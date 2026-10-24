@@ -367,3 +367,9 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 ### Open items
 - OVP 30.3 V vs 32 V max operating battery: either raise OVP or define 30 V max.
 - EasyEDA footprints unverified (esp. CTS 228E holes, AC1005 pads, M.2 pinout); 1720819 low stock (50); USB3-A C3032863 no stock; V20E385P stock 2.
+
+## Rev 2026-10-24 (b): schematic redrawn with real wires
+- tools/layout.py (enabled by gen.WIRED=True): ICs anchor functional clusters; passives attach to the IC they share a local net with (chains followed), decoupling caps attach to the IC whose rail they bypass and are wired to its rail pin. Clusters flow left->right in design order, wrapped onto the smallest A-size paper.
+- Router: A* maze router on the 1.27 mm grid; symbol bodies and label/power-symbol areas are obstacles; other nets may only be crossed perpendicular at straight segments (no T onto a crossing); bend and crossing penalties; junctions at every node of degree >= 3.
+- Labels kept only for: off-sheet nets (global labels), power/ground and isolated rails (power symbols; rails with a driver/PWR_FLAG such as GND_AC use power symbols named for the rail), wide buses (SPI/I2C/DSI/LVDS/MDI/expander ports -> stub + local label), and the few nets the router could not complete (label fallback, 10 nets total).
+- Verified: netlist partition identical to the label-only version (1082 nets), ERC 0 errors/0 warnings, BOM identical. Local nets lost their label names (now auto Net-(...)).

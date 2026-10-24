@@ -6,6 +6,7 @@ import kilib
 PROJ='genctl'
 OUT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 G=1.27
+WIRED=True  # clustered placement + real wires (tools/layout.py); False = legacy label-only shelf layout
 def snap(v): return round(v/G)*G
 def U(): return str(uuid.uuid4())
 
@@ -176,7 +177,9 @@ def build(sheets, root_title='genctl generator controller'):
             for p in pt.pins:
                 n=pt.net[p['num']]
                 if n: netsheets[n].add(sh.name)
-    for sh in sheets: write_sheet(sh, root_uuid, netsheets)
+    import layout
+    for sh in sheets: (layout.write_sheet if WIRED else write_sheet)(sh, root_uuid, netsheets)
+    if WIRED: print('route stats',layout.STATS)
     write_root(sheets, root_uuid, root_title)
     write_custom_lib()
     return flagged, netsheets
