@@ -42,9 +42,12 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - Two BSC070N10NS5 back-to-back, common drain (VBAT_DD).
 - VS, A and VSNS all on VBAT_F.
 - CAP: 100 nF from CAP to VS (*assumed*, typical application).
-- SW → 191k / 45.3k / 10k ladder to EN/UVLO and OV:
-  - OV = 1.231 × 246.3/10 = **30.3 V**
-  - UV = 1.231 × 246.3/55.3 = **5.5 V**
+- SW → 210k / 49.9k / 10k ladder to EN/UVLO and OV (Rev 2026-10-24 c; was 191k/45.3k/10k = 30.3 V OV):
+  - DS: V(OVR) 1.231 V typ (1.195-1.267), V(OVF) 1.13 V; V(UVLOR) 1.231 V, V(UVLOF) 1.132 V.
+  - OV trip (rising) = 1.231 × 269.9/10 = **33.2 V** (tol. 32.3-34.2 V from Vref spread only; +1% R adds ~±0.3 V)
+  - OV release (falling) = 1.13 × 26.99 = **30.5 V** (2.7 V hysteresis)
+  - UV rising = 1.231 × 269.9/59.9 = **5.55 V**, falling = 1.132 × 4.506 = **5.10 V**
+  - Ladder current ~0.12 mA at 32 V. R1 210k = C22952 (extended, 25k stock), R2 49.9k = C23184 (basic), R3 10k = C25804 (basic).
 - Check the 5.5 V UV against cold-crank requirements.
 
 **+12V (LM5176)**
@@ -365,11 +368,21 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - Auto PWR_FLAGs (gen.py): only on nets with power_in but no power_out, i.e. rails sourced through passive pins (inductor/fuse) or module-internal; list in tools output. Note gen.py was extended with a `types` arg.
 
 ### Open items
-- OVP 30.3 V vs 32 V max operating battery: either raise OVP or define 30 V max.
-- EasyEDA footprints unverified (esp. CTS 228E holes, AC1005 pads, M.2 pinout); 1720819 low stock (50); USB3-A C3032863 no stock; V20E385P stock 2.
+- OVP raised to 33.2 V (done, Rev c). Rating check still open: SMBJ28CA on VBAT_P and VBAT_ESTOP (schematic) has Vbr min 31.1 V, so it will conduct when charging at 32 V; power_bom lists SMDJ33CA (Vbr min 36.7 V), so the schematic and BOM disagree. Replace with SMBJ33CA/36CA. LM2904DR (non-V, 26 V max) on VBAT_P: change to LM2904B/LM2904V (36 V) or a 40 V op-amp.
+- EasyEDA footprints unverified (esp. CTS 228E holes, AC1005 pads, M.2 pinout); 1720819 low stock (50); USB3-A replaced by HC-USB3.0-L168-WP C7501850 (Rev c); V20E385P stock 2.
 
 ## Rev 2026-10-24 (b): schematic redrawn with real wires
 - tools/layout.py (enabled by gen.WIRED=True): ICs anchor functional clusters; passives attach to the IC they share a local net with (chains followed), decoupling caps attach to the IC whose rail they bypass and are wired to its rail pin. Clusters flow left->right in design order, wrapped onto the smallest A-size paper.
 - Router: A* maze router on the 1.27 mm grid; symbol bodies and label/power-symbol areas are obstacles; other nets may only be crossed perpendicular at straight segments (no T onto a crossing); bend and crossing penalties; junctions at every node of degree >= 3.
 - Labels kept only for: off-sheet nets (global labels), power/ground and isolated rails (power symbols; rails with a driver/PWR_FLAG such as GND_AC use power symbols named for the rail), wide buses (SPI/I2C/DSI/LVDS/MDI/expander ports -> stub + local label), and the few nets the router could not complete (label fallback, 10 nets total).
 - Verified: netlist partition identical to the label-only version (1082 nets), ERC 0 errors/0 warnings, BOM identical. Local nets lost their label names (now auto Net-(...)).
+
+## Rev 2026-10-24 (c): OVP raised for 24 V charging; USB3-A part swap
+- LM74800 OV/UV ladder 191k/45.3k/10k -> 210k/49.9k/10k: OV 33.2 V rise / 30.5 V release, UV 5.55 V / 5.10 V (see Ideal diode section).
+- Fixed wrong LCSC codes in gen.py RLCSC: 191k was C25860 (actually 1.1k 0402), now C22932. 45.3k was C23171 (actually 432k), now C23058, which affects the +3V3 FB R23.
+- Voltage ratings on VBAT_P at 33.2 V + margin: BSC070N10NS5 100 V, LM5176 55 V, LMR36506 65 V, TPS1HTC30 64 V, TPS48100, INA281 and SS110 fine, EEHZA1H101P 50 V, 10u 1210 CL32B106KBJNNNE 50 V, 100n 0603 C14663 50 V, 2.2u 1206 100 V: all OK.
+  NOT OK: SMBJ28CA (VBAT_P, VBAT_ESTOP; Vbr min 31.1 V) and LM2904DR (26 V supply). See Open items. 0805 100n on VBAT rails has no LCSC code assigned; specify 50 V or higher.
+- J11 USB3 Type-A: Molex 48393-0003 / C3032863 (no stock) -> Hong Cheng HC-USB3.0-L168-WP, LCSC C7501850 (JLC extended, 20,774 stock, $0.1249 qty 1 on 2026-10-24). THT right-angle, 9 pins + 2 shell pegs.
+  Per DS: 1 VBUS, 2 D-, 3 D+, 4 GND, 5 SSRX-, 6 SSRX+, 7 GND_DRAIN, 8 SSTX-, 9 SSTX+, shell = pad 10 -> CHASSIS. Net mapping unchanged.
+  Footprint genctl.pretty/USB3_A_HC-USB3.0-L168-WP.kicad_mod comes from EasyEDA C7501850 (pitch 2.0/2.5 mm, rows 1.5 mm apart, shell 13.14 mm, all consistent with the DS). Check pin-1 orientation against the DS drawing before layout. Rated op temp is only -25..70 C.
+- Cost total now $755.36 (comms +$0.12 for the now-priced USB-A; resistors sit in the misc lump).
