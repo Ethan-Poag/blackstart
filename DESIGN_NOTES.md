@@ -368,7 +368,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - Auto PWR_FLAGs (gen.py): only on nets with power_in but no power_out, i.e. rails sourced through passive pins (inductor/fuse) or module-internal; list in tools output. Note gen.py was extended with a `types` arg.
 
 ### Open items
-- OVP raised to 33.2 V (done, Rev c). Rating check still open: SMBJ28CA on VBAT_P and VBAT_ESTOP (schematic) has Vbr min 31.1 V, so it will conduct when charging at 32 V; power_bom lists SMDJ33CA (Vbr min 36.7 V), so the schematic and BOM disagree. Replace with SMBJ33CA/36CA. LM2904DR (non-V, 26 V max) on VBAT_P: change to LM2904B/LM2904V (36 V) or a 40 V op-amp.
+- OVP raised to 33.2 V (done, Rev c). TVS/op-amp items below are RESOLVED in Rev d: SMBJ28CA on VBAT_P and VBAT_ESTOP (schematic) has Vbr min 31.1 V, so it will conduct when charging at 32 V; power_bom lists SMDJ33CA (Vbr min 36.7 V), so the schematic and BOM disagree. Replace with SMBJ33CA/36CA. LM2904DR (non-V, 26 V max) on VBAT_P: change to LM2904B/LM2904V (36 V) or a 40 V op-amp.
 - EasyEDA footprints unverified (esp. CTS 228E holes, AC1005 pads, M.2 pinout); 1720819 low stock (50); USB3-A replaced by HC-USB3.0-L168-WP C7501850 (Rev c); V20E385P stock 2.
 
 ## Rev 2026-10-24 (b): schematic redrawn with real wires
@@ -386,3 +386,10 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
   Per DS: 1 VBUS, 2 D-, 3 D+, 4 GND, 5 SSRX-, 6 SSRX+, 7 GND_DRAIN, 8 SSTX-, 9 SSTX+, shell = pad 10 -> CHASSIS. Net mapping unchanged.
   Footprint genctl.pretty/USB3_A_HC-USB3.0-L168-WP.kicad_mod comes from EasyEDA C7501850 (pitch 2.0/2.5 mm, rows 1.5 mm apart, shell 13.14 mm, all consistent with the DS). Check pin-1 orientation against the DS drawing before layout. Rated op temp is only -25..70 C.
 - Cost total now $755.36 (comms +$0.12 for the now-priced USB-A; resistors sit in the misc lump).
+
+## Rev 2026-10-24 (d): 33 V-safe TVS, 36 V op-amp, 0805 cap codes
+- All 18 SMBJ28CA -> SMBJ33CA, Brightking C78420 (JLC extended, 132,283 stock, $0.0575). That covers VBAT_P, VBAT_ESTOP and the 16 output TVS, which also see raw battery when on. Vbr min 36.7 V > 33.2 V OVP; Vc 53.3 V @ 11.3 A < TPS1HTC30 64 V / FETs 100 V. Same package (DO-214AA), footprint Diode_SMD:D_SMB unchanged.
+- power_bom aligned to the schematic: post-cutoff TVS is SMBJ33CA (SMB), not SMDJ33CA. SMB 600 W is enough because the SMDJ58CA at the input absorbs the load-dump surge and the LM74800 opens on OV, so the downstream TVS only takes cutoff overshoot and local inductive transients (mJ level).
+- U24-U26 LM2904DR -> LM2904BIDR (TI) C1849422 (extended, 4,110 stock, $0.1046), 3-36 V supply (datasheets/lm2904b.pdf, Family Comparison table: LM2904 = 26 V). SOIC-8 pinout identical (1 OUT1, 2 IN1-, 3 IN1+, 4 V-, 5 IN2+, 6 IN2-, 7 OUT2, 8 V+).
+- All 0805 100 nF (22 pcs, incl. VBAT_F/VBAT_P/VBAT_ESTOP/DPX_VI) -> Samsung CL21B104KCFNNNE 100 V X7R C28233 (basic, 1.5M stock), via gen.CLCSC.
+- Cost total $755.07 (was $755.36): outputs and power TVS cheaper, inputs op-amp +$0.12.
