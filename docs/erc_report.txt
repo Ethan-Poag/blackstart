@@ -1,0 +1,25 @@
+ERC report (2026-10-24T01:33:17-1000, Encoding UTF8)
+
+***** Sheet /
+
+***** Sheet /Power: input protection, ideal diode, 12V buck-boost, 5V, 3V3/
+
+***** Sheet /STM32H743 safety MCU/
+
+***** Sheet /Raspberry Pi CM5/
+
+***** Sheet /Comms: CAN x2, RS-485, Ethernet, USB hub/ports, LTE modem/
+
+***** Sheet /Display: DSI->LVDS bridge, panel power, backlight, touch/
+
+***** Sheet /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/
+
+***** Sheet /Outputs: fuel/crank (TPS48100), 13x TPS1HTC30, watchdog gating, readback/
+
+***** Sheet /E-stop trip and sense/
+
+***** Sheet /AC metering: 2x ADE9000 (gen + bus), isolated/
+
+***** Sheet /Front panel: buttons, LEDs, buzzer/
+
+ ** ERC messages: 0  Errors 0  Warnings 0

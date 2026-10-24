@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "genctl")(type "KiCad")(uri "${KIPRJMOD}/genctl.kicad_sym")(options "")(descr "genctl project symbols"))
+)
