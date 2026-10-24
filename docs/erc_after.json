@@ -1,0 +1,64 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-24T03:55:04-1000",
+    "kicad_version": "9.0.2",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/228d0786-76cc-4b6c-81f5-359458688001",
+            "violations": []
+        },
+        {
+            "path": "/Power: input protection, ideal diode, 12V buck-boost, 5V, 3V3/",
+            "uuid_path": "/228d0786-76cc-4b6c-81f5-359458688001/56848d14-642b-4a38-9f14-13caee52b76a",
+            "violations": []
+        },
+        {
+            "path": "/STM32H743 safety MCU/",
+            "uuid_path": "/228d0786-76cc-4b6c-81f5-359458688001/c0888dec-8422-42cd-86f8-d4c781b63a3d",
+            "violations": []
+        },
+        {
+            "path": "/Raspberry Pi CM5/",
+            "uuid_path": "/228d0786-76cc-4b6c-81f5-359458688001/9c67e031-68c2-4ec7-8e8d-e1f5d4d0f19e",
+            "violations": []
+        },
+        {
+            "path": "/Comms: CAN x2, RS-485, Ethernet, USB hub/ports, LTE modem/",
+            "uuid_path": "/228d0786-76cc-4b6c-81f5-359458688001/cb3a4b60-48d8-4863-a03b-9a242a5cd1b4",
+            "violations": []
+        },
+        {
+            "path": "/Display: DSI->LVDS bridge, panel power, backlight, touch/",
+            "uuid_path": "/228d0786-76cc-4b6c-81f5-359458688001/625b4d5d-240f-47e5-8d06-5b4daee50951",
+            "violations": []
+        },
+        {
+            "path": "/Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/",
+            "uuid_path": "/228d0786-76cc-4b6c-81f5-359458688001/b5106185-a7fa-4c3e-8908-8d6fd49c4d7b",
+            "violations": []
+        },
+        {
+            "path": "/Outputs: fuel/crank (TPS48100), 13x TPS1HTC30, watchdog gating, readback/",
+            "uuid_path": "/228d0786-76cc-4b6c-81f5-359458688001/59491b02-6c6d-49dd-934b-c63b1825ec99",
+            "violations": []
+        },
+        {
+            "path": "/E-stop trip and sense/",
+            "uuid_path": "/228d0786-76cc-4b6c-81f5-359458688001/e7b4d93e-4365-4914-ba0e-14c4daefc549",
+            "violations": []
+        },
+        {
+            "path": "/AC metering: 2x ADE9000 (gen + bus), isolated/",
+            "uuid_path": "/228d0786-76cc-4b6c-81f5-359458688001/6a2de72d-ff7d-4088-8702-b8023530d1b4",
+            "violations": []
+        },
+        {
+            "path": "/Front panel: backlit buttons, buzzer/",
+            "uuid_path": "/228d0786-76cc-4b6c-81f5-359458688001/4b0bc120-7a39-4c92-b3c5-1f898ee306ac",
+            "violations": []
+        }
+    ],
+    "source": "genctl.kicad_sch"
+}

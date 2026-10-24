@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "genctl")(type "KiCad")(uri "${KIPRJMOD}/genctl.pretty")(options "")(descr "genctl project footprints (EasyEDA-derived land patterns + hand-drawn 228E/AC1005 pads: VERIFY before layout)"))
+)

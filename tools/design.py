@@ -34,14 +34,15 @@ def S(name,title,notes=''):
 # =====================================================================
 pw=S('power','Power: input protection, ideal diode, 12V buck-boost, 5V, 3V3',
  'POWER. J0 battery in -> 10A ATO -> SMDJ58CA -> LM74800 + 2x BSC070N10NS5 back-to-back (VBAT_P).\n'
- 'OV 30.3V / UV 5.5V (191k/45.3k/10k, 1.231V thresholds). LM5176 buck-boost -> +12V (FB 140k/10k, RT 27k ~290kHz).\n'
- 'TPS56637 -> +5V (FB 75k/10k = 5.1V). TPS56637 -> +3V3 from +12V (FB 45.3k/10k, 2.2uH, 3x22u), >=3A.')
+ 'OV 30.3V / UV 5.5V (191k/45.3k/10k, 1.231V thresholds). LM5176 buck-boost -> +12V (FB 140k/10k, RT 27.4k ~300kHz, 8mR sense).\n'
+ 'TPS56637 -> +5V (FB 75k/10k = 5.1V, 3.3uH). TPS56637 -> +3V3 from +12V (FB 45.3k/10k, 2.2uH, 3x22u), >=3A. MODE open = FCCM.\n'
+ 'SAFE DOMAIN: LMR36506 buck VBAT_P -> +3V3_BK (always on); TPS2116 priority mux VIN1=+3V3 / VIN2=+3V3_BK -> +3V3_SAFE (MCU, FRAM, WDT, I/O, E-stop logic).')
 conn(pw,4,['BAT_IN','BAT_IN','GND','GND'],'PC 5/4-GF-7,62 (battery in)',mpn='1720819 Phoenix',note='J0 battery input')
 pw.p('Device:Fuse','10A ATO (3557-2 clips)',{'1':'BAT_IN','2':'VBAT_F'},prefix='F',mpn='3557-2')
 tvs(pw,'SMDJ58CA','VBAT_F')
 pw.C('100n','VBAT_F','GND',pkg='0805',note='100V')
-pw.p('genctl:LM74800QDRRRQ1','LM74800QDRRRQ1',{'A':'VBAT_F','VS':'VBAT_F','VSNS':'VBAT_F','SW':'OVUV_TOP','EN/UVLO':'LM748_EN','OV':'LM748_OV','GND':'GND',
-     'DGATE':'LM748_DGATE','C':'VBAT_DD','HGATE':'LM748_HGATE','OUT':'VBAT_P','CAP':'LM748_CAP'},mpn='LM74800QDRRRQ1')
+pw.p('genctl:LM74800QDRRRQ1','LM74800QDRRRQ1',{'A':'VBAT_F','VS':'VBAT_F','VSNS':'VBAT_F','SW':'OVUV_TOP','EN/UVLO':'LM748_EN','OV':'LM748_OV','GND':'GND','RTN':None,
+     'DGATE':'LM748_DGATE','C':'VBAT_DD','HGATE':'LM748_HGATE','OUT':'VBAT_P','CAP':'LM748_CAP'},mpn='LM74800QDRRRQ1',lcsc='C3215600',note='EP=RTN left floating per DS')
 pw.C('100n','LM748_CAP','VBAT_F',note='CAP-VS charge-pump cap, 0.1uF per DS typ app')
 pw.R('191k','OVUV_TOP','LM748_EN'); pw.R('45.3k','LM748_EN','LM748_OV'); pw.R('10k','LM748_OV','GND')
 fet(pw,'Transistor_FET:BSC070N10NS5','BSC070N10NS5','LM748_DGATE','VBAT_F','VBAT_DD')
@@ -55,43 +56,55 @@ pw.p('genctl:LM5176PWPR','LM5176PWPR',{'VIN':'VBAT_P','VISNS':'VBAT_P','EN/UVLO'
    'HDRV1':'BB_HDRV1','BOOT1':'BB_BOOT1','SW1':'BB_SW1','LDRV1':'BB_LDRV1','HDRV2':'BB_HDRV2','BOOT2':'BB_BOOT2','SW2':'BB_SW2','LDRV2':'BB_LDRV2',
    'CS':'BB_CS','CSG':'GND','PGOOD':'PG_12V','VCC':'BB_VCC','BIAS':'+12V','PGND':'GND'},mpn='LM5176PWPR')
 pw.R('100k','VBAT_P','BB_EN'); pw.R('33k','BB_EN','GND')
-pw.R('93.1k','BB_MODE','GND',note='MODE strap value TBD from DS table (assumed CCM/hiccup off)')
-pw.R('27k','BB_RT','GND',note='~290kHz assumed (40k=200k, 20k=390k)')
-pw.C('100p','BB_SLOPE','GND',note='slope comp - verify with DS eq.')
-pw.C('47n','BB_SS','GND'); pw.R('10k','BB_COMP','BB_COMP_RC'); pw.C('22n','BB_COMP_RC','GND'); pw.C('220p','BB_COMP','GND')
+pw.R('93.1k','BB_MODE','GND',note='MODE: 93.1k = CCM, hiccup OFF (DS MODE table)')
+pw.R('27.4k','BB_RT','GND',note='fsw ~300kHz per DS RT equation - see DESIGN_NOTES')
+pw.C('220p','BB_SLOPE','GND',note='slope comp per DS eq. (see DESIGN_NOTES)')
+pw.C('47n','BB_SS','GND'); pw.R('22.1k','BB_COMP','BB_COMP_RC',note='Rc'); pw.C('33n','BB_COMP_RC','GND',note='Cc1'); pw.C('220p','BB_COMP','GND',note='Cc2')
 pw.R('140k','+12V','BB_FB'); pw.R('10k','BB_FB','GND')
-pw.R('100k','PG_12V','+3V3')
+pw.R('100k','PG_12V','+3V3_SAFE')
 pw.C('4.7u','BB_VCC','GND',pkg='1206'); pw.C('1u','+12V','GND',pkg='0805')
 pw.C('100n','BB_BOOT1','BB_SW1'); pw.C('100n','BB_BOOT2','BB_SW2')
+for bt in ('BB_BOOT1','BB_BOOT2'): schottky(pw,'BAS70','BB_VCC',bt,mpn='BAS70'); pw.parts[-1].lcsc='C77297'; pw.parts[-1].fp='Package_TO_SOT_SMD:SOT-23'; pw.parts[-1].note='external 70V boot diode per LM5176 DS'
 for g,s_,d in (('BB_HDRV1','BB_SW1','VBAT_P'),('BB_LDRV1','BB_CS','BB_SW1'),('BB_LDRV2','BB_CS','BB_SW2'),('BB_HDRV2','BB_SW2','+12V')):
     fet(pw,'Transistor_FET:BSC070N10NS5','BSC070N10NS5',g,s_,d)
-pw.p('Device:L','4.7u',{'1':'BB_SW1','2':'BB_SW2'},prefix='L',note='4.7uH >=15A sat (BOM)')
-pw.R('2m','BB_CS','GND',pkg='2512',mpn='WSL25122L000FEA',note='buck-boost current sense')
-pw.R('2m','BB_CS','GND',pkg='2512',mpn='WSL25122L000FEA',dnp=True,note='DNP - 2nd sense R option (BOM qty 2)')
+pw.p('Device:L','4.7u',{'1':'BB_SW1','2':'BB_SW2'},prefix='L',mpn='SPM10065VT-4R7M-D',lcsc='C501976',fp='genctl:L_SPM10065',note='4.7uH 10x10')
+pw.R('8m','BB_CS','GND',pkg='2512',mpn='YLR12-2-8F-W',lcsc='C469375',note='buck-boost sense: 8mR -> ~9.4A peak limit (see DESIGN_NOTES)')
 for _ in range(2): pw.C('470u 25V','+12V','GND',pol=True,mpn='EEHZK1E471P',pkg='Capacitor_SMD:CP_Elec_10x10.5')
 for _ in range(4): pw.C('22u','+12V','GND',pkg='1206')
 # 5V
 pw.p('genctl:TPS56637RPAR','TPS56637RPAR',{'VIN':'+12V','EN':'EN_5V','MODE':'MODE_5V','FB':'FB_5V','AGND':'GND','PGND':'GND','BOOT':'BOOT_5V','SW':'SW_5V','PG':'PG_5V','NC':None},mpn='TPS56637RPAR')
-pw.R('100k','+12V','EN_5V'); pw.R('27k','EN_5V','GND')
-pw.R('100k','MODE_5V','GND',note='MODE resistor TBD per DS table')
+pw.R('121k','+12V','EN_5V'); pw.R('16k','EN_5V','GND',note='EN 1.4V at 12V; start ~9V')
+pw.R('0R','MODE_5V','GND',dnp=True,note='DNP: MODE open = FCCM; fit 0R for Eco-mode')
 pw.C('100n','BOOT_5V','SW_5V')
-pw.p('Device:L','4.7u',{'1':'SW_5V','2':'+5V'},prefix='L')
-pw.R('75k','+5V','FB_5V'); pw.R('10k','FB_5V','GND')
-pw.R('100k','PG_5V','+3V3')
+pw.p('Device:L','3.3u',{'1':'SW_5V','2':'+5V'},prefix='L',mpn='MWSA1004S-3R3MT',lcsc='C408483',fp='genctl:L_MWSA1004S',note='3.3uH per DS Table 4 (5V)')
+pw.R('75k','+5V','FB_5V',note='5.1V'); pw.R('10k','FB_5V','GND')
+pw.C('100p','+5V','FF_5V',note='C9 feed-forward per DS Table 4'); pw.R('20k','FF_5V','FB_5V',note='R8 per DS Table 4')
+pw.R('100k','PG_5V','+3V3_SAFE')
 for _ in range(2): pw.C('10u','+12V','GND',pkg='0805')
 for _ in range(4): pw.C('22u','+5V','GND',pkg='1206')
 tvs(pw,'SMBJ5.0A','+5V',uni=True)
 # 3V3 (TPS56637, 6A part used for >=3A rail)
 pw.p('genctl:TPS56637RPAR','TPS56637RPAR',{'VIN':'+12V','EN':'EN_3V3','MODE':'MODE_3V3','FB':'FB_3V3','AGND':'GND','PGND':'GND','BOOT':'BOOT_3V3','SW':'SW_3V3','PG':'PG_3V3','NC':None},mpn='TPS56637RPAR',note='+3V3 >=3A (6A capable)')
-pw.R('100k','+12V','EN_3V3'); pw.R('27k','EN_3V3','GND')
-pw.R('100k','MODE_3V3','GND',note='MODE resistor TBD per DS table (same as 5V rail)')
+pw.R('121k','+12V','EN_3V3'); pw.R('16k','EN_3V3','GND',note='EN 1.4V at 12V')
+pw.R('0R','MODE_3V3','GND',dnp=True,note='DNP: MODE open = FCCM')
 pw.C('100n','BOOT_3V3','SW_3V3')
-pw.p('Device:L','2.2u',{'1':'SW_3V3','2':'+3V3'},prefix='L',note='2.2uH per DS Table 4 (3.3V), Isat >=5A')
+pw.p('Device:L','2.2u',{'1':'SW_3V3','2':'+3V3'},prefix='L',mpn='MWSA0503S-2R2MT',lcsc='C408408',fp='genctl:L_MWSA0503S',note='2.2uH per DS Table 4 (3.3V)')
 pw.R('45.3k','+3V3','FB_3V3',note='DS Table 4: 45.3k/10k -> 3.32V'); pw.R('10k','FB_3V3','GND')
-pw.C('150p','+3V3','FF_3V3',note='feed-forward per DS Table 4 (100-220p)'); pw.R('20k','FF_3V3','FB_3V3',note='feed-forward R per DS Table 4 - verify topology')
-pw.R('100k','PG_3V3','+3V3')
+pw.C('100p','+3V3','FF_3V3',note='C9 per DS Table 4'); pw.R('20k','FF_3V3','FB_3V3',note='R8 per DS Table 4 (C9+R8 in series across R6)')
+pw.R('100k','PG_3V3','+3V3_SAFE')
 for _ in range(2): pw.C('10u','+12V','GND',pkg='0805',note='25V')
 for _ in range(3): pw.C('22u','+3V3','GND',pkg='1206')
+# ---- always-on backup 3V3 (safety domain) ----
+pw.p('genctl:LMR36506RRPER','LMR36506RRPER',{'VIN':'VBAT_P','EN/UVLO':'VBAT_P','RT':'BK_RT','FB':'BK_FB','GND':'GND','SW':'BK_SW','BOOT':'BK_BOOT','VCC':'BK_VCC','PGOOD':None},mpn='LMR36506RRPER',lcsc='C2870127',note='always-on 3.3V from battery, 65V abs max')
+pw.C('2.2u','VBAT_P','GND',pkg='1206',mpn='CL31B225KCHSNNE',lcsc='C170101',note='100V'); pw.C('100n','VBAT_P','GND',pkg='0805')
+pw.R('40.2k','BK_RT','GND',note='fsw 400kHz (DS eq.1)'); pw.C('100n','BK_BOOT','BK_SW'); pw.C('1u','BK_VCC','GND')
+pw.p('Device:L','33u',{'1':'BK_SW','2':'+3V3_BK'},prefix='L',mpn='SWPA6045S330MT',lcsc='C83451',fp='genctl:L_SWPA6045S',note='33uH per DS Table 8-1 (400kHz, 3.3V)')
+pw.R('100k','+3V3_BK','BK_FB',note='3.315V'); pw.R('43.2k','BK_FB','GND')
+for _ in range(2): pw.C('47u','+3V3_BK','GND',pkg='1206',mpn='CL31A476MQHNNNE',lcsc='C68361')
+pw.p('genctl:TPS2116DRLR','TPS2116DRLR',{'VIN1':'+3V3','MODE':'+3V3','PR1':'MUX_PR1','VIN2':'+3V3_BK','GND':'GND','VOUT':'+3V3_SAFE','ST':'PSU_MAIN_OK'},mpn='TPS2116DRLR',lcsc='C3235557',note='priority mux: main +3V3 preferred, battery buck backup')
+pw.R('18.7k','+3V3','MUX_PR1',note='switch to backup below ~2.87V'); pw.R('10k','MUX_PR1','GND')
+pw.R('100k','PSU_MAIN_OK','+3V3_SAFE'); pw.C('1u','+3V3','GND'); pw.C('1u','+3V3_BK','GND')
+for _ in range(2): pw.C('22u','+3V3_SAFE','GND',pkg='1206')
 # chassis
 for i in range(4): pw.p('Mechanical:MountingHole_Pad','MountingHole_Pad',{'1':'CHASSIS'},prefix='H')
 pw.R('1M','CHASSIS','GND',pkg='1206'); pw.C('4.7n','CHASSIS','GND',pkg='1206',note='2kV - chassis/0V RC bond (assumed)')
@@ -104,7 +117,7 @@ MAP={'PA0':'VBAT_SNS','PA1':'VESTOP_SNS','PA2':'DPLUS_SNS','PA3':'FUEL_ISNS','PA
  'PA8':'DIAG_EN','PA9':'MUX_A0','PA10':'MUX_A1','PA11':'MUX_A2','PA12':'WDI','PA13':'SWDIO','PA14':'SWCLK','PA15':'MPU_SPEED',
  'PB0':'ADE_IRQ_N','PB1':'CRANK_ISNS','PB2':'OUT_FAULT_N','PB3':'BUZZER_PWM','PB4':'AUX3_MCU','PB5':'AUX4_MCU','PB6':'AUX5_MCU','PB7':'AUX6_MCU',
  'PB8':'I2C1_SCL','PB9':'I2C1_SDA','PB10':'DI8_N','PB11':'DI9_N','PB12':'CAN2_RX','PB13':'CAN2_TX','PB14':'DI10_N','PB15':'DI11_N',
- 'PC0':'MUXA_OUT','PC1':'MUXB_OUT','PC2_C':'MCU_SPARE1','PC3_C':'MCU_SPARE2','PC4':'ADE_CS2_N','PC5':'ADE_RST_N','PC6':'ESTOP2_DIG','PC7':'MPU_GATE',
+ 'PC0':'MUXA_OUT','PC1':'MUXB_OUT','PC2_C':'MCU_SPARE1','PC3_C':'PSU_MAIN_OK','PC4':'ADE_CS2_N','PC5':'ADE_RST_N','PC6':'ESTOP2_DIG','PC7':'MPU_GATE',
  'PC8':'DPLUS_EXC_EN','PC9':'GCB_CL_MCU','PC10':'GCB_OP_MCU','PC11':'MCB_CL_MCU','PC12':'MCB_OP_MCU','PC13':'EXP_12V_EN','PC14':'LSE_IN','PC15':'LSE_OUT',
  'PD0':'CAN1_RX','PD1':'CAN1_TX','PD2':'FUEL_EN_MCU','PD3':'CRANK_EN_MCU','PD4':'GLOW_EN_MCU','PD5':'MCU_UART_TX','PD6':'MCU_UART_RX','PD7':'MCU_TRIP',
  'PD8':'RS485_TX','PD9':'RS485_RX','PD10':'DI12_N','PD11':'AUX7_MCU','PD12':'RS485_DE','PD13':'AUX8_MCU','PD14':'ESTOP_DIG','PD15':'DPLUS_DIG',
@@ -114,12 +127,12 @@ for i in range(7): MAP['PE%d'%(9+i)]='DI%d_N'%(i+1)
 c=dict(MAP); c.update({'NRST':'NRST','BOOT0':'BOOT0','VREF+':'+3V3','VDD':'+3V3','VSS':'GND','VSSA':'GND','VDDA':'VDDA','48':'VCAP1','73':'VCAP2','VBAT':'VBAT_MCU'})
 mc.p('MCU_ST_STM32H7:STM32H743VITx','STM32H743VIT6',c,mpn='STM32H743VIT6')
 dec(mc,'+3V3',6); mc.C('4.7u','+3V3','GND',pkg='1206')
-mc.p('Device:FerriteBead','600R@100MHz',{'1':'+3V3','2':'VDDA'},prefix='FB'); mc.C('1u','VDDA','GND'); mc.C('100n','VDDA','GND')
+mc.p('Device:FerriteBead','600R@100MHz',{'1':'+3V3','2':'VDDA'},prefix='FB',mpn='GZ1608D601TF',lcsc='C1002',fp='Inductor_SMD:L_0603_1608Metric'); mc.C('1u','VDDA','GND'); mc.C('100n','VDDA','GND')
 mc.C('2.2u','VCAP1','GND'); mc.C('2.2u','VCAP2','GND')
 mc.C('100n','VBAT_MCU','GND')
-mc.p('Device:Crystal_GND24','25MHz',{'1':'HSE_IN','3':'HSE_OUT','2':'GND','4':'GND'},prefix='Y',mpn='X322525MOB4SI',note='load caps assume CL=12pF')
+mc.p('Device:Crystal_GND24','25MHz',{'1':'HSE_IN','3':'HSE_OUT','2':'GND','4':'GND'},prefix='Y',mpn='X322525MOB4SI',lcsc='C9006',fp='Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm',note='CL=12pF')
 mc.C('18p','HSE_IN','GND',pkg='0402'); mc.C('18p','HSE_OUT','GND',pkg='0402')
-mc.p('Device:Crystal','32.768kHz',{'1':'LSE_IN','2':'LSE_OUT'},prefix='Y',mpn='X321532768KGD2SI',note='load caps assume CL=12.5pF')
+mc.p('Device:Crystal','32.768kHz',{'1':'LSE_IN','2':'LSE_OUT'},prefix='Y',mpn='X321532768KGD2SI',lcsc='C620155',fp='Crystal:Crystal_SMD_3215-2Pin_3.2x1.5mm',note='CL=12.5pF')
 mc.C('18p','LSE_IN','GND',pkg='0402'); mc.C('18p','LSE_OUT','GND',pkg='0402')
 mc.C('100n','NRST','GND')
 mc.p('Switch:SW_Push','RESET',{'1':'NRST','2':'GND'},prefix='SW',mpn='TS-1187A-B-A-B')
@@ -130,12 +143,12 @@ mc.p('Connector_Generic:Conn_02x04_Odd_Even','JP1 CM5->MCU SWD/boot',{'1':'CM5_S
 mc.R('10k','OUT_FAULT_N','+3V3'); mc.R('10k','I2C_INT_N','+3V3')
 mc.R('2.2k','I2C1_SCL','+3V3'); mc.R('2.2k','I2C1_SDA','+3V3')
 mc.R('10k','ADE_IRQ_N','+3V3'); mc.R('10k','MCU_IRQ','GND')
-mc.R('1k','MCU_LED','LED_HB_A'); mc.LED('green','LED_HB_A','GND')
+mc.R('1k','MCU_LED','LED_HB_A'); mc.LED('green','LED_HB_A','GND',lcsc='C2297')
 mc.p('Memory_NVRAM:FM24C64B','FM24CL64B',{'A0':'GND','A1':'GND','A2':'GND','VSS':'GND','SDA':'I2C1_SDA','SCL':'I2C1_SCL','WP':'GND','VDD':'+3V3'},mpn='FM24CL64B-GTR')
 mc.C('100n','+3V3','GND')
 mc.p('genctl:CR2032_Holder','CR2032',{'+':'VBAT_CELL','-':'GND'},mpn='CR2032 holder')
-mc.p('Diode:BAT54C','BAT54C',{'1':'+3V3','2':'VBAT_CELL','3':'VBAT_MCU'},prefix='D',mpn='BAT54C',note='VBAT OR: +3V3 / CR2032')
-mc.p('Connector_Generic:Conn_02x05_Odd_Even','Header B (MCU spare)',{'1':'+3V3','2':'GND','3':'MCU_SPARE1','4':'MCU_SPARE2','5':'I2C1_SCL','6':'I2C1_SDA','7':'GND','8':'+5V','9':None,'10':None},prefix='J')
+mc.p('Diode:BAT54C','BAT54C',{'1':'+3V3','2':'VBAT_CELL','3':'VBAT_MCU'},prefix='D',mpn='BAT54C',note='VBAT OR: +3V3_SAFE / CR2032')
+mc.p('Connector_Generic:Conn_02x05_Odd_Even','Header B (MCU spare)',{'1':'+3V3','2':'GND','3':'MCU_SPARE1','4':None,'5':'I2C1_SCL','6':'I2C1_SDA','7':'GND','8':'+5V','9':None,'10':None},prefix='J')
 
 # =====================================================================
 cm=S('cm5','Raspberry Pi CM5',
@@ -162,12 +175,12 @@ for _ in range(2): cm.C('22u','+5V','GND',pkg='1206')
 dec(cm,'+5V',2); cm.C('100n','CM5_3V3','GND'); cm.C('1u','CM5_3V3','GND'); cm.C('100n','CM5_1V8','GND')
 for a,b in (('CM5_SPI_SCK','MCU_SPI_SCK'),('CM5_SPI_MOSI','MCU_SPI_MOSI'),('CM5_SPI_MISO','MCU_SPI_MISO'),('CM5_SPI_CE0','MCU_SPI_NSS'),
             ('CM5_UART_TX','MCU_UART_RX'),('CM5_UART_RX','MCU_UART_TX'),('CM5_MCU_IRQ','MCU_IRQ')):
-    cm.R('33R',a,b,note='series/link resistor CM5<->MCU')
+    cm.R('1k',a,b,note='1k domain-boundary R: limits back-power injection to <3mA when one side is unpowered; SPI <=4MHz')
 cm.R('1k','CM5_VBAT','CM5_VBAT_D'); cm.p('Diode:BAT54C','BAT54C',{'1':'VBAT_CELL','2':None,'3':'CM5_VBAT_D'},prefix='D',mpn='BAT54C',note='CR2032 to CM5 RTC; 2nd anode unused')
 cm.p('Switch:SW_Push','nRPIBOOT',{'1':'CM5_NRPIBOOT','2':'GND'},prefix='SW',mpn='TS-1187A-B-A-B')
 cm.p('Switch:SW_Push','CM5 PWR',{'1':'CM5_PWR_BTN','2':'GND'},prefix='SW',mpn='TS-1187A-B-A-B',note='optional power button')
-cm.R('1k','CM5_3V3','CM5_LED_ACT_A'); cm.LED('green','CM5_LED_ACT_A','CM5_LED_ACT_N')
-cm.R('1k','CM5_3V3','CM5_LED_PWR_A'); cm.LED('red','CM5_LED_PWR_A','CM5_LED_PWR_N')
+cm.R('1k','CM5_3V3','CM5_LED_ACT_A'); cm.LED('green','CM5_LED_ACT_A','CM5_LED_ACT_N',lcsc='C2297')
+cm.R('1k','CM5_3V3','CM5_LED_PWR_A'); cm.LED('red','CM5_LED_PWR_A','CM5_LED_PWR_N',lcsc='C2295')
 conn(cm,4,['GND','+5V','FAN_TACH','FAN_PWM'],'Fan header (SM04B)',mpn='SM04B-SRSS-TB')
 cm.p('Connector_Generic:Conn_02x05_Odd_Even','Header A (CM5 I2C/SPI)',{'1':'CM5_3V3','2':'+5V','3':'HDRA_SDA','4':'HDRA_SCL','5':'HDRA_SPI_SCK','6':'HDRA_SPI_MOSI','7':'HDRA_SPI_MISO','8':'HDRA_SPI_CE0','9':'GND','10':'GND'},prefix='J')
 cm.R('10k','CM5_NRST','CM5_3V3',dnp=True,note='DNP - JP1 open by default')
@@ -175,11 +188,12 @@ cm.R('10k','CM5_NRST','CM5_3V3',dnp=True,note='DNP - JP1 open by default')
 # =====================================================================
 co=S('comms','Comms: CAN x2, RS-485, Ethernet, USB hub/ports, LTE modem',
  'COMMS. CAN1/CAN2 CA-IS3062W (VCC=+5V, 4.5-5.5V). Bus: CMC -> NUP2105L -> split termination via DIP (62R+62R, 4.7nF mid).\n'
- 'RS-485 CA-IS2092W, SEL=VISO (5V bus), DIP for 120R term + 680R bias. Shields -> CHASSIS via 1M||4.7nF.\n'
+ 'RS-485 CA-IS2092W, SEL=GND_485 (3.3V VISO bus; DS: SEL=VISO only valid with VCC=5V), DIP for 120R term + 680R bias. Shields -> CHASSIS via 1M||4.7nF.\n'
  'USB: CM5 USB2 -> USB-C service; USB3-0 -> USB-A (TPS2051C); USB3-1 HS -> USB2514B hub (DN1 M.2 modem, DN2 internal header, DN3/4 spare).')
 for i,(tx,rx,iso) in enumerate((('CAN1_TX','CAN1_RX','GND_CAN1'),('CAN2_TX','CAN2_RX','GND_CAN2')),1):
     n='CAN%d'%i
-    co.p('genctl:CA-IS3062W','CA-IS3062W',{'VCC':'+5V','TXD':tx,'RXD':rx,'GND1':'GND','NC':None,'VISO':'VISO_%s'%n,'CANH':n+'_H','CANL':n+'_L','GND2':iso},mpn='CA-IS3062W')
+    co.R('1k',tx,tx+'_T',note='domain-boundary R (SAFE MCU -> +5V transceiver)'); co.R('1k',rx+'_T',rx,note='domain-boundary R')
+    co.p('genctl:CA-IS3062W','CA-IS3062W',{'VCC':'+5V','TXD':tx+'_T','RXD':rx+'_T','GND1':'GND','NC':None,'VISO':'VISO_%s'%n,'CANH':n+'_H','CANL':n+'_L','GND2':iso},mpn='CA-IS3062W')
     co.C('100n','+5V','GND'); co.C('10u','+5V','GND',pkg='0805'); co.C('100n','VISO_'+n,iso); co.C('10u','VISO_'+n,iso,pkg='0805')
     co.p('genctl:ACT45B-510-2P','ACT45B-510-2P',{'1':n+'_H','4':n+'_HB','2':n+'_L','3':n+'_LB'},mpn='ACT45B-510-2P-TL003')
     co.p('Power_Protection:NUP2105L','NUP2105L',{'1':n+'_HB','2':n+'_LB','3':iso},prefix='D',mpn='NUP2105LT1G')
@@ -187,13 +201,14 @@ for i,(tx,rx,iso) in enumerate((('CAN1_TX','CAN1_RX','GND_CAN1'),('CAN2_TX','CAN
     co.R('62R',n+'_TH',n+'_TMID',pkg='1206'); co.R('62R',n+'_TL',n+'_TMID',pkg='1206'); co.C('4.7n',n+'_TMID',iso)
     co.R('1M',n+'_SCR','CHASSIS',pkg='1206'); co.C('4.7n',n+'_SCR','CHASSIS',pkg='1206',note='2kV')
 conn(co,4,['CAN1_HB','CAN1_LB','CAN1_SCR','GND_CAN1'],'CAN1 (PC 5/4)',mpn='Phoenix PC 5/4-GF')
-co.p('genctl:TPS1H200AQDGNRQ1','TPS1H200AQDGNRQ1',{'VS':'+12V','IN':'EXP_12V_EN','DIAG_EN':'+3V3','CL':'EXP12_CL','DELAY':None,'GND':'GND','EP':'GND','OUT':'EXP_12V','FAULT':'OUT_FAULT_N'},mpn='TPS1H200AQDGNRQ1')
+co.p('genctl:TPS1H200AQDGNRQ1','TPS1H200AQDGNRQ1',{'VS':'+12V','IN':'EXP_12V_EN','DIAG_EN':'+3V3_SAFE','CL':'EXP12_CL','DELAY':None,'GND':'GND','EP':'GND','OUT':'EXP_12V','FAULT':'OUT_FAULT_N'},mpn='TPS1H200AQDGNRQ1')
 co.R('1.33k','EXP12_CL','GND',note='ILIM ~1.5A (0.8*2500/I)'); co.C('100n','+12V','GND'); co.C('10n','EXP_12V','GND')
 schottky(co,'SS110','GND','EXP_12V',mpn='SS110')
 conn(co,6,['EXP_12V','GND','CAN2_HB','CAN2_LB','GND_CAN2','CAN2_SCR'],'Expansion bus (PC 5/6)',mpn='Phoenix PC 5/6-GF')
-co.p('genctl:CA-IS2092W','CA-IS2092W',{'VCC':'+3V3','DI':'RS485_TX','RO':'RS485_RX','DE':'RS485_DE','~{RE}':'GND','GNDA':'GND','VISO':'VISO_485','SEL':'VISO_485','A':'RS485_A','B':'RS485_B','GNDB':'GND_485','NC':None},mpn='CA-IS2092W')
+for n in ('RS485_TX','RS485_RX','RS485_DE'): co.R('1k',n,n+'_T',note='domain-boundary R')
+co.p('genctl:CA-IS2092W','CA-IS2092W',{'VCC':'+3V3','DI':'RS485_TX_T','RO':'RS485_RX_T','DE':'RS485_DE_T','~{RE}':'GND','GNDA':'GND','VISO':'VISO_485','SEL':'GND_485','A':'RS485_A','B':'RS485_B','GNDB':'GND_485','NC':None},mpn='CA-IS2092W')
 co.C('100n','+3V3','GND'); co.C('10u','+3V3','GND',pkg='0805'); co.C('100n','VISO_485','GND_485'); co.C('10u','VISO_485','GND_485',pkg='0805')
-co.R('10k','RS485_DE','GND')
+co.R('10k','RS485_DE_T','GND')
 co.p('Diode:SM712_SOT23','SM712',{'1':'RS485_A','2':'RS485_B','3':'GND_485'},prefix='D',mpn='SM712')
 co.p('Switch:SW_DIP_x02','TERM/BIAS',{'1':'RS485_A','4':'RS485_TA','2':'RS485_B','3':'RS485_TB'},prefix='SW',note='ADDED: SW1 term, SW2 term other end - see notes')
 co.R('120R','RS485_TA','RS485_TB',pkg='1206')
@@ -214,7 +229,7 @@ co.R('5.1k','USBC_CC1','GND'); co.R('5.1k','USBC_CC2','GND')
 co.p('Power_Protection:USBLC6-2SC6','USBLC6-2SC6',{'1':'USB_SVC_P','6':'USB_SVC_P','3':'USB_SVC_N','4':'USB_SVC_N','5':'USBC_VBUS','2':'GND'},prefix='D',mpn='USBLC6-2SC6')
 # USB-A
 co.p('Power_Management:TPS2051CDBV','TPS2051C',{'IN':'+5V','EN':'USBA_VBUS_EN','GND':'GND','OUT':'USBA_VBUS','~{FLT}':'USBA_FLT_N'},prefix='U',mpn='TPS2051CDBVR')
-co.R('10k','USBA_FLT_N','+3V3'); co.C('100n','+5V','GND'); co.C('100u 10V','USBA_VBUS','GND',pol=True,pkg='Capacitor_SMD:CP_Elec_6.3x5.4')
+co.R('10k','USBA_FLT_N','+3V3'); co.C('100n','+5V','GND'); co.C('100u 10V','USBA_VBUS','GND',pol=True,pkg='genctl:CP_Elec_6.3x6',mpn='BLA10V100M6.3*6',lcsc='C165631')
 co.p('genctl:USB3_A_Receptacle','USB3 Type-A',{'VBUS':'USBA_VBUS','D-':'USB30_DM','D+':'USB30_DP','GND':'GND','SSRX-':'USB30_RX_N','SSRX+':'USB30_RX_P','GND_DRAIN':'GND','SSTX-':'USBA_SSTX_N','SSTX+':'USBA_SSTX_P','SHIELD':'CHASSIS'})
 co.C('100n','USB30_TX_P','USBA_SSTX_P',pkg='0402',note='USB3 TX AC-coupling (check if already on CM5)')
 co.C('100n','USB30_TX_N','USBA_SSTX_N',pkg='0402')
@@ -227,7 +242,7 @@ co.p('Interface_USB:USB2514B_Bi','USB2514B',{'VBUS_DET':'HUB_VBUSDET','USBDM_UP'
    '24':'HUB_CFG0','25':'HUB_CFG1','22':'HUB_NONREM1','28':'HUB_NONREM0'},prefix='U',mpn='USB2514B-AEZC-TR')
 dec(co,'+3V3',6); co.C('4.7u','+3V3','GND',pkg='1206')
 co.C('1u','HUB_PLLF','GND'); co.C('1u','HUB_CRF','GND'); co.R('12k','HUB_RBIAS','GND',note='1%')
-co.p('Device:Crystal','24MHz',{'1':'HUB_XI','2':'HUB_XO'},prefix='Y',mpn='24MHz 3225 (TBD)',note='CL assumed 12pF')
+co.p('Device:Crystal_GND24','24MHz',{'1':'HUB_XI','3':'HUB_XO','2':'GND','4':'GND'},prefix='Y',mpn='X322524MOB4SI',lcsc='C70590',fp='Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm',note='CL=12pF')
 co.C('18p','HUB_XI','GND',pkg='0402'); co.C('18p','HUB_XO','GND',pkg='0402'); co.R('1M','HUB_XI','HUB_XO')
 co.R('10k','HUB_RST_N','+3V3'); co.C('100n','HUB_RST_N','GND'); co.R('10k','HUB_VBUSDET','+3V3')
 for n in ('HUB_CFG0','HUB_CFG1','HUB_NONREM1','HUB_NONREM0'): co.R('10k',n,'GND',note='strap: default config')
@@ -238,31 +253,32 @@ conn(co,6,['+5V','USB_SP3_N','USB_SP3_P','USB_SP4_N','USB_SP4_P','GND'],'Spare U
 # Modem
 co.p('genctl:TPS56637RPAR','TPS56637RPAR',{'VIN':'+12V','EN':'MODEM_PWR_EN_12','MODE':'MDM_MODE','FB':'MDM_FB','AGND':'GND','PGND':'GND','BOOT':'MDM_BOOT','SW':'MDM_SW','PG':None,'NC':None},mpn='TPS56637RPAR',note='3.8V modem rail')
 npn(co,'MDM_EN_B','GND','MDM_EN_INV'); co.R('10k','MODEM_PWR_EN','MDM_EN_B'); co.R('100k','MDM_EN_B','GND')
-co.R('100k','+12V','MDM_EN_INV'); npn(co,'MDM_EN_INV','GND','MODEM_PWR_EN_12'); co.R('100k','+12V','MODEM_PWR_EN_12',note='EN pull-up; 2 NPN = non-inverting 3V3->12V level shift')
-co.R('100k','MDM_MODE','GND',note='TBD'); co.C('100n','MDM_BOOT','MDM_SW'); co.p('Device:L','2.2u',{'1':'MDM_SW','2':'+3V8_MDM'},prefix='L')
+co.R('100k','+12V','MDM_EN_INV'); npn(co,'MDM_EN_INV','GND','MODEM_PWR_EN_12'); co.R('121k','+12V','MODEM_PWR_EN_12',note='EN pull-up; 121k/16k keeps EN 1.4V < 6V abs max'); co.R('16k','MODEM_PWR_EN_12','GND')
+co.R('0R','MDM_MODE','GND',dnp=True,note='DNP: MODE open = FCCM'); co.C('100n','MDM_BOOT','MDM_SW'); co.p('Device:L','3.3u',{'1':'MDM_SW','2':'+3V8_MDM'},prefix='L',mpn='MWSA0503S-3R3MT',lcsc='C408409',fp='genctl:L_MWSA0503S',note='3.3uH (DS Table 4: next rail up = 5V)')
+co.C('100p','+3V8_MDM','MDM_FF'); co.R('20k','MDM_FF','MDM_FB')
 co.R('53.6k','+3V8_MDM','MDM_FB'); co.R('10k','MDM_FB','GND'); co.C('10u','+12V','GND',pkg='0805')
-co.C('1000u 6.3V','+3V8_MDM','GND',pol=True,pkg='Capacitor_SMD:CP_Elec_10x10.5',note='LTE burst hold-up')
+co.C('1000u 16V','+3V8_MDM','GND',pol=True,pkg='genctl:CP_Elec_10x10',mpn='RVT1C102M1010',lcsc='C970714',note='LTE burst hold-up')
 for _ in range(2): co.C('22u','+3V8_MDM','GND',pkg='1206')
 co.p('genctl:M.2_KeyB_Modem','M.2 Key B (LTE)',{'3.3V':'+3V8_MDM','GND':'GND','FULL_CARD_PWR_OFF#':'+3V8_MDM','W_DISABLE1#':None,'RESET#':None,'LED1#':'MDM_LED_K',
    'USB_D+':'USB_M2_P','USB_D-':'USB_M2_N','UIM_RESET':'SIM_RST','UIM_CLK':'SIM_CLK','UIM_DATA':'SIM_IO','UIM_PWR':'SIM_VCC','SIM_DETECT':None},mpn='M.2 Key-B socket',note='"3.3V" pins fed 3.8V per BOM/notes (modem dependent!)')
-co.R('1k','+3V8_MDM','MDM_LED_A'); co.LED('green','MDM_LED_A','MDM_LED_K')
-co.p('Connector:SIM_Card','nano-SIM',{'VCC':'SIM_VCC','RST':'SIM_RST','CLK':'SIM_CLK','GND':'GND','VPP':None,'I/O':'SIM_IO'},prefix='J')
+co.R('1k','+3V8_MDM','MDM_LED_A'); co.LED('green','MDM_LED_A','MDM_LED_K',lcsc='C2297')
+co.p('Connector:SIM_Card','nano-SIM',{'VCC':'SIM_VCC','RST':'SIM_RST','CLK':'SIM_CLK','GND':'GND','VPP':None,'I/O':'SIM_IO'},prefix='J',mpn='NANO SIM XG6P',lcsc='C7529386',fp='genctl:NANO-SIM-XG6P',note='footprint shell pads 8-11: tie to GND in layout')
 co.p('Power_Protection:SRV05-4','SRV05-4',{'1':'SIM_RST','3':'SIM_CLK','4':'SIM_IO','6':None,'5':'SIM_VCC','2':'GND'},prefix='D',mpn='SRV05-4')
 co.C('100n','SIM_VCC','GND')
 
 # =====================================================================
 di=S('display','Display: DSI->LVDS bridge, panel power, backlight, touch',
  'DISPLAY RVT121HVLNWCA0-B. SN65DSI83 (1.8V TLV75518, ADDR=0 -> 0x2C). Panel VDD and touch power via TPS22918.\n'
- 'Backlight TPS61500: EN=BL_PWM (PWM dim), FREQ 160k (~600kHz assumed), OVP 232k/10k = 29.7V, Rsense 2x1.1R (~360mA). COMP/SS assumed.')
+ 'Backlight TPS61500 (VIN +12V, DS max 18V): EN=BL_PWM (PWM dim), FREQ 180k (~540kHz), OVP 232k/10k = 29.7V, Rsense 2x1.1R (~364mA), L 10uH, SS36.')
 di.p('genctl:TLV75518PDBVR','TLV75518PDBVR',{'IN':'+3V3','EN':'+3V3','GND':'GND','OUT':'+1V8_DSI','NC':None},mpn='TLV75518PDBVR')
 di.C('1u','+3V3','GND'); di.C('1u','+1V8_DSI','GND')
 dsi={'DA0P':'DSI_D0_P','DA0N':'DSI_D0_N','DA1P':'DSI_D1_P','DA1N':'DSI_D1_N','DA2P':'DSI_D2_P','DA2N':'DSI_D2_N','DA3P':'DSI_D3_P','DA3N':'DSI_D3_N','DACP':'DSI_C_P','DACN':'DSI_C_N',
- 'SCL':'DISP_SCL','SDA':'DISP_SDA','ADDR':'GND','EN':'DSI83_EN','IRQ':'DSI83_IRQ','REFCLK':'GND','RSVD1':None,'RSVD2':'GND',
+ 'SCL':'DISP_SCL','SDA':'DISP_SDA','ADDR':'GND','EN':'DSI83_EN','IRQ':'DSI83_IRQ','REFCLK':'DSI83_REFCLK','RSVD1':None,'RSVD2':None,
  'A_Y0P':'LVDS0_P','A_Y0N':'LVDS0_N','A_Y1P':'LVDS1_P','A_Y1N':'LVDS1_N','A_Y2P':'LVDS2_P','A_Y2N':'LVDS2_N','A_Y3P':'LVDS3_P','A_Y3N':'LVDS3_N','A_CLKP':'LVDSC_P','A_CLKN':'LVDSC_N',
  'VCC':'+1V8_DSI','VCORE':'DSI83_VCORE','GND':'GND','NC':None}
 di.p('genctl:SN65DSI83ZXHR','SN65DSI83ZXHR',dsi,mpn='SN65DSI83ZXHR')
 dec(di,'+1V8_DSI',4); di.C('10u','+1V8_DSI','GND',pkg='0805'); di.C('1u','DSI83_VCORE','GND')
-di.R('100k','DSI83_EN','GND'); di.C('10n','DSI83_EN','GND'); di.R('10k','DSI83_IRQ','CM5_3V3')
+di.R('10k','DSI83_REFCLK','GND',note='REFCLK unused (clock from DSI): 10k to GND'); di.R('100k','DSI83_EN','GND'); di.C('10n','DSI83_EN','GND'); di.R('10k','DSI83_IRQ','CM5_3V3')
 di.p('genctl:TPS22918DBVR','TPS22918DBVR',{'VIN':'+3V3','ON':'PANEL_VDD_EN','CT':'PNL_CT','GND':'GND','VOUT':'+3V3_PANEL','QOD':'+3V3_PANEL'},mpn='TPS22918DBVR',note='panel VDD switch')
 di.C('1n','PNL_CT','GND'); di.R('100k','PANEL_VDD_EN','GND'); di.C('10u','+3V3_PANEL','GND',pkg='0805')
 di.p('genctl:TPS22918DBVR','TPS22918DBVR',{'VIN':'+3V3','ON':'TOUCH_PWR_EN','CT':'TCH_CT','GND':'GND','VOUT':'+3V3_TOUCH','QOD':'+3V3_TOUCH'},mpn='TPS22918DBVR',note='touch power switch')
@@ -276,13 +292,13 @@ conn(di,10,['GND',None,None,None,'GND','+3V3_TOUCH','TOUCH_RST_N','DISP_SCL','TO
 di.R('10k','TOUCH_RST_N','+3V3_TOUCH'); di.R('10k','TOUCH_INT_N','+3V3_TOUCH')
 di.R('2.2k','DISP_SCL','CM5_3V3',dnp=True,note='DNP: CM5 GPIO2/3 have 1.8k on-module pull-ups'); di.R('2.2k','DISP_SDA','CM5_3V3',dnp=True)
 di.p('genctl:TPS61500PWPR','TPS61500PWPR',{'VIN':'+12V','EN':'BL_PWM','DIMC':'BL_DIMC','SS':'BL_SS','FREQ':'BL_FREQ','COMP':'BL_COMP','AGND':'GND','EP':'GND','SW':'BL_SW','OVP':'BL_OVP','FB':'BL_FB','PGND':'GND'},mpn='TPS61500PWPR')
-di.R('100k','BL_PWM','GND'); di.C('1u','BL_DIMC','GND'); di.C('100n','BL_SS','GND'); di.R('160k','BL_FREQ','GND'); di.C('470n','BL_COMP','GND')
-di.p('Device:L','6.8u',{'1':'+12V','2':'BL_SW'},prefix='L'); schottky(di,'SS34','BL_SW','VLED',mpn='SS34')
+di.R('100k','BL_PWM','GND'); di.C('1u','BL_DIMC','GND'); di.C('47n','BL_SS','GND'); di.R('180k','BL_FREQ','GND',note='DS FREQ eq. -> ~540kHz'); di.C('470n','BL_COMP','GND',note='DS recommended for PWM dimming')
+di.p('Device:L','10u',{'1':'+12V','2':'BL_SW'},prefix='L',mpn='SWPA6045S100MT',lcsc='C79272',fp='genctl:L_SWPA6045S',note='10uH per DS range (4.7-22uH)'); schottky(di,'SS36','BL_SW','VLED',mpn='SS36'); di.parts[-1].lcsc='C16015'; di.parts[-1].fp='Diode_SMD:D_SMA'
 for _ in range(2): di.C('10u','+12V','GND',pkg='0805')
 for _ in range(2): di.C('4.7u','VLED','GND',pkg='1206',note='50V')
 di.R('232k','VLED','BL_OVP'); di.R('10k','BL_OVP','GND')
 di.R('1.1R','BL_FB','GND',pkg='0805'); di.R('1.1R','BL_FB','GND',pkg='0805')
-conn(di,2,['VLED','BL_FB'],'Backlight (JST)',note='1 LEDA, 2 LEDK')
+conn(di,2,['VLED','BL_FB'],'Backlight (JST SM02B-BHSS)',mpn='SM02B-BHSS-1-TB',lcsc='C485339',note='1 LEDA, 2 LEDK')
 
 # =====================================================================
 inp=S('inputs','Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense',
@@ -307,7 +323,7 @@ oas={}
 for ch in range(1,7):
     a='AI%d'%ch
     tvs(inp,'SMAJ36CA',a); inp.C('100n',a,'GND',pkg='1206',note='100V')
-    inp.R('2.49k','VBAT_P',a+'_E',note='0.1% 1mA set'); pnp(inp,a+'_B',a+'_E',a+'_C')
+    inp.R('2.49k','VBAT_P',a+'_E',pkg='1206',lcsc='C319805',mpn='AR06BTCV2491',note='0.1% 1mA set'); pnp(inp,a+'_B',a+'_E',a+'_C')
     inp.p('Diode:1N4148W','1N4148W',{'A':a+'_C','K':a+'_D'},prefix='D',mpn='1N4148W'); inp.R('1k',a+'_D',a)
     inp.R('10k','AI_VSET',a+'_REF')
     fet(inp,'Transistor_FET:BSS84','BSS84',a+'_PG','VBAT_P',a+'_REF')
@@ -378,7 +394,7 @@ tvs(inp,'SMAJ36CA','VBAT_SENSE'); inp.R('100k','VBAT_SENSE','VBAT_SNS',note='0.1
 ou=S('outputs','Outputs: fuel/crank (TPS48100), 13x TPS1HTC30, watchdog gating, readback',
  'OUTPUTS. All MCU enables gated by TPS3431 WDO (LVC1G08 for fuel/crank/glow, LVC541 OE for the rest). Fuel/crank: TPS48100 + 2x BSC070N10NS5 + 1mR shunt +\n'
  'INA281A2 from VBAT_ESTOP. Small outputs TPS1HTC30 from VBAT_P: ILIM 40.2k, SNS 1.1k -> TMUX1208 -> ADC. Readback via NPN to TCA9555 @0x23.')
-ou.p('genctl:TPS3431SDRBR','TPS3431SDRBR',{'VDD':'+3V3','EN':'+3V3','SET1':'+3V3','CWD':'WD_CWD','WDI':'WDI','GND':'GND','WDO':'WDO_N','ENOUT':None},mpn='TPS3431SDRBR')
+ou.p('genctl:TPS3431SDRBR','TPS3431SQDRBRQ1',{'VDD':'+3V3','EN':'+3V3','SET1':'+3V3','CWD':'WD_CWD','WDI':'WDI','GND':'GND','EP':'GND','WDO':'WDO_N','ENOUT':None},mpn='TPS3431SQDRBRQ1',lcsc='C2878091')
 ou.R('10k','WD_CWD','+3V3',note='CWD via 10k to VDD = factory timing (assumed)'); ou.R('10k','WDO_N','+3V3'); ou.C('100n','+3V3','GND')
 npn(ou,'WD_INV_B','GND','WD_OE_N'); ou.R('10k','WDO_N','WD_INV_B'); ou.R('100k','WD_INV_B','GND'); ou.R('10k','WD_OE_N','+3V3')
 for n in ('FUEL','CRANK','GLOW'):
@@ -395,7 +411,7 @@ for n in small: ou.R('100k',n+'_EN','GND')
 for n in ('FUEL','CRANK'):
     ou.p('genctl:TPS48100QDGXRQ1','TPS48100QDGXRQ1',{'VS':'VBAT_ESTOP','EN/UVLO':n+'_UVLO','INP1':n+'_EN','INP2':'GND','CS_SEL':'GND','ISCP':n+'_ISCP','TMR':n+'_TMR','SCP_TEST':'GND','GND':'GND','NC':None,
         'CS+':'VBAT_ESTOP','CS-':n+'_DRN','G1PU':n+'_GPU','G1PD':n+'_GPD','G2':None,'BST':n+'_BST','SRC':n+'_OUT','FLT':'OUT_FAULT_N'},mpn='TPS48100QDGXRQ1')
-    ou.R('100k','VBAT_ESTOP',n+'_UVLO'); ou.R('27k',n+'_UVLO','GND'); ou.R('35.7k',n+'_ISCP',n+'_DRN',note='ISCP R - reference node assumed CS-; verify'); ou.C('68n',n+'_TMR','GND')
+    ou.R('100k','VBAT_ESTOP',n+'_UVLO'); ou.R('27k',n+'_UVLO','GND'); ou.R('35.7k',n+'_ISCP','GND',note='RISCP to GND per DS eq.5: Isc=(35.7k*2uA+19mV)/1mR = 90A'); ou.C('68n',n+'_TMR','GND')
     ou.C('470n',n+'_BST',n+'_OUT'); ou.C('100n','VBAT_ESTOP','GND',pkg='0805')
     ou.R('10R',n+'_GPU',n+'_G'); ou.R('0R',n+'_GPD',n+'_G')
     ou.R('1m','VBAT_ESTOP',n+'_DRN',pkg='2512',mpn='WSLP2512 1mR',note='shunt')
@@ -414,12 +430,12 @@ for i,n in enumerate(outs):
     mux[n]=n+'_SNSM'
 rb=['FUEL','CRANK']+outs
 for n in rb:
-    ou.R('10k',n+'_OUT',n+'_LED',pkg='1206',note='LED limit 10k (was 1k in BOM - too hot at 24V)'); ou.LED('green',n+'_LED','GND')
+    ou.R('10k',n+'_OUT',n+'_LED',pkg='1206',note='LED limit 10k (was 1k in BOM - too hot at 24V)'); ou.LED('green',n+'_LED','GND',lcsc='C2297')
     ou.R('100k',n+'_OUT',n+'_RBB'); ou.R('10k',n+'_RBB','GND'); npn(ou,n+'_RBB','GND',n+'_RB_N')
 tca(ou,3,{('P0%d'%i if i<8 else 'P1%d'%(i-8)):rb[i]+'_RB_N' for i in range(15)} | {'P17':None})
 mA=[mux[n] for n in outs[:8]]; mB=[mux[n] for n in outs[8:]]+['ESTOP_TRIP_SNSM','GND','GND']
 for nm,lst in (('MUXA_OUT',mA),('MUXB_OUT',mB)):
-    c={'D':nm,'A0':'MUX_A0','A1':'MUX_A1','A2':'MUX_A2','EN':'+3V3','VDD':'+3V3','GND':'GND','GND/NC?':'GND'}
+    c={'D':nm,'A0':'MUX_A0','A1':'MUX_A1','A2':'MUX_A2','EN':'+3V3','VDD':'+3V3','GND':'GND','NC':None}
     for i,s_ in enumerate(lst): c['S%d'%(i+1)]=s_
     ou.p('genctl:TMUX1208PWR','TMUX1208PWR',c,mpn='TMUX1208PWR'); ou.C('100n','+3V3','GND'); ou.C('10n',nm,'GND')
 conn(ou,4,['VBAT_ESTOP','VBAT_ESTOP','FUEL_OUT','CRANK_OUT'],'J4 E-stop/fuel/crank (PC 5/4-7.62)',mpn='Phoenix PC 5/4-GF-7,62')
@@ -435,7 +451,7 @@ es=S('estop','E-stop trip and sense',
  'ADDED: 4th LVC1G08 gates MCU_TRIP with WDO. Hold-up cap changed to 50V (BOM 25V part < 30V OV threshold).')
 schottky(es,'SS110','VBAT_P','TRIP_LDO_IN',mpn='SS110')
 es.C('10u','TRIP_LDO_IN','GND',pkg='1210',note='50V (BOM 25V too low)')
-es.p('genctl:TPS7B6950QDBVRQ1','TPS7B6950QDBVRQ1',{'IN':'TRIP_LDO_IN','GND':'GND','OUT':'+5V_TRIP','NC':None},mpn='TPS7B6950QDBVRQ1')
+es.p('genctl:TPS7B6950QDBVRQ1','TPS7B6950QDBVRQ1',{'IN':'TRIP_LDO_IN','GND':'GND','OUT':'+5V_TRIP','NC':None},mpn='TPS7B6950QDBVRQ1',lcsc='C132202')
 es.C('2.2u','+5V_TRIP','GND',pkg='0805'); es.C('100n','+5V_TRIP','GND')
 es.R('47k','VBAT_ESTOP','TRIP_QB'); es.R('10k','TRIP_QB','GND'); npn(es,'TRIP_QB','GND','TRIP_RST')
 es.R('10k','+5V_TRIP','TRIP_RST'); es.R('100k','TRIP_RST','TRIP_TRIG'); es.C('100n','TRIP_TRIG','GND')
@@ -447,7 +463,7 @@ es.p('Diode:BAT54C','BAT54C',{'1':'TRIP_555_Q','2':'MCU_TRIP_G','3':'ESTOP_TRIP_
 es.p('genctl:TPS1HTC30QPWPRQ1','TPS1HTC30QPWPRQ1',{'VS':'VBAT_P','EN':'ESTOP_TRIP_EN','DIAG_EN':'DIAG_EN','LATCH':'GND','ILIM':'ESTOP_TRIP_ILIM','GND':'GND','VOUT':'ESTOP_TRIP_OUT','SNS':'ESTOP_TRIP_SNS','FAULT':'OUT_FAULT_N','NC':None},mpn='TPS1HTC30QPWPRQ1')
 es.R('13.3k','ESTOP_TRIP_ILIM','GND',note='~ILIM per BOM'); es.R('1.1k','ESTOP_TRIP_SNS','GND'); es.R('1k','ESTOP_TRIP_SNS','ESTOP_TRIP_SNSM'); es.C('100n','VBAT_P','GND',pkg='0805')
 schottky(es,'SS110','GND','ESTOP_TRIP_OUT',mpn='SS110'); tvs(es,'SMBJ28CA','ESTOP_TRIP_OUT')
-es.R('10k','ESTOP_TRIP_OUT','ESTOP_TRIP_LED',pkg='1206'); es.LED('red','ESTOP_TRIP_LED','GND')
+es.R('10k','ESTOP_TRIP_OUT','ESTOP_TRIP_LED',pkg='1206'); es.LED('red','ESTOP_TRIP_LED','GND',lcsc='C2295')
 es.R('100k','VBAT_ESTOP','VESTOP_SNS',note='0.1%'); es.R('10k','VESTOP_SNS','GND',note='0.1%'); es.C('100n','VESTOP_SNS','GND'); clamp(es,'VESTOP_SNS','BAT54S')
 tvs(es,'SMBJ28CA','VBAT_ESTOP')
 
@@ -456,10 +472,11 @@ ac=S('ac_metering','AC metering: 2x ADE9000 (gen + bus), isolated',
  'AC METERING. Hot side GND_AC isolated by ISOW7841 (data+power) + ISO7741, both 5kVrms reinforced, SOIC-16W 8mm. Barrier keep-out >=8mm + slot.\n'
  'Voltage: fully differential. Each line 4x1M -> tap (1k to GND_AC); each neutral (GEN_N, BUS_N separately) 4x1M -> N_TAP (1k to GND_AC); VxN <- 1k <- N_TAP.\n'
  'No 0R neutral link: GND_AC floats at the divider mid-point, common-mode attenuated 4001:1. Current: AC1005 CTs, burden 2x24.9R.')
-ac.p('genctl:ISOW7841DWE','ISOW7841DWER',{'VCC':'+3V3','GND1':'GND','INA':'ADE_SCK','INB':'ADE_MOSI','INC':'ADE_CS1_N','OUTD':'ADE_MISO','NC':None,
+for n in ('ADE_SCK','ADE_MOSI','ADE_CS1_N','ADE_MISO','ADE_CS2_N','ADE_RST_N','ADE_IRQ_N'): ac.R('1k',n,n+'_I',note='domain-boundary R (SAFE MCU <-> +3V3 isolator)')
+ac.p('genctl:ISOW7841DWE','ISOW7841DWER',{'VCC':'+3V3','GND1':'GND','INA':'ADE_SCK_I','INB':'ADE_MOSI_I','INC':'ADE_CS1_N_I','OUTD':'ADE_MISO_I','NC':None,
    'VISO':'+3V3_AC','GND2':'GND_AC','OUTA':'AC_SCK','OUTB':'AC_MOSI','OUTC':'AC_CS1_N','IND':'AC_MISO','SEL':'GND_AC'},mpn='ISOW7841DWER',note='5kVrms reinforced; SEL=GND2 -> VISO 3.3V')
 ac.C('10u','+3V3','GND',pkg='0805'); ac.C('100n','+3V3','GND'); ac.C('10u','+3V3_AC','GND_AC',pkg='0805'); ac.C('100n','+3V3_AC','GND_AC')
-ac.p('genctl:ISO7741DW','ISO7741DWR',{'VCC1':'+3V3','GND1':'GND','INA':'ADE_CS2_N','INB':'ADE_RST_N','INC':'GND','OUTD':'ADE_IRQ_N','EN1':'+3V3',
+ac.p('genctl:ISO7741DW','ISO7741DWR',{'VCC1':'+3V3','GND1':'GND','INA':'ADE_CS2_N_I','INB':'ADE_RST_N_I','INC':'GND','OUTD':'ADE_IRQ_N_I','EN1':'+3V3',
    'VCC2':'+3V3_AC','GND2':'GND_AC','OUTA':'AC_CS2_N','OUTB':'AC_RST_N','OUTC':None,'IND':'AC_IRQ_N','EN2':'+3V3_AC'},mpn='ISO7741DWR',note='5kVrms reinforced')
 ac.C('100n','+3V3','GND'); ac.C('100n','+3V3_AC','GND_AC')
 ac.R('10k','AC_IRQ_N','+3V3_AC'); ac.R('10k','AC_RST_N','+3V3_AC')
@@ -475,11 +492,11 @@ for k,(tag,clkin,clkout) in enumerate((('GEN','ADE_XI','ADE_XO'),('BUS','ADE_XO2
     ac.p('genctl:ADE9000ACPZ','ADE9000ACPZ (%s)'%tag,c,mpn='ADE9000ACPZ')
     ac.C('4.7u','AVDD_'+tag,'GND_AC',pkg='0805'); ac.C('100n','AVDD_'+tag,'GND_AC'); ac.C('4.7u','DVDD_'+tag,'GND_AC',pkg='0805'); ac.C('100n','DVDD_'+tag,'GND_AC')
     ac.C('4.7u','REF_'+tag,'GND_AC',pkg='0805'); ac.C('100n','REF_'+tag,'GND_AC'); ac.C('10u','+3V3_AC','GND_AC',pkg='0805'); ac.C('100n','+3V3_AC','GND_AC')
-ac.p('Device:Crystal','24.576MHz',{'1':'ADE_XI','2':'ADE_XO'},prefix='Y',mpn='24.576MHz 3225 (TBD)'); ac.C('22p','ADE_XI','GND_AC',pkg='0402'); ac.C('22p','ADE_XO','GND_AC',pkg='0402')
+ac.p('Device:Crystal_GND24','24.576MHz',{'1':'ADE_XI','3':'ADE_XO','2':'GND_AC','4':'GND_AC'},prefix='Y',mpn='X322524576MOB4SI',lcsc='C70568',fp='Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm'); ac.C('22p','ADE_XI','GND_AC',pkg='0402'); ac.C('22p','ADE_XO','GND_AC',pkg='0402')
 for tag,J in (('GEN','J7'),('BUS','J8')):
     conn(ac,4,[tag+'_L1',tag+'_L2',tag+'_L3',tag+'_N'],'%s %s voltage (L1 L2 L3 N)'%(J,tag),note='external DIN fuses assumed (spec); >=600VAC rated terminal')
     for ph,L in zip('ABC',('L1','L2','L3')):
-        ac.p('Device:Varistor','V20E385P',{'1':tag+'_'+L,'2':tag+'_N'},prefix='RV',mpn='V20E385P')
+        ac.p('Device:Varistor','V20E385P',{'1':tag+'_'+L,'2':tag+'_N'},prefix='RV',mpn='V20E385P',lcsc='C1527447',fp='Varistor:RV_Disc_D21.5mm_W7.5mm_P10mm')
         a=tag+'_'+L
         for j in range(4):
             b=('%s_%s_HV%d'%(tag,L,j+1)) if j<3 else '%s_V%s_TAP'%(tag,ph)
@@ -493,7 +510,7 @@ for tag,J in (('GEN','J7'),('BUS','J8')):
     ac.R('1k',tag+'_VN_TAP','GND_AC',note='neutral divider tap - no direct N-GND_AC link')
 cts=[]
 for i,ph in enumerate('ABCN',1):
-    ac.p('genctl:AC1005','AC1005',{'P1':'CT%d_S1'%i,'P2':'CT%d_S2'%i,'S1':'GEN_CT%s_1'%ph,'S2':'GEN_CT%s_2'%ph},mpn='AC1005')
+    ac.p('genctl:AC1005','AC1005',{'P1':'CT%d_S1'%i,'P2':'CT%d_S2'%i,'S1':'GEN_CT%s_1'%ph,'S2':'GEN_CT%s_2'%ph,'NC':None},mpn='AC1005',lcsc='C6117861')
     ac.R('24.9R','GEN_CT%s_1'%ph,'GND_AC',note='0.1% burden'); ac.R('24.9R','GEN_CT%s_2'%ph,'GND_AC',note='0.1% burden')
     ac.R('1k','GEN_CT%s_1'%ph,'GEN_I%s_P'%ph); ac.C('33n','GEN_I%s_P'%ph,'GND_AC'); ac.R('1k','GEN_CT%s_2'%ph,'GEN_I%s_N'%ph); ac.C('33n','GEN_I%s_N'%ph,'GND_AC')
     cts+=['CT%d_S1'%i,'CT%d_S2'%i]
@@ -503,7 +520,8 @@ conn(ac,8,cts,'J9 CT secondaries (5A)',note='external 5A CT loops pass through A
 fp_=S('frontpanel','Front panel: backlit buttons, buzzer',
  'FRONT PANEL. 12x CTS 228EMVARGBFR IP67 RGB-backlit tactile switches. Switch -> TCA9555 @0x20 (internal pull-ups).\n'
  'Backlight: common anodes on BTN_LED_V (+5V via AO3401A high-side, gated by CM5 GPIO13 BTN_BL_PWM = global dimming, default off).\n'
- 'Cathodes R/G/B per button via 330R/330R/200R (~8-9mA) to TCA9555 @0x21/@0x24/@0x25, active low. OFF = pin set as input (Hi-Z).')
+ 'Cathodes R/G/B per button via 470R/470R/330R (~6mA, <=18mA/pin, ~96mA/expander worst case) to TCA9555 @0x21/@0x24/@0x25, active low. OFF = Hi-Z.\n'
+ 'TCA9555s on +3V3_SAFE; buzzer on main +3V3.')
 b={}
 for i in range(12): b[('P0%d'%i) if i<8 else 'P1%d'%(i-8)]='BTN%d'%(i+1)
 for i in range(12,16): b['P1%d'%(i-8)]=None
@@ -512,8 +530,8 @@ ch=[]
 for i in range(12):
     n=i+1
     fp_.p('genctl:228EMVARGBFR','BTN%d'%n,{'A':'BTN%d'%n,'B':'GND','L1':'BTN_LED_V','L2':'BTN%d_GK'%n,'L3':'BTN%d_RK'%n,'L4':'BTN%d_BK'%n},prefix='SW',mpn='228EMVARGBFR')
-    for col,r in (('R','330R'),('G','330R'),('B','200R')):
-        fp_.R(r,'BTN%d_%sK'%(n,col),'BL%d_%s'%(n,col),note='LED %s ~8-9mA from 5V'%col); ch.append('BL%d_%s'%(n,col))
+    for col,r in (('R','470R'),('G','470R'),('B','330R')):
+        fp_.R(r,'BTN%d_%sK'%(n,col),'BL%d_%s'%(n,col),note='LED %s ~5-6mA from 5V'%col); ch.append('BL%d_%s'%(n,col))
 pins=[('P0%d'%k) for k in range(8)]+[('P1%d'%k) for k in range(8)]
 for addr,chunk in ((1,ch[0:16]),(4,ch[16:32]),(5,ch[32:36])):
     m={pn:None for pn in pins}
@@ -523,6 +541,114 @@ fp_.R('1k','BTN_BL_PWM','BL_Q_B'); fp_.R('100k','BL_Q_B','GND',note='default off
 fp_.R('10k','+5V','BL_PG',note='PFET gate pull-up'); fet(fp_,'Transistor_FET:AO3401A','AO3401A','BL_PG','+5V','BTN_LED_V')
 fp_.C('1u','BTN_LED_V','GND',pkg='0603'); fp_.C('10u','+5V','GND',pkg='0805')
 fp_.R('1k','BUZZER_PWM','BUZ_B'); fp_.R('100k','BUZ_B','GND'); npn(fp_,'BUZ_B','GND','BUZ_K')
-fp_.p('Device:Buzzer','MLT-8530',{'1':'BUZ_K','2':'+3V3'},prefix='BZ',mpn='MLT-8530')
+fp_.p('Device:Buzzer','MLT-8530',{'+':'+3V3','-':'BUZ_K'},prefix='BZ',mpn='MLT-8530',lcsc='C94599',fp='genctl:MLT-8530_buzzer',note='FIXED polarity: pad1 = +')
 fp_.p('Diode:1N4148W','1N4148W',{'A':'BUZ_K','K':'+3V3'},prefix='D',mpn='1N4148W')
 fp_.C('10u','+3V3','GND',pkg='0805')
+
+# =====================================================================
+# POST-PASS 1: safety domain. Everything on the MCU, inputs, outputs and E-stop sheets, plus the
+# front-panel TCA9555 expanders, runs from +3V3_SAFE (TPS2116 mux of +3V3 / always-on +3V3_BK).
+SAFE_SHEETS=('mcu','inputs','outputs','estop')
+for sh in SHEETS:
+    for pt in sh.parts:
+        keep = sh.name=='frontpanel' and (pt.value in ('MLT-8530','1N4148W') or pt is sh.parts[-1])
+        if sh.name in SAFE_SHEETS or (sh.name=='frontpanel' and not keep):
+            for k,v in pt.net.items():
+                if v=='+3V3': pt.net[k]='+3V3_SAFE'
+
+# POST-PASS 2: footprint / LCSC fill for generic parts (explicit values above win)
+FPMAP={  # libid -> (fp, lcsc, mpn)
+ 'Transistor_FET:BSC070N10NS5':('Package_TO_SOT_SMD:TDSON-8-1','C152539','BSC070N10NS5ATMA1'),
+ 'Transistor_FET:BSS84':('Package_TO_SOT_SMD:SOT-23',None,None),'Transistor_FET:DMN6075S':('Package_TO_SOT_SMD:SOT-23',None,None),
+ 'Transistor_FET:AO3401A':('Package_TO_SOT_SMD:SOT-23',None,None),'Transistor_BJT:MMBT3904':('Package_TO_SOT_SMD:SOT-23',None,None),
+ 'Transistor_BJT:MMBT3906':('Package_TO_SOT_SMD:SOT-23',None,None),'Diode:BAV99':('Package_TO_SOT_SMD:SOT-23',None,None),
+ 'Diode:BAT54S':('Package_TO_SOT_SMD:SOT-23',None,None),'Diode:BAT54C':('Package_TO_SOT_SMD:SOT-23',None,None),
+ 'Diode:1N4148W':('Diode_SMD:D_SOD-123',None,None),'Diode:SM712_SOT23':('Package_TO_SOT_SMD:SOT-23',None,None),
+ 'Power_Protection:NUP2105L':('Package_TO_SOT_SMD:SOT-23',None,None),'Power_Protection:USBLC6-2SC6':('Package_TO_SOT_SMD:SOT-23-6',None,None),
+ 'Power_Protection:SRV05-4':('Package_TO_SOT_SMD:SOT-23-6',None,None),
+ 'Interface_Expansion:TCA9555PWR':('Package_SO:TSSOP-24_4.4x7.8mm_P0.65mm',None,None),
+ 'MCU_ST_STM32H7:STM32H743VITx':('Package_QFP:LQFP-100_14x14mm_P0.5mm','C114409',None),
+ 'Memory_NVRAM:FM24C64B':('Package_SO:SOIC-8_3.9x4.9mm_P1.27mm','C9829',None),
+ 'Switch:SW_Push':('Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A','C318884',None),
+ 'Connector:Conn_ARM_JTAG_SWD_10':('genctl:FTSH-105-02_SWD','C5199898','FTSH-105-02-L-DV-TR'),
+ 'Connector_Generic:Conn_02x04_Odd_Even':('Connector_PinHeader_2.54mm:PinHeader_2x04_P2.54mm_Vertical','C68234','2x4 2.54 header'),
+ 'Connector_Generic:Conn_02x05_Odd_Even':('genctl:PZ254-2-05-S_2x05_SMD','C3294463','PZ254-2-05-S'),
+ 'Connector:USB_C_Receptacle_USB2.0_16P':('Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12','C165948',None),
+ 'Power_Management:TPS2051CDBV':('Package_TO_SOT_SMD:SOT-23-5',None,None),
+ 'Interface_USB:USB2514B_Bi':('Package_DFN_QFN:QFN-36-1EP_6x6mm_P0.5mm_EP3.7x3.7mm',None,None),
+ 'Amplifier_Operational:TLV9062':('Package_SO:SOIC-8_3.9x4.9mm_P1.27mm',None,None),'Amplifier_Operational:LM2904':('Package_SO:SOIC-8_3.9x4.9mm_P1.27mm',None,None),
+ 'Comparator:LM393':('Package_SO:SOIC-8_3.9x4.9mm_P1.27mm',None,None),'Analog_ADC:ADS1115IDGS':('Package_SO:MSOP-10_3x3mm_P0.5mm',None,None),
+ 'Reference_Voltage:LM4040DBZ-2.5':('Package_TO_SOT_SMD:SOT-23','C9421','LM4040AIM3-2.5'),
+ '74xx:74HC14':('Package_SO:SOIC-14_3.9x8.7mm_P1.27mm','C5605','74HC14D,653'),'Regulator_Linear:LM317_TO-252':('Package_TO_SOT_SMD:TO-252-2',None,None),
+ '74xGxx:74LVC1G08':('Package_TO_SOT_SMD:SOT-23-5',None,None),'Amplifier_Current:INA281A2':('Package_TO_SOT_SMD:SOT-23-5',None,None),
+ 'Timer:TLC555xD':('Package_SO:SOIC-8_3.9x4.9mm_P1.27mm','C130208','TLC555QDRQ1'),
+ 'Device:Fuse':('genctl:Keystone_3557-2_ATO_clips','C352820','3557-2 (x2 clips per fuse)'),
+ 'Switch:SW_DIP_x02':('genctl:DSHP02TSGER_DIP2','C367376','DSHP02TSGER'),
+ 'Mechanical:MountingHole_Pad':('MountingHole:MountingHole_3.2mm_M3_Pad','',None),
+}
+MPNLCSC={'BSS84':'C8545','DMN6075S':'C2832191','SI2309CDS-T1-GE3':'C10487','AO3401A':'C15127','BAV99':'C2500','BAT54S':'C85099','BAT54C':'C37704',
+ '1N4148W':'C81598','SM712':'C29359','NUP2105LT1G':'C14223','USBLC6-2SC6':'C7519','SRV05-4':'C85364','TPS2051CDBVR':'C129581',
+ 'USB2514B-AEZC-TR':'C51062','TLV9062IDR':'C693209','LM2904DR':'C7950','LM393DR':'C7955','ADS1115IDGSR':'C37593','LM317MDT-TR':'C15622',
+ 'SN74LVC1G08DBVR':'C7813','INA281A2QDBVRQ1':'C2862726','STM32H743VIT6':'C114409','FM24CL64B-GTR':'C9829',
+ 'SMDJ58CA':'C2985669','SMBJ28CA':'C113985','SMBJ5.0A':'C114063','SMAJ36CA':'C114047','SMBJ58CA':'C114034','SMBJ36CA':'C78421','SMDJ24A':'C2963997',
+ 'SS110':'C2847','SS34':'C8678','SK1010C':'C2847480','EEHZA1H101P':'C109086','EEHZK1E471P':'C242138','TS-1187A-B-A-B':'C318884',
+ 'SM04B-SRSS-TB':'C160390','TYPE-C-31-M-12':'C165948','WSLP2512 1mR':'C2933264','MMBT3904':'C20526','MMBT3906':'C2143'}
+DIODEFP={'SMDJ':'Diode_SMD:D_SMC','SMBJ':'Diode_SMD:D_SMB','SMAJ':'Diode_SMD:D_SMA','SS110':'Diode_SMD:D_SMA','SS34':'Diode_SMD:D_SMA','SK1010C':'Diode_SMD:D_SMC'}
+_r6='Resistor_SMD:R_0603_1608Metric'; _r12='Resistor_SMD:R_1206_3216Metric'; _c6='Capacitor_SMD:C_0603_1608Metric'
+RCX={  # (value, fp) -> lcsc for passives not in gen.RLCSC/CLCSC (all checked on JLC parts search 2026-10-24)
+ ('121k',_r6):'C25809',('16k',_r6):'C4210',('180k',_r6):'C22827',('18.7k',_r6):'C22893',('20k',_r6):'C4184',('232k',_r6):'C22913',
+ ('27.4k',_r6):'C22964',('330R',_r6):'C23138',('35.7k',_r6):'C23027',('40.2k',_r6):'C12447',('43.2k',_r6):'C23053',('470R',_r6):'C23179',
+ ('53.6k',_r6):'C23074',('680R',_r6):'C23228',('93.1k',_r6):'C23266',('1.1k',_r6):'C22764',('1.33k',_r6):'C22838',('13.3k',_r6):'C25952',
+ ('10R',_r6):'C22936',('1M',_r12):'C17927',('120R',_r12):'C17909',('62R',_r12):'C17971',('10k',_r12):'C17902',('4.7k',_r12):'C17936',
+ ('100R',_r12):'C319961',('1.1R','Resistor_SMD:R_0805_2012Metric'):'C2933354',('10R','Resistor_SMD:R_2512_6332Metric'):'C47019',
+ ('100n','Capacitor_SMD:C_0805_2012Metric'):'C28233',('100n','Capacitor_SMD:C_1206_3216Metric'):'C1945',('100p',_c6):'C14858',
+ ('10n',_c6):'C57112',('18p','Capacitor_SMD:C_0402_1005Metric'):'C1549',('2.2u','Capacitor_SMD:C_0805_2012Metric'):'C5137595',
+ ('220p',_c6):'C1603',('270p',_c6):'C1608',('4.7n','Capacitor_SMD:C_1206_3216Metric'):'C41017',('4.7u','Capacitor_SMD:C_0805_2012Metric'):'C1779',
+ ('470n',_c6):'C1623',('47n',_c6):'C1622',('68n',_c6):'C5137586',
+}
+PREC={('100k',_r6):'C122538',('18k',_r6):'C309650'}  # 0.1% thin film where the note asks for 0.1%
+CONNFP={  # value prefix -> (fp, lcsc, mpn)
+ 'PC 5/4-GF-7,62':('Connector_Phoenix_GMSTB:PhoenixContact_GMSTB_2,5_4-GF-7,62_1x04_P7.62mm_Horizontal_ThreadedFlange','C3579760','1720819'),
+ 'J4 E-stop':('Connector_Phoenix_GMSTB:PhoenixContact_GMSTB_2,5_4-GF-7,62_1x04_P7.62mm_Horizontal_ThreadedFlange','C3579760','1720819'),
+ 'Fan header':('Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal','C160390','SM04B-SRSS-TB'),
+ 'Internal USB':('Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal','C160390','SM04B-SRSS-TB'),
+ 'Spare USB':('Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical','C2337','1x6 2.54 header'),
+ 'LVDS FPC':('genctl:FPC_40P_0.5_05A20L40P','C5362161','05A20L40P'),'Touch FPC':('genctl:FPC_10P_0.5_05B20L10P','C5362168','05B20L10P'),
+ 'Backlight':('genctl:SM02B-BHSS-1-TB','C485339','SM02B-BHSS-1-TB'),
+ 'CAN1':('genctl:WJ15EDGRC-3.81-4P','C7245','WJ15EDGRC-3.81-04P'),'Expansion':('genctl:WJ15EDGRC-3.81-6P','C7246','WJ15EDGRC-3.81-06P'),
+ 'RS-485':('genctl:WJ15EDGRC-3.81-3P','C8406','WJ15EDGRC-3.81-03P'),
+ 'J9 CT':('genctl:KF2EDGRM-5.08-8P','C441294','KF2EDGRM-5.08-8P'),
+}
+def _fill(pt):
+    lid=pt.libid
+    if lid in ('74xx:74HC14','Timer:TLC555xD'): pt.fp=None; pt.lcsc=None; pt.mpn=None  # align with CSV BOM part
+    if pt.mpn=='MMBT3906': pt.lcsc='C2143'
+    if lid in FPMAP:
+        f,l,m=FPMAP[lid]
+        if not pt.fp: pt.fp=f
+        if not pt.lcsc and l: pt.lcsc=l
+        if not pt.mpn and m: pt.mpn=m
+    if not pt.lcsc and pt.mpn in MPNLCSC: pt.lcsc=MPNLCSC[pt.mpn]
+    if lid in ('Device:D_TVS','Device:D_Zener','Device:D_Schottky') and not pt.fp:
+        for k,f in DIODEFP.items():
+            if pt.value.startswith(k): pt.fp=f
+    if lid.startswith('Connector_Generic:Conn_01x') and not pt.fp:
+        for k,(f,l,m) in CONNFP.items():
+            if pt.value.startswith(k): pt.fp=f; pt.lcsc=pt.lcsc or l; pt.mpn=m
+        if not pt.fp:
+            n=int(lid[-2:])
+            if n==6 and ('7.62' not in pt.value):
+                pt.fp='genctl:WJ15EDGRC-3.81-6P'; pt.lcsc=pt.lcsc or 'C7246'; pt.mpn='WJ15EDGRC-3.81-06P'
+            if n==4 and 'voltage' in pt.value:
+                pt.fp='genctl:KF2EDGRM-5.08-6P'; pt.lcsc='C441292'; pt.mpn='KF2EDGRM-5.08-6P (use 4 of 6: L1/L2/L3 . N spacing)'
+    if lid=='Device:LED' and pt.lcsc in ('C2297','C2295'): pt.fp='LED_SMD:LED_0805_2012Metric'
+    if lid=='Device:R' and '0.1%' in (pt.note or '') and (pt.value,pt.fp) in PREC: pt.lcsc=PREC[(pt.value,pt.fp)]
+    if lid in ('Device:R','Device:C','Device:C_Polarized') and not pt.lcsc:
+        pt.lcsc=RCX.get((pt.value,pt.fp),'')
+    if not pt.lcsc and not pt.power:
+        sl={p[1]:p[2] for p in find(pt.sym,'property')}.get('LCSC','')
+        if sl: pt.lcsc=sl
+for pt in ALLPARTS: _fill(pt)
+
+# project footprint library
+open(os.path.join(OUT,'fp-lib-table'),'w').write('(fp_lib_table\n  (version 7)\n  (lib (name "genctl")(type "KiCad")(uri "${KIPRJMOD}/genctl.pretty")(options "")(descr "genctl project footprints (EasyEDA-derived land patterns + hand-drawn 228E/AC1005 pads: VERIFY before layout)"))\n)\n')

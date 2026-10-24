@@ -36,8 +36,14 @@ def prop(k,v,x=0,y=0,hide=False,ang=0):
     e=[Sym('effects'),[Sym('font'),[Sym('size'),1.27,1.27]]]
     if hide: e.append([Sym('hide'),Sym('yes')])
     return [Sym('property'),k,v,[Sym('at'),x,y,ang],e]
-def ic(name, left, right, top=(), bottom=(), ref='U', desc='', fp='', ds='', lcsc='', mpn='', mfr=''):
-    """left/right: list of (num,name) or None (spacer). Pins passive."""
+TYPEMAP={'W':'power_in','w':'power_out','I':'input','O':'output','B':'bidirectional','C':'open_collector','N':'no_connect','P':'passive','T':'tri_state','E':'open_emitter','U':'unspecified'}
+def ic(name, left, right, top=(), bottom=(), ref='U', desc='', fp='', ds='', lcsc='', mpn='', mfr='', types=None):
+    """left/right: list of (num,name) or None (spacer). types: {pin name or number: code} (W power_in, w power_out, I in, O out,
+    B bidir, C open collector/drain, N no_connect, P passive). Unlisted pins default to passive."""
+    types=types or {}
+    def ty(num,nm):
+        c=types.get(str(num), types.get(nm, 'P'))
+        return TYPEMAP.get(c,c)
     cw=0.85
     lw=max([len(e[1]) for e in left if e] or [0]); rw=max([len(e[1]) for e in right if e] or [0])
     tw=max(len(top),len(bottom))*2.54+5.08
@@ -50,7 +56,7 @@ def ic(name, left, right, top=(), bottom=(), ref='U', desc='', fp='', ds='', lcs
     def col(lst,x,ang):
         y=snap((len(lst)-1)*2.54/2); y=math.floor(y/2.54)*2.54
         for e in lst:
-            if e: pins.append(mkpin(e[0],e[1],x,round(y,2),ang))
+            if e: pins.append(mkpin(e[0],e[1],x,round(y,2),ang,typ=ty(e[0],e[1])))
             y-=2.54
     col(left,-hw-2.54,0); col(right,hw+2.54,180)
     yb=-(math.ceil(((len(left) if len(left)>len(right) else len(right))-1)*2.54/2/2.54)*2.54) - 2.54
@@ -59,13 +65,13 @@ def ic(name, left, right, top=(), bottom=(), ref='U', desc='', fp='', ds='', lcs
         yt+=2.54
         x=-(len(top)-1)*2.54/2; x=math.floor(x/2.54)*2.54
         for e in top:
-            if e: pins.append(mkpin(e[0],e[1],round(x,2),yt+2.54,270))
+            if e: pins.append(mkpin(e[0],e[1],round(x,2),yt+2.54,270,typ=ty(e[0],e[1])))
             x+=2.54
     if bottom:
         yb-=2.54
         x=-(len(bottom)-1)*2.54/2; x=math.floor(x/2.54)*2.54
         for e in bottom:
-            if e: pins.append(mkpin(e[0],e[1],round(x,2),yb-2.54,90))
+            if e: pins.append(mkpin(e[0],e[1],round(x,2),yb-2.54,90,typ=ty(e[0],e[1])))
             x+=2.54
     body=[Sym('symbol'),name+'_0_1',[Sym('rectangle'),[Sym('start'),-hw,yt],[Sym('end'),hw,yb],
           [Sym('stroke'),[Sym('width'),0.254],[Sym('type'),Sym('default')]],[Sym('fill'),[Sym('type'),Sym('background')]]]]

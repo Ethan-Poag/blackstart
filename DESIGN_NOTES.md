@@ -340,3 +340,30 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 4. **Footprints** are set only for passives and well-known packages. Custom ICs need footprints assigned.
 5. **LCSC fields** are blank on about half the grouped BOM lines (TBD).
 6. **Expander defaults** at power-up are Hi-Z. The AI current sources therefore default ON and the shunts OFF. Confirm this is acceptable.
+
+## Rev 2026-10-24: always-on safety 3.3 V, datasheet pass
+
+### +3V3_SAFE domain (restored battery backup)
+- +3V3 (TPS56637 from +12V) and +3V3_BK (LMR36506RRPER, EN tied to VBAT_P, runs 4.2-65 V so covers 6-32 V battery incl. cranking) feed a TPS2116 priority mux -> +3V3_SAFE.
+- Powers: STM32H743, FRAM, TPS3431 watchdog, E-stop logic, input/output expanders, front-panel logic. CM5, display, comms, modem stay on +3V3/+5V/+12V.
+- LMR36506: RT 40.2k (18286/400^1.021 = 40.4k -> ~400 kHz); FB 100k/43.2k -> 1.0*(1+100/43.2)=3.315 V; L 33 uH; 2x47 uF; CIN 2.2 uF/100 V + 100n.
+- TPS2116: VIN1=+3V3 priority, PR1 divider 18.7k/10k -> switchover when +3V3 < 1.0*28.7/10 = 2.87 V (2.64-3.10 V over tol). ST -> PSU_MAIN_OK (STM32 PC3_C, 100k pull-up to SAFE) so firmware knows it is on backup.
+- Dissipation on backup ~0.2 W vs ~8.6 W for an LDO from 28 V. BOM add ~$2.56.
+- Alternative considered: LMR51606 (C21260865) at 3.265 V + 2x LM66100 ideal-diode OR. Rejected: TPS2116 gives priority (no load sharing), a status pin and one part.
+- Back-powering at the domain boundary: every SAFE<->unpowered-domain signal (CM5 SPI/UART/links, CAN/RS-485 TX/RX/DE, ADE isolator I/O) goes through 1k series -> injection < 3 mA/pin into unpowered clamp diodes (within abs max of CM5/transceivers). SPI to CM5 limited to <=4 MHz by the 1k + pin C. Firmware must tri-state these pins when PSU_MAIN_OK is low.
+
+### Calculations replacing placeholders
+- LM5176: RT 27.4k; slope 220p; comp 22.1k/33n/220p; sense single 8 mOhm 2512; MODE 93.1k; external BAS70 boot diodes VCC->BOOT1/2.
+- TPS56637 (5V, 3V3, modem): EN 121k/16k -> 12*16/137 = 1.40 V > 1.2 V rising (modem: DS-suggested 27k also acceptable, kept 121k/16k for consistency); MODE 0R DNP (float = valid; 100k was in the invalid band); 3.3 uH; feed-forward 100p+20k. 5V FB kept 75k/10k (5.1 V; 73.2k gives 5.0 V if preferred).
+- TPS48100: RISCP 35.7k -> Isc = (35.7k*2 uA + 19 mV)/1 mOhm = 90 A.
+- TPS61500: VIN max 18 V (abs 20 V) on +12 V OK; FREQ 180k (~580 kHz; 176k low stock); SS 47n; L 10 uH SWPA6045S100MT; SS36 diode.
+- TCA9555: 18 mA/pin, ~96 mA/package worst case, under 160 mA GND limit.
+- ISOW7841: 75 mA available vs ~42 mA load.
+
+### ERC
+- Before: 2 errors (CA-IS3062W pins 11/16 both power-out). After: 0 errors, 0 warnings (kicad-cli --severity-all).
+- Auto PWR_FLAGs (gen.py): only on nets with power_in but no power_out, i.e. rails sourced through passive pins (inductor/fuse) or module-internal; list in tools output. Note gen.py was extended with a `types` arg.
+
+### Open items
+- OVP 30.3 V vs 32 V max operating battery: either raise OVP or define 30 V max.
+- EasyEDA footprints unverified (esp. CTS 228E holes, AC1005 pads, M.2 pinout); 1720819 low stock (50); USB3-A C3032863 no stock; V20E385P stock 2.

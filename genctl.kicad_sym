@@ -16,7 +16,7 @@
 			(effects
 				(font
 					(size 1.27 1.27))))
-		(property "Footprint" ""
+		(property "Footprint" "genctl:LM74800_WSON-12_3x3"
 			(at 0 0 0)
 			(effects
 				(font
@@ -28,13 +28,13 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "Description" "Ideal diode controller w/ load-dump protection, WSON-12"
+		(property "Description" "Ideal diode controller w/ load-dump protection, WSON-12. EP (13) = RTN: leave floating per DS Table 6-1"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C3215600"
 			(at 0 0 0)
 			(effects
 				(font
@@ -62,7 +62,7 @@
 				(fill
 					(type background))))
 		(symbol "LM74800QDRRRQ1_1_1"
-			(pin passive line
+			(pin power_in line
 				(at -12.7 7.62 0)
 				(length 2.54)
 				(name "A"
@@ -73,7 +73,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -12.7 5.08 0)
 				(length 2.54)
 				(name "VS"
@@ -84,7 +84,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 2.54 0)
 				(length 2.54)
 				(name "VSNS"
@@ -106,7 +106,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 -2.54 0)
 				(length 2.54)
 				(name "EN/UVLO"
@@ -117,7 +117,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 -5.08 0)
 				(length 2.54)
 				(name "OV"
@@ -128,7 +128,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -12.7 -7.62 0)
 				(length 2.54)
 				(name "GND"
@@ -139,7 +139,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 12.7 5.08 180)
 				(length 2.54)
 				(name "DGATE"
@@ -161,7 +161,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 12.7 0 180)
 				(length 2.54)
 				(name "HGATE"
@@ -191,6 +191,17 @@
 						(font
 							(size 1.27 1.27))))
 				(number "11"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin no_connect line
+				(at 12.7 -7.62 180)
+				(length 2.54)
+				(name "RTN"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "13"
 					(effects
 						(font
 							(size 1.27 1.27)))))))
@@ -226,7 +237,7 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C442493"
 			(at 0 0 0)
 			(effects
 				(font
@@ -254,7 +265,7 @@
 				(fill
 					(type background))))
 		(symbol "LM5176PWPR_1_1"
-			(pin passive line
+			(pin power_in line
 				(at -12.7 17.78 0)
 				(length 2.54)
 				(name "VIN"
@@ -265,7 +276,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 15.24 0)
 				(length 2.54)
 				(name "VISNS"
@@ -276,7 +287,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 12.7 0)
 				(length 2.54)
 				(name "EN/UVLO"
@@ -287,7 +298,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 10.16 0)
 				(length 2.54)
 				(name "MODE"
@@ -309,7 +320,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 5.08 0)
 				(length 2.54)
 				(name "RT/SYNC"
@@ -353,7 +364,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 -5.08 0)
 				(length 2.54)
 				(name "FB"
@@ -364,7 +375,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 -7.62 0)
 				(length 2.54)
 				(name "VOSNS"
@@ -375,7 +386,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 -10.16 0)
 				(length 2.54)
 				(name "ISNS+"
@@ -386,7 +397,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 -12.7 0)
 				(length 2.54)
 				(name "ISNS-"
@@ -397,7 +408,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -12.7 -15.24 0)
 				(length 2.54)
 				(name "AGND"
@@ -419,7 +430,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 12.7 15.24 180)
 				(length 2.54)
 				(name "HDRV1"
@@ -452,7 +463,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 12.7 7.62 180)
 				(length 2.54)
 				(name "LDRV1"
@@ -463,7 +474,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 12.7 5.08 180)
 				(length 2.54)
 				(name "HDRV2"
@@ -496,7 +507,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 12.7 -2.54 180)
 				(length 2.54)
 				(name "LDRV2"
@@ -507,7 +518,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at 12.7 -5.08 180)
 				(length 2.54)
 				(name "CS"
@@ -518,7 +529,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at 12.7 -7.62 180)
 				(length 2.54)
 				(name "CSG"
@@ -529,7 +540,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin open_collector line
 				(at 12.7 -10.16 180)
 				(length 2.54)
 				(name "PGOOD"
@@ -540,7 +551,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_out line
 				(at 12.7 -12.7 180)
 				(length 2.54)
 				(name "VCC"
@@ -551,7 +562,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 12.7 -15.24 180)
 				(length 2.54)
 				(name "BIAS"
@@ -562,7 +573,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 12.7 -17.78 180)
 				(length 2.54)
 				(name "PGND"
@@ -587,7 +598,7 @@
 			(effects
 				(font
 					(size 1.27 1.27))))
-		(property "Footprint" ""
+		(property "Footprint" "genctl:TPS56637_VQFN-HR-10_RPA"
 			(at 0 0 0)
 			(effects
 				(font
@@ -605,7 +616,7 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C841386"
 			(at 0 0 0)
 			(effects
 				(font
@@ -633,7 +644,7 @@
 				(fill
 					(type background))))
 		(symbol "TPS56637RPAR_1_1"
-			(pin passive line
+			(pin power_in line
 				(at -10.16 5.08 0)
 				(length 2.54)
 				(name "VIN"
@@ -644,7 +655,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 2.54 0)
 				(length 2.54)
 				(name "EN"
@@ -655,7 +666,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 0 0)
 				(length 2.54)
 				(name "MODE"
@@ -666,7 +677,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 -2.54 0)
 				(length 2.54)
 				(name "FB"
@@ -677,7 +688,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -10.16 -5.08 0)
 				(length 2.54)
 				(name "AGND"
@@ -688,7 +699,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -10.16 -7.62 0)
 				(length 2.54)
 				(name "PGND"
@@ -721,7 +732,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin open_collector line
 				(at 10.16 -2.54 180)
 				(length 2.54)
 				(name "PG"
@@ -732,7 +743,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at 10.16 -5.08 180)
 				(length 2.54)
 				(name "NC"
@@ -743,160 +754,12 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))))
-	(symbol "TPS629210DRL"
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(property "Reference" "U"
-			(at -12.7 6.35 0)
-			(effects
-				(font
-					(size 1.27 1.27))))
-		(property "Value" "TPS629210DRL"
-			(at -12.7 -8.89 0)
-			(effects
-				(font
-					(size 1.27 1.27))))
-		(property "Footprint" ""
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "Datasheet" ""
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "Description" "3-17V 1A sync buck, SOT-583"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "LCSC" ""
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "MPN" "TPS629210QDRLRQ1"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "Manufacturer" "TI"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(symbol "TPS629210DRL_0_1"
-			(rectangle
-				(start -12.7 5.08)
-				(end 12.7 -7.62)
-				(stroke
-					(width 0.254)
-					(type default))
-				(fill
-					(type background))))
-		(symbol "TPS629210DRL_1_1"
-			(pin passive line
-				(at -15.24 2.54 0)
-				(length 2.54)
-				(name "VIN"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "6"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -15.24 0 0)
-				(length 2.54)
-				(name "EN"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "7"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -15.24 -2.54 0)
-				(length 2.54)
-				(name "MODE/S-CONF"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "8"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -15.24 -5.08 0)
-				(length 2.54)
-				(name "GND"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "5"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 15.24 2.54 180)
-				(length 2.54)
-				(name "SW"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "4"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 15.24 0 180)
-				(length 2.54)
-				(name "VOS"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "3"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 15.24 -2.54 180)
-				(length 2.54)
-				(name "FB/VSET"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "1"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 15.24 -5.08 180)
-				(length 2.54)
-				(name "PG"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "2"
-					(effects
-						(font
-							(size 1.27 1.27)))))))
 	(symbol "TPS3431SDRBR"
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(property "Reference" "U"
-			(at -7.62 8.89 0)
+			(at -7.62 11.43 0)
 			(effects
 				(font
 					(size 1.27 1.27))))
@@ -905,7 +768,7 @@
 			(effects
 				(font
 					(size 1.27 1.27))))
-		(property "Footprint" ""
+		(property "Footprint" "genctl:TPS3431_VSON-8_DRB"
 			(at 0 0 0)
 			(effects
 				(font
@@ -917,19 +780,19 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "Description" "Standard programmable window watchdog, SON-8"
+		(property "Description" "Standard programmable window watchdog, VSON-8 DRB; EP (9) to GND"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C2878091"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "MPN" "TPS3431SDRBR"
+		(property "MPN" "TPS3431SQDRBRQ1"
 			(at 0 0 0)
 			(effects
 				(font
@@ -943,7 +806,7 @@
 				hide))
 		(symbol "TPS3431SDRBR_0_1"
 			(rectangle
-				(start -7.62 7.62)
+				(start -7.62 10.16)
 				(end 7.62 -10.16)
 				(stroke
 					(width 0.254)
@@ -951,8 +814,8 @@
 				(fill
 					(type background))))
 		(symbol "TPS3431SDRBR_1_1"
-			(pin passive line
-				(at -10.16 5.08 0)
+			(pin power_in line
+				(at -10.16 7.62 0)
 				(length 2.54)
 				(name "VDD"
 					(effects
@@ -962,8 +825,8 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
-				(at -10.16 2.54 0)
+			(pin input line
+				(at -10.16 5.08 0)
 				(length 2.54)
 				(name "EN"
 					(effects
@@ -973,8 +836,8 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
-				(at -10.16 0 0)
+			(pin input line
+				(at -10.16 2.54 0)
 				(length 2.54)
 				(name "SET1"
 					(effects
@@ -985,7 +848,7 @@
 						(font
 							(size 1.27 1.27)))))
 			(pin passive line
-				(at -10.16 -2.54 0)
+				(at -10.16 0 0)
 				(length 2.54)
 				(name "CWD"
 					(effects
@@ -995,8 +858,8 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
-				(at -10.16 -5.08 0)
+			(pin input line
+				(at -10.16 -2.54 0)
 				(length 2.54)
 				(name "WDI"
 					(effects
@@ -1006,8 +869,8 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
-				(at -10.16 -7.62 0)
+			(pin power_in line
+				(at -10.16 -5.08 0)
 				(length 2.54)
 				(name "GND"
 					(effects
@@ -1017,7 +880,18 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
+				(at -10.16 -7.62 0)
+				(length 2.54)
+				(name "EP"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "9"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin open_collector line
 				(at 10.16 0 180)
 				(length 2.54)
 				(name "WDO"
@@ -1028,7 +902,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 10.16 -2.54 180)
 				(length 2.54)
 				(name "ENOUT"
@@ -1053,7 +927,7 @@
 			(effects
 				(font
 					(size 1.27 1.27))))
-		(property "Footprint" ""
+		(property "Footprint" "genctl:TPS61500_HTSSOP-14_PWP"
 			(at 0 0 0)
 			(effects
 				(font
@@ -1065,13 +939,13 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "Description" "3A boost WLED driver, HTSSOP-14"
+		(property "Description" "3A boost WLED driver, HTSSOP-14 PowerPAD"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C71160"
 			(at 0 0 0)
 			(effects
 				(font
@@ -1099,7 +973,7 @@
 				(fill
 					(type background))))
 		(symbol "TPS61500PWPR_1_1"
-			(pin passive line
+			(pin power_in line
 				(at -10.16 7.62 0)
 				(length 2.54)
 				(name "VIN"
@@ -1110,7 +984,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 5.08 0)
 				(length 2.54)
 				(name "EN"
@@ -1121,7 +995,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 2.54 0)
 				(length 2.54)
 				(name "DIMC"
@@ -1165,7 +1039,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -10.16 -7.62 0)
 				(length 2.54)
 				(name "AGND"
@@ -1209,7 +1083,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at 10.16 2.54 180)
 				(length 2.54)
 				(name "OVP"
@@ -1220,7 +1094,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at 10.16 0 180)
 				(length 2.54)
 				(name "FB"
@@ -1231,7 +1105,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 10.16 -2.54 180)
 				(length 2.54)
 				(name "PGND"
@@ -1242,7 +1116,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 10.16 -5.08 180)
 				(length 2.54)
 				(name "PGND"
@@ -1253,7 +1127,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 10.16 -7.62 180)
 				(length 2.54)
 				(name "PGND"
@@ -1296,7 +1170,7 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C131941"
 			(at 0 0 0)
 			(effects
 				(font
@@ -1324,7 +1198,7 @@
 				(fill
 					(type background))))
 		(symbol "TPS22918DBVR_1_1"
-			(pin passive line
+			(pin power_in line
 				(at -10.16 2.54 0)
 				(length 2.54)
 				(name "VIN"
@@ -1335,7 +1209,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 0 0)
 				(length 2.54)
 				(name "ON"
@@ -1357,7 +1231,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -10.16 -5.08 0)
 				(length 2.54)
 				(name "GND"
@@ -1368,7 +1242,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_out line
 				(at 10.16 0 180)
 				(length 2.54)
 				(name "VOUT"
@@ -1422,7 +1296,7 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C2877863"
 			(at 0 0 0)
 			(effects
 				(font
@@ -1450,7 +1324,7 @@
 				(fill
 					(type background))))
 		(symbol "TLV75518PDBVR_1_1"
-			(pin passive line
+			(pin power_in line
 				(at -10.16 2.54 0)
 				(length 2.54)
 				(name "IN"
@@ -1461,7 +1335,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 0 0)
 				(length 2.54)
 				(name "EN"
@@ -1472,7 +1346,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -10.16 -2.54 0)
 				(length 2.54)
 				(name "GND"
@@ -1483,7 +1357,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_out line
 				(at 10.16 0 180)
 				(length 2.54)
 				(name "OUT"
@@ -1494,7 +1368,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at 10.16 -2.54 180)
 				(length 2.54)
 				(name "NC"
@@ -1531,13 +1405,13 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "Description" "40V 150mA 5V LDO, SOT-23-5 (pin4 assumed NC)"
+		(property "Description" "40V 150mA 5V LDO, SOT-23-5 DBV: pins 3 and 4 both GND per DS pin table"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C132202"
 			(at 0 0 0)
 			(effects
 				(font
@@ -1565,7 +1439,7 @@
 				(fill
 					(type background))))
 		(symbol "TPS7B6950QDBVRQ1_1_1"
-			(pin passive line
+			(pin power_in line
 				(at -10.16 0 0)
 				(length 2.54)
 				(name "IN"
@@ -1576,7 +1450,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -10.16 -2.54 0)
 				(length 2.54)
 				(name "GND"
@@ -1587,7 +1461,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_out line
 				(at 10.16 2.54 180)
 				(length 2.54)
 				(name "OUT"
@@ -1598,7 +1472,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at 10.16 0 180)
 				(length 2.54)
 				(name "NC"
@@ -1609,10 +1483,10 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 10.16 -2.54 180)
 				(length 2.54)
-				(name "NC"
+				(name "GND"
 					(effects
 						(font
 							(size 1.27 1.27))))
@@ -1634,7 +1508,7 @@
 			(effects
 				(font
 					(size 1.27 1.27))))
-		(property "Footprint" ""
+		(property "Footprint" "genctl:TPS1H200_MSOP-8-EP_DGN"
 			(at 0 0 0)
 			(effects
 				(font
@@ -1652,7 +1526,7 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C2653785"
 			(at 0 0 0)
 			(effects
 				(font
@@ -1680,7 +1554,7 @@
 				(fill
 					(type background))))
 		(symbol "TPS1H200AQDGNRQ1_1_1"
-			(pin passive line
+			(pin power_in line
 				(at -12.7 7.62 0)
 				(length 2.54)
 				(name "VS"
@@ -1691,7 +1565,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 5.08 0)
 				(length 2.54)
 				(name "IN"
@@ -1702,7 +1576,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 2.54 0)
 				(length 2.54)
 				(name "DIAG_EN"
@@ -1735,7 +1609,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -12.7 -5.08 0)
 				(length 2.54)
 				(name "GND"
@@ -1768,7 +1642,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin open_collector line
 				(at 12.7 -2.54 180)
 				(length 2.54)
 				(name "FAULT"
@@ -1793,7 +1667,7 @@
 			(effects
 				(font
 					(size 1.27 1.27))))
-		(property "Footprint" ""
+		(property "Footprint" "genctl:TPS1HTC30_HTSSOP-14_PWP"
 			(at 0 0 0)
 			(effects
 				(font
@@ -1805,19 +1679,19 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "Description" "40V 30mOhm high-side switch, HTSSOP-14 (EP not modelled - check DS)"
+		(property "Description" "40V 30mOhm high-side switch, HTSSOP-14 PWP; EP (15) to GND per DS"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C22414694"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "MPN" "TPS1HTC30QPWPRQ1"
+		(property "MPN" "TPS1HTC30AQPWPRQ1"
 			(at 0 0 0)
 			(effects
 				(font
@@ -1839,7 +1713,7 @@
 				(fill
 					(type background))))
 		(symbol "TPS1HTC30QPWPRQ1_1_1"
-			(pin passive line
+			(pin power_in line
 				(at -12.7 7.62 0)
 				(length 2.54)
 				(name "VS"
@@ -1850,7 +1724,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -12.7 5.08 0)
 				(length 2.54)
 				(name "VS"
@@ -1861,7 +1735,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -12.7 2.54 0)
 				(length 2.54)
 				(name "VS"
@@ -1872,7 +1746,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 0 0)
 				(length 2.54)
 				(name "EN"
@@ -1883,7 +1757,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 -2.54 0)
 				(length 2.54)
 				(name "DIAG_EN"
@@ -1894,7 +1768,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 -5.08 0)
 				(length 2.54)
 				(name "LATCH"
@@ -1916,7 +1790,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -12.7 -10.16 0)
 				(length 2.54)
 				(name "GND"
@@ -1928,7 +1802,7 @@
 						(font
 							(size 1.27 1.27)))))
 			(pin passive line
-				(at 12.7 5.08 180)
+				(at 12.7 7.62 180)
 				(length 2.54)
 				(name "VOUT"
 					(effects
@@ -1939,7 +1813,7 @@
 						(font
 							(size 1.27 1.27)))))
 			(pin passive line
-				(at 12.7 2.54 180)
+				(at 12.7 5.08 180)
 				(length 2.54)
 				(name "VOUT"
 					(effects
@@ -1950,7 +1824,7 @@
 						(font
 							(size 1.27 1.27)))))
 			(pin passive line
-				(at 12.7 0 180)
+				(at 12.7 2.54 180)
 				(length 2.54)
 				(name "VOUT"
 					(effects
@@ -1961,7 +1835,7 @@
 						(font
 							(size 1.27 1.27)))))
 			(pin passive line
-				(at 12.7 -2.54 180)
+				(at 12.7 0 180)
 				(length 2.54)
 				(name "SNS"
 					(effects
@@ -1971,8 +1845,8 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
-				(at 12.7 -5.08 180)
+			(pin open_collector line
+				(at 12.7 -2.54 180)
 				(length 2.54)
 				(name "FAULT"
 					(effects
@@ -1982,14 +1856,25 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
-				(at 12.7 -7.62 180)
+			(pin no_connect line
+				(at 12.7 -5.08 180)
 				(length 2.54)
 				(name "NC"
 					(effects
 						(font
 							(size 1.27 1.27))))
 				(number "11"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin power_in line
+				(at 12.7 -7.62 180)
+				(length 2.54)
+				(name "EP"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "15"
 					(effects
 						(font
 							(size 1.27 1.27)))))))
@@ -2007,7 +1892,7 @@
 			(effects
 				(font
 					(size 1.27 1.27))))
-		(property "Footprint" ""
+		(property "Footprint" "genctl:TPS48100_VSSOP-19_DGX"
 			(at 0 0 0)
 			(effects
 				(font
@@ -2019,13 +1904,13 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "Description" "Smart high-side driver with protection, VSSOP-19"
+		(property "Description" "Smart high-side driver with protection, VSSOP-19 DGX (pin 16 absent). ISCP: R to GND; CS_SEL GND = high-side sense"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C43131316"
 			(at 0 0 0)
 			(effects
 				(font
@@ -2053,7 +1938,7 @@
 				(fill
 					(type background))))
 		(symbol "TPS48100QDGXRQ1_1_1"
-			(pin passive line
+			(pin power_in line
 				(at -12.7 12.7 0)
 				(length 2.54)
 				(name "VS"
@@ -2064,7 +1949,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 10.16 0)
 				(length 2.54)
 				(name "EN/UVLO"
@@ -2075,7 +1960,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 7.62 0)
 				(length 2.54)
 				(name "INP1"
@@ -2086,7 +1971,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 5.08 0)
 				(length 2.54)
 				(name "INP2"
@@ -2097,7 +1982,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 2.54 0)
 				(length 2.54)
 				(name "CS_SEL"
@@ -2108,7 +1993,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 0 0)
 				(length 2.54)
 				(name "ISCP"
@@ -2119,7 +2004,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 -2.54 0)
 				(length 2.54)
 				(name "TMR"
@@ -2130,7 +2015,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -12.7 -5.08 0)
 				(length 2.54)
 				(name "SCP_TEST"
@@ -2141,7 +2026,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -12.7 -7.62 0)
 				(length 2.54)
 				(name "GND"
@@ -2152,7 +2037,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at -12.7 -10.16 0)
 				(length 2.54)
 				(name "NC"
@@ -2163,7 +2048,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at -12.7 -12.7 0)
 				(length 2.54)
 				(name "NC"
@@ -2174,7 +2059,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at 12.7 7.62 180)
 				(length 2.54)
 				(name "CS+"
@@ -2185,7 +2070,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at 12.7 5.08 180)
 				(length 2.54)
 				(name "CS-"
@@ -2196,7 +2081,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 12.7 2.54 180)
 				(length 2.54)
 				(name "G1PU"
@@ -2207,7 +2092,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 12.7 0 180)
 				(length 2.54)
 				(name "G1PD"
@@ -2218,7 +2103,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 12.7 -2.54 180)
 				(length 2.54)
 				(name "G2"
@@ -2251,7 +2136,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin open_collector line
 				(at 12.7 -10.16 180)
 				(length 2.54)
 				(name "FLT"
@@ -2288,13 +2173,13 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "Description" "8:1 analog mux, TSSOP-16 (pin3 per DS table UNVERIFIED)"
+		(property "Description" "8:1 analog mux, TSSOP-16 (pin 3 = NC per DS)"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C494728"
 			(at 0 0 0)
 			(effects
 				(font
@@ -2333,7 +2218,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 5.08 0)
 				(length 2.54)
 				(name "A0"
@@ -2344,7 +2229,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 2.54 0)
 				(length 2.54)
 				(name "A1"
@@ -2355,7 +2240,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 0 0)
 				(length 2.54)
 				(name "A2"
@@ -2366,7 +2251,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 -2.54 0)
 				(length 2.54)
 				(name "EN"
@@ -2377,7 +2262,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -10.16 -5.08 0)
 				(length 2.54)
 				(name "VDD"
@@ -2388,7 +2273,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -10.16 -7.62 0)
 				(length 2.54)
 				(name "GND"
@@ -2399,10 +2284,10 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at -10.16 -10.16 0)
 				(length 2.54)
-				(name "GND/NC?"
+				(name "NC"
 					(effects
 						(font
 							(size 1.27 1.27))))
@@ -2530,7 +2415,7 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C113281"
 			(at 0 0 0)
 			(effects
 				(font
@@ -2558,7 +2443,7 @@
 				(fill
 					(type background))))
 		(symbol "SN74LVC541APWR_1_1"
-			(pin passive line
+			(pin input line
 				(at -10.16 12.7 0)
 				(length 2.54)
 				(name "A1"
@@ -2569,7 +2454,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 10.16 0)
 				(length 2.54)
 				(name "A2"
@@ -2580,7 +2465,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 7.62 0)
 				(length 2.54)
 				(name "A3"
@@ -2591,7 +2476,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 5.08 0)
 				(length 2.54)
 				(name "A4"
@@ -2602,7 +2487,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 2.54 0)
 				(length 2.54)
 				(name "A5"
@@ -2613,7 +2498,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 0 0)
 				(length 2.54)
 				(name "A6"
@@ -2624,7 +2509,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 -2.54 0)
 				(length 2.54)
 				(name "A7"
@@ -2635,7 +2520,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 -5.08 0)
 				(length 2.54)
 				(name "A8"
@@ -2646,7 +2531,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 -7.62 0)
 				(length 2.54)
 				(name "~{OE1}"
@@ -2657,7 +2542,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 -10.16 0)
 				(length 2.54)
 				(name "~{OE2}"
@@ -2668,7 +2553,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -10.16 -12.7 0)
 				(length 2.54)
 				(name "VCC"
@@ -2679,7 +2564,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -10.16 -15.24 0)
 				(length 2.54)
 				(name "GND"
@@ -2690,7 +2575,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin tri_state line
 				(at 10.16 7.62 180)
 				(length 2.54)
 				(name "Y1"
@@ -2701,7 +2586,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin tri_state line
 				(at 10.16 5.08 180)
 				(length 2.54)
 				(name "Y2"
@@ -2712,7 +2597,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin tri_state line
 				(at 10.16 2.54 180)
 				(length 2.54)
 				(name "Y3"
@@ -2723,7 +2608,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin tri_state line
 				(at 10.16 0 180)
 				(length 2.54)
 				(name "Y4"
@@ -2734,7 +2619,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin tri_state line
 				(at 10.16 -2.54 180)
 				(length 2.54)
 				(name "Y5"
@@ -2745,7 +2630,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin tri_state line
 				(at 10.16 -5.08 180)
 				(length 2.54)
 				(name "Y6"
@@ -2756,7 +2641,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin tri_state line
 				(at 10.16 -7.62 180)
 				(length 2.54)
 				(name "Y7"
@@ -2767,7 +2652,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin tri_state line
 				(at 10.16 -10.16 180)
 				(length 2.54)
 				(name "Y8"
@@ -2792,7 +2677,7 @@
 			(effects
 				(font
 					(size 1.27 1.27))))
-		(property "Footprint" ""
+		(property "Footprint" "genctl:SN65DSI83_nFBGA-64_ZXH"
 			(at 0 0 0)
 			(effects
 				(font
@@ -2810,7 +2695,7 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C2871688"
 			(at 0 0 0)
 			(effects
 				(font
@@ -2838,7 +2723,7 @@
 				(fill
 					(type background))))
 		(symbol "SN65DSI83ZXHR_1_1"
-			(pin passive line
+			(pin input line
 				(at -30.48 22.86 0)
 				(length 2.54)
 				(name "DA0P"
@@ -2849,7 +2734,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -30.48 20.32 0)
 				(length 2.54)
 				(name "DA0N"
@@ -2860,7 +2745,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -30.48 17.78 0)
 				(length 2.54)
 				(name "DA1P"
@@ -2871,7 +2756,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -30.48 15.24 0)
 				(length 2.54)
 				(name "DA1N"
@@ -2882,7 +2767,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -30.48 12.7 0)
 				(length 2.54)
 				(name "DA2P"
@@ -2893,7 +2778,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -30.48 10.16 0)
 				(length 2.54)
 				(name "DA2N"
@@ -2904,7 +2789,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -30.48 7.62 0)
 				(length 2.54)
 				(name "DA3P"
@@ -2915,7 +2800,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -30.48 5.08 0)
 				(length 2.54)
 				(name "DA3N"
@@ -2926,7 +2811,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -30.48 2.54 0)
 				(length 2.54)
 				(name "DACP"
@@ -2937,7 +2822,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -30.48 0 0)
 				(length 2.54)
 				(name "DACN"
@@ -2948,7 +2833,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -30.48 -5.08 0)
 				(length 2.54)
 				(name "SCL"
@@ -2959,7 +2844,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin bidirectional line
 				(at -30.48 -7.62 0)
 				(length 2.54)
 				(name "SDA"
@@ -2970,7 +2855,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -30.48 -10.16 0)
 				(length 2.54)
 				(name "ADDR"
@@ -2981,7 +2866,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -30.48 -12.7 0)
 				(length 2.54)
 				(name "EN"
@@ -2992,7 +2877,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at -30.48 -15.24 0)
 				(length 2.54)
 				(name "IRQ"
@@ -3003,7 +2888,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -30.48 -17.78 0)
 				(length 2.54)
 				(name "REFCLK"
@@ -3036,7 +2921,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 30.48 33.02 180)
 				(length 2.54)
 				(name "A_Y0P"
@@ -3047,7 +2932,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 30.48 30.48 180)
 				(length 2.54)
 				(name "A_Y0N"
@@ -3058,7 +2943,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 30.48 27.94 180)
 				(length 2.54)
 				(name "A_Y1P"
@@ -3069,7 +2954,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 30.48 25.4 180)
 				(length 2.54)
 				(name "A_Y1N"
@@ -3080,7 +2965,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 30.48 22.86 180)
 				(length 2.54)
 				(name "A_Y2P"
@@ -3091,7 +2976,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 30.48 20.32 180)
 				(length 2.54)
 				(name "A_Y2N"
@@ -3102,7 +2987,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 30.48 17.78 180)
 				(length 2.54)
 				(name "A_Y3P"
@@ -3113,7 +2998,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 30.48 15.24 180)
 				(length 2.54)
 				(name "A_Y3N"
@@ -3124,7 +3009,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 30.48 12.7 180)
 				(length 2.54)
 				(name "A_CLKP"
@@ -3135,7 +3020,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 30.48 10.16 180)
 				(length 2.54)
 				(name "A_CLKN"
@@ -3146,7 +3031,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 30.48 5.08 180)
 				(length 2.54)
 				(name "VCC"
@@ -3157,7 +3042,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 30.48 2.54 180)
 				(length 2.54)
 				(name "VCC"
@@ -3168,7 +3053,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 30.48 0 180)
 				(length 2.54)
 				(name "VCC"
@@ -3179,7 +3064,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 30.48 -2.54 180)
 				(length 2.54)
 				(name "VCC"
@@ -3190,7 +3075,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 30.48 -5.08 180)
 				(length 2.54)
 				(name "VCC"
@@ -3201,7 +3086,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 30.48 -7.62 180)
 				(length 2.54)
 				(name "VCC"
@@ -3212,7 +3097,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 30.48 -10.16 180)
 				(length 2.54)
 				(name "VCC"
@@ -3223,7 +3108,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 30.48 -12.7 180)
 				(length 2.54)
 				(name "VCORE"
@@ -3234,7 +3119,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 30.48 -15.24 180)
 				(length 2.54)
 				(name "GND"
@@ -3245,7 +3130,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 30.48 -17.78 180)
 				(length 2.54)
 				(name "GND"
@@ -3256,7 +3141,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 30.48 -20.32 180)
 				(length 2.54)
 				(name "GND"
@@ -3267,7 +3152,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 30.48 -22.86 180)
 				(length 2.54)
 				(name "GND"
@@ -3278,7 +3163,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 30.48 -25.4 180)
 				(length 2.54)
 				(name "GND"
@@ -3289,7 +3174,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 30.48 -27.94 180)
 				(length 2.54)
 				(name "GND"
@@ -3300,7 +3185,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 30.48 -30.48 180)
 				(length 2.54)
 				(name "GND"
@@ -3311,7 +3196,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 30.48 -33.02 180)
 				(length 2.54)
 				(name "GND"
@@ -3322,7 +3207,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at -25.4 -43.18 90)
 				(length 2.54)
 				(name "NC"
@@ -3333,7 +3218,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at -22.86 -43.18 90)
 				(length 2.54)
 				(name "NC"
@@ -3344,7 +3229,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at -20.32 -43.18 90)
 				(length 2.54)
 				(name "NC"
@@ -3355,7 +3240,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at -17.78 -43.18 90)
 				(length 2.54)
 				(name "NC"
@@ -3366,7 +3251,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at -15.24 -43.18 90)
 				(length 2.54)
 				(name "NC"
@@ -3377,7 +3262,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at -12.7 -43.18 90)
 				(length 2.54)
 				(name "NC"
@@ -3388,7 +3273,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at -10.16 -43.18 90)
 				(length 2.54)
 				(name "NC"
@@ -3399,7 +3284,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at -7.62 -43.18 90)
 				(length 2.54)
 				(name "NC"
@@ -3410,7 +3295,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at -5.08 -43.18 90)
 				(length 2.54)
 				(name "NC"
@@ -3421,7 +3306,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at -2.54 -43.18 90)
 				(length 2.54)
 				(name "NC"
@@ -3432,7 +3317,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at 0 -43.18 90)
 				(length 2.54)
 				(name "NC"
@@ -3443,7 +3328,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at 2.54 -43.18 90)
 				(length 2.54)
 				(name "NC"
@@ -3454,7 +3339,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at 5.08 -43.18 90)
 				(length 2.54)
 				(name "NC"
@@ -3465,7 +3350,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at 7.62 -43.18 90)
 				(length 2.54)
 				(name "NC"
@@ -3476,7 +3361,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at 10.16 -43.18 90)
 				(length 2.54)
 				(name "NC"
@@ -3487,7 +3372,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at 12.7 -43.18 90)
 				(length 2.54)
 				(name "NC"
@@ -3498,7 +3383,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at 15.24 -43.18 90)
 				(length 2.54)
 				(name "NC"
@@ -3509,7 +3394,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at 17.78 -43.18 90)
 				(length 2.54)
 				(name "NC"
@@ -3520,7 +3405,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at 20.32 -43.18 90)
 				(length 2.54)
 				(name "NC"
@@ -3531,7 +3416,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at 22.86 -43.18 90)
 				(length 2.54)
 				(name "NC"
@@ -3574,7 +3459,7 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C2890050"
 			(at 0 0 0)
 			(effects
 				(font
@@ -3602,7 +3487,7 @@
 				(fill
 					(type background))))
 		(symbol "CA-IS3062W_1_1"
-			(pin passive line
+			(pin power_in line
 				(at -10.16 7.62 0)
 				(length 2.54)
 				(name "VCC"
@@ -3613,7 +3498,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 5.08 0)
 				(length 2.54)
 				(name "TXD"
@@ -3624,7 +3509,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at -10.16 2.54 0)
 				(length 2.54)
 				(name "RXD"
@@ -3635,7 +3520,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -10.16 0 0)
 				(length 2.54)
 				(name "GND1"
@@ -3646,7 +3531,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -10.16 -2.54 0)
 				(length 2.54)
 				(name "GND1"
@@ -3657,7 +3542,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at -10.16 -5.08 0)
 				(length 2.54)
 				(name "NC"
@@ -3668,7 +3553,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at -10.16 -7.62 0)
 				(length 2.54)
 				(name "NC"
@@ -3679,7 +3564,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at -10.16 -10.16 0)
 				(length 2.54)
 				(name "NC"
@@ -3690,7 +3575,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 10.16 7.62 180)
 				(length 2.54)
 				(name "VISO"
@@ -3701,7 +3586,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_out line
 				(at 10.16 5.08 180)
 				(length 2.54)
 				(name "VISO"
@@ -3712,7 +3597,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin bidirectional line
 				(at 10.16 2.54 180)
 				(length 2.54)
 				(name "CANH"
@@ -3723,7 +3608,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin bidirectional line
 				(at 10.16 0 180)
 				(length 2.54)
 				(name "CANL"
@@ -3734,7 +3619,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 10.16 -2.54 180)
 				(length 2.54)
 				(name "GND2"
@@ -3745,7 +3630,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 10.16 -5.08 180)
 				(length 2.54)
 				(name "GND2"
@@ -3756,7 +3641,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 10.16 -7.62 180)
 				(length 2.54)
 				(name "GND2"
@@ -3767,7 +3652,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at 10.16 -10.16 180)
 				(length 2.54)
 				(name "NC"
@@ -3810,7 +3695,7 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C5121950"
 			(at 0 0 0)
 			(effects
 				(font
@@ -3838,7 +3723,7 @@
 				(fill
 					(type background))))
 		(symbol "CA-IS2092W_1_1"
-			(pin passive line
+			(pin power_in line
 				(at -10.16 7.62 0)
 				(length 2.54)
 				(name "VCC"
@@ -3849,7 +3734,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 5.08 0)
 				(length 2.54)
 				(name "DI"
@@ -3860,7 +3745,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin tri_state line
 				(at -10.16 2.54 0)
 				(length 2.54)
 				(name "RO"
@@ -3871,7 +3756,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 0 0)
 				(length 2.54)
 				(name "DE"
@@ -3882,7 +3767,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 -2.54 0)
 				(length 2.54)
 				(name "~{RE}"
@@ -3893,7 +3778,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -10.16 -5.08 0)
 				(length 2.54)
 				(name "GNDA"
@@ -3904,7 +3789,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -10.16 -7.62 0)
 				(length 2.54)
 				(name "GNDA"
@@ -3915,7 +3800,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -10.16 -10.16 0)
 				(length 2.54)
 				(name "GNDA"
@@ -3926,7 +3811,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_out line
 				(at 10.16 7.62 180)
 				(length 2.54)
 				(name "VISO"
@@ -3937,7 +3822,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at 10.16 5.08 180)
 				(length 2.54)
 				(name "SEL"
@@ -3948,7 +3833,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin bidirectional line
 				(at 10.16 2.54 180)
 				(length 2.54)
 				(name "A"
@@ -3959,7 +3844,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin bidirectional line
 				(at 10.16 0 180)
 				(length 2.54)
 				(name "B"
@@ -3970,7 +3855,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 10.16 -2.54 180)
 				(length 2.54)
 				(name "GNDB"
@@ -3981,7 +3866,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 10.16 -5.08 180)
 				(length 2.54)
 				(name "GNDB"
@@ -3992,7 +3877,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at 10.16 -7.62 180)
 				(length 2.54)
 				(name "NC"
@@ -4003,7 +3888,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at 10.16 -10.16 180)
 				(length 2.54)
 				(name "NC"
@@ -4028,7 +3913,7 @@
 			(effects
 				(font
 					(size 1.27 1.27))))
-		(property "Footprint" ""
+		(property "Footprint" "genctl:ADE9000_LFCSP-40_6x6"
 			(at 0 0 0)
 			(effects
 				(font
@@ -4046,13 +3931,13 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C654559"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "MPN" "ADE9000ACPZ"
+		(property "MPN" "ADE9000ACPZ-RL"
 			(at 0 0 0)
 			(effects
 				(font
@@ -4074,7 +3959,7 @@
 				(fill
 					(type background))))
 		(symbol "ADE9000ACPZ_1_1"
-			(pin passive line
+			(pin input line
 				(at -15.24 17.78 0)
 				(length 2.54)
 				(name "IAP"
@@ -4085,7 +3970,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -15.24 15.24 0)
 				(length 2.54)
 				(name "IAN"
@@ -4096,7 +3981,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -15.24 12.7 0)
 				(length 2.54)
 				(name "IBP"
@@ -4107,7 +3992,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -15.24 10.16 0)
 				(length 2.54)
 				(name "IBN"
@@ -4118,7 +4003,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -15.24 7.62 0)
 				(length 2.54)
 				(name "ICP"
@@ -4129,7 +4014,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -15.24 5.08 0)
 				(length 2.54)
 				(name "ICN"
@@ -4140,7 +4025,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -15.24 2.54 0)
 				(length 2.54)
 				(name "INP"
@@ -4151,7 +4036,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -15.24 0 0)
 				(length 2.54)
 				(name "INN"
@@ -4162,7 +4047,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -15.24 -2.54 0)
 				(length 2.54)
 				(name "VAP"
@@ -4173,7 +4058,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -15.24 -5.08 0)
 				(length 2.54)
 				(name "VAN"
@@ -4184,7 +4069,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -15.24 -7.62 0)
 				(length 2.54)
 				(name "VBP"
@@ -4195,7 +4080,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -15.24 -10.16 0)
 				(length 2.54)
 				(name "VBN"
@@ -4206,7 +4091,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -15.24 -12.7 0)
 				(length 2.54)
 				(name "VCP"
@@ -4217,7 +4102,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -15.24 -15.24 0)
 				(length 2.54)
 				(name "VCN"
@@ -4228,7 +4113,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -15.24 -17.78 0)
 				(length 2.54)
 				(name "CLKIN"
@@ -4239,7 +4124,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at -15.24 -20.32 0)
 				(length 2.54)
 				(name "CLKOUT"
@@ -4250,7 +4135,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 15.24 20.32 180)
 				(length 2.54)
 				(name "VDD"
@@ -4261,7 +4146,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at 15.24 17.78 180)
 				(length 2.54)
 				(name "PULL_HIGH"
@@ -4272,7 +4157,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_out line
 				(at 15.24 15.24 180)
 				(length 2.54)
 				(name "AVDDOUT"
@@ -4283,7 +4168,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_out line
 				(at 15.24 12.7 180)
 				(length 2.54)
 				(name "DVDDOUT"
@@ -4305,7 +4190,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at 15.24 7.62 180)
 				(length 2.54)
 				(name "SCLK"
@@ -4316,7 +4201,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at 15.24 5.08 180)
 				(length 2.54)
 				(name "MOSI"
@@ -4327,7 +4212,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin tri_state line
 				(at 15.24 2.54 180)
 				(length 2.54)
 				(name "MISO"
@@ -4338,7 +4223,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at 15.24 0 180)
 				(length 2.54)
 				(name "~{SS}"
@@ -4349,7 +4234,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at 15.24 -2.54 180)
 				(length 2.54)
 				(name "~{RESET}"
@@ -4360,7 +4245,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin open_collector line
 				(at 15.24 -5.08 180)
 				(length 2.54)
 				(name "~{IRQ0}"
@@ -4371,7 +4256,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin open_collector line
 				(at 15.24 -7.62 180)
 				(length 2.54)
 				(name "~{IRQ1}"
@@ -4382,7 +4267,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 15.24 -10.16 180)
 				(length 2.54)
 				(name "CF1"
@@ -4393,7 +4278,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 15.24 -12.7 180)
 				(length 2.54)
 				(name "CF2"
@@ -4404,7 +4289,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 15.24 -15.24 180)
 				(length 2.54)
 				(name "CF3/ZX"
@@ -4415,7 +4300,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 15.24 -17.78 180)
 				(length 2.54)
 				(name "CF4/EVENT"
@@ -4426,7 +4311,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at 15.24 -20.32 180)
 				(length 2.54)
 				(name "PM0"
@@ -4437,7 +4322,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at 15.24 -22.86 180)
 				(length 2.54)
 				(name "PM1"
@@ -4448,7 +4333,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -7.62 -30.48 90)
 				(length 2.54)
 				(name "DGND"
@@ -4459,7 +4344,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -5.08 -30.48 90)
 				(length 2.54)
 				(name "REFGND"
@@ -4492,7 +4377,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 2.54 -30.48 90)
 				(length 2.54)
 				(name "AGND"
@@ -4503,7 +4388,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 5.08 -30.48 90)
 				(length 2.54)
 				(name "GND"
@@ -4525,599 +4410,12 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))))
-	(symbol "ADuM5020-5BRWZ"
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(property "Reference" "U"
-			(at -10.16 11.43 0)
-			(effects
-				(font
-					(size 1.27 1.27))))
-		(property "Value" "ADuM5020-5BRWZ"
-			(at -10.16 -13.97 0)
-			(effects
-				(font
-					(size 1.27 1.27))))
-		(property "Footprint" "Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "Datasheet" ""
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "Description" "Isolated DC-DC 500mW, SOIC-16W (3 kVrms - NOT reinforced 5kV)"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "LCSC" ""
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "MPN" "ADuM5020-5BRWZ"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "Manufacturer" "Analog Devices"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(symbol "ADuM5020-5BRWZ_0_1"
-			(rectangle
-				(start -10.16 10.16)
-				(end 10.16 -12.7)
-				(stroke
-					(width 0.254)
-					(type default))
-				(fill
-					(type background))))
-		(symbol "ADuM5020-5BRWZ_1_1"
-			(pin passive line
-				(at -12.7 7.62 0)
-				(length 2.54)
-				(name "VDDP"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "5"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -12.7 5.08 0)
-				(length 2.54)
-				(name "PDIS"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "3"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -12.7 2.54 0)
-				(length 2.54)
-				(name "GND1"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "2"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -12.7 0 0)
-				(length 2.54)
-				(name "GND1"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "4"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -12.7 -2.54 0)
-				(length 2.54)
-				(name "GND1"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "6"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -12.7 -5.08 0)
-				(length 2.54)
-				(name "GND1"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "8"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -12.7 -7.62 0)
-				(length 2.54)
-				(name "NIC"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "1"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -12.7 -10.16 0)
-				(length 2.54)
-				(name "NIC"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "7"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 12.7 7.62 180)
-				(length 2.54)
-				(name "VISO"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "12"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 12.7 5.08 180)
-				(length 2.54)
-				(name "VSEL"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "14"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 12.7 2.54 180)
-				(length 2.54)
-				(name "GNDISO"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "9"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 12.7 0 180)
-				(length 2.54)
-				(name "GNDISO"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "11"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 12.7 -2.54 180)
-				(length 2.54)
-				(name "GNDISO"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "13"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 12.7 -5.08 180)
-				(length 2.54)
-				(name "GNDISO"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "15"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 12.7 -7.62 180)
-				(length 2.54)
-				(name "NIC"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "10"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 12.7 -10.16 180)
-				(length 2.54)
-				(name "NIC"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "16"
-					(effects
-						(font
-							(size 1.27 1.27)))))))
-	(symbol "ADuM141E1BRWZ"
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(property "Reference" "U"
-			(at -7.62 11.43 0)
-			(effects
-				(font
-					(size 1.27 1.27))))
-		(property "Value" "ADuM141E1BRWZ"
-			(at -7.62 -13.97 0)
-			(effects
-				(font
-					(size 1.27 1.27))))
-		(property "Footprint" "Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "Datasheet" ""
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "Description" "Quad digital isolator 3/1, SOIC-16W (pinout from memory - UNVERIFIED)"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "LCSC" ""
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "MPN" "ADuM141E1BRWZ"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "Manufacturer" "Analog Devices"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(symbol "ADuM141E1BRWZ_0_1"
-			(rectangle
-				(start -7.62 10.16)
-				(end 7.62 -12.7)
-				(stroke
-					(width 0.254)
-					(type default))
-				(fill
-					(type background))))
-		(symbol "ADuM141E1BRWZ_1_1"
-			(pin passive line
-				(at -10.16 7.62 0)
-				(length 2.54)
-				(name "VDD1"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "1"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -10.16 5.08 0)
-				(length 2.54)
-				(name "VIA"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "3"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -10.16 2.54 0)
-				(length 2.54)
-				(name "VIB"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "4"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -10.16 0 0)
-				(length 2.54)
-				(name "VIC"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "5"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -10.16 -2.54 0)
-				(length 2.54)
-				(name "VOD"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "6"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -10.16 -5.08 0)
-				(length 2.54)
-				(name "VE1"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "7"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -10.16 -7.62 0)
-				(length 2.54)
-				(name "GND1"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "2"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -10.16 -10.16 0)
-				(length 2.54)
-				(name "GND1"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "8"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 10.16 7.62 180)
-				(length 2.54)
-				(name "VDD2"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "16"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 10.16 5.08 180)
-				(length 2.54)
-				(name "VOA"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "14"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 10.16 2.54 180)
-				(length 2.54)
-				(name "VOB"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "13"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 10.16 0 180)
-				(length 2.54)
-				(name "VOC"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "12"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 10.16 -2.54 180)
-				(length 2.54)
-				(name "VID"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "11"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 10.16 -5.08 180)
-				(length 2.54)
-				(name "VE2"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "10"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 10.16 -7.62 180)
-				(length 2.54)
-				(name "GND2"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "9"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 10.16 -10.16 180)
-				(length 2.54)
-				(name "GND2"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "15"
-					(effects
-						(font
-							(size 1.27 1.27)))))))
-	(symbol "ADP150AUJZ-3.3"
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(property "Reference" "U"
-			(at -7.62 6.35 0)
-			(effects
-				(font
-					(size 1.27 1.27))))
-		(property "Value" "ADP150AUJZ-3.3"
-			(at -7.62 -6.35 0)
-			(effects
-				(font
-					(size 1.27 1.27))))
-		(property "Footprint" "Package_TO_SOT_SMD:TSOT-23-5"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "Datasheet" ""
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "Description" "150mA 3.3V LDO TSOT-5"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "LCSC" ""
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "MPN" "ADP150AUJZ-3.3-R7"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "Manufacturer" "Analog Devices"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(symbol "ADP150AUJZ-3.3_0_1"
-			(rectangle
-				(start -7.62 5.08)
-				(end 7.62 -5.08)
-				(stroke
-					(width 0.254)
-					(type default))
-				(fill
-					(type background))))
-		(symbol "ADP150AUJZ-3.3_1_1"
-			(pin passive line
-				(at -10.16 2.54 0)
-				(length 2.54)
-				(name "VIN"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "1"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -10.16 0 0)
-				(length 2.54)
-				(name "EN"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "3"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -10.16 -2.54 0)
-				(length 2.54)
-				(name "GND"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "2"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 10.16 0 180)
-				(length 2.54)
-				(name "VOUT"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "5"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 10.16 -2.54 180)
-				(length 2.54)
-				(name "NC"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "4"
-					(effects
-						(font
-							(size 1.27 1.27)))))))
 	(symbol "AC1005"
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(property "Reference" "T"
-			(at -5.08 3.81 0)
+			(at -5.08 6.35 0)
 			(effects
 				(font
 					(size 1.27 1.27))))
@@ -5126,7 +4424,7 @@
 			(effects
 				(font
 					(size 1.27 1.27))))
-		(property "Footprint" ""
+		(property "Footprint" "genctl:AC1005_CT"
 			(at 0 0 0)
 			(effects
 				(font
@@ -5138,13 +4436,13 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "Description" "Current transformer 5A:5mA 1000:1, pass-through primary. P1/P2 = primary wire loop through core (wire bridge / busbar link - not a pin on the CT)"
+		(property "Description" "Current transformer 5A:5mA 1000:1, pass-through primary. S1/S2 = CT pins 1/2, pin 3 mechanical. P1/P2 = footprint wire-loop pads 4/5 (primary wire passes through the core window)"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C6117861"
 			(at 0 0 0)
 			(effects
 				(font
@@ -5164,7 +4462,7 @@
 				hide))
 		(symbol "AC1005_0_1"
 			(rectangle
-				(start -5.08 2.54)
+				(start -5.08 5.08)
 				(end 5.08 -5.08)
 				(stroke
 					(width 0.254)
@@ -5179,7 +4477,7 @@
 					(effects
 						(font
 							(size 1.27 1.27))))
-				(number "1"
+				(number "4"
 					(effects
 						(font
 							(size 1.27 1.27)))))
@@ -5190,96 +4488,14 @@
 					(effects
 						(font
 							(size 1.27 1.27))))
-				(number "2"
+				(number "5"
 					(effects
 						(font
 							(size 1.27 1.27)))))
 			(pin passive line
-				(at 7.62 0 180)
+				(at 7.62 2.54 180)
 				(length 2.54)
 				(name "S1"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "3"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 7.62 -2.54 180)
-				(length 2.54)
-				(name "S2"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "4"
-					(effects
-						(font
-							(size 1.27 1.27)))))))
-	(symbol "HR911130C"
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(property "Reference" "J"
-			(at -10.16 11.43 0)
-			(effects
-				(font
-					(size 1.27 1.27))))
-		(property "Value" "HR911130C"
-			(at -10.16 -13.97 0)
-			(effects
-				(font
-					(size 1.27 1.27))))
-		(property "Footprint" ""
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "Datasheet" ""
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "Description" "RJ45 magjack 10/100 w/ LEDs (pin map UNVERIFIED - DS is graphical). CM5 needs 1000BASE-T 4-pair jack for gigabit"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "LCSC" ""
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "MPN" "HR911130C"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "Manufacturer" "HanRun"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(symbol "HR911130C_0_1"
-			(rectangle
-				(start -10.16 10.16)
-				(end 10.16 -12.7)
-				(stroke
-					(width 0.254)
-					(type default))
-				(fill
-					(type background))))
-		(symbol "HR911130C_1_1"
-			(pin passive line
-				(at -12.7 7.62 0)
-				(length 2.54)
-				(name "TD+"
 					(effects
 						(font
 							(size 1.27 1.27))))
@@ -5288,9 +4504,9 @@
 						(font
 							(size 1.27 1.27)))))
 			(pin passive line
-				(at -12.7 5.08 0)
+				(at 7.62 0 180)
 				(length 2.54)
-				(name "TD-"
+				(name "S2"
 					(effects
 						(font
 							(size 1.27 1.27))))
@@ -5298,135 +4514,14 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
-				(at -12.7 2.54 0)
-				(length 2.54)
-				(name "RD+"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "3"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -12.7 0 0)
-				(length 2.54)
-				(name "RD-"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "6"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -12.7 -2.54 0)
-				(length 2.54)
-				(name "CT1"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "4"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -12.7 -5.08 0)
-				(length 2.54)
-				(name "CT2"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "5"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -12.7 -7.62 0)
+			(pin no_connect line
+				(at 7.62 -2.54 180)
 				(length 2.54)
 				(name "NC"
 					(effects
 						(font
 							(size 1.27 1.27))))
-				(number "7"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -12.7 -10.16 0)
-				(length 2.54)
-				(name "GND_CHS"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "8"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 12.7 5.08 180)
-				(length 2.54)
-				(name "LED_L_A"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "9"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 12.7 2.54 180)
-				(length 2.54)
-				(name "LED_L_K"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "10"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 12.7 0 180)
-				(length 2.54)
-				(name "LED_R_A"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "11"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 12.7 -2.54 180)
-				(length 2.54)
-				(name "LED_R_K"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "12"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 12.7 -5.08 180)
-				(length 2.54)
-				(name "SHIELD"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "13"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 12.7 -7.62 180)
-				(length 2.54)
-				(name "SHIELD"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "14"
+				(number "3"
 					(effects
 						(font
 							(size 1.27 1.27)))))))
@@ -5444,7 +4539,7 @@
 			(effects
 				(font
 					(size 1.27 1.27))))
-		(property "Footprint" ""
+		(property "Footprint" "genctl:HR911131A_RJ45"
 			(at 0 0 0)
 			(effects
 				(font
@@ -5456,13 +4551,13 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "Description" "RJ45 magjack 10/100/1000BASE-T (IEEE802.3ab), 4x 1CT:1CT, centre taps common on P5/P6, green LED 11(A)-12(K), yellow 14(A)-13(K) per HanRun DS schematic. Shield tab pin numbers per footprint"
+		(property "Description" "RJ45 magjack 10/100/1000BASE-T (IEEE802.3ab), 4x 1CT:1CT, centre taps common on P5/P6, green LED 11(A)-12(K), yellow 14(A)-13(K) per HanRun DS schematic. Shield pads 15/16 per footprint"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C5184934"
 			(at 0 0 0)
 			(effects
 				(font
@@ -5698,7 +4793,7 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C179690"
 			(at 0 0 0)
 			(effects
 				(font
@@ -5726,7 +4821,7 @@
 				(fill
 					(type background))))
 		(symbol "ISOW7841DWE_1_1"
-			(pin passive line
+			(pin power_in line
 				(at -10.16 7.62 0)
 				(length 2.54)
 				(name "VCC"
@@ -5737,7 +4832,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 5.08 0)
 				(length 2.54)
 				(name "INA"
@@ -5748,7 +4843,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 2.54 0)
 				(length 2.54)
 				(name "INB"
@@ -5759,7 +4854,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 0 0)
 				(length 2.54)
 				(name "INC"
@@ -5770,7 +4865,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at -10.16 -2.54 0)
 				(length 2.54)
 				(name "OUTD"
@@ -5781,7 +4876,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin no_connect line
 				(at -10.16 -5.08 0)
 				(length 2.54)
 				(name "NC"
@@ -5792,7 +4887,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -10.16 -7.62 0)
 				(length 2.54)
 				(name "GND1"
@@ -5803,7 +4898,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -10.16 -10.16 0)
 				(length 2.54)
 				(name "GND1"
@@ -5814,7 +4909,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_out line
 				(at 10.16 7.62 180)
 				(length 2.54)
 				(name "VISO"
@@ -5825,7 +4920,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 10.16 5.08 180)
 				(length 2.54)
 				(name "OUTA"
@@ -5836,7 +4931,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 10.16 2.54 180)
 				(length 2.54)
 				(name "OUTB"
@@ -5847,7 +4942,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 10.16 0 180)
 				(length 2.54)
 				(name "OUTC"
@@ -5858,7 +4953,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at 10.16 -2.54 180)
 				(length 2.54)
 				(name "IND"
@@ -5869,7 +4964,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at 10.16 -5.08 180)
 				(length 2.54)
 				(name "SEL"
@@ -5880,7 +4975,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 10.16 -7.62 180)
 				(length 2.54)
 				(name "GND2"
@@ -5891,7 +4986,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 10.16 -10.16 180)
 				(length 2.54)
 				(name "GND2"
@@ -5934,7 +5029,7 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C571196"
 			(at 0 0 0)
 			(effects
 				(font
@@ -5962,7 +5057,7 @@
 				(fill
 					(type background))))
 		(symbol "ISO7741DW_1_1"
-			(pin passive line
+			(pin power_in line
 				(at -10.16 7.62 0)
 				(length 2.54)
 				(name "VCC1"
@@ -5973,7 +5068,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 5.08 0)
 				(length 2.54)
 				(name "INA"
@@ -5984,7 +5079,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 2.54 0)
 				(length 2.54)
 				(name "INB"
@@ -5995,7 +5090,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 0 0)
 				(length 2.54)
 				(name "INC"
@@ -6006,7 +5101,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at -10.16 -2.54 0)
 				(length 2.54)
 				(name "OUTD"
@@ -6017,7 +5112,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at -10.16 -5.08 0)
 				(length 2.54)
 				(name "EN1"
@@ -6028,7 +5123,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -10.16 -7.62 0)
 				(length 2.54)
 				(name "GND1"
@@ -6039,7 +5134,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -10.16 -10.16 0)
 				(length 2.54)
 				(name "GND1"
@@ -6050,7 +5145,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 10.16 7.62 180)
 				(length 2.54)
 				(name "VCC2"
@@ -6061,7 +5156,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 10.16 5.08 180)
 				(length 2.54)
 				(name "OUTA"
@@ -6072,7 +5167,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 10.16 2.54 180)
 				(length 2.54)
 				(name "OUTB"
@@ -6083,7 +5178,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin output line
 				(at 10.16 0 180)
 				(length 2.54)
 				(name "OUTC"
@@ -6094,7 +5189,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at 10.16 -2.54 180)
 				(length 2.54)
 				(name "IND"
@@ -6105,7 +5200,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin input line
 				(at 10.16 -5.08 180)
 				(length 2.54)
 				(name "EN2"
@@ -6116,7 +5211,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 10.16 -7.62 180)
 				(length 2.54)
 				(name "GND2"
@@ -6127,7 +5222,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at 10.16 -10.16 180)
 				(length 2.54)
 				(name "GND2"
@@ -6152,7 +5247,7 @@
 			(effects
 				(font
 					(size 1.27 1.27))))
-		(property "Footprint" ""
+		(property "Footprint" "genctl:CTS_228E_RGB"
 			(at 0 0 0)
 			(effects
 				(font
@@ -6164,13 +5259,13 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "Description" "Sealed IP67 SMD tactile switch, RGB backlit. Switch A-B (B pins common). LED: L1 common anode, L2 green K, L3 red K, L4 blue K (CTS 228E Rev H fig.1). Pad numbers per footprint (TBD)"
+		(property "Description" "Sealed IP67 SMD tactile switch, RGB backlit. Switch A-B (B pins common). LED: L1 common anode, L2 green K, L3 red K, L4 blue K (CTS 228E Rev H fig.1). Pads 1-7 = symbol pins; footprint hand-drawn from CTS drawing"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C6077135"
 			(at 0 0 0)
 			(effects
 				(font
@@ -6289,7 +5384,7 @@
 			(effects
 				(font
 					(size 1.27 1.27))))
-		(property "Footprint" ""
+		(property "Footprint" "genctl:RClamp0524P_SLP2510P8"
 			(at 0 0 0)
 			(effects
 				(font
@@ -6301,13 +5396,13 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "Description" "4-line ESD array, flow-through SLP2510P8"
+		(property "Description" "4-line ESD array, flow-through SLP2510P8 (pins 6/7/9/10 are internally the same lines as 5/4/2/1 - route through)"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C40960"
 			(at 0 0 0)
 			(effects
 				(font
@@ -6459,7 +5554,7 @@
 			(effects
 				(font
 					(size 1.27 1.27))))
-		(property "Footprint" ""
+		(property "Footprint" "genctl:ACT45B_CMC"
 			(at 0 0 0)
 			(effects
 				(font
@@ -6471,13 +5566,13 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "Description" "CAN common-mode choke 51uH (winding 1:1-4, 2:2-3 UNVERIFIED)"
+		(property "Description" "CAN common-mode choke 51uH; windings 1-4 and 2-3 per TDK ACT45B drawing"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C76584"
 			(at 0 0 0)
 			(effects
 				(font
@@ -6563,7 +5658,7 @@
 			(effects
 				(font
 					(size 1.27 1.27))))
-		(property "Footprint" ""
+		(property "Footprint" "genctl:M.2_KeyB_MDT420B03001"
 			(at 0 0 0)
 			(effects
 				(font
@@ -6575,25 +5670,25 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "Description" "M.2 Key B socket (WWAN/LTE). Pin functions from M.2 spec from memory - UNVERIFIED; Pnn = unused/NC"
+		(property "Description" "M.2 Key B socket (WWAN/LTE). Pin functions per PCI-SIG M.2 WWAN Key B assignment (verify vs modem); Pnn = unused/NC"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C4594496"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "MPN" "M.2 Key-B socket 0.5mm (TBD)"
+		(property "MPN" "MDT420B01001"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "Manufacturer" ""
+		(property "Manufacturer" "Molex/MDT"
 			(at 0 0 0)
 			(effects
 				(font
@@ -6609,7 +5704,7 @@
 				(fill
 					(type background))))
 		(symbol "M.2_KeyB_Modem_1_1"
-			(pin passive line
+			(pin power_in line
 				(at -17.78 22.86 0)
 				(length 2.54)
 				(name "3.3V"
@@ -6620,7 +5715,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -17.78 20.32 0)
 				(length 2.54)
 				(name "3.3V"
@@ -6631,7 +5726,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -17.78 17.78 0)
 				(length 2.54)
 				(name "3.3V"
@@ -6642,7 +5737,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -17.78 15.24 0)
 				(length 2.54)
 				(name "3.3V"
@@ -6653,7 +5748,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin passive line
+			(pin power_in line
 				(at -17.78 12.7 0)
 				(length 2.54)
 				(name "3.3V"
@@ -7360,7 +6455,7 @@
 			(effects
 				(font
 					(size 1.27 1.27))))
-		(property "Footprint" ""
+		(property "Footprint" "genctl:DF40C-100DS-0.4V"
 			(at 0 0 0)
 			(effects
 				(font
@@ -7378,19 +6473,19 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C597931"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "MPN" "Hirose DF40C-100DS-0.4V mating connector (CM5 socket)"
+		(property "MPN" "DF40C-100DS-0.4V(51)"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "Manufacturer" "Raspberry Pi"
+		(property "Manufacturer" "Hirose"
 			(at 0 0 0)
 			(effects
 				(font
@@ -8520,7 +7615,7 @@
 			(effects
 				(font
 					(size 1.27 1.27))))
-		(property "Footprint" ""
+		(property "Footprint" "genctl:DF40C-100DS-0.4V"
 			(at 0 0 0)
 			(effects
 				(font
@@ -8538,19 +7633,19 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C597931"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "MPN" "Hirose DF40C-100DS-0.4V mating connector (CM5 socket)"
+		(property "MPN" "DF40C-100DS-0.4V(51)"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "Manufacturer" "Raspberry Pi"
+		(property "Manufacturer" "Hirose"
 			(at 0 0 0)
 			(effects
 				(font
@@ -9680,7 +8775,7 @@
 			(effects
 				(font
 					(size 1.27 1.27))))
-		(property "Footprint" ""
+		(property "Footprint" "Connector_USB:USB3_A_Molex_48393-001"
 			(at 0 0 0)
 			(effects
 				(font
@@ -9692,25 +8787,25 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "Description" "USB 3.0 Type-A receptacle (part TBD)"
+		(property "Description" "USB 3.0 Type-A receptacle, Molex 48393-0003 class (KiCad USB3_A_Molex_48393-001, 4 shield pads = 10)"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C3032863"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "MPN" "USB3.0 A female TBD"
+		(property "MPN" "48393-0003"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "Manufacturer" ""
+		(property "Manufacturer" "Molex"
 			(at 0 0 0)
 			(effects
 				(font
@@ -9835,17 +8930,6 @@
 				(number "10"
 					(effects
 						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 15.24 -2.54 180)
-				(length 2.54)
-				(name "SHIELD"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "11"
-					(effects
-						(font
 							(size 1.27 1.27)))))))
 	(symbol "CR2032_Holder"
 		(exclude_from_sim no)
@@ -9861,7 +8945,7 @@
 			(effects
 				(font
 					(size 1.27 1.27))))
-		(property "Footprint" ""
+		(property "Footprint" "genctl:BS-CR2032-8"
 			(at 0 0 0)
 			(effects
 				(font
@@ -9873,25 +8957,25 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "Description" "CR2032 holder"
+		(property "Description" "CR2032 SMD holder"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" ""
+		(property "LCSC" "C7498149"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "MPN" "CR2032 holder (BOM other_bom)"
+		(property "MPN" "BS-CR2032-8"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "Manufacturer" ""
+		(property "Manufacturer" "MYOUNG"
 			(at 0 0 0)
 			(effects
 				(font
@@ -9907,7 +8991,7 @@
 				(fill
 					(type background))))
 		(symbol "CR2032_Holder_1_1"
-			(pin passive line
+			(pin power_out line
 				(at -7.62 0 0)
 				(length 2.54)
 				(name "+"
@@ -9926,6 +9010,313 @@
 						(font
 							(size 1.27 1.27))))
 				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)))))))
+	(symbol "LMR36506RRPER"
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "U"
+			(at -10.16 8.89 0)
+			(effects
+				(font
+					(size 1.27 1.27))))
+		(property "Value" "LMR36506RRPER"
+			(at -10.16 -8.89 0)
+			(effects
+				(font
+					(size 1.27 1.27))))
+		(property "Footprint" "genctl:LMR36506_VQFN-HR-9_RPE"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(property "Description" "3-65V 0.6A sync buck, VQFN-HR-9 2x2 (RPE)"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(property "LCSC" "C2870127"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(property "MPN" "LMR36506RRPER"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(property "Manufacturer" "TI"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(symbol "LMR36506RRPER_0_1"
+			(rectangle
+				(start -10.16 7.62)
+				(end 10.16 -7.62)
+				(stroke
+					(width 0.254)
+					(type default))
+				(fill
+					(type background))))
+		(symbol "LMR36506RRPER_1_1"
+			(pin power_in line
+				(at -12.7 5.08 0)
+				(length 2.54)
+				(name "VIN"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin input line
+				(at -12.7 2.54 0)
+				(length 2.54)
+				(name "EN/UVLO"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin input line
+				(at -12.7 0 0)
+				(length 2.54)
+				(name "RT"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin input line
+				(at -12.7 -2.54 0)
+				(length 2.54)
+				(name "FB"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "8"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin power_in line
+				(at -12.7 -5.08 0)
+				(length 2.54)
+				(name "GND"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "9"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin passive line
+				(at 12.7 2.54 180)
+				(length 2.54)
+				(name "SW"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "5"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin passive line
+				(at 12.7 0 180)
+				(length 2.54)
+				(name "BOOT"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "6"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin power_out line
+				(at 12.7 -2.54 180)
+				(length 2.54)
+				(name "VCC"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "7"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin open_collector line
+				(at 12.7 -5.08 180)
+				(length 2.54)
+				(name "PGOOD"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)))))))
+	(symbol "TPS2116DRLR"
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "U"
+			(at -7.62 8.89 0)
+			(effects
+				(font
+					(size 1.27 1.27))))
+		(property "Value" "TPS2116DRLR"
+			(at -7.62 -8.89 0)
+			(effects
+				(font
+					(size 1.27 1.27))))
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-583-8"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(property "Description" "1.6-5.5V 2.5A power mux, SOT-583-8"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(property "LCSC" "C3235557"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(property "MPN" "TPS2116DRLR"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(property "Manufacturer" "TI"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(symbol "TPS2116DRLR_0_1"
+			(rectangle
+				(start -7.62 7.62)
+				(end 7.62 -7.62)
+				(stroke
+					(width 0.254)
+					(type default))
+				(fill
+					(type background))))
+		(symbol "TPS2116DRLR_1_1"
+			(pin power_in line
+				(at -10.16 5.08 0)
+				(length 2.54)
+				(name "VIN1"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin power_in line
+				(at -10.16 2.54 0)
+				(length 2.54)
+				(name "VIN2"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "6"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin input line
+				(at -10.16 0 0)
+				(length 2.54)
+				(name "PR1"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin input line
+				(at -10.16 -2.54 0)
+				(length 2.54)
+				(name "MODE"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "5"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin power_in line
+				(at -10.16 -5.08 0)
+				(length 2.54)
+				(name "GND"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin power_out line
+				(at 10.16 2.54 180)
+				(length 2.54)
+				(name "VOUT"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin passive line
+				(at 10.16 0 180)
+				(length 2.54)
+				(name "VOUT"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "7"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin open_collector line
+				(at 10.16 -2.54 180)
+				(length 2.54)
+				(name "ST"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "8"
 					(effects
 						(font
 							(size 1.27 1.27))))))))
