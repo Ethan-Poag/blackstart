@@ -1,4 +1,4 @@
-# genctl schematic – design notes, assumptions, open questions (draft A, 2026-10-24)
+# genctl schematic – design notes, assumptions, open questions (Rev B, 2026-10-24)
 
 Status: every block is captured with full connectivity. kicad-cli 9.0.2 ERC: **0 errors, 0 warnings** (all severities).
 The exported netlist was checked against the generator's net model: 714 named nets, 0 mismatches, 0 single-pin nets.
@@ -15,9 +15,10 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - File format is 20231120 (KiCad 8), so KiCad 8 and 9 can both open it. KiCad 9 offers to upgrade it on save.
 
 ## New or changed parts versus the BOMs (please approve)
-1. **4x TCA9555PWR I2C expanders** (new; not in any BOM). The STM32H743VIT6 does not have enough GPIO.
+0. **Rev B changes (2026-10-24):** RGB-backlit IP67 buttons instead of discrete LEDs; gigabit magjack; separate gen/bus neutral references; 5 kVrms reinforced metering isolation; +3V3 rail >=3 A. Details in each section below.
+1. **6x TCA9555PWR I2C expanders** (LCSC C465732; 0x24/0x25 are costed in other_bom, 0x20-0x23 are still not in any BOM). The STM32H743VIT6 does not have enough GPIO.
    - @0x20: 12 buttons.
-   - @0x21: 10 front-panel LEDs.
+   - @0x21, @0x24, @0x25: 36 button-backlight cathodes (12 buttons x R/G/B).
    - @0x22: 16 AI/DI mode controls.
    - @0x23: 15 output readbacks.
 2. **Output readback.** Each readback uses a 100k/10k divider into an MMBT3904, which pulls the expander pin low (inverted logic).
@@ -61,10 +62,9 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - MODE resistor 100k is TBD per the datasheet table.
 - SMBJ5.0A on the rail.
 
-**+3V3 (TPS629210)**
-- Fed from +12V through an MBR0540. FB 100k/22.1k → 3.31 V.
-- MODE/S-CONF tied to GND (*assumed*: external-FB, auto PFM).
-- **Open:** 1 A is marginal for STM32 + DSI83 + panel VDD + touch + hub + expanders + CAN/RS-485 logic. Consider a 2–3 A buck.
+**+3V3 (TPS56637, Rev B)**
+- Second TPS56637RPAR (6 A part) from +12V. Per DS Table 4 for 3.3 V: FB 45.3k/10k (3.32 V), L 2.2 µH (Sunlord MWSA0503S-2R2MT, Isat 7 A), 3x22 µF out, 2x10 µF in, feed-forward 150 pF + 20k (check the topology against the DS figure). EN 100k/27k, MODE 100k (placeholder, same as the 5V rail).
+- The rail now supports >=3 A. The MBR0540 diode-OR path is gone, so the STM32 no longer has an always-on 3V3 independent of the 12 V bus. **Open:** is that acceptable?
 
 **Chassis**
 - CHASSIS goes to 4 mounting holes, bonded to 0V through 1M ∥ 4.7 nF (*assumed*).
@@ -168,10 +168,11 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 **Expansion 12V**
 - TPS1H200A, CL = 1.33k (about 1.5 A). DELAY is NC (assumed auto-retry). FAULT goes to OUT_FAULT_N.
 
-**Ethernet — open question**
-- The HR911130C pin map is UNVERIFIED (the datasheet is graphical only).
-- It is a 10/100 jack, so CM5 pairs 2 and 3 are unused and the **link will run at 100M**. Choose a gigabit magjack if 1G is wanted.
-- RClamp0524P ESD.
+**Ethernet (gigabit, Rev B)**
+- HanRun **HR911131A** (LCSC C5184934). The datasheet states "Meets or Exceeds IEEE802.3ab standards for 1000Base-T", 4x 1CT:1CT, 1500 Vrms.
+- Pin map from the DS schematic: P1/P2 = MDI0 (J1/J2), P3/P4 = MDI1 (J3/J6), P7/P8 = MDI2 (J4/J5), P9/P10 = MDI3 (J7/J8). Centre taps are common on P5/P6. Green LED 11(A)/12(K), yellow LED 14(A)/13(K). P/N polarity within a pair was read from the drawing; the BCM54210PE corrects polarity automatically anyway.
+- Centre taps: AC-decoupled only (100 nF + 10 nF to GND; voltage-mode PHY, no CT bias). LEDs: 330R from CM5_3V3 to the anode, cathode to Ethernet_nLED2/3.
+- 2x RClamp0524P cover all 4 pairs. Shield → CHASSIS. The shield tab pin numbers depend on the footprint.
 
 **USB**
 - **USB-C service port:** 5.1k CC pull-downs, USBLC6-2SC6. VBUS goes only to the ESD part; the board is not powered from it.
@@ -287,12 +288,13 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - VESTOP_SNS: 100k/10k divider + BAT54S clamp → PA1.
 
 ## AC metering (ac_metering.kicad_sch)
-**Isolated supply and links**
-- ADuM5020-5 (VISO = 5 V) → ADP150 3.3 V.
-- **The ADuM5020 is 3 kVrms basic isolation, not the 5 kV reinforced in the spec.** This needs a part change or a decision.
-- ADuM141E ×2 (pinout from memory, UNVERIFIED):
-  - #1 carries SCK, MOSI and CS1 across, and brings MISO back.
-  - #2 carries CS2 and RST across, and brings IRQ0 back. Only the GEN ADE drives IRQ0.
+**Isolated supply and links (Rev B: 5 kVrms reinforced)**
+- **TI ISOW7841DWER** (C179690): 5 kVrms reinforced, integrated DC-DC, SOIC-16 DWE, 8 mm creepage/clearance. VCC = +3V3 (logic levels match the STM32). SEL = GND2 → VISO = 3.3 V, which feeds +3V3_AC directly. Channels: SCK, MOSI, CS1 forward; MISO back.
+- **TI ISO7741DWR** (C571196): 5 kVrms reinforced, SOIC-16 DW. Channels: CS2, RST forward (INC tied low); IRQ0 back. EN1/EN2 tied high.
+- Power budget: 2x ADE9000 at 17 mA max + ISO7741 side 2 + pull-ups ≈ 40 mA, against ~75 mA available (3.3 V→3.3 V). Check this against the DS curves.
+- ADuM5020, ADP150 and both ADuM141E are removed.
+- **Layout:** keep a >=8 mm creepage and clearance keep-out across the barrier on every layer, with a milled slot under the isolators. Keep the HV dividers' 1206 chains along the hot side. Reinforced CAT III 300 V needs ≥5.5 mm clearance / ≥6 mm creepage (PD2, material group III). 600 V-class (347/600 V) systems need more and must be re-checked.
+- **JLC stock of the ISOW7841 is only 38.** Order or consign early.
 
 **ADE9000 ×2 (GEN and BUS)**
 - Shared SPI bus. Clock: 24.576 MHz crystal on the GEN ADE; its CLKOUT feeds the BUS ADE's CLKIN.
@@ -300,7 +302,10 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - AVDDOUT, DVDDOUT and REF each get 4.7 µF + 100 nF.
 
 **Voltage inputs**
-- Per phase: 4 × 1M (1206 HV) to a 1k low-side resistor → 4001:1. 1k/33 nF anti-alias on both VxP and VxN. V20E385P MOV L–N.
+- Per phase: 4 × 1M (1206 HV) to a 1k low-side resistor → 4001:1. V20E385P MOV L–N.
+- **Separate neutrals (Rev B):** GEN_N and BUS_N each have their own 4 × 1M / 1k divider (GEN_VN_TAP, BUS_VN_TAP). Each VxN input is fed from its own system's neutral tap through 1k/33 nF, and each VxP from the line tap through 1k/33 nF. Gen phases are therefore measured against N-gen and bus phases against N-bus, fully differentially.
+- The 0R neutral → GND_AC links are removed. GND_AC is defined by the dividers' 1k low sides and floats at about the mean of the 8 conductors / 4001. The ADE9000 needs all inputs within ±0.6 V of AGND and ±1 V differential. The full-scale tap is about 0.1 Vrms, and even 1 kV of neutral-to-neutral difference gives only ~0.25 V of common mode. The CT inputs are referenced to GND_AC through their burden.
+- The 1k/33 nF networks on P and N see slightly different source impedances (tap ∥ 1k each), but both legs match within a system.
 - Fuses are external, on fused DIN terminals per the spec. No on-board fuse.
 
 **Current inputs**
@@ -308,19 +313,20 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - Burden 2 × 24.9R, centre-tapped to AGND. 1k/33 nF anti-alias.
 - The BUS ADE current inputs are grounded (voltage-only measurement).
 
-**Open question**
-- GEN_N and BUS_N are both tied to GND_AC with 0R links. That bonds generator neutral to bus neutral on the board.
-- If the neutrals can differ (for example, a separately derived system), fit only one link and use differential dividers.
-
-## Front panel (frontpanel.kicad_sch)
-- 12 KSC241J buttons go to the TCA9555 at 0x20, using its internal pull-ups.
-- 10 LEDs are on the TCA9555 at 0x21, active low with 1k resistors: 6 green, 4 red.
+## Front panel (frontpanel.kicad_sch) — Rev B backlit buttons
+- 12x **CTS 228EMVARGBFR** (C6077135): IP67 sealed SMD tactile switch, 7.2x6.8 mm, RGB backlight, common anode. Pins from CTS 228E Rev H fig. 1: switch A/B; L1 anode, L2 green K, L3 red K, L4 blue K. Vf is red 1.7–2.4 V, green 1.9–2.4 V, blue 3.0–3.6 V at 20 mA. The switch rating is 12 V / 50 mA and it is used at 3.3 V.
+- Switches go to the TCA9555 at 0x20, using its internal pull-ups (unchanged).
+- Backlight: all anodes are on BTN_LED_V. +5V is switched through an AO3401A PFET (10k gate pull-up), and an MMBT3904 driven from **CM5 GPIO13 (BTN_BL_PWM, PWM0_CHAN1)** pulls the gate. A 100k base pull-down keeps the backlight off by default. This is the global dimming line.
+- Per-LED cathode resistors: R and G 330R (~8.5 mA), B 200R (~8.5 mA). TCA9555 @0x21 holds BTN1–5 RGB + BTN6 R; @0x24 holds BTN6 G/B – BTN11 G; @0x25 holds the rest (12 spare pins). ON = pin output low. **OFF = configure the pin as an input (Hi-Z).** Driving it high (3.3 V) would leave 1.7 V across a red LED, which can glow faintly. TCA9555 I/O is 6 V abs max, so 5 V on the pin is fine.
+- Worst case all on: 36 x 8.5 mA = 306 mA from +5V, and 16 x 8.5 = 136 mA sunk by one TCA9555. **Check the TCA9555 total GND current limit (DS)**; lower the current if needed (e.g. 470R).
+- Colours: green = running/active, red = alarm, plus blue/mixed (amber = R+G) for extra states. The red-green bi-colour 228EMVARGFR (C6401338) is out of stock at JLC, so RGB is used.
+- JLC stock of 228EMVARGBFR is 597 (~49 boards). The footprint and pad numbering need to follow the CTS land pattern (8 pads).
+- The 10 discrete front-panel LEDs and their 1k resistors are removed.
 - Buzzer: MLT-8530 driven by an MMBT3904 from PB3, with a 1N4148W flyback diode. It runs from +3V3.
 
 ## Global open questions / to verify before layout
 1. **UNVERIFIED pinouts.** Check these against their datasheets:
-   - ADuM141E
-   - HR911130C
+   - HR911131A shield-tab pin numbering (footprint); 228EMVARGBFR pad numbering (footprint)
    - M.2 Key B
    - ACT45B choke
    - TMUX1208 pin 3
@@ -328,9 +334,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
    - TPS1HTC30 exposed pad
    - USB3-A part
 2. **Spec decisions to make:**
-   - 3V3 rail current budget (TPS629210, 1 A).
-   - Isolation rating on AC metering (ADuM5020 is 3 kVrms).
-   - Gigabit vs 100M Ethernet.
+   - Loss of always-on 3V3 diode-OR (Rev B 3V3 runs only from the 12 V bus).
    - Modem supply voltage on the M.2 3.3V pins.
 3. **Loop compensation** for LM5176 and TPS61500, LM5176 MODE, and TPS56637 MODE: values are placeholders.
 4. **Footprints** are set only for passives and well-known packages. Custom ICs need footprints assigned.

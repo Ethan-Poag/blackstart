@@ -1,4 +1,4 @@
-ERC report (2026-10-24T01:33:17-1000, Encoding UTF8)
+ERC report (2026-10-24T03:22:38-1000, Encoding UTF8)
 
 ***** Sheet /
 
@@ -20,6 +20,6 @@ ERC report (2026-10-24T01:33:17-1000, Encoding UTF8)
 
 ***** Sheet /AC metering: 2x ADE9000 (gen + bus), isolated/
 
-***** Sheet /Front panel: buttons, LEDs, buzzer/
+***** Sheet /Front panel: backlit buttons, buzzer/
 
  ** ERC messages: 0  Errors 0  Warnings 0
