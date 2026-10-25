@@ -199,7 +199,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 ## Display (display.kicad_sch)
 **Bridge (SN65DSI83)**
 - 1.8 V from a TLV75518. VCORE gets 1 µF.
-- ADDR (ball A1) = GND (address 0x2C). RSVD2 = GND. REFCLK default = R113 10k to GND (clock from DSI, HS_CLK_SRC=1); Y4 oscillator + U80 buffer + R531 are a DNP option. See Rev (j) below (review C1: all DSI83 CMOS I/O is translated to 1.8 V).
+- ADDR (ball A1) = GND (address 0x2C). RSVD2 = GND. REFCLK default = R113 10k to GND (clock from DSI, HS_CLK_SRC=1); Y4 oscillator + R531 + C286 are a DNP footprint option (Linux driver always uses DSI clock). See Rev (j) below (review C1: all DSI83 CMOS I/O is translated to 1.8 V).
 - EN: U78 SN74LVC1T45 3.3 V -> 1.8 V; R533 47k + C116 10 nF on the 1.8 V side, R114 100k on the GPIO6 side. See Rev (j).
 - LVDS lanes go to the 40-pin FPC per the RVT121 datasheet:
   - Lanes: Rxin0 on 8/9, Rxin1 11/12, Rxin2 14/15, CLK 17/18, Rxin3 20/21.
@@ -506,11 +506,12 @@ Sources read this session: SN65DSI83 SLLSEC1I; PCA9306 SCPS113O; SN74LVC1T45 SCE
   - VCCA = +1V8_DSI, A = DSI83_IRQ_1V8 (U21.J9), DIR = VCCA (A->B), VCCB = CM5_3V3, B = DSI83_IRQ (GPIO7, U9.37).
   - R115 changed from 10k to CM5_3V3 to 100k to GND on the 1.8 V side; the ref is kept so annotation stays stable. U21 IRQ is Hi-Z by default and active high, so the pulldown defines an idle low.
   - Decoupling: C289-C292 100n, one per VCC pin.
-- **REFCLK:**
-  - Requirement: a fast 1.8 V buffer Y4 -> buffer -> R531 22R -> REFCLK with tr/tf <= 1 ns at 1.8 V / 25 MHz.
-  - **Could not verify.** The TI SN74LVC1G34 (SCES519O) and SN74AUP1G34 (SCES603K) datasheets specify only tpd (AUP at 1.8 V: 2.2/3.2/6 ns typ/max class figures) and an input transition-rate limit. Neither gives output rise/fall time, and the AUC1G34 sheet was not obtained.
-  - Therefore the default build is **Y4 DNP, C286 DNP, R531 DNP, U80 (SN74LVC1G34DBVR, LCSC C840096, JLC class not verified) DNP + C293 DNP, and R113 10k REFCLK -> GND fitted.** The buffered path stays as a footprint option.
-- **DSI-clock alternative (default):** REFCLK strapped to GND by R113 10k, CSR 0x0A bit 0 HS_CLK_SRC = 1 (LVDS clock derived from the DSI CLK lane), and DSI_CLK_DIVIDER (0x0B bits 7:3) set for the panel clock. The CM5 DSI clock lane must run continuously in HS mode for this mode (SLLSEC1I). If the oscillator option is fitted instead: R113 may remain (10k is a light load), and use the Rev (i) register plan (HS_CLK_SRC = 0, REFCLK_MULTIPLIER x3).
+- **REFCLK (revised 12:38 after driver research, /workspace/research/dsi83_fix.md addendum "REFCLK from DSI clock"):**
+  - The stock Linux sn65dsi83 driver (mainline and rpi-6.12.y) ALWAYS sets HS_CLK_SRC = 1 (CSR 0x0A bit 0, LVDS clock derived from the DSI HS clock) and has no external-REFCLK option. An oscillator would be unused without a driver patch. No REFCLK buffer is added.
+  - **Default build:** REFCLK (U21.H2) strapped to GND by R113 10k, as the datasheet requires when REFCLK is unused (SLLSEC1I p.5). No oscillator populated.
+  - **DNP footprint option:** Y4 25 MHz 1.8 V oscillator -> R531 22R -> REFCLK, plus C286 100n, kept exactly as in Rev (i) but all DNP.
+  - Fitting Y4 later needs (a) a patched driver (HS_CLK_SRC = 0, REFCLK_MULTIPLIER; Rev (i) register plan) and (b) an oscillator with tr/tf <= 1 ns at 1.8 V. The ASDMB is rated 1.8-3 ns at 15 pF, so a faster part is needed. A SN74LVC1G34/AUP1G34 buffer was considered, but TI specifies no output tr/tf for either (SCES519O, SCES603K), so it could not be verified and was dropped.
+  - DSI-clock mode constraints: the DSI HS clock must be exactly 3x the pixel clock for single-link 24 bpp at 4 lanes (DSI_CLK_DIVIDER, 0x0B bits 7:3), and the CM5 DSI clock lane must run continuously in HS mode. The CM5 PLL rounding of the requested DSI clock must be confirmed on hardware (panel 66.3-78.9 MHz pixel clock).
 - **ADDR:** ball A1 tied to GND, giving 0x2C. Checked in the netlist.
-- **Checks:** ERC 0 errors. Netlist diff vs the previous revision shows only the intended nets (DISP_SCL/SDA_1V8, DSI83_EN/IRQ_1V8, PCA_VREF2 [auto-named Net-(U77-EN)], DSI83_REFCLK_BUF, R113 back on DSI83_REFCLK). Pin-by-pin rail check: /workspace/w8/c1_railcheck.txt, 0 connectivity mismatches.
-- **Unverified:** JLC basic/extended class and stock for C33196, C7843 and C840096 (LCSC numbers for PCA9306/LVC1T45 are taken from the brief); PCA9306 behaviour with VREF1 unpowered; the real EN power-up timing; buffer edge rate; the I2C rise time at 400 kHz with 2.2k + 1.8k and unknown bus capacitance.
+- **Checks:** ERC 0 errors. Netlist diff vs the previous revision shows only the intended nets (DISP_SCL/SDA_1V8, DSI83_EN/IRQ_1V8, PCA_VREF2 [auto-named Net-(U77-EN)], R113 back on DSI83_REFCLK). Pin-by-pin rail check: /workspace/w8/c1_railcheck.txt, 0 connectivity mismatches.
+- **Unverified:** JLC basic/extended class and stock for C33196, C7843 and C840096 (LCSC numbers for PCA9306/LVC1T45 are taken from the brief); PCA9306 behaviour with VREF1 unpowered; the real EN power-up timing; the I2C rise time at 400 kHz with 2.2k + 1.8k and unknown bus capacitance.
