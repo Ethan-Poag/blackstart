@@ -33,7 +33,9 @@ CAP_PROUD = 0.5                             # cap face stands 0.5 proud of panel
 CAP_TOP_Y0 = -(WINDOW_GAP + WEB + CAP_SLOT_CLR + CAP_H)       # -15.25
 BTN_Y_TOP = CAP_TOP_Y0 + CAP_H / 2                            # -9.25
 BTN_Y_BOT = GLASS_H + WINDOW_GAP + WEB + CAP_SLOT_CLR + CAP_H / 2   # 188.71
-BTN_X = [AA_LEFT + (i + 0.5) * BTN_PITCH for i in range(BTN_N)]
+# BCR-4 (2026-10-25): board key positions are LOCKED at AA sixths + 0.30 mm (MEASURED genctl_v4_handrouted.kicad_pcb @ f03c57a)
+BTN_X_BOARD_OFFSET = 0.30
+BTN_X = [round(AA_LEFT + (i + 0.5) * BTN_PITCH + BTN_X_BOARD_OFFSET, 2) for i in range(BTN_N)]   # 29.38 72.90 116.42 159.94 203.46 246.98
 GUIDE_DX = 17.0                             # guide stems at cap centre +-17 (span 34 of 43.02)
 GUIDE_D, GUIDE_BORE = 3.0, 3.15
 

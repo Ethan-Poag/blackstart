@@ -11,7 +11,7 @@ Coordinates: mm, origin = top-left of the cover glass, front view, y down. Z = m
 | Panel build | 3 mm plate | CNC 6061-T6: 4.0 mm field, 12.5 mm deep rim round the display window with a rear ledge |
 | Display window | - | 277.56 x 180.46 (glass + 0.5 per side) |
 | PCB | 284 x 198 | **284 x 210** (x -3.72...280.28, y -15.27...194.73). Grown 12 mm because the key rows moved ~5 mm further out |
-| Key centres x | 29.08 72.60 116.12 159.64 203.16 246.68 (unchanged, pitch 43.52 = active width / 6) | same |
+| Key centres x | 29.38 72.90 116.42 159.94 203.46 246.98 (BCR-4 2026-10-25: AA sixths + 0.30, locked to board; pitch 43.52) | same |
 | Key centres y | -4.40 / 183.86 | **-9.25 / 188.71** |
 | PCB mount holes H1-H4 | (3.5, row y) | (2.0, -9.25) (274.56, -9.25) (2.0, 188.71) (274.56, 188.71). Add 2-4 mid-board holes still recommended |
 | Panel-to-housing | - | 8 M4 blind studs (PEM CFHC type) pressed into the rear; no holes through the face |

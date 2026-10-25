@@ -6,7 +6,7 @@ Inventory checked: geometry.py, PANEL_V2.md, display_mech.md, draw_front_panel.p
 | 1 | display_mech.md | PCB outline | 284 x 198, y -9.27..188.73 | 284 x 210, y -15.27..194.73 | MEASURED |
 | 2 | display_mech.md | key rows | y -4.40 / 183.86 | y -9.25 / 188.71 | MEASURED |
 | 3 | display_mech.md | holes H1-H4 | (3.5,-4.4) (273.06,-4.4) (3.5,183.86) (273.06,183.86), M3 | (2,-9.25) (274.56,-9.25) (2,188.71) M4; H4 (272,185.5) 9.5 NPTH | MEASURED |
-| 4 | geometry.py / display_mech / PANEL_V2 | key x centres | 29.08 ... 246.68 | 29.38 ... 246.98 (+0.30) | MEASURED |
+| 4 | geometry.py / display_mech / PANEL_V2 | key x centres | was 29.08 ... 246.68 | RESOLVED phase 3: geometry.py now = board 29.38 ... 246.98 | MEASURED |
 | 5 | PANEL_V2.md | cap width | 43.02 x 12 wide caps, one long slot per row, actuator bar + wire stabiliser | 24 mm caps, one switch/key, own pocket (Ethan) | MEASURED (constraint) |
 | 6 | PANEL_V2.md | panel build / mounting | CNC panel with 8 M4 PEM studs to housing; no clamp | self-contained unit, front slide-in, rear clamps | constraint |
 | 7 | PANEL_V2.md / geometry.py | geometry.py header comment "PANEL V2" + GUIDE_DX 17 / stabiliser params | still present | obsolete (24 mm caps) | MEASURED (file) |

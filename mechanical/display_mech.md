@@ -37,7 +37,7 @@ Body 6.8 (x) x 7.2 (y), **height 5.5 mm**, travel 0.7, land pattern 11.2 mm wide
 
 Proposed layout (`geometry.py`, drawing `front_panel.png/.svg`):
 - 6 above + 6 below, **pitch 43.52 mm = AA width / 6** → each key centred under one sixth of the screen so on-screen soft-key labels line up.
-- Button x centres: 29.08, 72.60, 116.12, 159.64, 203.16, 246.68.
+- Button x centres: 29.38, 72.90, 116.42, 159.94, 203.46, 246.98 (BCR-4 2026-10-25: AA sixths + 0.30 mm, locked to board f03c57a).
 - Rows at y = −4.40 (top) and 183.86 (bottom): body 0.8 mm from glass edge → **centre 12.43 mm above the AA top edge and 12.63 mm below the AA bottom edge**.
 - Front panel outline **292.56 x 201.46 mm** (≈293 x 202), border 8.0 L/R and 11.0 T/B, R3 corners. 11 mm T/B is the minimum that holds a 7.2 mm key + 0.8 mm glass gap + ~3 mm to edge; L/R could go to 5 mm if the enclosure allows.
 - **PCB outline 284.0 x 198.0 mm**, centred on the glass: x −3.72 … 280.28, y −9.27 … 188.73. Board sits behind the display and spans the button rows; M3 standoffs H1-H4 at (3.5, −4.4), (273.06, −4.4), (3.5, 183.86), (273.06, 183.86) — in the button rows, outside the glass footprint. Recommend adding 2-4 more holes mid-board (e.g. through the board behind the display) to stop flex on a 284 mm board.

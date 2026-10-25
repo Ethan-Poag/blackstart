@@ -13,6 +13,10 @@ Built against genctl_v4_handrouted.kicad_pcb @ f03c57a (read-only). Supersedes P
 - BCR-1 solved in the rear shell: sealed port tunnels, RJ45 20 x 24 and USB-C 16 x 10 inner, 1.5 mm lead-in, 0.5 mm above the jacks. They sit inside the shell outline, so the fit through the 296 x 228 cutout (1.0 mm/side) and the clamp zone (Z 37.5-45 at the walls) are unchanged.
 - Heat options: HEAT_PATH.md section "Options". BCR-4 table: BOARD_CHANGE_REQUESTS.md.
 
+## Phase 3
+- BCR-4 closed: geometry.py BTN_X now equals the board key x (+0.30 mm). front_panel.png/svg regenerated.
+- Heat re-validated (HEAT_PATH.md, "Phase 3 re-check"). At the ESTIMATED 4 W dashboard load the CM5 throttles above about 41 C ambient with no change, 46 C with A, 53 C with B and 57 C with C. Under a full CPU stress load (8.5 W) only C holds 57 C.
+
 ## Files
 enclosure_v3.py, render_v3.py, board_interface.json, BOARD_INTERFACE.md, BOARD_CHANGE_REQUESTS.md, MISMATCH_LIST.md, KEYS_LIGHTGUIDE.md, HEAT_PATH.md, TOLERANCE_STACK.md, PARTS_COSTED.md/.csv, checks.json, enclosure_v3_assembly.step, step/*.step (15 parts), exploded_view_v3.png, iso_front_v3.png, iso_rear_v3.png, section_key_clamp_v3.png, section_key_detail_v3.png, section_heatpath_v3.png.
 Rebuild: `/workspace/cqenv/bin/python enclosure_v3.py && /workspace/cqenv/bin/python render_v3.py`.

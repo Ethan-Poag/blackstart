@@ -42,3 +42,28 @@ IEC 62368-1 Table 38, accessible metal surfaces, TS1 limits (UNVERIFIED, from me
 - Base at 40 C ambient gives a 59 C bezel: fails the 48 C limit.
 - C at 40 C ambient gives 49 C: borderline.
 - At 50 C ambient no option meets 48 C, so a hot-surface warning label or a non-metal touch zone is needed.
+
+## Phase 3 re-check: validated inputs (2026-10-25)
+| Input | Value | Label | Source |
+|---|---|---|---|
+| CM5 module idle | 2.0 W (400 mA x 5 V) | datasheet typical | https://datasheets.raspberrypi.com/cm5/cm5-datasheet.pdf §3.3 |
+| CM5 module "operating" | 4.5 W (900 mA x 5 V) | datasheet typical | same |
+| CM5 idle at the wall (includes the CM5 IO board) | 2.3-2.4 W | MEASURED on a CM5 | Geerling https://github.com/geerlingguy/sbc-reviews/issues/58 ; CNX https://www.cnx-software.com/2024/12/22/raspberry-pi-cm5-review-different-cooling-solutions/ |
+| CM5 under stress-ng / HPL, at the wall | 8.5 / 9.4 W | MEASURED on a CM5 (board power, not module only) | Geerling issue 58 |
+| CM5 under stress, passive heatsink, at the wall | 6.66 W (SoC 63.7 C) | MEASURED on a CM5 | https://shumeipai.nxez.com/2024/12/11/raspberry-pi-compute-module-5-review.html |
+| Our workload: Qt/Wayland dashboard at 1280x800, Ethernet, light CPU | 2.5 low / 4.0 typ / 8.5 high (stress, worst case) W | ESTIMATED (no CM5 measurement for this load was found) | interpolated from the rows above |
+| Backlight | 8.6 W, kept separate from the CM5 | from the earlier display data, unchanged | above |
+| Throttle | soft (Arm) 80-85 C, hard (Arm + GPU) 85 C; the limit can be lowered but not raised | MEASURED (documentation) | https://github.com/raspberrypi/documentation/blob/master/documentation/asciidoc/computers/raspberry-pi/frequency-management.adoc ; https://www.raspberrypi.com/news/heating-and-cooling-raspberry-pi-5/ |
+| BCM2712 junction-to-case | not published (2.0 K/W kept) | ESTIMATED | none found |
+| CM5 heatsink K/W | no K/W published. Official passive cooler: 79.3 C under CPUminer at 25-26 C ambient, no throttling. That is about 54 K at about 8.5 W (power from Geerling's test, a different run), roughly 6 K/W SoC-to-air | INFERRED cross-check | CNX link above |
+| Our chain SoC to bezel 5.80 + bezel to air 1.29 (per W of CM5, about 7.1 K/W, plus the backlight load) | | ESTIMATED | about 15 % worse than the official cooler, which is plausible for a conduction path to a shared bezel |
+
+### Throttle ambient at 80 C soft limit (T_SoC = Ta + (P + 8.6) R_ba + P R_chain)
+| Option | 2.5 W low | 4.0 W typical | 8.5 W high |
+|---|---|---|---|
+| No change | 51 C | 41 C | 9 C |
+| A | 55 C | 46 C | 20 C |
+| B | 61 C | 53 C | 30 C |
+| C (cap 3.5 W, backlight 70 %) | 63 C | 57 C | 57 C |
+
+Conclusion: the phase-2 figure of 26 C assumed a 6 W load. For the real dashboard load (about 4 W, ESTIMATED), no change throttles at about 41 C and B at about 53 C. Only C stays clear at 50 C ambient whatever the software does. Next step: measure the CM5 power on the real dashboard (`vcgencmd pmic_read_adc`).
