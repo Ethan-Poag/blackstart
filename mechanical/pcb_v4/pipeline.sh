@@ -7,6 +7,7 @@ PASSES=${PASSES:-40}
 python3 refine_v4.py pcb_v4/genctl_v4.kicad_pcb pcb_v4/genctl_v4_ref.kicad_pcb 2>&1 | grep -v assert  # crystals + HV divider strings
 python3 seat_iso_series.py pcb_v4/genctl_v4_ref.kicad_pcb pcb_v4/genctl_v4_ref.kicad_pcb 2>&1 | grep -v assert
 python3 route_v4.py setup pcb_v4/genctl_v4_ref.kicad_pcb $W/crit.kicad_pcb 2>&1 | grep -v assert
+python3 pcb_v4/bga_escape_u21.py $W/crit.kicad_pcb $W/crit.kicad_pcb 2>&1 | grep -v assert   # U21 dog-bone/VIP escape
 python3 pcb_v4/handroute_iter.py $W/crit.kicad_pcb $W/hand.kicad_pcb 6   # critical nets, locked
 python3 route_v4.py dsn $W/hand.kicad_pcb $W/genctl.dsn
 sed -i 's/(type route)/(type protect)/g' $W/genctl.dsn   # hand routes fixed for Freerouting 2>&1 | grep -v assert

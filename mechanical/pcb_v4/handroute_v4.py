@@ -325,6 +325,13 @@ def pad_mask(code, win, pads=None):
         img = Image.new("L", (x1 - x0, y1 - y0), 0)
         ImageDraw.Draw(img).polygon([(x - x0, y - y0) for x, y in pg], fill=1)
         m[li] |= np.array(img, bool)
+    # BGA escape copper (pre-placed dog-bone / VIP via) counts as part of the U21 pad
+    own = LAB[:, y0:y1, x0:x1] == code + 1
+    for p in (pads if pads is not None else pads_of(code)):
+        if p.GetParentFootprint().GetReference() != "U21": continue
+        c = p.GetPosition(); cy, cx = gy(mm(c.y)) - y0, gx(mm(c.x)) - x0
+        yy, xx = np.ogrid[:y1 - y0, :x1 - x0]
+        m |= own & (((yy - cy) ** 2 + (xx - cx) ** 2) <= (0.8 / R) ** 2)[None]
     return m
 def _poly_hit(pg, pad):
     c = pad.GetPosition(); x, y = gx(mm(c.x)), gy(mm(c.y))
@@ -355,10 +362,7 @@ def route_net(code, w=None, cost=None, viac=300.0, margin=8.0, allow_layers=(0, 
     y0, y1, x0, x1 = win
     free, vfree, (_, _, _, vnp) = free_map(code, w, win, extra_clear, allow_layers)
     # via-in-pad allowed in own BGA pads (U21)
-    for p in pads:
-        if p.GetParentFootprint().GetReference() == "U21":
-            c = p.GetPosition(); yy, xx = int(round(gy(mm(c.y)))) - y0, int(round(gx(mm(c.x)))) - x0
-            vfree[yy, xx] = vnp[yy, xx]
+    # U21 escape (vias/dog-bones) is pre-placed by bga_escape_u21.py; no in-router via-in-pad
     if cost is None: cost = np.ones(free.shape, np.float64)
     tree = [pads[0]]; rest = pads[1:]
     total = 0.0; vias = 0; allpts = []
