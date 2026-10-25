@@ -438,7 +438,7 @@ J6B = AUX7-10 + 2 GND, J5B = 6 GND (was 4 + 2 NC): output pins 16 (+ fuel/crank 
 - HR911131A locating holes changed to NPTH.
 - Removed the unused M.2, SIM and USB3-A footprints.
 - Power BOM 22u price corrected. Grand total is now $769.87.
-- Open item: SOIC-16W isolator pads give a 7.25 mm gap, so a slot under each isolator is needed at layout to reach 8 mm.
+- Open item (resolved rev g): SOIC-16W isolator pads gave a 7.25 mm gap; see docs/ISOLATION_CHECK.md.
 
 ## Rev 2026-10-24 (f2) - schematic beautification (connectivity unchanged)
 - Each functional group (an anchor IC with its satellites) is drawn inside a dashed, titled box. Repeated channels (outputs, inputs) tile into rows.
@@ -449,3 +449,7 @@ J6B = AUX7-10 + 2 GND, J5B = 6 GND (was 4 + 2 NC): output pins 16 (+ fuel/crank 
   - 1030/1030 nets, identical node sets, 0 named nets renamed.
   - 419 nets that were auto-named Net-(...) now carry their design net name because they are labelled.
 - ERC is 0/0.
+
+## Rev 2026-10-24 (g) - isolation footprint (see docs/ISOLATION_CHECK.md)
+- ISOW7841 / ISO7741 now use genctl:SOIC-16W_7.5x10.3mm_P1.27mm_HV_Slot: TI DW0016B "HV/isolation option" pads (1.65 x 0.6 at 9.75 mm) -> 8.1 mm copper gap (was 7.25 mm), plus a 2.0 x 21.0 mm routed slot and an all-layer copper keep-out between the rows. Netlist identical, ERC 0/0.
+- Barrier: plan >=13 mm (FR-4 IIIa, 600 V working, reinforced) instead of 12 mm, or call out CTI>=400 laminate. J7/J8 inter-phase slot. AC1005 CT insulation unproven (open).

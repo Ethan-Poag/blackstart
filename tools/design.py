@@ -468,10 +468,10 @@ ac=S('ac_metering','AC metering: 2x ADE9000 (gen + bus), isolated',
  'No 0R neutral link: GND_AC floats at the divider mid-point, common-mode attenuated 4001:1. Current: AC1005 CTs, burden 2x24.9R.')
 for n in ('ADE_SCK','ADE_MOSI','ADE_CS1_N','ADE_MISO','ADE_CS2_N','ADE_RST_N','ADE_IRQ_N'): ac.R('1k',n,n+'_I',note='domain-boundary R (SAFE MCU <-> +3V3 isolator)')
 ac.p('genctl:ISOW7841DWE','ISOW7841DWER',{'VCC':'+3V3','GND1':'GND','INA':'ADE_SCK_I','INB':'ADE_MOSI_I','INC':'ADE_CS1_N_I','OUTD':'ADE_MISO_I','NC':None,
-   'VISO':'+3V3_AC','GND2':'GND_AC','OUTA':'AC_SCK','OUTB':'AC_MOSI','OUTC':'AC_CS1_N','IND':'AC_MISO','SEL':'GND_AC'},mpn='ISOW7841DWER',note='5kVrms reinforced; SEL=GND2 -> VISO 3.3V')
+   'VISO':'+3V3_AC','GND2':'GND_AC','OUTA':'AC_SCK','OUTB':'AC_MOSI','OUTC':'AC_CS1_N','IND':'AC_MISO','SEL':'GND_AC'},mpn='ISOW7841DWER',fp='genctl:SOIC-16W_7.5x10.3mm_P1.27mm_HV_Slot',note='5kVrms reinforced; SEL=GND2 -> VISO 3.3V')
 ac.C('10u','+3V3','GND',pkg='0805'); ac.C('100n','+3V3','GND'); ac.C('10u','+3V3_AC','GND_AC',pkg='0805'); ac.C('100n','+3V3_AC','GND_AC')
 ac.p('genctl:ISO7741DW','ISO7741DWR',{'VCC1':'+3V3','GND1':'GND','INA':'ADE_CS2_N_I','INB':'ADE_RST_N_I','INC':'GND','OUTD':'ADE_IRQ_N_I','EN1':'+3V3',
-   'VCC2':'+3V3_AC','GND2':'GND_AC','OUTA':'AC_CS2_N','OUTB':'AC_RST_N','OUTC':None,'IND':'AC_IRQ_N','EN2':'+3V3_AC'},mpn='ISO7741DWR',note='5kVrms reinforced')
+   'VCC2':'+3V3_AC','GND2':'GND_AC','OUTA':'AC_CS2_N','OUTB':'AC_RST_N','OUTC':None,'IND':'AC_IRQ_N','EN2':'+3V3_AC'},mpn='ISO7741DWR',fp='genctl:SOIC-16W_7.5x10.3mm_P1.27mm_HV_Slot',note='5kVrms reinforced')
 ac.C('100n','+3V3','GND'); ac.C('100n','+3V3_AC','GND_AC')
 ac.R('10k','AC_IRQ_N','+3V3_AC'); ac.R('10k','AC_RST_N','+3V3_AC')
 for k,(tag,clkin,clkout) in enumerate((('GEN','ADE_XI','ADE_XO'),('BUS','ADE_XO2',None)),1):
