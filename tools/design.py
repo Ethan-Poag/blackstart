@@ -124,12 +124,17 @@ MAP={'PA0':'VBAT_SNS','PA1':'VESTOP_SNS','PA2':'DPLUS_SNS','PA3':'FUEL_ISNS','PA
  'PE0':'AUX1_MCU','PE1':'AUX2_MCU','PE2':'MCU_SPI_SCK','PE3':'MCU_IRQ','PE4':'MCU_SPI_NSS','PE5':'MCU_SPI_MISO','PE6':'MCU_SPI_MOSI','PE7':'I2C_INT_N','PE8':'MCU_LED',
  'PH0':'HSE_IN','PH1':'HSE_OUT'}
 for i in range(7): MAP['PE%d'%(9+i)]='DI%d_N'%(i+1)
+# rev h: DI pins that double as STM32 bootloader pins (SPI4 PE11-14, USART3 PB10/11, USART1-alt PB14/15) get 1k series R
+BLPINS=['PE11','PE12','PE13','PE14','PB10','PB11','PB14','PB15']
+BLR=[(MAP[p],MAP[p]+'_M') for p in BLPINS]
+for p in BLPINS: MAP[p]+='_M'
 c=dict(MAP); c.update({'NRST':'NRST','BOOT0':'BOOT0','VREF+':'+3V3','VDD':'+3V3','VSS':'GND','VSSA':'GND','VDDA':'VDDA','48':'VCAP1','73':'VCAP2','VBAT':'VBAT_MCU'})
 mc.p('MCU_ST_STM32H7:STM32H743VITx','STM32H743VIT6',c,mpn='STM32H743VIT6')
 dec(mc,'+3V3',6); mc.C('4.7u','+3V3','GND',pkg='1206')
 mc.p('Device:FerriteBead','600R@100MHz',{'1':'+3V3','2':'VDDA'},prefix='FB',mpn='GZ1608D601TF',lcsc='C1002',fp='Inductor_SMD:L_0603_1608Metric'); mc.C('1u','VDDA','GND'); mc.C('100n','VDDA','GND')
 mc.C('2.2u','VCAP1','GND'); mc.C('2.2u','VCAP2','GND')
 mc.C('100n','VBAT_MCU','GND')
+for a,b in BLR: mc.R('1k',a,b,note='limits contention if bootloader drives this pin (<=3.3mA)')
 mc.p('Device:Crystal_GND24','25MHz',{'1':'HSE_IN','3':'HSE_OUT','2':'GND','4':'GND'},prefix='Y',mpn='X322525MOB4SI',lcsc='C9006',fp='Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm',note='CL=12pF')
 mc.C('18p','HSE_IN','GND',pkg='0402'); mc.C('18p','HSE_OUT','GND',pkg='0402')
 mc.p('Device:Crystal','32.768kHz',{'1':'LSE_IN','2':'LSE_OUT'},prefix='Y',mpn='X321532768KGD2SI',lcsc='C620155',fp='Crystal:Crystal_SMD_3215-2Pin_3.2x1.5mm',note='CL=12.5pF')
@@ -193,11 +198,11 @@ cm.R('10k','CM5_PWRBTN_MCU','PBTN_QB'); cm.R('100k','PBTN_QB','GND'); npn(cm,'PB
 cm.R('10k','CM5_PWR_FAIL','CM5_3V3',note='PWR_FAIL high = running on hold-up (or CM5_3V3 alone)')
 npn(cm,'HU_QB1','GND','CM5_PWR_FAIL'); cm.R('10k','HU_ST','HU_QB1'); cm.R('100k','HU_QB1','GND')
 npn(cm,'HU_QB2','GND','PWR_FAIL_MCU'); cm.R('10k','HU_ST','HU_QB2'); cm.R('100k','HU_QB2','GND'); cm.R('10k','PWR_FAIL_MCU','+3V3_SAFE')
-# CM5 5V hold-up: 2x10F supercap (5F, ~4.9V) -> TPS61023 boost 4.85V -> TPS2121 IN2; IN1 = +5V priority
+# CM5 5V hold-up: 2x20F 3.0V 85C supercap JIERONG JRCD3R0206N120030E (10F, ~4.9V = 2.45V/cell; was 2x HV1030 10F 65C) -> TPS61023 boost 4.85V -> TPS2121 IN2; IN1 = +5V priority
 schottky(cm,'SS34','+5V','SC_CHG',mpn='SS34')
 for _ in range(3): cm.R('150R','SC_CHG','SC_TOP',pkg='1206',note='3x150R = 50R charge limit (<=92mA, 0.14W each)')
-cm.C('10F 2.7V','SC_TOP','SC_MID',pol=True,pkg='Capacitor_THT:CP_Radial_D10.0mm_P5.00mm',mpn='HV1030-2R7106-R')
-cm.C('10F 2.7V','SC_MID','GND',pol=True,pkg='Capacitor_THT:CP_Radial_D10.0mm_P5.00mm',mpn='HV1030-2R7106-R')
+cm.C('20F 3.0V','SC_TOP','SC_MID',pol=True,pkg='Capacitor_THT:CP_Radial_D12.5mm_P5.00mm',mpn='JRCD3R0206N120030E',lcsc='C7471020')
+cm.C('20F 3.0V','SC_MID','GND',pol=True,pkg='Capacitor_THT:CP_Radial_D12.5mm_P5.00mm',mpn='JRCD3R0206N120030E',lcsc='C7471020')
 cm.R('10k','SC_TOP','SC_MID',note='passive balance'); cm.R('10k','SC_MID','GND',note='passive balance')
 cm.C('22u','SC_TOP','GND',pkg='1206')
 cm.p('genctl:TPS61023DRLR','TPS61023DRLR',{'VIN':'SC_TOP','EN':'SC_TOP','FB':'HU_FB','GND':'GND','VOUT':'+5V_HU','SW':'HU_SW'},mpn='TPS61023DRLR',lcsc='C919459',note='hold-up boost 4.85V')
@@ -257,8 +262,13 @@ co.R('5.1k','USBC_CC1','GND'); co.R('5.1k','USBC_CC2','GND')
 co.p('Power_Protection:USBLC6-2SC6','USBLC6-2SC6',{'1':'USB_SVC_P','6':'USB_SVC_P','3':'USB_SVC_N','4':'USB_SVC_N','5':'USBC_VBUS','2':'GND'},prefix='D',mpn='USBLC6-2SC6')
 # Internal USB2 headers direct from CM5 USB3-0/USB3-1 HS pairs (no hub, no USB-A host). SS pairs NC.
 for i,(dm,dp,lab) in enumerate((('USB30_DM','USB30_DP','Internal USB0 touch (SM04B)'),('USB31_DM','USB31_DP','Internal USB1 spare (SM04B)'))):
-    conn(co,4,['+5V',dm,dp,'GND'],lab,mpn='SM04B-SRSS-TB')
-    co.p('Power_Protection:USBLC6-2SC6','USBLC6-2SC6',{'1':dp,'6':dp,'3':dm,'4':dm,'5':'+5V','2':'GND'},prefix='D',mpn='USBLC6-2SC6')
+    vb='USB%d_5V'%i; en='USB%d_EN'%i; il='USB%d_ILIM'%i
+    # rev h: TPS2553 current-limited switch per header; 40.2k -> ~0.68A nom (>0.5A USB2), FAULT -> OUT_FAULT_N, EN from TCA9555 @0x25 (default ON)
+    co.p('genctl:TPS2553DBVR','TPS2553DBVR',{'IN':'+5V','GND':'GND','EN':en,'FAULT':'OUT_FAULT_N','ILIM':il,'OUT':vb},mpn='TPS2553DBVR')
+    co.R('40.2k',il,'GND',note='IOS = 25230/R^0.977 ~ 0.68A'); co.R('100k',en,'+3V3_SAFE',note='default ON')
+    co.C('1u','+5V','GND',pkg='0603'); co.C('10u',vb,'GND',pkg='0805')
+    conn(co,4,[vb,dm,dp,'GND'],lab,mpn='SM04B-SRSS-TB')
+    co.p('Power_Protection:USBLC6-2SC6','USBLC6-2SC6',{'1':dp,'6':dp,'3':dm,'4':dm,'5':vb,'2':'GND'},prefix='D',mpn='USBLC6-2SC6')
 
 # =====================================================================
 di=S('display','Display: DSI->LVDS bridge, panel power, backlight, touch',
@@ -530,7 +540,7 @@ pins=[('P0%d'%k) for k in range(8)]+[('P1%d'%k) for k in range(8)]
 for addr,chunk in ((1,ch[0:16]),(4,ch[16:32]),(5,ch[32:36])):
     m={pn:None for pn in pins}
     for pn,net in zip(pins,chunk): m[pn]=net
-    if addr==5: m.update({'P04':'ROUTER_12V_EN','P05':'CM5_OFF','P06':'CM5_PWRBTN_MCU','P07':'PWR_FAIL_MCU','P10':'AUX9_MCU','P11':'AUX10_MCU','P12':'AUX10_RB_N'})
+    if addr==5: m.update({'P04':'ROUTER_12V_EN','P05':'CM5_OFF','P06':'CM5_PWRBTN_MCU','P07':'PWR_FAIL_MCU','P10':'AUX9_MCU','P11':'AUX10_MCU','P12':'AUX10_RB_N','P13':'USB0_EN','P14':'USB1_EN'})
     tca(fp_,addr,m)
 fp_.R('1k','BTN_BL_PWM','BL_Q_B'); fp_.R('100k','BL_Q_B','GND',note='default off'); npn(fp_,'BL_Q_B','GND','BL_PG')
 fp_.R('10k','+5V','BL_PG',note='PFET gate pull-up'); fet(fp_,'Transistor_FET:AO3401A','AO3401A','BL_PG','+5V','BTN_LED_V')

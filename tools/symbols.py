@@ -6,6 +6,7 @@ TYPES={
  'TPS56637RPAR':dict(VIN='W',EN='I',MODE='I',FB='I',AGND='W',PGND='W',PG='C',NC='N'),
  'TPS3431SDRBR':dict(EP='W',VDD='W',EN='I',SET1='I',WDI='I',GND='W',WDO='C',ENOUT='O'),
  'TPS61500PWPR':dict(VIN='W',EN='I',DIMC='I',AGND='W',OVP='I',FB='I',PGND='W'),
+ 'TPS2553DBVR':dict(IN='W',GND='W',EN='I',FAULT='C',ILIM='P',OUT='w'),
  'TPS22918DBVR':dict(VIN='W',ON='I',GND='W',VOUT='w'),
  'TLV75518PDBVR':dict(IN='W',EN='I',GND='W',OUT='w',NC='N'),
  'TPS7B6950QDBVRQ1':dict(IN='W',GND='W',OUT='w',NC='N'),
@@ -48,6 +49,8 @@ ic('TPS61500PWPR', P((3,'VIN'),(4,'EN'),(6,'DIMC'),(5,'SS'),(10,'FREQ'),(8,'COMP
    desc='3A boost WLED driver, HTSSOP-14 PowerPAD', mfr='TI', mpn='TPS61500PWPR', fp='genctl:TPS61500_HTSSOP-14_PWP', lcsc='C71160')
 ic('TPS22918DBVR', P((1,'VIN'),(3,'ON'),(4,'CT'),(2,'GND')), P((6,'VOUT'),(5,'QOD')), desc='5.5V 2A load switch, SOT-23-6', mfr='TI', mpn='TPS22918DBVR',
    fp='Package_TO_SOT_SMD:SOT-23-6', lcsc='C131941')
+ic('TPS2553DBVR', P((1,'IN'),(3,'EN'),(5,'ILIM'),(2,'GND')), P((6,'OUT'),(4,'FAULT')), desc='USB power switch, adjustable ILIM 75-1700 mA, active-high EN, SOT-23-6', mfr='TI', mpn='TPS2553DBVR',
+   fp='Package_TO_SOT_SMD:SOT-23-6', lcsc='C55266')
 ic('TLV75518PDBVR', P((1,'IN'),(3,'EN'),(2,'GND')), P((5,'OUT'),(4,'NC')), desc='1.8V 500mA LDO, SOT-23-5', mfr='TI', mpn='TLV75518PDBVR', fp='Package_TO_SOT_SMD:SOT-23-5', lcsc='C2877863')
 ic('TPS7B6950QDBVRQ1', P((1,'IN'),(3,'GND')), P((5,'OUT'),(2,'NC'),(4,'GND')), desc='40V 150mA 5V LDO, SOT-23-5 DBV: pins 3 and 4 both GND per DS pin table', mfr='TI', mpn='TPS7B6950QDBVRQ1', fp='Package_TO_SOT_SMD:SOT-23-5', lcsc='C132202')
 ic('TPS1H200AQDGNRQ1', P((8,'VS'),(1,'IN'),(2,'DIAG_EN'),(4,'CL'),(5,'DELAY'),(6,'GND'),(9,'EP')), P((7,'OUT'),(3,'FAULT')), desc='40V 200mOhm high-side switch, MSOP-8-PowerPAD', mfr='TI', mpn='TPS1H200AQDGNRQ1', fp='genctl:TPS1H200_MSOP-8-EP_DGN', lcsc='C2653785')
