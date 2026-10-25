@@ -77,5 +77,21 @@ if "Y4" not in have:
           {"1": "+1V8_DSI", "4": "+1V8_DSI", "2": "GND", "3": "DSI83_REFCLK_OSC"})
     addfp("Resistor_SMD", "R_0603_1608Metric", "R531", "22R", h2x + 1.0, h2y - 1.9, 0, {"1": "DSI83_REFCLK_OSC", "2": "DSI83_REFCLK"})
     addfp("Capacitor_SMD", "C_0603_1608Metric", "C286", "100n", h2x + 4.0, h2y - 4.2, 90, {"1": "+1V8_DSI", "2": "GND"})
-RV.fanout(b); RV.fill(b); b.Save(dst)
+# ADE9000 GND pins: tie straight to the GND_AC exposed pad on B instead of an outward fan-out via, which
+# boxed in the neighbouring signal pins (U72.6 AC_RST_N, U71.19 GEN_VA_N ...)
+held = []
+for ref in ("U71", "U72"):
+    f = b.FindFootprintByReference(ref); cx, cy = f.GetPosition().x, f.GetPosition().y
+    for p in f.Pads():
+        if p.GetNetname() == "GND_AC" and p.GetNumber() != "41": held.append((p, p.GetNetCode(), cx, cy)); p.SetNetCode(0)
+RV.fanout(b)
+for p, code, cx, cy in held:
+    p.SetNetCode(code)
+    px, py = p.GetPosition().x, p.GetPosition().y
+    dx, dy = cx - px, cy - py
+    ex, ey = (px + int(dx * 0.37), py) if abs(dx) > abs(dy) else (px, py + int(dy * 0.37))   # into the EP (pins ~3 mm from centre, EP edge ~2.35 mm)
+    t = pcbnew.PCB_TRACK(b); t.SetStart(p.GetPosition()); t.SetEnd(pcbnew.VECTOR2I(ex, ey)); t.SetWidth(MM(0.2))
+    t.SetLayer(pcbnew.B_Cu if p.IsOnLayer(pcbnew.B_Cu) else pcbnew.F_Cu); t.SetNetCode(code); b.Add(t)
+print("ADE GND pins tied to EP:", len(held))
+RV.fill(b); b.Save(dst)
 print("flipped to F: %d %s" % (len(flipped), " ".join(flipped)))
