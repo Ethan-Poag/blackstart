@@ -277,7 +277,7 @@ di=S('display','Display: DSI->LVDS bridge, panel power, backlight, touch',
 di.p('genctl:TLV75518PDBVR','TLV75518PDBVR',{'IN':'+3V3','EN':'+3V3','GND':'GND','OUT':'+1V8_DSI','NC':None},mpn='TLV75518PDBVR')
 di.C('1u','+3V3','GND'); di.C('1u','+1V8_DSI','GND')
 dsi={'DA0P':'DSI_D0_P','DA0N':'DSI_D0_N','DA1P':'DSI_D1_P','DA1N':'DSI_D1_N','DA2P':'DSI_D2_P','DA2N':'DSI_D2_N','DA3P':'DSI_D3_P','DA3N':'DSI_D3_N','DACP':'DSI_C_P','DACN':'DSI_C_N',
- 'SCL':'DISP_SCL','SDA':'DISP_SDA','ADDR':'GND','EN':'DSI83_EN','IRQ':'DSI83_IRQ','REFCLK':'DSI83_REFCLK','RSVD1':None,'RSVD2':None,
+ 'SCL':'DISP_SCL_1V8','SDA':'DISP_SDA_1V8','ADDR':'GND','EN':'DSI83_EN_1V8','IRQ':'DSI83_IRQ_1V8','REFCLK':'DSI83_REFCLK','RSVD1':None,'RSVD2':None,
  'A_Y0P':'LVDS0_P','A_Y0N':'LVDS0_N','A_Y1P':'LVDS1_P','A_Y1N':'LVDS1_N','A_Y2P':'LVDS2_P','A_Y2N':'LVDS2_N','A_Y3P':'LVDS3_P','A_Y3N':'LVDS3_N','A_CLKP':'LVDSC_P','A_CLKN':'LVDSC_N',
  'VCC':'+1V8_DSI','VCORE':'DSI83_VCORE','GND':'GND','NC':None}
 di.p('genctl:SN65DSI83ZXHR','SN65DSI83ZXHR',dsi,mpn='SN65DSI83ZXHR')
@@ -287,8 +287,8 @@ di.R('10k','DSI83_REFCLK','GND',note='REFCLK unused (clock from DSI): 10k to GND
 # Fit Y? + R? (22R series, near source) + C? when the Pi DSI clock is not continuous / its PLL causes panel flicker; then set CSR 0x0A.0 HS_CLK_SRC=0 and REFCLK_MULTIPLIER.
 # SN65DSI83 REFCLK: 25-154 MHz, 1.8 V CMOS (abs max 2.175 V), <=50 ps p-p jitter, 40-60 % duty -> oscillator must run from +1V8_DSI. 10k pull-down may stay fitted.
 di.p('Oscillator:ASDMB-xxxMHz','25MHz',{'1':'+1V8_DSI','4':'+1V8_DSI','2':'GND','3':'DSI83_REFCLK_OSC'},prefix='Y',ref='Y4',mpn='ASDMB-25.000MHZ-LC-T',fp='Oscillator:Oscillator_SMD_Abracon_ASDMB-4Pin_2.5x2.0mm',dnp=True,note='DNP option: 25 MHz 1.8 V CMOS oscillator for DSI83 REFCLK (Pi DSI PLL flicker risk)')
-di.R('22R','DSI83_REFCLK_OSC','DSI83_REFCLK',dnp=True,ref='R531',note='DNP: REFCLK series R at the oscillator (0R-22R)'); di.C('100n','+1V8_DSI','GND',dnp=True,ref='C286',note='DNP: REFCLK oscillator decoupling')
-di.R('100k','DSI83_EN','GND'); di.C('10n','DSI83_EN','GND'); di.R('10k','DSI83_IRQ','CM5_3V3')
+di.R('22R','DSI83_REFCLK_BUF','DSI83_REFCLK',dnp=True,ref='R531',note='DNP option: REFCLK series R after U80 buffer (0R-22R)'); di.C('100n','+1V8_DSI','GND',dnp=True,ref='C286',note='DNP: REFCLK oscillator decoupling')
+di.R('100k','DSI83_EN','GND',note='GPIO6 3.3 V side pulldown (R114)'); di.C('10n','DSI83_EN_1V8','GND',note='C116: EN RC delay at U21.B1 (1.8 V side)'); di.R('100k','DSI83_IRQ_1V8','GND',note='R115: IRQ 1.8 V side pulldown (was 10k to CM5_3V3 = 3.3 V on a 1.8 V pin, review C1)')
 di.p('genctl:TPS22918DBVR','TPS22918DBVR',{'VIN':'+3V3','ON':'PANEL_VDD_EN','CT':'PNL_CT','GND':'GND','VOUT':'+3V3_PANEL','QOD':'+3V3_PANEL'},mpn='TPS22918DBVR',note='panel VDD switch')
 di.C('1n','PNL_CT','GND'); di.R('100k','PANEL_VDD_EN','GND'); di.C('10u','+3V3_PANEL','GND',pkg='0805')
 di.p('genctl:TPS22918DBVR','TPS22918DBVR',{'VIN':'+3V3','ON':'PANEL_VDD_EN','CT':'TCH_CT','GND':'GND','VOUT':'+3V3_TOUCH','QOD':'+3V3_TOUCH'},mpn='TPS22918DBVR',note='touch power switch')
@@ -300,7 +300,20 @@ for p,n in ((8,'LVDS0_N'),(9,'LVDS0_P'),(11,'LVDS1_N'),(12,'LVDS1_P'),(14,'LVDS2
 conn(di,40,[None if x=='NC' else x for x in lv],'LVDS FPC 40p 0.5mm',mpn='FPC 40P 0.5mm (BOM)',note='RVT121 LVDS pin map per DS; other pins NC')
 conn(di,10,['GND',None,None,None,'GND','+3V3_TOUCH','TOUCH_RST_N','DISP_SCL','TOUCH_INT_N','DISP_SDA'],'Touch FPC 10p 0.5mm',mpn='FPC 10P 0.5mm',note='USB touch pins (2-4) unused - I2C mode')
 di.R('10k','TOUCH_RST_N','+3V3_TOUCH'); di.R('10k','TOUCH_INT_N','+3V3_TOUCH')
-di.R('2.2k','DISP_SCL','CM5_3V3',dnp=True,note='DNP: CM5 GPIO2/3 have 1.8k on-module pull-ups'); di.R('2.2k','DISP_SDA','CM5_3V3',dnp=True)
+di.R('2.2k','DISP_SCL_1V8','+1V8_DSI',note='R119: DSI83 SCL pull-up, 1.8 V side of U77 (3.3 V side uses CM5 1.8k on-module pull-ups)'); di.R('2.2k','DISP_SDA_1V8','+1V8_DSI',note='R120')
+# ---- Review C1 fix: SN65DSI83 CMOS I/O is 1.8 V (abs max 2.175 V, SLLSEC1I); CM5 GPIO_VREF stays 3.3 V -> translate. Fixed refs keep annotation stable.
+# I2C: PCA9306 (SCPS113O Fig 8-1: EN tied to VREF2, 200k to VCC2, 100 pF filter at VREF2). VREF1 = +1V8_DSI (1.2 V..VREF2-0.6 V ok).
+di.p('Interface:PCA9306DC','PCA9306DCUR',{'1':'GND','2':'+1V8_DSI','3':'DISP_SCL_1V8','4':'DISP_SDA_1V8','5':'DISP_SDA','6':'DISP_SCL','7':'PCA_VREF2','8':'PCA_VREF2'},ref='U77',mpn='PCA9306DCUR',lcsc='C33196',fp='Package_SO:VSSOP-8_2.3x2mm_P0.5mm',note='DSI83 I2C 1.8V<->3.3V translator (review C1)')
+di.R('200k','PCA_VREF2','CM5_3V3',ref='R532',note='PCA9306 VREF2/EN bias (SCPS113O 200k)'); di.C('100p','PCA_VREF2','GND',ref='C287',note='PCA9306 VREF2 filter (SCPS113O 100 pF)'); di.C('100n','+1V8_DSI','GND',ref='C288',note='U77 VREF1 decoupling')
+# EN: SN74LVC1T45 (SCES515N) DIR high = A->B, DIR referenced to VCCA. A=GPIO6 3.3 V, B=U21.EN 1.8 V. Either VCC at 0 V -> Hi-Z, R533 holds EN low.
+di.p('Logic_LevelTranslator:SN74LVC1T45DBV','SN74LVC1T45DBVR',{'1':'CM5_3V3','2':'GND','3':'DSI83_EN','4':'DSI83_EN_1V8','5':'CM5_3V3','6':'+1V8_DSI'},ref='U78',mpn='SN74LVC1T45DBVR',lcsc='C7843',note='DSI83 EN 3.3V->1.8V (review C1)')
+di.R('47k','DSI83_EN_1V8','GND',ref='R533',note='EN held low while translator Hi-Z / +1V8_DSI ramps (U21 internal 200k pull-up)'); di.C('100n','CM5_3V3','GND',ref='C289'); di.C('100n','+1V8_DSI','GND',ref='C290')
+# IRQ: SN74LVC1T45 A=U21.IRQ (1.8 V push-pull/Hi-Z, active high), B=GPIO7 3.3 V; DIR tied to VCCA (+1V8_DSI) = A->B.
+di.p('Logic_LevelTranslator:SN74LVC1T45DBV','SN74LVC1T45DBVR',{'1':'+1V8_DSI','2':'GND','3':'DSI83_IRQ_1V8','4':'DSI83_IRQ','5':'+1V8_DSI','6':'CM5_3V3'},ref='U79',mpn='SN74LVC1T45DBVR',lcsc='C7843',note='DSI83 IRQ 1.8V->3.3V (review C1)')
+di.C('100n','+1V8_DSI','GND',ref='C291'); di.C('100n','CM5_3V3','GND',ref='C292')
+# REFCLK buffer option (DNP): Y4 -> U80 -> R531 22R -> REFCLK. Output tr/tf <=1 ns at 1.8 V NOT verifiable from TI datasheet (only tpd given) -> DNP; default = 10k REFCLK->GND, clock from DSI (HS_CLK_SRC).
+di.p('74xGxx:74LVC1G34','SN74LVC1G34DBVR',{'1':None,'2':'DSI83_REFCLK_OSC','3':'GND','4':'DSI83_REFCLK_BUF','5':'+1V8_DSI'},prefix='U',ref='U80',mpn='SN74LVC1G34DBVR',lcsc='C840096',fp='Package_TO_SOT_SMD:SOT-23-5',dnp=True,note='DNP option: REFCLK buffer; tr/tf <=1 ns @1.8 V unverified')
+di.C('100n','+1V8_DSI','GND',ref='C293',dnp=True,note='DNP: U80 decoupling')
 di.p('genctl:TPS61500PWPR','TPS61500PWPR',{'VIN':'+12V','EN':'BL_PWM','DIMC':'BL_DIMC','SS':'BL_SS','FREQ':'BL_FREQ','COMP':'BL_COMP','AGND':'GND','EP':'GND','SW':'BL_SW','OVP':'BL_OVP','FB':'BL_FB','PGND':'GND'},mpn='TPS61500PWPR')
 di.R('100k','BL_PWM','GND'); di.C('1u','BL_DIMC','GND'); di.C('47n','BL_SS','GND'); di.R('180k','BL_FREQ','GND',note='DS FREQ eq. -> ~540kHz'); di.C('470n','BL_COMP','GND',note='DS recommended for PWM dimming')
 di.p('Device:L','10u',{'1':'+12V','2':'BL_SW'},prefix='L',mpn='SWPA6045S100MT',lcsc='C79272',fp='genctl:L_SWPA6045S',note='10uH per DS range (4.7-22uH)'); schottky(di,'SS36','BL_SW','VLED',mpn='SS36'); di.parts[-1].lcsc='C16015'; di.parts[-1].fp='Diode_SMD:D_SMA'

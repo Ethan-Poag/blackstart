@@ -1,0 +1,83 @@
+U21   H1   DISP_SCL_1V8         OK
+U21   J1   DISP_SDA_1V8         OK
+U21   B1   DSI83_EN_1V8         OK
+U21   J9   DSI83_IRQ_1V8        OK
+U21   H2   DSI83_REFCLK         OK
+U77   1    GND                  OK
+U77   2    +1V8_DSI             OK
+U77   3    DISP_SCL_1V8         OK
+U77   4    DISP_SDA_1V8         OK
+U77   5    DISP_SDA             OK
+U77   6    DISP_SCL             OK
+U77   7    Net-(U77-EN)         MISMATCH expected PCA_VREF2
+U77   8    Net-(U77-EN)         MISMATCH expected PCA_VREF2
+U78   1    CM5_3V3              OK
+U78   2    GND                  OK
+U78   3    DSI83_EN             OK
+U78   4    DSI83_EN_1V8         OK
+U78   5    CM5_3V3              OK
+U78   6    +1V8_DSI             OK
+U79   1    +1V8_DSI             OK
+U79   2    GND                  OK
+U79   3    DSI83_IRQ_1V8        OK
+U79   4    DSI83_IRQ            OK
+U79   5    +1V8_DSI             OK
+U79   6    CM5_3V3              OK
+U80   2    DSI83_REFCLK_OSC     OK
+U80   3    GND                  OK
+U80   4    DSI83_REFCLK_BUF     OK
+U80   5    +1V8_DSI             OK
+U9    30   DSI83_EN             OK
+U9    37   DSI83_IRQ            OK
+U9    56   DISP_SCL             OK
+U9    58   DISP_SDA             OK
+J15   8    DISP_SCL             OK
+J15   10   DISP_SDA             OK
+R119  1    DISP_SCL_1V8         OK
+R119  2    +1V8_DSI             OK
+R120  1    DISP_SDA_1V8         OK
+R120  2    +1V8_DSI             OK
+R115  1    DSI83_IRQ_1V8        OK
+R115  2    GND                  OK
+R114  1    DSI83_EN             OK
+R114  2    GND                  OK
+C116  1    DSI83_EN_1V8         OK
+R533  1    DSI83_EN_1V8         OK
+R533  2    GND                  OK
+R532  1    Net-(U77-EN)         MISMATCH expected PCA_VREF2
+R532  2    CM5_3V3              OK
+R113  1    DSI83_REFCLK         OK
+R113  2    GND                  OK
+R531  1    DSI83_REFCLK_BUF     OK
+R531  2    DSI83_REFCLK         OK
+Y4    3    DSI83_REFCLK_OSC     OK
+Y4    1    +1V8_DSI             OK
+U21 ADDR: see GND net membership
+DISP_SCL_1V8 [('R119', '1'), ('U21', 'H1'), ('U77', '3')]
+DISP_SDA_1V8 [('R120', '1'), ('U21', 'J1'), ('U77', '4')]
+DSI83_EN_1V8 [('C116', '1'), ('R533', '1'), ('U21', 'B1'), ('U78', '4')]
+DSI83_IRQ_1V8 [('R115', '1'), ('U21', 'J9'), ('U79', '3')]
+DSI83_REFCLK [('R113', '1'), ('R531', '2'), ('U21', 'H2')]
+DSI83_REFCLK_BUF [('R531', '1'), ('U80', '4')]
+DSI83_REFCLK_OSC [('U80', '2'), ('Y4', '3')]
+U77 PCA9306DCUR fit
+U78 SN74LVC1T45DBVR fit
+U79 SN74LVC1T45DBVR fit
+U80 SN74LVC1G34DBVR DNP
+R113 10k fit
+R115 100k fit
+R119 2.2k fit
+R120 2.2k fit
+R531 22R DNP
+R532 200k fit
+R533 47k fit
+C287 100p fit
+C288 100n fit
+C289 100n fit
+C290 100n fit
+C291 100n fit
+C292 100n fit
+C293 100n DNP
+Y4 25MHz DNP
+C286 100n DNP
+mismatches 3
