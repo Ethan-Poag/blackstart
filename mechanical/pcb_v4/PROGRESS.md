@@ -49,3 +49,10 @@
 
 **These skews are far above the usual targets (around 0.1 to 0.15 mm intra-pair for USB, DSI and LVDS). Before fab, every pair needs coupled re-routing and tuning in KiCad's interactive router (Route → Differential Pair, Tune Skew).** The LVDS and DSI escape from the U21 BGA is the bottleneck.
 - DRC on genctl_v4_handrouted.kicad_pcb: see drc_v4_handrouted.rpt.
+
+## Milestone 3: U21 (DSI83) BGA escape (bga_escape_u21.py)
+- The 0.5 mm-pitch 9x9 BGA cannot be fully dog-boned: a 0.45/0.2 via does not fit between 0.5 mm balls, and even 0.40/0.20 vias only fit on a checkerboard of interstitial sites. The result is a mixed escape:
+  - 5 dog-bones at 0.40/0.20 (H4->G4, H6->G6, D8->D7, F8->F7, GND E4->E3). GND balls E4-F4-F5 are tied on B.Cu.
+  - 8 via-in-pad: H2 (DSI83_REFCLK) at 0.30/0.15; H3, H5, H7, C8, E8, G8, E6 at 0.35/0.20.
+- Cost: JLC POFV (epoxy-filled, copper-capped) via-in-pad is free on 6-20 layer boards but applies board-wide (from JLC pages found by web search in 2026; confirm when quoting). The 0.35/0.2/0.075 minimum is scoped to the U21 courtyard by the .kicad_dru rule "via min outside U21 BGA". Only the board-setup floor was lowered.
+- DRC on genctl_v4_escaped: 0 errors (drc_v4_escaped.rpt).

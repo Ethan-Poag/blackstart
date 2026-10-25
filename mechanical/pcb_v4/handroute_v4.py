@@ -27,8 +27,8 @@ VIA_D, VIA_DR = 0.4, 0.2
 HV_VIA_D, HV_VIA_DR = 0.8, 0.4
 BARRIER_X = (60.0, 73.0)
 MARGIN = 0.035
-HV_MARGIN = 0.08
-BGA_VIA_D, BGA_VIA_DR = 0.3, 0.15
+HV_MARGIN = 0.25   # covers KiCad raster error + Freerouting's octagon/additive clearance model
+BGA_VIA_D, BGA_VIA_DR = 0.35, 0.2   # JLC POFV-compliant (hole >= 0.2, annular 0.075)
 EDGE_CLR = 0.35
 mm = pcbnew.ToMM; FM = pcbnew.FromMM
 
@@ -240,8 +240,9 @@ def free_map(code, w, win, extra_clear=0.0, allow_layers=(0, 1, 2)):
             c_n = c_h = c_d = 1.5
         else:
             c_n = max(own_c, 0.12) + extra_clear; c_h = 3.0 if outer else 1.5; c_d = 1.5
-        hw = w / 2 + (HV_MARGIN if (cl.startswith("HV") or c_h > 1) else MARGIN)
-        free[l] = (dn[l] > c_n + hw) & (dh[l] > c_h + hw) & (dd[l] > c_d + hw)
+        hw = w / 2
+        mn = HV_MARGIN if cl.startswith("HV") else MARGIN
+        free[l] = (dn[l] > c_n + hw + mn) & (dh[l] > c_h + hw + HV_MARGIN) & (dd[l] > c_d + hw + HV_MARGIN)
         if l not in allow_layers: free[l] = False
     free &= ~BLK[:, y0:y1, x0:x1]
     free |= (lab_w == me)                      # own copper always enterable
@@ -250,7 +251,7 @@ def free_map(code, w, win, extra_clear=0.0, allow_layers=(0, 1, 2)):
     c_v = (1.5 if cl.startswith("HV") else max(own_c, 0.12))
     vfree = np.ones(lab_w.shape[1:], bool)
     for l in range(3):
-        vfree &= (dn[l] > c_v + vd / 2 + 0.1) & (dh[l] > (3.0 if OUTER[l] else 1.5) + vd / 2 + MARGIN) & (dd[l] > 1.5 + vd / 2 + MARGIN)
+        vfree &= (dn[l] > c_v + vd / 2 + 0.1) & (dh[l] > (3.0 if OUTER[l] else 1.5) + vd / 2 + HV_MARGIN) & (dd[l] > 1.5 + vd / 2 + HV_MARGIN)
     vfree_nopad = np.ones(lab_w.shape[1:], bool)
     for l in range(3):
         vfree_nopad &= (dn[l] > c_v + BGA_VIA_D / 2 + MARGIN) & (dh[l] > 3.0 + BGA_VIA_D / 2) & (dd[l] > 1.5 + BGA_VIA_D / 2)
@@ -261,7 +262,7 @@ def free_map(code, w, win, extra_clear=0.0, allow_layers=(0, 1, 2)):
 _u = b.FindFootprintByReference("U21")
 _ub = _u.GetCourtyard(pcbnew.B_Cu if _u.IsFlipped() else pcbnew.F_Cu).BBox()
 U21BB = (mm(_ub.GetX()), mm(_ub.GetY()), mm(_ub.GetRight()), mm(_ub.GetBottom()))
-ds = b.GetDesignSettings(); ds.m_ViasMinSize = FM(0.3); ds.m_MinThroughDrill = FM(0.15); ds.m_ViasMinAnnularWidth = FM(0.075)
+ds = b.GetDesignSettings(); ds.m_ViasMinSize = FM(0.35); ds.m_MinThroughDrill = FM(0.2); ds.m_ViasMinAnnularWidth = FM(0.075)
 made = []
 def add_track(code, li, a, c, w):
     t = pcbnew.PCB_TRACK(b); t.SetStart(pcbnew.VECTOR2I(FM(a[0]), FM(a[1]))); t.SetEnd(pcbnew.VECTOR2I(FM(c[0]), FM(c[1])))
@@ -416,6 +417,60 @@ def route_pair(pn, nn, report):
     report.append((pn, nn, rP["ok"], rN["ok"], round(rP["length"], 2), round(rN["length"], 2), round(skew, 2), rP["vias"], rN["vias"], rP["failed"] + rN["failed"]))
     return rP, rN
 
+
+# ---------------- skew tuning (trombone serpentines) ----------------
+def net_len(code):
+    return sum(mm(t.GetLength()) for t in b.GetTracks() if t.GetNetCode() == code and t.Type() != pcbnew.PCB_VIA_T)
+
+def tune_pair(P, N, tol=0.10):
+    lp, ln = net_len(P), net_len(N)
+    S, O = (P, N) if lp < ln else (N, P)
+    delta = abs(lp - ln)
+    if delta <= tol: return delta
+    w = CLS[cls_of(S)][0]
+    segs = sorted([t for t in made if t.GetNetCode() == S and t.Type() != pcbnew.PCB_VIA_T], key=lambda t: -t.GetLength())
+    for t in segs:
+        if delta <= tol: break
+        a = np.array([mm(t.GetStart().x), mm(t.GetStart().y)]); c = np.array([mm(t.GetEnd().x), mm(t.GetEnd().y)])
+        L = float(np.linalg.norm(c - a))
+        if L < 1.4: continue
+        u = (c - a) / L; nrm = np.array([-u[1], u[0]])
+        li = LAY.index(t.GetLayer())
+        win = (max(0, int(gy(min(a[1], c[1]) - 3))), min(H, int(gy(max(a[1], c[1]) + 3))), max(0, int(gx(min(a[0], c[0]) - 3))), min(W, int(gx(max(a[0], c[0]) + 3))))
+        free, _, _ = free_map(S, w, win)
+        def ok(pts):
+            for q0, q1 in zip(pts[:-1], pts[1:]):
+                n_ = max(2, int(np.linalg.norm(q1 - q0) / 0.04))
+                for f_ in np.linspace(0, 1, n_):
+                    q = q0 + f_ * (q1 - q0); yy, xx = int(round(gy(q[1]))) - win[0], int(round(gx(q[0]))) - win[2]
+                    if not (0 <= yy < free.shape[1] and 0 <= xx < free.shape[2]) or not free[li, yy, xx]: return False
+            return True
+        sp = 0.6
+        kmax = int((L - 0.4) / sp)
+        if kmax < 1: continue
+        done = False
+        for side in (1, -1):
+            m = (a + c) / 2 + side * nrm * (GAP[cls_of(S)] + w)
+            if LAB[li, int(round(gy(m[1]))), int(round(gx(m[0])))] == O + 1: continue   # never bulge toward partner
+            for hmax in (0.7, 0.5, 0.35, 0.25):
+                k = min(kmax, int(math.ceil(delta / (2 * hmax))))
+                h = delta / (2 * k)
+                if h > hmax + 1e-9: continue
+                o0 = (L - k * sp) / 2
+                pts = [a]
+                for i in range(k):
+                    p0 = a + u * (o0 + i * sp)
+                    pts += [p0, p0 + side * nrm * h, p0 + u * sp / 2 + side * nrm * h, p0 + u * sp / 2]
+                pts.append(c)
+                if not ok(pts[1:-1]): continue
+                code = t.GetNetCode(); b.Remove(t); made.remove(t)
+                for q0, q1 in zip(pts[:-1], pts[1:]):
+                    if np.linalg.norm(q1 - q0) > 1e-6: add_track(code, li, (float(q0[0]), float(q0[1])), (float(q1[0]), float(q1[1])), w)
+                delta = abs(net_len(P) - net_len(N)); done = True; break
+            if done: break
+    return abs(net_len(P) - net_len(N))
+
+
 # ---------------- groups ----------------
 def nets_matching(rx):
     return sorted(str(n) for n in b.GetNetsByName().keys() if re.search(rx, str(n)))
@@ -445,12 +500,15 @@ def run_job(job, rep):
         return (not r) or r["ok"]
     out = []; route_pair(name, kw["nn"], out)
     pn, nn, okp, okn, lp, ln, sk, vp, vn, fl = out[0]
+    if okp and okn:
+        P = b.FindNet(pn).GetNetCode(); N = b.FindNet(nn).GetNetCode()
+        sk = round(tune_pair(P, N), 3); lp = round(net_len(P), 2); ln = round(net_len(N), 2)
     rep.append(dict(group=g, net=pn, pair=nn, ok=okp and okn, length=lp, length_n=ln, skew=sk, vias=vp, vias_n=vn, failed=fl))
     return okp and okn
 
 if __name__ == "__main__":
     import json, time, os
-    groups = sys.argv[3:] or ["hv", "xtal", "ade", "eth", "usb", "lvds", "dsi"]
+    groups = sys.argv[3:] or ["dsi", "lvds", "eth", "usb", "xtal", "ade", "hv"]
     jobs = [j for g in groups for j in jobs_for(g)]
     prio = json.load(open(os.environ["PRIO"])) if os.environ.get("PRIO") else []
     jobs.sort(key=lambda j: (0 if j[2] in prio else 1, prio.index(j[2]) if j[2] in prio else 0))
