@@ -11,13 +11,14 @@ Planes: LV area  GND on GND1+GND2, +3V3_SAFE on PWR
 Impedance widths are ESTIMATES for this stackup -- confirm in JLC's impedance calculator before fab.
 """
 import sys, re, math, pcbnew
-sys.path.insert(0, "/workspace/genctl/layout_prep")
+sys.path.insert(0, "/workspace/genctl/layout_prep"); sys.path.insert(0, __import__("os").path.dirname(__import__("os").path.abspath(__file__)))
 MM = pcbnew.FromMM; TM = pcbnew.ToMM
 HV = (-3.745, 11.0, 60.0, 162.0)
 
 CLASSES = {  # name: (track, clearance, via_d, via_drill, dp_width, dp_gap, patterns)
     "PWR":     (0.50, 0.15, 0.6, 0.3, None, None, [r"^VBAT_(P|F|ESTOP)$", r"^\+12V$", r"^\+5V", r"^\+3V3", r"^\+1V8", r"CM5_3V3", r"USB\d_5V", r"BAT_IN", r"/BB_SW", r"OUT\d+$", r"CRANK_OUT", r"FUEL_OUT"]),
     "HV_LINE": (0.50, 1.50, 0.8, 0.4, None, None, [r"(GEN|BUS)_L\d$", r"(GEN|BUS)_N$", r"(GEN|BUS)_L\d_F", r"Net-\(F\d+-"]),
+    "HV_LINE_DIV": (0.40, 1.50, 0.8, 0.4, None, None, [r"^Net-\(R4[2-7]\d-Pad2\)$"]),
     "DIFF100": (0.11, 0.15, 0.4, 0.2, 0.11, 0.15, [r"ETH\d_[PN]$", r"LVDS\w*_[PN]$", r"DSI\w*_[PN]$"]),
     "DIFF90":  (0.15, 0.15, 0.4, 0.2, 0.15, 0.18, [r"USB\w*_D[PMN]$", r"USB\w*_D[+-]$"]),
 }
@@ -38,11 +39,16 @@ def setup_classes(b):
         nc.SetPriority(list(CLASSES).index(name))
         ns.SetNetclass(name, nc)
     count = {}
+    import hv
+    divnodes = set(n for _, _, nodes in hv.chains(b) for n in nodes[:-1])   # last node is the low-voltage tap
     for n in b.GetNetsByName().keys():
         n = str(n)
+        if n in divnodes:
+            ns.SetNetclassPatternAssignment(re.escape(n), "HV_LINE_DIV"); count["HV_LINE_DIV"] = count.get("HV_LINE_DIV", 0) + 1; continue
         for name, c in CLASSES.items():
+            if name == "HV_LINE_DIV": continue
             if any(re.search(p, short(n)) or re.search(p, n) for p in c[6]):
-                ns.SetNetclassPatternAssignment(n.replace("(", r"\(").replace(")", r"\)").replace("+", r"\+").replace("{", r"\{").replace("}", r"\}"), name)
+                ns.SetNetclassPatternAssignment(re.escape(n), name)
                 count[name] = count.get(name, 0) + 1; break
     ns.RecomputeEffectiveNetclasses() if hasattr(ns, "RecomputeEffectiveNetclasses") else None
     b.SynchronizeNetsAndNetClasses(True)
@@ -83,6 +89,7 @@ def fanout(b):
     vias = []; added = 0; failed = []
     VD, CL = 0.40, 0.16
     def pcl(n):
+        if re.search(r"(GEN|BUS)_(L\d|N)$", n): return 3.05       # outer-layer full-voltage rule (kicad_dru)
         for name, c in CLASSES.items():
             if any(re.search(p, short(n)) for p in c[6]): return c[1]
         return 0.10

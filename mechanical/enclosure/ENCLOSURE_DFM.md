@@ -335,3 +335,6 @@ The SLA baseline stays at $15-35.
 - Keep SLA caps for the first build.
 - If metal is wanted, order one CNC M2 set (12 caps, PTFE hard anodise, acrylic strips glued in) for evaluation, accepting about $150-300 for that one set.
 - Move to M1 or batch CNC at 100+ pieces if it's adopted.
+
+## Panel jacks — recommendation (not implemented)
+The panel jacks stay on the main board for v4. We recommend moving them to a small daughterboard joined by a ribbon cable or board-to-board connector. That would decouple panel geometry from the main PCB, free routing space, and let the jacks be revised without a main-board respin.

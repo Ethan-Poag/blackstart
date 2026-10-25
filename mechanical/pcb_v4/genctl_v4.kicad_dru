@@ -1,0 +1,16 @@
+(version 1)
+# Blackstart v4 custom rules. 600 V spacing per Ethan 2026-10-25 -- NEEDS PROFESSIONAL (safety/compliance) REVIEW.
+# Full-voltage line/neutral copper (netclass HV_LINE) on OUTER layers: 3.0 mm to any other net.
+(rule "HV line outer 3mm"
+  (layer outer)
+  (condition "A.hasNetclass('HV_LINE') && !B.hasNetclass('HV_LINE_DIV')")
+  (constraint clearance (min 3.0mm)))
+# Inside a series divider string each resistor sees only a fraction of the line voltage: 1.5 mm between divider parts.
+(rule "HV divider string 1.5mm"
+  (layer outer)
+  (condition "A.hasNetclass('HV_LINE') && B.hasNetclass('HV_LINE_DIV')")
+  (constraint clearance (min 1.5mm)))
+(rule "HV divider nodes 1.5mm"
+  (condition "A.hasNetclass('HV_LINE_DIV') && B.Type != 'Zone'")
+  (constraint clearance (min 1.5mm)))
+# Inner layers: HV_LINE netclass clearance (1.5 mm) applies.

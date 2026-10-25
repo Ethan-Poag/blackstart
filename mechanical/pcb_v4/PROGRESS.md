@@ -12,3 +12,10 @@
   - 600 V divider traces
 
   They are currently left to Freerouting, which gives no impedance or length control.
+
+## Milestone 1 — refined placement + HV rules (2026-10-25)
+- refine_v4.py re-seats Y1/Y2/Y3 + load caps next to their IC pins and lays the 8 x 4-resistor 600 V divider strings (hv.py) in a line from terminal toward the ADE9000 input.
+- HV spacing (Ethan's decision), implemented in genctl_v4.kicad_dru: 3.0 mm on OUTER layers for full-600 V HV_LINE copper; 1.5 mm between series divider nodes (HV_LINE_DIV) and on inner layers. Small manual nudges (R446, R425, R462) cleared the last 2 errors.
+- **The HV creepage/clearance values have NOT been verified against IEC 60664-1 / UL 61010 / the actual pollution degree and overvoltage category. They need professional review before fabrication.**
+- +3V3_SAFE stays on inner layer 3 (PWR). Panel jacks left as placed; a small jack daughterboard is recommended (see ENCLOSURE_DFM).
+- DRC: 0 errors, 499 unconnected (unrouted). Fanout had no room for 15 pads (listed in route_v4 output).

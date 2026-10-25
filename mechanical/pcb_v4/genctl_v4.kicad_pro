@@ -230,7 +230,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "crit.kicad_pro",
+    "filename": "crit2.kicad_pro",
     "version": 3
   },
   "net_settings": {
@@ -264,7 +264,7 @@
         "microvia_drill": 0.1,
         "name": "DIFF100",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 2,
+        "priority": 3,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.11,
         "via_diameter": 0.4,
@@ -282,7 +282,7 @@
         "microvia_drill": 0.1,
         "name": "DIFF90",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 3,
+        "priority": 4,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.15,
         "via_diameter": 0.4,
@@ -303,6 +303,24 @@
         "priority": 1,
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.5,
+        "via_diameter": 0.8,
+        "via_drill": 0.4,
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "clearance": 1.5,
+        "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "line_style": 0,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "name": "HV_LINE_DIV",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "priority": 2,
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "track_width": 0.4,
         "via_diameter": 0.8,
         "via_drill": 0.4,
         "wire_width": 6
@@ -382,99 +400,99 @@
       },
       {
         "netclass": "HV_LINE",
-        "pattern": "/AC metering: 2x ADE9000 \\(gen \\+ bus\\), isolated/BUS_L1"
+        "pattern": "/AC\\ metering:\\ 2x\\ ADE9000\\ \\(gen\\ \\+\\ bus\\),\\ isolated/BUS_L1"
       },
       {
         "netclass": "HV_LINE",
-        "pattern": "/AC metering: 2x ADE9000 \\(gen \\+ bus\\), isolated/BUS_L2"
+        "pattern": "/AC\\ metering:\\ 2x\\ ADE9000\\ \\(gen\\ \\+\\ bus\\),\\ isolated/BUS_L2"
       },
       {
         "netclass": "HV_LINE",
-        "pattern": "/AC metering: 2x ADE9000 \\(gen \\+ bus\\), isolated/BUS_L3"
+        "pattern": "/AC\\ metering:\\ 2x\\ ADE9000\\ \\(gen\\ \\+\\ bus\\),\\ isolated/BUS_L3"
       },
       {
         "netclass": "HV_LINE",
-        "pattern": "/AC metering: 2x ADE9000 \\(gen \\+ bus\\), isolated/BUS_N"
+        "pattern": "/AC\\ metering:\\ 2x\\ ADE9000\\ \\(gen\\ \\+\\ bus\\),\\ isolated/BUS_N"
       },
       {
         "netclass": "HV_LINE",
-        "pattern": "/AC metering: 2x ADE9000 \\(gen \\+ bus\\), isolated/GEN_L1"
+        "pattern": "/AC\\ metering:\\ 2x\\ ADE9000\\ \\(gen\\ \\+\\ bus\\),\\ isolated/GEN_L1"
       },
       {
         "netclass": "HV_LINE",
-        "pattern": "/AC metering: 2x ADE9000 \\(gen \\+ bus\\), isolated/GEN_L2"
+        "pattern": "/AC\\ metering:\\ 2x\\ ADE9000\\ \\(gen\\ \\+\\ bus\\),\\ isolated/GEN_L2"
       },
       {
         "netclass": "HV_LINE",
-        "pattern": "/AC metering: 2x ADE9000 \\(gen \\+ bus\\), isolated/GEN_L3"
+        "pattern": "/AC\\ metering:\\ 2x\\ ADE9000\\ \\(gen\\ \\+\\ bus\\),\\ isolated/GEN_L3"
       },
       {
         "netclass": "HV_LINE",
-        "pattern": "/AC metering: 2x ADE9000 \\(gen \\+ bus\\), isolated/GEN_N"
+        "pattern": "/AC\\ metering:\\ 2x\\ ADE9000\\ \\(gen\\ \\+\\ bus\\),\\ isolated/GEN_N"
       },
       {
         "netclass": "PWR",
-        "pattern": "/Comms: CAN x2, RS-485, Ethernet, USB hub/ports, router 12V/USB0_5V"
+        "pattern": "/Comms:\\ CAN\\ x2,\\ RS\\-485,\\ Ethernet,\\ USB\\ hub/ports,\\ router\\ 12V/USB0_5V"
       },
       {
         "netclass": "PWR",
-        "pattern": "/Comms: CAN x2, RS-485, Ethernet, USB hub/ports, router 12V/USB1_5V"
+        "pattern": "/Comms:\\ CAN\\ x2,\\ RS\\-485,\\ Ethernet,\\ USB\\ hub/ports,\\ router\\ 12V/USB1_5V"
       },
       {
         "netclass": "DIFF100",
-        "pattern": "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS0_N"
+        "pattern": "/Display:\\ DSI\\->LVDS\\ bridge,\\ panel\\ power,\\ backlight,\\ touch/LVDS0_N"
       },
       {
         "netclass": "DIFF100",
-        "pattern": "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS0_P"
+        "pattern": "/Display:\\ DSI\\->LVDS\\ bridge,\\ panel\\ power,\\ backlight,\\ touch/LVDS0_P"
       },
       {
         "netclass": "DIFF100",
-        "pattern": "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS1_N"
+        "pattern": "/Display:\\ DSI\\->LVDS\\ bridge,\\ panel\\ power,\\ backlight,\\ touch/LVDS1_N"
       },
       {
         "netclass": "DIFF100",
-        "pattern": "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS1_P"
+        "pattern": "/Display:\\ DSI\\->LVDS\\ bridge,\\ panel\\ power,\\ backlight,\\ touch/LVDS1_P"
       },
       {
         "netclass": "DIFF100",
-        "pattern": "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS2_N"
+        "pattern": "/Display:\\ DSI\\->LVDS\\ bridge,\\ panel\\ power,\\ backlight,\\ touch/LVDS2_N"
       },
       {
         "netclass": "DIFF100",
-        "pattern": "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS2_P"
+        "pattern": "/Display:\\ DSI\\->LVDS\\ bridge,\\ panel\\ power,\\ backlight,\\ touch/LVDS2_P"
       },
       {
         "netclass": "DIFF100",
-        "pattern": "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS3_N"
+        "pattern": "/Display:\\ DSI\\->LVDS\\ bridge,\\ panel\\ power,\\ backlight,\\ touch/LVDS3_N"
       },
       {
         "netclass": "DIFF100",
-        "pattern": "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS3_P"
+        "pattern": "/Display:\\ DSI\\->LVDS\\ bridge,\\ panel\\ power,\\ backlight,\\ touch/LVDS3_P"
       },
       {
         "netclass": "DIFF100",
-        "pattern": "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDSC_N"
+        "pattern": "/Display:\\ DSI\\->LVDS\\ bridge,\\ panel\\ power,\\ backlight,\\ touch/LVDSC_N"
       },
       {
         "netclass": "DIFF100",
-        "pattern": "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDSC_P"
+        "pattern": "/Display:\\ DSI\\->LVDS\\ bridge,\\ panel\\ power,\\ backlight,\\ touch/LVDSC_P"
       },
       {
         "netclass": "PWR",
-        "pattern": "/Outputs: fuel/crank \\(TPS48100\\), 15x TPS1HTC30, watchdog gating, readback/CRANK_OUT"
+        "pattern": "/Outputs:\\ fuel/crank\\ \\(TPS48100\\),\\ 15x\\ TPS1HTC30,\\ watchdog\\ gating,\\ readback/CRANK_OUT"
       },
       {
         "netclass": "PWR",
-        "pattern": "/Power: input protection, ideal diode, 12V buck-boost, 5V, 3V3/BAT_IN"
+        "pattern": "/Power:\\ input\\ protection,\\ ideal\\ diode,\\ 12V\\ buck\\-boost,\\ 5V,\\ 3V3/BAT_IN"
       },
       {
         "netclass": "PWR",
-        "pattern": "/Power: input protection, ideal diode, 12V buck-boost, 5V, 3V3/BB_SW1"
+        "pattern": "/Power:\\ input\\ protection,\\ ideal\\ diode,\\ 12V\\ buck\\-boost,\\ 5V,\\ 3V3/BB_SW1"
       },
       {
         "netclass": "PWR",
-        "pattern": "/Power: input protection, ideal diode, 12V buck-boost, 5V, 3V3/BB_SW2"
+        "pattern": "/Power:\\ input\\ protection,\\ ideal\\ diode,\\ 12V\\ buck\\-boost,\\ 5V,\\ 3V3/BB_SW2"
       },
       {
         "netclass": "PWR",
@@ -551,6 +569,102 @@
       {
         "netclass": "DIFF100",
         "pattern": "ETH3_P"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R422\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R423\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R424\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R429\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R430\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R431\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R436\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R437\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R438\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R443\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R444\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R445\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R448\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R449\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R450\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R455\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R456\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R457\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R462\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R463\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R464\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R469\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R470\\-Pad2\\)"
+      },
+      {
+        "netclass": "HV_LINE_DIV",
+        "pattern": "Net\\-\\(R471\\-Pad2\\)"
       },
       {
         "netclass": "DIFF90",
