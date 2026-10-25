@@ -8,6 +8,7 @@ from gen import G, U, q, f, snap, POWER_SYMS, REFC, find, find1
 BUS_RE=re.compile(r'(SPI|SCK|SCLK|MOSI|MISO|_CS\b|SDA|SCL|I2C|DSI|LVDS|MDI|^EXP|_P[01][0-7]$|^DPLUS|^DMINUS|_D[PN]\d?$|USB_D)')
 RAIL_RE=re.compile(r'^(GND|\+)|^V(MID|LED|DDA|BAT|DD|CC|IN|ISO|_)|VCC$|VDD|BTN_LED_V|^VBUS|_VCC$')
 STATS={}
+LMAX=36  # max wire cells (1.27 mm) per connection before falling back to labels
 
 def gi(v): return int(round(v/G))
 
@@ -230,7 +231,7 @@ def write_sheet(sh, root_uuid, netsheets):
     cb=[]
     for cl in clusters:
         rs=[item_rect(it) for it in cl]
-        cb.append((min(r[0] for r in rs)-7.62,min(r[1] for r in rs)-7.62,max(r[2] for r in rs)+7.62,max(r[3] for r in rs)+7.62))
+        cb.append((min(r[0] for r in rs)-10.16,min(r[1] for r in rs)-12.7,max(r[2] for r in rs)+10.16,max(r[3] for r in rs)+7.62))
     for pname,PW,PH in gen.PAPERS+[('User',1500,1100)]:
         W=PW-30; x=y=rowh=0; offs=[]
         for b in cb:
@@ -241,81 +242,92 @@ def write_sheet(sh, root_uuid, netsheets):
     if pname=='User': PW,PH=max(PW,int(x)+60),int(y+rowh)+80
     for cl,(ox,oy) in zip(clusters,offs):
         for it in cl: it.X=snap(it.X+ox+15); it.Y=snap(it.Y+oy+40)
-    R=Router(gi(PW),gi(PH))
-    libs={}; body=[]; path='/%s/%s'%(root_uuid,sh.uuid)
-    # obstacles: bodies (open interior + boundary except tips)
-    pins=[]  # (it,p,node,outdir_index,net)
-    for it in items:
-        libs[it.pt.libid]=it.pt.sym
-        b=item_rect(it,False)
-        for gx in range(gi(b[0]),gi(b[2])+1):
-            for gy in range(gi(b[1]),gi(b[3])+1): R.block.add((gx,gy))
-        for p in it.ps:
-            x,y=it.pinpos(p); nd=(gi(x),gi(y)); o,dx,dy=outdir(p)
-            di=DIRS.index((dx,dy)); pins.append((it,p,nd,di,it.pt.net[p['num']]))
-    for it,p,nd,di,n in pins:
-        R.block.discard(nd); R.tip[nd]=n
-        # reserve 2-cell stub
-        dx,dy=DIRS[di]
-        for k in (1,2):
-            m=(nd[0]+dx*k,nd[1]+dy*k)
-            if m not in R.reserve: R.reserve[m]=n
-            else: R.reserve[m]='#conflict'
-    # which pins get wires
-    bynet=collections.defaultdict(list)
-    for t in pins:
-        if t[4] is not None: bynet[t[4]].append(t)
-    wired=collections.defaultdict(list)  # net -> list of pin tuples to connect
-    for n,lst in bynet.items():
-        k=kind(n)
-        if k=='local': wired[n]=lst
-        elif k in ('power','rail','global'):
-            # decap groups: anchor pins + decap pins of same net
-            grp=collections.defaultdict(list)
-            for t in lst:
-                it=t[0]; a=it if it.sats else it.anchor
-                if a is not None and (it.sats or getattr(it,'decap',False)) and not n.startswith('GND'): grp[id(a)].append(t)
-            for g in grp.values():
-                g.sort(key=lambda t:0 if t[0].sats else 1)
-                if len(g)>=2 and any(getattr(t[0],'decap',False) for t in g): wired[(n,len(wired))]=g
-    labelled=set()
-    wp=set()
-    for key,lst in wired.items():
-        for t in lst: wp.add((id(t[0]),t[1]['num'],t[1]['unit']))
-    for it,p,nd,di,n in pins:
-        if n is None or (id(it),p['num'],p['unit']) in wp: continue
-        dx,dy=DIRS[di]; k=kind(n)
-        L=4 if k in ('power','rail') else int(gen.lab_len(n,k=='global')/G)+2
-        for a in range(3,3+L):
-            for b in (-1,0,1):
-                m=(nd[0]+dx*a+(b if dy else 0), nd[1]+dy*a+(b if dx else 0))
-                if m not in R.tip: R.block.add(m)
-    order=sorted(wired.items(),key=lambda kv:(len(kv[1]),max(abs(a[2][0]-b[2][0])+abs(a[2][1]-b[2][1]) for a in kv[1] for b in kv[1])))
-    failed=[]
-    for key,lst in order:
-        net=key if isinstance(key,str) else key[0]
-        tag=key if isinstance(key,str) else '%s#%d'%key
-        ok=True
-        conn=[lst[0]]; tree=set(); tipdir={}
-        rest=lst[1:]
-        # first: from lst[0] to nearest other tip
-        tree_nodes={lst[0][2]}
-        R.reserve.update({})
-        for t in sorted(rest,key=lambda t:abs(t[2][0]-lst[0][2][0])+abs(t[2][1]-lst[0][2][1])):
-            targets=set(tree_nodes)
-            tdir={}
-            if len(tree_nodes)==1:
-                s0=lst[0]; tdir[s0[2]]=(s0[3]+2)%4
-            xs=[n[0] for n in targets]+[t[2][0]]; ys=[n[1] for n in targets]+[t[2][1]]
-            box=(min(xs)-25,min(ys)-25,max(xs)+25,max(ys)+25)
-            pth=R.route(tag,t[2],t[3],targets,tdir,box) or R.route(tag,t[2],t[3],targets,tdir,None,400000)
-            if not pth: ok=False; break
-            R.commit(tag,pth); tree_nodes|=set(pth)
-        if not ok:
-            R.uncommit(tag); failed.append((key,lst))
+    CL={}
+    for ci,cl in enumerate(clusters):
+        for it in cl: CL[id(it)]=ci
+    prev_failed=[]
+    for attempt in range(2):
+        R=Router(gi(PW),gi(PH))
+        libs={}; body=[]; path='/%s/%s'%(root_uuid,sh.uuid)
+        # obstacles: bodies (open interior + boundary except tips)
+        pins=[]  # (it,p,node,outdir_index,net)
+        for it in items:
+            libs[it.pt.libid]=it.pt.sym
+            b=item_rect(it,False)
+            for gx in range(gi(b[0]),gi(b[2])+1):
+                for gy in range(gi(b[1]),gi(b[3])+1): R.block.add((gx,gy))
+            for p in it.ps:
+                x,y=it.pinpos(p); nd=(gi(x),gi(y)); o,dx,dy=outdir(p)
+                di=DIRS.index((dx,dy)); pins.append((it,p,nd,di,it.pt.net[p['num']]))
+        for it,p,nd,di,n in pins:
+            R.block.discard(nd); R.tip[nd]=n
+            # reserve 2-cell stub
+            dx,dy=DIRS[di]
+            for k in (1,2):
+                m=(nd[0]+dx*k,nd[1]+dy*k)
+                if m not in R.reserve: R.reserve[m]=n
+                else: R.reserve[m]='#conflict'
+        # which pins get wires
+        bynet=collections.defaultdict(list)
+        for t in pins:
+            if t[4] is not None: bynet[t[4]].append(t)
+        wired=collections.defaultdict(list)  # net -> list of pin tuples to connect
+        for n,lst in bynet.items():
+            k=kind(n)
+            if k=='local':
+                if len({CL[id(t[0])] for t in lst})==1: wired[n]=lst   # beautify: wire only inside one functional group
+            elif k in ('power','rail','global'):
+                # decap groups: anchor pins + decap pins of same net
+                grp=collections.defaultdict(list)
+                for t in lst:
+                    it=t[0]; a=it if it.sats else it.anchor
+                    if a is not None and (it.sats or getattr(it,'decap',False)) and not n.startswith('GND'): grp[id(a)].append(t)
+                for g in grp.values():
+                    g.sort(key=lambda t:0 if t[0].sats else 1)
+                    if len(g)>=2 and any(getattr(t[0],'decap',False) for t in g): wired[(n,len(wired))]=g
+        for key_,_ in prev_failed: wired.pop(key_,None)
+        labelled=set()
+        wp=set()
+        for key,lst in wired.items():
+            for t in lst: wp.add((id(t[0]),t[1]['num'],t[1]['unit']))
+        for it,p,nd,di,n in pins:
+            if n is None or (id(it),p['num'],p['unit']) in wp: continue
+            dx,dy=DIRS[di]; k=kind(n)
+            L=4 if k in ('power','rail') else int(gen.lab_len(n,k=='global')/G)+2
+            for a in range(3,3+L):
+                for b in (-1,0,1):
+                    m=(nd[0]+dx*a+(b if dy else 0), nd[1]+dy*a+(b if dx else 0))
+                    if m not in R.tip: R.block.add(m)
+        order=sorted(wired.items(),key=lambda kv:(len(kv[1]),max(abs(a[2][0]-b[2][0])+abs(a[2][1]-b[2][1]) for a in kv[1] for b in kv[1])))
+        failed=[]
+        for key,lst in order:
+            net=key if isinstance(key,str) else key[0]
+            tag=key if isinstance(key,str) else '%s#%d'%key
+            ok=True
+            conn=[lst[0]]; tree=set(); tipdir={}
+            rest=lst[1:]
+            # first: from lst[0] to nearest other tip
+            tree_nodes={lst[0][2]}
+            R.reserve.update({})
+            for t in sorted(rest,key=lambda t:abs(t[2][0]-lst[0][2][0])+abs(t[2][1]-lst[0][2][1])):
+                targets=set(tree_nodes)
+                tdir={}
+                if len(tree_nodes)==1:
+                    s0=lst[0]; tdir[s0[2]]=(s0[3]+2)%4
+                xs=[n[0] for n in targets]+[t[2][0]]; ys=[n[1] for n in targets]+[t[2][1]]
+                box=(min(xs)-25,min(ys)-25,max(xs)+25,max(ys)+25)
+                pth=R.route(tag,t[2],t[3],targets,tdir,box)
+                if not pth: ok=False; break
+                R.commit(tag,pth); tree_nodes|=set(pth)
+            if ok and len(R.edges.get(tag,()))>LMAX*max(1,len(lst)-1): ok=False   # beautify: long detours -> labels
+            if not ok:
+                R.uncommit(tag); failed.append((key,lst))
+        if not failed or attempt==1: break
+        prev_failed=prev_failed+failed   # beautify pass 2: re-route with label areas of fallback nets blocked
+    failed_total=prev_failed+failed
     rs=[item_rect(it,False) for it in items]
     ov=sum(1 for i in range(len(rs)) for j in range(i) if overlap(rs[i],rs[j]))
-    STATS[sh.name]=dict(routed=len(wired)-len(failed),label_fallback=len(failed),body_overlaps=ov,paper=pname)
+    STATS[sh.name]=dict(routed=len(wired)-len(failed),label_fallback=len(failed)+len(prev_failed),body_overlaps=ov,paper=pname)
     failed_pins=set()
     for key,lst in failed:
         for t in lst: failed_pins.add((id(t[0]),t[1]['num'],t[1]['unit']))
@@ -364,6 +376,14 @@ def write_sheet(sh, root_uuid, netsheets):
             body.append('(wire (pts (xy %s %s) (xy %s %s)) (stroke (width 0) (type default)) (uuid "%s"))'%(f(a[0]*G),f(a[1]*G),f(b[0]*G),f(b[1]*G),U())); nwire+=1
         for j in junc:
             body.append('(junction (at %s %s) (diameter 0) (color 0 0 0 0) (uuid "%s"))'%(f(j[0]*G),f(j[1]*G),U()))
+    for ci,cl in enumerate(clusters):
+        rs=[item_rect(it) for it in cl]
+        x0=snap(min(r[0] for r in rs)-5.08); y0=snap(min(r[1] for r in rs)-5.08); x1=snap(max(r[2] for r in rs)+5.08); y1=snap(max(r[3] for r in rs)+5.08)
+        body.append('(rectangle (start %s %s) (end %s %s) (stroke (width 0.25) (type dash) (color 72 72 160 1)) (fill (type none)) (uuid "%s"))'%(f(x0),f(y0),f(x1),f(y1),U()))
+        a0=cl[0]
+        ttl=(a0.pt.ref+' '+a0.pt.value) if (len(cl)>1 or a0.npins>=5) else 'misc'
+        if len(cl)>1 and a0.npins<5: ttl='misc / support'
+        body.append('(text %s (exclude_from_sim no) (at %s %s 0) (effects (font (size 2 2) (thickness 0.3) bold (color 72 72 160 1)) (justify left bottom)) (uuid "%s"))'%(q(ttl),f(x0+1.27),f(y0-0.635),U()))
     if sh.notes:
         body.append('(text %s (exclude_from_sim no) (at 15 12 0) (effects (font (size 1.6 1.6)) (justify left top)) (uuid "%s"))'%(q(sh.notes),U()))
     txt=['(kicad_sch (version 20231120) (generator "eeschema") (generator_version "8.0")',

@@ -439,3 +439,13 @@ J6B = AUX7-10 + 2 GND, J5B = 6 GND (was 4 + 2 NC): output pins 16 (+ fuel/crank 
 - Removed the unused M.2, SIM and USB3-A footprints.
 - Power BOM 22u price corrected. Grand total is now $769.87.
 - Open item: SOIC-16W isolator pads give a 7.25 mm gap, so a slot under each isolator is needed at layout to reach 8 mm.
+
+## Rev 2026-10-24 (f2) - schematic beautification (connectivity unchanged)
+- Each functional group (an anchor IC with its satellites) is drawn inside a dashed, titled box. Repeated channels (outputs, inputs) tile into rows.
+- Wires are kept inside one group. Nets that span groups, or would need a detour longer than 36 grid cells per connection, use short orthogonal stubs with local labels.
+- There is a second routing pass that blocks the label areas of those nets, so wires no longer run through their text.
+- Big-IC Ref/Value fields are moved below the body, off the top-pin numbers.
+- Verified with tools/netcompare.py (pre-beautify netlist vs new):
+  - 1030/1030 nets, identical node sets, 0 named nets renamed.
+  - 419 nets that were auto-named Net-(...) now carry their design net name because they are labelled.
+- ERC is 0/0.

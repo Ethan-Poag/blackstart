@@ -290,8 +290,20 @@ def fields_xml(pt,X,Y,u):
     if not pt.power:
         vals+=[('LCSC',pt.lcsc,True),('MPN',pt.mpn,True),('Manufacturer',pt.mfr,True)]
         if pt.note: vals.append(('Note',pt.note,True))
+    # beautify: ICs with top pins -> Ref/Value below body so they don't sit on the pin numbers
+    rects=[(float(find1(r,'start')[1]),float(find1(r,'start')[2]),float(find1(r,'end')[1]),float(find1(r,'end')[2])) for sub in find(pt.sym,'symbol') for r in find(sub,'rectangle')]
+    below=None
+    if rects and not pt.power:
+        top=max(max(r[1],r[3]) for r in rects); bot=min(min(r[1],r[3]) for r in rects)
+        try: pp=kilib.pins(pt.sym)
+        except Exception: pp=[]
+        if any(p['y']>top+0.1 for p in pp):
+            lo=min([bot]+[p['y'] for p in pp]); cx=(min(min(r[0],r[2]) for r in rects)+max(max(r[0],r[2]) for r in rects))/2
+            below=(cx,lo)
     for k,v,h in vals:
         x,y,a=at(k)
+        if below and k in ('Reference','Value'):
+            x=X+below[0]; y=Y-below[1]+(8.89 if k=='Reference' else 11.43); a=0
         out.append('(property %s %s (at %s %s %d) (effects (font (size 1.27 1.27))%s))'%(q(k),q(v),f(snap(x) if k not in('Reference','Value') else x),f(y),a,' (hide yes)' if h else ''))
     return out
 
