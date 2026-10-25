@@ -1,0 +1,97 @@
+# Quilter
+
+## Quilter
+
+- [Welcome to Quilter](https://docs.quilter.ai/get-started/readme.md): Quilter streamlines PCB design with automated PCB layout, physics checks, and iterative design tools, reducing the time from concept to production.
+- [Quickstart](https://docs.quilter.ai/get-started/quickstart.md): A concise guide covering the essential steps to quickly prepare and upload your schematic for automatic PCB layout generation with Quilter.
+- [Why we're building Quilter](https://docs.quilter.ai/about-quilter/why-were-building-quilter.md): An overview of Quilter’s mission to streamline PCB layout through physics-driven automation, enabling engineers to rapidly explore, iterate, and optimize their designs.
+- [Why should I use Quilter?](https://docs.quilter.ai/about-quilter/why-should-i-use-quilter.md): Key reasons to adopt Quilter’s AI-powered PCB layout automation, highlighting faster time-to-market, efficient iterative design, reduced errors, and optimized use of engineering talent.
+- [How does Quilter work?](https://docs.quilter.ai/about-quilter/how-does-quilter-work.md): An overview of Quilter’s physics-driven approach to automated PCB layout, constraint handling, and validation.
+- [What Quilter isn't](https://docs.quilter.ai/about-quilter/what-quilter-isnt.md): An explanation of Quilter’s role as a fully automated layout service, highlighting its workflow, scope, and limitations.
+- [What Quilter does well](https://docs.quilter.ai/about-quilter/what-quilter-does-well.md): A concise summary of Quilter’s recommended applications and optimal design parameters.
+- [FAQ](https://docs.quilter.ai/about-quilter/faq.md)
+- [Placement Guide](https://docs.quilter.ai/guides/placement-guide.md): Getting the best results out of Quilter's Placement Engine
+- [Introduction](https://docs.quilter.ai/using-quilter/introduction.md): An overview of Quilter’s automated PCB layout service, detailing workflow steps, integration with existing CAD tools, and evaluation criteria.
+- [Design your schematic](https://docs.quilter.ai/using-quilter/design-your-schematic.md): Concise guidelines for preparing schematics compatible with Quilter, including supported CAD platforms and design best practices.
+- [Prepare your input board file](https://docs.quilter.ai/using-quilter/prepare-your-input-board-file.md): Instructions for creating an input board file for Quilter, covering required elements, recommended constraints, and optional parameters.
+- [Start a project](https://docs.quilter.ai/using-quilter/start-a-project.md): Instructions for using Quilter Projects
+- [Upload your design files](https://docs.quilter.ai/using-quilter/upload-your-design-files.md): Instructions for uploading schematic, board, and project files to Quilter, including supported file formats, parsing validation, and file replacement procedures.
+- [Select your stackup](https://docs.quilter.ai/using-quilter/select-your-stackup.md): Explanation of stackup options in Quilter.
+- [Fabricator constraints](https://docs.quilter.ai/using-quilter/fabricator-constraints.md): Overview of Quilter’s fabrication rules, detailing how they define geometric constraints for manufacturability and ensure compliance with fabricator capabilities.
+- [Define physics comprehensions](https://docs.quilter.ai/using-quilter/define-physics-comprehensions.md): An overview of Quilter’s Circuit Comprehension step, outlining how to define and validate physics constraints for your PCB layout.
+- [Review and edit constraints](https://docs.quilter.ai/using-quilter/review-and-edit-constraints.md): An overview of Quilter’s Constraints step, outlining how to define and validate physics constraints for your PCB layout.
+- [Submit your layout job](https://docs.quilter.ai/using-quilter/submit-your-layout-job.md): Instructions on submitting a layout job to Quilter, including naming your job, processing times, and receiving candidate results.
+- [Review layout candidates](https://docs.quilter.ai/using-quilter/review-layout-candidates.md): Explanation of Quilter’s Candidate Review page, including evaluating successful and unsuccessful layout candidates, managing filters, and downloading results.
+- [Overview](https://docs.quilter.ai/cad-compatibility/overview.md)
+- [Altium](https://docs.quilter.ai/cad-compatibility/altium.md)
+- [KiCAD](https://docs.quilter.ai/cad-compatibility/kicad.md)
+- [Siemens Xpedition](https://docs.quilter.ai/cad-compatibility/siemens-xpedition.md)
+- [Cadence Allegro](https://docs.quilter.ai/cad-compatibility/cadence-allegro.md)
+- [Other CAD tools](https://docs.quilter.ai/cad-compatibility/other-cad-tools.md)
+- [Zuken CR-8000](https://docs.quilter.ai/cad-compatibility/other-cad-tools/zuken-cr-8000.md)
+- [EasyEDA](https://docs.quilter.ai/cad-compatibility/other-cad-tools/easyeda.md)
+- [Overview](https://docs.quilter.ai/physics-constraints/overview.md): Explanation of how Quilter identifies, categorizes, and manages physics constraints during Circuit Comprehension, including automatic detection and manual specification.
+- [Power Nets](https://docs.quilter.ai/physics-constraints/power-nets.md): Explanation of Quilter’s Power Net constraint, including automatic detection criteria, recommended naming conventions, default current values, and IPC-based validation methods.
+- [Single-ended Impedance Control](https://docs.quilter.ai/physics-constraints/single-ended-impedance-control.md): Details on specifying and validating single-ended impedance-controlled nets, including supported impedances and calculation methods.
+- [Differential Pairs](https://docs.quilter.ai/physics-constraints/differential-pairs.md): Instructions on defining differential pair constraints, including detection rules, limitations, supported impedances, and required fields.
+- [Timing-sensitive Signals](https://docs.quilter.ai/physics-constraints/timing-sensitive-signals.md)
+- [Bypass Capacitors](https://docs.quilter.ai/physics-constraints/bypass-capacitors.md): Guidelines for setting bypass capacitor constraints, including automatic detection criteria, recommended schematic practices, and required configuration details.
+- [Crystal Oscillators](https://docs.quilter.ai/physics-constraints/crystal-oscillators.md): Instructions for defining crystal oscillator constraints, covering detection criteria, configuration fields, and current limitations.
+- [Switching Converters](https://docs.quilter.ai/physics-constraints/switching-converters.md): Instructions for configuring switching converter constraints, covering detection criteria, supported configurations, and required fields.
+- [Overview](https://docs.quilter.ai/physics-rule-checks-prcs/overview.md): Overview of Physics Rule Checks (PRCs) applied by Quilter to validate user-defined physics constraints.
+- [Ground Plane Overlap](https://docs.quilter.ai/physics-rule-checks-prcs/ground-plane-overlap.md): Explanation of the Ground Plane Overlap PRC, verifying consistent ground coverage beneath impedance controlled signals to ensure signal integrity and minimize EMI.
+- [Invalid Width Span](https://docs.quilter.ai/physics-rule-checks-prcs/invalid-width-span.md): Summary of the Invalid Width Span PRC, ensuring trace widths remain within acceptable tolerances for impedance control, current capacity, and EMI mitigation.
+- [Layer Switch Count](https://docs.quilter.ai/physics-rule-checks-prcs/layer-switch-count.md): Summary of the Layer Switch Count PRC, verifying minimal via count between bypass capacitors and associated pins to maintain low impedance and effective decoupling.
+- [Length Mismatch](https://docs.quilter.ai/physics-rule-checks-prcs/length-mismatch.md)
+- [Overheated Length](https://docs.quilter.ai/physics-rule-checks-prcs/overheated-length.md)
+- [Pin Distance](https://docs.quilter.ai/physics-rule-checks-prcs/pin-distance.md): Summary of the Pin Distance PRC, checking pin spacing to ensure short traces, reduced EMI, and improved routing efficiency.
+- [Trace Path Length](https://docs.quilter.ai/physics-rule-checks-prcs/trace-path-length.md): Summary of the Trace Path Length PRC, validating trace lengths to minimize inductance, enhance noise filtering, and ensure efficient power and signal integrity.
+- [Uncoupled Spacing](https://docs.quilter.ai/physics-rule-checks-prcs/uncoupled-spacing.md): Summary of the Uncoupled Spacing PRC, checking differential pair spacing to ensure effective electromagnetic coupling, consistent impedance, and minimal crosstalk.
+- [Future PRC2s](https://docs.quilter.ai/physics-rule-checks-prcs/future-prc2s.md)
+- [Top Plane Ground Pour](https://docs.quilter.ai/physics-rule-checks-prcs/future-prc2s/top-plane-ground-pour.md)
+- [Neck Downs](https://docs.quilter.ai/physics-rule-checks-prcs/future-prc2s/neck-downs.md)
+- [Trace Proximity](https://docs.quilter.ai/physics-rule-checks-prcs/future-prc2s/trace-proximity.md)
+- [Overview](https://docs.quilter.ai/design-parameters/overview.md): Overview of Design Parameters available to constrain and specify Quilter-generated layouts.
+- [Fabricators](https://docs.quilter.ai/design-parameters/fabricators.md): Explanation of Quilter’s fabricator profiles, including stack-ups, fabrication rules, compile targets, filtering options, and pre-supported manufacturers.
+- [Stackups](https://docs.quilter.ai/design-parameters/stackups.md): Quilter generates PCB candidates using either the stackup from your files or standard stackups defined in partnership with top fabricators
+- [Pre-placed components](https://docs.quilter.ai/design-parameters/pre-placed-components.md): Explanation of Quilter’s handling of pre-placed components, including reasons for pre-placement, supported scenarios, and instructions for locking positions.
+- [Placement regions](https://docs.quilter.ai/design-parameters/placement-regions.md): Explanation of Quilter’s Placement Regions, including creation methods in Altium and Cadence, component associations, and instructions for constraining component placement.
+- [Single-sided placement](https://docs.quilter.ai/design-parameters/single-sided-placement.md): Instructions for managing single-sided placement in Quilter, including automatic exploration, forcing double-sided layouts, and specifying single-sided constraints.
+- [Pre-routed traces](https://docs.quilter.ai/design-parameters/pre-routed-traces.md): Instructions for managing pre-routed traces in Quilter, including reasons to pre-route, handling during layout, and specifying locked routing paths.
+- [Preserved pours](https://docs.quilter.ai/design-parameters/preserved-pours.md)
+- [Keepouts](https://docs.quilter.ai/design-parameters/keepouts.md): Summary of using Keepouts in Quilter to restrict placement and routing areas, including common uses and how to specify them in your CAD tool.
+- [Net Widths by Layer](https://docs.quilter.ai/design-parameters/net-widths-by-layer.md): Explanation of Quilter’s Net Width constraint, detailing careful usage guidelines, potential conflicts with automatic constraints, and instructions for specifying custom widths.
+- [Overview](https://docs.quilter.ai/candidate-review/overview.md): Overview of Quilter’s Candidate Review page, highlighting tools for exploring, inspecting, and iterating on layout candidates generated by Quilter.
+- [Job details](https://docs.quilter.ai/candidate-review/job-details.md): Summary of Quilter’s Job Details, providing high-level metadata about submitted input files, configured parameters, and board previews for layout jobs.
+- [Candidate details](https://docs.quilter.ai/candidate-review/candidate-details.md): Summary of Quilter’s Candidate Details, highlighting metadata used to sort, filter, and select layout candidates based on specific design criteria.
+- [Filtering](https://docs.quilter.ai/candidate-review/filtering.md): Overview of Quilter’s filtering tools, describing automatic filter application, real-time candidate updates, and options to reset filters for candidate exploration.
+- [Sorting](https://docs.quilter.ai/candidate-review/sorting.md): Overview of Quilter’s candidate sorting, detailing default sorting criteria for routing completion, fabrication rules, layer count, and future sorting enhancements based on PRC results.
+- [Review phases](https://docs.quilter.ai/candidate-review/review-phases.md)
+- [Detail view](https://docs.quilter.ai/candidate-review/detail-view.md): Overview of Quilter’s board detail viewer, describing controls for inspecting board layers, toggling visibility of objects by layer or globally, and navigating layout details.
+- [Reviewing PRCs](https://docs.quilter.ai/reviewing-prcs.md): Overview of Quilter’s PRC reports, detailing how to interpret results grouped by constraint types, view passing and failing checks, and understand individual physics rule evaluations.
+- [Edit & iterate](https://docs.quilter.ai/edit-and-iterate.md)
+- [Job Actions](https://docs.quilter.ai/job-actions.md): Summary of Quilter’s Job Actions, describing available actions such as duplication for iteration, modification of constraints, and adjustments to design parameters.
+- [Downloading candidates](https://docs.quilter.ai/downloading-candidates.md): Overview of downloading Quilter-generated layout candidates, including native file formats for offline review, and tracking downloaded jobs.
+- [Page 1](https://docs.quilter.ai/pre-supported-fabs/page-1.md)
+- [Glossary](https://docs.quilter.ai/even-more-docs/glossary.md)
+- [User resources](https://docs.quilter.ai/even-more-docs/user-resources.md)
+
+
+---
+
+# Agent Instructions
+This documentation is published with GitBook. GitBook is the documentation platform designed so that both humans and AI agents can read, navigate, and reason over technical content effectively. Learn more at gitbook.com.
+
+## Querying This Documentation
+This site has an agentic ask interface you may use to query the documentation dynamically by asking a question.
+
+Perform an HTTP GET request on the following URL with the `ask` and `goal` query parameters:
+
+```
+GET https://docs.quilter.ai/index.md?ask=<question>&goal=<user_goal>
+```
+
+`ask` is the immediate question: it should be specific, self-contained, and written in natural language.
+`goal` is what the user is ultimately trying to achieve, the reason they need the answer. Sharing it helps GitBook give you a better, more relevant answer. A goal is most helpful when it describes the outcome the user wants rather than restating the question. For example, with `ask=how do I create an API token`, a goal like `automate deployments from our CI pipeline` lets GitBook tailor the answer to that use case.
+
+The response will contain a direct answer to the question and relevant excerpts and sources from the documentation.
