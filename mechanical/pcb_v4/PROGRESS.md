@@ -56,3 +56,24 @@
   - 8 via-in-pad: H2 (DSI83_REFCLK) at 0.30/0.15; H3, H5, H7, C8, E8, G8, E6 at 0.35/0.20.
 - Cost: JLC POFV (epoxy-filled, copper-capped) via-in-pad is free on 6-20 layer boards but applies board-wide (from JLC pages found by web search in 2026; confirm when quoting). The 0.35/0.2/0.075 minimum is scoped to the U21 courtyard by the .kicad_dru rule "via min outside U21 BGA". Only the board-setup floor was lowered.
 - DRC on genctl_v4_escaped: 0 errors (drc_v4_escaped.rpt).
+
+## Milestone 4: critical re-route on the escaped board (handroute_iter, best of passes 0-3; pass 4 crashed)
+- Base: genctl_v4_escaped. Result: genctl_v4_handrouted.kicad_pcb (pass 0 was the best for pairs). 1810 connections unrouted (pcbnew, after zone fill). KiCad DRC: 13 errors (drc_v4_handrouted.rpt). These are raster clearance shortfalls of 0.11-0.148 mm against 0.15 mm (DIFF/PWR next to existing GND/+3V3_SAFE vias), plus 2 DSI_D3_N hole-clearance errors at J10 NPTH. There are no HV 1.5/3 mm errors now.
+- Skew (track length only, vias excluded), P/N mm:
+  | pair | P | N | skew |
+  |---|---|---|---|
+  | DSI_C | 122.759 | 122.759 | 0.000 |
+  | DSI_D0 | 122.255 | 122.255 | 0.000 |
+  | DSI_D1 | 125.168 | 125.168 | 0.000 |
+  | DSI_D2 | 122.918 | 122.918 | 0.000 |
+  | DSI_D3 | 125.093 | 125.093 | 0.000 |
+  | LVDS0 | 42.521 | 42.521 | 0.000 |
+  | LVDS3 | 42.355 | 42.355 | 0.000 |
+  | ETH0 | 66.929 | 66.929 | 0.000 |
+  | ETH1 | 60.355 | 60.355 | 0.000 |
+  | ETH2 | 81.267 | 81.267 | 0.000 |
+  | ETH3 | 71.397 | 71.397 | 0.000 |
+  | LVDS1, LVDSC | 0.6 (P not really routed: the router accepts a false 0.6 mm hit at the dog-bone pads) | ~40 | OPEN |
+  | LVDS2, USB30, USB31 | failed | | OPEN |
+- Still unrouted critical nets: LVDS1/LVDSC/LVDS2 P, USB30/USB31, AC_MISO, AC_MOSI, AC_SCK, ADE_SCK, BUS_VC_N, GEN_VA_N, GEN_VC_P, and divider nodes R437/R455/R456/R464/R471-Pad2. Passes trade one failure for another, so a congestion-aware ordering or a manual pass is needed.
+- Freerouting pre-existing violations on the new DSN: 317, down from 396. The listed examples are same-net fixed-via pairs (e.g. Net-(R430-Pad2) via<->via), which is a Freerouting artefact and not a real spacing problem.

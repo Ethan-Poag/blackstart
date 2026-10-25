@@ -1,65 +1,85 @@
-** Drc report for hr.kicad_pcb **
-** Created on 2026-10-25T02:25:00-1000 **
+** Drc report for hand.kicad_pcb **
+** Created on 2026-10-25T03:42:19-1000 **
 
-** Found 8 DRC violations **
-[clearance]: Clearance violation (rule 'HV divider nodes 1.5mm' clearance 1.5000 mm; actual 1.4872 mm)
-    Rule: HV divider nodes 1.5mm; error
-    @(27.3550 mm, 81.2050 mm): Track [Net-(R457-Pad2)] on F.Cu, length 0.1000 mm
-    @(24.8739 mm, 79.1044 mm): PTH pad 4 [/AC metering: 2x ADE9000 (gen + bus), isolated/CT3_S1] of T3
-[clearance]: Clearance violation (rule 'HV divider nodes 1.5mm' clearance 1.5000 mm; actual 1.4872 mm)
-    Rule: HV divider nodes 1.5mm; error
-    @(27.3550 mm, 81.1050 mm): Track [Net-(R457-Pad2)] on F.Cu, length 0.4243 mm
-    @(24.8739 mm, 79.1044 mm): PTH pad 4 [/AC metering: 2x ADE9000 (gen + bus), isolated/CT3_S1] of T3
-[clearance]: Clearance violation (netclass 'DIFF100' clearance 0.1500 mm; actual 0.1350 mm)
-    Rule: netclass 'DIFF100'; error
-    @(159.0000 mm, 130.2000 mm): Pad C9 [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS0_N] of U21 on B.Cu
-    @(159.4550 mm, 130.2050 mm): Via [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS1_N] on F.Cu - B.Cu
-[clearance]: Clearance violation (rule 'HV divider nodes 1.5mm' clearance 1.5000 mm; actual 1.4833 mm)
-    Rule: HV divider nodes 1.5mm; error
-    @(30.0500 mm, 58.5729 mm): Via [GND_AC] on F.Cu - B.Cu
-    @(31.5550 mm, 59.7050 mm): Track [Net-(R424-Pad2)] on F.Cu, length 3.9598 mm
-[clearance]: Clearance violation (netclass 'PWR' clearance 0.1500 mm; actual 0.1300 mm)
+** Found 13 DRC violations **
+[clearance]: Clearance violation (netclass 'PWR' clearance 0.1500 mm; actual 0.1387 mm)
     Rule: netclass 'PWR'; error
-    @(159.5000 mm, 72.3250 mm): Track [+3V3_SAFE] on B.Cu, length 1.7000 mm
-    @(159.9550 mm, 71.1050 mm): Via [ADE_CS1_N] on F.Cu - B.Cu
-[clearance]: Clearance violation (rule 'HV divider nodes 1.5mm' clearance 1.5000 mm; actual 1.4833 mm)
-    Rule: HV divider nodes 1.5mm; error
-    @(31.5550 mm, 59.8050 mm): Track [Net-(R424-Pad2)] on F.Cu, length 0.1000 mm
-    @(30.0500 mm, 58.5729 mm): Via [GND_AC] on F.Cu - B.Cu
-[clearance]: Clearance violation (rule 'HV divider nodes 1.5mm' clearance 1.5000 mm; actual 1.4890 mm)
-    Rule: HV divider nodes 1.5mm; error
-    @(30.0500 mm, 58.5729 mm): Via [GND_AC] on F.Cu - B.Cu
-    @(30.9550 mm, 60.3050 mm): Track [Net-(R424-Pad2)] on F.Cu, length 0.2828 mm
-[clearance]: Clearance violation (rule 'HV divider nodes 1.5mm' clearance 1.5000 mm; actual 1.4890 mm)
-    Rule: HV divider nodes 1.5mm; error
-    @(30.0500 mm, 58.5729 mm): Via [GND_AC] on F.Cu - B.Cu
-    @(31.1550 mm, 60.1050 mm): Track [Net-(R424-Pad2)] on F.Cu, length 0.1000 mm
+    @(158.5750 mm, 81.0000 mm): Via [+3V3_SAFE] on F.Cu - B.Cu
+    @(159.0550 mm, 81.1050 mm): Track [ADE_IRQ_N] on B.Cu, length 0.9899 mm
+[clearance]: Clearance violation (netclass 'PWR' clearance 0.1500 mm; actual 0.1480 mm)
+    Rule: netclass 'PWR'; error
+    @(107.7877 mm, 102.7784 mm): Pad 1 [VBAT_P] of C206 on B.Cu
+    @(108.7550 mm, 103.2050 mm): Track [ADE_IRQ_N] on B.Cu, length 0.4243 mm
+[clearance]: Clearance violation (netclass 'PWR' clearance 0.1500 mm; actual 0.1285 mm)
+    Rule: netclass 'PWR'; error
+    @(124.6550 mm, 90.8050 mm): Track [ADE_RST_N] on F.Cu, length 6.4000 mm
+    @(121.9378 mm, 90.4015 mm): Via [+3V3_SAFE] on F.Cu - B.Cu
+[clearance]: Clearance violation (netclass 'DIFF100' clearance 0.1500 mm; actual 0.1349 mm)
+    Rule: netclass 'DIFF100'; error
+    @(162.5550 mm, 128.0050 mm): Track [DSI_C_N] on B.Cu, length 0.5000 mm
+    @(162.0000 mm, 127.7000 mm): Pad J4 [DSI_D1_N] of U21 on B.Cu
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2000 mm; actual 0.1360 mm)
+    Rule: board setup constraints hole; error
+    @(221.9550 mm, 53.3050 mm): Track [DSI_D3_N] on B.Cu, length 0.8485 mm
+    @(221.0000 mm, 53.0000 mm): NPTH pad of J10
+[hole_clearance]: Hole clearance violation (board setup constraints hole clearance 0.2000 mm; actual 0.1500 mm)
+    Rule: board setup constraints hole; error
+    @(221.3550 mm, 53.9050 mm): Track [DSI_D3_N] on B.Cu, length 0.8000 mm
+    @(221.0000 mm, 53.0000 mm): NPTH pad of J10
+[clearance]: Clearance violation (netclass 'DIFF100' clearance 0.1500 mm; actual 0.1125 mm)
+    Rule: netclass 'DIFF100'; error
+    @(220.1500 mm, 36.4000 mm): Via [GND] on F.Cu - B.Cu
+    @(220.4550 mm, 42.6050 mm): Track [ETH0_P] on F.Cu, length 6.0000 mm
+[clearance]: Clearance violation (netclass 'DIFF100' clearance 0.1500 mm; actual 0.1410 mm)
+    Rule: netclass 'DIFF100'; error
+    @(239.5000 mm, 6.4000 mm): Via [GND] on F.Cu - B.Cu
+    @(239.6550 mm, 6.8050 mm): Track [ETH3_N] on F.Cu, length 0.4243 mm
+[clearance]: Clearance violation (netclass 'DIFF100' clearance 0.1500 mm; actual 0.1410 mm)
+    Rule: netclass 'DIFF100'; error
+    @(233.1000 mm, 35.6000 mm): Via [GND] on F.Cu - B.Cu
+    @(232.4550 mm, 36.8050 mm): Track [ETH1_P] on SIG_In2, length 1.5556 mm
+[clearance]: Clearance violation (netclass 'DIFF100' clearance 0.1500 mm; actual 0.1090 mm)
+    Rule: netclass 'DIFF100'; error
+    @(186.9550 mm, 103.8050 mm): Track [DSI_D0_N] on F.Cu, length 0.4243 mm
+    @(186.5448 mm, 103.7004 mm): Via [GND] on F.Cu - B.Cu
+[clearance]: Clearance violation (netclass 'PWR' clearance 0.1500 mm; actual 0.1349 mm)
+    Rule: netclass 'PWR'; error
+    @(162.0000 mm, 126.7000 mm): Pad J2 [+1V8_DSI] of U21 on B.Cu
+    @(162.1550 mm, 127.0050 mm): Track [DSI_D0_N] on B.Cu, length 0.1000 mm
+[clearance]: Clearance violation (netclass 'DIFF100' clearance 0.1500 mm; actual 0.1125 mm)
+    Rule: netclass 'DIFF100'; error
+    @(220.4550 mm, 36.6050 mm): Track [ETH0_P] on F.Cu, length 0.1414 mm
+    @(220.1500 mm, 36.4000 mm): Via [GND] on F.Cu - B.Cu
+[clearance]: Clearance violation (netclass 'PWR' clearance 0.1500 mm; actual 0.1354 mm)
+    Rule: netclass 'PWR'; error
+    @(159.8550 mm, 73.1050 mm): Track [ADE_CS1_N] on B.Cu, length 0.1000 mm
+    @(159.5000 mm, 72.3250 mm): Pad 27 [+3V3_SAFE] of U7 on B.Cu
 
 ** Found 499 unconnected pads **
 [unconnected_items]: Missing connection between items
     Local override; error
     @(160.0000 mm, 128.2000 mm): Pad E5 [+1V8_DSI] of U21 on B.Cu
-    @(160.0000 mm, 128.7000 mm): Pad E6 [+1V8_DSI] of U21 on B.Cu
+    @(160.0000 mm, 128.7000 mm): Via [+1V8_DSI] on F.Cu - B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(160.0000 mm, 128.7000 mm): Pad E6 [+1V8_DSI] of U21 on B.Cu
+    @(160.0000 mm, 128.7000 mm): Via [+1V8_DSI] on F.Cu - B.Cu
     @(160.5000 mm, 128.7000 mm): Pad F6 [+1V8_DSI] of U21 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
     @(159.5000 mm, 128.7000 mm): Pad D6 [+1V8_DSI] of U21 on B.Cu
-    @(160.0000 mm, 128.7000 mm): Pad E6 [+1V8_DSI] of U21 on B.Cu
+    @(160.0000 mm, 128.7000 mm): Via [+1V8_DSI] on F.Cu - B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(158.0000 mm, 130.2000 mm): Pad A9 [+1V8_DSI] of U21 on B.Cu
     @(158.5000 mm, 129.7000 mm): Pad B8 [+1V8_DSI] of U21 on B.Cu
+    @(158.0000 mm, 130.2000 mm): Pad A9 [+1V8_DSI] of U21 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
     @(159.5000 mm, 128.7000 mm): Pad D6 [+1V8_DSI] of U21 on B.Cu
     @(158.5000 mm, 129.7000 mm): Pad B8 [+1V8_DSI] of U21 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(152.8911 mm, 132.5068 mm): Pad 1 [+1V8_DSI] of C111 on B.Cu
     @(152.7154 mm, 134.8805 mm): Pad 1 [+1V8_DSI] of C112 on B.Cu
+    @(152.8911 mm, 132.5068 mm): Pad 1 [+1V8_DSI] of C111 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
     @(162.0000 mm, 126.7000 mm): Pad J2 [+1V8_DSI] of U21 on B.Cu
@@ -70,16 +90,16 @@
     @(113.4002 mm, 133.8725 mm): Pad 1 [+1V8_DSI] of C109 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(160.7550 mm, 133.2283 mm): Pad 1 [+1V8_DSI] of C110 on B.Cu
     @(158.0000 mm, 130.2000 mm): Pad A9 [+1V8_DSI] of U21 on B.Cu
+    @(160.7550 mm, 133.2283 mm): Pad 1 [+1V8_DSI] of C110 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
     @(227.7940 mm, 53.6856 mm): Pad 1 [+1V8_DSI] of C114 on B.Cu
     @(224.0749 mm, 50.4831 mm): Pad 1 [+1V8_DSI] of C113 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(152.8911 mm, 132.5068 mm): Pad 1 [+1V8_DSI] of C111 on B.Cu
     @(158.0000 mm, 130.2000 mm): Pad A9 [+1V8_DSI] of U21 on B.Cu
+    @(152.8911 mm, 132.5068 mm): Pad 1 [+1V8_DSI] of C111 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
     @(113.4002 mm, 133.8725 mm): Pad 1 [+1V8_DSI] of C109 on B.Cu
@@ -574,64 +594,60 @@
     @(220.0857 mm, 148.8910 mm): Pad 1 [+12V] of R9 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
+    @(59.8550 mm, 62.8050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_CS1_N] on B.Cu, length 0.6000 mm
     @(61.3625 mm, 62.6350 mm): Pad 12 [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_CS1_N] of U69 on B.Cu
-    @(60.1550 mm, 62.8050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_CS1_N] on B.Cu, length 0.3000 mm
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(60.4550 mm, 96.3050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_CS2_N] on B.Cu, length 0.1414 mm
+    @(60.4550 mm, 96.3050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_CS2_N] on B.Cu, length 1.2728 mm
     @(61.3625 mm, 96.0950 mm): Pad 14 [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_CS2_N] of U70 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(59.8550 mm, 99.9050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_IRQ_N] on B.Cu, length 0.6000 mm
     @(61.3625 mm, 99.9050 mm): Pad 11 [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_IRQ_N] of U70 on B.Cu
+    @(59.5550 mm, 100.1050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_IRQ_N] on B.Cu, length 0.9000 mm
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(59.6550 mm, 61.4050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_MOSI] on B.Cu, length 0.8000 mm
+    @(59.8550 mm, 63.9050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_MISO] on B.Cu, length 0.6000 mm
+    @(61.3625 mm, 63.9050 mm): Pad 11 [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_MISO] of U69 on B.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(39.6550 mm, 65.6050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_MISO] on B.Cu, length 0.2828 mm
+    @(39.0175 mm, 101.0000 mm): Pad 38 [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_MISO] of U72 on B.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(59.8550 mm, 61.4050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_MOSI] on B.Cu, length 0.6000 mm
     @(61.3625 mm, 61.3650 mm): Pad 13 [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_MOSI] of U69 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
+    @(38.5550 mm, 65.3050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_MOSI] on B.Cu, length 0.4000 mm
     @(38.5175 mm, 101.0000 mm): Pad 39 [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_MOSI] of U72 on B.Cu
-    @(38.5550 mm, 65.7050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_MOSI] on SIG_In2, length 1.5556 mm
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(56.8842 mm, 95.0954 mm): Pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_RST_N] of R421 on B.Cu
-    @(56.4550 mm, 94.6050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_RST_N] on B.Cu, length 1.2728 mm
-[unconnected_items]: Missing connection between items
-    Local override; error
-    @(60.4550 mm, 97.0050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_RST_N] on B.Cu, length 0.8000 mm
+    @(60.4550 mm, 97.6050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_RST_N] on B.Cu, length 0.5000 mm
     @(61.3625 mm, 97.3650 mm): Pad 13 [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_RST_N] of U70 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(53.6550 mm, 91.9050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_RST_N] on B.Cu, length 2.7000 mm
-    @(37.2675 mm, 97.7500 mm): Pad 6 [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_RST_N] of U72 on B.Cu
-[unconnected_items]: Missing connection between items
-    Local override; error
-    @(59.8550 mm, 60.1050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_SCK] on B.Cu, length 0.6000 mm
     @(61.3625 mm, 60.0950 mm): Pad 14 [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_SCK] of U69 on B.Cu
+    @(39.5175 mm, 65.0000 mm): Pad 37 [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_SCK] of U71 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(74.1550 mm, 104.2050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/ADE_IRQ_N_I] on B.Cu, length 0.9000 mm
+    @(39.5175 mm, 65.0000 mm): Pad 37 [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_SCK] of U71 on B.Cu
+    @(39.5175 mm, 101.0000 mm): Pad 37 [/AC metering: 2x ADE9000 (gen + bus), isolated/AC_SCK] of U72 on B.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
     @(74.4250 mm, 105.6550 mm): Pad 2 [/AC metering: 2x ADE9000 (gen + bus), isolated/ADE_IRQ_N_I] of R419 on B.Cu
+    @(74.1550 mm, 104.2050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/ADE_IRQ_N_I] on B.Cu, length 0.9000 mm
 [unconnected_items]: Missing connection between items
     Local override; error
     @(74.4250 mm, 67.1550 mm): Pad 2 [/AC metering: 2x ADE9000 (gen + bus), isolated/ADE_MISO_I] of R416 on B.Cu
-    @(74.0550 mm, 66.6050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/ADE_MISO_I] on B.Cu, length 2.5456 mm
+    @(74.0550 mm, 66.6050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/ADE_MISO_I] on B.Cu, length 3.5355 mm
 [unconnected_items]: Missing connection between items
     Local override; error
     @(74.4250 mm, 63.1150 mm): Pad 2 [/AC metering: 2x ADE9000 (gen + bus), isolated/ADE_MOSI_I] of R414 on B.Cu
     @(73.9550 mm, 62.7050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/ADE_MOSI_I] on B.Cu, length 0.1000 mm
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(43.6550 mm, 67.4050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/ADE_XO] on B.Cu, length 0.4243 mm
-    @(44.3074 mm, 68.0212 mm): Pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/ADE_XO] of C258 on B.Cu
-[unconnected_items]: Missing connection between items
-    Local override; error
-    @(44.3074 mm, 68.0212 mm): Pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/ADE_XO] of C258 on B.Cu
-    @(43.2675 mm, 99.7500 mm): Pad 29 [/AC metering: 2x ADE9000 (gen + bus), isolated/ADE_XO] of U72 on B.Cu
-[unconnected_items]: Missing connection between items
-    Local override; error
-    @(7.3550 mm, 96.6050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_L1] on SIG_In2, length 0.1414 mm
     @(18.6987 mm, 141.0026 mm): PTH pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_L1] of RV4
+    @(7.3550 mm, 96.6050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_L1] on SIG_In2, length 0.1414 mm
 [unconnected_items]: Missing connection between items
     Local override; error
     @(10.0050 mm, 88.4425 mm): PTH pad 2 [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_L2] of J29
@@ -666,44 +682,36 @@
     @(16.2182 mm, 78.4998 mm): PTH pad 2 [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_N] of RV6
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(42.0550 mm, 94.3050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VA_N] on B.Cu, length 0.2000 mm
+    @(42.0550 mm, 94.4050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VA_N] on B.Cu, length 0.1000 mm
     @(42.0175 mm, 95.0000 mm): Pad 19 [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VA_N] of U72 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(43.2675 mm, 95.7500 mm): Pad 21 [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VB_N] of U72 on B.Cu
-    @(43.3550 mm, 104.7050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VB_N] on F.Cu, length 9.2000 mm
+    @(52.3550 mm, 98.4050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VA_N] on B.Cu, length 2.5456 mm
+    @(52.8626 mm, 98.8617 mm): Pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VA_N] of C266 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(37.6550 mm, 110.7050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VB_N] on B.Cu, length 1.9000 mm
     @(38.1811 mm, 111.1223 mm): Pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VB_N] of C268 on B.Cu
+    @(37.6550 mm, 110.7050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VB_N] on B.Cu, length 1.9000 mm
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(49.1439 mm, 88.8937 mm): Pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VB_P] of C267 on B.Cu
-    @(45.6401 mm, 86.9979 mm): Pad 2 [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VB_P] of R460 on B.Cu
-[unconnected_items]: Missing connection between items
-    Local override; error
-    @(43.2675 mm, 96.2500 mm): Pad 22 [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VB_P] of U72 on B.Cu
-    @(49.1439 mm, 88.8937 mm): Pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VB_P] of C267 on B.Cu
-[unconnected_items]: Missing connection between items
-    Local override; error
-    @(43.5550 mm, 86.5050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VB_TAP] on B.Cu, length 2.5456 mm
-    @(43.9901 mm, 86.9979 mm): Pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VB_TAP] of R460 on B.Cu
+    @(43.2675 mm, 96.7500 mm): Pad 23 [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VC_N] of U72 on B.Cu
+    @(25.9034 mm, 90.8065 mm): Pad 2 [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VC_N] of R468 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
     @(47.6550 mm, 109.0050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VC_P] on B.Cu, length 0.2000 mm
     @(47.9618 mm, 109.5676 mm): Pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VC_P] of C269 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(28.4888 mm, 92.0388 mm): Pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VN_TAP] of R454 on B.Cu
-    @(28.0550 mm, 91.6050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VN_TAP] on B.Cu, length 0.4000 mm
+    @(55.1550 mm, 89.6050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VC_TAP] on B.Cu, length 0.4000 mm
+    @(55.1246 mm, 90.5665 mm): Pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VC_TAP] of R467 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(34.8550 mm, 87.6050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VN_TAP] on B.Cu, length 1.5556 mm
-    @(36.5037 mm, 89.0589 mm): Pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VN_TAP] of R473 on B.Cu
+    @(58.7375 mm, 62.8250 mm): Pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VC_TAP] of R466 on B.Cu
+    @(58.2550 mm, 62.4050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VC_TAP] on B.Cu, length 0.5000 mm
 [unconnected_items]: Missing connection between items
     Local override; error
     @(33.8615 mm, 97.1122 mm): Pad 2 [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VN_TAP] of R472 on B.Cu
-    @(33.3550 mm, 96.2050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VN_TAP] on B.Cu, length 0.1414 mm
+    @(33.3550 mm, 96.2050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VN_TAP] on B.Cu, length 0.2000 mm
 [unconnected_items]: Missing connection between items
     Local override; error
     @(7.7900 mm, 154.0800 mm): PTH pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/CT1_S1] of J30
@@ -874,20 +882,20 @@
     @(16.2458 mm, 33.7307 mm): Pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_L2] of R429 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(10.0050 mm, 31.0050 mm): PTH pad 3 [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_L3] of J28
     @(23.6539 mm, 154.1729 mm): PTH pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_L3] of RV3
+    @(10.0050 mm, 31.0050 mm): PTH pad 3 [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_L3] of J28
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(48.1550 mm, 26.8050 mm): Via [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_N] on F.Cu - B.Cu
-    @(47.6550 mm, 18.8050 mm): Via [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_N] on F.Cu - B.Cu
+    @(48.9372 mm, 27.5474 mm): PTH pad 2 [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_N] of RV2
+    @(47.3550 mm, 18.5050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_N] on SIG_In2, length 0.4243 mm
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(48.1550 mm, 26.8050 mm): Via [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_N] on F.Cu - B.Cu
+    @(47.0000 mm, 18.0500 mm): PTH pad 2 [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_N] of RV1
     @(16.7687 mm, 28.2820 mm): Pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_N] of R443 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
     @(33.6539 mm, 150.2729 mm): PTH pad 2 [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_N] of RV3
-    @(16.7687 mm, 28.2820 mm): Pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_N] of R443 on B.Cu
+    @(49.0550 mm, 28.1050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_N] on SIG_In2, length 0.4000 mm
 [unconnected_items]: Missing connection between items
     Local override; error
     @(54.6656 mm, 68.9232 mm): Pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_VA_N] of C260 on B.Cu
@@ -898,8 +906,20 @@
     @(42.0175 mm, 59.0000 mm): Pad 19 [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_VA_N] of U71 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(49.6550 mm, 61.3050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_VB_P] on B.Cu, length 0.1414 mm
     @(50.0125 mm, 61.7758 mm): Pad 2 [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_VB_P] of R434 on B.Cu
+    @(49.6550 mm, 61.3050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_VB_P] on B.Cu, length 0.1414 mm
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(49.1550 mm, 70.0050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_VB_P] on B.Cu, length 0.8485 mm
+    @(50.1646 mm, 71.1076 mm): Pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_VB_P] of C261 on B.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(55.9550 mm, 90.8050 mm): Track [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_VC_P] on B.Cu, length 2.9698 mm
+    @(53.6459 mm, 93.4042 mm): Pad 2 [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_VC_P] of R441 on B.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(57.0827 mm, 79.9602 mm): Pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_VC_P] of C263 on B.Cu
+    @(43.2675 mm, 61.2500 mm): Pad 24 [/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_VC_P] of U71 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
     @(33.9482 mm, 91.0726 mm): Pad 1 [/AC metering: 2x ADE9000 (gen + bus), isolated/REF_BUS] of C253 on B.Cu
@@ -1138,7 +1158,7 @@
     @(157.4880 mm, 61.4370 mm): Pad 1 [/Display: DSI->LVDS bridge, panel power, backlight, touch/BL_SS] of C122 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(161.5000 mm, 126.7000 mm): Pad H2 [/Display: DSI->LVDS bridge, panel power, backlight, touch/DSI83_REFCLK] of U21 on B.Cu
+    @(161.5000 mm, 126.7000 mm): Via [/Display: DSI->LVDS bridge, panel power, backlight, touch/DSI83_REFCLK] on F.Cu - B.Cu
     @(164.3232 mm, 128.2380 mm): Pad 1 [/Display: DSI->LVDS bridge, panel power, backlight, touch/DSI83_REFCLK] of R113 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
@@ -1146,36 +1166,28 @@
     @(164.8264 mm, 135.7485 mm): Pad 1 [/Display: DSI->LVDS bridge, panel power, backlight, touch/DSI83_VCORE] of C115 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(122.1550 mm, 138.4050 mm): Track [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS0_N] on F.Cu, length 1.0000 mm
+    @(122.1550 mm, 138.4050 mm): Track [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS0_N] on F.Cu, length 0.7000 mm
     @(122.1300 mm, 139.1300 mm): Pad 8 [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS0_N] of J14 on F.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(159.0000 mm, 129.7000 mm): Pad C8 [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS0_P] of U21 on B.Cu
-    @(159.0550 mm, 129.1050 mm): Track [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS0_P] on B.Cu, length 0.4000 mm
-[unconnected_items]: Missing connection between items
-    Local override; error
-    @(122.5550 mm, 138.4050 mm): Track [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS0_P] on F.Cu, length 0.8000 mm
+    @(122.5550 mm, 138.4050 mm): Track [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS0_P] on F.Cu, length 0.6000 mm
     @(122.6300 mm, 139.1300 mm): Pad 9 [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS0_P] of J14 on F.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(123.6300 mm, 139.1300 mm): Pad 11 [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS1_N] of J14 on F.Cu
-    @(123.6550 mm, 138.4050 mm): Track [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS1_N] on F.Cu, length 0.3000 mm
+    @(159.5000 mm, 129.7000 mm): Track [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS1_P] on B.Cu, length 0.5000 mm
+    @(159.3550 mm, 128.9050 mm): Track [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS1_P] on SIG_In2, length 0.1000 mm
 [unconnected_items]: Missing connection between items
     Local override; error
     @(124.1300 mm, 139.1300 mm): Pad 12 [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS1_P] of J14 on F.Cu
     @(159.5000 mm, 129.7000 mm): Pad D8 [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS1_P] of U21 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(125.6300 mm, 139.1300 mm): Pad 15 [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS2_P] of J14 on F.Cu
-    @(160.0000 mm, 129.7000 mm): Pad E8 [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS2_P] of U21 on B.Cu
+    @(125.1300 mm, 139.1300 mm): Pad 14 [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS2_N] of J14 on F.Cu
+    @(160.0000 mm, 130.2000 mm): Pad E9 [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS2_N] of U21 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
-    @(161.0000 mm, 129.7000 mm): Pad G8 [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS3_P] of U21 on B.Cu
-    @(160.8550 mm, 129.1050 mm): Track [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS3_P] on B.Cu, length 0.4000 mm
-[unconnected_items]: Missing connection between items
-    Local override; error
+    @(126.6550 mm, 138.4050 mm): Track [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDSC_N] on F.Cu, length 0.2000 mm
     @(126.6300 mm, 139.1300 mm): Pad 17 [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDSC_N] of J14 on F.Cu
-    @(160.5000 mm, 130.2000 mm): Pad F9 [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDSC_N] of U21 on B.Cu
 [unconnected_items]: Missing connection between items
     Local override; error
     @(127.1300 mm, 139.1300 mm): Pad 18 [/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDSC_P] of J14 on F.Cu
@@ -2032,6 +2044,14 @@
     Local override; error
     @(195.8772 mm, 157.5776 mm): Pad 1 [/Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/AI6_PG] of R189 on B.Cu
     @(228.7289 mm, 179.5245 mm): Pad 1 [/Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/AI6_PG] of Q33 on B.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(182.7827 mm, 146.5611 mm): Pad 5 [/Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/AI6_REF] of U28 on B.Cu
+    @(196.4941 mm, 159.7779 mm): Pad 2 [/Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/AI6_REF] of R187 on B.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(196.4941 mm, 159.7779 mm): Pad 2 [/Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/AI6_REF] of R187 on B.Cu
+    @(227.7789 mm, 177.6495 mm): Pad 3 [/Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/AI6_REF] of Q33 on B.Cu
 
 ** Found 0 Footprint errors **
 
