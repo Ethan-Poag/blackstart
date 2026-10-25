@@ -1,14 +1,9 @@
-# genctl – KiCad schematic (draft A)
+# Project Blackstart
 
-KiCad 8/9 hierarchical schematic for the genctl diesel generator controller.
-Open `genctl.kicad_pro` in KiCad 8 or 9.
+Open-source diesel generator controller: STM32 safety MCU, Raspberry Pi CM5 for UI and connectivity,
+dual ADE9000 metering (600 V class), 12.1" display, 12 backlit keys, external LTE router over Ethernet.
 
-* `genctl.kicad_sch` – root sheet (10 sub-sheets, connectivity via global labels)
-* `*.kicad_sch` – power, mcu, cm5, comms, display, inputs, outputs, estop, ac_metering, frontpanel
-* `genctl.kicad_sym` – project symbols (non-library ICs/connectors) with LCSC/MPN fields
-* `docs/genctl_schematic.pdf` – PDF export, `docs/erc_report.txt` – ERC, `docs/genctl_bom.csv` – BOM export
-* `docs/auto_nc_pins.log` – every pin the generator left as no-connect (review list)
-* `DESIGN_NOTES.md` – all assumptions, value choices and open questions
-* `tools/` – generator (`python3 tools/run.py` from `tools/` regenerates every sheet; UUIDs change on each run)
+Status: schematic complete (ERC 0/0), layout and enclosure in progress. Prototype for the maintainer's own use first.
+Not certified. Do not rely on it for safety until independently tested and reviewed.
 
-Schematic was generated programmatically; it is wiring-by-label (short stubs + net labels), not hand-routed.
+See DESIGN_NOTES.md, docs/, and LICENSING.md.
