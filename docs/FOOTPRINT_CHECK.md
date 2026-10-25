@@ -36,3 +36,9 @@ Tie the FPC and SM02B tabs to GND copper at layout if you want them for shieldin
 - Hot ↔ SELV barrier (ISOW7841 / ISO7741 / CA-IS on SOIC-16W): the datasheet gives 8 mm package creepage. **The stock KiCad SOIC-16W_7.5x10.3 land pattern leaves only 7.25 mm copper-to-copper between the pad rows (pads at ±4.65, 2.05 long), so it is below 8 mm.** At layout: (a) route a ≥1 mm slot under each isolator body between the rows, which takes the surface creepage path above 8 mm, or (b) use a 'creepage' land pattern trimmed to ≥8 mm. Keep no copper on either domain inside the 8 mm barrier strip. Flagged open: there is no slot or keep-out in the schematic.
 - MOVs (RV_Disc P10): 10 mm lead spacing.
 - The divider resistor strings must be laid out as series 1206/2512 chains so that each part sees ≤ its rated working voltage (layout item).
+
+## Rev: rear-facing connectors (2026-10-25)
+| Part | Footprint | Source | Check |
+|---|---|---|---|
+| HR963380AE vertical RJ45 magjack (J10), LCSC C19724763 | genctl:HR963380AE_RJ45 | EasyEDA/LCSC land pattern via easyeda2kicad, checked against HanRun DS p.3 (10 pads 0.85x2.9 @1.35, LED pads 1.1x4.2 @ ±4.01/±6.55, shield pad 15 2.5x2.6, 2x Ø1.40 NPTH @ ±7.00) | locating holes set to NPTH; LED pinout differs from HR911131A: orange 11A/12K, green 13A/14K |
+| TYPE-C-31-D-06B vertical USB-C 16P (J11), LCSC C47817619 | genctl:USB_C_Receptacle_HRO_TYPE-C-31-D-06B_Vertical | EasyEDA/LCSC land pattern; 4 shell THT tabs renamed S1; 2 NPTH pegs | VERIFY against HRO drawing (only the D-06 drawing was read; D-06B is the 10 mm tall variant, same land pattern per EasyEDA) |

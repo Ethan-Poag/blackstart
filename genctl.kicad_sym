@@ -4651,7 +4651,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))))
-	(symbol "HR911131A"
+	(symbol "HR963380AE"
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -4660,12 +4660,12 @@
 			(effects
 				(font
 					(size 1.27 1.27))))
-		(property "Value" "HR911131A"
+		(property "Value" "HR963380AE"
 			(at -10.16 -16.51 0)
 			(effects
 				(font
 					(size 1.27 1.27))))
-		(property "Footprint" "genctl:HR911131A_RJ45"
+		(property "Footprint" "genctl:HR963380AE_RJ45"
 			(at 0 0 0)
 			(effects
 				(font
@@ -4677,19 +4677,19 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "Description" "RJ45 magjack 10/100/1000BASE-T (IEEE802.3ab), 4x 1CT:1CT, centre taps common on P5/P6, green LED 11(A)-12(K), yellow 14(A)-13(K) per HanRun DS schematic. Shield pads 15/16 per footprint"
+		(property "Description" "RJ45 magjack, VERTICAL (tab-up, top entry) SMD, 10/100/1000BASE-T (IEEE802.3ab), 4x 1CT:1CT, centre taps P5/P6, orange LED 11(A)-12(K), green LED 13(A)-14(K) per HanRun DS schematic, shield pad 15, 2x NPTH locating holes. 16.85 mm tall"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "LCSC" "C5184934"
+		(property "LCSC" "C19724763"
 			(at 0 0 0)
 			(effects
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "MPN" "HR911131A"
+		(property "MPN" "HR963380AE"
 			(at 0 0 0)
 			(effects
 				(font
@@ -4701,7 +4701,7 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(symbol "HR911131A_0_1"
+		(symbol "HR963380AE_0_1"
 			(rectangle
 				(start -10.16 12.7)
 				(end 10.16 -15.24)
@@ -4710,7 +4710,7 @@
 					(type default))
 				(fill
 					(type background))))
-		(symbol "HR911131A_1_1"
+		(symbol "HR963380AE_1_1"
 			(pin passive line
 				(at -12.7 10.16 0)
 				(length 2.54)
@@ -4828,7 +4828,7 @@
 					(effects
 						(font
 							(size 1.27 1.27))))
-				(number "11"
+				(number "13"
 					(effects
 						(font
 							(size 1.27 1.27)))))
@@ -4839,29 +4839,29 @@
 					(effects
 						(font
 							(size 1.27 1.27))))
-				(number "12"
+				(number "14"
 					(effects
 						(font
 							(size 1.27 1.27)))))
 			(pin passive line
 				(at 12.7 0 180)
 				(length 2.54)
-				(name "LED_Y_A"
+				(name "LED_O_A"
 					(effects
 						(font
 							(size 1.27 1.27))))
-				(number "14"
+				(number "11"
 					(effects
 						(font
 							(size 1.27 1.27)))))
 			(pin passive line
 				(at 12.7 -2.54 180)
 				(length 2.54)
-				(name "LED_Y_K"
+				(name "LED_O_K"
 					(effects
 						(font
 							(size 1.27 1.27))))
-				(number "13"
+				(number "12"
 					(effects
 						(font
 							(size 1.27 1.27)))))
@@ -4873,17 +4873,6 @@
 						(font
 							(size 1.27 1.27))))
 				(number "15"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 12.7 -7.62 180)
-				(length 2.54)
-				(name "SHIELD"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "16"
 					(effects
 						(font
 							(size 1.27 1.27)))))))

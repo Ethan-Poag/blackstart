@@ -249,15 +249,15 @@ co.p('Switch:SW_DIP_x02','BIAS',{'1':'VISO_485','4':'RS485_BIASP','2':'GND_485',
 co.R('680R','RS485_BIASP','RS485_A'); co.R('680R','RS485_BIASN','RS485_B')
 conn(co,3,['RS485_A','RS485_B','GND_485'],'RS-485 (PC 5/3)',mpn='Phoenix PC 5/3-GF')
 # Ethernet (gigabit)
-co.p('genctl:HR911131A','HR911131A',{'TRD0+':'ETH0_P','TRD0-':'ETH0_N','TRD1+':'ETH1_P','TRD1-':'ETH1_N','TRD2+':'ETH2_P','TRD2-':'ETH2_N','TRD3+':'ETH3_P','TRD3-':'ETH3_N',
-    'CT':'ETH_CT','LED_G_A':'ETH_LEDG_A','LED_G_K':'ETH_LED_LINK_N','LED_Y_A':'ETH_LEDY_A','LED_Y_K':'ETH_LED_ACT_N','SHIELD':'CHASSIS'},mpn='HR911131A',
-    note='1000BASE-T magjack; pair order P1/2,P3/4,P7/8,P9/10 = MDI A-D; polarity auto-corrected by PHY')
+co.p('genctl:HR963380AE','HR963380AE',{'TRD0+':'ETH0_P','TRD0-':'ETH0_N','TRD1+':'ETH1_P','TRD1-':'ETH1_N','TRD2+':'ETH2_P','TRD2-':'ETH2_N','TRD3+':'ETH3_P','TRD3-':'ETH3_N',
+    'CT':'ETH_CT','LED_G_A':'ETH_LEDG_A','LED_G_K':'ETH_LED_LINK_N','LED_O_A':'ETH_LEDY_A','LED_O_K':'ETH_LED_ACT_N','SHIELD':'CHASSIS'},mpn='HR963380AE',
+    note='1000BASE-T magjack, vertical top-entry (opening faces the rear shell window); pair order P1/2,P3/4,P7/8,P9/10 = MDI A-D; polarity auto-corrected by PHY')
 co.C('100n','ETH_CT','GND',note='voltage-mode PHY: centre taps AC-decoupled only'); co.C('10n','ETH_CT','GND')
 co.R('330R','CM5_3V3','ETH_LEDG_A'); co.R('330R','CM5_3V3','ETH_LEDY_A')
 co.p('genctl:RClamp0524P','RClamp0524P',{'IO1':'ETH0_P','IO2':'ETH0_N','IO3':'ETH1_P','IO4':'ETH1_N','GND':'GND'},mpn='RCLAMP0524P.TCT')
 co.p('genctl:RClamp0524P','RClamp0524P',{'IO1':'ETH2_P','IO2':'ETH2_N','IO3':'ETH3_P','IO4':'ETH3_N','GND':'GND'},mpn='RCLAMP0524P.TCT')
 # USB-C service
-co.p('Connector:USB_C_Receptacle_USB2.0_16P','USB-C service',{'VBUS':'USBC_VBUS','CC1':'USBC_CC1','CC2':'USBC_CC2','D+':'USB_SVC_P','D-':'USB_SVC_N','GND':'GND','SHIELD':'CHASSIS','SBU1':None,'SBU2':None},prefix='J',mpn='TYPE-C-31-M-12')
+co.p('Connector:USB_C_Receptacle_USB2.0_16P','USB-C service',{'VBUS':'USBC_VBUS','CC1':'USBC_CC1','CC2':'USBC_CC2','D+':'USB_SVC_P','D-':'USB_SVC_N','GND':'GND','SHIELD':'CHASSIS','SBU1':None,'SBU2':None},prefix='J',mpn='TYPE-C-31-D-06B')
 co.R('5.1k','USBC_CC1','GND'); co.R('5.1k','USBC_CC2','GND')
 co.p('Power_Protection:USBLC6-2SC6','USBLC6-2SC6',{'1':'USB_SVC_P','6':'USB_SVC_P','3':'USB_SVC_N','4':'USB_SVC_N','5':'USBC_VBUS','2':'GND'},prefix='D',mpn='USBLC6-2SC6')
 # Internal USB2 headers direct from CM5 USB3-0/USB3-1 HS pairs (no hub, no USB-A host). SS pairs NC.
@@ -578,7 +578,7 @@ FPMAP={  # libid -> (fp, lcsc, mpn)
  'Connector:Conn_ARM_JTAG_SWD_10':('genctl:FTSH-105-02_SWD','C5199898','FTSH-105-02-L-DV-TR'),
  'Connector_Generic:Conn_02x04_Odd_Even':('Connector_PinHeader_2.54mm:PinHeader_2x04_P2.54mm_Vertical','C68234','2x4 2.54 header'),
  'Connector_Generic:Conn_02x05_Odd_Even':('genctl:PZ254-2-05-S_2x05_SMD','C3294463','PZ254-2-05-S'),
- 'Connector:USB_C_Receptacle_USB2.0_16P':('Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12','C165948',None),
+ 'Connector:USB_C_Receptacle_USB2.0_16P':('genctl:USB_C_Receptacle_HRO_TYPE-C-31-D-06B_Vertical','C47817619','TYPE-C-31-D-06B'),
  'Power_Management:TPS2051CDBV':('Package_TO_SOT_SMD:SOT-23-5',None,None),
  'Interface_USB:USB2514B_Bi':('Package_DFN_QFN:QFN-36-1EP_6x6mm_P0.5mm_EP3.7x3.7mm',None,None),
  'Amplifier_Operational:TLV9062':('Package_SO:SOIC-8_3.9x4.9mm_P1.27mm',None,None),'Amplifier_Operational:LM2904':('Package_SO:SOIC-8_3.9x4.9mm_P1.27mm',None,None),
@@ -597,7 +597,7 @@ MPNLCSC={'BSS84':'C8545','DMN6075S':'C2832191','SI2309CDS-T1-GE3':'C10487','AO34
  'SN74LVC1G08DBVR':'C7813','INA281A2QDBVRQ1':'C2862726','STM32H743VIT6':'C114409','FM24CL64B-GTR':'C9829',
  'SMDJ58CA':'C2985669','SMBJ33CA':'C78420','SMBJ5.0A':'C114063','SMAJ36CA':'C114047','SMBJ58CA':'C114034','SMBJ36CA':'C78421','SMDJ24A':'C2963997',
  'SS110':'C2847','SS34':'C8678','SK1010C':'C2847480','EEHZA1H101P':'C109086','EEHZK1E471P':'C242138','TS-1187A-B-A-B':'C318884',
- 'SM04B-SRSS-TB':'C160390','TYPE-C-31-M-12':'C165948','WSLP2512 1mR':'C2933264','MMBT3904':'C20526','MMBT3906':'C2143'}
+ 'SM04B-SRSS-TB':'C160390','TYPE-C-31-M-12':'C165948','TYPE-C-31-D-06B':'C47817619','WSLP2512 1mR':'C2933264','MMBT3904':'C20526','MMBT3906':'C2143'}
 DIODEFP={'SMDJ':'Diode_SMD:D_SMC','SMBJ':'Diode_SMD:D_SMB','SMAJ':'Diode_SMD:D_SMA','SS110':'Diode_SMD:D_SMA','SS34':'Diode_SMD:D_SMA','SK1010C':'Diode_SMD:D_SMC'}
 _r6='Resistor_SMD:R_0603_1608Metric'; _r12='Resistor_SMD:R_1206_3216Metric'; _c6='Capacitor_SMD:C_0603_1608Metric'
 RCX={  # (value, fp) -> lcsc for passives not in gen.RLCSC/CLCSC (all checked on JLC parts search 2026-10-24)

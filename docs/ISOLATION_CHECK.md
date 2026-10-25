@@ -8,7 +8,7 @@
 | AC1005 x8 | current transformers | 600 V side (secondary on GND_AC) <-> external CT loop (J9) | **no insulation rating in datasheets/ac1005.txt** | - | - |
 | CA-IS3062W x2 | isolated CAN | SELV <-> CAN field bus (SELV) - functional only | VIORM 849 Vpk | 8 / 8 mm | CTI >400, group I |
 | CA-IS2092W | isolated RS-485 | SELV <-> RS-485 field bus (SELV) - functional only | VIORM 560 Vpk (objective DS) | 8 / 8 mm | CTI >400, group II |
-| HR911131A | magjack | SELV <-> Ethernet, 1500 Vrms functional | - | - | - |
+| HR963380AE (was HR911131A) | magjack | SELV <-> Ethernet, 2250 VDC/60 s (≈1500 Vrms) functional | - | - | - |
 Only ISOW7841 and ISO7741 (and the AC1005 CTs) bridge the 600 V barrier. The CAN/RS-485 isolators are SELV-to-SELV and do not need reinforced spacing; they keep the stock footprint.
 
 ## 2. Why "8 mm" on a package whose footprint gap is 7.25 mm
