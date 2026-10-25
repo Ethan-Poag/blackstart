@@ -95,7 +95,7 @@ REFC=collections.Counter()
 ALLPARTS=[]
 NCLOG=[]
 class Part:
-    def __init__(s,sheet,libid,value,conns,prefix=None,lcsc=None,mpn='',fp='',mfr='',dnp=False,note='',ds=''):
+    def __init__(s,sheet,libid,value,conns,prefix=None,lcsc=None,mpn='',fp='',mfr='',dnp=False,note='',ds='',ref=None):
         s.sheet=sheet; s.libid=libid; s.value=value; s.dnp=dnp; s.note=note
         s.sym=kilib.get_symbol(libid,CUSTOM)
         s.pins=kilib.pins(s.sym)
@@ -105,6 +105,7 @@ class Part:
         if s.power:
             REFC['#PWR' if prefix!='#FLG' else '#FLG']+=1
             s.ref='%s%04d'%(prefix, REFC['#PWR' if prefix!='#FLG' else '#FLG'])
+        elif ref: s.ref=ref   # fixed ref (late additions; keeps existing annotation stable)
         else:
             REFC[prefix]+=1; s.ref='%s%d'%(prefix,REFC[prefix])
         s.fp=fp or (props['Footprint'][2] if 'Footprint' in props else '')

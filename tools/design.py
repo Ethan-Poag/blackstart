@@ -282,7 +282,13 @@ dsi={'DA0P':'DSI_D0_P','DA0N':'DSI_D0_N','DA1P':'DSI_D1_P','DA1N':'DSI_D1_N','DA
  'VCC':'+1V8_DSI','VCORE':'DSI83_VCORE','GND':'GND','NC':None}
 di.p('genctl:SN65DSI83ZXHR','SN65DSI83ZXHR',dsi,mpn='SN65DSI83ZXHR')
 dec(di,'+1V8_DSI',4); di.C('10u','+1V8_DSI','GND',pkg='0805'); di.C('1u','DSI83_VCORE','GND')
-di.R('10k','DSI83_REFCLK','GND',note='REFCLK unused (clock from DSI): 10k to GND'); di.R('100k','DSI83_EN','GND'); di.C('10n','DSI83_EN','GND'); di.R('10k','DSI83_IRQ','CM5_3V3')
+di.R('10k','DSI83_REFCLK','GND',note='REFCLK unused (clock from DSI): 10k to GND');
+# Optional external REFCLK (DNP). Default build: 10k to GND as above (datasheet: unused REFCLK must be pulled to GND by a resistor), clock from DSI CLK lane.
+# Fit Y? + R? (22R series, near source) + C? when the Pi DSI clock is not continuous / its PLL causes panel flicker; then set CSR 0x0A.0 HS_CLK_SRC=0 and REFCLK_MULTIPLIER.
+# SN65DSI83 REFCLK: 25-154 MHz, 1.8 V CMOS (abs max 2.175 V), <=50 ps p-p jitter, 40-60 % duty -> oscillator must run from +1V8_DSI. 10k pull-down may stay fitted.
+di.p('Oscillator:ASDMB-xxxMHz','25MHz',{'1':'+1V8_DSI','4':'+1V8_DSI','2':'GND','3':'DSI83_REFCLK_OSC'},prefix='Y',ref='Y4',mpn='ASDMB-25.000MHZ-LC-T',fp='Oscillator:Oscillator_SMD_Abracon_ASDMB-4Pin_2.5x2.0mm',dnp=True,note='DNP option: 25 MHz 1.8 V CMOS oscillator for DSI83 REFCLK (Pi DSI PLL flicker risk)')
+di.R('22R','DSI83_REFCLK_OSC','DSI83_REFCLK',dnp=True,ref='R531',note='DNP: REFCLK series R at the oscillator (0R-22R)'); di.C('100n','+1V8_DSI','GND',dnp=True,ref='C286',note='DNP: REFCLK oscillator decoupling')
+di.R('100k','DSI83_EN','GND'); di.C('10n','DSI83_EN','GND'); di.R('10k','DSI83_IRQ','CM5_3V3')
 di.p('genctl:TPS22918DBVR','TPS22918DBVR',{'VIN':'+3V3','ON':'PANEL_VDD_EN','CT':'PNL_CT','GND':'GND','VOUT':'+3V3_PANEL','QOD':'+3V3_PANEL'},mpn='TPS22918DBVR',note='panel VDD switch')
 di.C('1n','PNL_CT','GND'); di.R('100k','PANEL_VDD_EN','GND'); di.C('10u','+3V3_PANEL','GND',pkg='0805')
 di.p('genctl:TPS22918DBVR','TPS22918DBVR',{'VIN':'+3V3','ON':'PANEL_VDD_EN','CT':'TCH_CT','GND':'GND','VOUT':'+3V3_TOUCH','QOD':'+3V3_TOUCH'},mpn='TPS22918DBVR',note='touch power switch')
