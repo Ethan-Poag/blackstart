@@ -460,3 +460,27 @@ J6B = AUX7-10 + 2 GND, J5B = 6 GND (was 4 + 2 NC): output pins 16 (+ fuel/crank 
 - STM32 hold-up: not added. SAFE rail runs to ~5.1 V input (LM74800 UV) so it rides cranking; below that the outputs drop and fuel de-energizes (fail-safe). Use BOR + FRAM state save. Option if wanted later: feed the SAFE LDO from the held-up rail.
 - Internal USB headers: each fed from its own TPS2553DBVR (C55266), ILIM 40.2k = ~0.68 A nominal, EN from TCA9555 @0x25 P13/P14 with 100k pull-up to +3V3_SAFE (on by default), FAULT wired to OUT_FAULT_N, 1u in / 10u out. USBLC6 VBUS pin moved to the switched rail.
 - Netlist changes are intentional; tools/netcompare_sig.py (refdes-independent) shows only these parts changed.
+
+## Rev 2026-10-25 (i) - SN65DSI83 REFCLK oscillator fitted
+
+Source: TI SN65DSI83 datasheet SLLSEC1I (rev. Oct 2020), pin table (REFCLK, H2), Sec. 6.x REFCLK timing, Sec. 7.3.1, CSR map; Abracon ASDMB datasheet (initial release 1/8/2025).
+
+- **Fitted:** Y4 ASDMB-25.000MHZ-LC-T, which is 25 MHz, ±50 ppm, −40..+85 °C, powered from +1V8_DSI with OE tied high. Its output goes through R531 (22R, at the oscillator) to REFCLK (U21 H2). C286 (100n) decouples Y4's VDD. None of these parts is DNP any more.
+- **Removed:** R113, the 10k REFCLK pulldown. The datasheet requires the pulldown only "if an external reference clock is not used". It also asks for the clock source "as close as possible with a series resistor near the source". A pulldown on a driven clock line only adds load, so R113 is gone from the schematic, the board and the BOMs.
+- **Register settings (all registers are written over I2C at 0x2C, with PLL_EN = 0 and REFCLK already stable):**
+  - HS_CLK_SRC, 0x0A bit 0 = 0, so the LVDS clock comes from REFCLK. This is the reset default.
+  - REFCLK_MULTIPLIER, 0x0B bits 1:0 (00 = ×1, 01 = ×2, 10 = ×3, 11 = ×4). DSI_CLK_DIVIDER, 0x0B bits 7:3, stays 00000.
+    - The panel needs 66.3–78.9 MHz (72.4 MHz typ). From a 25 MHz reference the choices are 25/50/75/100 MHz, so the plan is **×3 = 75 MHz** (0x0B = 0x02).
+    - The CM5 DSI video timing must then be generated for a 75 MHz pixel clock: blanking is adjusted so the frame rate stays about 60 Hz.
+  - LVDS_CLK_RANGE, 0x0A bits 3:1 = 010 (62.5–87.5 MHz). The table is 000 = 25–37.5, 001 = 37.5–62.5, 010 = 62.5–87.5, 011 = 87.5–112.5, 100 = 112.5–137.5 and 101 = 137.5–154 MHz.
+  - CH_DSI_CLK_RANGE, 0x12, is still set to the DSI channel A clock range.
+  - Set PLL_EN (0x0D bit 0) last, then wait until it reports locked (≥3 ms). The PLL must be disabled whenever 0x0A or 0x0B is changed.
+  - The pixel/LVDS clock range with REFCLK is 25–154 MHz. REFCLK also accepts SSC (0.5–2 % center spread, 30–60 kHz).
+  - A benefit of using REFCLK is that the DSI clock lane no longer has to run continuously in HS mode.
+- **OPEN, datasheet mismatch to resolve before ordering:**
+  - DSI83 REFCLK limits: tr/tf 100 ps–1 ns and peak-to-peak phase jitter ≤50 ps.
+  - At 1.8 V and 15 pF, the ASDMB specifies Tr 1.8 ns typ / 3.0 ns max and Tf 1.0 / 3.0 ns, so its rated edges exceed the 1 ns limit. The real load (one BGA input plus about 3 mm of trace, roughly 3–5 pF) will be faster than the rated figure, but that is not guaranteed.
+  - The ASDMB gives no peak-to-peak jitter figure, only 60 ps cycle-to-cycle and 10 ps RMS period jitter at 100 MHz, so compliance is unproven.
+  - The candidate alternate is SiTime SiT1602BI-13-18S-25.000000 (2.5×2.0, 1.8 V, ±50 ppm, −40..85 °C): peak-to-peak period jitter 30 ps max at 1.8 V and Tr/Tf 1.3 ns typ / 2.5 ns max. Its edge rate is also not guaranteed under 1 ns at 15 pF.
+  - Either part must be checked on the bench: scope the edges at H2 and confirm the PLL locks.
+  - The footprint and pinout are standard 4-pad 2520 (OE, GND, OUT, VDD), so the two parts swap without a board change.
