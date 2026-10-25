@@ -25,6 +25,8 @@ BEZEL_W = SHELL_W + 2 * (SH_FLANGE_W + 0.5 + RIM_W)   # 322
 BEZEL_H = SHELL_H + 2 * (SH_FLANGE_W + 0.5 + RIM_W)   # 248
 GASKET_T, GASKET_W = 2.0, 8.0                    # closed-cell silicone sponge, 30 % compression -> 1.4
 PANEL_T = 2.0                                    # customer panel shown; clamp range 1.0 ... 5.0
+REAR_PORTS = {"J10": (214.0, 53.1, 20.0, 24.0),   # RJ45 C19724763: plug 11.7 wide + latch-release finger room
+              "J11": (240.0, 49.5, 13.0, 7.0)}    # USB-C C47817619: overmold ~12 x 6.5; 1 mm web to the (240,60) post boss
 SHELL_DEPTH = 62.0                               # rear face Z
 SCREW_D, SCREW_HEAD_D = 4.0, 7.6                 # all M4 (ISO 7380 button head, head 2.2)
 N_CLAMPS = 6
@@ -156,6 +158,10 @@ def rear_shell():
     s = s.cut(box(BOARD_X0 + BOARD_W - 20, 20, BOARD_X0 + BOARD_W + 1, 175, zr0, SHELL_DEPTH + 1))
     for i in range(8):
         s = s.cut(box(150 + i * 7, 60, 153 + i * 7, 130, zr0, SHELL_DEPTH + 1))
+    # rev D: rear-wall openings for the vertical (rear-mating) J10 RJ45 and J11 USB-C, centred on the jack axes.
+    # Jacks are recessed (RJ45 top Z 34.5, USB-C top Z ~27.6 vs rear face Z 62), so these are plug + finger wells, not bezels.
+    for (cx, cy, w, h) in REAR_PORTS.values():
+        s = s.cut(box(cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2, zr0, SHELL_DEPTH + 1))
     for (p, side) in CLAMPS:                          # outside pads + BLIND hook pockets (3.5 deep of 5.5)
         for d in (-7, 7):
             if side in "TB":

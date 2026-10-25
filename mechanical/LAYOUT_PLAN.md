@@ -41,7 +41,7 @@ Scripts: `geometry.py` (source of truth), `place.py` (placer), `render_placement
 | Inputs | 74,135 … 190,180 | AI/DI/MPU → J17-J20, J22 in the bottom key gaps |
 | Power | 190,135 … 262,180 | LM74800, **LM5176**, TPS56637 x2, LMR36506, supercaps, F1; next to J1 battery (right edge, bottom) |
 | Spill | 74,95 … 135,135 | overflow (45 input parts) |
-| Edge: right | x 262…280, y 4…179 | J10 RJ45, J11 USB-C, J6 CAN, J7 expansion, J23 fuel/crank (Phoenix), J1 battery (Phoenix) — 170 mm of 175 used |
+| Edge: right | x 262…280, y 38…180 | J6 CAN, J7 expansion, J23 fuel/crank (Phoenix), J1 battery (Phoenix). J10/J11 moved to rear-facing positions at (214,53) / (240,50) (v4) |
 | Edge: end slots | bottom-left x 7…23: J9 RS-485; bottom-right x 253…266: J8 router 12 V | |
 | Silkscreen | B.SilkS (140…215, 173…180) | "PROJECT BLACKSTART" / "genctl rev H placement v3 CERN-OHL-S-2.0"; "600V HAZARDOUS VOLTAGE" above the hot zone |
 Thermal: LM5176 + inductors bottom-right, CM5 top-right (~100 mm apart), output FETs spread along the top band, ADE9000s cool.
@@ -123,7 +123,7 @@ Custom DRC rule sketch (`.kicad_dru`):
 1. AC1005 / J30 hot vs earthed CT loop (§4).
 2. Shell changes for v3: barrier rib x / cross-rib y (§4); rear windows: top/bottom window x 38…243 should become ~28…248 (KF flanges reach x 30.4 and 245.4)
    and the end-slot terminals J9 (x 7…23) / J8 (x 253…266) need their own openings; the right window y 20…175 should start at ~4 (J10 RJ45).
-3. J10 RJ45 and J11 USB-C are **horizontal** parts (mate parallel to the board) — at the right edge they need a side-wall opening, or vertical variants for rear access.
+3. DONE (rev D): J10 is now the vertical HR963380AE RJ45 and J11 the vertical TYPE-C-31-D-06B. Both mate through **rear-wall** wells (see ENCLOSURE_DFM §3); no side-wall opening. The right edge keeps only J6, J7, J23 and J1.
 4. KF2EDGRM flanges sit behind the switches on B: confirm the 228E locating pegs don't protrude past the PCB rear (1.0 mm NPTH), else trim pegs or shorten the flange.
 5. Wire-entry direction: script points each terminal body at the board edge; verify in pcbnew against the plug drawings (plug choice decides rear vs edge entry).
 6. CM5 DF40 offset (§5).
@@ -149,3 +149,6 @@ Custom DRC rule sketch (`.kicad_dru`):
 1. Open `out/genctl_placed_v3.kicad_pcb`; hand-place and pre-route the hot zone, isolators, DSI/LVDS, Ethernet, LM5176 loop.
 2. `python3 place.py --netlist genctl.net --out out/genctl_quilter_input.kicad_pcb --quilter` for a Quilter input (fixed parts inside, rest parked), see QUILTER.md.
 3. The board is built from the netlist (no schematic UUID links). Before release, run "Update PCB from Schematic" in pcbnew on this board to link symbols.
+
+## v4 (2026-10-25): connectivity-driven placement + route pipeline
+See `pcb_v4/README.md`. Placement is no longer block-by-size. Hard constraints are locked first, then parts are placed by connectivity: each IC goes to the centroid of what it connects to, and each small part goes to the pin it serves. After that comes the critical routing (planes and fan-out), then Freerouting, DRC and render.

@@ -130,6 +130,23 @@ Guide clearance is now **0.10 mm per side**. SLA caps are about ±0.05-0.1, so m
   - **PE boss:** at H4, bottom right, far (> 200 mm) from the HV strip.
   - **CM5 heatsink top:** about 35 mm from the shell rear (Z 33.6 vs 59).
 
+**Rear-wall I/O openings (rev D, 2026-10-25):**
+- Ethernet and USB-C now mate **through the rear wall**, perpendicular to the board. There is **no side-wall opening** any more.
+- J10: HanRun HR963380AE (LCSC C19724763), vertical RJ45 with magnetics, on B.Cu at PCB (214.0, 53.1). Body 16.2 x 16.5 mm, 16.85 mm tall. Its top is at Z ≈ 34.5.
+- J11: HRO TYPE-C-31-D-06B (LCSC C47817619), vertical USB-C, on B.Cu at PCB (240.0, 50.0). About 10 mm tall, so its top is at Z ≈ 27.6.
+- Rear-wall cut-outs in `enclosure.py` (`REAR_PORTS`):
+  - RJ45: 20 x 24 mm well. That is the plug plus room for a finger on the latch.
+  - USB-C: 13 x 7 mm. It leaves a 1 mm web to the (240,60) post boss.
+- **Height budget behind the board:**
+  - PCB rear is at Z 17.6, the inner rear wall at Z 59 and the outer face at Z 62. That leaves about 41.4 mm clear.
+  - The jacks do **not** reach the wall. The RJ45 face sits about 27.5 mm in from the outer face, and the USB-C face about 34 mm in.
+  - Plugs therefore go into a deep well. That works for a standard RJ45 patch lead, but latch release needs a finger or a tool. A USB-C plug overmold is usually 15 mm or more long, so it **cannot** seat with 34 mm of wall in front of it unless the well is open the whole depth (this cut does that).
+  - Decision for Ethan:
+    - (a) keep the deep wells;
+    - (b) add a raised boss on the shell interior or a small rear daughterboard to bring the jacks to the wall;
+    - (c) use panel-mount RJ45/USB-C extension leads in the rear wall.
+- The STEP was **not** regenerated: cadquery isn't installed on the build box. Run `python3 enclosure.py` locally.
+
 **Rear protection, IP2X:**
 - Pluggable terminals through rear windows.
 - Vent slots, top and bottom, each under a 6 mm drip hood.
