@@ -393,3 +393,40 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - U24-U26 LM2904DR -> LM2904BIDR (TI) C1849422 (extended, 4,110 stock, $0.1046), 3-36 V supply (datasheets/lm2904b.pdf, Family Comparison table: LM2904 = 26 V). SOIC-8 pinout identical (1 OUT1, 2 IN1-, 3 IN1+, 4 V-, 5 IN2+, 6 IN2-, 7 OUT2, 8 V+).
 - All 0805 100 nF (22 pcs, incl. VBAT_F/VBAT_P/VBAT_ESTOP/DPX_VI) -> Samsung CL21B104KCFNNNE 100 V X7R C28233 (basic, 1.5M stock), via gen.CLCSC.
 - Cost total $755.07 (was $755.36): outputs and power TVS cheaper, inputs op-amp +$0.12.
+
+## Rev 2026-10-24 (e) - modem removed, router power, CM5 reflash/control, 5V hold-up, no USB hub, 10 aux outputs
+
+**Removed:** M.2 Key B socket, nano-SIM + SRV05-4, 3.8 V TPS56637 buck/inductor/ceramics/1000 uF bulk, MDM LED, U.FL/standoff BOM rows,
+MODEM_PWR_EN. Also removed USB2514B hub (+24 MHz crystal, straps), USB3 Type-A host port, TPS2051C, its 100 uF cap and ESD. CM5 USB3 SS pairs NC.
+**USB:** USB-C service = CM5 USB2 OTG (rpiboot with nRPIBOOT button) is the only external USB. CM5 USB3-0 HS -> internal SM04B header
+(display touch), USB3-1 HS -> internal SM04B spare; each with USBLC6-2SC6. Header VBUS = +5V unswitched.
+**Router:** external router on RJ45, powered from ROUTER_12V: TPS1H200A-Q1 (C2653785) from +12V, RCL 1.0k -> 0.8*2500/1k = 2.0 A limit
+(+ thermal shutdown = electronic fuse), SS110 freewheel, 10 nF, FAULT wired-OR to OUT_FAULT_N. IN = ROUTER_12V_EN, 100k pull-up to +3V3_SAFE
+so it is ON at power-up (TCA9555 pins are Hi-Z inputs at reset); STM32 power-cycles it via TCA9555 @0x25 P04. Connector WJ15EDGRC-3.81-02P (C8387) +
+plug WJ15EDGK-3.81-02P (C8466), same 3.81 family as CAN/RS-485/expansion (polarized plug; no locking flange).
+**CM5 <-> STM32 lines:**
+| Function | CM5 | STM32 / other | Circuit |
+|---|---|---|---|
+| UART (bootloader-capable) | GPIO14 TXD0 / GPIO15 RXD0 | PA10 USART1_RX / PA9 USART1_TX | 1k series each (moved from PD5/PD6; MUX_A0/A1 moved PA9/PA10 -> PD5/PD6) |
+| BOOT0 | GPIO27 CM5_BOOT0 | BOOT0 | 1k series; existing 10k pull-down -> 3.0 V when CM5 drives high, 0 V when CM5 off/Hi-Z |
+| NRST | GPIO22 CM5_NRST | NRST | 10k -> MMBT3904 base (100k pull-down), collector on NRST (open-drain; cannot back-power) |
+| Heartbeat | GPIO26 CM5_HB | PC2_C (was MCU_SPARE1; Header B pin 3 now NC) | 1k series, 100k pull-down at MCU |
+| Power-fail warning | GPIO17 CM5_PWR_FAIL (in) | TCA9555 @0x25 P07 PWR_FAIL_MCU (INT) | TPS2121 ST -> two NPN inverters, pull-ups to CM5_3V3 / +3V3_SAFE; high = on hold-up |
+| Hard power-off | PMIC_Enable (pin 99, int. 100k to 5V) | TCA9555 @0x25 P05 CM5_OFF | 10k -> NPN o/c; Hi-Z = CM5 on |
+| Power button | PWR_Button (pin 92) | TCA9555 @0x25 P06 CM5_PWRBTN_MCU | 10k -> NPN o/c (in parallel with SW) |
+SWD header kept; JP1 reduced to CM5 SWD (pins 5-8 NC). Touch power TPS22918 now shares PANEL_VDD_EN (frees GPIO17).
+Note: H743 bootloader also scans USART1 PB14/PB15 (DI10/DI11) and other ports when BOOT0=1; field input activity could select the wrong port - CM5 should
+assert BOOT0/NRST and send 0x7F promptly.
+**Hold-up (CM5 only, +5V_CM5):** CM5 datasheet: ~0.9 A (4.5 W) operating, ~0.4 A idle, 1.3 mA with PMIC_EN low. 10 s at 4.5 W = 45 J.
+Bulk options rejected: 5 V bulk gives only 0.5*C*(5.0^2-4.75^2) = 1.2 J/F (needs ~40 F); VBAT_P bulk 35->8 V needs ~0.15 F/50 V. TPS61094 rejected
+(1.7-2.6 A valley limit -> <1 A at 5 V). Chosen: 2x Eaton HV1030-2R7106-R 10 F/2.7 V in series (5 F, 10k balancing), charged from +5V via SS34 + 50R
+(<=92 mA, tau 250 s) to ~4.9 V; TPS61023 boost (C919459, Vout = 0.595*(1+715k/100k) = 4.85 V, 1 uH FNR5020S1R0MT) -> TPS2121 (C485916) IN2;
+IN1 = +5V with PR1 33.2k/10k (IN1 preferred above 4.58 V rising / 4.49 V falling), RILM 29.4k = 3.5 A, 5 us switchover.
+Usable energy 0.5*5*(4.9^2-2.7^2) = 41.8 J x 0.88 = 36.8 J -> ~8 s at 4.5 W, ~18 s at 2 W idle (-10% cap tol: ~7 s). TPS61023 output limit at 2.7 V in:
+(1-D)*(ILIM_min 2.7 A + ripple/2) ~ 1.5 A -> 7 W, OK. Hold-up isolated from +5V (no backfeed into TPS56637/USB/fan). STM32 is NOT held up (accepted:
+the LM5176 already rides through cranking down to ~4 V; hold-up covers full battery disconnect). On PWR_FAIL the CM5 runs `shutdown -h`; if power returns
+after halt the STM32 sees no heartbeat and pulses CM5_OFF (PMIC_EN low) to reboot it. Supercaps are not JLC-stocked: hand-solder (DigiKey $3.39 qty-1), 65 C rated - mount away from hot parts.
+**Outputs:** aux smart outputs 8 -> 10 (15 TPS1HTC30 + E-stop trip). AUX9/AUX10 enables come from TCA9555 @0x25 P10/P11 (no free STM32 pins) through the
+LVC541 watchdog gate. SNS mux now 16/16 used (MUXA 8, MUXB 7 + E-stop trip). Readback: @0x23 all 16 pins, AUX10_RB_N on @0x25 P12.
+J6B = AUX7-10 + 2 GND, J5B = 6 GND (was 4 + 2 NC): output pins 16 (+ fuel/crank on J4), returns 8; connectors unchanged (4x KF2EDGRM-5.08-6P + plugs).
+**Cost:** $755.07 -> $769.41 (comms 36.58 -> 28.45, outputs 145.41 -> 159.66, power 44.61 -> 52.83).

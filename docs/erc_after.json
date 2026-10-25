@@ -1,62 +1,62 @@
 {
     "$schema": "https://schemas.kicad.org/erc.v1.json",
     "coordinate_units": "mm",
-    "date": "2026-10-24T07:29:52-1000",
+    "date": "2026-10-24T15:55:09-1000",
     "kicad_version": "9.0.2",
     "sheets": [
         {
             "path": "/",
-            "uuid_path": "/706a266d-e752-4f7d-9e01-dca3f9ef7987",
+            "uuid_path": "/f971385e-4572-4065-970b-8e3e5c8852a9",
             "violations": []
         },
         {
             "path": "/Power: input protection, ideal diode, 12V buck-boost, 5V, 3V3/",
-            "uuid_path": "/706a266d-e752-4f7d-9e01-dca3f9ef7987/4dc7fb55-a64f-4ea6-8e12-cc377d02530d",
+            "uuid_path": "/f971385e-4572-4065-970b-8e3e5c8852a9/841a65b6-df53-48cd-a487-2f48ea8b9038",
             "violations": []
         },
         {
             "path": "/STM32H743 safety MCU/",
-            "uuid_path": "/706a266d-e752-4f7d-9e01-dca3f9ef7987/08c3470d-cf76-4c53-bbcb-098a8002c3da",
+            "uuid_path": "/f971385e-4572-4065-970b-8e3e5c8852a9/5f7b0fe4-d4a8-4512-a4cd-bb21d0bd0754",
             "violations": []
         },
         {
             "path": "/Raspberry Pi CM5/",
-            "uuid_path": "/706a266d-e752-4f7d-9e01-dca3f9ef7987/a67ec9b1-1c95-4916-89ce-af99258270cb",
+            "uuid_path": "/f971385e-4572-4065-970b-8e3e5c8852a9/ef207c5b-50bd-4fa9-9fdc-ba32934e4100",
             "violations": []
         },
         {
-            "path": "/Comms: CAN x2, RS-485, Ethernet, USB hub/ports, LTE modem/",
-            "uuid_path": "/706a266d-e752-4f7d-9e01-dca3f9ef7987/fb2eb0eb-0c38-439d-89fe-52f2953417da",
+            "path": "/Comms: CAN x2, RS-485, Ethernet, USB hub/ports, router 12V/",
+            "uuid_path": "/f971385e-4572-4065-970b-8e3e5c8852a9/be804d02-b72a-45f7-85e7-7b87537648e3",
             "violations": []
         },
         {
             "path": "/Display: DSI->LVDS bridge, panel power, backlight, touch/",
-            "uuid_path": "/706a266d-e752-4f7d-9e01-dca3f9ef7987/4d58bda5-1973-45b1-98f2-c9739847966a",
+            "uuid_path": "/f971385e-4572-4065-970b-8e3e5c8852a9/674bb17b-4746-4656-94f1-02a4813c4453",
             "violations": []
         },
         {
             "path": "/Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/",
-            "uuid_path": "/706a266d-e752-4f7d-9e01-dca3f9ef7987/1fcb28dd-01f9-4f0b-b39f-ba72d1d0c3a8",
+            "uuid_path": "/f971385e-4572-4065-970b-8e3e5c8852a9/1c520802-c3f5-42e9-a627-a11e4b9a5324",
             "violations": []
         },
         {
-            "path": "/Outputs: fuel/crank (TPS48100), 13x TPS1HTC30, watchdog gating, readback/",
-            "uuid_path": "/706a266d-e752-4f7d-9e01-dca3f9ef7987/9e5e47d0-daaf-493e-a3a2-1893474f1fe8",
+            "path": "/Outputs: fuel/crank (TPS48100), 15x TPS1HTC30, watchdog gating, readback/",
+            "uuid_path": "/f971385e-4572-4065-970b-8e3e5c8852a9/992e225a-f653-4769-b08e-e44e59efeeb0",
             "violations": []
         },
         {
             "path": "/E-stop trip and sense/",
-            "uuid_path": "/706a266d-e752-4f7d-9e01-dca3f9ef7987/3fa0fe3d-b2f2-4b94-b5b5-1a532a954f8b",
+            "uuid_path": "/f971385e-4572-4065-970b-8e3e5c8852a9/e2246825-3a6e-4b85-bad8-d630c155dbbc",
             "violations": []
         },
         {
             "path": "/AC metering: 2x ADE9000 (gen + bus), isolated/",
-            "uuid_path": "/706a266d-e752-4f7d-9e01-dca3f9ef7987/267bfab2-71a8-4504-9060-2375f0b90e0b",
+            "uuid_path": "/f971385e-4572-4065-970b-8e3e5c8852a9/04f85bbf-7817-455b-b150-16d37a8e688c",
             "violations": []
         },
         {
             "path": "/Front panel: backlit buttons, buzzer/",
-            "uuid_path": "/706a266d-e752-4f7d-9e01-dca3f9ef7987/fbe900ea-be28-4e68-86d5-0a5a681eef5c",
+            "uuid_path": "/f971385e-4572-4065-970b-8e3e5c8852a9/34f68969-5637-47a5-91f2-897d3db02cd2",
             "violations": []
         }
     ],

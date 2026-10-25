@@ -111,15 +111,15 @@ pw.R('1M','CHASSIS','GND',pkg='1206'); pw.C('4.7n','CHASSIS','GND',pkg='1206',no
 
 # =====================================================================
 mc=S('mcu','STM32H743 safety MCU',
- 'MCU. STM32H743VIT6 LQFP-100. HSE 25MHz, LSE 32.768kHz. SWD header + JP1 (CM5 can reflash MCU over SWD).\n'
+ 'MCU. STM32H743VIT6 LQFP-100. HSE 25MHz, LSE 32.768kHz. SWD header + JP1 (CM5 SWD, optional). CM5 reflash: USART1 PA9/PA10 bootloader, BOOT0 via 1k, NRST via NPN open-collector; PC2_C = CM5 heartbeat.\n'
  'Peripherals: SPI4 slave to CM5, USART2 to CM5, FDCAN1/2, USART3 RS-485, I2C1 (expanders/ADC/FRAM), SPI1 to ADE9000s via isolators.')
 MAP={'PA0':'VBAT_SNS','PA1':'VESTOP_SNS','PA2':'DPLUS_SNS','PA3':'FUEL_ISNS','PA4':'ADE_CS1_N','PA5':'ADE_SCK','PA6':'ADE_MISO','PA7':'ADE_MOSI',
- 'PA8':'DIAG_EN','PA9':'MUX_A0','PA10':'MUX_A1','PA11':'MUX_A2','PA12':'WDI','PA13':'SWDIO','PA14':'SWCLK','PA15':'MPU_SPEED',
+ 'PA8':'DIAG_EN','PA9':'MCU_UART_TX','PA10':'MCU_UART_RX','PA11':'MUX_A2','PA12':'WDI','PA13':'SWDIO','PA14':'SWCLK','PA15':'MPU_SPEED',
  'PB0':'ADE_IRQ_N','PB1':'CRANK_ISNS','PB2':'OUT_FAULT_N','PB3':'BUZZER_PWM','PB4':'AUX3_MCU','PB5':'AUX4_MCU','PB6':'AUX5_MCU','PB7':'AUX6_MCU',
  'PB8':'I2C1_SCL','PB9':'I2C1_SDA','PB10':'DI8_N','PB11':'DI9_N','PB12':'CAN2_RX','PB13':'CAN2_TX','PB14':'DI10_N','PB15':'DI11_N',
- 'PC0':'MUXA_OUT','PC1':'MUXB_OUT','PC2_C':'MCU_SPARE1','PC3_C':'PSU_MAIN_OK','PC4':'ADE_CS2_N','PC5':'ADE_RST_N','PC6':'ESTOP2_DIG','PC7':'MPU_GATE',
+ 'PC0':'MUXA_OUT','PC1':'MUXB_OUT','PC2_C':'MCU_CM5_HB','PC3_C':'PSU_MAIN_OK','PC4':'ADE_CS2_N','PC5':'ADE_RST_N','PC6':'ESTOP2_DIG','PC7':'MPU_GATE',
  'PC8':'DPLUS_EXC_EN','PC9':'GCB_CL_MCU','PC10':'GCB_OP_MCU','PC11':'MCB_CL_MCU','PC12':'MCB_OP_MCU','PC13':'EXP_12V_EN','PC14':'LSE_IN','PC15':'LSE_OUT',
- 'PD0':'CAN1_RX','PD1':'CAN1_TX','PD2':'FUEL_EN_MCU','PD3':'CRANK_EN_MCU','PD4':'GLOW_EN_MCU','PD5':'MCU_UART_TX','PD6':'MCU_UART_RX','PD7':'MCU_TRIP',
+ 'PD0':'CAN1_RX','PD1':'CAN1_TX','PD2':'FUEL_EN_MCU','PD3':'CRANK_EN_MCU','PD4':'GLOW_EN_MCU','PD5':'MUX_A0','PD6':'MUX_A1','PD7':'MCU_TRIP',
  'PD8':'RS485_TX','PD9':'RS485_RX','PD10':'DI12_N','PD11':'AUX7_MCU','PD12':'RS485_DE','PD13':'AUX8_MCU','PD14':'ESTOP_DIG','PD15':'DPLUS_DIG',
  'PE0':'AUX1_MCU','PE1':'AUX2_MCU','PE2':'MCU_SPI_SCK','PE3':'MCU_IRQ','PE4':'MCU_SPI_NSS','PE5':'MCU_SPI_MISO','PE6':'MCU_SPI_MOSI','PE7':'I2C_INT_N','PE8':'MCU_LED',
  'PH0':'HSE_IN','PH1':'HSE_OUT'}
@@ -139,7 +139,8 @@ mc.p('Switch:SW_Push','RESET',{'1':'NRST','2':'GND'},prefix='SW',mpn='TS-1187A-B
 mc.R('10k','BOOT0','GND')
 mc.p('Switch:SW_Push','BOOT0',{'1':'BOOT0','2':'+3V3'},prefix='SW',mpn='TS-1187A-B-A-B')
 mc.p('Connector:Conn_ARM_JTAG_SWD_10','SWD',{'1':'+3V3','2':'SWDIO','3':'GND','4':'SWCLK','5':'GND','6':None,'7':None,'8':None,'9':'GND','10':'NRST'},prefix='J')
-mc.p('Connector_Generic:Conn_02x04_Odd_Even','JP1 CM5->MCU SWD/boot',{'1':'CM5_SWDIO','2':'SWDIO','3':'CM5_SWCLK','4':'SWCLK','5':'CM5_NRST','6':'NRST','7':'CM5_BOOT0','8':'BOOT0'},prefix='JP')
+mc.p('Connector_Generic:Conn_02x04_Odd_Even','JP1 CM5->MCU SWD (opt)',{'1':'CM5_SWDIO','2':'SWDIO','3':'CM5_SWCLK','4':'SWCLK','5':None,'6':None,'7':None,'8':None},prefix='JP')
+mc.R('100k','MCU_CM5_HB','GND',note='heartbeat idle low when CM5 off')
 mc.R('10k','OUT_FAULT_N','+3V3'); mc.R('10k','I2C_INT_N','+3V3')
 mc.R('2.2k','I2C1_SCL','+3V3'); mc.R('2.2k','I2C1_SDA','+3V3')
 mc.R('10k','ADE_IRQ_N','+3V3'); mc.R('10k','MCU_IRQ','GND')
@@ -148,31 +149,32 @@ mc.p('Memory_NVRAM:FM24C64B','FM24CL64B',{'A0':'GND','A1':'GND','A2':'GND','VSS'
 mc.C('100n','+3V3','GND')
 mc.p('genctl:CR2032_Holder','CR2032',{'+':'VBAT_CELL','-':'GND'},mpn='CR2032 holder')
 mc.p('Diode:BAT54C','BAT54C',{'1':'+3V3','2':'VBAT_CELL','3':'VBAT_MCU'},prefix='D',mpn='BAT54C',note='VBAT OR: +3V3_SAFE / CR2032')
-mc.p('Connector_Generic:Conn_02x05_Odd_Even','Header B (MCU spare)',{'1':'+3V3','2':'GND','3':'MCU_SPARE1','4':None,'5':'I2C1_SCL','6':'I2C1_SDA','7':'GND','8':'+5V','9':None,'10':None},prefix='J')
+mc.p('Connector_Generic:Conn_02x05_Odd_Even','Header B (MCU spare)',{'1':'+3V3','2':'GND','3':None,'4':None,'5':'I2C1_SCL','6':'I2C1_SDA','7':'GND','8':'+5V','9':None,'10':None},prefix='J')
 
 # =====================================================================
 cm=S('cm5','Raspberry Pi CM5',
  'CM5. GPIO map: 0/1 ID_SD/SC -> header A I2C; 2/3 display I2C (DSI83 + touch); 4 TOUCH_INT_N; 5 TOUCH_RST_N; 6 DSI83_EN; 7 DSI83_IRQ;\n'
- '8-11 SPI0 to MCU (33R series); 12 BL_PWM; 13 BTN_BL_PWM (button backlight dimming, PWM0_CHAN1); 14/15 UART0 to MCU; 16 PANEL_VDD_EN; 17 TOUCH_PWR_EN; 18-21 SPI1 header A;\n'
- '22 CM5_NRST; 23 SWCLK; 24 SWDIO; 25 MCU_IRQ; 26 MODEM_PWR_EN; 27 CM5_BOOT0.')
-cma={'GND':'GND','5V':'+5V','CM5_3.3V':'CM5_3V3','CM5_1.8V':'CM5_1V8','GPIO_VREF':'CM5_3V3','VBAT':'CM5_VBAT','nRPIBOOT':'CM5_NRPIBOOT',
+ '8-11 SPI0 to MCU (33R series); 12 BL_PWM; 13 BTN_BL_PWM (button backlight dimming, PWM0_CHAN1); 14/15 UART0 to MCU; 16 PANEL_VDD_EN (also touch power); 17 CM5_PWR_FAIL (in, hold-up active); 18-21 SPI1 header A;\n'
+ '22 CM5_NRST (NPN o/c to MCU NRST); 23 SWCLK; 24 SWDIO; 25 MCU_IRQ; 26 CM5_HB heartbeat -> MCU PC2_C; 27 CM5_BOOT0 (1k -> BOOT0).\n'
+ 'CM5 5V from +5V_CM5 (TPS2121 mux: +5V / supercap hold-up boost). PMIC_Enable pulled low by MCU (via TCA9555 @0x25 P05 + NPN) = hard power-off.')
+cma={'GND':'GND','5V':'+5V_CM5','CM5_3.3V':'CM5_3V3','CM5_1.8V':'CM5_1V8','GPIO_VREF':'CM5_3V3','VBAT':'CM5_VBAT','nRPIBOOT':'CM5_NRPIBOOT',
  'Ethernet_Pair0_P':'ETH0_P','Ethernet_Pair0_N':'ETH0_N','Ethernet_Pair1_P':'ETH1_P','Ethernet_Pair1_N':'ETH1_N','Ethernet_Pair2_P':'ETH2_P','Ethernet_Pair2_N':'ETH2_N','Ethernet_Pair3_P':'ETH3_P','Ethernet_Pair3_N':'ETH3_N',
  'Ethernet_nLED2':'ETH_LED_LINK_N','Ethernet_nLED3':'ETH_LED_ACT_N','Fan_PWM':'FAN_PWM','Fan_Tacho':'FAN_TACH',
  'ID_SD':'HDRA_SDA','ID_SC':'HDRA_SCL','GPIO2':'DISP_SDA','GPIO3':'DISP_SCL','GPIO4':'TOUCH_INT_N','GPIO5':'TOUCH_RST_N','GPIO6':'DSI83_EN','GPIO7':'CM5_SPI_CE0',
  'GPIO8':'CM5_SPI_CE0X','GPIO9':'CM5_SPI_MISO','GPIO10':'CM5_SPI_MOSI','GPIO11':'CM5_SPI_SCK','GPIO12':'BL_PWM','GPIO13':'BTN_BL_PWM','GPIO14':'CM5_UART_TX','GPIO15':'CM5_UART_RX',
- 'GPIO16':'PANEL_VDD_EN','GPIO17':'TOUCH_PWR_EN','GPIO18':'HDRA_SPI_CE0','GPIO19':'HDRA_SPI_MISO','GPIO20':'HDRA_SPI_MOSI','GPIO21':'HDRA_SPI_SCK',
- 'GPIO22':'CM5_NRST','GPIO23':'CM5_SWCLK','GPIO24':'CM5_SWDIO','GPIO25':'CM5_MCU_IRQ','GPIO26':'MODEM_PWR_EN','GPIO27':'CM5_BOOT0',
- 'LED_nACT':'CM5_LED_ACT_N','LED_nPWR':'CM5_LED_PWR_N','PWR_Button':'CM5_PWR_BTN','EEPROM_nWP':None}
+ 'GPIO16':'PANEL_VDD_EN','GPIO17':'CM5_PWR_FAIL','GPIO18':'HDRA_SPI_CE0','GPIO19':'HDRA_SPI_MISO','GPIO20':'HDRA_SPI_MOSI','GPIO21':'HDRA_SPI_SCK',
+ 'GPIO22':'CM5_NRST','GPIO23':'CM5_SWCLK','GPIO24':'CM5_SWDIO','GPIO25':'CM5_MCU_IRQ','GPIO26':'CM5_HB','GPIO27':'CM5_BOOT0',
+ 'LED_nACT':'CM5_LED_ACT_N','LED_nPWR':'CM5_LED_PWR_N','PWR_Button':'CM5_PWR_BTN','PMIC_Enable':'CM5_PMIC_EN','EEPROM_nWP':None}
 # fix GPIO7 = DSI83_IRQ, GPIO8 = SPI CE0
 cma['GPIO7']='DSI83_IRQ'; cma['GPIO8']='CM5_SPI_CE0'
 cm.p('genctl:RPi_CM5_A','CM5 (conn A)',cma,mpn='SC1xxx CM5 (variant TBD)')
-cmb={'GND':'GND','USB3-0-RX_N':'USB30_RX_N','USB3-0-RX_P':'USB30_RX_P','USB3-0-DP':'USB30_DP','USB3-0-DM':'USB30_DM','USB3-0-TX_N':'USB30_TX_N','USB3-0-TX_P':'USB30_TX_P',
- 'USB3-1-DP':'USB31_DP','USB3-1-DM':'USB31_DM','USB_N':'USB_SVC_N','USB_P':'USB_SVC_P','VBUS_EN':'USBA_VBUS_EN'}
+cmb={'GND':'GND','USB3-0-RX_N':None,'USB3-0-RX_P':None,'USB3-0-DP':'USB30_DP','USB3-0-DM':'USB30_DM','USB3-0-TX_N':None,'USB3-0-TX_P':None,
+ 'USB3-1-DP':'USB31_DP','USB3-1-DM':'USB31_DM','USB_N':'USB_SVC_N','USB_P':'USB_SVC_P','VBUS_EN':None}
 for l in ('D0','D1','D2','D3','C'):
     for pn in 'PN': cmb['MIPI0_%s_%s'%(l,pn)]='DSI_%s_%s'%(l,pn)
 cm.p('genctl:RPi_CM5_B','CM5 (conn B)',cmb,mpn='CM5')
-for _ in range(2): cm.C('22u','+5V','GND',pkg='1206')
-dec(cm,'+5V',2); cm.C('100n','CM5_3V3','GND'); cm.C('1u','CM5_3V3','GND'); cm.C('100n','CM5_1V8','GND')
+for _ in range(2): cm.C('22u','+5V_CM5','GND',pkg='1206')
+dec(cm,'+5V_CM5',2); cm.C('100n','CM5_3V3','GND'); cm.C('1u','CM5_3V3','GND'); cm.C('100n','CM5_1V8','GND')
 for a,b in (('CM5_SPI_SCK','MCU_SPI_SCK'),('CM5_SPI_MOSI','MCU_SPI_MOSI'),('CM5_SPI_MISO','MCU_SPI_MISO'),('CM5_SPI_CE0','MCU_SPI_NSS'),
             ('CM5_UART_TX','MCU_UART_RX'),('CM5_UART_RX','MCU_UART_TX'),('CM5_MCU_IRQ','MCU_IRQ')):
     cm.R('1k',a,b,note='1k domain-boundary R: limits back-power injection to <3mA when one side is unpowered; SPI <=4MHz')
@@ -183,13 +185,35 @@ cm.R('1k','CM5_3V3','CM5_LED_ACT_A'); cm.LED('green','CM5_LED_ACT_A','CM5_LED_AC
 cm.R('1k','CM5_3V3','CM5_LED_PWR_A'); cm.LED('red','CM5_LED_PWR_A','CM5_LED_PWR_N',lcsc='C2295')
 conn(cm,4,['GND','+5V','FAN_TACH','FAN_PWM'],'Fan header (SM04B)',mpn='SM04B-SRSS-TB')
 cm.p('Connector_Generic:Conn_02x05_Odd_Even','Header A (CM5 I2C/SPI)',{'1':'CM5_3V3','2':'+5V','3':'HDRA_SDA','4':'HDRA_SCL','5':'HDRA_SPI_SCK','6':'HDRA_SPI_MOSI','7':'HDRA_SPI_MISO','8':'HDRA_SPI_CE0','9':'GND','10':'GND'},prefix='J')
-cm.R('10k','CM5_NRST','CM5_3V3',dnp=True,note='DNP - JP1 open by default')
+cm.R('1k','CM5_HB','MCU_CM5_HB',note='1k domain-boundary R: heartbeat to MCU PC2_C')
+cm.R('1k','CM5_BOOT0','BOOT0',note='1k boundary R; MCU 10k pull-down keeps BOOT0 low (0V) when CM5 off/Hi-Z; CM5 high -> 3.0V')
+cm.R('10k','CM5_NRST','NRST_QB'); cm.R('100k','NRST_QB','GND',note='CM5 off/Hi-Z -> NPN off'); npn(cm,'NRST_QB','GND','NRST')
+cm.R('10k','CM5_OFF','PMIC_QB'); cm.R('100k','PMIC_QB','GND',note='expander Hi-Z/unpowered -> CM5 on'); npn(cm,'PMIC_QB','GND','CM5_PMIC_EN')
+cm.R('10k','CM5_PWRBTN_MCU','PBTN_QB'); cm.R('100k','PBTN_QB','GND'); npn(cm,'PBTN_QB','GND','CM5_PWR_BTN')
+cm.R('10k','CM5_PWR_FAIL','CM5_3V3',note='PWR_FAIL high = running on hold-up (or CM5_3V3 alone)')
+npn(cm,'HU_QB1','GND','CM5_PWR_FAIL'); cm.R('10k','HU_ST','HU_QB1'); cm.R('100k','HU_QB1','GND')
+npn(cm,'HU_QB2','GND','PWR_FAIL_MCU'); cm.R('10k','HU_ST','HU_QB2'); cm.R('100k','HU_QB2','GND'); cm.R('10k','PWR_FAIL_MCU','+3V3_SAFE')
+# CM5 5V hold-up: 2x10F supercap (5F, ~4.9V) -> TPS61023 boost 4.85V -> TPS2121 IN2; IN1 = +5V priority
+schottky(cm,'SS34','+5V','SC_CHG',mpn='SS34')
+for _ in range(3): cm.R('150R','SC_CHG','SC_TOP',pkg='1206',note='3x150R = 50R charge limit (<=92mA, 0.14W each)')
+cm.C('10F 2.7V','SC_TOP','SC_MID',pol=True,pkg='Capacitor_THT:CP_Radial_D10.0mm_P5.00mm',mpn='HV1030-2R7106-R')
+cm.C('10F 2.7V','SC_MID','GND',pol=True,pkg='Capacitor_THT:CP_Radial_D10.0mm_P5.00mm',mpn='HV1030-2R7106-R')
+cm.R('10k','SC_TOP','SC_MID',note='passive balance'); cm.R('10k','SC_MID','GND',note='passive balance')
+cm.C('22u','SC_TOP','GND',pkg='1206')
+cm.p('genctl:TPS61023DRLR','TPS61023DRLR',{'VIN':'SC_TOP','EN':'SC_TOP','FB':'HU_FB','GND':'GND','VOUT':'+5V_HU','SW':'HU_SW'},mpn='TPS61023DRLR',lcsc='C919459',note='hold-up boost 4.85V')
+cm.p('Device:L','1u',{'1':'SC_TOP','2':'HU_SW'},prefix='L',mpn='FNR5020S1R0MT',lcsc='C167920',fp='genctl:L_FNR5020S',note='1uH 5A')
+cm.R('715k','+5V_HU','HU_FB',note='Vout=0.595*(1+715/100)=4.85V'); cm.R('100k','HU_FB','GND')
+for _ in range(2): cm.C('22u','+5V_HU','GND',pkg='1206')
+cm.p('genctl:TPS2121RUXR','TPS2121RUXR',{'IN1':'+5V','IN2':'+5V_HU','PR1':'HU_PR1','CP2':'GND','OV1':'GND','OV2':'GND','GND':'GND','OUT':'+5V_CM5','ST':'HU_ST','ILM':'HU_ILM','SS':'HU_SS'},mpn='TPS2121RUXR',lcsc='C485916',note='IN1 priority >4.58V')
+cm.R('33.2k','+5V','HU_PR1',note='PR1 1.06V -> IN1 valid >4.58V rising / 4.49V falling'); cm.R('10k','HU_PR1','GND')
+cm.R('29.4k','HU_ILM','GND',note='ILIM ~3.5A'); cm.C('100n','HU_SS','GND'); cm.C('1u','+5V','GND'); cm.C('1u','+5V_HU','GND')
 
 # =====================================================================
-co=S('comms','Comms: CAN x2, RS-485, Ethernet, USB hub/ports, LTE modem',
+co=S('comms','Comms: CAN x2, RS-485, Ethernet, USB hub/ports, router 12V',
  'COMMS. CAN1/CAN2 CA-IS3062W (VCC=+5V, 4.5-5.5V). Bus: CMC -> NUP2105L -> split termination via DIP (62R+62R, 4.7nF mid).\n'
  'RS-485 CA-IS2092W, SEL=GND_485 (3.3V VISO bus; DS: SEL=VISO only valid with VCC=5V), DIP for 120R term + 680R bias. Shields -> CHASSIS via 1M||4.7nF.\n'
- 'USB: CM5 USB2 -> USB-C service; USB3-0 -> USB-A (TPS2051C); USB3-1 HS -> USB2514B hub (DN1 M.2 modem, DN2 internal header, DN3/4 spare).')
+ 'USB: CM5 USB2 OTG -> USB-C service/rpiboot (only external USB). CM5 USB3-0 HS -> internal header (display touch), USB3-1 HS -> internal spare header. No hub, no USB-A. No on-board modem: external router on RJ45, powered from ROUTER_12V.\n'
+ 'ROUTER_12V: TPS1H200A from +12V, ILIM 1.0k = 2.0A, default ON (100k pull-up), STM32 power-cycles via TCA9555 @0x25 P04.')
 for i,(tx,rx,iso) in enumerate((('CAN1_TX','CAN1_RX','GND_CAN1'),('CAN2_TX','CAN2_RX','GND_CAN2')),1):
     n='CAN%d'%i
     co.R('1k',tx,tx+'_T',note='domain-boundary R (SAFE MCU -> +5V transceiver)'); co.R('1k',rx+'_T',rx,note='domain-boundary R')
@@ -205,6 +229,10 @@ co.p('genctl:TPS1H200AQDGNRQ1','TPS1H200AQDGNRQ1',{'VS':'+12V','IN':'EXP_12V_EN'
 co.R('1.33k','EXP12_CL','GND',note='ILIM ~1.5A (0.8*2500/I)'); co.C('100n','+12V','GND'); co.C('10n','EXP_12V','GND')
 schottky(co,'SS110','GND','EXP_12V',mpn='SS110')
 conn(co,6,['EXP_12V','GND','CAN2_HB','CAN2_LB','GND_CAN2','CAN2_SCR'],'Expansion bus (PC 5/6)',mpn='Phoenix PC 5/6-GF')
+co.p('genctl:TPS1H200AQDGNRQ1','TPS1H200AQDGNRQ1',{'VS':'+12V','IN':'ROUTER_12V_EN','DIAG_EN':'+3V3_SAFE','CL':'RTR_CL','DELAY':None,'GND':'GND','EP':'GND','OUT':'ROUTER_12V','FAULT':'OUT_FAULT_N'},mpn='TPS1H200AQDGNRQ1')
+co.R('1k','RTR_CL','GND',note='ILIM 2.0A (0.8*2500/I) for ~1.5A router'); co.R('100k','ROUTER_12V_EN','+3V3_SAFE',note='default ON at power-up')
+co.C('100n','+12V','GND'); co.C('10n','ROUTER_12V','GND'); schottky(co,'SS110','GND','ROUTER_12V',mpn='SS110')
+conn(co,2,['ROUTER_12V','GND'],'Router 12V (3.81/2)',mpn='WJ15EDGRC-3.81-02P')
 for n in ('RS485_TX','RS485_RX','RS485_DE'): co.R('1k',n,n+'_T',note='domain-boundary R')
 co.p('genctl:CA-IS2092W','CA-IS2092W',{'VCC':'+3V3','DI':'RS485_TX_T','RO':'RS485_RX_T','DE':'RS485_DE_T','~{RE}':'GND','GNDA':'GND','VISO':'VISO_485','SEL':'GND_485','A':'RS485_A','B':'RS485_B','GNDB':'GND_485','NC':None},mpn='CA-IS2092W')
 co.C('100n','+3V3','GND'); co.C('10u','+3V3','GND',pkg='0805'); co.C('100n','VISO_485','GND_485'); co.C('10u','VISO_485','GND_485',pkg='0805')
@@ -227,44 +255,10 @@ co.p('genctl:RClamp0524P','RClamp0524P',{'IO1':'ETH2_P','IO2':'ETH2_N','IO3':'ET
 co.p('Connector:USB_C_Receptacle_USB2.0_16P','USB-C service',{'VBUS':'USBC_VBUS','CC1':'USBC_CC1','CC2':'USBC_CC2','D+':'USB_SVC_P','D-':'USB_SVC_N','GND':'GND','SHIELD':'CHASSIS','SBU1':None,'SBU2':None},prefix='J',mpn='TYPE-C-31-M-12')
 co.R('5.1k','USBC_CC1','GND'); co.R('5.1k','USBC_CC2','GND')
 co.p('Power_Protection:USBLC6-2SC6','USBLC6-2SC6',{'1':'USB_SVC_P','6':'USB_SVC_P','3':'USB_SVC_N','4':'USB_SVC_N','5':'USBC_VBUS','2':'GND'},prefix='D',mpn='USBLC6-2SC6')
-# USB-A
-co.p('Power_Management:TPS2051CDBV','TPS2051C',{'IN':'+5V','EN':'USBA_VBUS_EN','GND':'GND','OUT':'USBA_VBUS','~{FLT}':'USBA_FLT_N'},prefix='U',mpn='TPS2051CDBVR')
-co.R('10k','USBA_FLT_N','+3V3'); co.C('100n','+5V','GND'); co.C('100u 10V','USBA_VBUS','GND',pol=True,pkg='genctl:CP_Elec_6.3x6',mpn='BLA10V100M6.3*6',lcsc='C165631')
-co.p('genctl:USB3_A_Receptacle','USB3 Type-A',{'VBUS':'USBA_VBUS','D-':'USB30_DM','D+':'USB30_DP','GND':'GND','SSRX-':'USB30_RX_N','SSRX+':'USB30_RX_P','GND_DRAIN':'GND','SSTX-':'USBA_SSTX_N','SSTX+':'USBA_SSTX_P','SHIELD':'CHASSIS'})
-co.C('100n','USB30_TX_P','USBA_SSTX_P',pkg='0402',note='USB3 TX AC-coupling (check if already on CM5)')
-co.C('100n','USB30_TX_N','USBA_SSTX_N',pkg='0402')
-co.p('Power_Protection:USBLC6-2SC6','USBLC6-2SC6',{'1':'USB30_DP','6':'USB30_DP','3':'USB30_DM','4':'USB30_DM','5':'USBA_VBUS','2':'GND'},prefix='D',mpn='USBLC6-2SC6')
-# Hub
-co.p('Interface_USB:USB2514B_Bi','USB2514B',{'VBUS_DET':'HUB_VBUSDET','USBDM_UP':'USB31_DM','USBDP_UP':'USB31_DP','RESET_N':'HUB_RST_N','TEST':'GND','RBIAS':'HUB_RBIAS',
-   'XTALIN/CLKIN':'HUB_XI','XTALOUT':'HUB_XO','PLLFILT':'HUB_PLLF','CRFILT':'HUB_CRF','VDDA33':'+3V3','VDD33':'+3V3','VSS':'GND',
-   'USBDM_DN1/PRT_DIS_M1':'USB_M2_N','USBDP_DN1/PRT_DIS_P1':'USB_M2_P','USBDM_DN2/PRT_DIS_M2':'USB_INT_N','USBDP_DN2/PRT_DIS_P2':'USB_INT_P','USBDM_DN3/PRT_DIS_M3':'USB_SP3_N','USBDP_DN3/PRT_DIS_P3':'USB_SP3_P','USBDM_DN4/PRT_DIS_M4':'USB_SP4_N','USBDP_DN4/PRT_DIS_P4':'USB_SP4_P',
-   '12':None,'16':None,'18':None,'20':None,'13':'HUB_OCS_N','17':'HUB_OCS_N','19':'HUB_OCS_N','21':'HUB_OCS_N',
-   '24':'HUB_CFG0','25':'HUB_CFG1','22':'HUB_NONREM1','28':'HUB_NONREM0'},prefix='U',mpn='USB2514B-AEZC-TR')
-dec(co,'+3V3',6); co.C('4.7u','+3V3','GND',pkg='1206')
-co.C('1u','HUB_PLLF','GND'); co.C('1u','HUB_CRF','GND'); co.R('12k','HUB_RBIAS','GND',note='1%')
-co.p('Device:Crystal_GND24','24MHz',{'1':'HUB_XI','3':'HUB_XO','2':'GND','4':'GND'},prefix='Y',mpn='X322524MOB4SI',lcsc='C70590',fp='Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm',note='CL=12pF')
-co.C('18p','HUB_XI','GND',pkg='0402'); co.C('18p','HUB_XO','GND',pkg='0402'); co.R('1M','HUB_XI','HUB_XO')
-co.R('10k','HUB_RST_N','+3V3'); co.C('100n','HUB_RST_N','GND'); co.R('10k','HUB_VBUSDET','+3V3')
-for n in ('HUB_CFG0','HUB_CFG1','HUB_NONREM1','HUB_NONREM0'): co.R('10k',n,'GND',note='strap: default config')
-co.R('10k','HUB_OCS_N','+3V3')
-conn(co,4,['+5V','USB_INT_N','USB_INT_P','GND'],'Internal USB (SM04B)',mpn='SM04B-SRSS-TB')
-co.p('Power_Protection:USBLC6-2SC6','USBLC6-2SC6',{'1':'USB_INT_P','6':'USB_INT_P','3':'USB_INT_N','4':'USB_INT_N','5':'+5V','2':'GND'},prefix='D',mpn='USBLC6-2SC6')
-conn(co,6,['+5V','USB_SP3_N','USB_SP3_P','USB_SP4_N','USB_SP4_P','GND'],'Spare USB header')
-# Modem
-co.p('genctl:TPS56637RPAR','TPS56637RPAR',{'VIN':'+12V','EN':'MODEM_PWR_EN_12','MODE':'MDM_MODE','FB':'MDM_FB','AGND':'GND','PGND':'GND','BOOT':'MDM_BOOT','SW':'MDM_SW','PG':None,'NC':None},mpn='TPS56637RPAR',note='3.8V modem rail')
-npn(co,'MDM_EN_B','GND','MDM_EN_INV'); co.R('10k','MODEM_PWR_EN','MDM_EN_B'); co.R('100k','MDM_EN_B','GND')
-co.R('100k','+12V','MDM_EN_INV'); npn(co,'MDM_EN_INV','GND','MODEM_PWR_EN_12'); co.R('121k','+12V','MODEM_PWR_EN_12',note='EN pull-up; 121k/16k keeps EN 1.4V < 6V abs max'); co.R('16k','MODEM_PWR_EN_12','GND')
-co.R('0R','MDM_MODE','GND',dnp=True,note='DNP: MODE open = FCCM'); co.C('100n','MDM_BOOT','MDM_SW'); co.p('Device:L','3.3u',{'1':'MDM_SW','2':'+3V8_MDM'},prefix='L',mpn='MWSA0503S-3R3MT',lcsc='C408409',fp='genctl:L_MWSA0503S',note='3.3uH (DS Table 4: next rail up = 5V)')
-co.C('100p','+3V8_MDM','MDM_FF'); co.R('20k','MDM_FF','MDM_FB')
-co.R('53.6k','+3V8_MDM','MDM_FB'); co.R('10k','MDM_FB','GND'); co.C('10u','+12V','GND',pkg='0805')
-co.C('1000u 16V','+3V8_MDM','GND',pol=True,pkg='genctl:CP_Elec_10x10',mpn='RVT1C102M1010',lcsc='C970714',note='LTE burst hold-up')
-for _ in range(2): co.C('22u','+3V8_MDM','GND',pkg='1206')
-co.p('genctl:M.2_KeyB_Modem','M.2 Key B (LTE)',{'3.3V':'+3V8_MDM','GND':'GND','FULL_CARD_PWR_OFF#':'+3V8_MDM','W_DISABLE1#':None,'RESET#':None,'LED1#':'MDM_LED_K',
-   'USB_D+':'USB_M2_P','USB_D-':'USB_M2_N','UIM_RESET':'SIM_RST','UIM_CLK':'SIM_CLK','UIM_DATA':'SIM_IO','UIM_PWR':'SIM_VCC','SIM_DETECT':None},mpn='M.2 Key-B socket',note='"3.3V" pins fed 3.8V per BOM/notes (modem dependent!)')
-co.R('1k','+3V8_MDM','MDM_LED_A'); co.LED('green','MDM_LED_A','MDM_LED_K',lcsc='C2297')
-co.p('Connector:SIM_Card','nano-SIM',{'VCC':'SIM_VCC','RST':'SIM_RST','CLK':'SIM_CLK','GND':'GND','VPP':None,'I/O':'SIM_IO'},prefix='J',mpn='NANO SIM XG6P',lcsc='C7529386',fp='genctl:NANO-SIM-XG6P',note='footprint shell pads 8-11: tie to GND in layout')
-co.p('Power_Protection:SRV05-4','SRV05-4',{'1':'SIM_RST','3':'SIM_CLK','4':'SIM_IO','6':None,'5':'SIM_VCC','2':'GND'},prefix='D',mpn='SRV05-4')
-co.C('100n','SIM_VCC','GND')
+# Internal USB2 headers direct from CM5 USB3-0/USB3-1 HS pairs (no hub, no USB-A host). SS pairs NC.
+for i,(dm,dp,lab) in enumerate((('USB30_DM','USB30_DP','Internal USB0 touch (SM04B)'),('USB31_DM','USB31_DP','Internal USB1 spare (SM04B)'))):
+    conn(co,4,['+5V',dm,dp,'GND'],lab,mpn='SM04B-SRSS-TB')
+    co.p('Power_Protection:USBLC6-2SC6','USBLC6-2SC6',{'1':dp,'6':dp,'3':dm,'4':dm,'5':'+5V','2':'GND'},prefix='D',mpn='USBLC6-2SC6')
 
 # =====================================================================
 di=S('display','Display: DSI->LVDS bridge, panel power, backlight, touch',
@@ -281,8 +275,8 @@ dec(di,'+1V8_DSI',4); di.C('10u','+1V8_DSI','GND',pkg='0805'); di.C('1u','DSI83_
 di.R('10k','DSI83_REFCLK','GND',note='REFCLK unused (clock from DSI): 10k to GND'); di.R('100k','DSI83_EN','GND'); di.C('10n','DSI83_EN','GND'); di.R('10k','DSI83_IRQ','CM5_3V3')
 di.p('genctl:TPS22918DBVR','TPS22918DBVR',{'VIN':'+3V3','ON':'PANEL_VDD_EN','CT':'PNL_CT','GND':'GND','VOUT':'+3V3_PANEL','QOD':'+3V3_PANEL'},mpn='TPS22918DBVR',note='panel VDD switch')
 di.C('1n','PNL_CT','GND'); di.R('100k','PANEL_VDD_EN','GND'); di.C('10u','+3V3_PANEL','GND',pkg='0805')
-di.p('genctl:TPS22918DBVR','TPS22918DBVR',{'VIN':'+3V3','ON':'TOUCH_PWR_EN','CT':'TCH_CT','GND':'GND','VOUT':'+3V3_TOUCH','QOD':'+3V3_TOUCH'},mpn='TPS22918DBVR',note='touch power switch')
-di.C('1n','TCH_CT','GND'); di.R('100k','TOUCH_PWR_EN','GND'); di.C('1u','+3V3_TOUCH','GND')
+di.p('genctl:TPS22918DBVR','TPS22918DBVR',{'VIN':'+3V3','ON':'PANEL_VDD_EN','CT':'TCH_CT','GND':'GND','VOUT':'+3V3_TOUCH','QOD':'+3V3_TOUCH'},mpn='TPS22918DBVR',note='touch power switch')
+di.C('1n','TCH_CT','GND'); di.C('1u','+3V3_TOUCH','GND')
 lv=['NC']*40
 for p in (2,3,4): lv[p-1]='+3V3_PANEL'
 for p in (6,7,10,13,16,19,22,25,28,31,32,33): lv[p-1]='GND'
@@ -391,7 +385,7 @@ inp.R('100k','DPLUS','DPLUS_SNS'); inp.R('10k','DPLUS_SNS','GND'); inp.C('100n',
 tvs(inp,'SMAJ36CA','VBAT_SENSE'); inp.R('100k','VBAT_SENSE','VBAT_SNS',note='0.1%'); inp.R('10k','VBAT_SNS','GND',note='0.1%'); inp.C('100n','VBAT_SNS','GND'); clamp(inp,'VBAT_SNS','BAT54S')
 
 # =====================================================================
-ou=S('outputs','Outputs: fuel/crank (TPS48100), 13x TPS1HTC30, watchdog gating, readback',
+ou=S('outputs','Outputs: fuel/crank (TPS48100), 15x TPS1HTC30, watchdog gating, readback',
  'OUTPUTS. All MCU enables gated by TPS3431 WDO (LVC1G08 for fuel/crank/glow, LVC541 OE for the rest). Fuel/crank: TPS48100 + 2x BSC070N10NS5 + 1mR shunt +\n'
  'INA281A2 from VBAT_ESTOP. Small outputs TPS1HTC30 from VBAT_P: ILIM 40.2k, SNS 1.1k -> TMUX1208 -> ADC. Readback via NPN to TCA9555 @0x23.')
 ou.p('genctl:TPS3431SDRBR','TPS3431SQDRBRQ1',{'VDD':'+3V3','EN':'+3V3','SET1':'+3V3','CWD':'WD_CWD','WDI':'WDI','GND':'GND','EP':'GND','WDO':'WDO_N','ENOUT':None},mpn='TPS3431SQDRBRQ1',lcsc='C2878091')
@@ -399,7 +393,7 @@ ou.R('10k','WD_CWD','+3V3',note='CWD via 10k to VDD = factory timing (assumed)')
 npn(ou,'WD_INV_B','GND','WD_OE_N'); ou.R('10k','WDO_N','WD_INV_B'); ou.R('100k','WD_INV_B','GND'); ou.R('10k','WD_OE_N','+3V3')
 for n in ('FUEL','CRANK','GLOW'):
     ou.p('74xGxx:74LVC1G08','74LVC1G08',{'1':n+'_EN_MCU','2':'WDO_N','4':n+'_EN','5':'+3V3','3':'GND'},prefix='U',mpn='SN74LVC1G08DBVR'); ou.C('100n','+3V3','GND'); ou.R('100k',n+'_EN','GND')
-small=['GCB_CL','GCB_OP','MCB_CL','MCB_OP']+['AUX%d'%i for i in range(1,9)]
+small=['GCB_CL','GCB_OP','MCB_CL','MCB_OP']+['AUX%d'%i for i in range(1,11)]
 for k in range(2):
     grp=small[k*8:(k+1)*8]; c={'~{OE1}':'WD_OE_N','~{OE2}':'WD_OE_N','VCC':'+3V3','GND':'GND'}
     for i in range(8):
@@ -432,17 +426,17 @@ rb=['FUEL','CRANK']+outs
 for n in rb:
     ou.R('10k',n+'_OUT',n+'_LED',pkg='1206',note='LED limit 10k (was 1k in BOM - too hot at 24V)'); ou.LED('green',n+'_LED','GND',lcsc='C2297')
     ou.R('100k',n+'_OUT',n+'_RBB'); ou.R('10k',n+'_RBB','GND'); npn(ou,n+'_RBB','GND',n+'_RB_N')
-tca(ou,3,{('P0%d'%i if i<8 else 'P1%d'%(i-8)):rb[i]+'_RB_N' for i in range(15)} | {'P17':None})
-mA=[mux[n] for n in outs[:8]]; mB=[mux[n] for n in outs[8:]]+['ESTOP_TRIP_SNSM','GND','GND']
+tca(ou,3,{('P0%d'%i if i<8 else 'P1%d'%(i-8)):rb[i]+'_RB_N' for i in range(16)})
+mA=[mux[n] for n in outs[:8]]; mB=[mux[n] for n in outs[8:]]+['ESTOP_TRIP_SNSM']
 for nm,lst in (('MUXA_OUT',mA),('MUXB_OUT',mB)):
     c={'D':nm,'A0':'MUX_A0','A1':'MUX_A1','A2':'MUX_A2','EN':'+3V3','VDD':'+3V3','GND':'GND','NC':None}
     for i,s_ in enumerate(lst): c['S%d'%(i+1)]=s_
     ou.p('genctl:TMUX1208PWR','TMUX1208PWR',c,mpn='TMUX1208PWR'); ou.C('100n','+3V3','GND'); ou.C('10n',nm,'GND')
 conn(ou,4,['VBAT_ESTOP','VBAT_ESTOP','FUEL_OUT','CRANK_OUT'],'J4 E-stop/fuel/crank (PC 5/4-7.62)',mpn='Phoenix PC 5/4-GF-7,62')
 conn(ou,6,['GLOW_OUT','GCB_CL_OUT','GCB_OP_OUT','MCB_CL_OUT','MCB_OP_OUT','ESTOP_TRIP_OUT'],'J5A outputs')
-conn(ou,6,['GND','GND','GND','GND',None,None],'J5B returns')
+conn(ou,6,['GND','GND','GND','GND','GND','GND'],'J5B returns')
 conn(ou,6,['AUX1_OUT','AUX2_OUT','AUX3_OUT','AUX4_OUT','AUX5_OUT','AUX6_OUT'],'J6A AUX1-6')
-conn(ou,6,['AUX7_OUT','AUX8_OUT','GND','GND','GND','GND'],'J6B AUX7-8 + returns')
+conn(ou,6,['AUX7_OUT','AUX8_OUT','AUX9_OUT','AUX10_OUT','GND','GND'],'J6B AUX7-10 + returns')
 
 # =====================================================================
 es=S('estop','E-stop trip and sense',
@@ -536,6 +530,7 @@ pins=[('P0%d'%k) for k in range(8)]+[('P1%d'%k) for k in range(8)]
 for addr,chunk in ((1,ch[0:16]),(4,ch[16:32]),(5,ch[32:36])):
     m={pn:None for pn in pins}
     for pn,net in zip(pins,chunk): m[pn]=net
+    if addr==5: m.update({'P04':'ROUTER_12V_EN','P05':'CM5_OFF','P06':'CM5_PWRBTN_MCU','P07':'PWR_FAIL_MCU','P10':'AUX9_MCU','P11':'AUX10_MCU','P12':'AUX10_RB_N'})
     tca(fp_,addr,m)
 fp_.R('1k','BTN_BL_PWM','BL_Q_B'); fp_.R('100k','BL_Q_B','GND',note='default off'); npn(fp_,'BL_Q_B','GND','BL_PG')
 fp_.R('10k','+5V','BL_PG',note='PFET gate pull-up'); fet(fp_,'Transistor_FET:AO3401A','AO3401A','BL_PG','+5V','BTN_LED_V')
@@ -600,7 +595,7 @@ RCX={  # (value, fp) -> lcsc for passives not in gen.RLCSC/CLCSC (all checked on
  ('27.4k',_r6):'C22964',('330R',_r6):'C23138',('35.7k',_r6):'C23027',('40.2k',_r6):'C12447',('43.2k',_r6):'C23053',('470R',_r6):'C23179',
  ('53.6k',_r6):'C23074',('680R',_r6):'C23228',('93.1k',_r6):'C23266',('1.1k',_r6):'C22764',('1.33k',_r6):'C22838',('13.3k',_r6):'C25952',
  ('10R',_r6):'C22936',('1M',_r12):'C17927',('120R',_r12):'C17909',('62R',_r12):'C17971',('10k',_r12):'C17902',('4.7k',_r12):'C17936',
- ('100R',_r12):'C319961',('1.1R','Resistor_SMD:R_0805_2012Metric'):'C2933354',('10R','Resistor_SMD:R_2512_6332Metric'):'C47019',
+ ('100R',_r12):'C319961',('715k',_r6):'C23237',('33.2k',_r6):'C23003',('29.4k',_r6):'C22974',('150R',_r12):'C17917',('1.1R','Resistor_SMD:R_0805_2012Metric'):'C2933354',('10R','Resistor_SMD:R_2512_6332Metric'):'C47019',
  ('100n','Capacitor_SMD:C_0805_2012Metric'):'C28233',('100n','Capacitor_SMD:C_1206_3216Metric'):'C1945',('100p',_c6):'C14858',
  ('10n',_c6):'C57112',('18p','Capacitor_SMD:C_0402_1005Metric'):'C1549',('2.2u','Capacitor_SMD:C_0805_2012Metric'):'C5137595',
  ('220p',_c6):'C1603',('270p',_c6):'C1608',('4.7n','Capacitor_SMD:C_1206_3216Metric'):'C41017',('4.7u','Capacitor_SMD:C_0805_2012Metric'):'C1779',
@@ -616,7 +611,7 @@ CONNFP={  # value prefix -> (fp, lcsc, mpn)
  'LVDS FPC':('genctl:FPC_40P_0.5_05A20L40P','C5362161','05A20L40P'),'Touch FPC':('genctl:FPC_10P_0.5_05B20L10P','C5362168','05B20L10P'),
  'Backlight':('genctl:SM02B-BHSS-1-TB','C485339','SM02B-BHSS-1-TB'),
  'CAN1':('genctl:WJ15EDGRC-3.81-4P','C7245','WJ15EDGRC-3.81-04P'),'Expansion':('genctl:WJ15EDGRC-3.81-6P','C7246','WJ15EDGRC-3.81-06P'),
- 'RS-485':('genctl:WJ15EDGRC-3.81-3P','C8406','WJ15EDGRC-3.81-03P'),
+ 'RS-485':('genctl:WJ15EDGRC-3.81-3P','C8406','WJ15EDGRC-3.81-03P'),'Router':('genctl:WJ15EDGRC-3.81-2P','C8387','WJ15EDGRC-3.81-02P'),
  'J9 CT':('genctl:KF2EDGRM-5.08-8P','C441294','KF2EDGRM-5.08-8P'),
 }
 def _fill(pt):

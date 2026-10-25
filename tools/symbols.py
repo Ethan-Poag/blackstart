@@ -26,6 +26,8 @@ TYPES={
  'LMR36506RRPER':dict(PGOOD='C',VIN='W',FB='I',GND='W',RT='I',VCC='w',**{'EN/UVLO':'I'}),
  'USB3_A_Receptacle':{},
  'AC1005':{'3':'N'},
+ 'TPS2121RUXR':dict(**{'8':'P'},IN1='W',IN2='W',OUT='w',GND='W',PR1='I',CP2='I',OV1='I',OV2='I'),
+ 'TPS61023DRLR':dict(VIN='W',EN='I',FB='I',GND='W',VOUT='w'),
  'TPS2116DRLR':dict(**{'7':'P'},GND='W',VOUT='w',VIN1='W',VIN2='W',PR1='I',MODE='I',ST='C'),
 }
 def ic(name,*a,**k): return _ic(name,*a,types=TYPES.get(name),**k)
@@ -95,4 +97,6 @@ for nm,rng in (('RPi_CM5_A',range(1,101)),('RPi_CM5_B',range(101,201))):
 ic('USB3_A_Receptacle', P((1,'VBUS'),(2,'D-'),(3,'D+'),(4,'GND'),(5,'SSRX-'),(6,'SSRX+'),(7,'GND_DRAIN'),(8,'SSTX-'),(9,'SSTX+')), P((10,'SHIELD'),), ref='J', desc='USB 3.0 Type-A receptacle, THT right-angle, Hong Cheng HC-USB3.0-L168-WP (DS pins 1-9 std USB3 StdA, 2 shell pads = 10)', mfr='Hong Cheng', mpn='HC-USB3.0-L168-WP', lcsc='C7501850', fp='genctl:USB3_A_HC-USB3.0-L168-WP')
 ic('CR2032_Holder', P((1,'+')), P((2,'-')), ref='BT', desc='CR2032 SMD holder', mfr='MYOUNG', mpn='BS-CR2032-8', fp='genctl:BS-CR2032-8', lcsc='C7498149')
 ic('LMR36506RRPER', P((4,'VIN'),(3,'EN/UVLO'),(1,'RT'),(8,'FB'),(9,'GND')), P((5,'SW'),(6,'BOOT'),(7,'VCC'),(2,'PGOOD')), desc='3-65V 0.6A sync buck, VQFN-HR-9 2x2 (RPE)', mfr='TI', mpn='LMR36506RRPER', fp='genctl:LMR36506_VQFN-HR-9_RPE', lcsc='C2870127')
+ic('TPS2121RUXR', P((7,'IN1'),(2,'IN2'),(6,'PR1'),(3,'CP2'),(5,'OV1'),(4,'OV2'),(12,'GND')), P((1,'OUT'),(8,'OUT'),(9,'ST'),(10,'ILM'),(11,'SS')), desc='2.8-22V 4.5A priority power mux, VQFN-HR-12 (RUX)', mfr='TI', mpn='TPS2121RUXR', fp='genctl:TPS2121_VQFN-HR-12_RUX', lcsc='C485916')
+ic('TPS61023DRLR', P((3,'VIN'),(2,'EN'),(1,'FB'),(4,'GND')), P((6,'VOUT'),(5,'SW')), desc='0.5-5.5V in 3.7A boost, SOT-563', mfr='TI', mpn='TPS61023DRLR', fp='Package_TO_SOT_SMD:SOT-563', lcsc='C919459')
 ic('TPS2116DRLR', P((3,'VIN1'),(6,'VIN2'),(4,'PR1'),(5,'MODE'),(1,'GND')), P((2,'VOUT'),(7,'VOUT'),(8,'ST')), desc='1.6-5.5V 2.5A power mux, SOT-583-8', mfr='TI', mpn='TPS2116DRLR', fp='Package_TO_SOT_SMD:SOT-583-8', lcsc='C3235557')
