@@ -14,3 +14,12 @@
   (condition "A.hasNetclass('HV_LINE_DIV') && B.Type != 'Zone'")
   (constraint clearance (min 1.5mm)))
 # Inner layers: HV_LINE netclass clearance (1.5 mm) applies.
+
+# Board-setup minimums were lowered to 0.3/0.15 mm (0.075 annular) ONLY so the
+# SN65DSI83 0.5 mm-pitch BGA (U21) can use filled+capped via-in-pad.  Everywhere
+# else the old 0.4/0.2 mm (0.1 annular) via minimum is still enforced here.
+(rule "via min outside U21 BGA"
+  (condition "A.Type == 'Via' && !A.intersectsCourtyard('U21')")
+  (constraint via_diameter (min 0.4mm))
+  (constraint hole_size (min 0.2mm))
+  (constraint annular_width (min 0.1mm)))

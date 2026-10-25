@@ -19,3 +19,33 @@
 - **The HV creepage/clearance values have NOT been verified against IEC 60664-1 / UL 61010 / the actual pollution degree and overvoltage category. They need professional review before fabrication.**
 - +3V3_SAFE stays on inner layer 3 (PWR). Panel jacks left as placed; a small jack daughterboard is recommended (see ENCLOSURE_DFM).
 - DRC: 0 errors, 499 unconnected (unrouted). Fanout had no room for 15 pads (listed in route_v4 output).
+
+## Milestone 2: critical nets hand-routed (2026-10-25)
+- handroute_v4.py is a pcbnew-python and numba grid A* router: 0.1 mm grid on F.Cu, In2 and B.Cu, through vias, and clearances that follow genctl_v4.kicad_dru. handroute_iter.py reruns it up to 6 times with failed jobs moved to the front (rip-up and retry) and keeps the best pass.
+- seat_iso_series.py: moved R413 to R419, the MCU-side isolator series resistors, out of the HV box (around x 58) to the LV side (x 75 or more). The placer had put LV parts on the HV side of the barrier, which was a real isolation bug.
+- U21 (SN65DSI83, 0.5 mm BGA) uses 0.3/0.15 mm filled via-in-pad. The board-setup via minimum is lowered for this, and genctl_v4.kicad_dru still enforces 0.4/0.2 mm everywhere else.
+- All hand-routed tracks and vias are LOCKED. In the Specctra DSN they are marked (type protect) so Freerouting cannot move them.
+- Result: 75/91 jobs (nets or pairs) fully routed. Partially routed or failed: GEN_VA_N, ADE_XO, AC_RST_N, LVDS1_P, LVDS2_P, LVDSC_P, DSI_D0_P, DSI_D1_P, DSI_D2_P, AC_MOSI, DSI_D3_P, Net-(R455-Pad2), Net-(R471-Pad2), BUS_VB_P, Net-(R464-Pad2), ETH2_P.
+- Pair method: P is routed first. N then follows P at gap+w using a distance-band cost. This is not a true coupled router, so coupling breaks near vias and pins. No serpentine length tuning has been done yet. Intra-pair skew (mm):
+
+| pair | ok | P len | skew | vias P/N |
+|---|---|---|---|---|
+| LVDS1_P | False | 0.0 | 39.37 | 0/1 |
+| LVDS2_P | False | 0.0 | 39.34 | 0/2 |
+| LVDSC_P | False | 0.0 | 0.0 | 0/0 |
+| DSI_D0_P | False | 0.0 | 120.53 | 0/2 |
+| DSI_D1_P | False | 0.0 | 120.21 | 0/2 |
+| LVDS3_P | True | 42.52 | 1.84 | 1/1 |
+| DSI_C_P | True | 119.93 | 0.62 | 2/2 |
+| ETH3_P | True | 68.19 | 1.64 | 0/4 |
+| DSI_D2_P | False | 0.0 | 119.4 | 0/4 |
+| DSI_D3_P | False | 0.0 | 119.24 | 0/2 |
+| ETH1_P | True | 62.8 | 1.72 | 2/6 |
+| USB31_DP | True | 45.96 | 3.19 | 2/5 |
+| LVDS0_P | True | 41.47 | 3.49 | 1/5 |
+| USB30_DP | True | 143.22 | 0.14 | 4/5 |
+| ETH0_P | True | 56.19 | 4.46 | 3/5 |
+| ETH2_P | False | 77.07 | 9.02 | 4/3 |
+
+**These skews are far above the usual targets (around 0.1 to 0.15 mm intra-pair for USB, DSI and LVDS). Before fab, every pair needs coupled re-routing and tuning in KiCad's interactive router (Route → Differential Pair, Tune Skew).** The LVDS and DSI escape from the U21 BGA is the bottleneck.
+- DRC on genctl_v4_handrouted.kicad_pcb: see drc_v4_handrouted.rpt.

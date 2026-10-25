@@ -1,0 +1,850 @@
+{
+ "report": [
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_VA_N",
+   "ok": false,
+   "length": 0.0,
+   "vias": 0,
+   "failed": [
+    "R428.2",
+    "C260.1"
+   ]
+  },
+  {
+   "group": "xtal",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/ADE_XO",
+   "ok": false,
+   "length": 8.41,
+   "vias": 0,
+   "failed": [
+    "U72.29"
+   ]
+  },
+  {
+   "group": "ade",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/AC_RST_N",
+   "ok": false,
+   "length": 46.75,
+   "vias": 0,
+   "failed": [
+    "U72.6"
+   ]
+  },
+  {
+   "group": "ade",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/AC_SCK",
+   "ok": true,
+   "length": 61.07,
+   "vias": 3,
+   "failed": []
+  },
+  {
+   "group": "lvds",
+   "net": "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS1_P",
+   "pair": "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS1_N",
+   "ok": false,
+   "length": 0.0,
+   "length_n": 39.37,
+   "skew": 39.37,
+   "vias": 0,
+   "vias_n": 1,
+   "failed": [
+    "U21.D8"
+   ]
+  },
+  {
+   "group": "lvds",
+   "net": "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS2_P",
+   "pair": "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS2_N",
+   "ok": false,
+   "length": 0.0,
+   "length_n": 39.34,
+   "skew": 39.34,
+   "vias": 0,
+   "vias_n": 2,
+   "failed": [
+    "U21.E8"
+   ]
+  },
+  {
+   "group": "lvds",
+   "net": "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDSC_P",
+   "pair": "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDSC_N",
+   "ok": false,
+   "length": 0.0,
+   "length_n": 0.0,
+   "skew": 0.0,
+   "vias": 0,
+   "vias_n": 0,
+   "failed": [
+    "U21.F8",
+    "U21.F9"
+   ]
+  },
+  {
+   "group": "dsi",
+   "net": "DSI_D0_P",
+   "pair": "DSI_D0_N",
+   "ok": false,
+   "length": 0.0,
+   "length_n": 120.53,
+   "skew": 120.53,
+   "vias": 0,
+   "vias_n": 2,
+   "failed": [
+    "U21.H3"
+   ]
+  },
+  {
+   "group": "dsi",
+   "net": "DSI_D1_P",
+   "pair": "DSI_D1_N",
+   "ok": false,
+   "length": 0.0,
+   "length_n": 120.21,
+   "skew": 120.21,
+   "vias": 0,
+   "vias_n": 2,
+   "failed": [
+    "U21.H4"
+   ]
+  },
+  {
+   "group": "lvds",
+   "net": "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS3_P",
+   "pair": "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS3_N",
+   "ok": true,
+   "length": 42.52,
+   "length_n": 44.36,
+   "skew": 1.84,
+   "vias": 1,
+   "vias_n": 1,
+   "failed": []
+  },
+  {
+   "group": "dsi",
+   "net": "DSI_C_P",
+   "pair": "DSI_C_N",
+   "ok": true,
+   "length": 119.93,
+   "length_n": 120.54,
+   "skew": 0.62,
+   "vias": 2,
+   "vias_n": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VC_N",
+   "ok": true,
+   "length": 28.96,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "ade",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/AC_MISO",
+   "ok": true,
+   "length": 64.0,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "eth",
+   "net": "ETH3_P",
+   "pair": "ETH3_N",
+   "ok": true,
+   "length": 68.19,
+   "length_n": 69.83,
+   "skew": 1.64,
+   "vias": 0,
+   "vias_n": 4,
+   "failed": []
+  },
+  {
+   "group": "dsi",
+   "net": "DSI_D2_P",
+   "pair": "DSI_D2_N",
+   "ok": false,
+   "length": 0.0,
+   "length_n": 119.4,
+   "skew": 119.4,
+   "vias": 0,
+   "vias_n": 4,
+   "failed": [
+    "U21.H6"
+   ]
+  },
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_VC_P",
+   "ok": true,
+   "length": 37.54,
+   "vias": 4,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R456-Pad2)",
+   "ok": true,
+   "length": 18.65,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R470-Pad2)",
+   "ok": true,
+   "length": 26.61,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "ade",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/AC_CS2_N",
+   "ok": true,
+   "length": 25.68,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "ade",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/ADE_MISO_I",
+   "ok": true,
+   "length": 3.49,
+   "vias": 0,
+   "failed": []
+  },
+  {
+   "group": "ade",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/ADE_MOSI_I",
+   "ok": true,
+   "length": 2.6,
+   "vias": 0,
+   "failed": []
+  },
+  {
+   "group": "ade",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/ADE_SCK_I",
+   "ok": true,
+   "length": 2.39,
+   "vias": 0,
+   "failed": []
+  },
+  {
+   "group": "ade",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/AC_MOSI",
+   "ok": false,
+   "length": 24.18,
+   "vias": 2,
+   "failed": [
+    "U72.39"
+   ]
+  },
+  {
+   "group": "dsi",
+   "net": "DSI_D3_P",
+   "pair": "DSI_D3_N",
+   "ok": false,
+   "length": 0.0,
+   "length_n": 119.24,
+   "skew": 119.24,
+   "vias": 0,
+   "vias_n": 2,
+   "failed": [
+    "U21.H7"
+   ]
+  },
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VC_P",
+   "ok": true,
+   "length": 28.07,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R455-Pad2)",
+   "ok": false,
+   "length": 0.0,
+   "vias": 0,
+   "failed": [
+    "R456.1"
+   ]
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R457-Pad2)",
+   "ok": true,
+   "length": 62.86,
+   "vias": 3,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R471-Pad2)",
+   "ok": false,
+   "length": 0.0,
+   "vias": 0,
+   "failed": [
+    "R471.2"
+   ]
+  },
+  {
+   "group": "eth",
+   "net": "ETH1_P",
+   "pair": "ETH1_N",
+   "ok": true,
+   "length": 62.8,
+   "length_n": 64.51,
+   "skew": 1.72,
+   "vias": 2,
+   "vias_n": 6,
+   "failed": []
+  },
+  {
+   "group": "usb",
+   "net": "USB31_DP",
+   "pair": "USB31_DM",
+   "ok": true,
+   "length": 45.96,
+   "length_n": 42.77,
+   "skew": 3.19,
+   "vias": 2,
+   "vias_n": 5,
+   "failed": []
+  },
+  {
+   "group": "lvds",
+   "net": "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS0_P",
+   "pair": "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS0_N",
+   "ok": true,
+   "length": 41.47,
+   "length_n": 44.96,
+   "skew": 3.49,
+   "vias": 1,
+   "vias_n": 5,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VB_P",
+   "ok": false,
+   "length": 0.0,
+   "vias": 0,
+   "failed": [
+    "R460.2",
+    "C267.1"
+   ]
+  },
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_VB_P",
+   "ok": true,
+   "length": 16.18,
+   "vias": 0,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R437-Pad2)",
+   "ok": true,
+   "length": 47.28,
+   "vias": 0,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R445-Pad2)",
+   "ok": true,
+   "length": 6.04,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R464-Pad2)",
+   "ok": false,
+   "length": 0.0,
+   "vias": 0,
+   "failed": [
+    "R465.1"
+   ]
+  },
+  {
+   "group": "ade",
+   "net": "ADE_SCK",
+   "ok": true,
+   "length": 89.19,
+   "vias": 0,
+   "failed": []
+  },
+  {
+   "group": "usb",
+   "net": "USB30_DP",
+   "pair": "USB30_DM",
+   "ok": true,
+   "length": 143.22,
+   "length_n": 143.36,
+   "skew": 0.14,
+   "vias": 4,
+   "vias_n": 5,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_L1",
+   "ok": true,
+   "length": 16.2,
+   "vias": 1,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_L2",
+   "ok": true,
+   "length": 2.71,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_L3",
+   "ok": true,
+   "length": 2.81,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_N",
+   "ok": true,
+   "length": 3.83,
+   "vias": 4,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VA_N",
+   "ok": true,
+   "length": 27.17,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VB_N",
+   "ok": true,
+   "length": 26.48,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VB_TAP",
+   "ok": true,
+   "length": 44.67,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VC_TAP",
+   "ok": true,
+   "length": 51.41,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VN_TAP",
+   "ok": true,
+   "length": 33.36,
+   "vias": 0,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_L1",
+   "ok": true,
+   "length": 13.47,
+   "vias": 1,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_L2",
+   "ok": true,
+   "length": 8.76,
+   "vias": 1,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_L3",
+   "ok": true,
+   "length": 20.04,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_N",
+   "ok": true,
+   "length": 10.3,
+   "vias": 3,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_VA_P",
+   "ok": true,
+   "length": 21.83,
+   "vias": 0,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_VB_N",
+   "ok": true,
+   "length": 23.4,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_VC_N",
+   "ok": true,
+   "length": 25.36,
+   "vias": 3,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_VN_TAP",
+   "ok": true,
+   "length": 76.15,
+   "vias": 4,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R422-Pad2)",
+   "ok": true,
+   "length": 2.4,
+   "vias": 0,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R423-Pad2)",
+   "ok": true,
+   "length": 12.8,
+   "vias": 0,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R424-Pad2)",
+   "ok": true,
+   "length": 14.83,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R425-Pad2)",
+   "ok": true,
+   "length": 26.73,
+   "vias": 3,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R429-Pad2)",
+   "ok": true,
+   "length": 2.65,
+   "vias": 0,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R430-Pad2)",
+   "ok": true,
+   "length": 2.51,
+   "vias": 0,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R431-Pad2)",
+   "ok": true,
+   "length": 3.73,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R432-Pad2)",
+   "ok": true,
+   "length": 57.58,
+   "vias": 4,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R436-Pad2)",
+   "ok": true,
+   "length": 11.62,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R438-Pad2)",
+   "ok": true,
+   "length": 15.93,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R439-Pad2)",
+   "ok": true,
+   "length": 95.87,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R443-Pad2)",
+   "ok": true,
+   "length": 14.79,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R444-Pad2)",
+   "ok": true,
+   "length": 30.87,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R448-Pad2)",
+   "ok": true,
+   "length": 33.59,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R449-Pad2)",
+   "ok": true,
+   "length": 7.77,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R450-Pad2)",
+   "ok": true,
+   "length": 12.47,
+   "vias": 0,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R451-Pad2)",
+   "ok": true,
+   "length": 63.06,
+   "vias": 4,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R462-Pad2)",
+   "ok": true,
+   "length": 31.58,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R463-Pad2)",
+   "ok": true,
+   "length": 106.52,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "hv",
+   "net": "Net-(R469-Pad2)",
+   "ok": true,
+   "length": 2.2,
+   "vias": 0,
+   "failed": []
+  },
+  {
+   "group": "xtal",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/ADE_XI",
+   "ok": true,
+   "length": 2.56,
+   "vias": 0,
+   "failed": []
+  },
+  {
+   "group": "xtal",
+   "net": "/STM32H743 safety MCU/HSE_IN",
+   "ok": true,
+   "length": 4.16,
+   "vias": 0,
+   "failed": []
+  },
+  {
+   "group": "xtal",
+   "net": "/STM32H743 safety MCU/HSE_OUT",
+   "ok": true,
+   "length": 4.81,
+   "vias": 0,
+   "failed": []
+  },
+  {
+   "group": "xtal",
+   "net": "Net-(U7-PC14)",
+   "ok": true,
+   "length": 6.25,
+   "vias": 0,
+   "failed": []
+  },
+  {
+   "group": "xtal",
+   "net": "Net-(U7-PC15)",
+   "ok": true,
+   "length": 19.14,
+   "vias": 0,
+   "failed": []
+  },
+  {
+   "group": "ade",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/AC_CS1_N",
+   "ok": true,
+   "length": 28.99,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "ade",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/AC_IRQ_N",
+   "ok": true,
+   "length": 52.58,
+   "vias": 3,
+   "failed": []
+  },
+  {
+   "group": "ade",
+   "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/ADE_IRQ_N_I",
+   "ok": true,
+   "length": 5.95,
+   "vias": 0,
+   "failed": []
+  },
+  {
+   "group": "ade",
+   "net": "ADE_CS1_N",
+   "ok": true,
+   "length": 86.76,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "ade",
+   "net": "ADE_CS2_N",
+   "ok": true,
+   "length": 93.3,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "ade",
+   "net": "ADE_IRQ_N",
+   "ok": true,
+   "length": 128.2,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "ade",
+   "net": "ADE_MISO",
+   "ok": true,
+   "length": 86.48,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "ade",
+   "net": "ADE_MOSI",
+   "ok": true,
+   "length": 88.65,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "ade",
+   "net": "ADE_RST_N",
+   "ok": true,
+   "length": 93.09,
+   "vias": 2,
+   "failed": []
+  },
+  {
+   "group": "eth",
+   "net": "ETH0_P",
+   "pair": "ETH0_N",
+   "ok": true,
+   "length": 56.19,
+   "length_n": 60.65,
+   "skew": 4.46,
+   "vias": 3,
+   "vias_n": 5,
+   "failed": []
+  },
+  {
+   "group": "eth",
+   "net": "ETH2_P",
+   "pair": "ETH2_N",
+   "ok": false,
+   "length": 77.07,
+   "length_n": 68.05,
+   "skew": 9.02,
+   "vias": 4,
+   "vias_n": 3,
+   "failed": [
+    "D18.2",
+    "D18.9"
+   ]
+  }
+ ],
+ "failed": [
+  "/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_VA_N",
+  "/AC metering: 2x ADE9000 (gen + bus), isolated/ADE_XO",
+  "/AC metering: 2x ADE9000 (gen + bus), isolated/AC_RST_N",
+  "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS1_P",
+  "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDS2_P",
+  "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDSC_P",
+  "DSI_D0_P",
+  "DSI_D1_P",
+  "DSI_D2_P",
+  "/AC metering: 2x ADE9000 (gen + bus), isolated/AC_MOSI",
+  "DSI_D3_P",
+  "Net-(R455-Pad2)",
+  "Net-(R471-Pad2)",
+  "/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VB_P",
+  "Net-(R464-Pad2)",
+  "ETH2_P"
+ ]
+}
