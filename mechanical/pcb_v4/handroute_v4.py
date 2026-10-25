@@ -373,7 +373,7 @@ def route_net(code, w=None, cost=None, viac=300.0, margin=8.0, allow_layers=(0, 
             pass
         tgt = pad_mask(code, win, rest)
         tp = np.array([[gy(mm(p.GetPosition().y)) - y0, gx(mm(p.GetPosition().x)) - x0] for p in rest], np.float64)
-        srcm = src | own_new_copper(code, win)
+        srcm = (src | own_new_copper(code, win)) & ~tgt   # escape copper at the target is not a source
         path = astar(free.astype(np.uint8), vfree.astype(np.uint8), cost, srcm, tgt, tp, viac)
         if not path:
             return dict(ok=False, length=total, vias=vias, failed=[f"{p.GetParentFootprint().GetReference()}.{p.GetNumber()}" for p in rest], pts=allpts)
