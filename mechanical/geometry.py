@@ -25,7 +25,7 @@ BTN_PITCH = AA_W / BTN_N                    # 43.52: one key per 1/6 of active a
 # PANEL V2 (2026-10-24): wide caps spanning the TFT active width edge to edge, 6 above + 6 below
 WINDOW_GAP = 0.5                            # glass edge -> window wall, per side (glass tol +-0.3)
 CAP_GAP = 0.5                               # gap between adjacent caps (only what the slot/seal needs)
-CAP_W = BTN_PITCH - CAP_GAP                 # 43.02 (outer caps flush with AA edges: row = 261.12 exactly)
+CAP_W = 24.0                                # ENCLOSURE rev C: 24 x 12 SLA caps in own pockets (V2 was 43.02 = pitch - gap)
 CAP_H = 12.0                                # finger/glove height
 CAP_SLOT_CLR = 0.25                         # cap -> panel slot wall, per side
 WEB = 2.5                                   # aluminium web between display window and key slot
@@ -79,5 +79,33 @@ BOARD = (BOARD_X0, BOARD_Y0, BOARD_X0 + BOARD_W, BOARD_Y0 + BOARD_H)
 BOARD_CORNER_R = 2.0
 
 # M3 standoff holes in the key rows outside the caps' switch/guide area
+# rev C: H1-H3 = M4 screws into bezel bosses (D4.3, 9 mm pad); H4 = D9.5 NPTH clearance for the bezel PE boss.
+# H4 moved inward from (274.56, 188.71) (only 0.97 mm web to the right edge) to (272.0, 185.5): 3.5 / 4.5 mm webs.
 MOUNT_HOLES = [("H1", 2.0, BTN_Y_TOP), ("H2", GLASS_W - 2.0, BTN_Y_TOP),
-               ("H3", 2.0, BTN_Y_BOT), ("H4", GLASS_W - 2.0, BTN_Y_BOT)]
+               ("H3", 2.0, BTN_Y_BOT), ("H4", 272.0, 185.5)]
+M4_HOLE_D, M4_PAD_D = 4.3, 9.0
+PE_HOLE_D = 9.5
+
+# ---------------- ENCLOSURE rev C constraints (enclosure/ENCLOSURE_DFM.md, enclosure.py) ----------------
+# Shell 294 x 220 is the OUTER size: board + 2 x (2.0 clearance + 3.0 wall) -> inside 288 x 214 = board 284 x 210 + 2 x 2.0. Consistent.
+SHELL_CLR, SHELL_WALL = 2.0, 3.0
+SHELL_POSTS = [(100, 60), (100, 140), (240, 60), (240, 140)]   # PA12 anti-flex posts, D10 B-side keep-out each
+SHELL_POST_KO = 10.0
+SW_KO_W, SW_KO_H = 13.0, 16.0                                   # clear area round each 228E switch (x by y)
+_cx, _cy = BOARD_X0 + BOARD_W / 2, BOARD_Y0 + BOARD_H / 2
+CLAMPS = [(BTN_X[1], "T"), (BTN_X[4], "T"), (BTN_X[1], "B"), (BTN_X[4], "B"), (_cy, "L"), (_cy, "R")]  # hook clamps (outside shell)
+def clamp_marks(depth=4.0, length=24.0):
+    """board-edge marker boxes opposite the 6 hook clamps (hooks stay OUTSIDE the shell in rev C; advisory only)."""
+    x0, y0, x1, y1 = BOARD
+    out = []
+    for p, s in CLAMPS:
+        if s == "T": out.append((p - length / 2, y0, p + length / 2, y0 + depth))
+        if s == "B": out.append((p - length / 2, y1 - depth, p + length / 2, y1))
+        if s == "L": out.append((x0, p - length / 2, x0 + depth, p + length / 2))
+        if s == "R": out.append((x1 - depth, p - length / 2, x1, p + length / 2))
+    return out
+# gaps between switch keep-outs along the key rows (where edge terminals go): width = pitch - 13 = 30.52
+KEY_GAP_X = [(a + b) / 2 for a, b in zip(BTN_X, BTN_X[1:])]
+KEY_GAP_W = BTN_PITCH - SW_KO_W
+# shell rear windows (enclosure.py): top/bottom x 38..243 (13 deep), right x BOARD_X1-20 .. BOARD_X1, y 20..175
+

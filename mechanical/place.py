@@ -1,90 +1,105 @@
 #!/usr/bin/env python3
-"""Blackstart / genctl scripted placement skeleton (KiCad 9 pcbnew API).
+"""Blackstart / genctl scripted placement, v3 (enclosure rev C). KiCad 9 pcbnew API.
 
-Builds a .kicad_pcb from a KiCad XML/S-expr netlist (kicad-cli sch export netlist)
-OR re-places footprints in an existing .kicad_pcb, then:
-  * draws the board outline (Edge.Cuts, rounded rect) from geometry.py
-  * places FIXED parts (buttons, mounting holes, display connectors, edge connectors)
-  * packs every other footprint into its ZONE (shelf packing, courtyard bbox)
-    or, with --quilter, leaves non-fixed parts OUTSIDE the outline (Quilter
-    treats anything inside the outline as locked and places the rest itself)
-  * adds Quilter-style placement regions (rule areas, all keepout items off)
-    and real keepouts, 6-layer stackup with GND/PWR named planes.
-
+Builds a .kicad_pcb from a KiCad netlist (kicad-cli sch export netlist), then
+  * outline 284 x 210 (geometry.py), 6 layers + JLC rules
+  * FIXED parts: 12 x CTS 228E keys (F), H1-H3 M4 (D4.3, 9 mm pad), H4 D9.5 PE-boss clearance (NPTH),
+    display connectors (F), CM5 DF40 connectors (B), ISOW7841/ISO7741 straddling the 600 V barrier
+  * edge terminals: KF2EDGRM 5.08 headers one per key gap (top/bottom), 600 V Phoenix on the left edge,
+    comms / battery / fuel-crank on the right edge; wire-entry side of each body points at the board edge
+  * every other part shelf-packed into its block zone (B side), avoiding keys, posts, CM5 body, strap corridor
+  * barrier keep-outs (13 mm, all layers), isolator windows, 1.5 mm inter-phase slots under J28/J29,
+    shell-post / switch / strap / PE-ring keep-outs, Quilter placement regions, silkscreen title.
 Usage:
-  kicad-cli sch export netlist -o genctl.net <copy>/genctl.kicad_sch
-  python3 place.py --netlist genctl.net --out out/genctl_placed.kicad_pcb [--quilter] [--slots]
-  python3 place.py --pcb existing.kicad_pcb --out out/x.kicad_pcb       # re-place only
-Coordinates: see geometry.py (mm, origin glass top-left, front view; F side faces display).
-STATUS: skeleton. Edge-connector rotations and CM5 connector offset are PLACEHOLDERS (marked TODO).
+  kicad-cli sch export netlist -o genctl.net snap/genctl.kicad_sch
+  python3 place.py --netlist genctl.net --out out/genctl_placed_v3.kicad_pcb [--quilter]
+Coordinates: geometry.py (mm, origin = glass top-left, FRONT view, y down; F side faces the display).
 """
-import argparse, os, re, sys
+import argparse, os, re, sys, math
 import pcbnew
 import geometry as g
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-PROJ_LIB = os.path.join(HERE, "snap", "genctl.pretty")   # read-only snapshot of repo lib
+PROJ_LIB = os.path.join(HERE, "snap", "genctl.pretty")   # refreshed copy of the repo lib (all genctl:* footprints)
 STOCK = "/usr/share/kicad/footprints"
 MM = pcbnew.FromMM
+X0, Y0, X1, Y1 = g.BOARD
+KEY_TOP_Y1 = g.BTN_Y_TOP + g.SW_KO_H / 2          # -1.25: bottom of the top key band keep-out
+KEY_BOT_Y0 = g.BTN_Y_BOT - g.SW_KO_H / 2          # 180.71
 
-# ---------------------------------------------------------------- tables
-# FIXED: ref -> (x, y, rot_deg, side)   side 'F' (toward display) or 'B' (rear)
+# ---------------- 600 V metering block and barrier (docs/ISOLATION_CHECK.md: >=13 mm copper-free on FR-4)
+BARRIER = 13.0
+HV = (X0, 11.0, 60.0, 162.0)                      # hot copper only inside this box (top-left)
+BAR_X = (HV[2], HV[2] + BARRIER)                  # vertical barrier band x 60..73
+LV_X0 = BAR_X[1] + 1.0                            # 74: first LV column
+ISO_Y = {"U69": 62.0, "U70": 98.0}                # ISOW7841 / ISO7741 straddle the barrier (slot in footprint)
+ISO_WIN = 11.0                                    # half-height of the barrier gap at each isolator (= its 21 mm slot + margin)
+
+# ---------------- CM5 + heat strap to M4 boss H2 (top-right)
+CM5 = (203.0, 1.0, 258.0, 41.0)                   # module outline (55 x 40, B side, 1.5 mm stack: nothing under it)
+CM5_CONN_DY = 34.0                                # DF40 centres 34 mm apart, 3 mm in from the 55 mm edges (CM4/CM5 datasheet)
+STRAP_KO = (247.0, -14.8, 279.8, 3.8)             # strap corridor heatsink top-right -> H2 lug: B side, no parts
+H2 = next((x, y) for r, x, y in g.MOUNT_HOLES if r == "H2")
+
 FIXED = {ref: (x, y, 0, "F") for ref, x, y in g.buttons()}
 FIXED.update({ref: (x, y, 0, "F") for ref, x, y in g.MOUNT_HOLES})
+cm5x = (CM5[0] + CM5[2]) / 2
 FIXED.update({
-    # display interconnect, F side (in the gap behind the display), short cables
-    "J14": (g.LVDS_ZIF_PIN1[0] + 10, g.SRC_PCB_BAND[1] - 8, 0, "F"),  # LVDS 40p FFC, just above source-PCB band
-    "J15": (sum(g.TOUCH_TAIL_X) / 2, g.GLASS_H - 6, 0, "F"),          # touch 10p, tail folds back (VERIFY tail length)
-    "J16": (12.0, 14.0, 0, "F"),                                        # backlight, 200 mm cable reaches anywhere
+    "J14": (g.LVDS_ZIF_PIN1[0] + 10, g.SRC_PCB_BAND[1] - 8, 0, "F"),  # LVDS 40p FFC, just above the TFT source-PCB band
+    "J15": (sum(g.TOUCH_TAIL_X) / 2, g.GLASS_H - 6, 0, "F"),          # touch 10p (VERIFY tail length vs STEP)
+    "J16": (12.0 + 70, 18.0, 0, "F"),                                   # backlight: moved out of the HV block (200 mm cable)
     "J12": (sum(g.TOUCH_TAIL_X) / 2 - 20, g.GLASS_H - 6, 0, "F"),     # touch USB alt (SM04B)
-    # CM5 carrier connectors, B side. TODO: copy exact U9/U10 offset from RPi CM5 IO board design files
-    "U9":  (160.0, 85.0, 0, "B"),
-    "U10": (160.0, 85.0 + 28.0, 0, "B"),   # PLACEHOLDER spacing
+    # TODO verify: +-2.5 mm x offset of the DF40 pair and which one is A, against the CM5 IO board KiCad files
+    "U9":  (cm5x, CM5[1] + 3.0, 0, "B"),
+    "U10": (cm5x, CM5[1] + 3.0 + CM5_CONN_DY, 0, "B"),
 })
 
-# EDGE strips: connectors auto-spaced along an edge (B side, wire entry outward).
-# Long axis is aligned to the edge automatically; ROT is an extra per-edge offset
-# (0/180) to point the wire entry outward. TODO verify entry direction per footprint in pcbnew.
-TB_SLOTS = [(g.BOARD[0] + g.BTN_X[0] - 5.6) / 2] + \
-           [(a + b) / 2 for a, b in zip(g.BTN_X, g.BTN_X[1:])] + \
-           [(g.BTN_X[-1] + 5.6 + g.BOARD[2]) / 2]           # 7 slots between button land patterns
-EDGES = {
-    # name: (refs in order, edge, rotation, start, end)  start/end along the edge (mm)
-    "left":   (["J29", "J30", "J31", "J1"], "L", 0, 7.0, 187.8),     # HV metering top, battery bottom
-    "right":  (["J24", "J28", "J8", "J9", "J6", "J10", "J11"], "R", 180, 8.0, 175.0),
-    "top":    ({1: "J21", 2: "J22", 3: "J25", 4: "J26", 5: "J27"}, "T", 0, None, None),  # slot0 = HV creepage buffer
-    "bottom": ({1: "J17", 2: "J18", 3: "J19", 4: "J20", 5: "J7"}, "Bt", 180, None, None),
-}
+# top/bottom key gaps (5 each, 30.52 mm between 13 mm switch keep-outs). KF2EDGRM-6P pin row 27.9 mm fits;
+# the flanged body (40.9) overhangs 5.2 mm per side on the B side behind the switches (switches are SMD on F).
+TOP_GAPS = ["J24", "J25", "J26", "J27", "J21"]    # outputs + E-stop/D+ (outputs block is the top band)
+BOT_GAPS = ["J17", "J18", "J19", "J20", "J22"]    # analog / MPU / DI (inputs block is the bottom band)
+END_SLOTS = {"J9": ("B", (X0 + 9.5 + 1.0 + (g.BTN_X[0] - g.SW_KO_W / 2)) / 2),     # RS-485, bottom-left end slot
+             "J8": ("B", (g.BTN_X[-1] + g.SW_KO_W / 2 + 266.0) / 2)}              # router 12 V, bottom-right end slot
+LEFT = (["J28", "J29", "J30"], HV[1], HV[3])     # 600 V GEN V, BUS V, CT secondaries (treated hot, see notes)
+RIGHT = (["J10", "J11", "J6", "J7", "J23", "J1"], STRAP_KO[3] + 0.4, 179.5 - 0.3)
 
-# ZONES: name -> (x0, y0, x1, y1, side, ref-regex list). First match wins; order matters.
-ZONES = [
-    # interior: x 10..266, y 1..178 (edge strips hold the connectors). Sized from parts-area x ~2.
-    ("ISO_BARRIER", (70.0, 8.0, 84.0, 128.0), "B", [r"^U67$", r"^U68$"]),
-    ("HV_METER", (12.0, 8.0, 70.0, 128.0), "B", []),           # AC metering sheet; >=8 mm to everything else
-    ("POWER_IN", (12.0, 136.0, 100.0, 178.0), "B", []),
-    ("MCU", (100.0, 118.0, 140.0, 178.0), "B", []),
-    ("CM5_DISPLAY", (140.0, 70.0, 215.0, 135.0), "B", []),      # CM5 55x40 + DSI83 + display power
-    ("INPUTS", (140.0, 135.0, 266.0, 178.0), "B", []),
-    ("COMMS", (215.0, 50.0, 266.0, 135.0), "B", []),
-    ("OUTPUTS", (84.0, 8.0, 266.0, 50.0), "B", []),
-    ("SPILL", (88.0, 50.0, 140.0, 118.0), "B", []),             # overflow for POWER/INPUTS/OUTPUTS/FRONT (never HV)
-    ("FRONT", (140.0, 50.0, 215.0, 70.0), "B", []),             # button LED drivers; route to buttons via inner layers
-    ("MISC", (84.0, 178.0, 130.0, 178.5), "B", [r".*"]),        # catch-all (should end up empty)
+ZONES = [  # name, bbox, side, explicit ref regexes (first match wins)
+    ("CT_AT_BARRIER", (26.5, 112.0, HV[2], HV[3]), "B", [r"^T[1-4]$"]),
+    ("ISO_LV", (LV_X0, 52.0, LV_X0 + 12.0, 95.0), "B", []),   # SELV-side decoupling of the isolators
+    ("HV_METER", (13.4, HV[1], HV[2], HV[3]), "B", []),
+    ("OUTPUTS", (LV_X0, KEY_TOP_Y1 + 0.3, 200.0, 52.0), "B", []),
+    ("CM5", (200.0, 41.5, 262.0, 62.0), "B", []),
+    ("FRONT", (LV_X0 + 12.5, 52.0, 135.0, 95.0), "B", []),
+    ("MCU", (135.0, 52.0, 200.0, 100.0), "B", []),
+    ("COMMS", (200.0, 62.0, 262.0, 135.0), "B", []),
+    ("DISPLAY", (135.0, 100.0, 200.0, 135.0), "B", []),
+    ("SPILL", (LV_X0, 95.0, 135.0, 135.0), "B", []),
+    ("INPUTS", (LV_X0, 135.0, 190.0, KEY_BOT_Y0 - 0.3), "B", []),
+    ("POWER", (190.0, 135.0, 262.0, KEY_BOT_Y0 - 0.3), "B", [r"^U2$"]),
+    ("MISC", (LV_X0, 46.0, 262.0, 140.0), "B", [r".*"]),
 ]
+SPILL_ORDER = {"OUTPUTS": ["FRONT", "SPILL", "MISC"], "INPUTS": ["SPILL", "MISC"], "POWER": ["COMMS", "SPILL", "MISC"],
+               "FRONT": ["SPILL", "MISC"], "MCU": ["SPILL", "MISC"], "COMMS": ["MISC"], "CM5": ["COMMS", "MCU", "MISC"],
+               "DISPLAY": ["SPILL", "MISC"], "SPILL": ["MISC"], "HV_METER": [], "CT_AT_BARRIER": ["HV_METER"], "ISO_LV": ["FRONT"]}
 
-SPILL_FROM = {"POWER_IN", "INPUTS", "OUTPUTS", "FRONT", "MCU", "COMMS"}
+SHEET_ZONE = [("AC metering", "HV_METER"), ("Power:", "POWER"), ("Raspberry Pi CM5", "CM5"),
+              ("Display:", "DISPLAY"), ("Comms:", "COMMS"), ("STM32", "MCU"), ("Front panel", "FRONT"),
+              ("Inputs:", "INPUTS"), ("Outputs:", "OUTPUTS"), ("E-stop", "OUTPUTS")]
+ALL_CU = ["F.Cu", "In1.Cu", "In2.Cu", "In3.Cu", "In4.Cu", "B.Cu"]
+
+def barrier_areas():
+    """13 mm copper-free U-shaped barrier round the HV box, with windows for the two isolators."""
+    out = [("BARRIER_top", (X0, KEY_TOP_Y1, BAR_X[1], HV[1])), ("BARRIER_bottom", (X0, HV[3], BAR_X[1], HV[3] + BARRIER))]
+    ys = [HV[1]] + [v for y in sorted(ISO_Y.values()) for v in (y - ISO_WIN, y + ISO_WIN)] + [HV[3]]
+    for i in range(0, len(ys), 2):
+        out.append((f"BARRIER_v{i//2}", (BAR_X[0], ys[i], BAR_X[1], ys[i + 1])))
+    return out
 
 KEEPOUTS = [  # (name, bbox, layers, no_tracks, no_vias, no_pads, no_fp, no_pour)
-    ("HV_creepage_band", (72.0, 8.0, 84.0, 128.0), ["F.Cu", "B.Cu", "In1.Cu", "In2.Cu", "In3.Cu", "In4.Cu"], True, True, False, False, True),
+    *[(n, bb, ALL_CU, True, True, True, True, True) for n, bb in barrier_areas()],
+    ("STRAP_CORRIDOR", STRAP_KO, ["B.Cu"], False, False, False, True, False),
+    ("CM5_BODY", CM5, ["B.Cu"], False, False, False, False, False),     # placement only (connectors live here)
 ]
-SLOTS = [  # milled isolation slots (internal Edge.Cuts cutouts) - add AFTER Quilter (it wants one outline)
-    (77.0, 12.0, 79.0, 124.0),
-]
-
-# schematic sheet (substring of sheet name) -> zone; used after explicit regexes, before net BFS
-SHEET_ZONE = [("AC metering", "HV_METER"), ("Power:", "POWER_IN"), ("Raspberry Pi CM5", "CM5_DISPLAY"),
-              ("Display:", "CM5_DISPLAY"), ("Comms:", "COMMS"), ("STM32", "MCU"), ("Front panel", "FRONT"),
-              ("Inputs:", "INPUTS"), ("Outputs:", "OUTPUTS"), ("E-stop", "OUTPUTS")]
 
 # ---------------------------------------------------------------- netlist
 def sexpr(text):
@@ -212,57 +227,179 @@ def put(fp, x, y, rot, side):
     c = fp.GetBoundingBox(False).GetCenter()
     fp.Move(pcbnew.VECTOR2I(MM(x) - c.x, MM(y) - c.y))
 
+# ---------------------------------------------------------------- v3 helpers
+def circle_area(b, name, x, y, r, layers, tracks=True, vias=True, pads=True, fps=True, pour=True, n=16):
+    z = pcbnew.ZONE(b); z.SetIsRuleArea(True); z.SetZoneName(name)
+    ls = pcbnew.LSET()
+    for l in layers: ls.AddLayer(b.GetLayerID(l))
+    z.SetLayerSet(ls)
+    z.SetDoNotAllowTracks(tracks); z.SetDoNotAllowVias(vias); z.SetDoNotAllowPads(pads)
+    z.SetDoNotAllowFootprints(fps); z.SetDoNotAllowCopperPour(pour)
+    ol = z.Outline(); ol.NewOutline()
+    rr = r / math.cos(math.pi / n)
+    for i in range(n):
+        a = 2 * math.pi * (i + 0.5) / n
+        ol.Append(MM(x + rr * math.cos(a)), MM(y + rr * math.sin(a)))
+    b.Add(z)
+
+def obround(b, cx, cy, w, l, vertical=True):
+    """internal milled slot on Edge.Cuts, width w, overall length l"""
+    r = w / 2; h = l / 2 - r
+    if vertical:
+        segs = [((cx - r, cy - h), (cx - r, cy + h)), ((cx + r, cy - h), (cx + r, cy + h))]
+        arcs = [((cx, cy - h), (cx - r, cy - h)), ((cx, cy + h), (cx + r, cy + h))]
+    else:
+        segs = [((cx - h, cy - r), (cx + h, cy - r)), ((cx - h, cy + r), (cx + h, cy + r))]
+        arcs = [((cx + h, cy), (cx + h, cy - r)), ((cx - h, cy), (cx - h, cy + r))]
+    for a, c in segs:
+        sh = pcbnew.PCB_SHAPE(b); sh.SetShape(pcbnew.SHAPE_T_SEGMENT); sh.SetLayer(pcbnew.Edge_Cuts)
+        sh.SetStart(pcbnew.VECTOR2I(MM(a[0]), MM(a[1]))); sh.SetEnd(pcbnew.VECTOR2I(MM(c[0]), MM(c[1]))); sh.SetWidth(MM(0.05)); b.Add(sh)
+    for c, st in arcs:
+        sh = pcbnew.PCB_SHAPE(b); sh.SetShape(pcbnew.SHAPE_T_ARC); sh.SetLayer(pcbnew.Edge_Cuts)
+        sh.SetCenter(pcbnew.VECTOR2I(MM(c[0]), MM(c[1]))); sh.SetStart(pcbnew.VECTOR2I(MM(st[0]), MM(st[1])))
+        sh.SetArcAngleAndEnd(pcbnew.EDA_ANGLE(180, pcbnew.DEGREES_T)); sh.SetWidth(MM(0.05)); b.Add(sh)
+
+def gfx_rect(b, bb, layer, w=0.15):
+    x0, y0, x1, y1 = bb
+    for a, c in [((x0, y0), (x1, y0)), ((x1, y0), (x1, y1)), ((x1, y1), (x0, y1)), ((x0, y1), (x0, y0))]:
+        sh = pcbnew.PCB_SHAPE(b); sh.SetShape(pcbnew.SHAPE_T_SEGMENT); sh.SetLayer(layer)
+        sh.SetStart(pcbnew.VECTOR2I(MM(a[0]), MM(a[1]))); sh.SetEnd(pcbnew.VECTOR2I(MM(c[0]), MM(c[1]))); sh.SetWidth(MM(w)); b.Add(sh)
+
+def text(b, s, x, y, h, layer, mirror=False):
+    t = pcbnew.PCB_TEXT(b); t.SetText(s); t.SetLayer(layer)
+    t.SetPosition(pcbnew.VECTOR2I(MM(x), MM(y))); t.SetTextSize(pcbnew.VECTOR2I(MM(h), MM(h)))
+    t.SetTextThickness(MM(h * 0.15)); t.SetMirrored(mirror); b.Add(t)
+
+def pad_centroid(fp):
+    ps = [p.GetPosition() for p in fp.Pads() if p.GetAttribute() != pcbnew.PAD_ATTRIB_NPTH]
+    return (pcbnew.ToMM(sum(p.x for p in ps) / len(ps)), pcbnew.ToMM(sum(p.y for p in ps) / len(ps)))
+
+def put_edge(fp, edge, along, side="B"):
+    """place a terminal against an edge with its long axis along the edge and the body (wire/plug side,
+    i.e. bbox centre relative to the pin centroid) pointing OUT of the board. along = centre coordinate."""
+    best = None
+    for rot in (0, 90, 180, 270):
+        put(fp, 0, 0, rot, side)
+        x0, y0, x1, y1 = rect_of(fp); w, h = x1 - x0, y1 - y0
+        pcx, pcy = pad_centroid(fp); bcx, bcy = (x0 + x1) / 2, (y0 + y1) / 2
+        if edge in "TB" and w < h: continue
+        if edge in "LR" and h < w: continue
+        out = {"T": bcy - pcy < 0, "B": bcy - pcy > 0, "L": bcx - pcx < 0, "R": bcx - pcx > 0}[edge]
+        score = (out, -abs((bcx - pcx) if edge in "LR" else (bcy - pcy)) if not out else 0)
+        if best is None or score > best[0]: best = (score, rot, w, h)
+    _, rot, w, h = best
+    m = 0.4
+    if edge == "T": put(fp, along, Y0 + m + h / 2, rot, side)
+    if edge == "B": put(fp, along, Y1 - m - h / 2, rot, side)
+    if edge == "L": put(fp, X0 + m + w / 2, along, rot, side)
+    if edge == "R": put(fp, X1 - m - w / 2, along, rot, side)
+    return w, h
+
+def fix_holes(b, fps):
+    for ref, x, y in g.MOUNT_HOLES:
+        old = fps.get(ref)
+        net = old.Pads()[0].GetNet() if old and old.Pads() else None
+        if ref == "H4":
+            new = pcbnew.FootprintLoad(os.path.join(STOCK, "MountingHole.pretty"), "MountingHole_4.3mm_M4")
+            p = new.Pads()[0]; p.SetDrillSize(pcbnew.VECTOR2I(MM(g.PE_HOLE_D), MM(g.PE_HOLE_D)))
+            p.SetSize(pcbnew.VECTOR2I(MM(g.PE_HOLE_D), MM(g.PE_HOLE_D)))
+            new.SetValue("PE boss clearance D9.5 NPTH")
+        else:
+            new = pcbnew.FootprintLoad(os.path.join(STOCK, "MountingHole.pretty"), "MountingHole_4.3mm_M4_Pad")
+            for p in new.Pads():
+                if p.GetAttribute() == pcbnew.PAD_ATTRIB_PTH and p.GetDrillSize().x > MM(4):
+                    p.SetSize(pcbnew.VECTOR2I(MM(g.M4_PAD_D), MM(g.M4_PAD_D)))
+                if net: p.SetNet(net)
+            new.SetValue("M4 bezel boss")
+        new.SetReference(ref)
+        if old:
+            new.SetPath(old.GetPath()); b.Remove(old)
+        b.Add(new); fps[ref] = new
+
 # ---------------------------------------------------------------- main
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--netlist"); ap.add_argument("--pcb"); ap.add_argument("--out", required=True)
     ap.add_argument("--quilter", action="store_true", help="only fixed parts inside outline; rest parked outside")
-    ap.add_argument("--slots", action="store_true", help="add HV isolation slots as internal Edge.Cuts")
     a = ap.parse_args()
     b = board_from_netlist(a.netlist) if a.netlist else pcbnew.LoadBoard(a.pcb)
 
-    # stackup / layers: 6 copper, Quilter-friendly plane names
     b.SetCopperLayerCount(6)
     for lid, nm in [(pcbnew.In1_Cu, "GND1"), (pcbnew.In2_Cu, "SIG_In2"), (pcbnew.In3_Cu, "PWR"), (pcbnew.In4_Cu, "GND2")]:
         b.SetLayerName(lid, nm)
     ds = b.GetDesignSettings()
-    ds.m_TrackMinWidth = MM(0.10); ds.m_MinClearance = MM(0.10)       # JLC 6L: 0.09/0.09 abs min; use 0.10
-    ds.m_ViasMinSize = MM(0.30); ds.m_MinThroughDrill = MM(0.20)       # 0.2/0.3-0.45 mm vias (JLC min 0.15/0.25)
+    ds.m_TrackMinWidth = MM(0.10); ds.m_MinClearance = MM(0.10)
+    ds.m_ViasMinSize = MM(0.30); ds.m_MinThroughDrill = MM(0.20)
     ds.m_HoleToHoleMin = MM(0.25); ds.m_CopperEdgeClearance = MM(0.30)
-
     edge_rect(b, *g.BOARD, r=g.BOARD_CORNER_R)
-    if a.slots:
-        for s in SLOTS: edge_rect(b, *s, r=0.99)
 
     fps = {fp.GetReference(): fp for fp in b.GetFootprints()}
+    fix_holes(b, fps)
+    # thermal-via pads without a number/net inside an exposed pad: give them the EP net (footprint-internal DRC noise)
+    for fp in fps.values():
+        named = [p for p in fp.Pads() if p.GetNumber() and p.GetNetCode() > 0]
+        for p in fp.Pads():
+            if p.GetAttribute() == pcbnew.PAD_ATTRIB_PTH and not p.GetNumber() and p.GetNetCode() <= 0:
+                host = next((q for q in named if q.HitTest(p.GetPosition())), None)
+                if host: p.SetNet(host.GetNet())
     placed = set()
     for ref, (x, y, rot, side) in FIXED.items():
         if ref in fps: put(fps[ref], x, y, rot, side); placed.add(ref)
         else: print("WARN fixed ref not in design:", ref)
 
-    # edge strips
-    for name, (refs, edge, rot, s0, s1) in EDGES.items():
-        if isinstance(refs, dict):   # top/bottom: fixed slots between buttons
-            for slot, ref in refs.items():
-                if ref not in fps: print("WARN edge ref missing:", ref); continue
-                w, h = size_mm(fps[ref]); base = 0 if w >= h else 90
-                if base: w, h = h, w
-                rot = base + rot
-                y = g.BOARD[1] + 0.5 + h / 2 if edge == "T" else g.BOARD[3] - 0.5 - h / 2
-                put(fps[ref], TB_SLOTS[slot], y, rot, "B"); placed.add(ref)
-                if w > 30: print(f"WARN {ref} {w:.1f} mm wide > slot width")
-        else:
-            refs = [r for r in refs if r in fps]
-            lens = [max(size_mm(fps[r])) for r in refs]
-            gap = max(1.0, ((s1 - s0) - sum(lens)) / max(1, len(refs) - 1)) if len(refs) > 1 else 0
-            pos = s0
-            for r, L in zip(refs, lens):
-                w, h = size_mm(fps[r]); depth = min(w, h); rr = (0 if h >= w else 90) + rot
-                x = g.BOARD[0] + 0.5 + depth / 2 if edge == "L" else g.BOARD[2] - 0.5 - depth / 2
-                put(fps[r], x, pos + L / 2, rr, "B"); placed.add(r); pos += L + gap
-            if pos - gap > s1: print(f"WARN edge {name} overflows by {pos-gap-s1:.1f} mm")
+    # isolators: HV-side pins (GND_AC) toward the HV box (x-)
+    for ref, y in ISO_Y.items():
+        iso = [r for r, f in fps.items() if "HV_Slot" in f.GetFPID().GetLibItemName().wx_str()]
+        order = sorted(iso)
+        if not order: break
+        r = order[list(ISO_Y).index(ref)] if len(order) == len(ISO_Y) else ref
+        fp = fps[r]
+        for rot in (0, 180):
+            put(fp, sum(BAR_X) / 2, y, rot, "B")
+            hv = [p for p in fp.Pads() if "GND_AC" in p.GetNetname() or "_AC" in p.GetNetname()]
+            if hv and all(pcbnew.ToMM(p.GetPosition().x) < sum(BAR_X) / 2 for p in hv): break
+        placed.add(r); print(f"isolator {r} ({fp.GetValue()}) at x {sum(BAR_X)/2:.1f} y {y} rot {fp.GetOrientationDegrees():.0f}")
 
-    # zone assignment: explicit regex first; otherwise inherit from a connected IC/connector
+    warn = []
+    # key-gap terminals
+    for refs, edge in ((TOP_GAPS, "T"), (BOT_GAPS, "B")):
+        for ref, x in zip(refs, g.KEY_GAP_X):
+            if ref not in fps: warn.append(f"gap ref missing {ref}"); continue
+            put_edge(fps[ref], edge, x); placed.add(ref)
+            pads = [pcbnew.ToMM(p.GetPosition().x) for p in fps[ref].Pads()]
+            half = g.KEY_GAP_W / 2
+            if max(pads) + 1.25 > x + half or min(pads) - 1.25 < x - half:
+                warn.append(f"{ref} pads intrude into switch keep-out")
+    for ref, (edge, x) in END_SLOTS.items():
+        if ref in fps: put_edge(fps[ref], edge, x); placed.add(ref)
+    # left (600 V) and right edge strips
+    for (refs, s0, s1), edge in ((LEFT, "L"), (RIGHT, "R")):
+        refs = [r for r in refs if r in fps]
+        lens = []
+        for r in refs:
+            w, h = put_edge(fps[r], edge, 0); lens.append(h)
+        gap = ((s1 - s0) - sum(lens)) / max(1, len(refs) - 1)
+        if gap < 0.3: warn.append(f"edge {edge} overflows: need {sum(lens):.1f} have {s1-s0:.1f}")
+        pos = s0
+        for r, L in zip(refs, lens):
+            put_edge(fps[r], edge, pos + L / 2); placed.add(r); pos += L + max(gap, 0.3)
+    # inter-phase slots under the 600 V headers J28/J29 (1.5 mm wide, between pad columns)
+    phase_slots = []
+    for ref in ("J28", "J29"):
+        if ref not in fps: continue
+        cols = {}
+        for p in fps[ref].Pads():
+            if p.GetAttribute() == pcbnew.PAD_ATTRIB_NPTH: continue
+            cols.setdefault(p.GetNumber(), []).append((pcbnew.ToMM(p.GetPosition().x), pcbnew.ToMM(p.GetPosition().y)))
+        cs = sorted(cols.values(), key=lambda v: sum(q[1] for q in v) / len(v))
+        for c1, c2 in zip(cs, cs[1:]):
+            ym = (sum(q[1] for q in c1) / len(c1) + sum(q[1] for q in c2) / len(c2)) / 2
+            xs = [q[0] for q in c1 + c2]
+            phase_slots.append((min(xs) - 1.5, ym, max(xs) + 1.5))
+    for x0s, ym, x1s in phase_slots:
+        obround(b, (x0s + x1s) / 2, ym, 1.5, x1s - x0s, vertical=False)
+
+    # ---------- zone packing
     def nearest_zone(ref):
         p = fps[ref].GetPosition(); x, y = pcbnew.ToMM(p.x), pcbnew.ToMM(p.y)
         def d(z):
@@ -271,86 +408,107 @@ def main():
         return min(ZONES[:-1], key=d)
     def explicit(ref):
         z = next((z for z in ZONES[:-1] if any(re.match(p, ref) for p in z[3])), None)
-        if z is None and ref in placed and not ref.startswith(("SW", "H")):
-            z = nearest_zone(ref)      # anchor passives to the zone nearest their (fixed) connector
+        if z is None and "AC metering" in fps[ref].GetSheetname():
+            nets = {p.GetNetname() for p in fps[ref].Pads()}
+            if nets & {"GND", "+3V3"} and not any("_AC" in n for n in nets):
+                return zone_by["ISO_LV"]          # SELV-side part drawn on the metering sheet
         if z is None:
             sh = fps[ref].GetSheetname()
             zn = next((zn for key, zn in SHEET_ZONE if key in sh), None)
             z = next((z for z in ZONES if z[0] == zn), None)
         return z
-    netmap = {}
-    for ref, fp in fps.items():
-        for pad in fp.Pads():
-            n = pad.GetNetname()
-            if n: netmap.setdefault(n, set()).add(ref)
-    def zone_of(ref, max_depth=4):
-        """BFS over small (<=8 node) nets until a part with an explicit zone is found."""
-        seen, frontier = {ref}, [ref]
-        for _ in range(max_depth + 1):
-            nxt = []
-            for r in frontier:
-                z = explicit(r)
-                if z: return z
-                for pad in fps[r].Pads():
-                    peers = netmap.get(pad.GetNetname(), ())
-                    if len(peers) > 8: continue
-                    for p in sorted(peers):
-                        if p not in seen: seen.add(p); nxt.append(p)
-            frontier = nxt
-        return None
-    overflow = {}
-    # obstacles: fixed/edge parts on the same side (THT parts block both sides)
+    zone_by = {z[0]: z for z in ZONES}
     def is_tht(fp): return any(p.GetAttribute() in (pcbnew.PAD_ATTRIB_PTH, pcbnew.PAD_ATTRIB_NPTH) for p in fp.Pads())
     obst = {"F": [], "B": []}
     for r in placed:
         fp = fps[r]; side = "B" if fp.IsFlipped() else "F"
         obst[side].append(rect_of(fp))
         if is_tht(fp): obst["B" if side == "F" else "F"].append(rect_of(fp))
-    # zones
-    parked_x = g.BOARD[2] + 20
-    cursor = {}
-    for ref in sorted(fps, key=lambda r: (re.sub(r"\d", "", r), int(re.sub(r"\D", "", r) or 0))):
+    for ref, x, y in g.buttons():   # switch clear areas: both sides for THT, F side for everything
+        k = (x - g.SW_KO_W / 2, y - g.SW_KO_H / 2, x + g.SW_KO_W / 2, y + g.SW_KO_H / 2)
+        obst["F"].append(k); obst["B"].append(k)
+    for x, y in g.SHELL_POSTS:
+        r = g.SHELL_POST_KO / 2; obst["B"].append((x - r, y - r, x + r, y + r))
+    for _, x, y in g.MOUNT_HOLES:
+        r = 6.0; obst["B"].append((x - r, y - r, x + r, y + r)); obst["F"].append((x - r, y - r, x + r, y + r))
+    obst["B"] += [CM5, STRAP_KO, (140.0, 173.0, 215.0, KEY_BOT_Y0)]   # CM5 body, strap, title text
+    for _, bb in barrier_areas(): obst["B"].append(bb); obst["F"].append(bb)
+    for x0s, ym, x1s in phase_slots: obst["B"].append((x0s, ym - 1, x1s, ym + 1))
+
+    def fits(zname, w, h, side, cur):
+        x0, y0, x1, y1 = zone_by[zname][1]
+        cx, cy, rowh = cur.get(zname, (x0, y0, 0))
+        while True:
+            if cx + w > x1: cx, cy, rowh = x0, cy + max(rowh, 0.5), 0
+            if cy + h > y1: return None
+            r = (cx, cy, cx + w, cy + h)
+            if not hits(r, obst[side]): return cx, cy, rowh
+            cx += 0.5
+    overflow, cursor, used = {}, {}, {}
+    parked_x = X1 + 20
+    order = sorted(fps, key=lambda r: (re.sub(r"\d", "", r), int(re.sub(r"\D", "", r) or 0)))
+    # big parts first inside each zone (better packing)
+    order = sorted(order, key=lambda r: -size_mm(fps[r])[0] * size_mm(fps[r])[1])
+    for ref in order:
         if ref in placed: continue
         fp = fps[ref]
-        zone = zone_of(ref) or ZONES[-1]
-        zname, (x0, y0, x1, y1), side, _ = zone
+        zone = explicit(ref) or ZONES[-1]
+        zname, _, side, _ = zone
         w, h = size_mm(fp)
-        if a.quilter:   # park outside the outline, grouped by zone in columns
-            cx, cy, rowh = cursor.get(zname, (parked_x + 60 * ZONES.index(zone), g.BOARD[1], 0))
-            put(fp, cx + w / 2, cy + h / 2, 0, side); cursor[zname] = (cx, cy + h + 0.5, 0)
-            continue
-        cx, cy, rowh = cursor.get(zname, (x0, y0, 0))
-        while True:
-            if cx + w > x1: cx, cy, rowh = x0, cy + max(rowh, 1.0), 0
-            if cy + h > y1 or not hits((cx, cy, cx + w, cy + h), obst[side]): break
-            cx += 1.0
-        if cy + h > y1 and zname in SPILL_FROM:
-            cursor[zname] = (cx, cy, rowh)
-            zname = "SPILL"; x0, y0, x1, y1 = next(z[1] for z in ZONES if z[0] == "SPILL")
-            cx, cy, rowh = cursor.get(zname, (x0, y0, 0))
-            if cx + w > x1: cx, cy, rowh = x0, cy + rowh + 0.4, 0
-        if cy + h > y1: overflow.setdefault(zname, []).append(ref)
+        if a.quilter:
+            cx, cy, _ = cursor.get(zname, (parked_x + 60 * ZONES.index(zone), Y0, 0))
+            put(fp, cx + w / 2, cy + h / 2, 0, side); cursor[zname] = (cx, cy + h + 0.5, 0); continue
+        tried = [zname] + SPILL_ORDER.get(zname, [])
+        res = None
+        for zn in tried:
+            res = fits(zn, w, h, side, cursor)
+            if res: zname = zn; break
+        if not res:
+            overflow.setdefault(zone[0], []).append(ref)
+            put(fp, parked_x + 10, Y0 + 10 * len(overflow[zone[0]]), 0, side); continue
+        cx, cy, rowh = res
         put(fp, cx + w / 2, cy + h / 2, 0, side)
         obst[side].append((cx, cy, cx + w, cy + h))
         if is_tht(fp): obst["F" if side == "B" else "B"].append((cx, cy, cx + w, cy + h))
-        cursor[zname] = (cx + w, cy, max(rowh, h))
-
-    area = {}
-    for ref in fps:
-        if ref in placed: continue
-        z = (zone_of(ref) or ZONES[-1])[0]; w, h = size_mm(fps[ref]); area[z] = area.get(z, 0) + w * h
+        cursor[zname] = (cx + w + 0.2, cy, max(rowh, h + 0.2))
+        used[zname] = used.get(zname, 0) + w * h
+        if zname != zone[0]: used.setdefault("spilled:" + zone[0] + "->" + zname, 0); used["spilled:" + zone[0] + "->" + zname] += 1
+    for k, v in used.items():
+        if k.startswith("spilled:"): print(f"  {k}: {v} parts")
     for zname, (x0, y0, x1, y1), side, _ in ZONES:
-        print(f"zone {zname:12s} parts-area {area.get(zname,0):8.0f} mm2  zone-area {(x1-x0)*(y1-y0):8.0f} mm2")
+        print(f"zone {zname:14s} used {used.get(zname,0):7.0f} mm2 of {(x1-x0)*(y1-y0):7.0f}")
     for z, refs in overflow.items():
-        print(f"WARN zone {z} overflow: {len(refs)} parts (enlarge zone / use --quilter): {' '.join(refs[:12])}...")
-    # placement regions (Quilter: rule area, keepout with ALL items off) + real keepouts
-    for zname, bbox, side, _ in ZONES:
+        warn.append(f"zone {z} overflow: {len(refs)} parts: {' '.join(refs[:12])}")
+
+    # ---------- rule areas / keep-outs / marks
+    for zname, bbox, side, _ in ZONES[:-1]:
         rule_area(b, "PR_" + zname, bbox, ["B.Cu" if side == "B" else "F.Cu"])
     for name, bbox, layers, t, v, p, f, pr in KEEPOUTS:
         rule_area(b, name, bbox, layers, t, v, p, f, pr)
+    for i, (x, y) in enumerate(g.SHELL_POSTS):
+        circle_area(b, f"SHELL_POST_{i+1}", x, y, g.SHELL_POST_KO / 2, ["B.Cu"], tracks=False, vias=False, pads=True, fps=True, pour=False)
+    hx, hy = next((x, y) for r, x, y in g.MOUNT_HOLES if r == "H4")
+    circle_area(b, "PE_BOSS_RING", hx, hy, g.PE_HOLE_D / 2 + 1.0, ALL_CU, pads=False, fps=False)
+    for ref, x, y in g.buttons():
+        gfx_rect(b, (x - g.SW_KO_W / 2, y - g.SW_KO_H / 2, x + g.SW_KO_W / 2, y + g.SW_KO_H / 2), pcbnew.F_CrtYd if False else pcbnew.Dwgs_User, 0.1)
+    for bb in g.clamp_marks(): gfx_rect(b, bb, pcbnew.Cmts_User, 0.2)
+    gfx_rect(b, CM5, pcbnew.Dwgs_User, 0.2); gfx_rect(b, STRAP_KO, pcbnew.Dwgs_User, 0.2)
+    text(b, "CM5 55x40 (B side) - heat strap to H2 boss", (CM5[0] + CM5[2]) / 2, (CM5[1] + CM5[3]) / 2, 1.5, pcbnew.Dwgs_User)
+    text(b, "PROJECT BLACKSTART", 177.5, 175.2, 3.0, pcbnew.B_SilkS, mirror=True)
+    text(b, "genctl rev H  placement v3  CERN-OHL-S-2.0", 177.5, 179.0, 1.5, pcbnew.B_SilkS, mirror=True)
+    text(b, "600V  HAZARDOUS VOLTAGE", 36.0, HV[1] - 3.5, 2.0, pcbnew.B_SilkS, mirror=True)
 
+    for w_ in warn: print("WARN", w_)
     os.makedirs(os.path.dirname(os.path.abspath(a.out)), exist_ok=True)
     pcbnew.SaveBoard(a.out, b)
+    # JLC 6-layer rules: Default netclass 0.10 mm clearance (KiCad default 0.20 flags fine-pitch footprints internally)
+    import json
+    pro = os.path.splitext(a.out)[0] + ".kicad_pro"
+    if os.path.exists(pro):
+        d = json.load(open(pro))
+        for c in d.get("net_settings", {}).get("classes", []):
+            if c.get("name") == "Default": c["clearance"] = 0.1
+        json.dump(d, open(pro, "w"), indent=2)
     print(f"saved {a.out}: {len(fps)} footprints, {len(placed)} fixed/edge-placed, quilter={a.quilter}")
 
 if __name__ == "__main__":
