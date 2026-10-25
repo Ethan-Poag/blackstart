@@ -147,14 +147,13 @@ def fp_rects(f,lay):
     bb=cy.BBox();return box(TM(bb.GetLeft()),TM(bb.GetTop()),TM(bb.GetRight()),TM(bb.GetBottom()))
 def is_tht(f):return any(p.GetAttribute()==pcbnew.PAD_ATTRIB_PTH for p in f.Pads())
 side_of=lambda f:"B" if f.GetLayer()==pcbnew.B_Cu else "F"
-crt={"F":[],"B":[]}
+crt={"F":[],"B":[]};ctag={"F":[],"B":[]}
 for r,f in fps.items():
-    if r in mv:continue
     s=side_of(f);g=fp_rects(f,pcbnew.B_CrtYd if s=="B" else pcbnew.F_CrtYd)
-    crt[s].append(g)
-    if is_tht(f):crt["B" if s=="F" else "F"].append(g)
-cu={"F":[],"B":[]};cun={"F":[],"B":[]}
-def addcu(s,g,n):cu[s].append(g);cun[s].append(n)
+    crt[s].append(g);ctag[s].append(r)
+    if is_tht(f):crt["B" if s=="F" else "F"].append(g);ctag["B" if s=="F" else "F"].append(r)
+cu={"F":[],"B":[]};cun={"F":[],"B":[]};cutag={"F":[],"B":[]}
+def addcu(s,g,n,tag=""):cu[s].append(g);cun[s].append(n);cutag[s].append(tag)
 for t in b.GetTracks():
     if t.GetClass()=="PCB_VIA":
         g=Point(P(t.GetPosition())).buffer(TM(t.GetWidth(pcbnew.F_Cu))/2)
@@ -165,11 +164,10 @@ for t in b.GetTracks():
         g=LineString([P(t.GetStart()),P(t.GetEnd())]).buffer(TM(t.GetWidth())/2)
         addcu("F" if L==pcbnew.F_Cu else "B",g,t.GetNetCode())
 for r,f in fps.items():
-    if r in mv:continue
     for p in f.Pads():
         bb=p.GetBoundingBox();g=box(TM(bb.GetLeft()),TM(bb.GetTop()),TM(bb.GetRight()),TM(bb.GetBottom()))
         for s,L in (("F",pcbnew.F_Cu),("B",pcbnew.B_Cu)):
-            if p.IsOnLayer(L):addcu(s,g,p.GetNetCode())
+            if p.IsOnLayer(L):addcu(s,g,p.GetNetCode(),r)
 ko={"F":[],"B":[]}
 for z in b.Zones():
     if z.GetIsRuleArea() and z.GetDoNotAllowFootprints():
@@ -180,6 +178,10 @@ bb=b.GetBoardEdgesBoundingBox();BX=(TM(bb.GetLeft())+1,TM(bb.GetTop())+1,TM(bb.G
 edge=b.GetBoardEdgesBoundingBox()
 outline=pcbnew.SHAPE_POLY_SET();b.GetBoardPolygonOutlines(outline)
 trees={}
+def drop(tag):
+    for s in "FB":
+        k=[i for i,t in enumerate(ctag[s]) if t!=tag];crt[s]=[crt[s][i] for i in k];ctag[s]=[ctag[s][i] for i in k]
+        k=[i for i,t in enumerate(cutag[s]) if t!=tag];cu[s]=[cu[s][i] for i in k];cun[s]=[cun[s][i] for i in k];cutag[s]=[cutag[s][i] for i in k]
 def build():
     for s in "FB":trees[s]=(STRtree(crt[s]),STRtree(cu[s]),STRtree(ko[s]) if ko[s] else None)
 build()
@@ -219,6 +221,7 @@ def legal(s,crt_,ps):
 report=[];moved=0
 for r in order:
     f=fps[r];owner,tp,mypad,ispw=plan[r];s=side_of(f)
+    drop(r);build()
     cr,pads=local(f);tx,ty=P(tp.GetPosition())
     before=audit_d(f)[0]
     best=None
@@ -238,8 +241,8 @@ for r in order:
     if best is None or best[0]>=before-0.3:
         report.append((r,owner,round(before,1),"kept" if best is None else "kept(no gain)"))
         # put it back as an obstacle
-        c_,ps=shapes(cr,pads,*P(f.GetPosition()),f.GetOrientationDegrees());crt[s].append(c_)
-        for (_,_,_,g,nc) in ps:addcu(s,g,nc)
+        c_,ps=shapes(cr,pads,*P(f.GetPosition()),f.GetOrientationDegrees());crt[s].append(c_);ctag[s].append(r+"#")
+        for (_,_,_,g,nc) in ps:addcu(s,g,nc,r+"#")
         build();continue
     d,x,y,a,c_,ps=best
     f.SetPosition(pcbnew.VECTOR2I(MM(x),MM(y)));f.SetOrientationDegrees(a)
@@ -247,8 +250,8 @@ for r in order:
     real={p.GetNumber():P(p.GetPosition()) for p in f.Pads()}
     for (num,px,py,g,nc) in ps:
         assert math.dist(real[num],(px,py))<0.01,(r,num,real[num],px,py)
-    crt[s].append(c_)
-    for (_,_,_,g,nc) in ps:addcu(s,g,nc)
+    crt[s].append(c_);ctag[s].append(r+"#")
+    for (_,_,_,g,nc) in ps:addcu(s,g,nc,r+"#")
     build();moved+=1
     report.append((r,owner,round(before,1),round(d,1)))
 b.Save(sys.argv[2])

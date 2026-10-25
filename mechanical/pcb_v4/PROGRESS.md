@@ -116,3 +116,52 @@ Board: **genctl_v4_handrouted.kicad_pcb**, opens in plain KiCad 9 with no plugin
 - **Plot:** routed_tracks_v4.png (tracks only, planes not shown), from plot_routes_v4.py.
 - **Open safety item for review:** HV parts may sit under the display (about 3.5 mm air gap on the F side), so HV parts must stay on B. The 600 V spacing rules still need professional compliance review.
 - **Naming:** the DSI83 bridge is **U21** on the board. U19 is a TPS2553.
+
+## Milestone 6: LV re-placement and re-route, plus review C1 (2026-10-25)
+Rules and sources: LAYOUT_RULES.md (AN4938, AN2867, the TPS56637/LM74800 datasheets, and /workspace/research/layout_notes.md). LM74800 U1 RTN pad 13 stays floating. HV 3.0 mm outer / 1.5 mm inner rules and the U21 via scoping (0.3/0.15/0.075 only inside U21; 0.4/0.2/0.1 elsewhere) are unchanged. The .kicad_dru is byte-identical to the one used for DRC.
+
+**Before/after** (metrics measured with `GetConnectivity().GetUnconnectedCount(True)` after zone fill, and `audit.py`):
+
+| metric | before (da8bdeb) | after (M6) |
+|---|---|---|
+| unconnected | 1805 | **1119** |
+| routed % = 1 - unconnected/2936 | 38.52 % | **61.89 %** |
+| KiCad DRC errors (severity error, project .kicad_pro/.kicad_dru) | 0 | **0** (drc_v4_m6.json) |
+| decap/power passive to owner pin: median / p90 / max | 4.8 / 23.3 / 131.6 mm | 2.2 / 6.2 / 81.3 mm |
+| decap/power > 5 mm / > 10 mm | 65 / 31 | 19 / 6 |
+| signal passive: median / p90 / max | 6.2 / 34.3 / 164.4 mm | 3.5 / 10.4 / 63.3 mm |
+| signal passive > 5 mm / > 10 mm | 378 / 199 | 155 / 64 |
+| locked tracks/vias | 3108 | 3108 (identical count) |
+| footprints | 1169 | 1181 (+U77-U79, R113, R532, R533, C287-C292) |
+
+Full audit outputs: audit_before_m6.txt and audit_after_m6.txt. The new tracks plot is routed_tracks_v4_m6.png (also at layout_prep/out/routed_tracks_v4.png).
+
+**What moved:** 470 R/C passives (place_lv.py and place_new.py). No IC, connector, isolator, terminal or HV-class part moved, and no part changed layer (checked by comparing positions against da8bdeb). Outline, holes, keepouts and locked copper were not edited. HV parts stay on B.Cu.
+
+**Pipeline** (scripts are in this folder):
+1. place_lv.py, then fanout_lv.py.
+2. route_rest.py: grid A*, MG=12, VC=60.
+3. sync_c1.py and fixcu_c1.py: netlist sync for C1, then removing stale DISP_SDA copper.
+4. place_new.py.
+5. filldrc.sh: copies the project .pro/.dru first, then fill and DRC.
+6. drcfix.py: removes only the unlocked router item in each DRC violation. It removed 99 items in one pass, which gave DRC 0.
+
+heal.py (dedupe plus gap bridging) was tried and rejected: no connectivity gain. The `prune.py` dangling-prune was abandoned (it over-prunes T-junctions) and was not used.
+
+**C1, review change (schematic, commits eca5dac and 31598c6):**
+- DSI83 1.8 V I/O is level-translated; CM5 GPIO_VREF stays 3.3 V.
+- U77 PCA9306 handles the I2C, with R119/R120 2.2k to +1V8_DSI and R532 200k / C287 100 pF on VREF2.
+- U78 SN74LVC1T45 translates EN, with R533 47k pulldown on the 1.8 V side.
+- U79 SN74LVC1T45 translates IRQ, with R115 100k pulldown on the 1.8 V side.
+- REFCLK: R113 10k to GND is fitted (datasheet p.5). Y4/R531/C286 are a DNP footprint option. No buffer is fitted.
+  - The stock Linux sn65dsi83 driver always uses the DSI clock. Fitting Y4 needs a driver patch and an oscillator with edges of 1 ns or less (the ASDMB is 1.8-3 ns).
+  - The DSI HS clock must be exactly 3x the pixel clock, and CM5 clock rounding must be confirmed on hardware (DESIGN_NOTES Rev j).
+
+**Unverified or unmet:**
+- 1119 connections are still unrouted (38 % of 2936). DRC reports them as "unconnected items" (capped at 499 in the report). The board is NOT fab-ready.
+- drcfix removed 99 router segments, so some nets that were routed before are open again (unconnected went from 1064 before DRC fix to 1119 after).
+- The router output still contains 219 exact duplicate segments. They are harmless (same net, same geometry) and DRC-clean.
+- Diff-pair skew and impedance were not re-measured in M6. The locked pair copper is unchanged, so the M4 figures still apply.
+- HV clearance values are still not certified against IEC 60664-1 / UL 61010.
+- The new C1 parts were placed on B near U21 but are not yet fully routed.
+- **The Quilter package (job 6ade7072) is now STALE.** It predates the C1 netlist and the M6 placement and must not be used.

@@ -1,0 +1,43 @@
+decap/power 141 median 4.8 mm  p90 23.3  max 131.6   >5mm: 65  >10mm: 31
+signal passives 603 median 6.2 mm  p90 34.3  max 164.4   >5mm: 378  >10mm: 199
+farthest decaps:
+  C99 10u -> U6 pad on +3V3: 131.6 mm
+  C114 10u -> Y4 pad on +1V8_DSI: 97.2 mm
+  C113 100n -> Y4 pad on +1V8_DSI: 96.9 mm
+  C18 470u 25V -> U4 pad on +12V: 81.3 mm
+  C28 22u -> U18 pad on +5V: 63.8 mm
+  C17 470u 25V -> U4 pad on +12V: 63.3 mm
+  C27 22u -> U18 pad on +5V: 63.2 mm
+  C29 22u -> U18 pad on +5V: 63.0 mm
+  C30 22u -> U18 pad on +5V: 60.3 mm
+  C70 100n -> U9 pad on +5V_CM5: 44.6 mm
+farthest signal passives:
+  R101 10k -> U17 on Net-(U17-DE): 164.4 mm
+  R530 100k -> Q69 on Net-(Q69-B): 134.3 mm
+  C123 470n -> U24 on /Display: DSI->LVDS bridge, panel power, backlight, touch/BL_COMP: 128.4 mm
+  R68 100k -> Q9 on /Raspberry Pi CM5/PBTN_QB: 123.9 mm
+  R102 120R -> SW7 on /Comms: CAN x2, RS-485, Ethernet, USB hub/ports, router 12V/RS485_TB: 110.1 mm
+  R225 4.7k -> D51 on /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/DI6: 99.9 mm
+  R222 4.7k -> D50 on /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/DI5: 97.4 mm
+  R252 33k -> U34 on /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/VESTOP_D: 91.2 mm
+  C159 100n -> U32 on /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/DI3_D: 86.1 mm
+  C161 100n -> U32 on /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/DI4_D: 85.0 mm
+  R221 33k -> U32 on /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/DI4_D: 83.7 mm
+  R224 33k -> U32 on /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/DI5_D: 74.8 mm
+longest signal nets (HPWL):
+  416 mm /Front panel: backlit buttons, buzzer/BTN_LED_V pads=14 ['C283', 'Q68', 'SW10', 'SW11', 'SW12']
+  323 mm Net-(SW14-L2) pads=2 ['R506', 'SW14']
+  309 mm OUT_FAULT_N pads=24 ['R44', 'U15', 'U16', 'U18', 'U19']
+  307 mm /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/DI_BIAS_A pads=9 ['J21', 'Q36', 'Q38', 'R210', 'R213']
+  305 mm /Front panel: backlit buttons, buzzer/BTN6_BK pads=2 ['R507', 'SW14']
+  269 mm /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/AI6_SH pads=2 ['Q35', 'R192']
+  240 mm DISP_SCL pads=4 ['J15', 'R119', 'U21', 'U9']
+  239 mm DISP_SDA pads=4 ['J15', 'R120', 'U21', 'U9']
+  217 mm Net-(SW14-L3) pads=2 ['R505', 'SW14']
+  209 mm /Front panel: backlit buttons, buzzer/BTN7 pads=2 ['SW15', 'U73']
+  208 mm /Front panel: backlit buttons, buzzer/BTN6 pads=2 ['SW14', 'U73']
+  207 mm I2C_INT_N pads=8 ['R45', 'U31', 'U62', 'U7', 'U73']
+  207 mm /Front panel: backlit buttons, buzzer/BTN1 pads=2 ['SW9', 'U73']
+  206 mm /Front panel: backlit buttons, buzzer/BTN12 pads=2 ['SW20', 'U73']
+  199 mm I2C1_SDA pads=12 ['J3', 'R47', 'U29', 'U30', 'U31']
+median net HPWL 41.7 mm over 789 nets

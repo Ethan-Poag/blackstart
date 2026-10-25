@@ -1,0 +1,43 @@
+decap/power 145 median 2.2 mm  p90 6.2  max 81.3   >5mm: 19  >10mm: 6
+signal passives 610 median 3.5 mm  p90 10.4  max 63.3   >5mm: 155  >10mm: 64
+farthest decaps:
+  C18 470u 25V -> U4 pad on +12V: 81.3 mm
+  C17 470u 25V -> U4 pad on +12V: 63.3 mm
+  C256 100n -> U72 pad on +3V3_AC: 27.4 mm
+  C3 100u 50V -> Q2 pad on VBAT_P: 12.9 mm
+  C255 10u -> U72 pad on +3V3_AC: 11.9 mm
+  C4 100u 50V -> Q42 pad on VBAT_P: 11.0 mm
+  C248 100n -> U71 pad on +3V3_AC: 8.0 mm
+  C48 4.7n -> H3 pad on CHASSIS: 7.6 mm
+  C68 22u -> U9 pad on +5V_CM5: 7.4 mm
+  C240 100n -> U70 pad on +3V3_AC: 6.8 mm
+farthest signal passives:
+  R462 1M -> RV6 on /AC metering: 2x ADE9000 (gen + bus), isolated/BUS_L3: 63.3 mm
+  C142 100n -> J17 on /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/AI6: 51.2 mm
+  C271 33n -> U71 on /AC metering: 2x ADE9000 (gen + bus), isolated/GEN_IA_P: 49.0 mm
+  C273 33n -> U71 on /AC metering: 2x ADE9000 (gen + bus), isolated/GEN_IB_P: 46.1 mm
+  C274 33n -> U71 on /AC metering: 2x ADE9000 (gen + bus), isolated/GEN_IB_N: 45.3 mm
+  C138 100n -> J17 on /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/AI4: 43.1 mm
+  C136 100n -> D30 on /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/AI3: 41.8 mm
+  R170 100R -> J17 on /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/AI4: 38.3 mm
+  R448 1M -> J29 on /AC metering: 2x ADE9000 (gen + bus), isolated/BUS_L1: 34.0 mm
+  R441 1k -> U71 on /AC metering: 2x ADE9000 (gen + bus), isolated/GEN_VC_P: 33.8 mm
+  R172 100k -> D35 on /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/AI4_ADC: 33.2 mm
+  C272 33n -> U71 on /AC metering: 2x ADE9000 (gen + bus), isolated/GEN_IA_N: 33.1 mm
+longest signal nets (HPWL):
+  416 mm /Front panel: backlit buttons, buzzer/BTN_LED_V pads=14 ['C283', 'Q68', 'SW10', 'SW11', 'SW12']
+  327 mm /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/DI_BIAS_A pads=9 ['J21', 'Q36', 'Q38', 'R210', 'R213']
+  323 mm Net-(SW14-L2) pads=2 ['R506', 'SW14']
+  309 mm OUT_FAULT_N pads=24 ['R44', 'U15', 'U16', 'U18', 'U19']
+  305 mm /Front panel: backlit buttons, buzzer/BTN6_BK pads=2 ['R507', 'SW14']
+  269 mm /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/AI6_SH pads=2 ['Q35', 'R192']
+  245 mm DISP_SDA pads=3 ['J15', 'U77', 'U9']
+  244 mm DISP_SCL pads=3 ['J15', 'U77', 'U9']
+  217 mm Net-(SW14-L3) pads=2 ['R505', 'SW14']
+  209 mm /Front panel: backlit buttons, buzzer/BTN7 pads=2 ['SW15', 'U73']
+  208 mm /Front panel: backlit buttons, buzzer/BTN6 pads=2 ['SW14', 'U73']
+  207 mm /Front panel: backlit buttons, buzzer/BTN1 pads=2 ['SW9', 'U73']
+  206 mm /Front panel: backlit buttons, buzzer/BTN12 pads=2 ['SW20', 'U73']
+  204 mm I2C_INT_N pads=8 ['R45', 'U31', 'U62', 'U7', 'U73']
+  202 mm /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/AI1_SH pads=2 ['Q15', 'R137']
+median net HPWL 32.6 mm over 794 nets
