@@ -1,0 +1,138 @@
+{
+ "interferences_mm3": {
+  "plug_envelopes&rear_shell": 0.0,
+  "panel1.0&rear_shell": 0.0,
+  "panel1.0&clamps": 0.0,
+  "panel6.0&rear_shell": 0.0,
+  "panel6.0&clamps": 0.0
+ },
+ "clearances_mm": {
+  "display_rear_to_PCB_front_airgap": 3.27,
+  "nib_to_plunger_free_gap": 0.1,
+  "glass_front_vs_bezel_face (neg = recessed)": -0.05,
+  "CM5_top_to_heatbar (pad)": 1.0,
+  "rear_parts_tallest_to_shell_inner_rear": 9.4,
+  "J10_mouth_depth_below_rear_face (tunnel)": 13.5,
+  "J11_mouth_depth_below_rear_face (tunnel)": 20.4,
+  "J10_tunnel_clearance_per_side_to_RJ45_body_x_y": [
+   4.16,
+   8.0
+  ],
+  "J11_tunnel_clearance_per_side_to_USBC_overmold_x_y (13.0x7.4)": [
+   1.5,
+   1.3
+  ],
+  "clamp_screw_reach_panel_range_mm": [
+   1.0,
+   6.0
+  ],
+  "shell_to_cutout_per_side": 1.0,
+  "insertion: shell bbox vs cutout per side (min gap, must be >0)": 1.0
+ },
+ "volumes_cm3": {
+  "bezel": 232.6,
+  "display": 451.3,
+  "key_caps": 36.5,
+  "key_membrane": 7.1,
+  "key_nibs": 0.2,
+  "switches": 2.9,
+  "pcb": 95.2,
+  "rear_parts": 190.7,
+  "heat_bar": 12.5,
+  "thermal_pads": 1.4,
+  "gasket": 12.8,
+  "customer_panel": 151.1,
+  "rear_shell": 315.5,
+  "clamps": 15.4,
+  "clamp_screws": 2.6
+ },
+ "bbox": {
+  "bezel": [
+   329.0,
+   261.0,
+   23.5
+  ],
+  "display": [
+   276.6,
+   179.5,
+   12.7
+  ],
+  "key_caps": [
+   243.6,
+   212.0,
+   10.3
+  ],
+  "key_membrane": [
+   260.5,
+   213.0,
+   1.0
+  ],
+  "key_nibs": [
+   221.6,
+   202.0,
+   1.4
+  ],
+  "switches": [
+   224.4,
+   205.2,
+   5.5
+  ],
+  "pcb": [
+   284.0,
+   210.0,
+   1.6
+  ],
+  "rear_parts": [
+   283.2,
+   209.2,
+   18.0
+  ],
+  "heat_bar": [
+   74.5,
+   61.8,
+   4.8
+  ],
+  "thermal_pads": [
+   71.0,
+   57.5,
+   1.0
+  ],
+  "gasket": [
+   328.0,
+   260.0,
+   1.4
+  ],
+  "customer_panel": [
+   379.0,
+   311.0,
+   3.0
+  ],
+  "rear_shell": [
+   310.0,
+   242.0,
+   44.0
+  ],
+  "clamps": [
+   322.0,
+   254.0,
+   7.5
+  ],
+  "clamp_screws": [
+   314.0,
+   246.0,
+   34.1
+  ]
+ },
+ "shell_outer_WxH": [
+  294.0,
+  226.0
+ ],
+ "cutout": [
+  296.0,
+  228.0
+ ],
+ "bezel_WxH": [
+  329.0,
+  261.0
+ ]
+}

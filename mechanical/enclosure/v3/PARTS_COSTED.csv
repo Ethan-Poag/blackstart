@@ -1,0 +1,15 @@
+item,part,qty_per_unit,process,service,url,price_basis,unit_cost_usd_qty1,unit_cost_usd_qty10,label,date_checked,needs_tooling
+1,Bezel 329x261 CNC 6061-T6 black anodise (baseline),1,3-axis CNC,any CNC shop (no public price),n/a,no public instant price without upload/account,450,220,ESTIMATED,2026-10-25,no
+1alt,Bezel as laser-cut 6061 stack (3.18 face + 4.75 + 3.18 ledge) bonded,3 plates,laser cut,SendCutSend,https://sendcutsend.com/materials/6061-aluminum/,tolerance +-0.005in and thickness list MEASURED; price needs upload,200,110,ESTIMATED,2026-10-25,no
+2,Rear shell SLS PA12 (price = MJF PA12 stand-in) PA12 312 cm3 (~315 g),1,SLS PA12 (price = MJF PA12 stand-in),JLC3DP,https://jlc3dp.com/news/drastic-material-price-cuts-and-adjusted-post-processing-service-fees,MJF-PA12 $0.275/g (MEASURED rate 2025-08-13) x ~315 g; dyeing extra,90,90,ESTIMATED,2026-10-25,no
+3,Rear clamp blocks PA12 15.4 cm3 total,6,SLS PA12 (price = MJF PA12 stand-in),JLC3DP,same,$0.275/g x ~16 g + per-part minimum $1 (MEASURED 'from $1.00'),8,6,ESTIMATED,2026-10-25,no
+4,Key caps 24x12 SLA clear 36.5 cm3 total,12,SLA,JLC3DP 8001,https://jlc3dp.com/help/article/photosensitive-8001-resin,'from $0.3' (MEASURED) ~$0.30/g x ~40 g,12,12,ESTIMATED,2026-10-25,no
+5,Silicone strip 1.0 mm translucent 50A + nibs (laser/knife cut),2 strips + 12 nibs,cut sheet,McMaster/any,https://www.mcmaster.com/,page blocked to fetcher,5,3,ESTIMATED,2026-10-25,no
+6,Switch CTS 228EMVARGBFR,12,catalogue,Digi-Key,https://www.digikey.co.uk/en/products/detail/cts-electrocomponents/228EMVARGBFR/17052476,GBP 1.749 @10 / 1.4448 @100 (MEASURED) x FX 1.33 (INFERRED),27.9,23.1,MEASURED price (FX INFERRED),2026-10-25,no
+7,Heat bar 6061 4.75 mm laser cut ~75x62,1,laser cut,SendCutSend,https://sendcutsend.com/pricing/,site example small Al part $19.51 (MEASURED example) ; Reddit SCS post qty-break -35% @10,20,12,ESTIMATED,2026-10-25,no
+8,Thermal pad 1.5 mm 6 W/mK ~50x30 + pad on boss,2,catalogue,any,n/a,,8,6,ESTIMATED,2026-10-25,no
+9,Panel gasket 2 mm closed-cell silicone sponge PSA cut ring,1,knife/laser,any,n/a,,20,10,ESTIMATED,2026-10-25,no
+10,M4 brass heat-set inserts (clamps),6,catalogue,McMaster 94180A353 class,https://www.mcmaster.com/94180A353/,page blocked to fetcher,3,2,ESTIMATED,2026-10-25,no
+11,M4x8 button head (bezel-shell 8) + M4x10 (PCB 3 + PE 1 + heat bar 2),14,catalogue,any,n/a,,3,2,ESTIMATED,2026-10-25,no
+12,M4x35 nylon-tip clamp screws,6,catalogue,any,n/a,,5,3,ESTIMATED,2026-10-25,no
+13,Neutral-cure silicone (DOWSIL 7091 class) + VHB spacers,-,catalogue,any,n/a,,6,4,ESTIMATED,2026-10-25,no

@@ -1,0 +1,941 @@
+{
+ "source": "mechanical/pcb_v4/genctl_v4_handrouted.kicad_pcb (mtime 2026-10-25 13:17 HST, git HEAD f03c57a), parsed read-only with KiCad 9.0.2 pcbnew python; all values MEASURED unless field 'inferred' present",
+ "frame": "mm, origin = display cover-glass top-left, front view, x right, y down (same as geometry.py). side F = toward display/front, B = rear",
+ "edge_cuts_bbox": [
+  -3.745,
+  -15.295,
+  280.305,
+  194.755
+ ],
+ "board_outline": "284.0 x 210.0 rect, R2 corners, x -3.72..280.28, y -15.27..194.73 (MEASURED)",
+ "internal_slots": "6 isolation slots 1.5 wide, x 3.465..10.755 (incl. R0.75 ends) at y centres 27.195, 34.815, 42.435, 77.0125, 84.6325, 92.2525 (MEASURED) - HV barrier slots, not notches",
+ "rule_areas": {
+  "CM5_UNDER": [
+   203,
+   7,
+   258,
+   35
+  ],
+  "CM5_BODY_drawing": [
+   203,
+   1,
+   258,
+   41
+  ],
+  "STRAP_CORRIDOR": [
+   247,
+   -14.8,
+   279.8,
+   3.8
+  ],
+  "PE_BOSS_RING": [
+   266.2,
+   179.8,
+   277.8,
+   191.2
+  ],
+  "SHELL_POST_1": [
+   95,
+   55,
+   105,
+   65
+  ],
+  "SHELL_POST_2": [
+   95,
+   135,
+   105,
+   145
+  ],
+  "SHELL_POST_3": [
+   235,
+   55,
+   245,
+   65
+  ],
+  "SHELL_POST_4": [
+   235,
+   135,
+   245,
+   145
+  ],
+  "BARRIER_top": [
+   -3.7,
+   -1.2,
+   73,
+   11
+  ],
+  "BARRIER_v0": [
+   60,
+   11,
+   73,
+   51
+  ],
+  "BARRIER_v1": [
+   60,
+   73,
+   73,
+   87
+  ],
+  "BARRIER_v2": [
+   60,
+   109,
+   73,
+   162
+  ],
+  "BARRIER_bottom": [
+   -3.7,
+   162,
+   73,
+   175
+  ]
+ },
+ "footprints": {
+  "H1": {
+   "val": "M4 bezel boss",
+   "fp": "MountingHole_4.3mm_M4_Pad",
+   "x": 2.0,
+   "y": -9.25,
+   "rot": 0.0,
+   "side": "F",
+   "bbox": [
+    -2.58,
+    -13.82,
+    6.58,
+    -4.67
+   ]
+  },
+  "H2": {
+   "val": "M4 bezel boss",
+   "fp": "MountingHole_4.3mm_M4_Pad",
+   "x": 274.56,
+   "y": -9.25,
+   "rot": 0.0,
+   "side": "F",
+   "bbox": [
+    269.99,
+    -13.82,
+    279.13,
+    -4.67
+   ]
+  },
+  "H3": {
+   "val": "M4 bezel boss",
+   "fp": "MountingHole_4.3mm_M4_Pad",
+   "x": 2.0,
+   "y": 188.71,
+   "rot": 0.0,
+   "side": "F",
+   "bbox": [
+    -2.58,
+    184.13,
+    6.58,
+    193.28
+   ]
+  },
+  "H4": {
+   "val": "PE boss clearance D9.5 NPTH",
+   "fp": "MountingHole_4.3mm_M4",
+   "x": 272.0,
+   "y": 185.5,
+   "rot": 0.0,
+   "side": "F",
+   "bbox": [
+    267.25,
+    180.75,
+    276.75,
+    190.25
+   ]
+  },
+  "J10": {
+   "val": "HR963380AE",
+   "fp": "HR963380AE_RJ45",
+   "x": 214.0,
+   "y": 53.07,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    205.78,
+    42.95,
+    222.22,
+    63.05
+   ]
+  },
+  "J11": {
+   "val": "USB-C service",
+   "fp": "USB_C_Receptacle_HRO_TYPE-C-31-D-06B_Vertical",
+   "x": 240.0,
+   "y": 50.0,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    235.41,
+    47.2,
+    244.59,
+    52.8
+   ]
+  },
+  "U9": {
+   "val": "CM5 (conn A)",
+   "fp": "DF40C-100DS-0.4V",
+   "x": 230.5,
+   "y": 4.0,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    219.07,
+    2.05,
+    241.93,
+    5.95
+   ]
+  },
+  "U10": {
+   "val": "CM5 (conn B)",
+   "fp": "DF40C-100DS-0.4V_B",
+   "x": 230.5,
+   "y": 38.0,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    219.07,
+    36.05,
+    241.93,
+    39.95
+   ]
+  },
+  "J14": {
+   "val": "LVDS FPC 40p 0.5mm",
+   "fp": "FPC_40P_0.5_05A20L40P",
+   "x": 128.38,
+   "y": 140.29,
+   "rot": 0.0,
+   "side": "F",
+   "bbox": [
+    115.94,
+    138.5,
+    140.82,
+    145.38
+   ]
+  },
+  "J15": {
+   "val": "Touch FPC 10p 0.5mm",
+   "fp": "FPC_10P_0.5_05B20L10P",
+   "x": 230.78,
+   "y": 172.49,
+   "rot": 0.0,
+   "side": "F",
+   "bbox": [
+    225.37,
+    170.71,
+    236.19,
+    176.22
+   ]
+  },
+  "J16": {
+   "val": "Backlight (JST SM02B-BHSS)",
+   "fp": "SM02B-BHSS-1-TB",
+   "x": 81.92,
+   "y": 18.0,
+   "rot": 0.0,
+   "side": "F",
+   "bbox": [
+    76.59,
+    14.12,
+    87.41,
+    21.88
+   ]
+  },
+  "J12": {
+   "val": "Internal USB0 touch (SM04B)",
+   "fp": "JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal",
+   "x": 210.78,
+   "y": 173.46,
+   "rot": 0.0,
+   "side": "F",
+   "bbox": [
+    206.85,
+    170.16,
+    214.71,
+    176.76
+   ]
+  },
+  "J1": {
+   "val": "PC 5/4-GF-7,62 (battery in)",
+   "fp": "PhoenixContact_PC5_4-GF-7.62_1720819",
+   "x": 266.56,
+   "y": 144.75,
+   "rot": -90.0,
+   "side": "B",
+   "bbox": [
+    264.2,
+    132.37,
+    279.88,
+    180.0
+   ]
+  },
+  "J23": {
+   "val": "J4 E-stop/fuel/crank (PC 5/4-7.62)",
+   "fp": "PhoenixContact_PC5_4-GF-7.62_1720819",
+   "x": 266.56,
+   "y": 95.0,
+   "rot": -90.0,
+   "side": "B",
+   "bbox": [
+    264.2,
+    82.61,
+    279.88,
+    130.24
+   ]
+  },
+  "J28": {
+   "val": "J7 GEN voltage (L1 L2 L3 N)",
+   "fp": "PhoenixContact_PC5_4-GF-7.62_1720819",
+   "x": 10.01,
+   "y": 46.24,
+   "rot": 90.0,
+   "side": "B",
+   "bbox": [
+    -3.32,
+    11.0,
+    12.36,
+    58.63
+   ]
+  },
+  "J29": {
+   "val": "J8 BUS voltage (L1 L2 L3 N)",
+   "fp": "PhoenixContact_PC5_4-GF-7.62_1720819",
+   "x": 10.01,
+   "y": 96.06,
+   "rot": 90.0,
+   "side": "B",
+   "bbox": [
+    -3.32,
+    60.82,
+    12.36,
+    108.45
+   ]
+  },
+  "J30": {
+   "val": "J9 CT secondaries (5A)",
+   "fp": "KF2EDGRM-5.08-8P",
+   "x": 7.79,
+   "y": 136.3,
+   "rot": 90.0,
+   "side": "B",
+   "bbox": [
+    -3.32,
+    110.64,
+    9.24,
+    162.0
+   ]
+  },
+  "J6": {
+   "val": "CAN1 (PC 5/4)",
+   "fp": "WJ15EDGRC-3.81-4P",
+   "x": 272.2,
+   "y": 46.19,
+   "rot": -90.0,
+   "side": "B",
+   "bbox": [
+    270.48,
+    38.0,
+    279.88,
+    54.37
+   ]
+  },
+  "J7": {
+   "val": "Expansion bus (PC 5/6)",
+   "fp": "WJ15EDGRC-3.81-6P",
+   "x": 272.2,
+   "y": 68.49,
+   "rot": -90.0,
+   "side": "B",
+   "bbox": [
+    270.48,
+    56.5,
+    279.88,
+    80.49
+   ]
+  },
+  "J8": {
+   "val": "Router 12V (3.81/2)",
+   "fp": "WJ15EDGRC-3.81-2P",
+   "x": 262.56,
+   "y": 189.96,
+   "rot": 90.0,
+   "side": "B",
+   "bbox": [
+    254.89,
+    185.58,
+    264.29,
+    194.33
+   ]
+  },
+  "J9": {
+   "val": "RS-485 (PC 5/3)",
+   "fp": "WJ15EDGRC-3.81-3P",
+   "x": 14.68,
+   "y": 186.66,
+   "rot": 180.0,
+   "side": "B",
+   "bbox": [
+    8.4,
+    184.93,
+    20.95,
+    194.33
+   ]
+  },
+  "J17": {
+   "val": "J1A analog in (PC 5/6)",
+   "fp": "KF2EDGRM-5.08-6P",
+   "x": 50.82,
+   "y": 183.22,
+   "rot": 180.0,
+   "side": "B",
+   "bbox": [
+    30.24,
+    181.76,
+    71.44,
+    194.33
+   ]
+  },
+  "J18": {
+   "val": "J1B COM/MPU (PC 5/6)",
+   "fp": "KF2EDGRM-5.08-6P",
+   "x": 94.34,
+   "y": 183.22,
+   "rot": 180.0,
+   "side": "B",
+   "bbox": [
+    73.76,
+    181.76,
+    114.96,
+    194.33
+   ]
+  },
+  "J19": {
+   "val": "J2A DI1-6",
+   "fp": "KF2EDGRM-5.08-6P",
+   "x": 137.86,
+   "y": 183.22,
+   "rot": 180.0,
+   "side": "B",
+   "bbox": [
+    117.28,
+    181.76,
+    158.48,
+    194.33
+   ]
+  },
+  "J20": {
+   "val": "J2B DI7-12",
+   "fp": "KF2EDGRM-5.08-6P",
+   "x": 181.38,
+   "y": 183.22,
+   "rot": 180.0,
+   "side": "B",
+   "bbox": [
+    160.8,
+    181.76,
+    202.0,
+    194.33
+   ]
+  },
+  "J21": {
+   "val": "J3A E-stop/D+/VBAT/bias",
+   "fp": "KF2EDGRM-5.08-6P",
+   "x": 224.94,
+   "y": -3.76,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    204.32,
+    -14.87,
+    245.52,
+    -2.3
+   ]
+  },
+  "J22": {
+   "val": "J3B",
+   "fp": "KF2EDGRM-5.08-6P",
+   "x": 224.9,
+   "y": 183.22,
+   "rot": 180.0,
+   "side": "B",
+   "bbox": [
+    204.32,
+    181.76,
+    245.52,
+    194.33
+   ]
+  },
+  "J24": {
+   "val": "J5A outputs",
+   "fp": "KF2EDGRM-5.08-6P",
+   "x": 50.86,
+   "y": -3.76,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    30.24,
+    -14.87,
+    71.44,
+    -2.3
+   ]
+  },
+  "J25": {
+   "val": "J5B returns",
+   "fp": "KF2EDGRM-5.08-6P",
+   "x": 94.38,
+   "y": -3.76,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    73.76,
+    -14.87,
+    114.96,
+    -2.3
+   ]
+  },
+  "J26": {
+   "val": "J6A AUX1-6",
+   "fp": "KF2EDGRM-5.08-6P",
+   "x": 137.9,
+   "y": -3.76,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    117.28,
+    -14.87,
+    158.48,
+    -2.3
+   ]
+  },
+  "J27": {
+   "val": "J6B AUX7-10 + returns",
+   "fp": "KF2EDGRM-5.08-6P",
+   "x": 181.42,
+   "y": -3.76,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    160.8,
+    -14.87,
+    202.0,
+    -2.3
+   ]
+  },
+  "J4": {
+   "val": "Fan header (SM04B)",
+   "fp": "JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal",
+   "x": 270.34,
+   "y": 14.23,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    266.41,
+    10.92,
+    274.26,
+    17.53
+   ]
+  },
+  "J2": {
+   "val": "SWD",
+   "fp": "FTSH-105-02_SWD",
+   "x": 197.36,
+   "y": 69.71,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    193.55,
+    66.27,
+    200.72,
+    73.14
+   ]
+  },
+  "J3": {
+   "val": "Header B (MCU spare)",
+   "fp": "PZ254-2-05-S_2x05_SMD",
+   "x": 127.98,
+   "y": 93.09,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    121.26,
+    88.84,
+    134.69,
+    97.34
+   ]
+  },
+  "J5": {
+   "val": "Header A (CM5 I2C/SPI)",
+   "fp": "PZ254-2-05-S_2x05_SMD",
+   "x": 191.07,
+   "y": 18.91,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    184.35,
+    14.66,
+    197.78,
+    23.16
+   ]
+  },
+  "JP1": {
+   "val": "JP1 CM5->MCU SWD (opt)",
+   "fp": "PinHeader_2x04_P2.54mm_Vertical",
+   "x": 198.05,
+   "y": 83.49,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    196.25,
+    74.07,
+    202.39,
+    85.28
+   ]
+  },
+  "SW1": {
+   "val": "RESET",
+   "fp": "SW_Push_1P1T_XKB_TS-1187A",
+   "x": 196.7,
+   "y": 53.57,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    192.93,
+    50.74,
+    200.48,
+    56.39
+   ]
+  },
+  "SW2": {
+   "val": "BOOT0",
+   "fp": "SW_Push_1P1T_XKB_TS-1187A",
+   "x": 163.83,
+   "y": 18.99,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    160.06,
+    16.16,
+    167.61,
+    21.81
+   ]
+  },
+  "SW3": {
+   "val": "nRPIBOOT",
+   "fp": "SW_Push_1P1T_XKB_TS-1187A",
+   "x": 250.6,
+   "y": 40.74,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    246.82,
+    37.91,
+    254.37,
+    43.56
+   ]
+  },
+  "SW4": {
+   "val": "CM5 PWR",
+   "fp": "SW_Push_1P1T_XKB_TS-1187A",
+   "x": 185.67,
+   "y": 8.35,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    181.9,
+    5.52,
+    189.45,
+    11.17
+   ]
+  },
+  "F1": {
+   "val": "10A ATO (3557-2 clips)",
+   "fp": "Keystone_3557-2_ATO_clips",
+   "x": 250.35,
+   "y": 128.2,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    240.32,
+    124.7,
+    260.39,
+    131.69
+   ]
+  },
+  "BT1": {
+   "val": "CR2032",
+   "fp": "BS-CR2032-8",
+   "x": 120.88,
+   "y": 60.0,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    105.8,
+    52.02,
+    134.21,
+    67.98
+   ]
+  },
+  "T1": {
+   "val": "AC1005",
+   "fp": "AC1005_CT",
+   "x": 41.59,
+   "y": 118.51,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    25.59,
+    112.83,
+    57.59,
+    124.2
+   ]
+  },
+  "T2": {
+   "val": "AC1005",
+   "fp": "AC1005_CT",
+   "x": 40.28,
+   "y": 138.05,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    24.28,
+    132.37,
+    56.28,
+    143.74
+   ]
+  },
+  "T3": {
+   "val": "AC1005",
+   "fp": "AC1005_CT",
+   "x": 39.37,
+   "y": 79.1,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    23.37,
+    73.42,
+    55.37,
+    84.79
+   ]
+  },
+  "T4": {
+   "val": "AC1005",
+   "fp": "AC1005_CT",
+   "x": 36.5,
+   "y": 43.69,
+   "rot": 0.0,
+   "side": "B",
+   "bbox": [
+    20.5,
+    38.01,
+    52.5,
+    49.38
+   ]
+  },
+  "SW9": {
+   "val": "BTN1",
+   "fp": "CTS_228E_RGB",
+   "x": 29.38,
+   "y": -9.25,
+   "rot": 0.0,
+   "side": "F",
+   "bbox": [
+    23.18,
+    -12.91,
+    34.98,
+    -5.59
+   ]
+  },
+  "SW10": {
+   "val": "BTN2",
+   "fp": "CTS_228E_RGB",
+   "x": 72.9,
+   "y": -9.25,
+   "rot": 0.0,
+   "side": "F",
+   "bbox": [
+    66.7,
+    -12.91,
+    78.5,
+    -5.59
+   ]
+  },
+  "SW11": {
+   "val": "BTN3",
+   "fp": "CTS_228E_RGB",
+   "x": 116.42,
+   "y": -9.25,
+   "rot": 0.0,
+   "side": "F",
+   "bbox": [
+    110.22,
+    -12.91,
+    122.02,
+    -5.59
+   ]
+  },
+  "SW12": {
+   "val": "BTN4",
+   "fp": "CTS_228E_RGB",
+   "x": 159.94,
+   "y": -9.25,
+   "rot": 0.0,
+   "side": "F",
+   "bbox": [
+    153.74,
+    -12.91,
+    165.54,
+    -5.59
+   ]
+  },
+  "SW13": {
+   "val": "BTN5",
+   "fp": "CTS_228E_RGB",
+   "x": 203.46,
+   "y": -9.25,
+   "rot": 0.0,
+   "side": "F",
+   "bbox": [
+    197.26,
+    -12.91,
+    209.06,
+    -5.59
+   ]
+  },
+  "SW14": {
+   "val": "BTN6",
+   "fp": "CTS_228E_RGB",
+   "x": 246.98,
+   "y": -9.25,
+   "rot": 0.0,
+   "side": "F",
+   "bbox": [
+    240.78,
+    -12.91,
+    252.58,
+    -5.59
+   ]
+  },
+  "SW15": {
+   "val": "BTN7",
+   "fp": "CTS_228E_RGB",
+   "x": 29.38,
+   "y": 188.71,
+   "rot": 0.0,
+   "side": "F",
+   "bbox": [
+    23.18,
+    185.05,
+    34.98,
+    192.37
+   ]
+  },
+  "SW16": {
+   "val": "BTN8",
+   "fp": "CTS_228E_RGB",
+   "x": 72.9,
+   "y": 188.71,
+   "rot": 0.0,
+   "side": "F",
+   "bbox": [
+    66.7,
+    185.05,
+    78.5,
+    192.37
+   ]
+  },
+  "SW17": {
+   "val": "BTN9",
+   "fp": "CTS_228E_RGB",
+   "x": 116.42,
+   "y": 188.71,
+   "rot": 0.0,
+   "side": "F",
+   "bbox": [
+    110.22,
+    185.05,
+    122.02,
+    192.37
+   ]
+  },
+  "SW18": {
+   "val": "BTN10",
+   "fp": "CTS_228E_RGB",
+   "x": 159.94,
+   "y": 188.71,
+   "rot": 0.0,
+   "side": "F",
+   "bbox": [
+    153.74,
+    185.05,
+    165.54,
+    192.37
+   ]
+  },
+  "SW19": {
+   "val": "BTN11",
+   "fp": "CTS_228E_RGB",
+   "x": 203.46,
+   "y": 188.71,
+   "rot": 0.0,
+   "side": "F",
+   "bbox": [
+    197.26,
+    185.05,
+    209.06,
+    192.37
+   ]
+  },
+  "SW20": {
+   "val": "BTN12",
+   "fp": "CTS_228E_RGB",
+   "x": 246.98,
+   "y": 188.71,
+   "rot": 0.0,
+   "side": "F",
+   "bbox": [
+    240.78,
+    185.05,
+    252.58,
+    192.37
+   ]
+  }
+ },
+ "heights_mm": {
+  "CTS228E switch (F)": {
+   "h": 5.5,
+   "src": "MEASURED datasheets/cts228e.pdf p3"
+  },
+  "display module depth": {
+   "h": 12.68,
+   "src": "MEASURED DR_RVT121HVLNWCA0-B Rev1.1"
+  },
+  "J10 RJ45 HR963380AE vertical (B)": {
+   "h": 16.9,
+   "src": "INFERRED from enclosure.py rev D comment (top Z 34.5 with PCB rear at Z 17.6); no datasheet in repo"
+  },
+  "J11 USB-C TYPE-C-31-D-06B vertical (B)": {
+   "h": 10.0,
+   "src": "INFERRED from enclosure.py rev D comment (top ~Z 27.6)"
+  },
+  "KF2EDGRM-5.08 header + plug (B)": {
+   "h": 16.0,
+   "src": "INFERRED (rev C model value)"
+  },
+  "PC5/4-GF-7.62 header + plug (B)": {
+   "h": 18.0,
+   "src": "INFERRED"
+  },
+  "CM5 stack above PCB rear (B): DF40 1.5 + CM5 PCB + parts": {
+   "h": 4.8,
+   "src": "INFERRED: 1.5 mated height (place_v4.py comment) + ~1.2 PCB + ~2.1 SoC/RAM; check cm5-datasheet.pdf mech drawing"
+  },
+  "T1-T4 AC1005 CT": {
+   "h": 12.0,
+   "src": "INFERRED"
+  }
+ },
+ "volatility": "PROGRESS.md M6: board 61.9% routed, 1119 unconnected, NOT fab-ready. M6 moved only R/C passives; outline, holes, connectors, ICs locked. Likely to move: C1 parts near U21, passives; possibly J10/J11 if DSI/LVDS escape re-placement needed (INFERRED)."
+}
