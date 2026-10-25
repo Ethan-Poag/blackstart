@@ -18,6 +18,10 @@ Compiled 2026-10-25. Each rule cites a document that was **actually fetched and 
 
 ## 2. Per-device rules
 **TPS56637 buck (TI SLVSEG1A)**
+- Use ≥ 2 vias each on VIN and GND at the pins.
+- 0.1 µF CHF plus ≥ 10 µF ceramic from VIN to PGND, right at the pins.
+- 0.1 µF from BOOT to SW.
+- Join AGND to PGND at one point.
 - Put CIN/COUT as close to the device as possible, with multiple vias.
 - Keep SW short and wide; switching current must not flow under the IC.
 - Take VOUT sense to the upper FB resistor separately; Kelvin the FB ground to GND.
@@ -31,6 +35,7 @@ Compiled 2026-10-25. Each rule cites a document that was **actually fetched and 
 - Place the FB divider at the FB pin and tie it to the COUT+ terminal.
 
 **LM74800 ideal diode (TI SNOSD95C, LM7480x-Q1)**
+- The exposed pad (RTN) must stay **floating**, with no GND pour or vias. Tying it to GND disables reverse-polarity protection (SNOSD95C pin table and §10.4). U1 pad 13 has been checked: it is `unconnected-(U1-RTN-Pad13)`.
 - Keep A/DGATE/C short to the MOSFET S/G/D, and HGATE/OUT short to the load-disconnect FET.
 - Place TVS and CVS close to the IC.
 - Keep the CAP charge-pump cap away from the FETs (thermal).
@@ -57,6 +62,7 @@ Compiled 2026-10-25. Each rule cites a document that was **actually fetched and 
 - Decap placement: as close as possible to, or under, the pins (opposite side for BGA), with a short, wide via to the planes.
 - Put the HSE crystal and load caps as close as possible to the MCU.
 - Space clocks ≥ 3× trace width from other signals and use few vias. Separate noisy circuits.
+- Crystal: AN2867 Rev 24 (keep load caps tight, with a local ground). From teammate notes in /workspace/research/layout_notes.md, which mark every mm value there as inference.
 - AN4488 is the F4 note and AN5419 covers H72x/73x; AN4938 is the applicable H74x/75x note.
 
 **SN65DSI83 (TI SLLSEC1I)**
