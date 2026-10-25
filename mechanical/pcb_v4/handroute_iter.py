@@ -8,6 +8,7 @@ for k in range(passes):
     out = dst + f".pass{k}.kicad_pcb"
     subprocess.run([sys.executable, os.path.join(os.path.dirname(__file__) or ".", "handroute_v4.py"), src, out],
                    env=dict(os.environ, PRIO="/tmp/hr_prio.json"), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    if not os.path.exists(out + ".route.json"): print(f"pass {k}: crashed", flush=True); continue
     r = json.load(open(out + ".route.json")); f = r["failed"]
     print(f"pass {k}: {len(f)} failed {f}", flush=True)
     if best is None or len(f) < best[0]: best = (len(f), out)

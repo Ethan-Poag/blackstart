@@ -4,6 +4,7 @@
     F courtyard is free (F faces the display: TFT rear is >= ~2.3 mm away even under the source-PCB band, so
     <=1 mm chips are fine; nothing tall moves). U21 VCC/VCORE decaps stay on B under the BGA.
   * parts in the U21 escape fan (x 162..172 east of the DSI columns, LVDS rows south) are pushed out radially
+  * re-assigns the divider-string resistors among their existing slots to shorten HV_LINE_DIV nodes (hvslots_v4)
   * adds the DNP REFCLK oscillator option Y4/R531/C286 on F above U21 ball H2
   * starts from the copper-free refined board (genctl_v4_ref) with src positions, then classes/planes/fan-out
 python3 relieve_v4.py in.kicad_pcb out.kicad_pcb [radius_u21=14] [cm5_margin=6]
@@ -26,6 +27,8 @@ for f in b.GetFootprints():
     if not q: continue
     if f.IsFlipped() != q[2]: f.Flip(f.GetPosition(), FD)
     f.SetPosition(pcbnew.VECTOR2I(q[0], q[1])); f.SetOrientationDegrees(q[3])
+import hvslots_v4
+hvslots_v4.reassign(b)   # shorten the 600 V divider strings (slot swap; spacing rules unchanged)
 RV.setup_classes(b); RV.setup_planes(b)
 fps = {f.GetReference(): f for f in b.GetFootprints()}
 U = fps["U21"]; ux, uy = TM(U.GetPosition().x), TM(U.GetPosition().y)

@@ -39,7 +39,7 @@ for t in list(b.GetTracks()):
     ends = [t.GetPosition()] if t.Type() == pcbnew.PCB_VIA_T else [t.GetStart(), t.GetEnd()]
     inside = any(min(xs)-0.05 < mm(p.x) < max(xs)+0.05 and min(ys)-0.05 < mm(p.y) < max(ys)+0.05 for p in ends)
     if t.GetNetname() == "GND" and inside and not t.IsLocked():
-        b.Remove(t)
+        b.Delete(t)
 VIP = {"H2": (0.30, 0.15), "H3": (0.35, 0.2), "H5": (0.35, 0.2), "H7": (0.35, 0.2),
        "C8": (0.35, 0.2), "E8": (0.35, 0.2), "G8": (0.35, 0.2), "E6": (0.35, 0.2)}
 for n, (d, dr) in VIP.items():

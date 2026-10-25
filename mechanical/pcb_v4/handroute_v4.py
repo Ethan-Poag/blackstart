@@ -122,6 +122,13 @@ BLK = np.stack([np.array(i, bool) for i in blk]) | ~inside[None]
 VBLK = np.array(vblk, bool) | ~inside
 VBLK[:, bx0:bx1] = True
 CLSARR = {}
+LAB0 = LAB.copy()   # pre-existing copper/pads, for rip-up
+def ripup(codes):
+    """remove this run's copper of the given nets (failed partial routes) and restore the raster"""
+    for t in [t for t in made if t.GetNetCode() in codes]:
+        made.remove(t); b.Delete(t)
+    for c in codes:
+        m = (LAB == c + 1) & (LAB0 != c + 1); LAB[m] = LAB0[m]
 def class_mask(names):
     codes = [c + 1 for c, n in netclass.items() if n in names]
     return np.isin(LAB, codes)
@@ -518,8 +525,28 @@ if __name__ == "__main__":
     jobs.sort(key=lambda j: (0 if j[2] in prio else 1, prio.index(j[2]) if j[2] in prio else 0))
     rep = []; failed = []
     t0 = time.time()
+    fj = []
     for j in jobs:
-        if not run_job(j, rep): failed.append(j[2])
+        if not run_job(j, rep): fj.append(j)
+    # repair rounds: rip up the partial copper of every failed job, retry with a wider window / cheaper vias
+    def codes_of(j):
+        c = [b.FindNet(j[2]).GetNetCode()]
+        if j[1] == "pair": c.append(b.FindNet(j[3]["nn"]).GetNetCode())
+        return c
+    for rnd, (mg, vc) in enumerate(((16.0, 150.0), (24.0, 60.0))):
+        if not fj: break
+        for j in fj: ripup(codes_of(j))
+        still = []
+        for j in reversed(fj):
+            kw = dict(j[3])
+            if j[1] == "net": kw.update(margin=mg, viac=vc)
+            rep[:] = [e for e in rep if e["net"] != j[2]]
+            if not run_job((j[0], j[1], j[2], kw), rep): still.append(j)
+        print(f"repair {rnd}: {len(fj)} -> {len(still)}", flush=True)
+        fj = still
+    if fj:
+        for j in fj: ripup(codes_of(j))   # leave no dangling partial copper for failed nets
+    failed = [j[2] for j in fj]
     print(f"routed {len(jobs)-len(failed)}/{len(jobs)} jobs in {time.time()-t0:.0f}s; failed: {failed}")
     pcbnew.ZONE_FILLER(b).Fill(b.Zones()); b.Save(sys.argv[2])
     json.dump(dict(report=rep, failed=failed), open(sys.argv[2] + ".route.json", "w"), indent=1)
