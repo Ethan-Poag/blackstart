@@ -97,6 +97,18 @@
    "failed": []
   },
   {
+   "group": "eth",
+   "net": "ETH2_P",
+   "pair": "ETH2_N",
+   "ok": true,
+   "length": 66.86,
+   "length_n": 66.86,
+   "skew": 0.0,
+   "vias": 2,
+   "vias_n": 3,
+   "failed": []
+  },
+  {
    "group": "hv",
    "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_VC_N",
    "ok": true,
@@ -109,11 +121,23 @@
    "net": "ETH3_P",
    "pair": "ETH3_N",
    "ok": true,
-   "length": 69.71,
-   "length_n": 69.71,
+   "length": 67.16,
+   "length_n": 67.16,
    "skew": 0.0,
-   "vias": 0,
-   "vias_n": 4,
+   "vias": 3,
+   "vias_n": 3,
+   "failed": []
+  },
+  {
+   "group": "usb",
+   "net": "USB30_DP",
+   "pair": "USB30_DM",
+   "ok": true,
+   "length": 146.22,
+   "length_n": 146.22,
+   "skew": 0.0,
+   "vias": 2,
+   "vias_n": 2,
    "failed": []
   },
   {
@@ -149,8 +173,8 @@
    "net": "DSI_C_P",
    "pair": "DSI_C_N",
    "ok": true,
-   "length": 122.36,
-   "length_n": 122.36,
+   "length": 122.97,
+   "length_n": 122.97,
    "skew": 0.0,
    "vias": 1,
    "vias_n": 2,
@@ -161,11 +185,11 @@
    "net": "DSI_D0_P",
    "pair": "DSI_D0_N",
    "ok": true,
-   "length": 121.8,
-   "length_n": 121.8,
+   "length": 126.97,
+   "length_n": 126.97,
    "skew": 0.0,
    "vias": 2,
-   "vias_n": 5,
+   "vias_n": 10,
    "failed": []
   },
   {
@@ -173,10 +197,10 @@
    "net": "DSI_D1_P",
    "pair": "DSI_D1_N",
    "ok": true,
-   "length": 124.84,
-   "length_n": 124.84,
+   "length": 125.3,
+   "length_n": 125.3,
    "skew": 0.0,
-   "vias": 2,
+   "vias": 1,
    "vias_n": 5,
    "failed": []
   },
@@ -185,11 +209,11 @@
    "net": "DSI_D2_P",
    "pair": "DSI_D2_N",
    "ok": true,
-   "length": 126.46,
-   "length_n": 126.46,
+   "length": 131.58,
+   "length_n": 131.58,
    "skew": 0.0,
    "vias": 1,
-   "vias_n": 5,
+   "vias_n": 6,
    "failed": []
   },
   {
@@ -197,11 +221,11 @@
    "net": "DSI_D3_P",
    "pair": "DSI_D3_N",
    "ok": true,
-   "length": 122.38,
-   "length_n": 122.38,
+   "length": 121.53,
+   "length_n": 121.53,
    "skew": 0.0,
    "vias": 2,
-   "vias_n": 3,
+   "vias_n": 4,
    "failed": []
   },
   {
@@ -221,11 +245,11 @@
    "net": "ETH0_P",
    "pair": "ETH0_N",
    "ok": true,
-   "length": 63.11,
-   "length_n": 63.11,
+   "length": 71.56,
+   "length_n": 71.56,
    "skew": 0.0,
    "vias": 2,
-   "vias_n": 4,
+   "vias_n": 3,
    "failed": []
   },
   {
@@ -233,22 +257,10 @@
    "net": "ETH1_P",
    "pair": "ETH1_N",
    "ok": true,
-   "length": 74.5,
-   "length_n": 74.5,
+   "length": 80.7,
+   "length_n": 80.7,
    "skew": 0.0,
-   "vias": 2,
-   "vias_n": 6,
-   "failed": []
-  },
-  {
-   "group": "eth",
-   "net": "ETH2_P",
-   "pair": "ETH2_N",
-   "ok": true,
-   "length": 77.35,
-   "length_n": 77.35,
-   "skew": 0.0,
-   "vias": 3,
+   "vias": 4,
    "vias_n": 6,
    "failed": []
   },
@@ -733,22 +745,6 @@
    "failed": []
   },
   {
-   "group": "usb",
-   "net": "USB30_DP",
-   "pair": "USB30_DM",
-   "ok": false,
-   "length": 141.93,
-   "length_n": 0.0,
-   "skew": 141.93,
-   "vias": 2,
-   "vias_n": 0,
-   "failed": [
-    "D20.3",
-    "D20.4",
-    "U10.136"
-   ]
-  },
-  {
    "group": "ade",
    "net": "/AC metering: 2x ADE9000 (gen + bus), isolated/AC_SCK",
    "ok": false,
@@ -809,7 +805,6 @@
   }
  ],
  "failed": [
-  "USB30_DP",
   "/AC metering: 2x ADE9000 (gen + bus), isolated/AC_SCK",
   "/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_VC_P",
   "/Display: DSI->LVDS bridge, panel power, backlight, touch/LVDSC_P",

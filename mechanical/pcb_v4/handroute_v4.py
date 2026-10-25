@@ -11,7 +11,7 @@ cells where the whole pair would not fit, then N follows P at gap+w using a
 distance band cost.  All produced tracks/vias are LOCKED so the Specctra export
 marks them protected and Freerouting leaves them alone.
 """
-import sys, re, math, heapq
+import sys, os, re, math, heapq
 import numpy as np, pcbnew
 from PIL import Image, ImageDraw
 from scipy.ndimage import distance_transform_edt as edt
@@ -328,7 +328,7 @@ def pad_mask(code, win, pads=None):
     y0, y1, x0, x1 = win
     m = np.zeros((3, y1 - y0, x1 - x0), bool)
     for li, pg in padown.get(code, []):
-        if pads is not None and not any(_poly_hit(pg, p) for p in pads): continue
+        if pads is not None and not any(p.IsOnLayer(LAY[li]) and _poly_hit(pg, p) for p in pads): continue   # same layer only (F pad over a B pad)
         img = Image.new("L", (x1 - x0, y1 - y0), 0)
         ImageDraw.Draw(img).polygon([(x - x0, y - y0) for x, y in pg], fill=1)
         m[li] |= np.array(img, bool)
@@ -500,7 +500,7 @@ def jobs_for(gname):
         rx = {"eth": r"^ETH\d_P$", "usb": r"^USB3\d_DP$", "lvds": r"LVDS[0-3C]_P$", "dsi": r"^DSI_(C|D\d)_P$"}[gname]
         for pn in nets_matching(rx):
             nn = re.sub(r"_P$", "_N", pn) if not pn.endswith("_DP") else pn[:-2] + "DM"
-            J.append(("pair", pn, dict(nn=nn)))
+            J.append(("pair", pn, dict(nn=nn, swap=bool(re.search(os.environ.get("SWAP_RX", "^$"), pn)))))
     return [(gname,) + j for j in J]
 
 def run_job(job, rep):
@@ -509,7 +509,9 @@ def run_job(job, rep):
         r = route_net(b.FindNet(name).GetNetCode(), **kw)
         if r: rep.append(dict(group=g, net=name, ok=r["ok"], length=round(r["length"], 2), vias=r["vias"], failed=r["failed"]))
         return (not r) or r["ok"]
-    out = []; route_pair(name, kw["nn"], out)
+    out = []
+    if kw.get("swap"): route_pair(kw["nn"], name, out); out = [(o[1], o[0], o[3], o[2], o[5], o[4], o[6], o[8], o[7], o[9]) for o in out]
+    else: route_pair(name, kw["nn"], out)
     pn, nn, okp, okn, lp, ln, sk, vp, vn, fl = out[0]
     if okp and okn:
         P = b.FindNet(pn).GetNetCode(); N = b.FindNet(nn).GetNetCode()
