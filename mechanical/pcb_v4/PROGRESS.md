@@ -77,3 +77,42 @@
   | LVDS2, USB30, USB31 | failed | | OPEN |
 - Still unrouted critical nets: LVDS1/LVDSC/LVDS2 P, USB30/USB31, AC_MISO, AC_MOSI, AC_SCK, ADE_SCK, BUS_VC_N, GEN_VA_N, GEN_VC_P, and divider nodes R437/R455/R456/R464/R471-Pad2. Passes trade one failure for another, so a congestion-aware ordering or a manual pass is needed.
 - Freerouting pre-existing violations on the new DSN: 317, down from 396. The listed examples are same-net fixed-via pairs (e.g. Net-(R430-Pad2) via<->via), which is a Freerouting artefact and not a real spacing problem.
+
+## Milestone 5 (2026-10-25 ~11:00 HST): relief, critical re-route, DRC clean-up, Freerouting attempt
+Board: **genctl_v4_handrouted.kicad_pcb**, opens in plain KiCad 9 with no plugins.
+- **Relief (relieve_v4.py):**
+  - 23 small passives near U21/U9/U10 moved from B to F.
+  - DNP REFCLK oscillator Y4 + R531 + C286 added on F.
+  - HV divider resistors reassigned among their existing slots (hvslots_v4.py). Total string length went from 819 to about 606 mm. Line-side resistors are kept more than 9 mm from the ADEs.
+  - ADE GND pins stubbed into EP41.
+  - The barrier rules (13 mm, slots) are unchanged.
+- **Critical routing:** best result is 86 of 91 critical jobs OK. The 5 that hard-fail:
+  - AC_SCK, BUS_VC_P, ADE_XO
+  - LVDSC_P, LVDS0_P (U21 C9/F9 escape)
+- **LVDS1_P is also effectively open.** The report marks it OK, but it has only 0.6 mm of copper (a false hit at the dog-bone). That makes **6 open critical nets**.
+- Negotiated-priority ordering was tried and rejected: the best pass had 9 failures, against 5 for the previous order. Passes oscillate between the U21 LVDS-escape set and the U72 SPI/XTAL set. This needs a manual pass or placement change.
+- **Unrouted / routed %** (pcbnew, after zone fill):
+  - 1809 of 2936 pad connections are unrouted, so **38.4 % routed** overall.
+  - Most of the remainder is plain low-speed nets.
+  - 3888 track segments, 1267 vias.
+- **DRC (kicad-cli, errors only): 0 violations.** It was 36 before the clean-up:
+  - **16 via/annular/drill errors.** Root cause: handroute rewrote the .kicad_pro and dropped the 0.30/0.15/0.075 board minimums needed by the U21 via-in-pad. The minimums are restored; outside U21 the .dru still enforces 0.4/0.2/0.1.
+  - **4 Y4/C54 errors** (short, mask bridge, 2 courtyard). Fixed by moving C54 1.3 mm up.
+  - **3 genuine HV 3 mm errors.** GEN_N/GEN_L1 pads were 2.63-2.98 mm from the *low-voltage* tap nodes R439/R425-Pad2 (Default class, so 3 mm applies) and from the CT4 secondary. Fixed by moving R443, R422, R439 and R425 by 0.15-0.45 mm with their tracks dragged.
+  - **13 clearance errors** that were 0.005-0.02 mm short. Fixed by via/segment nudges, the ADE_CS1_N exit from U7.28, and a zone refill.
+  - Scripts: drcfix_v4.py, drcfix2_v4.py.
+  - Unconnected count unchanged by the fixes (1810 → 1809).
+- **Skew** (track length, P vs N, measured on the board): DSI C/D0-D3, ETH0-3, LVDS2/3 are all ≤0.05 mm, so track-only skew is within 0.15 mm.
+- **Skew including vias: NOT met.** Via counts differ within pairs:
+  - DSI_D0 3/10, DSI_D2 2/6, DSI_D1 2/5, USB31 2/4, ETH1 4/6, LVDS2 1/3, others ±1.
+  - At about 1.6 mm per through-via that is up to about 11 mm electrical skew on DSI_D0.
+  - Needs coupled re-routing in KiCad's interactive diff-pair router.
+  - The GEN/BUS V± analog inputs have 10-14 mm skew; that does not matter for them.
+- **Freerouting** (low-speed remainder):
+  - Hand routes were marked protect, and the run had a hard 60-minute timeout (09:56-10:56 HST).
+  - It **timed out (exit 124) without writing an SES.** It logged no completed pass on 2784 unrouted items, so **no Freerouting result was imported.**
+  - Next try: split by region/net subset, or run longer on a bigger machine.
+  - Note: the DSN still contained the open critical nets. Delete any of their Freerouting tracks on import.
+- **Plot:** routed_tracks_v4.png (tracks only, planes not shown), from plot_routes_v4.py.
+- **Open safety item for review:** HV parts may sit under the display (about 3.5 mm air gap on the F side), so HV parts must stay on B. The 600 V spacing rules still need professional compliance review.
+- **Naming:** the DSI83 bridge is **U21** on the board. U19 is a TPS2553.
