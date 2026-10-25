@@ -199,7 +199,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 ## Display (display.kicad_sch)
 **Bridge (SN65DSI83)**
 - 1.8 V from a TLV75518. VCORE gets 1 µF.
-- ADDR = GND (address 0x2C). REFCLK = GND (clock taken from DSI). RSVD2 = GND.
+- ADDR = GND (address 0x2C). REFCLK = GND (clock taken from DSI). RSVD2 = GND. Optional DNP REFCLK source: Y4 25 MHz 1.8 V CMOS oscillator (ASDMB-25.000MHZ-LC-T, VDD +1V8_DSI) -> R531 (22R, or 0R) at the oscillator -> REFCLK; the 10k to GND stays fitted. Fit it if the Pi DSI clock lane is non-continuous or its PLL causes flicker, then set HS_CLK_SRC (0x0A.0)=0 and REFCLK_MULTIPLIER (0x0B.1:0) so the pixel clock is 25-154 MHz. Datasheet SLLSEC1I: REFCLK 25-154 MHz, <=50 ps p-p jitter, 40-60 % duty, 1.8 V CMOS (abs max 2.175 V).
 - EN: 100k + 10 nF RC.
 - LVDS lanes go to the 40-pin FPC per the RVT121 datasheet:
   - Lanes: Rxin0 on 8/9, Rxin1 11/12, Rxin2 14/15, CLK 17/18, Rxin3 20/21.
