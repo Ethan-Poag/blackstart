@@ -93,7 +93,7 @@ for line in open('/workspace/genctl/kicad/genctl/tools/cm5pins.txt'):
 for nm,rng in (('RPi_CM5_A',range(1,101)),('RPi_CM5_B',range(101,201))):
     ic(nm,[(str(n),CM5[n]) for n in rng if n%2==1],[(str(n),CM5[n]) for n in rng if n%2==0],ref='U',
        desc='Raspberry Pi Compute Module 5, connector %s (pins %d-%d), pin names from CM5 datasheet'%(nm[-1],rng[0],rng[-1]),
-       mfr='Hirose', mpn='DF40C-100DS-0.4V(51)', fp='genctl:DF40C-100DS-0.4V', lcsc='C597931')
+       mfr='Hirose', mpn='DF40C-100DS-0.4V(51)', fp='genctl:DF40C-100DS-0.4V'+('_B' if nm.endswith('B') else ''), lcsc='C597931')
 ic('USB3_A_Receptacle', P((1,'VBUS'),(2,'D-'),(3,'D+'),(4,'GND'),(5,'SSRX-'),(6,'SSRX+'),(7,'GND_DRAIN'),(8,'SSTX-'),(9,'SSTX+')), P((10,'SHIELD'),), ref='J', desc='USB 3.0 Type-A receptacle, THT right-angle, Hong Cheng HC-USB3.0-L168-WP (DS pins 1-9 std USB3 StdA, 2 shell pads = 10)', mfr='Hong Cheng', mpn='HC-USB3.0-L168-WP', lcsc='C7501850', fp='genctl:USB3_A_HC-USB3.0-L168-WP')
 ic('CR2032_Holder', P((1,'+')), P((2,'-')), ref='BT', desc='CR2032 SMD holder', mfr='MYOUNG', mpn='BS-CR2032-8', fp='genctl:BS-CR2032-8', lcsc='C7498149')
 ic('LMR36506RRPER', P((4,'VIN'),(3,'EN/UVLO'),(1,'RT'),(8,'FB'),(9,'GND')), P((5,'SW'),(6,'BOOT'),(7,'VCC'),(2,'PGOOD')), desc='3-65V 0.6A sync buck, VQFN-HR-9 2x2 (RPE)', mfr='TI', mpn='LMR36506RRPER', fp='genctl:LMR36506_VQFN-HR-9_RPE', lcsc='C2870127')

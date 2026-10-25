@@ -603,8 +603,8 @@ RCX={  # (value, fp) -> lcsc for passives not in gen.RLCSC/CLCSC (all checked on
 }
 PREC={('100k',_r6):'C122538',('18k',_r6):'C309650'}  # 0.1% thin film where the note asks for 0.1%
 CONNFP={  # value prefix -> (fp, lcsc, mpn)
- 'PC 5/4-GF-7,62':('Connector_Phoenix_GMSTB:PhoenixContact_GMSTB_2,5_4-GF-7,62_1x04_P7.62mm_Horizontal_ThreadedFlange','C3579760','1720819'),
- 'J4 E-stop':('Connector_Phoenix_GMSTB:PhoenixContact_GMSTB_2,5_4-GF-7,62_1x04_P7.62mm_Horizontal_ThreadedFlange','C3579760','1720819'),
+ 'PC 5/4-GF-7,62':('genctl:PhoenixContact_PC5_4-GF-7.62_1720819','C3579760','1720819'),
+ 'J4 E-stop':('genctl:PhoenixContact_PC5_4-GF-7.62_1720819','C3579760','1720819'),
  'Fan header':('Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal','C160390','SM04B-SRSS-TB'),
  'Internal USB':('Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal','C160390','SM04B-SRSS-TB'),
  'Spare USB':('Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical','C2337','1x6 2.54 header'),
@@ -633,9 +633,9 @@ def _fill(pt):
         if not pt.fp:
             n=int(lid[-2:])
             if n==6 and ('7.62' not in pt.value):
-                pt.fp='genctl:WJ15EDGRC-3.81-6P'; pt.lcsc=pt.lcsc or 'C7246'; pt.mpn='WJ15EDGRC-3.81-06P'
+                pt.fp='genctl:KF2EDGRM-5.08-6P'; pt.lcsc='C441292'; pt.mpn='KF2EDGRM-5.08-6P'  # FIX rev f: field I/O are 5.08 mm Kefa per BOM (was 3.81 WJ15)
             if n==4 and 'voltage' in pt.value:
-                pt.fp='genctl:KF2EDGRM-5.08-6P'; pt.lcsc='C441292'; pt.mpn='KF2EDGRM-5.08-6P (use 4 of 6: L1/L2/L3 . N spacing)'
+                pt.fp='genctl:PhoenixContact_PC5_4-GF-7.62_1720819'; pt.lcsc='C3579760'; pt.mpn='1720819'  # FIX rev f: BOM part is Phoenix PC 5/4-GF-7,62 (was KF2 5.08 6P, 2.6 mm L-L gap)
     if lid=='Device:LED' and pt.lcsc in ('C2297','C2295'): pt.fp='LED_SMD:LED_0805_2012Metric'
     if lid=='Device:R' and '0.1%' in (pt.note or '') and (pt.value,pt.fp) in PREC: pt.lcsc=PREC[(pt.value,pt.fp)]
     if lid in ('Device:R','Device:C','Device:C_Polarized') and not pt.lcsc:

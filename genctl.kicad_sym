@@ -7615,7 +7615,7 @@
 			(effects
 				(font
 					(size 1.27 1.27))))
-		(property "Footprint" "genctl:DF40C-100DS-0.4V"
+		(property "Footprint" "genctl:DF40C-100DS-0.4V_B"
 			(at 0 0 0)
 			(effects
 				(font

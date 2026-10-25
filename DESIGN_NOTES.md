@@ -430,3 +430,12 @@ after halt the STM32 sees no heartbeat and pulses CM5_OFF (PMIC_EN low) to reboo
 LVC541 watchdog gate. SNS mux now 16/16 used (MUXA 8, MUXB 7 + E-stop trip). Readback: @0x23 all 16 pins, AUX10_RB_N on @0x25 P12.
 J6B = AUX7-10 + 2 GND, J5B = 6 GND (was 4 + 2 NC): output pins 16 (+ fuel/crank on J4), returns 8; connectors unchanged (4x KF2EDGRM-5.08-6P + plugs).
 **Cost:** $755.07 -> $769.41 (comms 36.58 -> 28.45, outputs 145.41 -> 159.66, power 44.61 -> 52.83).
+
+## Rev 2026-10-24 (f) - footprint verification fixes (see docs/FOOTPRINT_CHECK.md)
+- CM5 connector B: new genctl:DF40C-100DS-0.4V_B with pads 101-200. Before this, all of conn B was unconnected on the PCB.
+- Field I/O headers J17-J22 and J24-J27 now use KF2EDGRM-5.08-6P (was 3.81 mm WJ15).
+- J0, J4, J7 and J8 now use the true Phoenix PC 5/4-GF-7,62 (1720819) pattern: 3 pins per potential, Ø1.3 mm holes, Ø3.2 mm flange holes. J7/J8 had been on a 5.08 mm Kefa footprint with a 2.6 mm gap at 600 V.
+- HR911131A locating holes changed to NPTH.
+- Removed the unused M.2, SIM and USB3-A footprints.
+- Power BOM 22u price corrected. Grand total is now $769.87.
+- Open item: SOIC-16W isolator pads give a 7.25 mm gap, so a slot under each isolator is needed at layout to reach 8 mm.
