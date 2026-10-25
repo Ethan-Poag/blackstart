@@ -27,13 +27,18 @@
    6.0
   ],
   "shell_to_cutout_per_side": 1.0,
+  "ALS_pipe_to_nearest_cap_edge": 4.38,
+  "ALS_centre_to_glass_top_edge": 9.25,
+  "ALS_centre_to_active_area_top_left_corner (7.32, 8.03)": 17.67,
+  "ALS_pipe_rear_face_to_PCB_F": 1.0,
+  "fin_plate_total_depth_behind_bezel_face": 82.75,
   "insertion: shell bbox vs cutout per side (min gap, must be >0)": 1.0
  },
  "volumes_cm3": {
-  "bezel": 232.6,
+  "bezel": 232.5,
   "display": 451.3,
   "key_caps": 36.5,
-  "key_membrane": 7.1,
+  "key_membrane": 7.0,
   "key_nibs": 0.2,
   "switches": 2.9,
   "pcb": 95.2,
@@ -42,9 +47,13 @@
   "thermal_pads": 1.4,
   "gasket": 12.8,
   "customer_panel": 151.1,
-  "rear_shell": 315.5,
+  "rear_shell": 202.8,
   "clamps": 15.4,
-  "clamp_screws": 2.6
+  "clamp_screws": 2.6,
+  "front_ring": 93.1,
+  "fin_plate": 487.6,
+  "heat_pillar": 22.1,
+  "light_pipe": 0.2
  },
  "bbox": {
   "bezel": [
@@ -121,6 +130,26 @@
    314.0,
    246.0,
    34.1
+  ],
+  "front_ring": [
+   329.0,
+   261.0,
+   4.0
+  ],
+  "fin_plate": [
+   242.0,
+   177.0,
+   34.8
+  ],
+  "heat_pillar": [
+   40.0,
+   28.0,
+   19.7
+  ],
+  "light_pipe": [
+   4.0,
+   4.0,
+   19.0
   ]
  },
  "shell_outer_WxH": [

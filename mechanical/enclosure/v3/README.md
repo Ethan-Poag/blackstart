@@ -17,6 +17,12 @@ Built against genctl_v4_handrouted.kicad_pcb @ f03c57a (read-only). Supersedes P
 - BCR-4 closed: geometry.py BTN_X now equals the board key x (+0.30 mm). front_panel.png/svg regenerated.
 - Heat re-validated (HEAT_PATH.md, "Phase 3 re-check"). At the ESTIMATED 4 W dashboard load the CM5 throttles above about 41 C ambient with no change, 46 C with A, 53 C with B and 57 C with C. Under a full CPU stress load (8.5 W) only C holds 57 C.
 
+## Phase 4 (cool-to-touch, ALS)
+- Thermal design D: CM5 -> heat pillar -> rear 6061 fin plate behind the panel; display isolated from the bezel; 3 mm PA12 front ring on a 1 mm air break is the touch surface. Ring 44.4 C at 40 C ambient (4 W CM5, 70 % backlight). **The cover glass is 52 C and cannot meet 45 C with this display (its own ~10 W): needs Ethan's decision (firmware dimming or a 61010-1 glass limit).**
+- **Deviations from Ethan's original constraints:** CM5 heat no longer goes to the bezel boss (D' keeps it); the glass is 4 mm behind the ring face (flush only if the bezel is recessed, not modelled); unit depth 82.75 mm instead of 48 mm.
+- ALS window at (11.0, -9.25), sensor on the PCB F side at the same coordinates: BCR-8. Cost delta for D: +$227 at qty 1 / +$115 at qty 10 (ESTIMATED).
+- Details: HEAT_PATH.md "Phase 4", thermal_v3.py, thermal_results.json.
+
 ## Files
 enclosure_v3.py, render_v3.py, board_interface.json, BOARD_INTERFACE.md, BOARD_CHANGE_REQUESTS.md, MISMATCH_LIST.md, KEYS_LIGHTGUIDE.md, HEAT_PATH.md, TOLERANCE_STACK.md, PARTS_COSTED.md/.csv, checks.json, enclosure_v3_assembly.step, step/*.step (15 parts), exploded_view_v3.png, iso_front_v3.png, iso_rear_v3.png, section_key_clamp_v3.png, section_key_detail_v3.png, section_heatpath_v3.png.
 Rebuild: `/workspace/cqenv/bin/python enclosure_v3.py && /workspace/cqenv/bin/python render_v3.py`.

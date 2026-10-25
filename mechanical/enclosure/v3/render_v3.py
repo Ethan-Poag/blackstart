@@ -12,7 +12,7 @@ def view(fname, expl, title, skip=()):
     for n, (wp, col) in parts.items():
         if n in skip: continue
         v, t = wp.val().tessellate(0.8, 0.5)
-        V = np.array([(p.x, p.y, p.z + (EXPL[n] if expl else 0)) for p in v])
+        V = np.array([(p.x, p.y, p.z + (EXPL.get(n, {"front_ring": 80, "light_pipe": 40, "fin_plate": -170, "heat_pillar": -130}.get(n, 0)) if expl else 0)) for p in v])
         a = 0.3 if n == "customer_panel" else 1
         ax.add_collection3d(Poly3DCollection(V[np.array(t)], facecolor=col + (a,), edgecolor="none"))
         if expl: ax.text(V[:, 0].max() + 10, V[:, 1].mean(), V[:, 2].mean(), n, fontsize=8)
@@ -20,7 +20,7 @@ def view(fname, expl, title, skip=()):
     ax.set_xlim(-40, 320); ax.set_ylim(-260, 100); ax.set_zlim(*zl)
     ax.set_box_aspect((360, 360, zl[1] - zl[0])); ax.view_init(elev=18 if expl else (-25 if "rear" in fname else 25), azim=-58 if expl else (-130 if "rear" in fname else -60)); ax.set_axis_off()
     ax.set_title(title, fontsize=10); fig.savefig(fname, dpi=110, bbox_inches="tight"); plt.close(fig)
-view("exploded_view_v3.png", True, "Blackstart enclosure v3 exploded: CNC Al bezel (heat spreader) + SLA caps/silicone strips/nibs + PCB v4 + Al heat bar + PA12 SLS shell + 6 PA12 rear clamps")
+view("exploded_view_v3.png", True, "Blackstart enclosure v3 exploded: CNC Al bezel (heat spreader) + SLA caps/silicone strips/nibs + PCB v4 + Al heat bar + PA12 SLS shell + 6 PA12 rear clamps + PA12 front ring + Al rear fin plate (phase 4)")
 view("iso_rear_v3.png", False, "v3 assembled, rear iso (customer panel 3 mm translucent)", skip=())
 view("iso_front_v3.png", False, "v3 front", skip=("customer_panel",))
 # fix front view angle

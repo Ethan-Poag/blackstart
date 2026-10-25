@@ -58,6 +58,16 @@ REAR_PORTS = {"J10": (FP["J10"]["x"], FP["J10"]["y"], 20.0, 24.0, ZR + H_J10),  
               "J11": (FP["J11"]["x"], FP["J11"]["y"], 16.0, 10.0, ZR + H_J11)}   # USB-C overmold 12.85 x 7.0 max (R2.2 ECN), 13.0 x 7.4 seen
 TUN_WALL, TUN_GAP, LEAD_IN = 2.0, 0.5, 1.5
 SHELL_POSTS = [(100, 60), (100, 140), (240, 60), (240, 140)]
+# PHASE 4 thermal option D: heat goes to a rear Al fin plate (not touched), PA12 front ring is the touch surface
+RING_T, RING_GAP = 3.0, 1.0                       # PA12 ring 3 mm, 1 mm air thermal break in front of the bezel face
+FP_T, FIN_H, FIN_T, FIN_PITCH = 4.75, 30.0, 2.0, 8.0   # 6061 base (laser/waterjet), laser-cut 2 mm fin slats in milled slots
+FIN_PLATE = (16.0, 1.0, 258.0, 178.0)             # inside the terminal wiring windows
+REAR_OPEN = (20.0, 4.0, 255.0, 176.0)             # PA12 rear wall opening under the plate
+PILLAR = (210.0, 8.0, 250.0, 36.0)                # 6061 block heat bar -> fin plate
+PORT_CLEAR = (196.0, 30.0, 256.0, 75.0)           # no fins around J10/J11 plugs
+# ambient light sensor (BCR-8): window centre in the cover-glass frame
+ALS = (11.0, -9.25); ALS_D, ALS_BORE = 4.0, 4.2
+ALS_Z_TOP = Z_PCB - 1.0                           # light-pipe rear face; sensor on PCB F side, <=0.7 mm tall + 0.3 gap
 
 def box(x0, y0, x1, y1, z0, z1):
     return cq.Workplane("XY").box(x1 - x0, y1 - y0, z1 - z0).translate(((x0 + x1) / 2, -(y0 + y1) / 2, -(z0 + z1) / 2))
@@ -88,6 +98,7 @@ def bezel():
     for _, x, y in KEYS:
         b = b.cut(box(x - CAP_W / 2 - GUIDE_CLR, y - CAP_H / 2 - GUIDE_CLR, x + CAP_W / 2 + GUIDE_CLR, y + CAP_H / 2 + GUIDE_CLR, -1, 30))
     for (x, y) in JOINT_SCREWS: b = b.cut(cyl(x, y, 3.3, 0.8, FIELD_T + 0.1))   # blind M4 taps, face intact
+    b = b.cut(cyl(*ALS, ALS_BORE, -1, 30))                                        # ALS light-pipe bore
     for (x, y) in PCB_HOLES + [PE]: b = b.cut(cyl(x, y, 3.3, 3.0, Z_PCB + 3))
     for x in (256.0, 271.0): b = b.cut(cyl(x, (BOSS[1] + BOSS[3]) / 2, 3.3, Z_HB0 - 10, Z_HB0 + 0.1))  # heat-bar M4 taps
     return b
@@ -99,7 +110,7 @@ def keys():
     caps, memb, nibs = [], [], []
     for yc, sg in ((KEYS[0][2], -1), (KEYS[6][2], 1)):   # strip: 1.5 bond land on the outer side, 0.1 on the display-rim side
         a, b = yc - sg * (CAP_H / 2 + 0.1), yc + sg * (CAP_H / 2 + 1.5)
-        memb.append(box(7.0, min(a, b), 267.5, max(a, b), GUIDE_L, GUIDE_L + MEMB_T).cut(box(BOSS[0] - 0.3, BOSS[1] - 1, BOSS[2] + 1, BOSS[3] + 0.3, 0, 30)))   # notch round heat boss
+        memb.append(box(7.0, min(a, b), 267.5, max(a, b), GUIDE_L, GUIDE_L + MEMB_T).cut(box(BOSS[0] - 0.3, BOSS[1] - 1, BOSS[2] + 1, BOSS[3] + 0.3, 0, 30)).cut(cyl(*ALS, 5.0, 0, 30)))   # notch round heat boss, ALS hole
     for _, x, y in KEYS:
         c = box(x - CAP_W / 2, y - CAP_H / 2, x + CAP_W / 2, y + CAP_H / 2, -HEAD_GAP, GUIDE_L)
         c = c.union(box(x - CAP_W / 2 - HEAD_OVER, y - CAP_H / 2 - HEAD_OVER, x + CAP_W / 2 + HEAD_OVER, y + CAP_H / 2 + HEAD_OVER, -HEAD_GAP - HEAD_T, -HEAD_GAP))
@@ -150,12 +161,11 @@ def rear_shell():
     s = s.cut(box(28, BY1 - 13, 248, BY1 + 1, zr0, SHELL_DEPTH + 1))           # bottom terminal row
     s = s.cut(box(BX1 - 18, 34, BX1 + 1, 182, zr0, SHELL_DEPTH + 1))           # right edge terminals J1/J23/J6/J7
     s = s.cut(box(BX0 - 1, 9, BX0 + 17, 164, zr0, SHELL_DEPTH + 1))            # left 600 V terminals J28/J29/J30
+    s = s.cut(box(*REAR_OPEN, zr0, SHELL_DEPTH + 1))                          # phase 4: opening under the Al fin plate
     for (cx, cy, w, h, zt) in REAR_PORTS.values():
         s = s.union(box(cx - w / 2 - TUN_WALL, cy - h / 2 - TUN_WALL, cx + w / 2 + TUN_WALL, cy + h / 2 + TUN_WALL, zt + TUN_GAP, SHELL_DEPTH))
         s = s.cut(box(cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2, zt, SHELL_DEPTH + 1))
         s = s.cut(box(cx - w / 2 - LEAD_IN, cy - h / 2 - LEAD_IN, cx + w / 2 + LEAD_IN, cy + h / 2 + LEAD_IN, SHELL_DEPTH - LEAD_IN, SHELL_DEPTH + 1))  # lead-in step
-    for i in range(12):                                                         # rear vents over CM5 / heat bar
-        s = s.cut(box(120 + i * 6, 70, 123 + i * 6, 130, zr0, SHELL_DEPTH + 1))
     for i in range(12):                                                         # chimney: bottom intake, top exhaust
         xv = 100 + i * 9
         s = s.cut(box(xv, SY0 - 1, xv + 4, SY0 + WALL + 1, 22, 34)).cut(box(xv, SY1 - WALL - 1, xv + 4, SY1 + 1, 22, 34))
@@ -194,6 +204,28 @@ def clamps(t=PANEL_T):
         br.append(b.cut(c)); sc.append(c)
     return U(br), U(sc)
 
+def front_ring():
+    r = box(BZ0[0], BZ0[1], BZ1[0], BZ1[1], -RING_GAP - RING_T, -RING_GAP).cut(box(W0, H0, W1, H1, -10, 1))
+    for _, x, y in KEYS:
+        r = r.cut(box(x - CAP_W / 2 - HEAD_OVER - 0.4, y - CAP_H / 2 - HEAD_OVER - 0.4, x + CAP_W / 2 + HEAD_OVER + 0.4, y + CAP_H / 2 + HEAD_OVER + 0.4, -10, 1))
+    r = r.cut(cyl(*ALS, ALS_BORE, -10, 1))
+    for (x, y) in JOINT_SCREWS[:6]: r = r.union(cyl(x, y - 6 if y < 0 else y + 6, 5.0, -RING_GAP - 0.01, 0))   # PA12 stand-off pips (thermal break)
+    return r
+def fin_plate():
+    f = box(*FIN_PLATE, SHELL_DEPTH, SHELL_DEPTH + FP_T)
+    x = FIN_PLATE[0] + 4
+    while x + FIN_T <= FIN_PLATE[2] - 4:
+        f = f.union(box(x, FIN_PLATE[1] + 2, x + FIN_T, FIN_PLATE[3] - 2, SHELL_DEPTH + FP_T, SHELL_DEPTH + FP_T + FIN_H)); x += FIN_PITCH
+    f = f.cut(box(*PORT_CLEAR, SHELL_DEPTH + FP_T, 200))
+    for (cx, cy, w, h, zt) in REAR_PORTS.values():
+        f = f.cut(box(cx - w / 2 - TUN_WALL - 0.5, cy - h / 2 - TUN_WALL - 0.5, cx + w / 2 + TUN_WALL + 0.5, cy + h / 2 + TUN_WALL + 0.5, 0, 200))
+    for (x, y) in SHELL_POSTS: f = f.cut(cyl(x, y, 4.5, 0, 200))
+    return f
+def heat_pillar():
+    return box(*PILLAR, Z_HB1, SHELL_DEPTH)
+def light_pipe():
+    return cyl(*ALS, ALS_D, -RING_GAP - RING_T, ALS_Z_TOP)
+
 def plug_envelopes():
     """Mated plug envelopes for checking only (not parts): RJ45 body 11.68 x 8.0 (Wikipedia 8P8C typ. / Canford 11.68 x 7.24 face),
     USB-C overmold 13.0 x 7.4 (largest measured, EE.SE 475901; spec max 12.85 x 7.0 per USB Type-C R2.2 ECN)."""
@@ -208,7 +240,9 @@ def build():
             "switches": (switches(), (0.3, 0.3, 0.3)), "pcb": (pcb(), (0.1, 0.5, 0.15)), "rear_parts": (rear_parts(), (0.2, 0.3, 0.6)),
             "heat_bar": (heat_bar(), (0.8, 0.5, 0.2)), "thermal_pads": (thermal_pads(), (0.9, 0.2, 0.6)),
             "gasket": (gasket(), (0.9, 0.3, 0.1)), "customer_panel": (customer_panel(), (0.7, 0.7, 0.7)),
-            "rear_shell": (rear_shell(), (0.45, 0.45, 0.42)), "clamps": (cb, (0.75, 0.6, 0.2)), "clamp_screws": (cs, (0.85, 0.85, 0.9))}
+            "rear_shell": (rear_shell(), (0.45, 0.45, 0.42)), "clamps": (cb, (0.75, 0.6, 0.2)), "clamp_screws": (cs, (0.85, 0.85, 0.9)),
+            "front_ring": (front_ring(), (0.55, 0.55, 0.52)), "fin_plate": (fin_plate(), (0.75, 0.75, 0.78)),
+            "heat_pillar": (heat_pillar(), (0.8, 0.55, 0.25)), "light_pipe": (light_pipe(), (0.9, 0.95, 1.0))}
 
 def vol(a, b):
     try: return a.intersect(b).val().Volume()
@@ -218,7 +252,7 @@ def checks(parts):
     res = {}
     names = list(parts)
     allowed = {("pcb", "rear_parts"), ("pcb", "switches"), ("heat_bar", "thermal_pads"), ("bezel", "thermal_pads"),
-               ("clamps", "rear_shell"), ("clamp_screws", "customer_panel")}
+               ("clamps", "rear_shell"), ("clamp_screws", "customer_panel"), ("heat_bar", "heat_pillar")}
     for a, b in itertools.combinations(names, 2):
         if (a, b) in allowed or (b, a) in allowed: continue
         if "customer_panel" in (a, b) and "gasket" in (a, b): continue
@@ -237,7 +271,12 @@ def checks(parts):
            "J10_tunnel_clearance_per_side_to_RJ45_body_x_y": [round((20.0 - 11.68) / 2, 2), round((24.0 - 8.0) / 2, 2)],
            "J11_tunnel_clearance_per_side_to_USBC_overmold_x_y (13.0x7.4)": [round((16.0 - 13.0) / 2, 2), round((10.0 - 7.4) / 2, 2)],
            "clamp_screw_reach_panel_range_mm": [PANEL_MIN, PANEL_MAX],
-           "shell_to_cutout_per_side": CUT_GAP}
+           "shell_to_cutout_per_side": CUT_GAP,
+           "ALS_pipe_to_nearest_cap_edge": round(KEYS[0][1] - CAP_W / 2 - (ALS[0] + ALS_D / 2), 2),
+           "ALS_centre_to_glass_top_edge": round(-ALS[1], 2),
+           "ALS_centre_to_active_area_top_left_corner (7.32, 8.03)": round(((ALS[0] - 7.32) ** 2 + (ALS[1] - 8.03) ** 2) ** 0.5, 2),
+           "ALS_pipe_rear_face_to_PCB_F": round(Z_PCB - ALS_Z_TOP, 2),
+           "fin_plate_total_depth_behind_bezel_face": SHELL_DEPTH + FP_T + FIN_H}
     # clamp test at panel extremes: clamps must not hit the panel; panel must not hit shell
     for t in (PANEL_MIN, PANEL_MAX):
         cp = customer_panel(t)

@@ -30,3 +30,20 @@ Frame (both): mm, origin = cover-glass top-left corner, front view, +x right, +y
 | SW18 | 159.94, 188.71 | 159.64, 188.71 | +0.30 | 0.00 |
 | SW19 | 203.46, 188.71 | 203.16, 188.71 | +0.30 | 0.00 |
 | SW20 | 246.98, 188.71 | 246.68, 188.71 | +0.30 | 0.00 |
+
+
+## BCR-8 (REQUEST ONLY, phase 4): ambient light sensor (ALS) position
+- **Window centre (cover-glass frame: mm, origin at the glass top-left, front view, x right, y down): x = 11.0, y = -9.25.** It sits in the bezel key band left of SW9. The board uses the same frame, so the **sensor centre on the PCB is (11.0, -9.25), on the F side** (the side facing the display and front).
+- Free space (MEASURED board_interface.json from genctl_v4_handrouted.kicad_pcb @ f03c57a): H1 pad bbox ends at x 6.58 and SW9 starts at x 23.18 on F. The nearest B-side THT is J24 at x ≥ 30.24. Keep-out request: 4 mm radius on F, sensor package ≤ 0.7 mm tall above the F face.
+- Clearances (model, checks.json):
+  - 4.38 mm from the light pipe to the SW9 cap edge, with a solid aluminium bore wall between them blocking key LED glow.
+  - 9.25 mm to the glass top edge; 17.7 mm to the active-area corner.
+  - Light pipe rear face 1.0 mm above the PCB F face (0.3 mm above a 0.7 mm-tall sensor).
+- Window: Ø4.2 bore through the bezel and the PA12 ring, plus a Ø5 hole in the key membrane. Light pipe: Ø4.0 x 19 mm cast PMMA (or PC), turned or cut from rod, front face bead-blasted as a diffuser, flush with the ring face.
+- Rain seal: 0.1 mm interference fit plus a neutral-cure silicone or UV-acrylic bead on the inside of the bore. Field of view about ±60 deg with a cosine-like response from the frosted face (ESTIMATED).
+- Coupling loss over the 19 mm pipe plus diffuser: 40-70 % (ESTIMATED). Calibrate a gain in firmware.
+- Sensor class (SUGGESTION only): digital I2C ALS with a photopic response. OPT3001 (2 x 2 mm USON, small aperture, suits a light pipe) or VEML7700.
+- Alternative position if the left is unwanted: x 261.5, y -9.25 (between SW14 at 252.58 and H2 at 269.99). It is near the warm CM5/heat-boss corner, which matters little for an ALS. Not modelled.
+
+## BCR-9 (REQUEST ONLY, optional, phase 4): display-rear heat spreader strap (option E)
+Option E would cool the glass a further 1-2.5 K. It needs two PCB slots (about 20 x 3 mm) near the left and right board edges, clear of copper, so a 1.5 mm aluminium strap can run from a display-rear spreader to the fin plate. F-side part heights under the display must leave ≥ 1.8 mm, which is UNVERIFIED. Low value for the cost; listed for completeness.

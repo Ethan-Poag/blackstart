@@ -19,6 +19,20 @@ No quotes requested, no accounts, no uploads. Only two figures are read directly
 | 12 | M4x35 nylon-tip clamp screws | 6 | catalogue / any | 5 | 3 | ESTIMATED | no | n/a () |
 | 13 | Neutral-cure silicone (DOWSIL 7091 class) + VHB spacers | - | catalogue / any | 6 | 4 | ESTIMATED | no | n/a () |
 
+**Phase 4 adders: thermal option D and the ALS (all ESTIMATED; PA12 priced as the MJF $0.275/g stand-in; SendCutSend and CNC prices need an upload, so these are not measured):**
+
+| Part | qty1 $ | qty10 $ | basis |
+|---|---|---|---|
+| PA12 front ring 93 cm3 (~95 g), light grey dye | 30 | 26 | $0.275/g stand-in + dye |
+| 6061 fin plate: 4.75 mm base with milled slots + 29 laser-cut 2 mm slats, bonded | 190 | 100 | ESTIMATED CNC + laser |
+| 6061 heat pillar 40 x 28 x 19.7 | 25 | 12 | ESTIMATED |
+| Gap pad 6 W/mK pillar/plate + foam VHB display tape | 8 | 5 | ESTIMATED |
+| PMMA light pipe Ø4 x 19, frosted face, + seal bead | 4 | 2 | ESTIMATED |
+| Rear shell lighter (312 -> 203 cm3) | -30 | -30 | stand-in rate |
+| **Delta for option D** | **+227** | **+115** | |
+| D' instead: + 2 internal 6061 tie bars | +20 | +10 | ESTIMATED |
+| Plastic touch-surface alternatives: SLA painted ring instead of PA12 | +40 | +20 | ESTIMATED; glass front ring (chemically strengthened, printed) about +80/+40, needs supplier tooling-free cutting, ESTIMATED |
+
 **Totals (ESTIMATED):** CNC bezel baseline **~$660 @1, ~$390 @10** per unit. Laser-cut bezel stack alternative **~$410 @1, ~$280 @10**. Bezel is >60 % of cost either way.
 Key set (items 4+5+6): ~$45 @1, ~$38 @10 -> inside the $20-50 per-set target (interpretation in KEYS_LIGHTGUIDE.md).
 **PRICE STAND-IN: every PA12 price here is JLC MJF PA12 ($0.275/g) used as a proxy for SLS PA12. No SLS PA12 price was measured.**
