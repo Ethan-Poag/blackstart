@@ -453,3 +453,10 @@ J6B = AUX7-10 + 2 GND, J5B = 6 GND (was 4 + 2 NC): output pins 16 (+ fuel/crank 
 ## Rev 2026-10-24 (g) - isolation footprint (see docs/ISOLATION_CHECK.md)
 - ISOW7841 / ISO7741 now use genctl:SOIC-16W_7.5x10.3mm_P1.27mm_HV_Slot: TI DW0016B "HV/isolation option" pads (1.65 x 0.6 at 9.75 mm) -> 8.1 mm copper gap (was 7.25 mm), plus a 2.0 x 21.0 mm routed slot and an all-layer copper keep-out between the rows. Netlist identical, ERC 0/0.
 - Barrier: plan >=13 mm (FR-4 IIIa, 600 V working, reinforced) instead of 12 mm, or call out CTI>=400 laminate. J7/J8 inter-phase slot. AC1005 CT insulation unproven (open).
+
+## Rev 2026-10-24 (h)
+- Hold-up: 2x HV1030 10F/2.7V (65 C, not JLC) -> 2x JIERONG JRCD3R0206N120030E 20F/3.0V, 85 C 1000 h, LCSC C7471020 (JLC stock 4176). Series = 10 F at 4.9 V (2.45 V/cell, under 3.0 V rating; check 85 C derating). Usable energy 0.5*10*(4.9^2-2.7^2) = 83.6 J, x0.88 boost eff = 73.6 J -> ~16 s at 4.5 W, ~13 s at -20% C. Charge via 50R: tau = 500 s (~25 min to full; first-boot shutdown time is shorter). Footprint CP_Radial_D12.5mm_P5.00mm - verify lead pitch.
+- BOOT0: DI3-6 (PE11-14 = SPI4 bootloader) and DI8-11 (PB10/11 USART3, PB14/15 USART1-alt; bootloader v9.1 echoes TX on PB14) now go through 1k series R (nets DIx_N_M) so a pin the bootloader drives can only fight the 74HC14 at <=3.3 mA. Firmware/CM5: send 0x7F straight after reset-into-bootloader, check ACK, retry with NRST. No free pins to move the DIs.
+- STM32 hold-up: not added. SAFE rail runs to ~5.1 V input (LM74800 UV) so it rides cranking; below that the outputs drop and fuel de-energizes (fail-safe). Use BOR + FRAM state save. Option if wanted later: feed the SAFE LDO from the held-up rail.
+- Internal USB headers: each fed from its own TPS2553DBVR (C55266), ILIM 40.2k = ~0.68 A nominal, EN from TCA9555 @0x25 P13/P14 with 100k pull-up to +3V3_SAFE (on by default), FAULT wired to OUT_FAULT_N, 1u in / 10u out. USBLC6 VBUS pin moved to the switched rail.
+- Netlist changes are intentional; tools/netcompare_sig.py (refdes-independent) shows only these parts changed.
