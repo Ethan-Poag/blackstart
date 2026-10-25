@@ -1,0 +1,11 @@
+pass 0: 12 failed ['LVDS2_P', 'ETH3_P', 'USB30_DP', 'USB31_DP', 'AC_MISO', 'AC_MOSI', 'AC_SCK', 'ADE_SCK', 'BUS_VB_P', 'BUS_VC_N', 'BUS_VC_P', 'GEN_VC_P']
+pass 1: 10 failed ['AC_SCK', 'BUS_VB_P', 'BUS_VC_N', 'BUS_VC_P', 'LVDSC_P', 'ETH2_P', 'ADE_XO', 'AC_IRQ_N', 'AC_RST_N', 'GEN_VC_N']
+pass 2: 9 failed ['AC_IRQ_N', 'AC_RST_N', 'LVDS2_P', 'AC_MISO', 'AC_MOSI', 'LVDS1_P', 'ADE_XI', 'GEN_VB_P', 'Net-(R450-Pad2)']
+pass 3: 11 failed ['AC_RST_N', 'AC_SCK', 'BUS_VB_P', 'BUS_VC_N', 'BUS_VC_P', 'ADE_XI', 'LVDSC_P', 'ADE_XO', 'LVDS0_P', 'ETH1_P', 'GEN_VB_N']
+pass 4: 10 failed ['AC_RST_N', 'ADE_XI', 'LVDS2_P', 'AC_MISO', 'AC_MOSI', 'AC_IRQ_N', 'ETH2_P', 'LVDS1_P', 'GEN_VB_P', 'DSI_D1_P']
+pass 5: 11 failed ['ADE_XI', 'AC_SCK', 'BUS_VC_N', 'LVDSC_P', 'ADE_XO', 'LVDS0_P', 'DSI_D2_P', 'ETH0_P', 'BUS_VA_N', 'GEN_VN_TAP', 'Net-(R449-Pad2)']
+pass 6: 13 failed ['ADE_XI', 'AC_RST_N', 'LVDS2_P', 'AC_MISO', 'AC_MOSI', 'BUS_VB_P', 'BUS_VC_P', 'AC_IRQ_N', 'LVDS1_P', 'GEN_VC_N', 'DSI_D0_P', 'DSI_D3_P', 'BUS_VB_N']
+pass 7: 11 failed ['AC_IRQ_N', 'AC_SCK', 'BUS_VC_N', 'LVDSC_P', 'GEN_VB_P', 'LVDS0_P', 'BUS_VB_N', 'USB31_DP', 'ETH0_P', 'BUS_VA_N', 'Net-(R449-Pad2)']
+pass 8: crashed
+pass 9: 11 failed ['AC_RST_N', 'ADE_XI', 'LVDS2_P', 'AC_MISO', 'AC_MOSI', 'ADE_XO', 'LVDS1_P', 'BUS_VB_N', 'ETH2_P', 'GEN_VC_N', 'DSI_D2_P']
+best: (9, 'w5/hand.kicad_pcb.pass2.kicad_pcb')
