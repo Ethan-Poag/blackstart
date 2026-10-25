@@ -248,3 +248,73 @@ About 10 min, plus the cutout.
 - Check the layout for the H4 PE clearance hole: it is 1 mm from the board edge at Ø9.5, so a slightly smaller boss or a move inward may be needed.
 - Shell FR grade decision before any unit leaves Ethan's own use.
 - Verify the Riverdi STEP against the ledge.
+
+## 10. Metal cap option (ALTERNATIVE; baseline remains the SLA clear caps)
+
+Files: `cap_metal.py` (imports the baseline parameters from `enclosure.py`; it changes nothing in the baseline), `step/metal_cap_*.step`, and `metal_cap.png`, which shows an exploded view plus 2 sections.
+**Unchanged:** key positions (`geometry.py`), pocket size and depth (8 mm guide), the enclosure outline, the hard stop (head on the face at 1.3 mm travel), and the switch.
+
+**Design (M1, clip-in light piece):**
+- **Cap:** 6061-T6, 24 x 12 mm body, head 26 x 14 x 1.0 mm.
+  - Rear cavity 21 x 9 mm (walls 1.5 mm); the front wall is 2.0 mm, including the head.
+  - A **16 x 1.6 mm through-slot** in the face lets the LED light out as a light bar.
+- **Light piece:** clear **SLA** resin (MJF/SLS nylon is opaque grey, so it is not suitable for light).
+  - A rib fills the slot flush with the face, with 0.05 mm clearance per side; a body fills the cavity.
+  - The rear is cored out so the LED light enters right behind the slot.
+- **Snap clip:**
+  - Two cantilever tabs on the long sides, each 1.0 mm thick, 4.5 mm long and 5 mm wide.
+  - Each has a **0.35 mm barb** that engages a **0.40 mm deep x 1.0 mm wide undercut groove**, machined 2.0 mm from the cap rear with a T-slot cutter or a side-milled undercut.
+  - Bending strain is about 1.5·t·y/L² = 1.5·1.0·0.35/4.5² ≈ 2.6 %. That is fine for tough/durable SLA resins (elongation > 6 %), but marginal for standard clear (about 6 %).
+  - Put a 30° lead-in on the barb and a 90° catch face. **Print in Formlabs Clear or a tough clear grade, oriented with the tabs vertical.**
+- **M2, simpler:** no clip. A **laser-cut 1.5 mm clear acrylic strip**, 15.9 x 5 mm (cut on Ethan's laser), is glued edge-on into the slot with clear UV or cyanoacrylate glue, then sanded flush.
+  - The cavity behind it stays empty, and the LED shines through the open cavity into the strip.
+  - It needs no snap features and no undercut machining, so the cap is about 20 % cheaper to make. **Recommended for the first metal caps.**
+- **Mass:** about 3.8 g for an aluminium cap (11.3 g in stainless) plus a 1.5 g light piece, versus about 3 g for the SLA cap. That is no concern for the 200 gf switch or the silicone return. The heavier stainless cap may rattle slightly under genset vibration, but the silicone bond damps it.
+
+**Sliding and galling in the 8 mm pocket (anodised Al on anodised Al)**
+- Plain anodised aluminium on anodised aluminium has µ ≈ 0.4-0.6 dry. At that friction, a cap 24 mm wide must stay within L/(2µ) = 8/1.0 ≈ 8 mm of centre to slide without jamming, but the cap corner is 12 mm from centre, so the cap **would jam** on an end press.
+- **Chosen: PTFE-impregnated hard anodise** (Type III, 25-40 µm, black, PTFE-sealed) on the caps only. The bezel stays Type II.
+  - µ ≈ 0.1-0.2, so the limit becomes 8/0.4 = 20 mm or more, with good margin over the 12 mm corner.
+  - Galling is no longer an issue (hard oxide on oxide).
+  - Spec the cap size **after the finish**: 24.00 x 12.00 -0.03/-0.06. Hard anodise grows about 50 % of its thickness outward, so pre-machine the caps about 0.03 mm under per side.
+  - Pocket clearance stays **0.10 mm per side**.
+  - Not chosen: an acetal/PTFE sleeve per pocket (12 extra parts, thinner pocket walls) and a looser 0.2 mm clearance (more wobble, still µ-limited).
+- **Stainless (303/304) alternative:**
+  - Bead-blasted, no anodise.
+  - Stainless on Type II Al has µ ≈ 0.3-0.4, which still fails the anti-jam rule, so it needs a PTFE (Xylan-type) coating on the cap.
+  - About 3x the mass.
+  - Machining costs about 1.3-1.8x more.
+
+**Light leakage**
+- The black hard-anodised cap is opaque, so light exits only through the slot.
+- Avoid leaks around the rib (0.05 mm fit, plus a black paint pen on the light piece's side faces except the rib), or bond with black silicone.
+- The LED's spill into the pocket gap is absorbed by the black pocket. Optionally add a black mask ring on the silicone nib.
+
+**Silicone seal bonding**
+- Anodised aluminium needs a **silicone primer** (DOWSIL 1200 OS or equivalent), wiped on the cap's rear rim and allowed to dry 30-60 min, before the 7091 bond to the silicone strip.
+- For M1, bond the strip to the primed cap rim and the light piece rear together.
+- PTFE-sealed anodise bonds poorly. **Mask the cap rear face during PTFE sealing**, or lightly abrade and prime it.
+
+**Hard stop and travel:** unchanged. The head flange lands on the face at 1.3 mm, the switch makes at 0.8 ± 0.2, and the silicone nib takes up the overtravel. Metal-on-metal at the stop is fine for hail and glove punches.
+
+**Manufacturing routes and cost (ROUGH estimates, typical online-service ranges, not quotes)**
+
+| Route | 12 pcs (1 unit) | 100+ pcs (8+ units) |
+|---|---|---|
+| A. Online CNC, 6061, M1 with undercut groove, or M2 (no groove, ~20 % less), black PTFE hard anodise | $10-25 per cap (set-up and minimum lot charges dominate) | $3-7 per cap |
+| B. Online laser/water-jet cut from 10 mm 6061 plate (24 x 12 profile + slot), then a vendor's batch hard anodise. **No head flange is possible** (a 2D profile), so the hard stop moves to 2 printed stop legs on the light piece landing on the PCB at 1.3 mm. Profile tolerance ±0.1 and edge taper mean the guide must be opened to 0.15-0.2 per side (still OK at µ 0.15). The cap is retained only by the bond | $2-4 per cap cut, plus an anodise lot charge of $60-150 per batch, so effectively $8-15 per cap at 12 | $1-2.5 per cap |
+| Light pieces: SLA clear (M1) or laser-cut acrylic (M2, Ethan's laser) | $0.5-1.5 per piece / ~$0.1 | $0.3-0.8 / ~$0.05 |
+
+**Per-unit key cost (12 caps + light pieces + silicone strips and nibs at $3-8) vs the $20-50 target:**
+
+| | 1 unit (12 pcs) | 100+ pcs (8+ units) |
+|---|---|---|
+| CNC route | about $130-320: **over target** | about $40-95: **target met only at the low end** |
+| Laser-cut route | about $100-190: over target, because of the anodise lot charge | about $20-45: **within target**, but with a looser guide and a bond-retained cap |
+
+The SLA baseline stays at $15-35.
+
+**Recommendation:**
+- Keep SLA caps for the first build.
+- If metal is wanted, order one CNC M2 set (12 caps, PTFE hard anodise, acrylic strips glued in) for evaluation, accepting about $150-300 for that one set.
+- Move to M1 or batch CNC at 100+ pieces if it's adopted.
