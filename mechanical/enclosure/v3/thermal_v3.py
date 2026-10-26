@@ -83,3 +83,60 @@ if __name__ == "__main__":
                  ring=round(T.get("ring", float("nan")), 1), touch_max=round(T["touch"], 1), SoC=round(T["S"], 1), throttle_Ta=round(T["throttle_Ta"], 1))
         out.append(r); print(name[:6], P, bl, sun, r['glass'], r['bezel_metal'], r['ring'], r['SoC'], r['throttle_Ta'])
     json.dump(out, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "thermal_results.json"), "w"), indent=1)
+
+
+# =====================================================================================================================
+# PHASE 23 (Ethan, Oct 25): PA12 front ring REMOVED. The black-anodised 6061 bezel face is the exposed front (touch surface).
+# Current design: V6 flat 4.75 mm fin plate + ATS-EXL1 strip + TWO 40 mm fans push-pull in series, flush glass, bare bezel.
+# Nodes: S SoC, H heat bar, G display/glass, B bezel (bare face to front air), I interior air, F fin plate.
+# Fan conductances are ESTIMATED (phase 9 values, reproduced to within 1 F). Everything else ESTIMATED as in phases 4-9.
+# Results are MODELLED (lumped steady state, ~+-5 F touch, +-15 F throttle ambient).
+R_JC_PAD = 2.2          # SoC junction->case 2.0 + pad 0.2 (phase 4 D chain, ESTIMATED)
+R_H_F = 1.1             # heat bar -> pillar -> fin plate (0.8 + joint 0.3, ESTIMATED)
+# AS IN THE CAD: the heat bar tab is screwed (2x A2 M4) onto the bezel heat boss through a 0.5 mm pad (heat_pad part).
+# Bar tab 0.8 + pad on boss 0.6 + boss 0.65 + spreading in the field 0.7 = 2.75 K/W (ESTIMATED; phase-1 table values).
+# Earlier phases (D/V1/V6) assumed this boss carried no heat; with a bare bezel that assumption matters, so both are run.
+R_H_B = {"as CAD (bar screwed to bezel boss, pad)": 2.75,
+         "fix: G10 spacers + nylon M4 at the boss (no pad)": 50.0,   # 2x G10 1.5 mm washers ~52 K/W || nylon screws (ESTIMATED)
+         "old assumption (boss carries no heat)": 1e9}
+G_GB_BARE = 0.1 + 0.3   # VHB tape to ledge 0.1 + glass edge -> PA12 sleeve/silicone bead -> metal window 0.3 (ESTIMATED; was glass->ring)
+G_BTA_BARE = H_FRONT * A_RING   # bare black-anodised face (emissivity ~0.85-0.9), h 9 W/m2K, ESTIMATED
+FANS_P23 = {"both fans": dict(gtc=2.2, gi=1.5, ftc=0.8), "one fan failed": dict(gtc=1.3, gi=1.2, ftc=0.65),
+            "both fans failed": dict(gtc=0.2, gi=0.69, ftc=0.45)}
+
+def solve_p23(fan, rhb, P=4.0, bl=0.325, Ta=40.0, dtc=0.0, sun=0.0, a_face=0.9):
+    Tc = Ta + dtc; n = ["S", "H", "G", "B", "I", "F"]; ix = {k: i for i, k in enumerate(n)}
+    M = np.zeros((6, 6)); q = np.zeros(6)
+    def link(a, b, g):
+        i, j = ix[a], ix[b]; M[i, i] += g; M[j, j] += g; M[i, j] -= g; M[j, i] -= g
+    def amb(a, g, T): M[ix[a], ix[a]] += g; q[ix[a]] += g * T
+    q[ix["S"]] += P; q[ix["G"]] += bl * BL_W * (1 - LIGHT_OUT) + LOGIC_W + sun * 0.9 * A_GLASS; q[ix["I"]] += misc(bl)
+    q[ix["B"]] += sun * a_face * A_RING
+    link("S", "H", 1 / R_JC_PAD); link("H", "F", 1 / R_H_F); link("H", "B", 1 / rhb)
+    amb("G", G_GTA, Ta); link("G", "B", G_GB_BARE); link("G", "I", fan["gi"]); link("B", "I", G_BI)
+    amb("B", G_BTA_BARE, Ta); amb("I", fan["gtc"], Tc); link("I", "F", 0.25); amb("F", fan["ftc"], Tc)
+    T = dict(zip(n, np.linalg.solve(M, q))); T["throttle_Ta"] = 80 - (T["S"] - Ta); return T
+
+def run_p23():
+    F = lambda c: round(c * 9 / 5 + 32)
+    FC = lambda c: f"{F(c)} F ({c:.1f} C)"
+    out = {"note": "PHASE 23 MODELLED; fan conductances ESTIMATED; Ta 104 F (40 C); CM5 4 W; idle cases = 90 % idle + 10 % full (average backlight); "
+                   "alarm = continuous 100 %; cabinet air = ambient (ASSUMPTION, plus cab-9F column)", "cases": {}}
+    for hb_name, rhb in R_H_B.items():
+        for fn, fan in FANS_P23.items():
+            for dtc, cn in ((0.0, "cab=amb"), (-5.0, "cab-9F")):
+                r = {}
+                for lab, bl in (("idle10", 0.19), ("idle25", 0.325), ("idle40", 0.46), ("alarm100", 1.0)):
+                    T = solve_p23(fan, rhb, 4.0, bl, dtc=dtc); r[lab] = {"bezel_face": FC(T["B"]), "glass": FC(T["G"]), "SoC": FC(T["S"])}
+                T25 = solve_p23(fan, rhb, 4.0, 0.325, dtc=dtc); r["throttle_ambient_4W_idle25"] = FC(40 + T25["throttle_Ta"] - 40 + 0) if False else FC(T25["throttle_Ta"])
+                r["throttle_ambient_8p5W_idle25"] = FC(solve_p23(fan, rhb, 8.5, 0.325, dtc=dtc)["throttle_Ta"])
+                out["cases"].setdefault(hb_name, {}).setdefault(fn, {})[cn] = r
+    return out
+
+if __name__ == "__main__":
+    res = run_p23()
+    json.dump(res, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "thermal_bare_bezel_p23.json"), "w"), indent=1)
+    for h, d in res["cases"].items():
+        for fn, c in d.items():
+            r = c["cab=amb"]
+            print(h[:12], "|", fn, "| bezel", [r[k]["bezel_face"] for k in ("idle10", "idle25", "idle40", "alarm100")], "| glass", [r[k]["glass"].split(" ")[0] for k in ("idle10", "idle25", "idle40", "alarm100")], "| thr", r["throttle_ambient_4W_idle25"], r["throttle_ambient_8p5W_idle25"], "| cab-9F bezel", [c["cab-9F"][k]["bezel_face"].split(" ")[0] for k in ("idle10", "idle25", "idle40", "alarm100")])

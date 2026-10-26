@@ -8,8 +8,8 @@
  },
  "clearances_mm": {
   "nib_to_plunger_free_gap": 0.1,
-  "glass_front_vs_ring_face (neg = behind)": -0.05,
-  "glass_edge_to_ring_sleeve (silicone bead)": 0.5,
+  "glass_front_vs_bare_bezel_face (neg = behind)": -0.05,
+  "glass_edge_to_PA12_sleeve (silicone bead)": 0.5,
   "sleeve_to_metal_window_gap": 0.2,
   "CM5_top_to_heatbar (pad)": 1.0,
   "rear_parts_tallest_to_shell_inner_rear": 9.4,
@@ -33,15 +33,15 @@
   "ALS_centre_to_active_area_top_left_corner (7.32, 8.03)": 132.0,
   "ALS_pipe_rear_face_to_PCB_F": 1.0,
   "V6_strip_rear_face_Z": 63.25,
-  "fan_filter_cover_rear_face_Z (total depth behind ring face = this + 4.0)": 68.25,
-  "display_rear_to_PCB_front_airgap_TFT_area (x<75 HV zone)": 11.44,
-  "display_rear_to_PCB_front_airgap_source_band (min)": 7.27,
+  "fan_filter_cover_rear_face_Z (= total depth behind the bezel face)": 68.25,
+  "display_rear_to_PCB_front_airgap_TFT_area (x<75 HV zone)": 7.44,
+  "display_rear_to_PCB_front_airgap_source_band (min)": 3.27,
   "HV": {
-   "lead_tips_2.0mm_to_display_rear": 9.44,
-   "lead_tips_2.0mm_to_bezel_metal (earthed, basic 5.5)": 7.0,
+   "lead_tips_2.0mm_to_display_rear": 5.44,
+   "lead_tips_2.0mm_to_bezel_metal (earthed, basic 5.5)": 9.04,
    "lead_tips_2.0mm_to_heat_pillar/plate": 32.47,
-   "lead_tips_1.0mm_to_display_rear": 10.44,
-   "lead_tips_1.0mm_to_bezel_metal (earthed, basic 5.5)": 8.0,
+   "lead_tips_1.0mm_to_display_rear": 6.44,
+   "lead_tips_1.0mm_to_bezel_metal (earthed, basic 5.5)": 9.83,
    "lead_tips_1.0mm_to_heat_pillar/plate": 32.47,
    "J28J29_plug_envelope_to_left_clamp_screw (reinforced 8.0)": 14.14,
    "J28J29_plug_envelope_to_left_clamp_insert (reinforced 8.0)": 13.48,
@@ -275,7 +275,7 @@
   "insertion: shell bbox vs cutout per side (min gap, must be >0)": 1.0
  },
  "volumes_cm3": {
-  "bezel": 231.7,
+  "bezel": 217.6,
   "display": 451.3,
   "key_caps": 36.5,
   "key_membrane": 7.0,
@@ -290,7 +290,7 @@
   "rear_shell": 206.8,
   "clamps": 20.6,
   "clamp_screws": 3.4,
-  "front_ring": 99.7,
+  "glass_sleeve": 10.2,
   "fin_plate": 187.2,
   "heat_pillar": 22.1,
   "light_pipe": 0.2,
@@ -384,9 +384,9 @@
    246.0,
    34.1
   ],
-  "front_ring": [
-   329.0,
-   261.0,
+  "glass_sleeve": [
+   280.2,
+   183.1,
    8.5
   ],
   "fin_plate": [
@@ -402,7 +402,7 @@
   "light_pipe": [
    4.0,
    4.0,
-   19.0
+   15.0
   ],
   "exl1_strip": [
    100.8,

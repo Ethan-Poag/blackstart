@@ -37,7 +37,7 @@ Panel face Z = rim 9.5 + gasket 2.0 x 0.7 = 10.9 (gasket 1.4..1.6 for 25-35 % co
 Panel t range **1.0 .. 6.0 mm (INFERRED design parameter)**: screw tip must reach Z 11.9..16.9 -> screw protrusion in front of block 20.6..25.6 -> **M4 x 35** (block 7.5 + insert) gives 27 mm usable, OK. Bezel rim flatness / panel bow: gasket compression range 0.6 mm (30 % of 2.0) covers +-0.3 panel waviness (INFERRED). Clamp checked in code at t = 1 and 6: no shell or clamp interference (checks.json).
 
 
-## 6. Flush glass (phase 6): glass front vs ring face, target ±0.15 mm
+## 6. Flush glass (phase 6; SUPERSEDED Phase 23, ring removed: now glass vs bare CNC bezel face, chain = ledge depth ±0.05 CNC + tape ±0.1, ESTIMATED) : glass front vs ring face, target ±0.15 mm
 The chain if each part is built to nominal and stacked: ring thickness ±0.2 (MJF/SLS local, ESTIMATED), pip/air gap ±0.1, bezel ledge Z ±0.05 (CNC), VHB foam tape 0.9 ±0.1, module CTP+TFT 8.51 ±0.2 (INFERRED, no tolerance in the datasheet).
 - WC ±0.65, RSS ±0.33 mm. **This fails ±0.15.**
 - **Process to meet ±0.15:** assemble face-down on a flat plate (±0.05) so the glass and the ring face share the datum. Bond the module to the ledge with foam tape that takes up the gap, then screw the ring down onto the bezel.

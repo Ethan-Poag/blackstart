@@ -34,7 +34,7 @@ Inventory checked: geometry.py, PANEL_V2.md, display_mech.md, draw_front_panel.p
 | 29 | board | J4 fan header present | | no fan (BCR-3) | MEASURED |
 
 | 30 | Rear ports 13.5 / 20.4 mm deep | BCR-1 solved in shell: sealed port tunnels with lead-in, plug envelopes 0 interference, no board change | phase 2 |
-| 31 | Flush glass | **Confirmed by Ethan (phase 6).** Glass flush with the PA12 ring face (-0.05 mm). Display-to-PCB gap 11.44 mm (TFT/HV area) / 7.27 mm (source band); 3.27 mm obsolete | closed (phase 9) |
+| 31 | Flush glass (superseded by #54: ring removed, glass flush with the bare bezel face) | **Confirmed by Ethan (phase 6).** Glass flush with the PA12 ring face (-0.05 mm). Display-to-PCB gap 11.44 mm (TFT/HV area) / 7.27 mm (source band); 3.27 mm obsolete | closed (phase 9) |
 | 32 | Display-tray rim vs J28/J29 lead tips | Phase 9 3D check: earthed Al rim was 1.52 mm from the 600 V THT lead tips (basic needs 5.5). Fixed in CAD: rim trimmed to Z 7.0 over y 10-115 -> 7.0 mm (2 mm leads) / 8.0 mm (trimmed 1 mm) | fixed in model; leads clipped <= 1.0 mm -> 8.0 mm; basic only with tested H4 PE bond (PE_BOND.md); PP film dropped (phase 11) |
 | 33 | Left PA12 wall y 15-105 | Phase 11: left clamp moved (y 90 -> y -2 and y 178); wall now solid fraction 1.000 at 3.0 mm over y 15-105. Inner face 9.94 mm from J28/J29 pad column, 2.4 mm from plug body | closed (phase 11) |
 | 34 | J4 fan header | no load switch or fuse on J4 +5V (direct on +5V net); CM5 has one FAN_PWM/FAN_TACH only -> BCR-10 rev phase 10 (U76 P15-17, open-drain PWM); +5V budget being checked by Layout/Firmware | open |
@@ -79,3 +79,5 @@ Inventory checked: geometry.py, PANEL_V2.md, display_mech.md, draw_front_panel.p
 | 51 | NEW/CLOSED: a primary earth path is reinstated as an M4 ground stud through the top side wall at x 140, Z 30, strapped to a bare bezel landing at (140, -19.8) (GROUND.md). The old PE_NEW location (12.3, -7.5) is not reused because it needed a PCB hole and sat near HV; the top-right corner is blocked by the heat bar. No board change. The clamp bond is unchanged as the backup. |
 | 52 | CLOSED (Phase 21): stud moved to the rear face at (257.5, -19.2). Strap joint is metal-to-metal, hex-pocket anti-rotation plus nylock, joint compound on the landings, test spot reused (GROUND.md). |
 | 53 | CLOSED (Phase 22): the stud pocket was a round Ø9 and is now a true hex, AF 7.2. Two printed strap clips added at x 186 and x 235. |
+| 54 | Phase 23: PA12 front ring (thermal design D, never approved by Ethan) removed. The glass is flush with the bare bezel face again (display DZ 0); the PA12 glass-edge sleeve is kept. |
+| 55 | OPEN, for Ethan. The CAD screws the heat bar tab to the bezel heat boss through a pad, but phases 4-9 modelled that boss as carrying no heat. Phase 23 models it as built (+2-3 F on the bezel face, +4 F throttle ambient). Optional G10/nylon isolation is in HEAT_PATH Phase 23. |

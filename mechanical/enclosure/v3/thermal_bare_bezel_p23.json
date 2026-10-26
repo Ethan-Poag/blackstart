@@ -1,0 +1,461 @@
+{
+ "note": "PHASE 23 MODELLED; fan conductances ESTIMATED; Ta 104 F (40 C); CM5 4 W; idle cases = 90 % idle + 10 % full (average backlight); alarm = continuous 100 %; cabinet air = ambient (ASSUMPTION, plus cab-9F column)",
+ "cases": {
+  "as CAD (bar screwed to bezel boss, pad)": {
+   "both fans": {
+    "cab=amb": {
+     "idle10": {
+      "bezel_face": "109 F (42.7 C)",
+      "glass": "109 F (42.5 C)",
+      "SoC": "131 F (54.8 C)"
+     },
+     "idle25": {
+      "bezel_face": "109 F (43.1 C)",
+      "glass": "110 F (43.3 C)",
+      "SoC": "131 F (55.0 C)"
+     },
+     "idle40": {
+      "bezel_face": "110 F (43.4 C)",
+      "glass": "111 F (44.1 C)",
+      "SoC": "131 F (55.2 C)"
+     },
+     "alarm100": {
+      "bezel_face": "113 F (44.8 C)",
+      "glass": "117 F (47.2 C)",
+      "SoC": "133 F (56.0 C)"
+     },
+     "throttle_ambient_4W_idle25": "149 F (65.0 C)",
+     "throttle_ambient_8p5W_idle25": "120 F (48.8 C)"
+    },
+    "cab-9F": {
+     "idle10": {
+      "bezel_face": "104 F (40.0 C)",
+      "glass": "103 F (39.4 C)",
+      "SoC": "124 F (50.9 C)"
+     },
+     "idle25": {
+      "bezel_face": "105 F (40.3 C)",
+      "glass": "104 F (40.2 C)",
+      "SoC": "124 F (51.1 C)"
+     },
+     "idle40": {
+      "bezel_face": "105 F (40.7 C)",
+      "glass": "106 F (40.9 C)",
+      "SoC": "124 F (51.3 C)"
+     },
+     "alarm100": {
+      "bezel_face": "108 F (42.1 C)",
+      "glass": "111 F (44.0 C)",
+      "SoC": "126 F (52.1 C)"
+     },
+     "throttle_ambient_4W_idle25": "156 F (68.9 C)",
+     "throttle_ambient_8p5W_idle25": "127 F (52.7 C)"
+    }
+   },
+   "one fan failed": {
+    "cab=amb": {
+     "idle10": {
+      "bezel_face": "110 F (43.2 C)",
+      "glass": "110 F (43.2 C)",
+      "SoC": "132 F (55.4 C)"
+     },
+     "idle25": {
+      "bezel_face": "111 F (43.6 C)",
+      "glass": "111 F (44.1 C)",
+      "SoC": "132 F (55.7 C)"
+     },
+     "idle40": {
+      "bezel_face": "111 F (44.1 C)",
+      "glass": "113 F (45.0 C)",
+      "SoC": "133 F (56.0 C)"
+     },
+     "alarm100": {
+      "bezel_face": "114 F (45.8 C)",
+      "glass": "120 F (48.8 C)",
+      "SoC": "135 F (57.1 C)"
+     },
+     "throttle_ambient_4W_idle25": "148 F (64.3 C)",
+     "throttle_ambient_8p5W_idle25": "118 F (47.7 C)"
+    },
+    "cab-9F": {
+     "idle10": {
+      "bezel_face": "105 F (40.7 C)",
+      "glass": "105 F (40.4 C)",
+      "SoC": "125 F (51.7 C)"
+     },
+     "idle25": {
+      "bezel_face": "106 F (41.1 C)",
+      "glass": "106 F (41.4 C)",
+      "SoC": "126 F (52.0 C)"
+     },
+     "idle40": {
+      "bezel_face": "107 F (41.6 C)",
+      "glass": "108 F (42.3 C)",
+      "SoC": "126 F (52.3 C)"
+     },
+     "alarm100": {
+      "bezel_face": "110 F (43.3 C)",
+      "glass": "115 F (46.1 C)",
+      "SoC": "128 F (53.3 C)"
+     },
+     "throttle_ambient_4W_idle25": "154 F (68.0 C)",
+     "throttle_ambient_8p5W_idle25": "125 F (51.4 C)"
+    }
+   },
+   "both fans failed": {
+    "cab=amb": {
+     "idle10": {
+      "bezel_face": "113 F (44.8 C)",
+      "glass": "114 F (45.3 C)",
+      "SoC": "135 F (57.3 C)"
+     },
+     "idle25": {
+      "bezel_face": "114 F (45.6 C)",
+      "glass": "116 F (46.7 C)",
+      "SoC": "136 F (57.9 C)"
+     },
+     "idle40": {
+      "bezel_face": "115 F (46.4 C)",
+      "glass": "119 F (48.2 C)",
+      "SoC": "137 F (58.5 C)"
+     },
+     "alarm100": {
+      "bezel_face": "121 F (49.4 C)",
+      "glass": "129 F (53.9 C)",
+      "SoC": "141 F (60.7 C)"
+     },
+     "throttle_ambient_4W_idle25": "144 F (62.1 C)",
+     "throttle_ambient_8p5W_idle25": "112 F (44.3 C)"
+    },
+    "cab-9F": {
+     "idle10": {
+      "bezel_face": "110 F (43.2 C)",
+      "glass": "111 F (43.8 C)",
+      "SoC": "130 F (54.4 C)"
+     },
+     "idle25": {
+      "bezel_face": "111 F (43.9 C)",
+      "glass": "113 F (45.2 C)",
+      "SoC": "131 F (55.0 C)"
+     },
+     "idle40": {
+      "bezel_face": "112 F (44.7 C)",
+      "glass": "116 F (46.6 C)",
+      "SoC": "132 F (55.5 C)"
+     },
+     "alarm100": {
+      "bezel_face": "118 F (47.7 C)",
+      "glass": "126 F (52.4 C)",
+      "SoC": "136 F (57.8 C)"
+     },
+     "throttle_ambient_4W_idle25": "149 F (65.0 C)",
+     "throttle_ambient_8p5W_idle25": "117 F (47.2 C)"
+    }
+   }
+  },
+  "fix: G10 spacers + nylon M4 at the boss (no pad)": {
+   "both fans": {
+    "cab=amb": {
+     "idle10": {
+      "bezel_face": "106 F (41.4 C)",
+      "glass": "108 F (42.2 C)",
+      "SoC": "135 F (57.0 C)"
+     },
+     "idle25": {
+      "bezel_face": "107 F (41.8 C)",
+      "glass": "109 F (43.0 C)",
+      "SoC": "135 F (57.1 C)"
+     },
+     "idle40": {
+      "bezel_face": "108 F (42.2 C)",
+      "glass": "111 F (43.8 C)",
+      "SoC": "135 F (57.2 C)"
+     },
+     "alarm100": {
+      "bezel_face": "111 F (43.8 C)",
+      "glass": "117 F (47.0 C)",
+      "SoC": "136 F (57.6 C)"
+     },
+     "throttle_ambient_4W_idle25": "145 F (62.9 C)",
+     "throttle_ambient_8p5W_idle25": "111 F (44.0 C)"
+    },
+    "cab-9F": {
+     "idle10": {
+      "bezel_face": "102 F (39.1 C)",
+      "glass": "103 F (39.2 C)",
+      "SoC": "126 F (52.3 C)"
+     },
+     "idle25": {
+      "bezel_face": "103 F (39.5 C)",
+      "glass": "104 F (40.0 C)",
+      "SoC": "126 F (52.4 C)"
+     },
+     "idle40": {
+      "bezel_face": "104 F (39.9 C)",
+      "glass": "105 F (40.8 C)",
+      "SoC": "127 F (52.5 C)"
+     },
+     "alarm100": {
+      "bezel_face": "107 F (41.6 C)",
+      "glass": "111 F (43.9 C)",
+      "SoC": "127 F (52.9 C)"
+     },
+     "throttle_ambient_4W_idle25": "154 F (67.6 C)",
+     "throttle_ambient_8p5W_idle25": "120 F (48.7 C)"
+    }
+   },
+   "one fan failed": {
+    "cab=amb": {
+     "idle10": {
+      "bezel_face": "107 F (41.8 C)",
+      "glass": "109 F (42.8 C)",
+      "SoC": "136 F (57.9 C)"
+     },
+     "idle25": {
+      "bezel_face": "108 F (42.3 C)",
+      "glass": "111 F (43.8 C)",
+      "SoC": "136 F (58.0 C)"
+     },
+     "idle40": {
+      "bezel_face": "109 F (42.8 C)",
+      "glass": "112 F (44.7 C)",
+      "SoC": "137 F (58.2 C)"
+     },
+     "alarm100": {
+      "bezel_face": "113 F (44.8 C)",
+      "glass": "119 F (48.5 C)",
+      "SoC": "138 F (58.8 C)"
+     },
+     "throttle_ambient_4W_idle25": "144 F (62.0 C)",
+     "throttle_ambient_8p5W_idle25": "108 F (42.4 C)"
+    },
+    "cab-9F": {
+     "idle10": {
+      "bezel_face": "104 F (39.8 C)",
+      "glass": "104 F (40.2 C)",
+      "SoC": "128 F (53.3 C)"
+     },
+     "idle25": {
+      "bezel_face": "105 F (40.3 C)",
+      "glass": "106 F (41.1 C)",
+      "SoC": "128 F (53.5 C)"
+     },
+     "idle40": {
+      "bezel_face": "105 F (40.8 C)",
+      "glass": "108 F (42.1 C)",
+      "SoC": "128 F (53.6 C)"
+     },
+     "alarm100": {
+      "bezel_face": "109 F (42.8 C)",
+      "glass": "115 F (45.9 C)",
+      "SoC": "130 F (54.2 C)"
+     },
+     "throttle_ambient_4W_idle25": "152 F (66.5 C)",
+     "throttle_ambient_8p5W_idle25": "116 F (46.9 C)"
+    }
+   },
+   "both fans failed": {
+    "cab=amb": {
+     "idle10": {
+      "bezel_face": "110 F (43.3 C)",
+      "glass": "113 F (44.8 C)",
+      "SoC": "140 F (60.3 C)"
+     },
+     "idle25": {
+      "bezel_face": "112 F (44.2 C)",
+      "glass": "115 F (46.3 C)",
+      "SoC": "141 F (60.7 C)"
+     },
+     "idle40": {
+      "bezel_face": "113 F (45.0 C)",
+      "glass": "118 F (47.8 C)",
+      "SoC": "142 F (61.1 C)"
+     },
+     "alarm100": {
+      "bezel_face": "119 F (48.4 C)",
+      "glass": "128 F (53.6 C)",
+      "SoC": "145 F (62.6 C)"
+     },
+     "throttle_ambient_4W_idle25": "139 F (59.3 C)",
+     "throttle_ambient_8p5W_idle25": "100 F (37.8 C)"
+    },
+    "cab-9F": {
+     "idle10": {
+      "bezel_face": "108 F (42.2 C)",
+      "glass": "110 F (43.5 C)",
+      "SoC": "133 F (56.4 C)"
+     },
+     "idle25": {
+      "bezel_face": "109 F (43.0 C)",
+      "glass": "113 F (44.9 C)",
+      "SoC": "134 F (56.7 C)"
+     },
+     "idle40": {
+      "bezel_face": "111 F (43.9 C)",
+      "glass": "116 F (46.4 C)",
+      "SoC": "135 F (57.1 C)"
+     },
+     "alarm100": {
+      "bezel_face": "117 F (47.2 C)",
+      "glass": "126 F (52.2 C)",
+      "SoC": "138 F (58.7 C)"
+     },
+     "throttle_ambient_4W_idle25": "146 F (63.3 C)",
+     "throttle_ambient_8p5W_idle25": "107 F (41.7 C)"
+    }
+   }
+  },
+  "old assumption (boss carries no heat)": {
+   "both fans": {
+    "cab=amb": {
+     "idle10": {
+      "bezel_face": "106 F (41.2 C)",
+      "glass": "108 F (42.2 C)",
+      "SoC": "135 F (57.3 C)"
+     },
+     "idle25": {
+      "bezel_face": "107 F (41.6 C)",
+      "glass": "109 F (43.0 C)",
+      "SoC": "135 F (57.4 C)"
+     },
+     "idle40": {
+      "bezel_face": "108 F (42.1 C)",
+      "glass": "111 F (43.8 C)",
+      "SoC": "135 F (57.5 C)"
+     },
+     "alarm100": {
+      "bezel_face": "111 F (43.7 C)",
+      "glass": "116 F (46.9 C)",
+      "SoC": "136 F (57.8 C)"
+     },
+     "throttle_ambient_4W_idle25": "145 F (62.6 C)",
+     "throttle_ambient_8p5W_idle25": "110 F (43.4 C)"
+    },
+    "cab-9F": {
+     "idle10": {
+      "bezel_face": "102 F (39.0 C)",
+      "glass": "102 F (39.2 C)",
+      "SoC": "127 F (52.5 C)"
+     },
+     "idle25": {
+      "bezel_face": "103 F (39.4 C)",
+      "glass": "104 F (40.0 C)",
+      "SoC": "127 F (52.6 C)"
+     },
+     "idle40": {
+      "bezel_face": "104 F (39.9 C)",
+      "glass": "105 F (40.7 C)",
+      "SoC": "127 F (52.7 C)"
+     },
+     "alarm100": {
+      "bezel_face": "107 F (41.5 C)",
+      "glass": "111 F (43.9 C)",
+      "SoC": "127 F (53.0 C)"
+     },
+     "throttle_ambient_4W_idle25": "153 F (67.4 C)",
+     "throttle_ambient_8p5W_idle25": "119 F (48.2 C)"
+    }
+   },
+   "one fan failed": {
+    "cab=amb": {
+     "idle10": {
+      "bezel_face": "107 F (41.6 C)",
+      "glass": "109 F (42.8 C)",
+      "SoC": "137 F (58.2 C)"
+     },
+     "idle25": {
+      "bezel_face": "108 F (42.1 C)",
+      "glass": "111 F (43.7 C)",
+      "SoC": "137 F (58.3 C)"
+     },
+     "idle40": {
+      "bezel_face": "109 F (42.6 C)",
+      "glass": "112 F (44.7 C)",
+      "SoC": "137 F (58.4 C)"
+     },
+     "alarm100": {
+      "bezel_face": "112 F (44.7 C)",
+      "glass": "119 F (48.5 C)",
+      "SoC": "138 F (59.0 C)"
+     },
+     "throttle_ambient_4W_idle25": "143 F (61.7 C)",
+     "throttle_ambient_8p5W_idle25": "107 F (41.7 C)"
+    },
+    "cab-9F": {
+     "idle10": {
+      "bezel_face": "103 F (39.7 C)",
+      "glass": "104 F (40.2 C)",
+      "SoC": "128 F (53.5 C)"
+     },
+     "idle25": {
+      "bezel_face": "104 F (40.2 C)",
+      "glass": "106 F (41.1 C)",
+      "SoC": "129 F (53.7 C)"
+     },
+     "idle40": {
+      "bezel_face": "105 F (40.7 C)",
+      "glass": "108 F (42.1 C)",
+      "SoC": "129 F (53.8 C)"
+     },
+     "alarm100": {
+      "bezel_face": "109 F (42.8 C)",
+      "glass": "115 F (45.9 C)",
+      "SoC": "130 F (54.3 C)"
+     },
+     "throttle_ambient_4W_idle25": "151 F (66.3 C)",
+     "throttle_ambient_8p5W_idle25": "115 F (46.3 C)"
+    }
+   },
+   "both fans failed": {
+    "cab=amb": {
+     "idle10": {
+      "bezel_face": "110 F (43.1 C)",
+      "glass": "113 F (44.8 C)",
+      "SoC": "141 F (60.7 C)"
+     },
+     "idle25": {
+      "bezel_face": "111 F (44.0 C)",
+      "glass": "115 F (46.2 C)",
+      "SoC": "142 F (61.0 C)"
+     },
+     "idle40": {
+      "bezel_face": "113 F (44.8 C)",
+      "glass": "118 F (47.7 C)",
+      "SoC": "143 F (61.4 C)"
+     },
+     "alarm100": {
+      "bezel_face": "119 F (48.3 C)",
+      "glass": "128 F (53.5 C)",
+      "SoC": "145 F (62.9 C)"
+     },
+     "throttle_ambient_4W_idle25": "138 F (59.0 C)",
+     "throttle_ambient_8p5W_idle25": "98 F (36.9 C)"
+    },
+    "cab-9F": {
+     "idle10": {
+      "bezel_face": "108 F (42.0 C)",
+      "glass": "110 F (43.4 C)",
+      "SoC": "134 F (56.6 C)"
+     },
+     "idle25": {
+      "bezel_face": "109 F (42.9 C)",
+      "glass": "113 F (44.9 C)",
+      "SoC": "135 F (57.0 C)"
+     },
+     "idle40": {
+      "bezel_face": "111 F (43.8 C)",
+      "glass": "115 F (46.4 C)",
+      "SoC": "135 F (57.4 C)"
+     },
+     "alarm100": {
+      "bezel_face": "117 F (47.2 C)",
+      "glass": "126 F (52.2 C)",
+      "SoC": "138 F (58.9 C)"
+     },
+     "throttle_ambient_4W_idle25": "145 F (63.0 C)",
+     "throttle_ambient_8p5W_idle25": "106 F (41.0 C)"
+    }
+   }
+  }
+ }
+}

@@ -20,7 +20,7 @@ Built against genctl_v4_handrouted.kicad_pcb @ f03c57a (read-only). Supersedes P
 - Heat re-validated (HEAT_PATH.md, "Phase 3 re-check"). At the ESTIMATED 4 W dashboard load the CM5 throttles above about 41 C ambient with no change, 46 C with A, 53 C with B and 57 C with C. Under a full CPU stress load (8.5 W) only C holds 57 C.
 
 ## Phase 4 (cool-to-touch, ALS)
-- Thermal design D: CM5 -> heat pillar -> rear 6061 fin plate behind the panel; display isolated from the bezel; 3 mm PA12 front ring on a 1 mm air break is the touch surface. Ring 44.4 C at 40 C ambient (4 W CM5, 70 % backlight). **The cover glass is 52 C and cannot meet 45 C with this display (its own ~10 W): needs Ethan's decision (firmware dimming or a 61010-1 glass limit).**
+- *(Superseded in Phase 23: the PA12 front ring is REMOVED; the bare aluminium bezel is the front face.)* Thermal design D: CM5 -> heat pillar -> rear 6061 fin plate behind the panel; display isolated from the bezel; 3 mm PA12 front ring on a 1 mm air break is the touch surface. Ring 44.4 C at 40 C ambient (4 W CM5, 70 % backlight). **The cover glass is 52 C and cannot meet 45 C with this display (its own ~10 W): needs Ethan's decision (firmware dimming or a 61010-1 glass limit).**
 - **Deviations from Ethan's original constraints:** CM5 heat no longer goes to the bezel boss (D' keeps it); the glass is 4 mm behind the ring face (flush only if the bezel is recessed, not modelled); unit depth 82.75 mm instead of 48 mm.
 - ALS window at (11.0, -9.25), sensor on the PCB F side at the same coordinates: BCR-8. Cost delta for D: +$227 at qty 1 / +$115 at qty 10 (ESTIMATED).
 - Details: HEAT_PATH.md "Phase 4", thermal_v3.py, thermal_results.json.
@@ -209,3 +209,25 @@ Pairwise boolean intersections of all 15 parts (intended contacts excluded: PCB/
   - HV unchanged: 8.0 / 10.44; clamp bond 38.18 / 54.86.
   - Thermal geometry unchanged.
 - Cost: $0 (printed in the shell).
+
+## Phase 23: PA12 front ring removed (Ethan)
+- **Removed:**
+  - `front_ring` part (3 mm PA12 face cover, 1 mm air break, stand-off pips and key/ALS pockets) and `RING_T` / `RING_GAP`.
+  - step/front_ring.step.
+  - The ring's BOM line.
+- **Front is now the bare black-anodised 6061 bezel face (Z 0).**
+- **Knock-on changes (reported, not silent):**
+  - **Glass:** to stay flush with the bare face, the display (part unchanged) moves back 4 mm to DZ = 0. Glass front is at Z 0.05 (−0.05 vs the face), the phase 1-5 position.
+    - Display-to-PCB air gap is now 7.44 mm (TFT/HV area) and 3.27 mm (source band), down from 11.44 / 7.27.
+    - Glass ledge back at Z 9.5. 0 interferences.
+  - **Glass edge:** the 1.5 mm PA12 sleeve that was part of the ring is kept as its own `glass_sleeve` part (Z 0-8.5, front flush). It keeps the glass-edge isolation and the 0.5 mm silicone bead. A thin PA12 line is visible around the glass.
+  - **Keys:** caps unchanged. The heads (Z −2.3 to −1.3) now stand 1.3-2.3 mm proud of the bezel face; before, they sat 1.7 mm recessed in ring pockets. Key travel and guides are unchanged.
+  - **ALS light pipe:** front moved from Z −4 to Z 0 (flush with the face). Same pipe otherwise.
+  - **Depth:** total depth behind the front face is 68.25 mm (was 72.25 including the ring).
+  - **Unaffected:** retention, panel gasket and bezel rim (Z 4-9.5), clamps. The ring had no screws (pips only).
+- **Checks (MODELLED):**
+  - 0 interferences with 1 mm and 6 mm panels; display, sleeve, light pipe and caps clash with nothing.
+  - Left wall 1.000; finger check unchanged.
+  - HV/clamp/bond/stud distances unchanged: stud minimum 40.33 mm, clamp bond 38.18 / 54.86.
+- **Thermal:** HEAT_PATH.md Phase 23 (the bezel face reaches 109-114 F with fans running). The CAD heat bar is screwed to the bezel boss; this was unmodelled before, now modelled.
+- Ground stud, hex pocket, clamp bond and clips are unchanged.

@@ -25,8 +25,10 @@ PE = (FP["H4"]["x"], FP["H4"]["y"])          # H4: plain NPTH clearance hole sin
 # ---------------- parameters (INFERRED design choices) ----------------
 WIN_GAP = 0.5            # glass edge -> window wall per side
 # PHASE 6 (Ethan, Oct 25): glass FLUSH with the PA12 ring face. The display moves 4 mm forward (DZ) into the ring opening.
-DZ = -4.0                # = -(RING_GAP + RING_T); glass front at Z -3.95 (flush with ring face at -4.0, 0.05 nominal tape allowance)
-SLEEVE = 1.5             # PA12 ring sleeve between glass edge and metal window (thermal break), 0.5 silicone bead gap to glass
+# PHASE 23 (Ethan, Oct 25): PA12 front ring REMOVED (never approved; the bare 6061 bezel face is the front). To keep the glass flush
+# with the now-exposed bezel face (Z 0) the display goes back to DZ = 0 (glass front Z 0.05, as in phases 1-5). GLASS/DISPLAY PART UNCHANGED.
+DZ = 0.0                 # was -4.0 (flush with the removed ring face at Z -4.0)
+SLEEVE = 1.5             # PA12 glass-edge sleeve (kept as its own part, phase 23) between glass edge and metal window (thermal break), 0.5 silicone bead gap to glass
 LEDGE_Z, LEDGE_W = 9.5 + DZ, 4.0
 FIELD_T = 4.0            # bezel field
 CAP_W, CAP_H, GUIDE_L, GUIDE_CLR = 24.0, 12.0, 8.0, 0.10
@@ -64,7 +66,7 @@ REAR_PORTS = {"J10": (FP["J10"]["x"], FP["J10"]["y"], 20.0, 24.0, ZR + H_J10),  
 TUN_WALL, TUN_GAP, LEAD_IN = 2.0, 0.5, 1.5
 SHELL_POSTS = [(100, 60), (100, 140), (240, 60), (240, 140)]
 # PHASE 4 thermal option D: heat goes to a rear Al fin plate (not touched), PA12 front ring is the touch surface
-RING_T, RING_GAP = 3.0, 1.0                       # PA12 ring 3 mm, 1 mm air thermal break in front of the bezel face
+# phase 23: RING_T / RING_GAP deleted with the PA12 front ring
 FP_T, FIN_H, FIN_T, FIN_PITCH = 4.75, 30.0, 2.0, 8.0   # 6061 base (laser/waterjet), laser-cut 2 mm fin slats in milled slots
 FIN_PLATE = (16.0, 1.0, 258.0, 178.0)             # inside the terminal wiring windows
 REAR_OPEN = (20.0, 4.0, 255.0, 176.0)             # PA12 rear wall opening under the plate
@@ -229,14 +231,10 @@ def clamps(t=PANEL_T):
         br.append(b.cut(c)); sc.append(c)
     return U(br), U(sc)
 
-def front_ring():
-    r = box(BZ0[0], BZ0[1], BZ1[0], BZ1[1], -RING_GAP - RING_T, -RING_GAP).cut(box(W0, H0, W1, H1, -10, 1))
-    r = r.union(box(W0 - SLEEVE + 0.2, H0 - SLEEVE + 0.2, W1 + SLEEVE - 0.2, H1 + SLEEVE - 0.2, -RING_GAP - 0.01, LEDGE_Z - 1.0).cut(box(W0, H0, W1, H1, -10, 30)))   # sleeve
-    for _, x, y in KEYS:
-        r = r.cut(box(x - CAP_W / 2 - HEAD_OVER - 0.4, y - CAP_H / 2 - HEAD_OVER - 0.4, x + CAP_W / 2 + HEAD_OVER + 0.4, y + CAP_H / 2 + HEAD_OVER + 0.4, -10, 1))
-    r = r.cut(cyl(*ALS, ALS_BORE, -10, 1))
-    for (x, y) in JOINT_SCREWS[:6]: r = r.union(cyl(x, y - 6 if y < 0 else y + 6, 5.0, -RING_GAP - 0.01, 0))   # PA12 stand-off pips (thermal break)
-    return r
+def glass_sleeve():
+    """phase 23: the 1.5 mm PA12 sleeve that was part of the front ring, kept on its own: glass-edge isolator in the bezel window
+    pocket (Z 0 .. LEDGE_Z-1), front flush with the bezel face. 0.5 mm silicone bead to the glass, 0.2 mm to the metal."""
+    return box(W0 - SLEEVE + 0.2, H0 - SLEEVE + 0.2, W1 + SLEEVE - 0.2, H1 + SLEEVE - 0.2, 0.0, LEDGE_Z - 1.0).cut(box(W0, H0, W1, H1, -10, 30))
 def fin_plate():
     """V6: flat 4.75 mm 6061 plate (laser cut) closing the PA12 rear opening; fan holes; strip screw holes."""
     f = box(*FIN_PLATE, SHELL_DEPTH, SHELL_DEPTH + FP_T)
@@ -295,7 +293,7 @@ def hv_leads(lead=2.0):
     P = _j.load(open(os.path.join(HERE, "hv_pads.json")))
     return U([cyl(x, y, 1.0, Z_PCB - lead, Z_PCB) for r in ("J28", "J29") for (num, x, y, d, net) in P[r]["pads"] if num])
 def light_pipe():
-    return cyl(*ALS, ALS_D, -RING_GAP - RING_T, ALS_Z_TOP)
+    return cyl(*ALS, ALS_D, 0.0, ALS_Z_TOP)   # phase 23: front flush with the bare bezel face
 
 def plug_envelopes():
     """Mated plug envelopes for checking only (not parts): RJ45 body 11.68 x 8.0 (Wikipedia 8P8C typ. / Canford 11.68 x 7.24 face),
@@ -492,7 +490,7 @@ def build():
             "heat_bar": (heat_bar(), (0.8, 0.5, 0.2)), "thermal_pads": (thermal_pads(), (0.9, 0.2, 0.6)),
             "gasket": (gasket(), (0.9, 0.3, 0.1)), "customer_panel": (customer_panel(), (0.7, 0.7, 0.7)),
             "rear_shell": (rear_shell(), (0.45, 0.45, 0.42)), "clamps": (cb, (0.75, 0.6, 0.2)), "clamp_screws": (cs, (0.85, 0.85, 0.9)),
-            "front_ring": (front_ring(), (0.55, 0.55, 0.52)), "fin_plate": (fin_plate(), (0.75, 0.75, 0.78)),
+            "glass_sleeve": (glass_sleeve(), (0.55, 0.55, 0.52)), "fin_plate": (fin_plate(), (0.75, 0.75, 0.78)),
             "heat_pillar": (heat_pillar(), (0.8, 0.55, 0.25)), "light_pipe": (light_pipe(), (0.9, 0.95, 1.0)),
             "exl1_strip": (exl1_strip(), (0.8, 0.8, 0.85)), "strip_pad": (strip_pad(), (0.9, 0.3, 0.6)),
             "fans": (fn, (0.1, 0.1, 0.1)), "fan_gaskets": (fg, (0.3, 0.3, 0.3)), "filter_covers": (fc, (0.4, 0.45, 0.42)), "fan_screws": (fs, (0.85, 0.85, 0.9)),
@@ -602,7 +600,7 @@ def checks(parts):
     # clearances (positive = gap), computed from parameters
     clr = {
            "nib_to_plunger_free_gap": 0.1,
-           "glass_front_vs_ring_face (neg = behind)": -0.05, "glass_edge_to_ring_sleeve (silicone bead)": WIN_GAP, "sleeve_to_metal_window_gap": 0.2,
+           "glass_front_vs_bare_bezel_face (neg = behind)": -0.05, "glass_edge_to_PA12_sleeve (silicone bead)": WIN_GAP, "sleeve_to_metal_window_gap": 0.2,
            "CM5_top_to_heatbar (pad)": PAD_T,
            "rear_parts_tallest_to_shell_inner_rear": round(SHELL_DEPTH - WALL - (ZR + 18.0), 2),
            "J10_mouth_depth_below_rear_face (tunnel)": round(SHELL_DEPTH - (ZR + H['J10']), 2),
@@ -616,7 +614,7 @@ def checks(parts):
            "ALS_centre_to_active_area_top_left_corner (7.32, 8.03)": round(((ALS[0] - 7.32) ** 2 + (ALS[1] - 8.03) ** 2) ** 0.5, 2),
            "ALS_pipe_rear_face_to_PCB_F": round(Z_PCB - ALS_Z_TOP, 2),
            "V6_strip_rear_face_Z": SHELL_DEPTH + FP_T + STRIP_PAD + EXL1_H,
-           "fan_filter_cover_rear_face_Z (total depth behind ring face = this + 4.0)": SHELL_DEPTH + FP_T + FAN_GASKET + FAN_T + FILTER_T,
+           "fan_filter_cover_rear_face_Z (= total depth behind the bezel face)": SHELL_DEPTH + FP_T + FAN_GASKET + FAN_T + FILTER_T,
            "display_rear_to_PCB_front_airgap_TFT_area (x<75 HV zone)": round(Z_PCB - (0.05 + DZ + CTP_TFT), 2),
            "display_rear_to_PCB_front_airgap_source_band (min)": round(Z_PCB - 0.05 - DZ - MOD_D, 2)}
     clr["HV"] = hv_checks(parts)

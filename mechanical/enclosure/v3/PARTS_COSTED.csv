@@ -13,7 +13,7 @@ item,part,qty_per_unit,process,service,url,price_basis,unit_cost_usd_qty1,unit_c
 11,M4x8 button head (bezel-shell 8) + M4x10 (PCB 3 + PE 1 + heat bar 2),14,catalogue,any,n/a,,3,2,ESTIMATED,2026-10-25,no
 12,M4x35 nylon-tip clamp screws,6,catalogue,any,n/a,,5,3,ESTIMATED,2026-10-25,no
 13,Neutral-cure silicone (DOWSIL 7091 class) + VHB spacers,-,catalogue,any,n/a,,6,4,ESTIMATED,2026-10-25,no
-P4-1,PA12 front ring 93 cm3 light grey (touch surface),1,SLS PA12 (price = MJF PA12 stand-in),JLC3DP,n/a,$0.275/g stand-in,30,26,ESTIMATED,2026-10-25,no
+P4-1,REMOVED Phase 23: PA12 front ring 93 cm3 light grey (touch surface),1,SLS PA12 (price = MJF PA12 stand-in),JLC3DP,n/a,$0.275/g stand-in,30,26,ESTIMATED,2026-10-25,no
 P4-2,6061 rear fin plate 242x177x4.75 + 29 laser-cut slats,1,CNC + laser,any CNC / SendCutSend,n/a,needs upload,190,100,ESTIMATED,2026-10-25,no
 P4-3,6061 heat pillar 40x28x19.7,1,CNC/waterjet,any,n/a,,25,12,ESTIMATED,2026-10-25,no
 P4-4,Gap pad 6 W/mK + foam VHB display tape,-,catalogue,any,n/a,,8,5,ESTIMATED,2026-10-25,no
@@ -93,3 +93,7 @@ P21-T3,ROLLED-UP unit total after Phase 21 (before 928.25/556.9),-,-,-,n/a,,930.
 P22-1,Hex pocket AF 7.2 + side slot (SLS shell),1,-,-,n/a,,0,0,ESTIMATED,2026-10-25,no
 P22-2,PA12 strap clips printed in shell (x186/x235),2,-,-,n/a,,0,0,ESTIMATED,2026-10-25,no
 P22-T1,ROLLED-UP unit total after Phase 22 (unchanged),-,-,-,n/a,sum,930.15,557.8,ESTIMATED,2026-10-25,no
+
+P23-1,PA12 front ring removed (P4-1),-1,-,-,n/a,$0.275/g stand-in,-30,-26,ESTIMATED,2026-10-25,no
+P23-2,PA12 glass-edge sleeve (separate part ~12 cm3),1,SLS PA12,JLC3DP,n/a,$0.275/g stand-in,4,3,ESTIMATED,2026-10-25,no
+P23-T1,ROLLED-UP unit total after Phase 23,-,-,-,n/a,sum,904.15,534.8,ESTIMATED,2026-10-25,no

@@ -90,7 +90,7 @@ Conclusion: the phase-2 figure of 26 C assumed a 6 W load. For the real dashboar
 - **Heat path.** A 6061 heat pillar (40 x 28 mm) runs from the CM5 heat bar to the fin plate. Chain: junction-to-case 2.0 + pad 0.2 + bar/pillar 0.8 + joint 0.3 = 3.3 K/W (ESTIMATED).
 - **Thermal break at the front.**
   - Display mounted on the bezel ledge with foam VHB tape instead of metal contact (about 0.1 W/K, ESTIMATED).
-  - A 3 mm SLS PA12 front ring covers all exposed metal of the bezel face, held off it by a 1 mm air gap on PA12 stand-off pips.
+  - *(REMOVED in Phase 23; Ethan never approved it.)* A 3 mm SLS PA12 front ring covered all exposed metal of the bezel face, held off it by a 1 mm air gap on PA12 stand-off pips.
   - The metal bezel stays as the structural frame and display carrier but is no longer a touch surface.
   - Keys sit in ring pockets with 0.4 mm clearance around the cap heads.
 - **DEVIATIONS from Ethan's original constraints:**
@@ -328,3 +328,37 @@ Cabinet air temperature remains an ASSUMPTION to verify with a thermocouple duri
 ## Phase 15 notes
 - Chimney slots (2 × 12, 4 × 12 mm, top/bottom walls) **deleted in CAD**: they were unfiltered inlets bypassing the fan filters (PD2). The phase-9 model did not credit them, so results are unchanged (INFERRED). The both-fans-failed case keeps 0.20 W/K (stalled rotors + filters).
 - All wiring windows now have gasketed covers. **No positive pressure is claimed** (push-pull series, not computed). The PD2 basis is that every opening is filtered or sealed.
+
+
+## Phase 23: PA12 front ring REMOVED, bare black-anodised 6061 bezel is the front (Ethan). Data: thermal_bare_bezel_p23.json
+Model: `thermal_v3.py` `solve_p23` with nodes SoC, heat bar, glass, bezel, interior air and fin plate. Current design: V6 flat plate + EXL1 strip + two 40 mm fans in push-pull series, flush glass, bare bezel face to front air (h 9 W/m²K, ESTIMATED).
+- Glass to bezel: 0.4 W/K (VHB tape plus the kept PA12 sleeve/bead, ESTIMATED).
+- Fan conductances are ESTIMATED (phase 9: 2.2 / 1.3 / 0.20 W/K). With no heat into the bezel, the model reproduces the phase 9 numbers to within 1 F.
+- Conditions: Ta 104 F (40 C), CM5 4 W, cabinet air = ambient (ASSUMPTION). Idle = 90 % idle + 10 % full backlight; alarm = continuous 100 %. No sun.
+- **All results below are MODELLED**, about ±5 F on surfaces.
+
+**New finding: the CAD still has the heat bar tab screwed (2x A2 M4, 0.5 mm pad) onto the bezel heat boss.** Phases 4-9 assumed this boss carries no heat. With a bare bezel that matters, so the as-CAD path is modelled at 2.75 K/W (ESTIMATED). The as-CAD row is the design as built.
+
+| Case (as CAD) | Bezel face idle 10 / 25 / 40 % | Bezel face alarm | Glass idle 10 / 25 / 40 % | Glass alarm | Throttle ambient 4 W / 8.5 W |
+|---|---|---|---|---|---|
+| Both fans | 109 (42.7) / 109 (43.1) / 110 (43.4) | 113 (44.8) | 109 / 110 / 111 | 117 | 149 F (65.0 C) / 120 F (48.8 C) |
+| One fan failed | 110 (43.2) / 111 (43.6) / 111 (44.1) | 114 (45.8) | 110 / 111 / 113 | 120 | 148 F (64.3 C) / 118 F (47.7 C) |
+| Both failed | 113 (44.8) / 114 (45.6) / 115 (46.4) | 121 (49.4) | 114 / 116 / 119 | 129 | 144 F (62.1 C) / 112 F (44.3 C) |
+
+**Comparison with phase 9 (both fans, ring):**
+- Glass: was 108 / 109 / 111 F at idle and 116 F at alarm; now 109 / 110 / 111 and 117 (+0 to +1 F).
+- Throttle ambient at 4 W: was 145 F, now 149 F (+4 F, because the bezel now also sinks CM5 heat).
+- Cabinet air 9 F below ambient: bezel 104 / 105 / 105 F at idle, 108 F at alarm.
+
+**Touch (source: /workspace/compliance/touch_temperature.md, read-only):**
+- IEC/UL 61010-1 Table 19 at 40 C ambient: 55 C (131 F) for metal knobs and handles; 65 C (149 F) for an outer enclosure of uncoated or anodised metal.
+- IEC 62368-1 TS1, metal held more than 1 min: 48 C (118.4 F), at a 25 C room.
+- ISO 13732-1 burn thresholds for uncoated metal: 51 C (1 min), 48 C (10 min), 43 C (8 h).
+- With fans running, the bezel is 109-114 F (43-46 C): under every limit above except the 8 h threshold. With both fans failed and the backlight at full, it reaches 121 F (49.4 C): over the 10 min burn threshold, under the 1 min threshold and under both 61010-1 limits.
+- **Sun is not included.** Phase 4 put direct sun at +20-30 K on a black face, which would put a bare black bezel in direct sun well above all of these. A sun hood or shade is needed at sunny sites (same conclusion as before).
+
+**Optional fix that keeps the bare look (NOT implemented):** replace the boss pad with 2 G10 1.5 mm spacer washers and use nylon M4 screws at the boss, so the heat bar is held but thermally isolated (about 50 K/W).
+- Effect, both fans: bezel −2 to −3 F (106 / 107 / 108, alarm 111 F).
+- Cost: throttle ambient 145 F (−4 F); both failed at alarm: 119 F (48.4 C).
+- Cost about +$2 / +$1 (ESTIMATED).
+- Not needed for the fans-running cases.

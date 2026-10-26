@@ -23,7 +23,7 @@ No quotes requested, no accounts, no uploads. Only two figures are read directly
 
 | Part | qty1 $ | qty10 $ | basis |
 |---|---|---|---|
-| PA12 front ring 93 cm3 (~95 g), light grey dye | 30 | 26 | $0.275/g stand-in + dye |
+| ~~PA12 front ring 93 cm3~~ (REMOVED Phase 23) (~95 g), light grey dye | 30 | 26 | $0.275/g stand-in + dye |
 | 6061 fin plate: 4.75 mm base with milled slots + 29 laser-cut 2 mm slats, bonded | 190 | 100 | ESTIMATED CNC + laser |
 | 6061 heat pillar 40 x 28 x 19.7 | 25 | 12 | ESTIMATED |
 | Gap pad 6 W/mK pillar/plate + foam VHB display tape | 8 | 5 | ESTIMATED |
@@ -255,3 +255,13 @@ These totals exclude the PCB, display, CM5, shipping and tax (as above), the BCR
 | PA12 strap clips printed into the inner top wall (x 186, 235; ≈ 0.1 cm³) | 2 | 0 | 0 | ESTIMATED |
 | **Phase 22 delta** | | **0** | **0** | ESTIMATED |
 | **Rolled-up unit total, after Phase 22** (unchanged from e4eece6) | | **930.15** | **557.8** | delta vs baseline +270.15 / +167.8 |
+
+## Phase 23: PA12 front ring removed (USD per unit, ESTIMATED)
+| item | qty | qty 1 | qty 10 | label |
+|---|---|---|---|---|
+| PA12 front ring 93 cm³ (P4-1) REMOVED | -1 | −30 | −26 | ESTIMATED (same price basis) |
+| PA12 glass-edge sleeve kept as its own part, about 12 cm³ (~12 g at $0.275/g) | 1 | +4 | +3 | ESTIMATED |
+| Display moved back 4 mm, light pipe 4 mm shorter | - | 0 | 0 | ESTIMATED |
+| **Phase 23 delta vs 0e0606b** | | **−26** | **−23** | ESTIMATED |
+| **Rolled-up unit total after Phase 23** | | **904.15** | **534.8** | delta vs baseline +244.15 / +144.8 |
+| (optional, not included) G10 spacers + nylon M4 at the bezel heat boss | 2 | +2 | +1 | ESTIMATED |
