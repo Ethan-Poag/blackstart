@@ -209,3 +209,30 @@ Board = /workspace/m7/u25 (from t20 = 32b12c7 board).
 - Net-(R436-Pad2) B.Cu 3.55 mm from slot corner (13.5,27.2), own phase needs 3.62. 24 locked F.Cu segments = accepted deviations.
 - Bulk low-speed router is NOT DRC-clean (test run gave 317 clearance errors) - not used.
 - NOT fab-ready.
+
+## 2026-10-25 ~6:20 PM HST — m7-wip: reviewer's 13 divider pairs fixed (layout executor)
+Board only on m7-wip. Not fab-ready.
+
+| metric | f16d8de | this commit |
+|---|---|---|
+| KiCad unconnected (pcbnew connectivity) | 973 | 965 |
+| uf.analyze open (my method) | 943 | 935 |
+| HV opens (hvopen.py) | 9 | 9 |
+| reviewer hvsheet.py pairs | 13 | 0 |
+| my hvrules (excluding accepted edge items) | 0 | 0 |
+| DRC errors, repo .kicad_pro | 0 | 0 |
+| DRC errors, working pro (min via 0.2/0.35) | — | 4 (the 2 DSI83_REFCLK 0.15/0.3 vias; still open) |
+| DRC warnings | 891 | 891 |
+
+What changed:
+- Moved R487 (0.96, −0.80 mm), R478 (−0.17, −0.99), C275 (−0.71, −0.26) and R486 (−0.25, −0.43). None of them is locked. No connectors, holes, outline, rule areas or locked tracks were touched, and J30 was not changed. Footprint count is 1181.
+- Ripped and rerouted copper near the flagged divider nodes: R448, R449, R456, R430-Pad2, GND_AC, BUS_VC_N, AC_IRQ_N and GEN_CTN_1. The R430 and R449-Pad2 copper was then restored from f16d8de. The Net-(R449-Pad2) via moved from y 99.205 to 98.855.
+- fixends added 79 joins. 30 of them hit clearance DRC errors (all low-voltage nets) and were removed.
+
+Still open: 9 HV opens (GEN_L3, GEN_N, BUS_N, BUS_L3 and others), the R436-Pad2 spacing (3.55 vs 3.62 mm), the GEN_L1 chain re-place and the rest of the queue.
+
+### J28/J29 slot change (reviewer re-audit item a)
+- d151ff7 had routed slots between adjacent J28/J29 pins at x 2.00–12.50 mm. They are now x 2.0–13.5 mm (2.0 × 11.5 mm), 1.0 mm longer toward the board interior.
+- The change was made in 32b12c7 with slots.py/slotmove.py, following the reviewer's sheet. **Reason for the 12.5 → 13.5 extension: not recorded.** slots.py still contains the 12.5 value, and my notes give no reason.
+- Copper that crossed the new slot area was ripped and rerouted in the u1–u6 steps. This mainly meant HV pad copper, and parts R429, R448, R456 and RV6 were moved off the slot-corner zone. I did not record an exact item list.
+- This change exists only on m7-wip, not on master.

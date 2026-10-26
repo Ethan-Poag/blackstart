@@ -30,3 +30,5 @@
 | 24 | GEN_N | (22.36, 19.51) | (22.66, 19.21) | 0.50 |
 
 2. J28/J29 pads 6.94 mm from the routed board edge (Ethan, accepted). Condition: no edge plating on the outline there.
+
+3. RV3 (GEN-side MOV) stays at (25.26, 154.08) mm on B.Cu, inside the BUS area (lead decision, 2026-10-25 6:00 PM HST). Condition: every HV spacing rule passes against its pads and traces. On the m7-wip board of this commit, the reviewer's hvsheet.py finds 0 pairs and my hvrules finds only the accepted J28/J29 edge items. RV3.1 (GEN_L3) and RV3.2 (GEN_N) are still unrouted, so this must be re-checked once their copper exists. A separate read-only RV3 placement study (rv3study) has not reported yet. Growth for RV3 is conditional on Mechanical, and none is committed.
