@@ -277,3 +277,15 @@ Rules/project files only; the board is unchanged.
   - 69 divider: nodes next to their own chain's line.
   They stay at warning, with the reason written in the file. hvsheet.py stays the arbiter, and it reports 0 pairs.
 - **Result: DRC now shows 63 hole_to_hole errors.** They come from the severity change, not from a board change. They are real DFM items: vias too close to connector THT holes (J26 12, J20 8, J27 8, J21 6, J18 4, J1 4, …). They are on the fix list (DFM hole spacing). Warnings: 1008.
+
+## 2026-10-25 ~7:35 PM HST — m7-wip: 63 hole_to_hole DRC errors fixed (0 left); fixends made safe
+Board only on m7-wip. Not fab-ready.
+- **Inherited, not new (measured).** I ran d151ff7 with today's rules. It has 70 hole_to_hole violations (35 unique pairs). The board before this fix had 63 (32 unique pairs). 31 pairs are common to both, and 1 is new: the duplicate BUS_L2 vias at (16.86/17.16, 56.81), which overlap with a 0 mm gap.
+- **Fix (h2h.py):**
+  - 31 of the 32 pairs are a via on the same net as a nearby connector through-hole pad (J18–J23, J26, J27, J1, J7, BAT_IN). Each of these vias has an inner-layer track that the pad doesn't connect to on that layer, so the via was moved away from the pad by 0.05–0.13 mm, with its tracks following, to give a ≥0.31 mm hole gap.
+  - The duplicate BUS_L2 via was removed, and its tracks re-ended on the via that stays.
+  - No connectors or holes were moved.
+- **Correction to my 6:20 PM entry ("79 joins / 30 dropped").** The 79 is the union of two separate runs: 75 joins added on v3 and 4 on v8. 30 of those 79 were dropped by dropbad.py because they hit DRC errors. The fixends.py committed in f16d8de was not idempotent; it re-adds segments on every run (the reviewer measured 6607 and 6673 joins on repeat runs). My later working copy skipped ends that were already joined, but it was not committed. The committed fixends.py now:
+  - is idempotent: a second run adds 0 joins (measured);
+  - has a clearance guard: it never adds a join within 0.2 mm of copper on another net. On the current board it adds 7 joins and blocks 30, so the CRANK_EN–GND (0.008 mm) and TOUCH_INT_N–DISP_SDA (0.039 mm) near-shorts cannot come back.
+- **Metrics (measured):** KiCad unconnected 963, geometric 933, HV opens 7, hvsheet 0 pairs. DRC errors 0 with both project files (they are now identical); warnings 1008.
