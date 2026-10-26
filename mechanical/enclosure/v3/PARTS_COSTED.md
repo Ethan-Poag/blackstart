@@ -247,3 +247,11 @@ These totals exclude the PCB, display, CM5, shipping and tax (as above), the BCR
 | **Delta vs baseline, after Phase 21** | **+270.15** | **+167.8** |
 | Rolled-up unit total, after Phase 20 | 928.25 | 556.9 |
 | **Rolled-up unit total, after Phase 21** | **930.15** | **557.8** |
+
+## Phase 22: true hex pocket + 2 printed strap clips (USD per unit, ESTIMATED)
+| item | qty | qty 1 | qty 10 | label |
+|---|---|---|---|---|
+| Hex pocket AF 7.2 + side slot (geometry change in the SLS shell boss) | 1 | 0 | 0 | ESTIMATED |
+| PA12 strap clips printed into the inner top wall (x 186, 235; ≈ 0.1 cm³) | 2 | 0 | 0 | ESTIMATED |
+| **Phase 22 delta** | | **0** | **0** | ESTIMATED |
+| **Rolled-up unit total, after Phase 22** (unchanged from e4eece6) | | **930.15** | **557.8** | delta vs baseline +270.15 / +167.8 |

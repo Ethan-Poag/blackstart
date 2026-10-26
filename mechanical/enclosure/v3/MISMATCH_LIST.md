@@ -78,3 +78,4 @@ Inventory checked: geometry.py, PANEL_V2.md, display_mech.md, draw_front_panel.p
 |---|---|
 | 51 | NEW/CLOSED: a primary earth path is reinstated as an M4 ground stud through the top side wall at x 140, Z 30, strapped to a bare bezel landing at (140, -19.8) (GROUND.md). The old PE_NEW location (12.3, -7.5) is not reused because it needed a PCB hole and sat near HV; the top-right corner is blocked by the heat bar. No board change. The clamp bond is unchanged as the backup. |
 | 52 | CLOSED (Phase 21): stud moved to the rear face at (257.5, -19.2). Strap joint is metal-to-metal, hex-pocket anti-rotation plus nylock, joint compound on the landings, test spot reused (GROUND.md). |
+| 53 | CLOSED (Phase 22): the stud pocket was a round Ø9 and is now a true hex, AF 7.2. Two printed strap clips added at x 186 and x 235. |

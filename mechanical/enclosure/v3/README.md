@@ -197,3 +197,15 @@ Pairwise boolean intersections of all 15 parts (intended contacts excluded: PCB/
   - Lead tips 8.0 / 10.44 (unchanged).
   - Finger check: covers on, no entry; covers off unchanged.
   - Thermal: heat-path geometry unchanged (the strap passes 1.7 mm above the heat bar, not touching it), so the thermal numbers are unchanged.
+
+## Phase 22
+- Stud anti-rotation pocket is now a true hex, 7.2 mm AF, sized for the ISO 4017 M4 head (7.0 AF), with a side-entry slot. Two printed PA12 strap clips on the inner top wall at x 186 and x 235. Details in GROUND.md.
+- **Checks (MODELLED):**
+  - 0 interferences with 1 mm and 6 mm panels.
+  - Left wall 1.000.
+  - Finger check unchanged (covers on: no entry).
+  - Stud metal minimum 40.33 mm (rule 38).
+  - Clearances unchanged: heat bar 1.71, clamps 2.5.
+  - HV unchanged: 8.0 / 10.44; clamp bond 38.18 / 54.86.
+  - Thermal geometry unchanged.
+- Cost: $0 (printed in the shell).

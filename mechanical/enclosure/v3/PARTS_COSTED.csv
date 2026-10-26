@@ -89,3 +89,7 @@ P21-4,Anti-oxidant joint compound (3 landings + eyes),1,-,-,n/a,,0.5,0.2,ESTIMAT
 P21-T1,TOTAL Phase 21 delta,-,-,-,n/a,sum,1.9,0.9,ESTIMATED,2026-10-25,no
 P21-T2,TOTAL delta vs baseline after Phase 21 (before 268.25/166.9),-,-,-,n/a,sum,270.15,167.8,ESTIMATED,2026-10-25,no
 P21-T3,ROLLED-UP unit total after Phase 21 (before 928.25/556.9),-,-,-,n/a,,930.15,557.8,ESTIMATED,2026-10-25,no
+
+P22-1,Hex pocket AF 7.2 + side slot (SLS shell),1,-,-,n/a,,0,0,ESTIMATED,2026-10-25,no
+P22-2,PA12 strap clips printed in shell (x186/x235),2,-,-,n/a,,0,0,ESTIMATED,2026-10-25,no
+P22-T1,ROLLED-UP unit total after Phase 22 (unchanged),-,-,-,n/a,sum,930.15,557.8,ESTIMATED,2026-10-25,no

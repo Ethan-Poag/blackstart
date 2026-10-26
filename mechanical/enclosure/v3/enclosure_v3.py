@@ -422,17 +422,31 @@ GS_X, GS_Y = 257.5, -19.2                      # phase 21: stud axis VERTICAL th
 GS_XY = (182.0, SY0 + WALL + 3.47)              # bare bezel landing (y -19.8) between keys SW12/SW13 (x 172-191)
 GS_HOLE = 4.5
 GS_PIECES = {}
+GS_HEX_AF = 7.2                                 # pocket across flats: ISO 4017 M4 head s = 7.0 max (6.78 min), e >= 7.66
+GS_CLIPS_X = (186.0, 235.0)                     # phase 22 PA12 strap clips on the inner top wall
+def hexp(x, y, af, z0, z1):
+    """hex prism, flats facing +-x (so a 7.2 slot along y holds it like a spanner)."""
+    return (cq.Workplane("XY").polygon(6, af / 0.8660254).extrude(z1 - z0).rotate((0, 0, 0), (0, 0, 1), 30)
+            .translate((x, -y, -z1)))
 def gs_boss():
-    """PA12 cup boss under the rear wall: hex pocket (anti-rotation for the bolt head) + strap slot."""
+    """PA12 cup boss under the rear wall. Lower part: TRUE HEX pocket AF 7.2 (Z 36-39.8) for the bolt head, continued as a
+    7.2 mm parallel slot open toward +y so the pre-assembled head/washers/eye/nylock stack slides in sideways; the flats
+    bear on the slot walls -> head cannot turn. Upper part: d10 counterbore + 10 mm slot (Z 39.8-44.8) for washers/eye/nut."""
     x, y, z = GS_X, GS_Y, SHELL_DEPTH - WALL
-    cup = cyl(x, y, 13.0, 36.5, z + 0.5).cut(cyl(x, y, 9.0, 36.0, z - 0.2))
-    return cup.cut(box(x - 3.5, SY0 + WALL - 0.5, x + 3.5, y, 36.0, 41.2))     # strap slot from the wall side
+    cup = cyl(x, y, 13.0, 36.5, z + 0.5)
+    cup = cup.cut(hexp(x, y, GS_HEX_AF, 36.0, 39.8)).cut(box(x - GS_HEX_AF / 2, y, x + GS_HEX_AF / 2, y + 10, 36.0, 39.8))
+    cup = cup.cut(cyl(x, y, 10.0, 39.8, z - 0.2)).cut(box(x - 5.0, y, x + 5.0, y + 10, 39.8, z - 0.2))
+    cup = cup.cut(box(x - 3.5, SY0 + WALL - 0.5, x + 3.5, y, 36.0, 41.2))     # strap slot from the wall side
+    yi = SY0 + WALL
+    for cx in GS_CLIPS_X:                       # hook from above + front lip; nothing below Z 31 (heat bar clearance kept)
+        cup = cup.union(box(cx - 2, yi - 0.01, cx + 2, yi + 1.5, 35.0, 35.8)).union(box(cx - 2, yi + 0.9, cx + 2, yi + 1.5, 31.0, 35.0))
+    return cup
 def ground_stud():
     """returns (bezel landing, metal parts union, gasket). Pieces in GS_PIECES."""
     x, y, z = GS_X, GS_Y, SHELL_DEPTH; yi = SY0 + WALL; lx, ly = GS_XY
     land = cyl(lx, ly, 6.0, FIELD_T, 10.0)
     GS_PIECES.clear()
-    GS_PIECES["stud_M4x25_A2_hex_bolt (head in hex pocket)"] = cyl(x, y, 8.0, 37.0, 39.8).union(cyl(x, y, 4.0, 39.8, z + 13.0))
+    GS_PIECES["stud_M4x25_A2_hex_bolt (head in hex pocket)"] = hexp(x, y, 7.0, 37.0, 39.8).union(cyl(x, y, 4.0, 39.8, z + 13.0))
     GS_PIECES["inner_joint: tooth washers + strap eye + A2 nylock nut"] = cyl(x, y, 8.0, 39.8, 41.6).union(cyl(x, y, 7.6, 41.6, 44.8))
     GS_PIECES["strap_0p5x6_tinned_Cu"] = U([box(lx - 3, yi + 0.01, lx + 3, yi + 0.6, 10.0, 35.0),           # leg up from landing
                                            box(lx - 3, yi + 0.01, lx + 3, ly + 3.0, 10.0, 10.5),            # foot on the landing

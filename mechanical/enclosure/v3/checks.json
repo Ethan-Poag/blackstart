@@ -211,10 +211,10 @@
    },
    "ground_stud_to_live_mm (rule 38.0)": {
     "stud_M4x25_A2_hex_bolt (head in hex pocket)": {
-     "to_live_copper": 43.2,
+     "to_live_copper": 43.18,
      "nearest": "C119 Net-(U23-CT)",
-     "to_J28J29_plug": 243.0,
-     "to_J30_plug(old model)": 276.18
+     "to_J28J29_plug": 243.28,
+     "to_J30_plug(old model)": 276.15
     },
     "inner_joint: tooth washers + strap eye + A2 nylock nut": {
      "to_live_copper": 44.5,
@@ -287,7 +287,7 @@
   "thermal_pads": 1.4,
   "gasket": 12.8,
   "customer_panel": 151.1,
-  "rear_shell": 207.0,
+  "rear_shell": 206.8,
   "clamps": 20.6,
   "clamp_screws": 3.4,
   "front_ring": 99.7,
