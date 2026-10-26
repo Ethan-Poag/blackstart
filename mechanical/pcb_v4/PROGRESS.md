@@ -312,3 +312,11 @@ Board only on m7-wip. Not fab-ready.
   - BUS_L2 is 0.3025 mm and GEN_L1 0.355 mm from the J28/J29 slot walls.
   - The c41fce7 reroute was a deliberate HV copper change and needs qualified safety review.
 - **KiCad 9.0.2 limit:** KiCad applies one edge-clearance value per copper item, so a 0.3 mm slot-wall error and an 8 mm outer-edge warning cannot both be expressed. Every attempt either dropped the outer warning or never fired the slot error, and KiCad also misses copper lying entirely inside a slot. The rules are enforced by verify.sh: the no-custom-rules DRC must show copper_edge_clearance = 0, plus the geometric slot check. The .kicad_dru is unchanged.
+- **03cdea5** — D1 (TVS) rotated 90° to (258.0, 135.6) B.Cu, its GND vias moved with pad 2. VBAT_F erosion (mneck.py) B.Cu 1.705 → 1.999 mm; F.Cu 2.435 unchanged. Full gate passed.
+- **815c989** — VBAT_F_PWR pour on PWR (priority 10; x 258.5–265.1 y 125.3–175.5 plus x 248–258.5 y 153.5–175.5). +3V3_SAFE island count unchanged (2, the R47.2 one pre-existing). Erosion F 2.435 / B 1.999 / PWR 2.435 mm. Full gate passed.
+- **(this commit)** — VBAT_P parallel F.Cu pour VBAT_P_FCU_PAR (x 224–251.6, y 134–163.5) + 65 stitching vias (0.6/0.3) to the In2 VBAT_P plane. In2 FEM (fem.py, F pour treated as ideal — INFERRED optimistic): Q2 sources→Q3 path 2.531 → 0.789 squares; peak-density effective width 2.59 → 3.45 mm at (252.08, 156.43). Full gate passed; GND/+3V3_SAFE/VBAT_P island counts unchanged.
+
+### Known current limits (IPC-2221, 10 °C / 18 °F rise, 1 oz outer, 0.5 oz inner — copper weights INFERRED, no stackup in file)
+- **VBAT_F F1→Q1:** erosion necks F 2.435 + B 1.999 + PWR 2.435 mm → ≈4.56 + 3.95 + 1.38 = **≈9.9 A continuous** (INFERRED). Short of 10 A. Limited by B-side fanout vias (UVLO/HGATE/GND) in the F pour, the HGATE via at (262.6, 158.8), and the VBAT_P_Q2S via field.
+- **VBAT_P Q2→Q3 (In2 hop to the new F pour):** peak-density width 3.45 mm on 0.5 oz In2 → **≈1.8 A by IPC internal** (INFERRED, IPC internal is very conservative for planes). Not a 10 A path.
+- Builder options: 2 oz outer/1 oz inner, or a lower system rating. Not hidden; open.
