@@ -236,3 +236,12 @@ Still open: 9 HV opens (GEN_L3, GEN_N, BUS_N, BUS_L3 and others), the R436-Pad2 
 - The change was made in 32b12c7 with slots.py/slotmove.py, following the reviewer's sheet. **Reason for the 12.5 → 13.5 extension: not recorded.** slots.py still contains the 12.5 value, and my notes give no reason.
 - Copper that crossed the new slot area was ripped and rerouted in the u1–u6 steps. This mainly meant HV pad copper, and parts R429, R448, R456 and RV6 were moved off the slot-corner zone. I did not record an exact item list.
 - This change exists only on m7-wip, not on master.
+
+## 2026-10-25 ~6:30 PM HST — m7-wip: R436 slot-corner fixed; slot centres corrected in my tools
+Board only on m7-wip. Not fab-ready.
+- **Tool bug found:** my slot-corner tools (route_m7.py, slotmove.py, slotchk.py) used slot y centres about 1.0 mm off (28.2/35.81/43.44/78.01/85.63/93.25). The real centres, measured from Edge.Cuts, are 27.195/34.815/42.435/77.013/84.6325/92.252. All three tools are fixed. slotchk2.py is a new pad/track/via checker with the two-tier rule: other phases ≥7.1 mm from a slot corner, the slot's own two phases ≥3.62 mm. Earlier slot-corner results from my own tools are therefore unreliable; the reviewer's hvsheet.py uses the real outline and was unaffected.
+- **R436:** moved +1.0 mm in x. **R424** (GEN_L1 chain) moved +0.5 mm in x to keep the 4.38 mm chain spacing to R436.1. Nets Net-(R436-Pad2), Net-(R423-Pad2) and Net-(R424-Pad2) were ripped and rerouted, and the router verified all 3 complete.
+  - Before, slotchk2 found 5 unlocked slot-corner violations, all R436 pads and tracks; the worst was R436.1 at 2.64 mm vs 3.62 mm. After, there are 0 unlocked violations.
+  - 1 locked item remains: a GEN_N F.Cu track at 3.594 mm vs 3.62 mm. It is one of the accepted locked F.Cu segments.
+- **GEN_L1:** J28.1, R422.1 and RV1.1 are already connected (hvopen no longer lists GEN_L1), so the chain did not need re-placing for reach. No GEN_L1 via is within 8.0 mm of the edge on this board (checked with my hvrules and a via-to-Edge.Cuts scan). The 7.675 mm via from the earlier review no longer exists.
+- **Metrics (measured):** KiCad unconnected 965, geometric 935, HV opens 9, hvsheet 0 pairs. DRC errors: 0 with the repo project file; 4 with the working project file (the 2 DSI83_REFCLK vias, still open); 891 warnings.

@@ -1,6 +1,6 @@
 import pcbnew,json,math,sys;T=pcbnew.ToMM;F=pcbnew.FromMM
 b=pcbnew.LoadBoard(sys.argv[1]);PH=json.load(open('phase.json'))
-SL=((28.2,'GEN_N','GEN_L3'),(35.81,'GEN_L3','GEN_L2'),(43.44,'GEN_L2','GEN_L1'),(78.01,'BUS_N','BUS_L3'),(85.63,'BUS_L3','BUS_L2'),(93.25,'BUS_L2','BUS_L1'))
+SL=((27.195,'GEN_N','GEN_L3'),(34.815,'GEN_L3','GEN_L2'),(42.435,'GEN_L2','GEN_L1'),(77.013,'BUS_N','BUS_L3'),(84.6325,'BUS_L3','BUS_L2'),(92.252,'BUS_L2','BUS_L1'))
 def bad(f,m=0.4):
   for p in f.Pads():
     ph=PH.get(p.GetNetname())

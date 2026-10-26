@@ -49,6 +49,24 @@ if os.environ.get('HVSHEET')=='1':
             if r<=1.6: continue
             d.setdefault(round(r,1),[]).append(c2)
         RQ[a]=d
+    # M7: reviewer hvsheet model - HV-domain ~0 V nets (GND_AC, CT, taps, ADE) need creep(|V(node)|) from each divider node
+    import sys as _s;_s.path.insert(0,'/tmp/rv');from common import domains as _dom
+    _hvd,_ctd,_,_=_dom(b);_nm2c={str(k):v.GetNetCode() for k,v in b.GetNetsByName().items()}
+    _lv=[_nm2c[n] for n in _hvd if n in _nm2c and _nm2c[n] not in _g['node'] and n not in _ctd]
+    _lv=[_nm2c[n] for n in _hvd if n in _nm2c and _nm2c[n] not in _g['node']]
+    def _creep(v):
+        T=[(0,0.0),(250,2.5),(320,3.2),(400,4.0),(500,5.0),(630,6.3),(800,8.0),(1000,10.0)]
+        for (a0,x),(c0,y) in zip(T,T[1:]):
+            if v<=c0: return x+(y-x)*(v-a0)/(c0-a0)
+        return 10.0
+    for a in _g['node']:
+        ch,k=_g['node'][a] if isinstance(_g['node'][a],tuple) else (None,None)
+        try: va=abs(_g['V'](a))
+        except Exception: continue
+        if va<1: continue
+        r=round(_creep(va)+0.15,1)
+        if r>1.6: RQ.setdefault(a,{}).setdefault(r,[]).extend(_lv)
+        for c2 in _lv: RQ.setdefault(c2,{}).setdefault(r,[]).append(a)
     def free_map(code,w,win,extra_clear=0.0,allow_layers=(0,1,2)):
         y0,y1,x0,x1=win;lab_w=H.LAB[:,y0:y1,x0:x1];me=code+1;cl=H.cls_of(code)
         other=(lab_w!=0)&(lab_w!=me)
@@ -85,7 +103,7 @@ if os.environ.get('HVSHEET')=='1':
             # own-phase (adjacent pin's phase): >=3.62 mm (3.62 + 3.48 corner->other pad = 7.1 creepage)
             import json as _j
             _PH=_j.load(open('/workspace/m7/phase.json'));_myph=_PH.get(H.NAME_OF[code] if hasattr(H,'NAME_OF') else NAMES.get(code,''),None)
-            SLOTS=((28.2,'GEN_N','GEN_L3'),(35.81,'GEN_L3','GEN_L2'),(43.44,'GEN_L2','GEN_L1'),(78.01,'BUS_N','BUS_L3'),(85.63,'BUS_L3','BUS_L2'),(93.25,'BUS_L2','BUS_L1'))
+            SLOTS=((27.195,'GEN_N','GEN_L3'),(34.815,'GEN_L3','GEN_L2'),(42.435,'GEN_L2','GEN_L1'),(77.013,'BUS_N','BUS_L3'),(84.6325,'BUS_L3','BUS_L2'),(92.252,'BUS_L2','BUS_L1'))
             def _szm(rad):
                 m=np.zeros((len(yy),len(xx)),bool)
                 for _cy,_a,_b in SLOTS:
