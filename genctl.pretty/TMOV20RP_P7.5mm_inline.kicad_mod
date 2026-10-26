@@ -1,0 +1,115 @@
+(footprint "TMOV20RP_P7.5mm_inline"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "M7: Littelfuse TMOV20RP460E (LCSC C3260792 per lead), 2 leads in-line, e=7.5 mm (datasheet: 7.5+/-1.0), disc D 18-23 mm; body drawn 23 x 8 mm (8 mm thickness ASSUMED, UNVERIFIED). Pads from KiCad RV_Disc_D21.5mm_W6.1mm_P7.5mm, enlarged to 1.9/1.2 drill; lead diameter and body thickness UNVERIFIED against the dimension table. varistor")
+	(tags "varistor SIOV")
+	(property "Reference" "REF**"
+		(at 3.75 5.7 0)
+		(layer "F.SilkS")
+		(uuid "e9c839a6-8024-4f41-a940-8deba6b41df3")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "RV_Disc_D21.5mm_W6.1mm_P7.5mm"
+		(at 3.75 -2.6 0)
+		(layer "F.Fab")
+		(uuid "6c468047-eca7-42bb-b240-ef74d7ccffda")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "fe7a45fa-9345-4e97-9607-88cc12de41d1")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "48d22d47-9ba7-4f5d-80b8-e68ba5bc57ce")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr through_hole)
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	(fp_text user "${REFERENCE}"
+		(at 3.75 1.45 0)
+		(layer "F.Fab")
+		(uuid "57f5661e-2cea-4cb9-a744-e6a2d2e5f712")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(fp_rect (start -7.75 -4) (end 15.25 4) (stroke (width 0.1) (type solid)) (fill no) (layer "F.Fab"))
+	(fp_rect (start -7.87 -4.12) (end 15.37 4.12) (stroke (width 0.12) (type solid)) (fill no) (layer "F.SilkS"))
+	(fp_rect (start -8.25 -4.5) (end 15.75 4.5) (stroke (width 0.05) (type solid)) (fill no) (layer "F.CrtYd"))
+	(pad "1" thru_hole circle
+		(at 0 0)
+		(size 1.9 1.9)
+		(drill 1.2)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "677a2802-8984-4822-ad3b-ba589263a024")
+	)
+	(pad "2" thru_hole circle
+		(at 7.5 0)
+		(size 1.9 1.9)
+		(drill 1.2)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "174e3391-ca08-475d-a7cf-eed06c815819")
+	)
+	(embedded_fonts no)
+	(model "${KICAD9_3DMODEL_DIR}/Varistor.3dshapes/RV_Disc_D21.5mm_W6.1mm_P7.5mm.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)
