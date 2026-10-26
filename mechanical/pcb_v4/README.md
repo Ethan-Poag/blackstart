@@ -31,3 +31,5 @@ Run it on the build box with KiCad 9 pcbnew python, Freerouting 2.5 and Java 25.
 5. **render**: `render_v4.py`.
 
 Rules: 0.10 mm track/space minimum, 0.20/0.40 mm vias. The impedance widths are **estimates** for JLC06161H-3313 and must be checked in JLC's impedance calculator.
+
+**Fab note (m7-wip, 2026-10-25):** two DSI83_REFCLK vias, at (161.5, 126.7) and (162.0, 125.65) mm, are **0.15 mm drill / 0.30 mm pad**. Every other via is ≥0.2/0.35. I tried enlarging them to 0.2/0.35, but they do not fit: that breaks the DIFF100 clearance (0.125 vs 0.15 mm), the hole clearance (0.18 vs 0.20 mm) and the zone clearance (0.176 vs 0.20 mm). The board therefore needs JLC's "smaller via" option (0.15/0.25–0.3 mm class) at order time, which may add cost; check the JLC quote. The project's minimums are min through-hole 0.15 mm and min via 0.30 mm. The working and repo .kicad_pro files now agree on these values.

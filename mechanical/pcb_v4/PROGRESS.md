@@ -258,3 +258,7 @@ Board only on m7-wip. Not fab-ready.
   - Without HVSHEET=1, the router does not apply the slot-corner rule (a test route gave 13 violations), so HV nets must always be routed with HVSHEET=1.
   - The HVSHEET model does not include the .kicad_dru 3 mm "HV line outer" rule against divider nodes, so DRC is still needed on every batch.
 - **Metrics (measured):** KiCad unconnected 963, geometric 933, HV opens 7, hvsheet 0 pairs, slotchk2 0 unlocked. DRC errors: 0 with the repo project file; 4 with the working project file (the DSI83 vias); 891 warnings.
+
+## 2026-10-25 ~7:00 PM HST — DSI83_REFCLK vias: kept at 0.15/0.3 (0.2/0.35 does not fit)
+- Trial: enlarging both vias to 0.2/0.35 caused 8 DRC errors (DIFF100 clearance 0.125 mm, hole clearance 0.18 mm, zone clearance 0.176 mm). Reverted; the board is unchanged.
+- My working .kicad_pro had min hole/via 0.2/0.35; I set it to the repo values (0.15/0.30). Both files now agree, so the 4 working-file DRC errors are gone: DRC errors are 0 with either file. The fab note (JLC "smaller via" option) is in README.md.
