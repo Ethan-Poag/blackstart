@@ -39,3 +39,8 @@ Inventory checked: geometry.py, PANEL_V2.md, display_mech.md, draw_front_panel.p
 | 33 | Left PA12 wall y 15-105 | Phase 11: left clamp moved (y 90 -> y -2 and y 178); wall now solid fraction 1.000 at 3.0 mm over y 15-105. Inner face 9.94 mm from J28/J29 pad column, 2.4 mm from plug body | closed (phase 11) |
 | 34 | J4 fan header | no load switch or fuse on J4 +5V (direct on +5V net); CM5 has one FAN_PWM/FAN_TACH only -> BCR-10 rev phase 10 (U76 P15-17, open-drain PWM); +5V budget being checked by Layout/Firmware | open |
 | 35 | H4 / PE | H4 is an NPTH clearance with no net; PE lands only on the bezel boss. H1-H3 CHASSIS pads need bare (masked) boss faces to bond. See PE_BOND.md | phase 11 |
+| 36 | PE stud location | Phase 13 option table (H4 276.8 mm from J28/J29). Phase 14: lead's (16, 3) lies behind the display glass (no bezel metal). New boss PE_NEW (12.3, -7.5), 31.0 / 103.9 mm to J28/J29 pads; H4 PE boss deleted (H4 = plain NPTH); needs BCR-11 (hole, move D5, GND vias). See PE_BOND.md | phase 14 |
+| 37 | Clamp count | CLAMP_RETENTION phase 12 said 9 clamps; CAD has 8 (T2, B2, L3, R1) -> 65 N per clamp | phase 14 |
+| 38 | Coating wording | Phase 13 README called the coating "IEC 60664-3-qualified" and "required for the PD2 creepage assumption"; replaced with Compliance's text (no spacing credit, not qualified) | phase 14 |
+| 39 | PE ring terminal | BOM said "M4 ring terminal" with no wire range; now blue 1.5-2.5 mm² / yellow 4-6 mm² M4 for the 2.5 / 4 mm² PE | phase 14 |
+| 40 | J30 KF2EDGRM rating | ≥ 600 V finger-safe rating not verified (Compliance open item) | open |

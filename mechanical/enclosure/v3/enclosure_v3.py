@@ -20,7 +20,8 @@ Z_PCB = 16.0                                    # PCB F face behind bezel face; 
 ZR = Z_PCB + PCB_T                              # PCB rear face 17.6
 KEYS = [(k, FP[k]["x"], FP[k]["y"]) for k in [f"SW{i}" for i in range(9, 21)]]
 PCB_HOLES = [(FP[h]["x"], FP[h]["y"]) for h in ("H1", "H2", "H3")]
-PE = (FP["H4"]["x"], FP["H4"]["y"])
+PE = (FP["H4"]["x"], FP["H4"]["y"])          # H4: plain NPTH clearance hole since phase 14 (no PE function)
+PE_NEW = (12.3, -7.5)    # phase 14: new bezel PE boss near J28/J29 (BCR-11 NPTH Ø9.5); (16, 3) is behind the glass -> moved
 # ---------------- parameters (INFERRED design choices) ----------------
 WIN_GAP = 0.5            # glass edge -> window wall per side
 # PHASE 6 (Ethan, Oct 25): glass FLUSH with the PA12 ring face. The display moves 4 mm forward (DZ) into the ring opening.
@@ -99,7 +100,7 @@ def bezel():
     for yc in (KEYS[0][2], KEYS[6][2]):                                          # 8 mm key band
         b = b.union(box(5.0, yc - CAP_H / 2 - 1.5, 271.5, yc + CAP_H / 2 + 1.5, 0, GUIDE_L))
     for (x, y) in PCB_HOLES: b = b.union(cyl(x, y, 7.0, 0.5, Z_PCB))
-    b = b.union(cyl(*PE, 8.0, 0.5, ZR + 1.0))
+    b = b.union(cyl(*PE_NEW, 8.0, 0.5, ZR + 1.0))                                # phase 14 PE boss (H4 boss deleted)
     b = b.union(box(*BOSS, 0.5, Z_HB0))                                           # heat boss
     rim = box(BZ0[0], BZ0[1], BZ1[0], BZ1[1], FIELD_T - 0.01, RIM_Z).cut(
         box(BZ0[0] + RIM_W, BZ0[1] + RIM_W, BZ1[0] - RIM_W, BZ1[1] - RIM_W, 0, 20))
@@ -114,7 +115,7 @@ def bezel():
         b = b.cut(box(x - CAP_W / 2 - GUIDE_CLR, y - CAP_H / 2 - GUIDE_CLR, x + CAP_W / 2 + GUIDE_CLR, y + CAP_H / 2 + GUIDE_CLR, -1, 30))
     for (x, y) in JOINT_SCREWS: b = b.cut(cyl(x, y, 3.3, 0.8, FIELD_T + 0.1))   # blind M4 taps, face intact
     b = b.cut(cyl(*ALS, ALS_BORE, -1, 30))                                        # ALS light-pipe bore
-    for (x, y) in PCB_HOLES + [PE]: b = b.cut(cyl(x, y, 3.3, 3.0, Z_PCB + 3))
+    for (x, y) in PCB_HOLES + [PE_NEW]: b = b.cut(cyl(x, y, 3.3, 3.0, Z_PCB + 3))
     for x in (256.0, 271.0): b = b.cut(cyl(x, (BOSS[1] + BOSS[3]) / 2, 3.3, Z_HB0 - 10, Z_HB0 + 0.1))  # heat-bar M4 taps
     # PHASE 9 compliance fix: display-tray rim (earthed Al) came within 1.52 mm of the J28/J29 THT lead tips
     # (basic 5.5 mm required). Trim the rim rear edge to Z <= HV_RIM_Z over y 10..115 (left side only).
@@ -129,7 +130,7 @@ def keys():
     caps, memb, nibs = [], [], []
     for yc, sg in ((KEYS[0][2], -1), (KEYS[6][2], 1)):   # strip: 1.5 bond land on the outer side, 0.1 on the display-rim side
         a, b = yc - sg * (CAP_H / 2 + 0.1), yc + sg * (CAP_H / 2 + 1.5)
-        memb.append(box(7.0, min(a, b), 267.5, max(a, b), GUIDE_L, GUIDE_L + MEMB_T).cut(box(BOSS[0] - 0.3, BOSS[1] - 1, BOSS[2] + 1, BOSS[3] + 0.3, 0, 30)).cut(cyl(*ALS, 5.0, 0, 30)))   # notch round heat boss, ALS hole
+        memb.append(box(7.0, min(a, b), 267.5, max(a, b), GUIDE_L, GUIDE_L + MEMB_T).cut(box(BOSS[0] - 0.3, BOSS[1] - 1, BOSS[2] + 1, BOSS[3] + 0.3, 0, 30)).cut(cyl(*ALS, 5.0, 0, 30)).cut(cyl(*PE_NEW, 9.0, 0, 30)))   # phase 14: notch round PE boss   # notch round heat boss, ALS hole
     for _, x, y in KEYS:
         c = box(x - CAP_W / 2, y - CAP_H / 2, x + CAP_W / 2, y + CAP_H / 2, -HEAD_GAP, GUIDE_L)
         c = c.union(box(x - CAP_W / 2 - HEAD_OVER, y - CAP_H / 2 - HEAD_OVER, x + CAP_W / 2 + HEAD_OVER, y + CAP_H / 2 + HEAD_OVER, -HEAD_GAP - HEAD_T, -HEAD_GAP))
@@ -144,7 +145,8 @@ H = {"J10": H_J10, "J11": H_J11}   # INFERRED heights, see board_interface.json
 def pcb():
     p = box(BX0, BY0, BX1, BY1, Z_PCB, ZR)
     for (x, y) in PCB_HOLES: p = p.cut(cyl(x, y, 4.3, Z_PCB - 1, ZR + 1))
-    p = p.cut(cyl(*PE, 9.5, Z_PCB - 1, ZR + 1))
+    p = p.cut(cyl(*PE, 9.5, Z_PCB - 1, ZR + 1))      # H4 (stays, plain clearance)
+    p = p.cut(cyl(*PE_NEW, 9.5, Z_PCB - 1, ZR + 1))  # BCR-11 proposed hole (not on the board yet)
     return p
 def rear_parts():
     parts = [box(*CM5, ZR, ZR + CM5_H)]
@@ -178,7 +180,8 @@ def rear_shell():
     zr0 = SHELL_DEPTH - WALL - 1
     s = s.cut(box(28, BY0 - 1, 248, BY0 + 13, zr0, SHELL_DEPTH + 1))           # top terminal row wiring window
     s = s.cut(box(28, BY1 - 13, 248, BY1 + 1, zr0, SHELL_DEPTH + 1))           # bottom terminal row
-    s = s.cut(box(BX1 - 18, 34, BX1 + 1, 192, zr0, SHELL_DEPTH + 1))           # right edge terminals J1/J23/J6/J7 + (phase 11) PE lug access at H4
+    s = s.cut(box(BX1 - 18, 34, BX1 + 1, 182, zr0, SHELL_DEPTH + 1))           # right edge terminals J1/J23/J6/J7 (phase 14: back to y 182)
+    s = s.cut(box(3.0, -21.0, 20.0, -1.0, zr0, SHELL_DEPTH + 1))              # phase 14: PE lug access window over PE_NEW (rear wall only)
     s = s.cut(box(BX0 - 1, 9, BX0 + 17, 164, zr0, SHELL_DEPTH + 1))            # left 600 V terminals J28/J29/J30
     s = s.cut(box(*REAR_OPEN, zr0, SHELL_DEPTH + 1))                          # phase 4: opening under the Al fin plate
     for (cx, cy, w, h, zt) in REAR_PORTS.values():
@@ -205,7 +208,7 @@ def rear_shell():
 
 def clamps(t=PANEL_T):
     """6 SLS PA12 clamp blocks: 18 x 10 tongue in the shell pad's blind slot, body outside, M4 brass heat-set insert,
-    M4 nylon-tip set/thumb screw pushes forward onto the customer panel rear."""
+    M4 thumb screw pushes forward onto the customer panel rear. Phase 14: LEFT clamps (HV side) use all-nylon PA66 M4x35 screws (non-conductive); T/B/R keep nylon-tip steel."""
     br, sc = [], []
     zt = Z_PANEL + t
     for (p, side) in CLAMPS:
@@ -285,12 +288,12 @@ HV_RIM_Z = 7.0                                     # phase 9: rim trimmed to Z 7
 PE_BOSS_D, PE_BOSS_Z = 8.0, ZR + 1.0            # bezel PE boss (existing) end face at Z 18.6, at H4
 PE_MASK_D = 12.0                                  # anodise mask-off: boss end face spot face (whole 8 mm face) + thread
 def pe_bond():
-    """phase 11: PE bond at H4 = M4 stainless screw + M4 ring terminal (PE conductor) + internal-tooth star washer on the BARE boss face."""
-    z = PE_BOSS_Z
-    sw = cyl(*PE, 8.0, z, z + 0.6).cut(cyl(*PE, 4.3, z - 1, z + 2))             # star washer DIN 6797 J M4 (OD 8, t 0.6)
-    lug = cyl(*PE, 8.0, z + 0.6, z + 1.4).cut(cyl(*PE, 4.3, z, z + 2)).union(box(PE[0] + 3.5, PE[1] - 2.5, PE[0] + 9.5, PE[1] + 2.5, z + 0.6, z + 1.4))   # ring lug, tongue +x (clear of J1 at y <= 180), crimp barrel just inside the right wall
-    fw = cyl(*PE, 9.0, z + 1.4, z + 2.2).cut(cyl(*PE, 4.3, z, z + 3))           # flat washer
-    sc = cyl(*PE, 7.0, z + 2.2, z + 5.0).union(cyl(*PE, 4.0, z - 8.0, z + 2.2))   # M4x10 head + shank into the 3.3 tap (Z 10.6-18.6)
+    """phase 14: PE bond at the NEW bezel boss PE_NEW = M4 A2 screw + flat washer + M4 ring terminal + internal-tooth star washer on the BARE boss face."""
+    z = PE_BOSS_Z; P = PE_NEW
+    sw = cyl(*P, 8.0, z, z + 0.6).cut(cyl(*P, 4.3, z - 1, z + 2))             # star washer DIN 6797 J M4 (OD 8, t 0.6)
+    lug = cyl(*P, 8.0, z + 0.6, z + 1.4).cut(cyl(*P, 4.3, z, z + 2)).union(box(P[0] - 2.5, P[1] - 9.5, P[0] + 2.5, P[1] - 3.5, z + 0.6, z + 1.4))   # ring lug, tongue -y over the board top edge
+    fw = cyl(*P, 9.0, z + 1.4, z + 2.2).cut(cyl(*P, 4.3, z, z + 3))           # flat washer
+    sc = cyl(*P, 7.0, z + 2.2, z + 5.0).union(cyl(*P, 4.0, z - 8.0, z + 2.2))   # M4x10 head + shank into the 3.3 tap
     return U([sw, lug, fw, sc])
 def hv_leads(lead=2.0):
     """J28/J29/J30 THT lead tips protruding from PCB F face (INFERRED 2.0 mm untrimmed, 1.0 trimmed)."""
@@ -343,7 +346,22 @@ def hv_checks(parts):
     out["J28J29_plug_envelope_to_left_clamp_insert (reinforced 8.0)"] = dist(pl, ins)
     out["J28J29_pads_to_left_clamp_insert"] = dist(hv_leads(0.01).translate((0, 0, PCB_T + 0.01)), ins)
     out["J30_plug_envelope_to_left_clamp_insert"] = dist(pl30, ins)
-    out["pe_bond_hardware_to_nearest_HV_plug"] = dist(parts["pe_bond"][0], pl)
+    out["pe_bond_hardware_to_nearest_HV_plug (earthed, basic 5.5)"] = dist(parts["pe_bond"][0], pl)
+    out["pe_boss_to_J28J29_plug_envelope (earthed, basic 5.5)"] = dist(cyl(*PE_NEW, 8.0, 0.5, ZR + 1.0), pl)
+    out["pe_bond_hardware_to_J30_plug_envelope"] = dist(parts["pe_bond"][0], pl30)
+    out["pe_boss_to_display"] = dist(cyl(*PE_NEW, 8.0, 0.5, ZR + 1.0), parts["display"][0])
+    out["pe_boss_to_switches"] = dist(cyl(*PE_NEW, 8.0, 0.5, ZR + 1.0), parts["switches"][0])
+    out["pe_boss_to_key_caps"] = dist(cyl(*PE_NEW, 8.0, 0.5, ZR + 1.0), parts["key_caps"][0])
+    out["pe_boss_to_light_pipe"] = dist(cyl(*PE_NEW, 8.0, 0.5, ZR + 1.0), parts["light_pipe"][0])
+    out["pe_boss_to_front_ring_sleeve"] = dist(cyl(*PE_NEW, 8.0, 0.5, ZR + 1.0), parts["front_ring"][0])
+    out["pe_boss_to_clamps"] = dist(cyl(*PE_NEW, 8.0, 0.5, ZR + 1.0), parts["clamps"][0])
+    # J30 creepage, phase 14: surface path (MODELLED, hand-route over CAD surfaces; see CLAMP_RETENTION.md / README phase 14)
+    ins118 = [p for (p, sd) in CLAMPS if sd == "L" and FP["J30"]["bbox"][1] - 15 < p < FP["J30"]["bbox"][3] + 15]
+    leg1 = ((max(FP["J30"]["bbox"][0], BX0) - (BX0 - 1)) ** 2 + ((SHELL_DEPTH - WALL) - (ZR + 16.0)) ** 2) ** 0.5   # plug top-left edge -> rear-window rim (along field-wire insulation)
+    path = leg1 + WALL + ((BX0 - 1) - SX0) + (SHELL_DEPTH - CL_Z1) + ((SX0 - (SX0 - 8 + 2.8)))                    # rim depth + rear face to corner + down outer wall + clamp top to insert edge
+    out["J30_surface_path_to_left_clamp_insert_MODELLED (reinforced 12.6)"] = round(path, 2)
+    out["J30_surface_path_legs [wire-insulation leg, rim, rear face, outer wall, clamp top]"] = [round(leg1, 2), WALL, round((BX0 - 1) - SX0, 2), round(SHELL_DEPTH - CL_Z1, 2), 5.2]
+    out["J30_adjacent_left_clamps_y"] = ins118
     js = U([cyl(x, y, 4.0, FIELD_T - 6, FIELD_T + FL_T) for (x, y) in JOINT_SCREWS])
     out["J28J29_plug_envelope_to_joint_screws (earthed, basic 5.5)"] = dist(pl, js)
     # left shell wall solid y 15..105 (phase 9 condition (c)/(d))

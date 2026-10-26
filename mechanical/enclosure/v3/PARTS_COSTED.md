@@ -117,7 +117,7 @@ Every ESTIMATED figure above would be replaced by a quote: the SendCutSend plate
 ## Phase 11 changes
 | item | qty | qty 1 | qty 10 | label |
 |---|---|---|---|---|
-| PE bond hardware: M4 star washer DIN 6797 J A2, M4 ring terminal, flat washer, M4x10 A2 | 1 set | 2 | 1 | ESTIMATED |
+| PE bond hardware: M4 star washer DIN 6797 J A2, M4 ring terminal (sized in phase 14), flat washer, M4x10 A2 | 1 set | 2 | 1 | ESTIMATED |
 | Anodise mask-off M1-M5 on CNC bezel (plugs/caps or post-anodise spot face) | 5 spots | 15 | 5 | ESTIMATED |
 | Bond test (operator time, 10 A 4-wire per unit; 25 A type test once) | 1 | 5 | 3 | ESTIMATED |
 | PE joint corrosion mitigation (SUGGESTION, optional, not in totals): conversion coat M1-M5 or inhibitor compound | 1 | 3-5 / 0.20 | n/a | ESTIMATED |
@@ -125,3 +125,12 @@ Every ESTIMATED figure above would be replaced by a quote: the SendCutSend plate
 | PP film (Phase 9 hv_sheet) | -1 | 0 | 0 | dropped; it was not in the Phase 9 totals |
 | **Phase 11 delta** | | **+26** | **+12** | ESTIMATED |
 | Phase 12: third left clamp (PA12 block + M4 insert + nylon-tip thumb screw), see CLAMP_RETENTION.md | 1 | 4 | 3 | ESTIMATED |
+
+## Phase 14 changes
+| item | qty | qty 1 | qty 10 | label |
+|---|---|---|---|---|
+| Left clamp screws: steel nylon-tip -> all-nylon PA66 M4x35 thumb screws (delta) | 3 | +0.5 | +0.3 | ESTIMATED (nylon ≈ $1.00 / $0.60 each vs ≈ $0.83 / $0.50) |
+| PE ring terminal correction: M4 insulated ring, blue 1.5-2.5 mm² + yellow 4-6 mm² (ship both; replaces unsized lug) | 2 | +0.40 | +0.25 | ESTIMATED ($0.15 blue, $0.25 yellow) |
+| PE boss moved H4 -> PE_NEW (12.3, -7.5); H4 boss deleted; membrane notch | 1 | 0 | 0 | ESTIMATED (same CNC ops) |
+| PE access window cover with grommet (OPTIONAL, not in totals) | 1 | 1 | 0.6 | ESTIMATED |
+| **Phase 14 delta** | | **+0.9** | **+0.55** | ESTIMATED |
