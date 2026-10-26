@@ -187,3 +187,25 @@ heal.py (dedupe plus gap bridging) was tried and rejected: no connectivity gain.
 - J28/J29 pads are 6.94 mm from the board edge (< 8.0 mm). Fix needs a connector move, frozen by BCR-7: lead decision.
 - Slot-end creepage ~6.9 mm (right) / 7.15 mm (left) between adjacent phases: meets 6.6 mm only by ~0.3 mm, marginal against fab tolerance.
 - NOT fab-ready.
+
+## M7 WIP step (2026-10-25 ~18:30 HST, branch m7-wip only, NOT for master yet)
+Board = /workspace/m7/u25 (from t20 = 32b12c7 board).
+
+**Measured (before d151ff7 -> t20 -> now):**
+- Unconnected (own unc.py, KiCad GetUnconnectedCount after zone fill): 1277 -> 1280 -> 973; routed 56.51 % -> 56.40 % -> 66.86 %.
+- HV opens (hvopen.py, pad islands): 17 -> 20 -> 9.
+- HV pairs, my hvrules.py: 21 net-pairs -> 0 -> 0. Reviewer hvsheet.py (m7): 28 pairs (21 chain) -> n/a -> 13 pairs (0 chain); the 13 are 191-382 V divider-node vs CT/GND_AC/BUS_VC_N gaps that my checker does not model -> NOT 0 by the reviewer's method.
+- hot-edge<8 mm: 48 groups (J28/J29 pads 6.94 mm on all layers = accepted, no edge plating) + GEN_L1 via 7.675 mm (open item).
+- KiCad DRC errors with the repo .kicad_pro: 0 -> 0 (warnings 860 -> 891, mostly track_dangling/copper_edge_clearance/silk). With the stricter work .kicad_pro (min hole 0.2/via 0.35) 4 errors: two pre-existing DSI83_REFCLK vias 0.3/0.15 at (161.5,126.7),(162.0,125.65), also in d151ff7. Footprints 1181 -> 1181. Locked tracks 2899 -> 2541 (earlier M7 rips, already flagged).
+- Reviewer unconn.py crashes (GetConnectedItems SWIG) - not measured that way.
+
+**What changed:**
+- Router fix (route_m7.py): source = pads + own copper actually connected to them (3D label) - stub bug gone; J28/J29 multi-pad pins now picked by position; every run reports uf-verified completion (router "ok" matched verified on all HV runs).
+- fixends.py: ~3300 track ends stopping <=0.35 mm short of their own pad (mostly PRE-EXISTING copper, incl. d151ff7) joined to the pad centre; 30 joins that DRC flagged were dropped (dropbad.py). => Earlier unconnected/"OK" counts were inflated by these near-misses; this, not new routing, is most of the 1280 -> 973 gain.
+- Moved (HV area, B side): R429, R448, R456, RV6 (slot-corner rule on own pads), R422, R423, R449 (courtyard overlap with new MOVs), RV3 +1.5 mm y, RV4 +1.25 mm y (RV4/RV5 overlap). R436 move tried and reverted (it caused HV pair fails). Unlocked copper of the affected HV nets ripped and rerouted with HVSHEET rules. Locked HV items touched in this step: none.
+
+**Unmet:**
+- RV3 (GEN_L3-GEN_N MOV) sits at y~154 in the BUS area since d151ff7 = misplaced; no legal spot in the GEN HV area found by search (needs a placement decision). 9 HV opens remain incl. GEN_L1 (its divider chain R422-R425 walls J28.1 off from R422.1/RV1), GEN_L3/GEN_N at RV3.
+- Net-(R436-Pad2) B.Cu 3.55 mm from slot corner (13.5,27.2), own phase needs 3.62. 24 locked F.Cu segments = accepted deviations.
+- Bulk low-speed router is NOT DRC-clean (test run gave 317 clearance errors) - not used.
+- NOT fab-ready.

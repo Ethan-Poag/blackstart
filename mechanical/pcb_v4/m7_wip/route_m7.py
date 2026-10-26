@@ -94,7 +94,7 @@ if os.environ.get('HVSHEET')=='1':
                 return m|np.outer(((yy>20)&(yy<49))|((yy>70)&(yy<99)),xx<13.6)
             sz=_szm(w/2)
             for l in range(3):
-                if H.OUTER[l]: free[l]&=~sz
+                if H.OUTER[l] and not os.environ.get("SLOTOFF"): free[l]&=~sz
         free&=~H.BLK[:,y0:y1,x0:x1];free|=(lab_w==me)
         vd=H.HV_VIA_D if ishv else H.VIA_D;c_v=1.5 if ishv else max(own_c,0.12)
         vfree=np.ones(lab_w.shape[1:],bool);vfree_nopad=np.ones(lab_w.shape[1:],bool)
@@ -108,6 +108,19 @@ if os.environ.get('HVSHEET')=='1':
             vfree&=(de>EDGE_HV+vd/2+0.1)&~szv
         return free,vfree,(dn,ds,df,vfree_nopad)
     H.free_map=free_map
+
+# ---- M7 step1: stub-bug fix. Source = tree pads + only the own-net copper CONNECTED to them (3D label, vias join layers).
+import inspect as _insp, scipy.ndimage as _ndi
+_src=_insp.getsource(H.route_net)
+_src=_src.replace("srcm = (src | own_new_copper(code, win)) & ~tgt","srcm = _conn_src(code, win, src) & ~tgt")
+def _conn_src(code,win,src):
+    y0,y1,x0,x1=win
+    own=(H.LAB[:,y0:y1,x0:x1]==code+1)|src
+    lab,n=_ndi.label(own,structure=_ndi.generate_binary_structure(3,1))
+    ids=np.unique(lab[src&own]);ids=ids[ids>0]
+    return np.isin(lab,ids)
+H._conn_src=_conn_src
+exec(compile(_src,'route_net_m7','exec'),H.__dict__)
 NAMES={c:n.GetNetname() for c,n in b.GetNetsByNetcode().items()}
 PLANE=('GND','GND_AC','+3V3_SAFE','+3V3_AC')
 per,items,fd=uf.analyze(b)
@@ -121,11 +134,12 @@ for name,k in per.items():
     if name in PLANE:continue
     isl={}
     for i,it in enumerate(items):
-        if it[0]=="pad" and it[1]==c:isl.setdefault(fd(i),[]).append(it[2])
+        if it[0]=="pad" and it[1]==c:isl.setdefault(fd(i),[]).append((it[2],it[3]))
     rep=[]
     for g in isl.values():
-        ref,num=g[0].rsplit(".",1)
-        rep+=[p for p in b.FindFootprintByReference(ref).Pads() if p.GetNumber()==num][:1]
+        (ref,num),q=g[0][0].rsplit(".",1),g[0][1]
+        cand=[p for p in b.FindFootprintByReference(ref).Pads() if p.GetNumber()==num]
+        rep+=sorted(cand,key=lambda p:(TM(p.GetPosition().x)-q[0])**2+(TM(p.GetPosition().y)-q[1])**2)[:1]
     if len(rep)<2:continue
     xs=[TM(p.GetPosition().x) for p in rep];ys=[TM(p.GetPosition().y) for p in rep]
     jobs.append((max(xs)-min(xs)+max(ys)-min(ys),name,c,rep))
@@ -191,4 +205,8 @@ print("stitch vias",nst,"stitch fail",nsf)
 for t in H.made:t.SetLocked(False)
 pcbnew.ZONE_FILLER(b).Fill(b.Zones());b.Save(dst)
 b.BuildConnectivity();print("done ok",ok,"fail",len(fail),"unconnected",b.GetConnectivity().GetUnconnectedCount(True),flush=True)
-json.dump(dict(res=res,fail=fail,stitch=nst,stitch_fail=nsf),open(dst+".route.json","w"))
+per2,_,_=uf.analyze(b)
+ver={name:per2.get(name,0) for name in res}
+tok=sum(1 for n in res if ver[n]==0)
+print("VERIFIED (uf copper islands): truly complete",tok,"of",len(res),"; router-claimed ok",ok,"; claimed-ok but still open",sum(1 for n in res if res[n]=='ok' and ver[n]>0),flush=True)
+json.dump(dict(res=res,verified_open=ver,fail=fail,stitch=nst,stitch_fail=nsf),open(dst+".route.json","w"))
