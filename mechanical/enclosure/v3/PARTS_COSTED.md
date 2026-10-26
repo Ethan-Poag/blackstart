@@ -119,7 +119,8 @@ Every ESTIMATED figure above would be replaced by a quote: the SendCutSend plate
 |---|---|---|---|---|
 | PE bond hardware: M4 star washer DIN 6797 J A2, M4 ring terminal, flat washer, M4x10 A2 | 1 set | 2 | 1 | ESTIMATED |
 | Anodise mask-off M1-M5 on CNC bezel (plugs/caps or post-anodise spot face) | 5 spots | 15 | 5 | ESTIMATED |
-| Bond test (operator time, 25 A tester amortised) | 1 | 5 | 3 | ESTIMATED |
+| Bond test (operator time, 10 A 4-wire per unit; 25 A type test once) | 1 | 5 | 3 | ESTIMATED |
+| PE joint corrosion mitigation (SUGGESTION, optional, not in totals): conversion coat M1-M5 or inhibitor compound | 1 | 3-5 / 0.20 | n/a | ESTIMATED |
 | Extra left clamp (PA12 block + M4 insert + thumb screw) | 1 | 4 | 3 | ESTIMATED |
 | PP film (Phase 9 hv_sheet) | -1 | 0 | 0 | dropped; it was not in the Phase 9 totals |
 | **Phase 11 delta** | | **+26** | **+12** | ESTIMATED |

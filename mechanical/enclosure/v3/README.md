@@ -67,10 +67,20 @@ Pairwise boolean intersections of all 15 parts (intended contacts excluded: PCB/
 
 ## Phase 11 (not committed)
 - **PE bond** at H4 designed: bare bezel boss + star washer + ring terminal + M4x10; masks M1-M5; continuity test. See PE_BOND.md. CAD part `pe_bond`; right terminal window extended to y 192 for access.
-- **Left wall y 15-105 now solid (fraction 1.000, was 0.9574).** The only opening was the left clamp blind T-slot (x -8.72..-4.22, y 81-99, Z 37.3-45.2). Left clamp y 90 removed; phase 12: three left clamps at y 5 / 116 / 178 (CLAMP_RETENTION.md).
+- **Left wall y 15-105 now solid (fraction 1.000, was 0.9574).** The only opening was the left clamp blind T-slot (x -8.72..-4.22, y 81-99, Z 37.3-45.2). Left clamp y 90 removed; phase 12: three left clamps at y 2 / 118 / 178 (phase 13) (CLAMP_RETENTION.md).
 - **J28/J29/J30 leads clipped to <= 1.0 mm** (assembly note, inspect): 8.0 mm to the trimmed tray rim. The rim trim (Z 7.0) passes basic only with the H4 PE bond bare-metal and continuity-tested (PE_BOND.md).
 - **PP film dropped** (not required per Compliance phase 9): removed from CAD (hv_sheet, step/hv_sheet.step) and docs.
-- **Creepage clamp insert -> HV plugs** (MODELLED route): 32.7 mm (new y -2 clamp -> J28), 35.5 mm (y 178 -> J30), 24.7 mm (old y 90 -> J29); all >= 12.6.
+- Creepage clamp insert -> HV plugs: superseded, see Phase 13.
 
 ## Phase 12
-- Clamp retention check: CLAMP_RETENTION.md. Left clamps now y 5 / 116 / 178 (max span 111 mm); wall y 15-105 still solid 1.000; HV clearance >= 11.3, creepage >= 26.7 mm.
+- Clamp retention check: CLAMP_RETENTION.md. Left clamps were y 5 / 116 / 178; moved in Phase 13 to y 2 / 118 / 178.
+
+## Phase 13 (PD2 decision, PE bond review)
+- **Pollution degree:** Ethan decided Oct 25: the fan air path is treated as **PD2**, justified by the enclosure seal plus washable filters on both fans plus conformal coating on the HV board section. The board's 6.6 mm creepage rule stays (per Compliance this is the board's L-L basic creepage at PD2, hv_layout_rules_600V.md). At PD3 it would not hold (Compliance, FROM-MEMORY).
+- **Creepage method:** straight-line distances (checks.json) are used as a lower bound for creepage. Any surface path between the same parts is ≥ the straight line. Where an older route bridged a wide gap straight across, that was **my own conservative method, not a standard rule** (IEC groove X is PD2 1.0 mm; a gap ≥ X is followed along its contour, so a straight jump is shorter = conservative). The old 24.7 mm figure is deleted.
+- **Clamps moved (CAD):** left clamps y 5 / 116 -> **y 2 / 118** (slots y -7..11, 109..127), y 178 unchanged; wall y 15-105 still solid 1.000; 0 interferences.
+- **Current straight-line minimums (MODELLED, checks.json):** J28/J29 plug envelope to y 2 left clamp insert **13.48 mm**, to its screw **14.14 mm** (were 12.03 / 12.68 at y 5); J28/J29 pads to insert 35.26 mm; J30 (CT secondaries) plug envelope to y 118 insert **11.29 mm**. All exceed 6.6 mm (PD2 basic); J28/J29 also exceed 12.6 mm reinforced (insert is unearthed accessible metal). J30 11.29 mm is < 12.6: J30 carries CT secondaries, not the 600 V lines; Compliance to confirm which class applies to J30.
+- **PE bond test** corrected to IEC 61010-1 3rd ed §6.5.2.5 (2nd ed §6.5.1.4), permanently connected: 2× the external fuse rating, ≤ 10 V. Production: 10 A 4-wire, PE lug to M5, ≤ 0.1 Ω per unit; one 25 A type test; ≤ 1 A through CHASSIS pads. See PE_BOND.md.
+- **PE wire** ≥ 600 V sense wire gauge (value TBD; not in repo). **No thread-locker** on the PE joint. Galvanic-corrosion note + suggested mitigation. **PE stud location TBD**: H4 is 276.8 mm from the nearest J28/J29 pad; options in PE_BOND.md.
+- **Fan filters (both fans):** washable open-cell foam, PPI **not specified (ESTIMATED 30-45 PPI, typical for fan filters)**, thickness up to the 4.0 mm filter cover depth in CAD (ESTIMATED 3 mm foam). Optional stainless or nylon support mesh. Filter face ≈ 40 x 40 = 1600 mm² vs the Ø38 fan hole 1134 mm² (MODELLED, ~1.4x). Pressure drop ESTIMATED 5-15 Pa clean, reducing fan flow ~10-25 % (ESTIMATED); the thermal model's fan conductances 2.2 / 1.3 / 0.20 W/K were ESTIMATED **including** filter restriction (HEAT_PATH.md). Cleaning: monthly at a salt-air or dusty site (recommendation, ESTIMATED); a clogged filter acts like a failed fan. Replacement: foam + PA12 snap cover, $8 / $6 for two (ESTIMATED, PARTS_COSTED row). Removal: unclip the PA12 snap cover, no tools.
+- **Conformal coating (requirement for board assembly, outside enclosure scope):** coat the HV section x < 73 behind the barrier (J28/J29/J30 area) per IEC 60664-3-qualified coating, masking connectors. Sent to the lead as a board assembly/BOM requirement; no cost here.

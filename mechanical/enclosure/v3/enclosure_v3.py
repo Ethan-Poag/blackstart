@@ -53,7 +53,7 @@ HB_TAB = (247.5, SY0 + WALL + 0.5, 279.5, CM5[1] + 2)   # tab over the STRAP_COR
 BOSS = (249.0, SY0 + WALL + 0.8, 278.0, BY0 - 0.8)      # bezel heat boss, outside the PCB edge, up to the heat bar
 JOINT_SCREWS = [(x, y) for x in (SX0 + 30, (SX0 + SX1) / 2, SX1 - 30) for y in (SY0 - 4.5, SY1 + 4.5)] + \
                [(SX0 - 4.5, (SY0 + SY1) / 2), (SX1 + 4.5, (SY0 + SY1) / 2)]
-CLAMPS = [(72.9, "T"), (203.5, "T"), (72.9, "B"), (203.5, "B"), (5.0, "L"), (116.0, "L"), (178.0, "L"), (90.0, "R")]   # phase 12: three left clamps (slots y -4..14, 107..125, 169..187), none in y 15-105
+CLAMPS = [(72.9, "T"), (203.5, "T"), (72.9, "B"), (203.5, "B"), (2.0, "L"), (118.0, "L"), (178.0, "L"), (90.0, "R")]   # phase 13: left clamps y 2 / 118 / 178 (slots y -7..11, 109..127, 169..187), none in y 15-105; insert >= 12.6 from J28/J29 plugs
 CL_Z0, CL_Z1 = 37.5, 45.0   # above the 16-18 mm terminal plugs (top Z 35.6)
 # PORT TUNNELS (phase 2, BCR-1 solved in the shell): sealed PA12 tunnels from the rear face down to 0.5 mm above each jack.
 # (cx, cy, inner w, inner h, jack top Z). Sizes: see TOLERANCE_STACK.md section 3.

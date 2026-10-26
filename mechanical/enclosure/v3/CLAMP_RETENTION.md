@@ -7,7 +7,7 @@ Hand calcs only. Labels: MEASURED (CAD/checks.json), ESTIMATED, ASSUMED. Nothing
 - After the change (MEASURED, checks.json): left wall y 15-105 solid fraction **1.000**; 0 interferences; panel 1.0 and 6.0 mm OK.
   - J28/J29 plug to nearest left insert 12.03 / screw 12.68 mm (≥ 8.0 reinforced).
   - J30 plug to insert 11.29 mm.
-- Creepage via the HV terminal window (MODELLED, same route as PE_BOND/phase 11): y 116 clamp to J29 = 5.2 + 3.0 + 4.0 + 4.0 + 11.4 (air crossing > 1.5 mm X) = **27.6 mm** (≥ 12.6). To J30 = 26.7 mm.
+- Creepage (phase 13): route figures removed. Straight-line distance is used as a lower bound for creepage (my own conservative method, not a standard rule; PD2 assumed: filters + conformal coat). See the phase 13 update below.
 
 ## Loads
 - **Mass, ESTIMATED 3.2 kg.**
@@ -39,3 +39,7 @@ Hand calcs only. Labels: MEASURED (CAD/checks.json), ESTIMATED, ASSUMED. Nothing
 - No tab or rib is needed.
 - **Assembly note:** thumb screws finger-tight, ≈ 0.3 N·m.
 - **Open:** gasket CFD, display mass, insert pull-out and a real vibration spec. Verify with a shake/peel test on a 1 mm panel.
+
+## Phase 13 update
+- Left clamps moved y 5 / 116 -> **y 2 / 118** (slots y -7..11, 109..127), y 178 unchanged. Left spans 116 / 60 mm (was 111 / 62); retention conclusions unchanged (INFERRED, same span class).
+- checks.json (MODELLED): 0 interferences; wall y 15-105 solid 1.000; J28/J29 plug to insert **13.48** / screw **14.14 mm** (≥ 12.6 reinforced, ≥ 6.6 PD2 basic); J30 to insert 11.29 mm (≥ 6.6; class for J30 CT secondaries for Compliance).

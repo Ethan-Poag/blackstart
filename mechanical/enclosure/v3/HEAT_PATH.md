@@ -305,6 +305,8 @@ display own fins + fan 3 W/K -5 99 100 101 104 ring 101 104
 - A clogged filter behaves the same as a failed fan.
 - Vents for the airflow open the rear shell to cabinet air; the front stays sealed by the panel gasket.
 - Salt air in Hawaii: use an IP68 fan plus a washable filter, or accept a shorter life.
+- **Phase 13 filters (both fans, PD2 basis):** washable open-cell foam, PPI not specified (ESTIMATED 30-45 PPI), ≤ 4.0 mm (CAD filter cover depth; ESTIMATED 3 mm foam), optional stainless/nylon mesh. Filter face ≈ 1600 mm² vs Ø38 hole 1134 mm² (MODELLED). Pressure drop ESTIMATED 5-15 Pa clean (~10-25 % flow loss, ESTIMATED). The fan conductances 2.2 / 1.3 / 0.20 W/K were ESTIMATED including filter restriction; no model change. Clean monthly at salt-air/dusty sites (recommendation, ESTIMATED). Spare: foam + PA12 snap cover, $8 / $6 for two (ESTIMATED). Removal: unclip the PA12 snap cover.
+- **Conformal coating** of the HV board section (x < 73, J28/J29/J30) is required for the PD2 creepage assumption, together with the enclosure seal and filters. It is a PCB-assembly step outside enclosure scope (requirement sent to the lead).
 
 ## Phase 9: V6 + TWO 40 mm fans, push-pull in series (Ethan GO, Oct 25). Data: thermal_dualfan_p9.json
 CAD: 4.75 mm flat plate + ATS-EXL1 strip (x 157.2-258, y 1-178, fins vertical, base 2.0 / fin 8.0 / t 1.0 mm ASSUMED), exhaust fan centre (128, 26), intake fan (128, 152), both on the plate outer face in cabinet air with gasket + washable filter cover. Front stays sealed (panel gasket, flush glass).
