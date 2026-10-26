@@ -164,6 +164,16 @@ for name,k in per.items():
     xs=[TM(p.GetPosition().x) for p in rep];ys=[TM(p.GetPosition().y) for p in rep]
     jobs.append((max(xs)-min(xs)+max(ys)-min(ys),name,c,rep))
 jobs.sort(key=lambda j:j[0])
+# AVOID="net1,net2:1.2" -> keep the routed nets this many mm (extra) from those nets' copper (crosstalk separation)
+if os.environ.get('AVOID'):
+    import scipy.ndimage as _nd
+    _an,_ad=os.environ['AVOID'].split(':');_r=int(round(float(_ad)/H.R))
+    _st=_nd.iterate_structure(_nd.generate_binary_structure(2,1),_r)
+    for _a in _an.split(','):
+        _cs=[c for c,n in NAMES.items() if n==_a or n.endswith('/'+_a)]
+        for _c in _cs:
+            for _l in range(3): H.BLK[_l]|=_nd.binary_dilation(H.LAB[_l]==_c+1,structure=_st)
+    print('AVOID applied',_an,_ad,flush=True)
 print("jobs",len(jobs),flush=True)
 t0=time.time();ok=0;fail=[];res={}
 for i,(hp,name,c,rep) in enumerate(jobs):

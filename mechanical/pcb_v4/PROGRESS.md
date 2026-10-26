@@ -289,3 +289,17 @@ Board only on m7-wip. Not fab-ready.
   - is idempotent: a second run adds 0 joins (measured);
   - has a clearance guard: it never adds a join within 0.2 mm of copper on another net. On the current board it adds 7 joins and blocks 30, so the CRANK_EN–GND (0.008 mm) and TOUCH_INT_N–DISP_SDA (0.039 mm) near-shorts cannot come back.
 - **Metrics (measured):** KiCad unconnected 963, geometric 933, HV opens 7, hvsheet 0 pairs. DRC errors 0 with both project files (they are now identical); warnings 1008.
+
+## 2026-10-25 ~8:05 PM HST — m7-wip: reviewer d28ac0a items, RV3 decision recorded, C275 courtyard, GEN_CTB_1 crosstalk
+Board only on m7-wip. Not fab-ready.
+- **RV3 (Ethan's decision):** RV3 stays where it is, and the 13.1 mm growth is declined. Its two pads are **unrouted**: there is no legal 600 V path, because GEN_L3/GEN_N would have to cross the BUS HV copper. This is recorded in HV_ACCEPTED_DEVIATIONS.md item 3 (reason, plus the open item to HV-check its pads once routed) and as a builder note in README.md. bom/ is not my file, so I did not edit it; the RV1–RV6 BOM line may want a pointer to the note.
+- **.kicad_dru rule-order proof (m7_wip/drutest.py):** on a copy, I added GEN_L1 and GEN_L2 0.5 mm F.Cu tracks 6.0 mm apart.
+  - Current rules: DRC flags them, "HV sheet: line-line outer 6.6mm … actual 6.0000 mm" (warning by design).
+  - Pre-fadf9e4 rules: no violation, because 5.5 mm won. This confirms the bug and the fix.
+- **Five pads the reviewer listed as open (U7.47 PB11, U9.26 HDRA_SPI_MISO, U45.12 BST, U7.98 AUX2_MCU, J15.9 TOUCH_INT_N):**
+  - On the current board, all 5 pads have own-net copper ending inside the pad.
+  - Only TOUCH_INT_N is still open as a net (geometric check: 1 open). Routing it added 6 clearance and 4 hole_to_hole errors, so I discarded that batch; it stays open.
+  - The near-shorts can't come back: the fixends clearance guard blocks every join within 0.2 mm of other-net copper.
+- **C275/C276 courtyard overlap:** C275 moved +0.1 mm in x (its two track ends moved with it). No courtyard collision now (pcbnew courtyard check).
+- **GEN_CTB_1 vs AC_MOSI:** I cut 5 GEN_CTB_1 segments (y 81–104) and rerouted them while keeping them away from AC_MOSI. My measurement: the F.Cu length within 1 mm of AC_MOSI is now 8.0 mm, and the minimum gap rose from 0.486 to 0.699 mm. The reviewer measured 19.8 mm before; mine counts duplicate segments differently, so the before numbers don't compare exactly.
+- **Metrics (measured):** KiCad unconnected 963, geometric 933, HV opens 7, hvsheet 0 pairs. DRC errors 0 with both project files; warnings 1008.

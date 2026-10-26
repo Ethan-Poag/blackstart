@@ -31,4 +31,8 @@
 
 2. J28/J29 pads 6.94 mm from the routed board edge (Ethan, accepted). Condition: no edge plating on the outline there.
 
-3. RV3 (GEN-side MOV) stays at (25.26, 154.08) mm on B.Cu, inside the BUS area (lead decision, 2026-10-25 6:00 PM HST). Condition: every HV spacing rule passes against its pads and traces. On the m7-wip board of this commit, the reviewer's hvsheet.py finds 0 pairs and my hvrules finds only the accepted J28/J29 edge items. RV3.1 (GEN_L3) and RV3.2 (GEN_N) are still unrouted, so this must be re-checked once their copper exists. A separate read-only RV3 placement study (rv3study) has not reported yet. Growth for RV3 is conditional on Mechanical, and none is committed.
+3. **RV3 (GEN-side MOV) stays at (25.26, 154.08) mm on B.Cu, inside the BUS area. Accepted exception, Ethan's decision 2026-10-25 (HST).**
+   - **Reason.** Wiring GEN_L3 and GEN_N to RV3 has to cross the BUS HV copper. The only legal spot found by the RV3 placement study is next to J28, and that needs 13.1 mm of board growth to the left, which Ethan declined. RV3 is not moved, and the outline is unchanged.
+   - **Current state (measured on m7-wip): RV3.1 (GEN_L3) and RV3.2 (GEN_N) are UNROUTED.** The router finds no legal path from the GEN side to RV3 under the 600 V rules. **On this board RV3 provides no surge protection on the GEN input until those pads are wired.**
+   - **Open item.** Once RV3's pads are routed, the new copper must pass hvsheet.py (the arbiter) and my checkers (hvrules.py, slotchk2.py) before the board can be called complete. Today those checks pass only because RV3 has no copper; hvsheet cannot see unrouted connections.
+   - Not fab-ready while this item is open.
