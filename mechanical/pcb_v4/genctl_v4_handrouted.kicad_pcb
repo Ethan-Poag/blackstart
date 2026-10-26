@@ -389223,7 +389223,7 @@
 	(segment
 		(start 156.255001 79.905001)
 		(end 155.855001 79.505001)
-		(width 0.4)
+		(width 0.15)
 		(locked yes)
 		(layer "B.Cu")
 		(net 482)
@@ -389232,7 +389232,7 @@
 	(segment
 		(start 152.955001 77.505001)
 		(end 152.555001 77.905001)
-		(width 0.5)
+		(width 0.15)
 		(locked yes)
 		(layer "B.Cu")
 		(net 482)
@@ -389241,7 +389241,7 @@
 	(segment
 		(start 154.455001 78.505001)
 		(end 154.976696 79.254179)
-		(width 0.8)
+		(width 0.15)
 		(layer "B.Cu")
 		(net 482)
 		(uuid "29bede96-4c0e-4703-912d-807179222ff6")
@@ -389249,7 +389249,7 @@
 	(segment
 		(start 152.455001 77.905001)
 		(end 152.055001 78.305001)
-		(width 0.8)
+		(width 0.15)
 		(locked yes)
 		(layer "B.Cu")
 		(net 482)
@@ -389258,7 +389258,7 @@
 	(segment
 		(start 152.055001 78.305001)
 		(end 151.555001 78.305001)
-		(width 0.8)
+		(width 0.15)
 		(locked yes)
 		(layer "B.Cu")
 		(net 482)
@@ -389276,7 +389276,7 @@
 	(segment
 		(start 155.855001 79.505001)
 		(end 155.555001 79.505001)
-		(width 0.8)
+		(width 0.15)
 		(locked yes)
 		(layer "B.Cu")
 		(net 482)
@@ -389285,7 +389285,7 @@
 	(segment
 		(start 152.555001 77.905001)
 		(end 152.455001 77.905001)
-		(width 0.65)
+		(width 0.15)
 		(locked yes)
 		(layer "B.Cu")
 		(net 482)
@@ -389294,7 +389294,7 @@
 	(segment
 		(start 153.455001 77.505001)
 		(end 152.955001 77.505001)
-		(width 0.35)
+		(width 0.15)
 		(locked yes)
 		(layer "B.Cu")
 		(net 482)
@@ -389303,7 +389303,7 @@
 	(segment
 		(start 154.455001 78.505001)
 		(end 153.455001 77.505001)
-		(width 0.25)
+		(width 0.15)
 		(locked yes)
 		(layer "B.Cu")
 		(net 482)
