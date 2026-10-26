@@ -12,7 +12,7 @@ def view(fname, expl, title, skip=()):
     for n, (wp, col) in parts.items():
         if n in skip: continue
         v, t = wp.val().tessellate(0.8, 0.5)
-        V = np.array([(p.x, p.y, p.z + (EXPL.get(n, {"front_ring": 80, "light_pipe": 40, "fin_plate": -170, "heat_pillar": -130, "strip_pad": -185, "exl1_strip": -200, "fan_gaskets": -185, "fans": -215, "fan_screws": -215, "filter_covers": -240, "hv_sheet": 25}.get(n, 0)) if expl else 0)) for p in v])
+        V = np.array([(p.x, p.y, p.z + (EXPL.get(n, {"front_ring": 80, "light_pipe": 40, "fin_plate": -170, "heat_pillar": -130, "strip_pad": -185, "exl1_strip": -200, "fan_gaskets": -185, "fans": -215, "fan_screws": -215, "filter_covers": -240, "pe_bond": -60}.get(n, 0)) if expl else 0)) for p in v])
         a = 0.3 if n == "customer_panel" else 1
         ax.add_collection3d(Poly3DCollection(V[np.array(t)], facecolor=col + (a,), edgecolor="none"))
         if expl: ax.text(V[:, 0].max() + 10, V[:, 1].mean(), V[:, 2].mean(), n, fontsize=8)

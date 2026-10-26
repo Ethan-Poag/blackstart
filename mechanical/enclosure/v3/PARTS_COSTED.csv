@@ -27,3 +27,8 @@ P9-5,Fan harness 2x JST SH 4-pin,2,catalogue,any,n/a,,4,3,ESTIMATED,2026-10-25,n
 P9-T1,TOTAL V6 + dual fans delta vs baseline,-,-,-,-,sum,194,127,MIXED,2026-10-25,no
 P9-T2,TOTAL dual-fan adder vs V6 passive,-,-,-,-,sum,49,41,ESTIMATED,2026-10-25,no
 P10-OPT,OPTIONAL later: IP/sealed fan swap (Orion IP option advertised not certified),2,catalogue,Digi-Key/Mouser,n/a,not in totals,+10 to +20,+10 to +20,ESTIMATED,2026-10-25,no
+P11-1,PE bond hardware (star washer DIN6797J M4 + ring terminal + washer + M4x10 A2),1 set,catalogue,any,n/a,,2,1,ESTIMATED,2026-10-25,no
+P11-2,Anodise mask-off M1-M5 on CNC bezel,5 spots,masking,anodiser,n/a,,15,5,ESTIMATED,2026-10-25,no
+P11-3,PE bond continuity test,1,test,in-house,n/a,,5,3,ESTIMATED,2026-10-25,no
+P11-4,Extra left clamp (PA12 + M4 insert + thumb screw),1,SLS PA12,JLC3DP,n/a,,4,3,ESTIMATED,2026-10-25,no
+P12-1,Third left clamp (PA12 + M4 insert + nylon-tip thumb screw),1,SLS PA12,JLC3DP,n/a,,4,3,ESTIMATED,2026-10-25,no

@@ -53,7 +53,7 @@ HB_TAB = (247.5, SY0 + WALL + 0.5, 279.5, CM5[1] + 2)   # tab over the STRAP_COR
 BOSS = (249.0, SY0 + WALL + 0.8, 278.0, BY0 - 0.8)      # bezel heat boss, outside the PCB edge, up to the heat bar
 JOINT_SCREWS = [(x, y) for x in (SX0 + 30, (SX0 + SX1) / 2, SX1 - 30) for y in (SY0 - 4.5, SY1 + 4.5)] + \
                [(SX0 - 4.5, (SY0 + SY1) / 2), (SX1 + 4.5, (SY0 + SY1) / 2)]
-CLAMPS = [(72.9, "T"), (203.5, "T"), (72.9, "B"), (203.5, "B"), (90.0, "L"), (90.0, "R")]
+CLAMPS = [(72.9, "T"), (203.5, "T"), (72.9, "B"), (203.5, "B"), (5.0, "L"), (116.0, "L"), (178.0, "L"), (90.0, "R")]   # phase 12: three left clamps (slots y -4..14, 107..125, 169..187), none in y 15-105
 CL_Z0, CL_Z1 = 37.5, 45.0   # above the 16-18 mm terminal plugs (top Z 35.6)
 # PORT TUNNELS (phase 2, BCR-1 solved in the shell): sealed PA12 tunnels from the rear face down to 0.5 mm above each jack.
 # (cx, cy, inner w, inner h, jack top Z). Sizes: see TOLERANCE_STACK.md section 3.
@@ -178,7 +178,7 @@ def rear_shell():
     zr0 = SHELL_DEPTH - WALL - 1
     s = s.cut(box(28, BY0 - 1, 248, BY0 + 13, zr0, SHELL_DEPTH + 1))           # top terminal row wiring window
     s = s.cut(box(28, BY1 - 13, 248, BY1 + 1, zr0, SHELL_DEPTH + 1))           # bottom terminal row
-    s = s.cut(box(BX1 - 18, 34, BX1 + 1, 182, zr0, SHELL_DEPTH + 1))           # right edge terminals J1/J23/J6/J7
+    s = s.cut(box(BX1 - 18, 34, BX1 + 1, 192, zr0, SHELL_DEPTH + 1))           # right edge terminals J1/J23/J6/J7 + (phase 11) PE lug access at H4
     s = s.cut(box(BX0 - 1, 9, BX0 + 17, 164, zr0, SHELL_DEPTH + 1))            # left 600 V terminals J28/J29/J30
     s = s.cut(box(*REAR_OPEN, zr0, SHELL_DEPTH + 1))                          # phase 4: opening under the Al fin plate
     for (cx, cy, w, h, zt) in REAR_PORTS.values():
@@ -281,10 +281,17 @@ def fans():
 def heat_pillar():
     return box(*PILLAR, Z_HB1, SHELL_DEPTH)
 HV_RIM_Z = 7.0                                     # phase 9: rim trimmed to Z 7.0 in the HV zone
-HV_SHEET_T = 0.43                                  # RECOMMENDED: Formex GK-17 class PP film 0.43 mm (>=0.4 mm per compliance 5a); ESTIMATED material
-def hv_sheet():
-    z = 0.05 + DZ + CTP_TFT                      # TFT rear face
-    return box(-0.5, 0.5, 75.0, SRC_BAND[1] - 1.0, z, z + HV_SHEET_T)
+# phase 11: PP film dropped (Compliance phase 9 ruling: not required; leads clipped to <= 1.0 mm instead)
+PE_BOSS_D, PE_BOSS_Z = 8.0, ZR + 1.0            # bezel PE boss (existing) end face at Z 18.6, at H4
+PE_MASK_D = 12.0                                  # anodise mask-off: boss end face spot face (whole 8 mm face) + thread
+def pe_bond():
+    """phase 11: PE bond at H4 = M4 stainless screw + M4 ring terminal (PE conductor) + internal-tooth star washer on the BARE boss face."""
+    z = PE_BOSS_Z
+    sw = cyl(*PE, 8.0, z, z + 0.6).cut(cyl(*PE, 4.3, z - 1, z + 2))             # star washer DIN 6797 J M4 (OD 8, t 0.6)
+    lug = cyl(*PE, 8.0, z + 0.6, z + 1.4).cut(cyl(*PE, 4.3, z, z + 2)).union(box(PE[0] + 3.5, PE[1] - 2.5, PE[0] + 9.5, PE[1] + 2.5, z + 0.6, z + 1.4))   # ring lug, tongue +x (clear of J1 at y <= 180), crimp barrel just inside the right wall
+    fw = cyl(*PE, 9.0, z + 1.4, z + 2.2).cut(cyl(*PE, 4.3, z, z + 3))           # flat washer
+    sc = cyl(*PE, 7.0, z + 2.2, z + 5.0).union(cyl(*PE, 4.0, z - 8.0, z + 2.2))   # M4x10 head + shank into the 3.3 tap (Z 10.6-18.6)
+    return U([sw, lug, fw, sc])
 def hv_leads(lead=2.0):
     """J28/J29/J30 THT lead tips protruding from PCB F face (INFERRED 2.0 mm untrimmed, 1.0 trimmed)."""
     import json as _j
@@ -312,7 +319,7 @@ def build():
             "heat_pillar": (heat_pillar(), (0.8, 0.55, 0.25)), "light_pipe": (light_pipe(), (0.9, 0.95, 1.0)),
             "exl1_strip": (exl1_strip(), (0.8, 0.8, 0.85)), "strip_pad": (strip_pad(), (0.9, 0.3, 0.6)),
             "fans": (fn, (0.1, 0.1, 0.1)), "fan_gaskets": (fg, (0.3, 0.3, 0.3)), "filter_covers": (fc, (0.4, 0.45, 0.42)), "fan_screws": (fs, (0.85, 0.85, 0.9)),
-            "hv_sheet": (hv_sheet(), (0.95, 0.85, 0.3))}
+            "pe_bond": (pe_bond(), (0.85, 0.7, 0.2))}
 
 def vol(a, b):
     try: return a.intersect(b).val().Volume()
@@ -326,15 +333,17 @@ def hv_checks(parts):
     for lead in (2.0, 1.0):
         L = hv_leads(lead)
         out[f"lead_tips_{lead}mm_to_display_rear"] = dist(L, parts["display"][0])
-        out[f"lead_tips_{lead}mm_to_hv_sheet_surface"] = dist(L, parts["hv_sheet"][0])
         out[f"lead_tips_{lead}mm_to_bezel_metal (earthed, basic 5.5)"] = dist(L, parts["bezel"][0])
         out[f"lead_tips_{lead}mm_to_heat_pillar/plate"] = dist(L, parts["fin_plate"][0])
     # plug envelopes J28/J29 (conservative: whole plug body treated as hot)
     pl = U([box(max(FP[r]["bbox"][0], BX0), FP[r]["bbox"][1], FP[r]["bbox"][2], FP[r]["bbox"][3], ZR, ZR + 18.0) for r in ("J28", "J29")])
+    pl30 = box(max(FP["J30"]["bbox"][0], BX0), FP["J30"]["bbox"][1], FP["J30"]["bbox"][2], FP["J30"]["bbox"][3], ZR, ZR + 16.0)
     ins = U([cyl(SX0 - 8, p, 5.6, CL_Z0, CL_Z1) for (p, sd) in CLAMPS if sd == "L"])   # M4 heat-set insert OD ~5.6 ESTIMATED
     out["J28J29_plug_envelope_to_left_clamp_screw (reinforced 8.0)"] = dist(pl, U([cyl(SX0 - 8, p, 4.0, Z_PANEL, CL_Z1 + 3) for (p, sd) in CLAMPS if sd == "L"]))
     out["J28J29_plug_envelope_to_left_clamp_insert (reinforced 8.0)"] = dist(pl, ins)
     out["J28J29_pads_to_left_clamp_insert"] = dist(hv_leads(0.01).translate((0, 0, PCB_T + 0.01)), ins)
+    out["J30_plug_envelope_to_left_clamp_insert"] = dist(pl30, ins)
+    out["pe_bond_hardware_to_nearest_HV_plug"] = dist(parts["pe_bond"][0], pl)
     js = U([cyl(x, y, 4.0, FIELD_T - 6, FIELD_T + FL_T) for (x, y) in JOINT_SCREWS])
     out["J28J29_plug_envelope_to_joint_screws (earthed, basic 5.5)"] = dist(pl, js)
     # left shell wall solid y 15..105 (phase 9 condition (c)/(d))
@@ -351,7 +360,7 @@ def checks(parts):
     names = list(parts)
     allowed = {("pcb", "rear_parts"), ("pcb", "switches"), ("heat_bar", "thermal_pads"), ("bezel", "thermal_pads"),
                ("clamps", "rear_shell"), ("clamp_screws", "customer_panel"), ("heat_bar", "heat_pillar"),
-               ("fan_screws", "fin_plate"), ("fan_screws", "fans"), ("fan_screws", "fan_gaskets"), ("fan_screws", "filter_covers"), ("display", "hv_sheet")}
+               ("fan_screws", "fin_plate"), ("fan_screws", "fans"), ("fan_screws", "fan_gaskets"), ("fan_screws", "filter_covers"), ("pe_bond", "bezel")}
     for a, b in itertools.combinations(names, 2):
         if (a, b) in allowed or (b, a) in allowed: continue
         if "customer_panel" in (a, b) and "gasket" in (a, b): continue

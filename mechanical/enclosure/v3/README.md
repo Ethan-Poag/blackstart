@@ -54,7 +54,7 @@ Pairwise boolean intersections of all 15 parts (intended contacts excluded: PCB/
 7. Gasket/IP rating not tested; vents reduce ingress rating (drip hoods from rev C not yet re-added).
 
 ## Phase 9 (V6 + dual fans, compliance checks). Not committed.
-- Parts added: exl1_strip, strip_pad, fans, fan_gaskets, filter_covers, fan_screws, hv_sheet (0.43 mm PP, x -0.5..75 on display rear). fin_plate is now the V6 flat plate with fan holes.
+- Parts added: exl1_strip, strip_pad, fans, fan_gaskets, filter_covers, fan_screws (hv_sheet PP film DROPPED in phase 11). fin_plate is now the V6 flat plate with fan holes.
 - Depth behind ring face: shell 48 + plate 4.75 + strip 10.5 = 63.25 (+4 ring = 67.25); fans/filter covers 68.25 (+4 = 72.25 mm total).
 - Bezel display-tray rim trimmed to Z 7.0 over y 10-115 (HV clearance fix). 0 interferences. New HV checks in checks.json["clearances_mm"]["HV"].
 - Renders regenerated incl. section_fans_v3.png and section_hv_J28J29_v3.png. Thermal: thermal_dualfan_p9.json.
@@ -63,4 +63,14 @@ Pairwise boolean intersections of all 15 parts (intended contacts excluded: PCB/
 - Fan: Orion OD4010-05HB10A 5 V with gaskets + filters (final). IP/sealed fan swap = OPTIONAL later change.
 - BCR-10 reconciled with firmware/ARCHITECTURE.md section 11 (shared open-drain PWM, U76 P15/P16/P17, 3x TMP1075 U81-U83).
 - TODO: EXL1 fin dims ASSUMED until the ATS drawing/sample.
-- Open: +5V budget being checked by Layout/Firmware. Compliance ruling on the rim trim (Z 7.0), lead trim to 1 mm and the 0.43 mm PP film is PENDING.
+- Open: +5V budget being checked by Layout/Firmware. Compliance phase 9 ruling received (see Phase 11).
+
+## Phase 11 (not committed)
+- **PE bond** at H4 designed: bare bezel boss + star washer + ring terminal + M4x10; masks M1-M5; continuity test. See PE_BOND.md. CAD part `pe_bond`; right terminal window extended to y 192 for access.
+- **Left wall y 15-105 now solid (fraction 1.000, was 0.9574).** The only opening was the left clamp blind T-slot (x -8.72..-4.22, y 81-99, Z 37.3-45.2). Left clamp y 90 removed; phase 12: three left clamps at y 5 / 116 / 178 (CLAMP_RETENTION.md).
+- **J28/J29/J30 leads clipped to <= 1.0 mm** (assembly note, inspect): 8.0 mm to the trimmed tray rim. The rim trim (Z 7.0) passes basic only with the H4 PE bond bare-metal and continuity-tested (PE_BOND.md).
+- **PP film dropped** (not required per Compliance phase 9): removed from CAD (hv_sheet, step/hv_sheet.step) and docs.
+- **Creepage clamp insert -> HV plugs** (MODELLED route): 32.7 mm (new y -2 clamp -> J28), 35.5 mm (y 178 -> J30), 24.7 mm (old y 90 -> J29); all >= 12.6.
+
+## Phase 12
+- Clamp retention check: CLAMP_RETENTION.md. Left clamps now y 5 / 116 / 178 (max span 111 mm); wall y 15-105 still solid 1.000; HV clearance >= 11.3, creepage >= 26.7 mm.

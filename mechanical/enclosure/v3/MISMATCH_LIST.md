@@ -35,6 +35,7 @@ Inventory checked: geometry.py, PANEL_V2.md, display_mech.md, draw_front_panel.p
 
 | 30 | Rear ports 13.5 / 20.4 mm deep | BCR-1 solved in shell: sealed port tunnels with lead-in, plug envelopes 0 interference, no board change | phase 2 |
 | 31 | Flush glass | **Confirmed by Ethan (phase 6).** Glass flush with the PA12 ring face (-0.05 mm). Display-to-PCB gap 11.44 mm (TFT/HV area) / 7.27 mm (source band); 3.27 mm obsolete | closed (phase 9) |
-| 32 | Display-tray rim vs J28/J29 lead tips | Phase 9 3D check: earthed Al rim was 1.52 mm from the 600 V THT lead tips (basic needs 5.5). Fixed in CAD: rim trimmed to Z 7.0 over y 10-115 -> 7.0 mm (2 mm leads) / 8.0 mm (trimmed 1 mm) | fixed in model; Compliance ruling (rim trim, 1 mm lead trim, PP film) PENDING |
-| 33 | Left PA12 wall y 15-105 | Solid (no vents/holes); 3.0 mm, locally 2.0 mm at the left clamp blind slot (y 77-103, Z 37.5-45). Inner face 9.94 mm from J28/J29 pad column, 2.4 mm from plug body | phase 9 |
+| 32 | Display-tray rim vs J28/J29 lead tips | Phase 9 3D check: earthed Al rim was 1.52 mm from the 600 V THT lead tips (basic needs 5.5). Fixed in CAD: rim trimmed to Z 7.0 over y 10-115 -> 7.0 mm (2 mm leads) / 8.0 mm (trimmed 1 mm) | fixed in model; leads clipped <= 1.0 mm -> 8.0 mm; basic only with tested H4 PE bond (PE_BOND.md); PP film dropped (phase 11) |
+| 33 | Left PA12 wall y 15-105 | Phase 11: left clamp moved (y 90 -> y -2 and y 178); wall now solid fraction 1.000 at 3.0 mm over y 15-105. Inner face 9.94 mm from J28/J29 pad column, 2.4 mm from plug body | closed (phase 11) |
 | 34 | J4 fan header | no load switch or fuse on J4 +5V (direct on +5V net); CM5 has one FAN_PWM/FAN_TACH only -> BCR-10 rev phase 10 (U76 P15-17, open-drain PWM); +5V budget being checked by Layout/Firmware | open |
+| 35 | H4 / PE | H4 is an NPTH clearance with no net; PE lands only on the bezel boss. H1-H3 CHASSIS pads need bare (masked) boss faces to bond. See PE_BOND.md | phase 11 |

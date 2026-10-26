@@ -113,3 +113,14 @@ Every ESTIMATED figure above would be replaced by a quote: the SendCutSend plate
 - Fan pick FINAL: Orion OD4010-05HB10A (standard, 5 V) with gaskets + washable filters; no 12 V Sanyo. Costs above unchanged (IP option not assumed).
 - OPTIONAL later change: swap to an IP/sealed-rated fan (Orion IP option, advertised not certified) if salt-air life demands it; ESTIMATED +$5-10 per fan, same 40x40x10.5 envelope and pinout.
 - TODO: EXL1 fin height / base / fin thickness stay ASSUMED (8.0 / 2.0 / 1.0 mm) until the ATS drawing or a sample is obtained.
+
+## Phase 11 changes
+| item | qty | qty 1 | qty 10 | label |
+|---|---|---|---|---|
+| PE bond hardware: M4 star washer DIN 6797 J A2, M4 ring terminal, flat washer, M4x10 A2 | 1 set | 2 | 1 | ESTIMATED |
+| Anodise mask-off M1-M5 on CNC bezel (plugs/caps or post-anodise spot face) | 5 spots | 15 | 5 | ESTIMATED |
+| Bond test (operator time, 25 A tester amortised) | 1 | 5 | 3 | ESTIMATED |
+| Extra left clamp (PA12 block + M4 insert + thumb screw) | 1 | 4 | 3 | ESTIMATED |
+| PP film (Phase 9 hv_sheet) | -1 | 0 | 0 | dropped; it was not in the Phase 9 totals |
+| **Phase 11 delta** | | **+26** | **+12** | ESTIMATED |
+| Phase 12: third left clamp (PA12 block + M4 insert + nylon-tip thumb screw), see CLAMP_RETENTION.md | 1 | 4 | 3 | ESTIMATED |

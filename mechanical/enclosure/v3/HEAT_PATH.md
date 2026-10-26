@@ -321,4 +321,4 @@ Cabinet air temperature remains an ASSUMPTION to verify with a thermocouple duri
 - Fan final: Orion OD4010-05HB10A (5 V, standard) + washable filters; an IP/sealed fan is an OPTIONAL later swap (same envelope; thermal unchanged).
 - TODO: EXL1 fin dims ASSUMED until the ATS drawing/sample; strip conductance carries that uncertainty.
 - Fan control/derating per firmware/ARCHITECTURE.md section 11 (one fan failed: survivor 100 %, backlight cap 60 %; both failed: backlight 25 %).
-- Compliance ruling on the rim trim / 1 mm lead trim / PP film is pending; +5V budget being checked by Layout/Firmware.
+- Compliance ruled (phase 9): rim trim OK as basic with a tested PE bond (PE_BOND.md), leads clipped to <= 1.0 mm (8.0 mm), PP film dropped (no thermal effect either way); +5V budget being checked by Layout/Firmware.
