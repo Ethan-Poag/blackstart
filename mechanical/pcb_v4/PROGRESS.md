@@ -303,3 +303,12 @@ Board only on m7-wip. Not fab-ready.
 - **C275/C276 courtyard overlap:** C275 moved +0.1 mm in x (its two track ends moved with it). No courtyard collision now (pcbnew courtyard check).
 - **GEN_CTB_1 vs AC_MOSI:** I cut 5 GEN_CTB_1 segments (y 81–104) and rerouted them while keeping them away from AC_MOSI. My measurement: the F.Cu length within 1 mm of AC_MOSI is now 8.0 mm, and the minimum gap rose from 0.486 to 0.699 mm. The reviewer measured 19.8 mm before; mine counts duplicate segments differently, so the before numbers don't compare exactly.
 - **Metrics (measured):** KiCad unconnected 963, geometric 933, HV opens 7, hvsheet 0 pairs. DRC errors 0 with both project files; warnings 1008.
+
+## M7 gate checkpoints, 2026-10-26 (HST)
+- **c41fce7** — BUS_L2 (12 segments) and GEN_L1 (1 segment) moved off the J28/J29 isolation slots on SIG_In2. Measured: KiCad unconnected 791, HV opens 7, hvsheet 0. DRC: project rules 0 errors / 0 shorts; repo pro without custom rules 0 errors (0 copper_edge_clearance) / 0 shorts. Co-located drills 0, dangling vias 12, geometric slot check 0.
+- **212923c** — Q2 moved beside Q1 (260, 165, rot 270, B.Cu). The drains are joined by a B.Cu VBAT_DD pour (10 A; INFERRED 33–48 °F rise at an assumed 1 oz). HGATE goes U1.8 → Q2.4 through In2. A B.Cu VBAT_P pour covers the Q2 sources. Measured: unconnected 789, HV opens 7, hvsheet 0, DRC project and no-custom-rules both 0 errors (edge 0) / 0 shorts, co-located 0, dangling 12, slot check 0, viachk 0. Open: the VBAT_P 10 A feed from the Q2 sources to the loads is not sized yet.
+- **Tight HV spots for the safety review (measured):**
+  - BUS_L2 to BUS_N on SIG_In2: 1.5025 mm, only 0.0025 mm over the 1.5 mm inner rule (1.900 mm before the slot reroute).
+  - BUS_L2 is 0.3025 mm and GEN_L1 0.355 mm from the J28/J29 slot walls.
+  - The c41fce7 reroute was a deliberate HV copper change and needs qualified safety review.
+- **KiCad 9.0.2 limit:** KiCad applies one edge-clearance value per copper item, so a 0.3 mm slot-wall error and an 8 mm outer-edge warning cannot both be expressed. Every attempt either dropped the outer warning or never fired the slot error, and KiCad also misses copper lying entirely inside a slot. The rules are enforced by verify.sh: the no-custom-rules DRC must show copper_edge_clearance = 0, plus the geometric slot check. The .kicad_dru is unchanged.
