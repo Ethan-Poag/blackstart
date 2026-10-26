@@ -1,0 +1,133 @@
+{
+ "note": "ESTIMATED fan conductances; Ta 104 F; CM5 4 W (8.5 W column separate); cabinet air ASSUMPTION",
+ "cases": {
+  "V6 passive (reproduce p8 a)": {
+   "cab=amb": {
+    "glass_idle10_25_40": [
+     112,
+     115,
+     117
+    ],
+    "glass_alarm": 128,
+    "ring_25_alarm": [
+     111,
+     118
+    ],
+    "throttle_ambient_F": 138,
+    "cm5_8p5W_throttle_ambient_F": 99,
+    "soc_F_at104": 142
+   },
+   "cab-9F": {
+    "glass_idle10_25_40": [
+     110,
+     112,
+     115
+    ],
+    "glass_alarm": 125,
+    "ring_25_alarm": [
+     109,
+     116
+    ],
+    "throttle_ambient_F": 146,
+    "cm5_8p5W_throttle_ambient_F": 106,
+    "soc_F_at104": 134
+   }
+  },
+  "both fans running (push-pull series, ~3.9 CFM through unit)": {
+   "cab=amb": {
+    "glass_idle10_25_40": [
+     108,
+     109,
+     111
+    ],
+    "glass_alarm": 116,
+    "ring_25_alarm": [
+     107,
+     110
+    ],
+    "throttle_ambient_F": 145,
+    "cm5_8p5W_throttle_ambient_F": 110,
+    "soc_F_at104": 135
+   },
+   "cab-9F": {
+    "glass_idle10_25_40": [
+     102,
+     104,
+     105
+    ],
+    "glass_alarm": 111,
+    "ring_25_alarm": [
+     103,
+     107
+    ],
+    "throttle_ambient_F": 153,
+    "cm5_8p5W_throttle_ambient_F": 119,
+    "soc_F_at104": 127
+   }
+  },
+  "one fan failed (survivor drives through dead rotor, ~60 %)": {
+   "cab=amb": {
+    "glass_idle10_25_40": [
+     109,
+     111,
+     112
+    ],
+    "glass_alarm": 119,
+    "ring_25_alarm": [
+     108,
+     112
+    ],
+    "throttle_ambient_F": 143,
+    "cm5_8p5W_throttle_ambient_F": 107,
+    "soc_F_at104": 137
+   },
+   "cab-9F": {
+    "glass_idle10_25_40": [
+     104,
+     106,
+     108
+    ],
+    "glass_alarm": 114,
+    "ring_25_alarm": [
+     104,
+     109
+    ],
+    "throttle_ambient_F": 151,
+    "cm5_8p5W_throttle_ambient_F": 115,
+    "soc_F_at104": 129
+   }
+  },
+  "both failed (passive V6, fan+filter restriction)": {
+   "cab=amb": {
+    "glass_idle10_25_40": [
+     113,
+     115,
+     118
+    ],
+    "glass_alarm": 129,
+    "ring_25_alarm": [
+     111,
+     118
+    ],
+    "throttle_ambient_F": 138,
+    "cm5_8p5W_throttle_ambient_F": 98,
+    "soc_F_at104": 142
+   },
+   "cab-9F": {
+    "glass_idle10_25_40": [
+     110,
+     113,
+     115
+    ],
+    "glass_alarm": 126,
+    "ring_25_alarm": [
+     109,
+     116
+    ],
+    "throttle_ambient_F": 145,
+    "cm5_8p5W_throttle_ambient_F": 106,
+    "soc_F_at104": 135
+   }
+  }
+ }
+}

@@ -7,9 +7,10 @@
   "panel6.0&clamps": 0.0
  },
  "clearances_mm": {
-  "display_rear_to_PCB_front_airgap": 3.27,
   "nib_to_plunger_free_gap": 0.1,
-  "glass_front_vs_bezel_face (neg = recessed)": -0.05,
+  "glass_front_vs_ring_face (neg = behind)": -0.05,
+  "glass_edge_to_ring_sleeve (silicone bead)": 0.5,
+  "sleeve_to_metal_window_gap": 0.2,
   "CM5_top_to_heatbar (pad)": 1.0,
   "rear_parts_tallest_to_shell_inner_rear": 9.4,
   "J10_mouth_depth_below_rear_face (tunnel)": 13.5,
@@ -27,15 +28,36 @@
    6.0
   ],
   "shell_to_cutout_per_side": 1.0,
-  "ALS_pipe_to_nearest_cap_edge": 4.38,
+  "ALS_pipe_to_nearest_cap_edge": 7.76,
   "ALS_centre_to_glass_top_edge": 9.25,
-  "ALS_centre_to_active_area_top_left_corner (7.32, 8.03)": 17.67,
+  "ALS_centre_to_active_area_top_left_corner (7.32, 8.03)": 132.0,
   "ALS_pipe_rear_face_to_PCB_F": 1.0,
-  "fin_plate_total_depth_behind_bezel_face": 82.75,
+  "V6_strip_rear_face_Z": 63.25,
+  "fan_filter_cover_rear_face_Z (total depth behind ring face = this + 4.0)": 68.25,
+  "display_rear_to_PCB_front_airgap_TFT_area (x<75 HV zone)": 11.44,
+  "display_rear_to_PCB_front_airgap_source_band (min)": 7.27,
+  "HV": {
+   "lead_tips_2.0mm_to_display_rear": 9.44,
+   "lead_tips_2.0mm_to_hv_sheet_surface": 9.01,
+   "lead_tips_2.0mm_to_bezel_metal (earthed, basic 5.5)": 7.0,
+   "lead_tips_2.0mm_to_heat_pillar/plate": 32.47,
+   "lead_tips_1.0mm_to_display_rear": 10.44,
+   "lead_tips_1.0mm_to_hv_sheet_surface": 10.01,
+   "lead_tips_1.0mm_to_bezel_metal (earthed, basic 5.5)": 8.0,
+   "lead_tips_1.0mm_to_heat_pillar/plate": 32.47,
+   "J28J29_plug_envelope_to_left_clamp_screw (reinforced 8.0)": 11.4,
+   "J28J29_plug_envelope_to_left_clamp_insert (reinforced 8.0)": 10.77,
+   "J28J29_pads_to_left_clamp_insert": 29.11,
+   "J28J29_plug_envelope_to_joint_screws (earthed, basic 5.5)": 13.22,
+   "left_wall_y15_105_solid_fraction (1.0 = no openings)": 0.9574,
+   "left_wall_thickness_mm": 3.0,
+   "left_wall_inner_face_to_J28J29_pad_column_x4.215": 9.94,
+   "left_wall_inner_face_to_J28J29_plug_body": 2.4
+  },
   "insertion: shell bbox vs cutout per side (min gap, must be >0)": 1.0
  },
  "volumes_cm3": {
-  "bezel": 232.5,
+  "bezel": 231.8,
   "display": 451.3,
   "key_caps": 36.5,
   "key_membrane": 7.0,
@@ -50,10 +72,17 @@
   "rear_shell": 202.8,
   "clamps": 15.4,
   "clamp_screws": 2.6,
-  "front_ring": 93.1,
-  "fin_plate": 487.6,
+  "front_ring": 99.7,
+  "fin_plate": 187.2,
   "heat_pillar": 22.1,
-  "light_pipe": 0.2
+  "light_pipe": 0.2,
+  "exl1_strip": 78.0,
+  "strip_pad": 1.5,
+  "fans": 12.9,
+  "fan_gaskets": 0.9,
+  "filter_covers": 5.7,
+  "fan_screws": 1.0,
+  "hv_sheet": 4.8
  },
  "bbox": {
   "bezel": [
@@ -134,12 +163,12 @@
   "front_ring": [
    329.0,
    261.0,
-   4.0
+   8.5
   ],
   "fin_plate": [
    242.0,
    177.0,
-   34.8
+   4.8
   ],
   "heat_pillar": [
    40.0,
@@ -150,6 +179,41 @@
    4.0,
    4.0,
    19.0
+  ],
+  "exl1_strip": [
+   100.8,
+   177.0,
+   10.0
+  ],
+  "strip_pad": [
+   96.8,
+   38.0,
+   0.5
+  ],
+  "fans": [
+   40.0,
+   166.0,
+   10.5
+  ],
+  "fan_gaskets": [
+   40.0,
+   166.0,
+   1.0
+  ],
+  "filter_covers": [
+   44.0,
+   170.0,
+   4.0
+  ],
+  "fan_screws": [
+   35.0,
+   161.0,
+   17.3
+  ],
+  "hv_sheet": [
+   75.5,
+   148.4,
+   0.4
   ]
  },
  "shell_outer_WxH": [

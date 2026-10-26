@@ -79,7 +79,7 @@ Conclusion: the phase-2 figure of 26 C assumed a 6 W load. For the real dashboar
 - Backlight: 48 LEDs, Vf 25.6 V typ (23.0-26.5), If 360 mA. **WBL 8.28 / 9.22 / 9.54 W** (min/typ/max). The earlier 8.6 W is replaced by 9.22 W.
 - TFT logic: 3.3 V x 210 mA = 0.69 W. Touch controller: 3.3 V x 100 mA = 0.33 W. Display total about 10.2 W typical at full backlight.
 - Light out: about 5 % of backlight power leaves through the LCD as light (ESTIMATED: LED radiant efficiency about 35 % times LCD transmission about 5-8 %). So **about 95 % of the backlight, roughly 8.8 W, becomes heat inside the display module**.
-- Where it goes: into the LED bar, the module frame and the cover glass. The glass radiates and convects to the front. The module rear passes heat across the 3.27 mm air gap to the PCB. The module frame conducts into the bezel ledge.
+- Where it goes: into the LED bar, the module frame and the cover glass. The glass radiates and convects to the front. The module rear passes heat across the 11.44 mm air gap to the PCB (7.27 mm at the source band; 3.27 mm was the pre-flush value). The module frame conducts into the bezel ledge.
 - Other board loads:
   - SN65DSI83 ICC 77 mA typ at 1.8 V = 0.14 W (MEASURED, sn65dsi83.txt).
   - Backlight driver loss about 10 % of backlight power (ESTIMATED).
@@ -163,3 +163,162 @@ Cabinet air behind the panel is assumed to be ambient + 5 C (ESTIMATED). "touch"
   - Conditions: in an environmental chamber or a still-air box at 40 ± 1 C (or at 25 C, scaling rises linearly), panel vertical, no forced air, about 2 h to steady state. Workloads: the dashboard and `stress-ng --matrix 0`. Optional IR camera with emissivity tape.
   - The test would fit the ESTIMATED conductances (h_front, interior coupling, the fin plate's K/W).
 - **Uncertainty (ESTIMATED):** h_front 9 ± 3 W/m2K moves the glass by about ±4 K. Fin plate K/W ±30 % moves SoC by about ±3 K. Cabinet ΔT of 0-10 K moves the rear-path nodes by about ±5 K. Overall: **touch temperatures ±5 K, SoC ±8 K, throttle ambient ±8 K.** The 45 C ring result is therefore marginal (0.6 K margin at typical load); the glass result is clearly above 45 C.
+
+## Phase 5: cheaper variants and duty-cycled backlight (°F, with °C in brackets; model inputs unchanged except the fin-plate conductance per variant)
+Fin-plate conductance is scaled from ATS catalogue natural-convection R per inch (MEASURED, ATS Extrusions R15_0121, https://media.digikey.com/pdf/Data%20Sheets/Advanced%20Thermal%20Solutions%20PDFs/Extrusions%20R15_0121.pdf: EXL424 4.0, EXL109 3.09, EXL117 6.9 °C/W per inch) to a 177 mm cut using R ∝ L^-0.7 (ESTIMATED).
+Prices are Digi-Key figures from the qats.com distributor table on 2026-10-25 (MEASURED): EXL424 $79.37 / $70.23 and EXL109 $120.09 / $106.25 (qty 1 / qty 10).
+Machining (saw cut, 4 holes, port notches) adds about $30 / $15 (ESTIMATED). No variant needs tooling.
+
+Ambient 104 F (40 C), CM5 4 W. Touch = PA12 ring. Results: thermal_variants_p5.json.
+
+| Variant | Ring at 100/70/40 % BL | Throttles above | Delta vs baseline, qty 1/10 | Depth |
+|---|---|---|---|---|
+| D (laser-cut fin plate) | 114/112/110 F | 134 F (56.9 C) | +$227 / +$115 | 82.75 mm |
+| V1 EXL424, 16.5 mm fins | 114/112/110 | 135 F (57.4 C) | +$146 / +$100 | 64.5 |
+| V2 EXL109, 32 mm fins | 113/112/110 | 137 F (58.3 C) | +$187 / +$136 | 80.05 |
+| V3 = V1 + laser-cut stacked block | 114/112/110 | 133 F (56.2 C) | +$133 / +$94 | 64.5 |
+| V4 flat 4.75 mm laser-cut plate + stacked block | 115/113/111 | 123 F (50.8 C) | +$59 / +$29 | 52.75 |
+| V5 EXL117, 12.5 mm fins | 114/112/110 | 131 F (55.0 C) | price not checked | 60.5 |
+
+Findings:
+- The ring temperature hardly depends on the fins; the fins mainly set the CM5 throttle point.
+- Depth can drop from 82.75 to 52.75 mm (flat plate). The cost is a lower CM5 throttle point: 134 F → 123 F at 4 W, and 99 F → 77 F (37 → 25 C) at 8.5 W.
+- Fins beside the shell are impossible: anything must stay inside the 294 x 226 slide-in outline.
+- The PA12 ring is already the cheapest option at $30 / $26 (MJF stand-in price). A machined ring would cost about $150 (ESTIMATED).
+
+### Duty-cycled backlight (Ethan's idea): 90 % of the time at idle brightness, 10 % at 100 %
+Steady state uses time-averaged power.
+- Time constants (ESTIMATED): display/glass about 474 s (0.7 kg × 840 J/kgK ÷ 1.24 W/K); ring plus bezel about 40 min.
+- Peak during a 2-minute bright period: average + (1 − e^(−120/474)) × (step to full) = average + 22 % of the step.
+- Results: thermal_dutycycle_p5.json.
+
+| Variant | Ring, idle 10/25/40 % | Glass avg (2-min peak), idle 25 % | Always 100 %: ring / glass | 1 h alarm: ring / glass | CM5 SoC, idle 25 % |
+|---|---|---|---|---|---|
+| none (metal face) | 119/121/123 F | 120 (123) F | 131 / 132 F | 128 / 132 | 163 F |
+| D | 109/109/110 | 118 (121) | 114 / 132 | 113 / 132 | 144 F |
+| V1 | 109/109/110 | 118 (121) | 114 / 132 | 113 / 132 | 144 F |
+| V4 flat | 110/110/111 | 120 (123) | 115 / 134 | 114 / 134 | 154 F |
+| D' (keeps boss) | 114/115/115 | 119 (122) | 117 / 133 | 117 / 133 | 151 F |
+| D' + flat plate | 116/117/117 | 121 (124) | 121 / 135 | 120 / 135 | 154 F |
+
+Results with duty cycling:
+- **The ring meets 113 F (45 C)** with D, V1 or V4 at every idle level. Only V4 goes about 1-2 F over, and only under a long alarm or with the screen always bright.
+- **D' does not meet the target:** the boss heats the bezel, giving a 114-117 F ring.
+- **The glass still does not reach 113 F:** 115-123 F average and 119-125 F peaks, against 118-135 F before. The floor is the warm cabinet air (ESTIMATED ambient + 9 F) heating the display from behind, plus the 1 W of display logic.
+- Under a 1 h or continuous alarm the glass reaches its full-bright steady state, 132-135 F (56-57 C). That is inside IEC 61010-1's 149 F (65 C) glass-knob limit, but not Ethan's 113 F.
+- Reaching 113 F at the glass would need cooler cabinet air (ventilated cabinet) or idle at ≤10 % with the cabinet at ambient. Both are site-dependent and need measuring.
+
+## Phase 6: FLUSH glass (Ethan's decision, Oct 25). Overrides Design D's 4 mm recess. °F, with °C in brackets.
+Model change: the ring is now a real node, coupled to the glass edge through the 0.5 mm silicone bead and the 1.5 mm PA12 sleeve. Coupling g = 0.3 W/K (ESTIMATED); 0.1 W/K in variant G, where a 2 mm metal lip separates glass and ring. All other inputs are as in phase 5 (cabinet air = ambient + 9 F). Results: thermal_flush_p6.json.
+
+Ambient 104 F (40 C), CM5 4 W. Entries are ring / glass at average backlight, with the 2-minute bright peak in brackets; idle backlight 10 / 25 / 40 %, 90 % of the time idle.
+
+| Variant | idle 10 % | idle 25 % | idle 40 % | Always or 1 h alarm: ring / glass | CM5 throttles above (idle 25 %) | 8.5 W: throttles above | Sun 500 W/m2: ring / glass | Δ$ qty 1/10 | Depth |
+|---|---|---|---|---|---|---|---|---|---|
+| D-flush | 111/114 (118) | 112/117 (120) | 113/119 (122) | 119/129 | 136 F | 99 F | 170/186 | +227/+115 | 82.75 |
+| **V1-flush (EXL424)** | **110/114 (118)** | **112/117 (119)** | **113/119 (121)** | 119/129 | 136 F | 101 F | 169/185 | **+146/+100** | **64.5** |
+| V4-flush (flat plate) | 112/116 (119) | 113/118 (121) | 114/121 (123) | 120/131 | 126 F | 78 F | 173/191 | +59/+29 | 52.75 |
+| D'-flush (boss kept) | 115/116 | 116/118 | 117/121 | 121/130 | 128 F | 81 F | 161/182 | +247/+125 | 82.75 |
+| G: glass on metal ledge, bezel tied to EXL424, ring outside a 2 mm metal lip | 113/116 (118), metal lip 116 | 114/118, lip 117 | 115/120, lip 119 | 118/127, lip 124 | 138 F | 101 F | 158/168 | +166/+110 | 64.5 |
+| G4: G with flat plate | 114/118 | 116/120 | 117/123 | 123/132 | 134 F | 89 F | 173/186 | +79/+39 | 52.75 |
+
+What flush changes:
+- The ring now picks up heat from the glass edge. The ring rises about 2-5 F against the recessed D, mostly at its inner edge, which runs near glass temperature.
+- Glass averages fall about 1-3 F, because the glass now also sheds heat into the ring.
+- Sun: the glass is fully exposed, so 168-191 F (76-88 C). A hood is needed if direct sun is possible.
+- D' no longer meets 113 F (115-117 F) and is dropped.
+- G (metal lip next to the glass) puts touchable metal at 116-124 F, so it fails the target.
+- V4 is marginal: 112-114 F, failing at 40 % idle and under alarms.
+
+Best option for flush glass: **V1-flush.** The ring stays ≤113 F (45 C) at idle 10-40 % with duty cycling. Under a long alarm or always-bright it reaches 119 F (48 C), which is still under the 61010-1 plastic limits. It is cheaper and shallower than D.
+
+Best achievable glass temperature: 114 F (45.6 C) at 10 % idle, peaking at 118 F after 2 minutes bright. The glass does not reach 113 F with the cabinet at ambient + 9 F. What would get it there, from this model:
+- A ventilated cabinet at ambient (ΔT 0): glass 111 F (44.1 C) at 10 % idle in G-type coupling. Always-bright is still 122 F.
+- A cabinet 9 F below ambient: 107 F (41.5 C) idle, 118 F always-bright.
+- A firmware dimming cap of 10 % idle and ≤2 min bright. An alarm still gives 127-129 F.
+- A display-rear spreader (BCR-9) adds only 2-4 F of improvement and needs PCB slots.
+
+
+## Phase 7: cabinet air at or below ambient (Ethan: the engine fan moves air around the OUTSIDE of the cabinet)
+**ASSUMPTION TO VERIFY:** the cabinet air temperature is not measured. Verify it on a real generator with a thermocouple or logger inside the cabinet, next to the unit, during a full-load run. Earlier phases assumed cabinet air = ambient + 9 F.
+Conditions: front ambient 104 F (40 C), CM5 4 W. Entries are ring / glass in F (C) at idle 10 / 25 / 40 % (90 % idle), then alarm (continuous 100 %).
+A 1 h alarm reaches about the same glass temperature (time constant about 8 min); the ring reaches about 80 % of its rise (time constant about 40 min, ESTIMATED).
+Throttle ambient is the front ambient at which the CM5 reaches 80 C at idle 25 %; the cabinet air at that point is shown in brackets. Data: thermal_cabinet_p7.json.
+
+```
+V1-flush cab 104 (40.0): 108 (42.4)/111 (44.1) | 110 (43.2)/114 (45.5) | 111 (44.0)/116 (46.9) | alarm 117 (47.1)/127 (52.5) | throttle ambient 145 (62.6) (cabinet 145 (62.6))
+V1-flush cab 95 (35.0): 106 (41.3)/109 (42.6) | 108 (42.1)/111 (44.0) | 109 (42.9)/114 (45.4) | alarm 115 (46.0)/124 (51.0) | throttle ambient 153 (67.1) (cabinet 144 (62.1))
+V1-flush cab 86 (30.0): 104 (40.2)/106 (41.1) | 106 (41.0)/108 (42.5) | 107 (41.8)/111 (43.9) | alarm 113 (44.9)/121 (49.5) | throttle ambient 161 (71.6) (cabinet 143 (61.6))
+V4-flush cab 104 (40.0): 110 (43.2)/113 (45.1) | 111 (44.0)/116 (46.5) | 113 (44.8)/118 (48.0) | alarm 118 (48.0)/129 (53.8) | throttle ambient 133 (56.2) (cabinet 133 (56.2))
+V4-flush cab 95 (35.0): 108 (42.1)/111 (43.7) | 109 (42.9)/113 (45.1) | 111 (43.8)/116 (46.6) | alarm 117 (47.0)/126 (52.4) | throttle ambient 140 (60.0) (cabinet 131 (55.0))
+V4-flush cab 86 (30.0): 106 (41.1)/108 (42.3) | 107 (41.9)/111 (43.7) | 109 (42.7)/113 (45.2) | alarm 115 (46.0)/124 (51.0) | throttle ambient 147 (63.8) (cabinet 129 (53.8))
+```
+Result: with cabinet air 9 F or more below ambient, the V1-flush glass meets 113 F at 10-25 % idle, and at 40 % idle once the cabinet is 18 F below. In alarm the glass stays at 121-127 F.
+
+
+## Phase 8: display-rear spreading, and a fan (DELIBERATE DEVIATION Ethan is evaluating: the original rule was no fan, vents OK)
+Model: thermal_v3 with V6 settings (fin-plate conductance 0.45 W/K, ring-glass coupling 0.3 W/K). Data: thermal_fan_p8.json.
+
+Columns: glass F at idle 10/25/40 % and at alarm 100 %; ring at idle 25 % / alarm; CM5 throttle ambient. Cabinet air = ambient, then ambient −9 F. **Cabinet air temperature is an ASSUMPTION to verify on a real generator.**
+
+```
+a V6 | cab=amb: 112 115 117 128 ring 111/118 thr 138 | cab-9F: 110 112 115 125 ring 109/116 thr 146
+b V6+display spreader strapped to plate (gfp .55) | cab=amb: 113 116 118 126 ring 111/117 thr 139 | cab-9F: 110 112 114 123 ring 108/115 thr 145
+b' upper bound: display rear perfectly tied to plate | cab=amb: 114 116 118 125 ring 111/116 thr 140 | cab-9F: 110 112 113 121 ring 108/114 thr 145
+b'' upper bound: display rear at cabinet air (infinite sink) | cab=amb: 104 104 104 104 ring 104/104 thr 142 | cab-9F: 95 95 95 95 ring 99/99 thr 151
+c V6 + 40mm fan (interior flushed) | cab=amb: 108 110 111 117 ring 107/111 thr 144 | cab-9F: 103 105 106 112 ring 104/108 thr 153
+c2 fan + full finned plate | cab=amb: 108 110 111 117 ring 107/111 thr 147 | cab-9F: 103 104 106 112 ring 104/108 thr 155
+d fan + CM5/hot-part heatsinks only, flat plate | cab=amb: 109 110 112 118 ring 107/111 thr 148 | cab-9F: 103 105 107 113 ring 104/108 thr 156
+fan FAILED (c, passive) | cab=amb: 112 115 117 128 ring 111/118 thr 138 | cab-9F: 110 112 115 125 ring 109/116 thr 146
+Qd 3.87 front 2.71 rear(GI) 0.25 ring 0.73 bezel 0.18 G_GTA 0.447
+UB rear->cabinet air 3.1W/K 0 105 106 107 109 ring 105 107
+UB rear->cabinet air 3.1W/K -5 98 98 99 101 ring 101 102
+display own fins passive 1 W/K 0 107 109 110 115 ring 107 111
+display own fins passive 1 W/K -5 102 103 104 110 ring 103 107
+display own fins + fan 3 W/K 0 106 107 108 111 ring 106 108
+display own fins + fan 3 W/K -5 99 100 101 104 ring 101 104
+```
+
+**Heat split, V6 at idle 25 % (MODELLED):** the display makes 3.87 W.
+- 2.71 W leaves through the front glass.
+- 0.73 W goes into the ring.
+- 0.18 W goes into the bezel.
+- Only 0.25 W (about 6 %) leaves through the rear, because the interior air is almost as warm as the display.
+
+**What is on the display's back (from the datasheet):**
+- The -B part is "N – Without Mounting Metal Frame" (DS Rev1.1 p.3).
+- The edge-lit backlight has 48 LEDs (MEASURED). The datasheet text does not give the LED bar's position.
+- The backlight cable exits at the top left (INFERRED from the drawing and our CAD notch). The source-PCB band and FPC are at the bottom (SRC_BAND in the CAD).
+- The rear surface is the backlight tray, presumably sheet metal or plastic (INFERRED, not stated).
+
+**Display module rear conductance:** about 3 W/K through the roughly 3 mm PMMA light guide (ESTIMATED).
+
+**Upper bound for any rear spreader** (display rear tied through 3.1 W/K to a perfect sink at cabinet air): glass 105–109 F at cabinet air = ambient. That would need a dedicated sink below 0.3 K/W behind the PCB, which is not achievable passively.
+- A dedicated passive 1 W/K display sink gives glass 107–115 F.
+- Strapping the display to the V6 plate (which the CM5 warms) changes glass by −2 to +1 F. At cabinet air = ambient and low idle, it pushes heat the wrong way (glass +1 F).
+- The display-to-PCB gap is now 11.44 mm (7.27 mm at the source band), so a sheet fits, but the strap must pass the PCB (BCR-9 slots or around the edges).
+
+**Fan (ESTIMATED):**
+- A 40 mm fan rated about 8 CFM free-air delivers about 3 CFM through the vents and PCB restriction. That is m·cp of about 1.7 W/K for the interior air.
+- Inside surfaces: h about doubles (display rear 0.69 → 1.5 W/K). Fins in the airflow: 0.45 → 0.75 W/K.
+- **Fan failure:** the unit falls back to passive V6 (glass 112–128 F, throttle above 138 F), so it stays safe. Firmware should read the tach on J4 and, on a fault, cap the backlight at 25 % and the CM5 power.
+- A clogged filter behaves the same as a failed fan.
+- Vents for the airflow open the rear shell to cabinet air; the front stays sealed by the panel gasket.
+- Salt air in Hawaii: use an IP68 fan plus a washable filter, or accept a shorter life.
+
+## Phase 9: V6 + TWO 40 mm fans, push-pull in series (Ethan GO, Oct 25). Data: thermal_dualfan_p9.json
+CAD: 4.75 mm flat plate + ATS-EXL1 strip (x 157.2-258, y 1-178, fins vertical, base 2.0 / fin 8.0 / t 1.0 mm ASSUMED), exhaust fan centre (128, 26), intake fan (128, 152), both on the plate outer face in cabinet air with gasket + washable filter cover. Front stays sealed (panel gasket, flush glass).
+Fan conductances are ESTIMATED: both 2.2 W/K interior flush, one failed 1.3 W/K (survivor pulls through the windmilling rotor, ~60 %), both failed 0.20 W/K (stalled rotors + filters restrict the passive path). Ta 104 F (40 C), CM5 4 W. Glass F at idle 10/25/40 %, alarm; ring at idle 25 / alarm; throttle ambient at idle 25 %; throttle ambient at CM5 8.5 W.
+```
+both fans  | cab=amb: 108 109 111 | 116 | ring 107/110 | thr 145 | 8.5W thr 110 ; cab-9F: 102 104 105 | 111 | ring 103/107 | thr 153 | 8.5W thr 119
+one failed | cab=amb: 109 111 112 | 119 | ring 108/112 | thr 143 | 8.5W thr 107 ; cab-9F: 104 106 108 | 114 | ring 104/109 | thr 151 | 8.5W thr 115
+both failed| cab=amb: 113 115 118 | 129 | ring 111/118 | thr 138 | 8.5W thr  98 ; cab-9F: 110 113 115 | 126 | ring 109/116 | thr 145 | 8.5W thr 106
+```
+Series vs parallel: in series one dead fan only adds rotor drag; in parallel the dead fan's opening becomes a short-circuit (backflow through the dead fan), so most of the survivor's flow recirculates. Series chosen.
+Cabinet air temperature remains an ASSUMPTION to verify with a thermocouple during a full-load run.
+
+## Phase 10 notes
+- Fan final: Orion OD4010-05HB10A (5 V, standard) + washable filters; an IP/sealed fan is an OPTIONAL later swap (same envelope; thermal unchanged).
+- TODO: EXL1 fin dims ASSUMED until the ATS drawing/sample; strip conductance carries that uncertainty.
+- Fan control/derating per firmware/ARCHITECTURE.md section 11 (one fan failed: survivor 100 %, backlight cap 60 %; both failed: backlight 25 %).
+- Compliance ruling on the rim trim / 1 mm lead trim / PP film is pending; +5V budget being checked by Layout/Firmware.

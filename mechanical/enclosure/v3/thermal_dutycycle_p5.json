@@ -1,0 +1,200 @@
+{
+ "none": {
+  "0.1": {
+   "touch": 48.4,
+   "glass": 47.9,
+   "glass_peak2min": 49.6,
+   "SoC": 71.6,
+   "thr": 48.4
+  },
+  "0.25": {
+   "touch": 49.5,
+   "glass": 49.1,
+   "glass_peak2min": 50.5,
+   "SoC": 72.7,
+   "thr": 47.3
+  },
+  "0.4": {
+   "touch": 50.5,
+   "glass": 50.4,
+   "glass_peak2min": 51.5,
+   "SoC": 73.7,
+   "thr": 46.3
+  },
+  "always100": {
+   "touch": 54.7,
+   "glass": 55.3,
+   "SoC": 77.9,
+   "thr": 42.1
+  },
+  "alarm1h": {
+   "glass": 55.3,
+   "touch": 53.6
+  }
+ },
+ "D": {
+  "0.1": {
+   "touch": 42.6,
+   "glass": 46.2,
+   "glass_peak2min": 48.4,
+   "SoC": 62.2,
+   "thr": 57.8
+  },
+  "0.25": {
+   "touch": 43.0,
+   "glass": 47.8,
+   "glass_peak2min": 49.6,
+   "SoC": 62.5,
+   "thr": 57.5
+  },
+  "0.4": {
+   "touch": 43.5,
+   "glass": 49.4,
+   "glass_peak2min": 50.8,
+   "SoC": 62.7,
+   "thr": 57.3
+  },
+  "always100": {
+   "touch": 45.4,
+   "glass": 55.7,
+   "SoC": 63.6,
+   "thr": 56.4
+  },
+  "alarm1h": {
+   "glass": 55.7,
+   "touch": 44.9
+  }
+ },
+ "V1 EXL424": {
+  "0.1": {
+   "touch": 42.5,
+   "glass": 46.2,
+   "glass_peak2min": 48.3,
+   "SoC": 61.8,
+   "thr": 58.2
+  },
+  "0.25": {
+   "touch": 43.0,
+   "glass": 47.7,
+   "glass_peak2min": 49.5,
+   "SoC": 62.0,
+   "thr": 58.0
+  },
+  "0.4": {
+   "touch": 43.5,
+   "glass": 49.3,
+   "glass_peak2min": 50.7,
+   "SoC": 62.2,
+   "thr": 57.8
+  },
+  "always100": {
+   "touch": 45.3,
+   "glass": 55.6,
+   "SoC": 63.0,
+   "thr": 57.0
+  },
+  "alarm1h": {
+   "glass": 55.6,
+   "touch": 44.8
+  }
+ },
+ "V4 flat plate": {
+  "0.1": {
+   "touch": 43.1,
+   "glass": 47.1,
+   "glass_peak2min": 49.3,
+   "SoC": 67.3,
+   "thr": 52.7
+  },
+  "0.25": {
+   "touch": 43.6,
+   "glass": 48.7,
+   "glass_peak2min": 50.5,
+   "SoC": 67.8,
+   "thr": 52.2
+  },
+  "0.4": {
+   "touch": 44.1,
+   "glass": 50.4,
+   "glass_peak2min": 51.8,
+   "SoC": 68.3,
+   "thr": 51.7
+  },
+  "always100": {
+   "touch": 46.0,
+   "glass": 56.9,
+   "SoC": 70.3,
+   "thr": 49.7
+  },
+  "alarm1h": {
+   "glass": 56.9,
+   "touch": 45.5
+  }
+ },
+ "D'": {
+  "0.1": {
+   "touch": 45.6,
+   "glass": 47.0,
+   "glass_peak2min": 49.0,
+   "SoC": 65.9,
+   "thr": 54.1
+  },
+  "0.25": {
+   "touch": 45.9,
+   "glass": 48.5,
+   "glass_peak2min": 50.2,
+   "SoC": 66.3,
+   "thr": 53.7
+  },
+  "0.4": {
+   "touch": 46.2,
+   "glass": 50.1,
+   "glass_peak2min": 51.4,
+   "SoC": 66.7,
+   "thr": 53.3
+  },
+  "always100": {
+   "touch": 47.3,
+   "glass": 56.2,
+   "SoC": 68.3,
+   "thr": 51.7
+  },
+  "alarm1h": {
+   "glass": 56.2,
+   "touch": 47.0
+  }
+ },
+ "D' flat plate": {
+  "0.1": {
+   "touch": 46.6,
+   "glass": 47.6,
+   "glass_peak2min": 49.7,
+   "SoC": 67.4,
+   "thr": 52.6
+  },
+  "0.25": {
+   "touch": 47.1,
+   "glass": 49.2,
+   "glass_peak2min": 51.0,
+   "SoC": 68.0,
+   "thr": 52.0
+  },
+  "0.4": {
+   "touch": 47.5,
+   "glass": 50.8,
+   "glass_peak2min": 52.3,
+   "SoC": 68.6,
+   "thr": 51.4
+  },
+  "always100": {
+   "touch": 49.2,
+   "glass": 57.3,
+   "SoC": 71.2,
+   "thr": 48.8
+  },
+  "alarm1h": {
+   "glass": 57.3,
+   "touch": 48.7
+  }
+ }
+}

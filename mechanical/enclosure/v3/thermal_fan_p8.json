@@ -1,0 +1,34 @@
+{
+ "a V6": [
+  "112 115 117 128 ring 111/118 thr 138",
+  "110 112 115 125 ring 109/116 thr 146"
+ ],
+ "b V6+display spreader strapped to plate (gfp .55)": [
+  "113 116 118 126 ring 111/117 thr 139",
+  "110 112 114 123 ring 108/115 thr 145"
+ ],
+ "b' upper bound: display rear perfectly tied to plate": [
+  "114 116 118 125 ring 111/116 thr 140",
+  "110 112 113 121 ring 108/114 thr 145"
+ ],
+ "b'' upper bound: display rear at cabinet air (infinite sink)": [
+  "104 104 104 104 ring 104/104 thr 142",
+  "95 95 95 95 ring 99/99 thr 151"
+ ],
+ "c V6 + 40mm fan (interior flushed)": [
+  "108 110 111 117 ring 107/111 thr 144",
+  "103 105 106 112 ring 104/108 thr 153"
+ ],
+ "c2 fan + full finned plate": [
+  "108 110 111 117 ring 107/111 thr 147",
+  "103 104 106 112 ring 104/108 thr 155"
+ ],
+ "d fan + CM5/hot-part heatsinks only, flat plate": [
+  "109 110 112 118 ring 107/111 thr 148",
+  "103 105 107 113 ring 104/108 thr 156"
+ ],
+ "fan FAILED (c, passive)": [
+  "112 115 117 128 ring 111/118 thr 138",
+  "110 112 115 125 ring 109/116 thr 146"
+ ]
+}

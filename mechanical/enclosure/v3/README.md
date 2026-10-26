@@ -23,12 +23,26 @@ Built against genctl_v4_handrouted.kicad_pcb @ f03c57a (read-only). Supersedes P
 - ALS window at (11.0, -9.25), sensor on the PCB F side at the same coordinates: BCR-8. Cost delta for D: +$227 at qty 1 / +$115 at qty 10 (ESTIMATED).
 - Details: HEAT_PATH.md "Phase 4", thermal_v3.py, thermal_results.json.
 
+## Phase 5 (not committed)
+- Cheaper variants and duty-cycle results: HEAT_PATH.md "Phase 5". Flat laser-cut plate V4: +$59 / +$29, depth 52.75 mm, ring 110-115 F. The glass stays above 113 F in all variants.
+- ALS moved to (138.18, -9.25). KiCad frame = cover-glass frame. See BCR-8 UPDATE.
+
+## Phase 6: FLUSH glass (Ethan, Oct 25; not committed)
+- The display moved 4 mm forward, so the glass is flush with the 3 mm PA12 ring face (Z -4).
+- A PA12 ring sleeve (1.5 mm) with a 0.5 mm silicone bead isolates the glass edge from the metal window.
+- Ring retention: M3 screws from the rear into heat-set inserts, plus PA12 pips giving a 1 mm air break. Pips are modelled; screws are not.
+- Recommended: V1-flush. Details: HEAT_PATH.md "Phase 6", TOLERANCE_STACK.md §6.
+
+## Phase 7 (not committed)
+- Corrected costs with a line-by-line V1 breakdown: PARTS_COSTED.md, Phase 7.
+- Cabinet-air cases: HEAT_PATH.md, Phase 7.
+
 ## Files
 enclosure_v3.py, render_v3.py, board_interface.json, BOARD_INTERFACE.md, BOARD_CHANGE_REQUESTS.md, MISMATCH_LIST.md, KEYS_LIGHTGUIDE.md, HEAT_PATH.md, TOLERANCE_STACK.md, PARTS_COSTED.md/.csv, checks.json, enclosure_v3_assembly.step, step/*.step (15 parts), exploded_view_v3.png, iso_front_v3.png, iso_rear_v3.png, section_key_clamp_v3.png, section_key_detail_v3.png, section_heatpath_v3.png.
 Rebuild: `/workspace/cqenv/bin/python enclosure_v3.py && /workspace/cqenv/bin/python render_v3.py`.
 
 ## Checks (computed in code, checks.json)
-Pairwise boolean intersections of all 15 parts (intended contacts excluded: PCB/parts, pads): **0 interferences**. Customer panel at 1.0 and 6.0 mm: no clash with shell or clamps. Shell (behind panel) vs cutout: 1.0 mm/side nominal. Display-to-PCB air gap 3.27; nib-plunger gap 0.1; tallest rear part to shell inner rear 9.4. Renders are matplotlib (approximate shading).
+Pairwise boolean intersections of all 15 parts (intended contacts excluded: PCB/parts, pads): **0 interferences**. Customer panel at 1.0 and 6.0 mm: no clash with shell or clamps. Shell (behind panel) vs cutout: 1.0 mm/side nominal. Display-to-PCB air gap 11.44 mm under the TFT area (including the whole HV zone x < 75) and 7.27 mm minimum only under the source band (x 20.6-255.6, y 149.9-179.5); phase 9 CAD, checks.json (3.27 obsolete); nib-plunger gap 0.1; tallest rear part to shell inner rear 9.4. Renders are matplotlib (approximate shading).
 
 ## Open questions / blocked
 1. BCR-1: J11/J10 sit 20.4 / 13.5 mm deep in the rear wall -> needs board change (port daughterboard or taller jacks). **Blocked on board.**
@@ -38,3 +52,15 @@ Pairwise boolean intersections of all 15 parts (intended contacts excluded: PCB/
 5. Touch-tail notch and ledge against the Riverdi STEP: not verified yet.
 6. Cap fit: SLA +-0.2 vs 0.1 clearance -> fit-at-assembly; UV-stable cap material needed outdoors.
 7. Gasket/IP rating not tested; vents reduce ingress rating (drip hoods from rev C not yet re-added).
+
+## Phase 9 (V6 + dual fans, compliance checks). Not committed.
+- Parts added: exl1_strip, strip_pad, fans, fan_gaskets, filter_covers, fan_screws, hv_sheet (0.43 mm PP, x -0.5..75 on display rear). fin_plate is now the V6 flat plate with fan holes.
+- Depth behind ring face: shell 48 + plate 4.75 + strip 10.5 = 63.25 (+4 ring = 67.25); fans/filter covers 68.25 (+4 = 72.25 mm total).
+- Bezel display-tray rim trimmed to Z 7.0 over y 10-115 (HV clearance fix). 0 interferences. New HV checks in checks.json["clearances_mm"]["HV"].
+- Renders regenerated incl. section_fans_v3.png and section_hv_J28J29_v3.png. Thermal: thermal_dualfan_p9.json.
+
+## Phase 10 (decisions)
+- Fan: Orion OD4010-05HB10A 5 V with gaskets + filters (final). IP/sealed fan swap = OPTIONAL later change.
+- BCR-10 reconciled with firmware/ARCHITECTURE.md section 11 (shared open-drain PWM, U76 P15/P16/P17, 3x TMP1075 U81-U83).
+- TODO: EXL1 fin dims ASSUMED until the ATS drawing/sample.
+- Open: +5V budget being checked by Layout/Firmware. Compliance ruling on the rim trim (Z 7.0), lead trim to 1 mm and the 0.43 mm PP film is PENDING.

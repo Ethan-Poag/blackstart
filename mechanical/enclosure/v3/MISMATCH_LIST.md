@@ -25,7 +25,7 @@ Inventory checked: geometry.py, PANEL_V2.md, display_mech.md, draw_front_panel.p
 | 20 | enclosure.py | shell posts | (100,60)(100,140)(240,60)(240,140) | match board SHELL_POST keepouts | MEASURED (match) |
 | 21 | enclosure.py | 600 V barrier rib at x BOARD_X0+16 = 12.3 | | board barrier areas x 60-73 (v0..v2) and HV box x < 73 -> v3 rib at x 73 | MEASURED |
 | 22 | all | HV parts side | assumed B | J28/J29/J30, T1-T4, HV dividers on B (MEASURED); PROGRESS says HV must stay B | MEASURED |
-| 23 | all | display F-side gap | "about 3.5" (PROGRESS) | 3.27 in model (Z_PCB 16 INFERRED) | INFERRED |
+| 23 | all | display F-side gap | "about 3.5" (PROGRESS) | 11.44 in TFT/HV area, 7.27 at source band (phase 9 CAD; 3.27 was pre-flush) | INFERRED (Z_PCB 16) |
 | 24 | lead's brief | "display glass ~3.5 mm behind front face" | | Ethan's brief says FLUSH glass; v3 is flush (glass 0.05 below face). I read "3.5 mm" as the F-side air gap (#23). **Needs lead/Ethan confirmation.** If a 3.5 mm recess is wanted, set glass Z offset: LEDGE_Z 9.5 -> 13.0 and rim depth +3.5 | INFERRED |
 | 25 | display_mech.md | touch-tail notch position "verify vs STEP" | not verified | still not verified in v3 (notch modelled x 225-248) | INFERRED |
 | 26 | cap_metal.py | metal caps option | | not used in v3 | n/a |
@@ -34,4 +34,7 @@ Inventory checked: geometry.py, PANEL_V2.md, display_mech.md, draw_front_panel.p
 | 29 | board | J4 fan header present | | no fan (BCR-3) | MEASURED |
 
 | 30 | Rear ports 13.5 / 20.4 mm deep | BCR-1 solved in shell: sealed port tunnels with lead-in, plug envelopes 0 interference, no board change | phase 2 |
-| 31 | Flush glass | **ASSUMPTION, not yet confirmed by Ethan.** Model keeps glass flush with bezel face (-0.05 mm); lead's "3.5 mm" read as display-to-PCB gap (3.27 mm modelled) | open |
+| 31 | Flush glass | **Confirmed by Ethan (phase 6).** Glass flush with the PA12 ring face (-0.05 mm). Display-to-PCB gap 11.44 mm (TFT/HV area) / 7.27 mm (source band); 3.27 mm obsolete | closed (phase 9) |
+| 32 | Display-tray rim vs J28/J29 lead tips | Phase 9 3D check: earthed Al rim was 1.52 mm from the 600 V THT lead tips (basic needs 5.5). Fixed in CAD: rim trimmed to Z 7.0 over y 10-115 -> 7.0 mm (2 mm leads) / 8.0 mm (trimmed 1 mm) | fixed in model; Compliance ruling (rim trim, 1 mm lead trim, PP film) PENDING |
+| 33 | Left PA12 wall y 15-105 | Solid (no vents/holes); 3.0 mm, locally 2.0 mm at the left clamp blind slot (y 77-103, Z 37.5-45). Inner face 9.94 mm from J28/J29 pad column, 2.4 mm from plug body | phase 9 |
+| 34 | J4 fan header | no load switch or fuse on J4 +5V (direct on +5V net); CM5 has one FAN_PWM/FAN_TACH only -> BCR-10 rev phase 10 (U76 P15-17, open-drain PWM); +5V budget being checked by Layout/Firmware | open |

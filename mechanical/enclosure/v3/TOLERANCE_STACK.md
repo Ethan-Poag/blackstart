@@ -35,3 +35,16 @@ WC min gap per side = (296 - 294 - 1.18)/2 = **0.41** (x), (228 - 226 - 0.90)/2 
 ## 5. Clamp range
 Panel face Z = rim 9.5 + gasket 2.0 x 0.7 = 10.9 (gasket 1.4..1.6 for 25-35 % compression, INFERRED target). Clamp block front face Z 37.5 fixed; M4 nylon-tip screw through a heat-set insert.
 Panel t range **1.0 .. 6.0 mm (INFERRED design parameter)**: screw tip must reach Z 11.9..16.9 -> screw protrusion in front of block 20.6..25.6 -> **M4 x 35** (block 7.5 + insert) gives 27 mm usable, OK. Bezel rim flatness / panel bow: gasket compression range 0.6 mm (30 % of 2.0) covers +-0.3 panel waviness (INFERRED). Clamp checked in code at t = 1 and 6: no shell or clamp interference (checks.json).
+
+
+## 6. Flush glass (phase 6): glass front vs ring face, target ±0.15 mm
+The chain if each part is built to nominal and stacked: ring thickness ±0.2 (MJF/SLS local, ESTIMATED), pip/air gap ±0.1, bezel ledge Z ±0.05 (CNC), VHB foam tape 0.9 ±0.1, module CTP+TFT 8.51 ±0.2 (INFERRED, no tolerance in the datasheet).
+- WC ±0.65, RSS ±0.33 mm. **This fails ±0.15.**
+- **Process to meet ±0.15:** assemble face-down on a flat plate (±0.05) so the glass and the ring face share the datum. Bond the module to the ledge with foam tape that takes up the gap, then screw the ring down onto the bezel.
+- What remains: ring face flatness and local thickness at the glass edge. MJF gives about ±0.2, which still fails. An SLA ring (±0.1) or a CNC face-skim of the MJF ring meets ±0.15 by RSS (0.05 fixture + 0.1 ring = ±0.11).
+- Cost: SLA ring about +$40 / +$20 (ESTIMATED).
+
+Where the display touches: the TFT rear rests at Z 4.56 on a 4 mm metal ledge lip (Z 5.5 seat, 0.94 mm foam tape). The glass edge touches only the silicone bead and PA12 sleeve, never metal. The module's 12.68 mm depth now ends at Z 8.73. The display-to-PCB air gap is 11.44 mm under the TFT area (including the whole HV zone x < 75) and 7.27 mm minimum only under the source band (x 20.6-255.6, y 149.9-179.5); phase 9 CAD, checks.json. The old 3.27 mm figure (recessed glass) is obsolete.
+
+## 7. Phase 9 stack (V6 + dual fans)
+Z behind bezel face: shell rear 48.0 | plate 48.0-52.75 | strip pad 0.5 | EXL1 base 2.0 + fins 8.0 (ASSUMED) -> 63.25 | fan gasket 1.0 + fan 10.5 + filter cover 4.0 -> 68.25. Ring face at -4.0, so overall depth 72.25 mm (strip-only 67.25). Display-to-PCB gap: 11.44 mm (TFT/HV area), 7.27 mm (source band). HV: J28/J29 lead tips (2.0 mm INFERRED) to trimmed bezel rim 7.0 mm, to display rear 9.44 mm; plug envelope to left clamp insert 10.77 mm, screw 11.4 mm.

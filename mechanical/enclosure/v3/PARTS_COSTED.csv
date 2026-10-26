@@ -19,3 +19,11 @@ P4-3,6061 heat pillar 40x28x19.7,1,CNC/waterjet,any,n/a,,25,12,ESTIMATED,2026-10
 P4-4,Gap pad 6 W/mK + foam VHB display tape,-,catalogue,any,n/a,,8,5,ESTIMATED,2026-10-25,no
 P4-5,PMMA light pipe d4 x 19 frosted + seal,1,turned/cut rod,any,n/a,,4,2,ESTIMATED,2026-10-25,no
 P4-6,Rear shell volume saving 312->203 cm3,1,SLS PA12 (price = MJF PA12 stand-in),JLC3DP,n/a,$0.275/g stand-in,-30,-30,ESTIMATED,2026-10-25,no
+P9-1,V6 flat plate 4.75 + ATS-EXL1-254 cut 177 + pad + 4xM3,1,laser cut + saw,SendCutSend / Digi-Key ATS2193-ND,https://www.digikey.com,EXL1 $29.61/$26.21 MEASURED; rest ESTIMATED,145,86,MIXED,2026-10-25,no
+P9-2,Fan Orion OD4010-05HB10A 5V PWM+tach (IP option advertised not certified),2,catalogue,Digi-Key/Mouser,https://www.mouser.com/datasheet/2/1491/OD4010-3239432.pdf,family price $9.99/$9.59 MEASURED; IP option ESTIMATED,34,30,ESTIMATED,2026-10-25,no
+P9-3,Washable foam filter + PA12 snap cover,2,SLS PA12,JLC3DP,n/a,,8,6,ESTIMATED,2026-10-25,no
+P9-4,Fan gaskets + 8x M3x16,2,catalogue,any,n/a,,3,2,ESTIMATED,2026-10-25,no
+P9-5,Fan harness 2x JST SH 4-pin,2,catalogue,any,n/a,,4,3,ESTIMATED,2026-10-25,no
+P9-T1,TOTAL V6 + dual fans delta vs baseline,-,-,-,-,sum,194,127,MIXED,2026-10-25,no
+P9-T2,TOTAL dual-fan adder vs V6 passive,-,-,-,-,sum,49,41,ESTIMATED,2026-10-25,no
+P10-OPT,OPTIONAL later: IP/sealed fan swap (Orion IP option advertised not certified),2,catalogue,Digi-Key/Mouser,n/a,not in totals,+10 to +20,+10 to +20,ESTIMATED,2026-10-25,no

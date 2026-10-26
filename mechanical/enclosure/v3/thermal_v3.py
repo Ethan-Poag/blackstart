@@ -23,7 +23,7 @@ OPTS = {
  "D' (keeps CM5->bezel boss, PA12 ring, bezel->fin plate bars)": dict(gb=0.1, bta=0, rc=4.41, sink="B", gf=0.25, gtc=0.25, ftc=0.85, ring=True, bf=2.0),
 }
 G_GTA = H_FRONT * A_GLASS            # glass front to air
-G_GI = 0.69                          # display rear -> PCB/interior, 3.27 mm air + radiation, ESTIMATED
+G_GI = 0.69                          # display rear -> PCB/interior, air gap + radiation, ESTIMATED (value kept from pre-flush 3.27 mm gap; flush gap 11.44 mm, conservative)
 G_BI = 0.20                          # bezel inner faces -> interior air, ESTIMATED
 R_RING_COND = 0.001 / (0.026 * A_RING) + 0.003 / (0.22 * A_RING)   # 1 mm air break + 3 mm PA12
 R_RING_SURF = 1 / (H_FRONT * A_RING)
@@ -43,7 +43,13 @@ def solve(o, P, bl, Ta=40.0, sun=0.0, a_glass=0.9, a_face=0.9):
     q[ix["G"]] += Qd + sun * a_glass * A_GLASS
     q[ix["I"]] += misc(bl)
     amb("G", G_GTA, Ta); link("G", "B", o["gb"]); link("G", "I", G_GI); link("B", "I", G_BI)
-    if o["ring"]:
+    if o["ring"] and o.get("grg", 0) > 0:
+        # phase 6 flush glass: ring is a real node coupled to the glass edge (silicone bead + PA12 sleeve)
+        g1, g2 = 1 / R_RING_COND, 1 / R_RING_SURF; qs = sun * a_face * A_RING
+        n.append("R"); ix["R"] = 5
+        M2 = np.zeros((6, 6)); M2[:5, :5] = M; q2 = np.zeros(6); q2[:5] = q; M, q = M2, q2
+        link("B", "R", g1); amb("R", g2, Ta); q[5] += qs; link("G", "R", o["grg"])
+    elif o["ring"]:
         # ring: sun absorbed on ring surface; bezel->ring->air series, with solar source at the ring surface node (solved analytically)
         g1, g2 = 1 / R_RING_COND, 1 / R_RING_SURF
         qs = sun * a_face * A_RING
@@ -53,7 +59,9 @@ def solve(o, P, bl, Ta=40.0, sun=0.0, a_glass=0.9, a_face=0.9):
     amb("I", o["gtc"], Tc); link("I", "F", o["gf"]); amb("F", o["ftc"], Tc); link("B", "F", o["bf"]); link("G", "F", o.get("gfp", 0))
     if o["ftc"] == 0: M[ix["F"], ix["F"]] += 1; q[ix["F"]] += Tc
     T = dict(zip(n, np.linalg.solve(M, q)))
-    if o["ring"]:
+    if "R" in T:
+        T["ring"] = T["R"]; touch = max(T["G"], T["R"])
+    elif o["ring"]:
         g1, g2 = 1 / R_RING_COND, 1 / R_RING_SURF; qs = sun * a_face * A_RING
         T["ring"] = (g1 * T["B"] + g2 * Ta + qs) / (g1 + g2)
         touch = max(T["G"], T["ring"])

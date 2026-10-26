@@ -38,3 +38,78 @@ Key set (items 4+5+6): ~$45 @1, ~$38 @10 -> inside the $20-50 per-set target (in
 **PRICE STAND-IN: every PA12 price here is JLC MJF PA12 ($0.275/g) used as a proxy for SLS PA12. No SLS PA12 price was measured.**
 
 Notes: JLC3DP's July 2026 price update page (MEASURED) lists cuts on PAC-HP/PA12-CF etc. but no new PA12 per-gram figure, so the Aug-2025 $0.275/g MJF-PA12 rate is used. JLC3DP SLS line is 3021PA-F/3301PA/1172Pro (MEASURED home page); MJF PA12 is used as the cost proxy for "SLS PA12" - same material family, check that Ethan accepts MJF. JLC MJF max build 370x276x360 (MEASURED PA12-HP page) fits the 310x242x48 shell. McMaster pages are blocked to the fetch tool -> fastener/sheet prices ESTIMATED.
+
+## Phase 7: line-by-line flush variants, with corrections (2026-10-25; no quotes, no accounts)
+Price sources read on 2026-10-25 (MEASURED):
+- ATS distributor tables:
+  - https://www.qats.com/Search/Distributor/ATS-EXL424-288-R0
+  - https://www.qats.com/Search/Distributor/ATS-EXL1-254-R0
+  - https://www.qats.com/Search/Distributor/ATS-EXL77-300-R0
+  - https://www.qats.com/Search/Distributor/ATS-EXL115-300-R0
+  - https://www.qats.com/Search/Distributor/ATS-EXL117-300-R0
+- Profile sizes and R per inch: ATS catalogue R15_0121 on media.digikey.com.
+
+**EXL424 is sold only as a 288 x 188 x 16.5 mm stick (or 1220 mm).** Neither the Digi-Key nor the Mouser listing offers cut-to-length. ATS lists cutting and machining services but publishes no price, so that would need a quote.
+- V1 uses one 188 x 177 mm piece with the fins vertical.
+- That wastes 111 mm (39 %), and the offcut is too short for a second unit. The whole stick is counted.
+
+| V1-flush line | @1 | @10 | Label / source | Replaces in baseline |
+|---|---|---|---|---|
+| (a) EXL424-288 stick, Digi-Key ATS2208-ND | 79.37 | 70.23 | MEASURED (lowest offer in the ATS table: $54.28 / $51.76, distributor not named) | the closed PA12 rear wall |
+| (c) saw cut, 4 holes, 8 mm port notch | 30 | 15 | ESTIMATED (shop rate; about $0 if done in-house) | - |
+| (b) PA12 ring 93 cm3 + 8.6 cm3 sleeve, about 104 g x $0.275/g + dye | 32 | 28 | rate MEASURED (JLC MJF 2025-08), mass ESTIMATED | - |
+| (b) flush finish: SLA ring or CNC face-skim (±0.15 mm) | 40 | 20 | ESTIMATED; **missing from the phase 6 totals** | - |
+| (d) heat pillar, now stacked laser-cut plates (was a $25/$12 block) | 12 | 7 | ESTIMATED | CM5-to-bezel heat bar |
+| (d) gap pads + foam VHB display tape | 8 | 5 | ESTIMATED | - |
+| (d) light pipe + silicone bead | 4 | 2 | ESTIMATED | - |
+| (d) ring retention: 8 M3 heat-set inserts + screws (pips are printed) | 4 | 3 | ESTIMATED; newly counted | - |
+| (e) shell 312 -> 203 cm3 (about 110 g x $0.275/g) | -30 | -30 | rate MEASURED, volume from CAD | shell baseline $90 / $90 |
+| **V1-flush total delta** | **+179** | **+120** | | |
+
+Baseline for comparison (f): PA12 shell $90 / $90 and CNC bezel $450 / $220, both ESTIMATED. The bezel is unchanged in every variant.
+
+Corrections:
+- **D fin plate: $190 / $100 -> $120 / $65 (ESTIMATED).** The old figure assumed CNC-milled slots in the base. Laser-cut tab slots with bonded slats remove the milling.
+- **Heat pillar: $25 / $12 -> $12 / $7 (ESTIMATED).** The old figure was a solid machined block; it is now a stack of laser-cut plates.
+- Two items were missing and are now added: the flush finish (+$40 / +$20) and the ring inserts (+$4 / +$3).
+
+Every flush variant carries a common block of ring + finish + pads + pipe + hardware − shell = **+$58 / +$28**. Totals:
+
+| Variant | @1 | @10 | Throttles above (4 W, idle 25 %) |
+|---|---|---|---|
+| D-flush | +190 | +100 | 136 F |
+| V1-flush (Digi-Key) | +179 | +120 | 136 F |
+| V1-flush (lowest listed stick $54.28 / $51.76) | +154 | +102 | 136 F |
+| V4-flush (4.75 mm plate $35 / $20, ESTIMATED) | +105 | +55 | 126 F |
+| **V6: V4 plate + one ATS-EXL1-254 strip over the CM5 (Digi-Key ATS2193-ND $29.61 / $26.21, MEASURED; 177 mm cut, 77 mm waste) + $10 / $5 machining** | **+145** | **+86** | 131 F |
+| V4 with a 6.35 mm plate | +115 | +60 | 127 F (1 F gain: not worth it) |
+
+Every ESTIMATED figure above would be replaced by a quote: the SendCutSend plate and slats (price needs an upload), a CNC shop for machining and the face-skim, and ATS for a cut-to-length EXL424.
+
+
+## Phase 8 options (delta vs baseline, USD qty 1 / qty 10)
+| Option | @1 | @10 | Lines | Depth |
+|---|---|---|---|---|
+| V6 (Phase 7) | +145 | +86 | see Phase 7 | 62.75 mm |
+| V6 + display spreader sheet, gap pad, straps | +170 | +101 | +$25 / +$15 ESTIMATED | 62.75 |
+| V6 + IP68 40x20 mm fan (Sanyo 109P0405J601, £18.18 at RS UK https://uk.rs-online.com/web/p/axial-fans/1919218, MEASURED; ×1.33 FX INFERRED ≈ $24) + guard, filter, mount $8 / $5 ESTIMATED | +177 | +113 | qty 10 fan price assumed $22 ESTIMATED | 62.75 (fan inside the shell, ESTIMATED fit) |
+| Same with a non-IP Vapo fan (Sunon MF40100V1-1000U-A99, "from $2.55", datasheets.com aggregator, MEASURED; 2-wire, no tach) | +156 | +93 | | 62.75 |
+| d: V4 flat plate + fan + small CM5 heat sink ($5 / $4 ESTIMATED) | +142 | +86 | | 52.75 + about 10 for the CM5 sink |
+
+## Phase 9: V6 + dual 40 mm fans (Ethan GO, Oct 25 2026). Delta per unit, USD qty 1 / qty 10
+| item | qty | qty 1 | qty 10 | label / source |
+|---|---|---|---|---|
+| V6 (4.75 mm flat plate + ATS-EXL1-254 cut to 177, pad, 4x M3) | 1 | +145 | +86 | from phase 8 (EXL1 Digi-Key ATS2193-ND $29.61/$26.21 MEASURED 2026-10-25) |
+| Fan Orion OD4010-05HB10A (5 V, PWM + tach), IP option advertised (not certified) | 2 | 2 x 17 = 34 | 2 x 15 = 30 | ESTIMATED: OD4010-05HB $9.99/$9.59 Mouser and -05HB10A $9.72 @520 MEASURED via aggregator 2026-10-25; IP option +~$5 and qty-1 price not published |
+| Washable foam filter + PA12 snap cover with grille | 2 | 8 | 6 | ESTIMATED (cover printed with shell) |
+| Fan gaskets (closed-cell 1 mm) + 8x M3x16 screws | 2 | 3 | 2 | ESTIMATED |
+| Extra plate machining (2x 38 mm holes, 8 taps) | - | 0 | 0 | ESTIMATED (same laser cut) |
+| Harness: 2x JST SH 4-pin 150 mm leads | 2 | 4 | 3 | ESTIMATED |
+| **Dual-fan adder** | | **+49** | **+41** | |
+| **V6 + dual fans vs V6 passive** | | **+49** | **+41** | |
+| **V6 + dual fans vs baseline** | | **+194** | **+127** | (excludes BCR-10 board parts: 2x TPS2553, 2x TMP1075, J4B, ~$6 ESTIMATED) |
+
+## Phase 10 decisions
+- Fan pick FINAL: Orion OD4010-05HB10A (standard, 5 V) with gaskets + washable filters; no 12 V Sanyo. Costs above unchanged (IP option not assumed).
+- OPTIONAL later change: swap to an IP/sealed-rated fan (Orion IP option, advertised not certified) if salt-air life demands it; ESTIMATED +$5-10 per fan, same 40x40x10.5 envelope and pinout.
+- TODO: EXL1 fin height / base / fin thickness stay ASSUMED (8.0 / 2.0 / 1.0 mm) until the ATS drawing or a sample is obtained.

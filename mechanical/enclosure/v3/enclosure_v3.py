@@ -1,3 +1,4 @@
+
 """Blackstart enclosure v3 (CadQuery, parametric). Ethan's 2026-10-25 hard constraints:
 front slide-in self-contained unit, rear clamps only, bezel+shell joined, SLS PA12 shell, rear-facing RJ45/USB-C,
 no fan, CM5->bezel heat path, on-demand fabrication only, 12 x 24 mm caps, one switch per key.
@@ -22,7 +23,10 @@ PCB_HOLES = [(FP[h]["x"], FP[h]["y"]) for h in ("H1", "H2", "H3")]
 PE = (FP["H4"]["x"], FP["H4"]["y"])
 # ---------------- parameters (INFERRED design choices) ----------------
 WIN_GAP = 0.5            # glass edge -> window wall per side
-LEDGE_Z, LEDGE_W = 9.5, 4.0
+# PHASE 6 (Ethan, Oct 25): glass FLUSH with the PA12 ring face. The display moves 4 mm forward (DZ) into the ring opening.
+DZ = -4.0                # = -(RING_GAP + RING_T); glass front at Z -3.95 (flush with ring face at -4.0, 0.05 nominal tape allowance)
+SLEEVE = 1.5             # PA12 ring sleeve between glass edge and metal window (thermal break), 0.5 silicone bead gap to glass
+LEDGE_Z, LEDGE_W = 9.5 + DZ, 4.0
 FIELD_T = 4.0            # bezel field
 CAP_W, CAP_H, GUIDE_L, GUIDE_CLR = 24.0, 12.0, 8.0, 0.10
 HEAD_OVER, HEAD_T, HEAD_GAP = 1.0, 1.0, 1.3
@@ -65,8 +69,18 @@ FIN_PLATE = (16.0, 1.0, 258.0, 178.0)             # inside the terminal wiring w
 REAR_OPEN = (20.0, 4.0, 255.0, 176.0)             # PA12 rear wall opening under the plate
 PILLAR = (210.0, 8.0, 250.0, 36.0)                # 6061 block heat bar -> fin plate
 PORT_CLEAR = (196.0, 30.0, 256.0, 75.0)           # no fins around J10/J11 plugs
+# PHASE 9 (Ethan GO, Oct 25): V6 = flat 4.75 mm 6061 plate + ATS-EXL1 strip + two 40 mm sealed fans (push-pull)
+EXL1_W, EXL1_H, EXL1_N, EXL1_L = 100.76, 10.0, 40, 177.0   # MEASURED ATS R15_0121 (W, H, fin count); 177 cut from the 254 stick
+EXL1_BASE, EXL1_FT = 2.0, 1.0                     # ASSUMED (base thickness / fin thickness not given in R15_0121); fin height = 10 - 2 = 8 mm
+STRIP_X0 = FIN_PLATE[2] - EXL1_W                  # strip right edge flush with the plate edge, over the CM5 pillar (210-250)
+STRIP_Y0 = FIN_PLATE[1]
+STRIP_PAD = 0.5                                   # gap pad plate -> strip base (0.5 mm, ESTIMATED)
+STRIP_SCREWS = [(STRIP_X0 + 6, STRIP_Y0 + 6), (STRIP_X0 + EXL1_W - 6, STRIP_Y0 + 6), (STRIP_X0 + 6, STRIP_Y0 + EXL1_L - 6), (STRIP_X0 + EXL1_W - 6, STRIP_Y0 + EXL1_L - 6)]
+FAN_S, FAN_T, FAN_HOLE, FAN_PITCH = 40.0, 10.5, 38.0, 32.0   # Orion OD4010 envelope 40 x 40 x 10.5 (MEASURED datasheet), M3 holes on 32 mm
+FAN_GASKET, FILTER_T = 1.0, 4.0                   # closed-cell gasket under each fan; washable foam filter in a PA12 snap cover
+FANS = {"fan_exhaust": (128.0, 26.0), "fan_intake": (128.0, 152.0)}   # centres (x, y) on the plate outer face; push-pull in series
 # ambient light sensor (BCR-8): window centre in the cover-glass frame
-ALS = (11.0, -9.25); ALS_D, ALS_BORE = 4.0, 4.2
+ALS = (138.18, -9.25); ALS_D, ALS_BORE = 4.0, 4.2   # phase 5: moved to SW11-SW12 gap centre (was 11.0)
 ALS_Z_TOP = Z_PCB - 1.0                           # light-pipe rear face; sensor on PCB F side, <=0.7 mm tall + 0.3 gap
 
 def box(x0, y0, x1, y1, z0, z1):
@@ -90,6 +104,7 @@ def bezel():
     rim = box(BZ0[0], BZ0[1], BZ1[0], BZ1[1], FIELD_T - 0.01, RIM_Z).cut(
         box(BZ0[0] + RIM_W, BZ0[1] + RIM_W, BZ1[0] - RIM_W, BZ1[1] - RIM_W, 0, 20))
     b = b.union(rim)
+    b = b.cut(box(W0 - SLEEVE, H0 - SLEEVE, W1 + SLEEVE, H1 + SLEEVE, -1, LEDGE_Z - 0.5))   # window + ring sleeve pocket
     b = b.cut(box(W0, H0, W1, H1, -1, LEDGE_Z))
     b = b.cut(box(W0 + LEDGE_W, H0 + LEDGE_W, W1 - LEDGE_W, H1 - LEDGE_W, -1, 30))
     b = b.cut(box(20.0, H1 - 31, 256.5, H1 + 0.01, LEDGE_Z - 0.01, 30))          # source-PCB band relief
@@ -101,10 +116,14 @@ def bezel():
     b = b.cut(cyl(*ALS, ALS_BORE, -1, 30))                                        # ALS light-pipe bore
     for (x, y) in PCB_HOLES + [PE]: b = b.cut(cyl(x, y, 3.3, 3.0, Z_PCB + 3))
     for x in (256.0, 271.0): b = b.cut(cyl(x, (BOSS[1] + BOSS[3]) / 2, 3.3, Z_HB0 - 10, Z_HB0 + 0.1))  # heat-bar M4 taps
+    # PHASE 9 compliance fix: display-tray rim (earthed Al) came within 1.52 mm of the J28/J29 THT lead tips
+    # (basic 5.5 mm required). Trim the rim rear edge to Z <= HV_RIM_Z over y 10..115 (left side only).
+    b = b.cut(box(BX0 - 6.0, 10.0, 12.0, 115.0, HV_RIM_Z, Z_PCB))
     return b
 
 def display():
-    return box(0, 0, GLASS_W, GLASS_H, 0.05, 0.05 + CTP_TFT).union(box(*SRC_BAND, 0.05 + CTP_TFT, 0.05 + MOD_D))
+    z = 0.05 + DZ
+    return box(0, 0, GLASS_W, GLASS_H, z, z + CTP_TFT).union(box(*SRC_BAND, z + CTP_TFT, z + MOD_D))
 
 def keys():
     caps, memb, nibs = [], [], []
@@ -206,23 +225,71 @@ def clamps(t=PANEL_T):
 
 def front_ring():
     r = box(BZ0[0], BZ0[1], BZ1[0], BZ1[1], -RING_GAP - RING_T, -RING_GAP).cut(box(W0, H0, W1, H1, -10, 1))
+    r = r.union(box(W0 - SLEEVE + 0.2, H0 - SLEEVE + 0.2, W1 + SLEEVE - 0.2, H1 + SLEEVE - 0.2, -RING_GAP - 0.01, LEDGE_Z - 1.0).cut(box(W0, H0, W1, H1, -10, 30)))   # sleeve
     for _, x, y in KEYS:
         r = r.cut(box(x - CAP_W / 2 - HEAD_OVER - 0.4, y - CAP_H / 2 - HEAD_OVER - 0.4, x + CAP_W / 2 + HEAD_OVER + 0.4, y + CAP_H / 2 + HEAD_OVER + 0.4, -10, 1))
     r = r.cut(cyl(*ALS, ALS_BORE, -10, 1))
     for (x, y) in JOINT_SCREWS[:6]: r = r.union(cyl(x, y - 6 if y < 0 else y + 6, 5.0, -RING_GAP - 0.01, 0))   # PA12 stand-off pips (thermal break)
     return r
 def fin_plate():
+    """V6: flat 4.75 mm 6061 plate (laser cut) closing the PA12 rear opening; fan holes; strip screw holes."""
     f = box(*FIN_PLATE, SHELL_DEPTH, SHELL_DEPTH + FP_T)
-    x = FIN_PLATE[0] + 4
-    while x + FIN_T <= FIN_PLATE[2] - 4:
-        f = f.union(box(x, FIN_PLATE[1] + 2, x + FIN_T, FIN_PLATE[3] - 2, SHELL_DEPTH + FP_T, SHELL_DEPTH + FP_T + FIN_H)); x += FIN_PITCH
-    f = f.cut(box(*PORT_CLEAR, SHELL_DEPTH + FP_T, 200))
     for (cx, cy, w, h, zt) in REAR_PORTS.values():
         f = f.cut(box(cx - w / 2 - TUN_WALL - 0.5, cy - h / 2 - TUN_WALL - 0.5, cx + w / 2 + TUN_WALL + 0.5, cy + h / 2 + TUN_WALL + 0.5, 0, 200))
     for (x, y) in SHELL_POSTS: f = f.cut(cyl(x, y, 4.5, 0, 200))
+    for (x, y) in FANS.values():
+        f = f.cut(cyl(x, y, FAN_HOLE, 0, 200))
+        for dx in (-1, 1):
+            for dy in (-1, 1): f = f.cut(cyl(x + dx * FAN_PITCH / 2, y + dy * FAN_PITCH / 2, 2.5, 0, 200))   # M3 tapping 2.5
+    for (x, y) in STRIP_SCREWS: f = f.cut(cyl(x, y, 2.5, 0, 200))
     return f
+def exl1_strip():
+    z0 = SHELL_DEPTH + FP_T + STRIP_PAD
+    st = box(STRIP_X0, STRIP_Y0, STRIP_X0 + EXL1_W, STRIP_Y0 + EXL1_L, z0, z0 + EXL1_BASE)
+    pitch = (EXL1_W - EXL1_FT) / (EXL1_N - 1)
+    for i in range(EXL1_N):
+        x = STRIP_X0 + i * pitch
+        st = st.union(box(x, STRIP_Y0, x + EXL1_FT, STRIP_Y0 + EXL1_L, z0 + EXL1_BASE, z0 + EXL1_H))
+    for (cx, cy, w, h, zt) in REAR_PORTS.values():       # notch around the J10/J11 tunnels and plugs
+        st = st.cut(box(cx - w / 2 - TUN_WALL - 1.0, cy - h / 2 - TUN_WALL - 1.0, cx + w / 2 + TUN_WALL + 1.0, cy + h / 2 + TUN_WALL + 1.0, 0, 200))
+    st = st.cut(box(*PORT_CLEAR, 0, 200))
+    for (x, y) in STRIP_SCREWS: st = st.cut(cyl(x, y, 6.0, z0 + EXL1_BASE, 200)).cut(cyl(x, y, 3.4, 0, 200))   # fins milled away at the 4 screws
+    return st
+def strip_pad():
+    z0 = SHELL_DEPTH + FP_T
+    p = box(STRIP_X0 + 2, STRIP_Y0 + 2, STRIP_X0 + EXL1_W - 2, STRIP_Y0 + 40, z0, z0 + STRIP_PAD)   # pad over the pillar zone
+    for (cx, cy, w, h, zt) in REAR_PORTS.values():
+        p = p.cut(box(cx - w / 2 - TUN_WALL - 1.0, cy - h / 2 - TUN_WALL - 1.0, cx + w / 2 + TUN_WALL + 1.0, cy + h / 2 + TUN_WALL + 1.0, 0, 200))
+    return p.cut(box(*PORT_CLEAR, 0, 200))
+def fans():
+    """two 40 x 40 x 10.5 fans on gaskets on the plate outer face, PA12 filter covers (washable foam) over each."""
+    z0 = SHELL_DEPTH + FP_T
+    fl, gk, cv, sc = [], [], [], []
+    for (x, y) in FANS.values():
+        h = FAN_S / 2
+        gk.append(box(x - h, y - h, x + h, y + h, z0, z0 + FAN_GASKET).cut(cyl(x, y, FAN_HOLE, 0, 200)))
+        fr = box(x - h, y - h, x + h, y + h, z0 + FAN_GASKET, z0 + FAN_GASKET + FAN_T).cut(cyl(x, y, 38.5, 0, 200)).union(cyl(x, y, 18, z0 + FAN_GASKET + 1, z0 + FAN_GASKET + FAN_T - 1))
+        zc = z0 + FAN_GASKET + FAN_T
+        c = box(x - h - 2, y - h - 2, x + h + 2, y + h + 2, zc, zc + FILTER_T).cut(box(x - h + 1, y - h + 1, x + h - 1, y + h - 1, zc - 1, zc + FILTER_T - 1.2))
+        for i in range(-3, 4): c = c.cut(box(x - 17, y + i * 5 - 1.5, x + 17, y + i * 5 + 1.5, zc + FILTER_T - 1.5, zc + FILTER_T + 1))   # grille slots
+        for dx in (-1, 1):
+            for dy in (-1, 1):
+                pc = cyl(x + dx * FAN_PITCH / 2, y + dy * FAN_PITCH / 2, 3.0, z0 - 3, zc + FILTER_T - 1.2)
+                fr = fr.cut(pc); c = c.cut(pc); gk[-1] = gk[-1].cut(pc); sc.append(pc)
+        fl.append(fr); cv.append(c)
+    return U(fl), U(gk), U(cv), U(sc)
 def heat_pillar():
     return box(*PILLAR, Z_HB1, SHELL_DEPTH)
+HV_RIM_Z = 7.0                                     # phase 9: rim trimmed to Z 7.0 in the HV zone
+HV_SHEET_T = 0.43                                  # RECOMMENDED: Formex GK-17 class PP film 0.43 mm (>=0.4 mm per compliance 5a); ESTIMATED material
+def hv_sheet():
+    z = 0.05 + DZ + CTP_TFT                      # TFT rear face
+    return box(-0.5, 0.5, 75.0, SRC_BAND[1] - 1.0, z, z + HV_SHEET_T)
+def hv_leads(lead=2.0):
+    """J28/J29/J30 THT lead tips protruding from PCB F face (INFERRED 2.0 mm untrimmed, 1.0 trimmed)."""
+    import json as _j
+    P = _j.load(open(os.path.join(HERE, "hv_pads.json")))
+    return U([cyl(x, y, 1.0, Z_PCB - lead, Z_PCB) for r in ("J28", "J29") for (num, x, y, d, net) in P[r]["pads"] if num])
 def light_pipe():
     return cyl(*ALS, ALS_D, -RING_GAP - RING_T, ALS_Z_TOP)
 
@@ -234,7 +301,7 @@ def plug_envelopes():
     return a.union(b)
 
 def build():
-    caps, memb, nibs = keys(); cb, cs = clamps()
+    caps, memb, nibs = keys(); cb, cs = clamps(); fn, fg, fc, fs = fans()
     return {"bezel": (bezel(), (0.15, 0.15, 0.17)), "display": (display(), (0.05, 0.1, 0.3)),
             "key_caps": (caps, (0.6, 0.85, 1.0)), "key_membrane": (memb, (0.9, 0.9, 0.85)), "key_nibs": (nibs, (1, 1, 0.7)),
             "switches": (switches(), (0.3, 0.3, 0.3)), "pcb": (pcb(), (0.1, 0.5, 0.15)), "rear_parts": (rear_parts(), (0.2, 0.3, 0.6)),
@@ -242,17 +309,49 @@ def build():
             "gasket": (gasket(), (0.9, 0.3, 0.1)), "customer_panel": (customer_panel(), (0.7, 0.7, 0.7)),
             "rear_shell": (rear_shell(), (0.45, 0.45, 0.42)), "clamps": (cb, (0.75, 0.6, 0.2)), "clamp_screws": (cs, (0.85, 0.85, 0.9)),
             "front_ring": (front_ring(), (0.55, 0.55, 0.52)), "fin_plate": (fin_plate(), (0.75, 0.75, 0.78)),
-            "heat_pillar": (heat_pillar(), (0.8, 0.55, 0.25)), "light_pipe": (light_pipe(), (0.9, 0.95, 1.0))}
+            "heat_pillar": (heat_pillar(), (0.8, 0.55, 0.25)), "light_pipe": (light_pipe(), (0.9, 0.95, 1.0)),
+            "exl1_strip": (exl1_strip(), (0.8, 0.8, 0.85)), "strip_pad": (strip_pad(), (0.9, 0.3, 0.6)),
+            "fans": (fn, (0.1, 0.1, 0.1)), "fan_gaskets": (fg, (0.3, 0.3, 0.3)), "filter_covers": (fc, (0.4, 0.45, 0.42)), "fan_screws": (fs, (0.85, 0.85, 0.9)),
+            "hv_sheet": (hv_sheet(), (0.95, 0.85, 0.3))}
 
 def vol(a, b):
     try: return a.intersect(b).val().Volume()
     except Exception: return 0.0
 
+def dist(a, b):
+    return round(a.val().distance(b.val()), 2) if hasattr(a.val(), "distance") else None
+def hv_checks(parts):
+    """phase 9 compliance: 3D clearances from J28/J29 hot metal to display, bezel (earthed), clamp metal, joint screws."""
+    out = {}
+    for lead in (2.0, 1.0):
+        L = hv_leads(lead)
+        out[f"lead_tips_{lead}mm_to_display_rear"] = dist(L, parts["display"][0])
+        out[f"lead_tips_{lead}mm_to_hv_sheet_surface"] = dist(L, parts["hv_sheet"][0])
+        out[f"lead_tips_{lead}mm_to_bezel_metal (earthed, basic 5.5)"] = dist(L, parts["bezel"][0])
+        out[f"lead_tips_{lead}mm_to_heat_pillar/plate"] = dist(L, parts["fin_plate"][0])
+    # plug envelopes J28/J29 (conservative: whole plug body treated as hot)
+    pl = U([box(max(FP[r]["bbox"][0], BX0), FP[r]["bbox"][1], FP[r]["bbox"][2], FP[r]["bbox"][3], ZR, ZR + 18.0) for r in ("J28", "J29")])
+    ins = U([cyl(SX0 - 8, p, 5.6, CL_Z0, CL_Z1) for (p, sd) in CLAMPS if sd == "L"])   # M4 heat-set insert OD ~5.6 ESTIMATED
+    out["J28J29_plug_envelope_to_left_clamp_screw (reinforced 8.0)"] = dist(pl, U([cyl(SX0 - 8, p, 4.0, Z_PANEL, CL_Z1 + 3) for (p, sd) in CLAMPS if sd == "L"]))
+    out["J28J29_plug_envelope_to_left_clamp_insert (reinforced 8.0)"] = dist(pl, ins)
+    out["J28J29_pads_to_left_clamp_insert"] = dist(hv_leads(0.01).translate((0, 0, PCB_T + 0.01)), ins)
+    js = U([cyl(x, y, 4.0, FIELD_T - 6, FIELD_T + FL_T) for (x, y) in JOINT_SCREWS])
+    out["J28J29_plug_envelope_to_joint_screws (earthed, basic 5.5)"] = dist(pl, js)
+    # left shell wall solid y 15..105 (phase 9 condition (c)/(d))
+    sh = parts["rear_shell"][0]
+    zone = box(SX0, 15.0, SX0 + WALL, 105.0, Z_PANEL, SHELL_DEPTH)
+    v_full = (WALL * 90.0 * (SHELL_DEPTH - Z_PANEL))
+    out["left_wall_y15_105_solid_fraction (1.0 = no openings)"] = round(vol(sh, zone) / v_full, 4)
+    out["left_wall_thickness_mm"] = WALL
+    out["left_wall_inner_face_to_J28J29_pad_column_x4.215"] = round(4.215 - (SX0 + WALL), 2)
+    out["left_wall_inner_face_to_J28J29_plug_body"] = round(max(FP["J28"]["bbox"][0], BX0) - (SX0 + WALL), 2)
+    return out
 def checks(parts):
     res = {}
     names = list(parts)
     allowed = {("pcb", "rear_parts"), ("pcb", "switches"), ("heat_bar", "thermal_pads"), ("bezel", "thermal_pads"),
-               ("clamps", "rear_shell"), ("clamp_screws", "customer_panel"), ("heat_bar", "heat_pillar")}
+               ("clamps", "rear_shell"), ("clamp_screws", "customer_panel"), ("heat_bar", "heat_pillar"),
+               ("fan_screws", "fin_plate"), ("fan_screws", "fans"), ("fan_screws", "fan_gaskets"), ("fan_screws", "filter_covers"), ("display", "hv_sheet")}
     for a, b in itertools.combinations(names, 2):
         if (a, b) in allowed or (b, a) in allowed: continue
         if "customer_panel" in (a, b) and "gasket" in (a, b): continue
@@ -261,9 +360,9 @@ def checks(parts):
     pe = plug_envelopes()
     res["plug_envelopes&rear_shell"] = round(vol(pe, parts["rear_shell"][0]), 3)
     # clearances (positive = gap), computed from parameters
-    clr = {"display_rear_to_PCB_front_airgap": round(Z_PCB - 0.05 - MOD_D, 2),
+    clr = {
            "nib_to_plunger_free_gap": 0.1,
-           "glass_front_vs_bezel_face (neg = recessed)": -0.05,
+           "glass_front_vs_ring_face (neg = behind)": -0.05, "glass_edge_to_ring_sleeve (silicone bead)": WIN_GAP, "sleeve_to_metal_window_gap": 0.2,
            "CM5_top_to_heatbar (pad)": PAD_T,
            "rear_parts_tallest_to_shell_inner_rear": round(SHELL_DEPTH - WALL - (ZR + 18.0), 2),
            "J10_mouth_depth_below_rear_face (tunnel)": round(SHELL_DEPTH - (ZR + H['J10']), 2),
@@ -272,11 +371,15 @@ def checks(parts):
            "J11_tunnel_clearance_per_side_to_USBC_overmold_x_y (13.0x7.4)": [round((16.0 - 13.0) / 2, 2), round((10.0 - 7.4) / 2, 2)],
            "clamp_screw_reach_panel_range_mm": [PANEL_MIN, PANEL_MAX],
            "shell_to_cutout_per_side": CUT_GAP,
-           "ALS_pipe_to_nearest_cap_edge": round(KEYS[0][1] - CAP_W / 2 - (ALS[0] + ALS_D / 2), 2),
+           "ALS_pipe_to_nearest_cap_edge": round(min(abs(ALS[0] - x) for _, x, _ in KEYS) - CAP_W / 2 - ALS_D / 2, 2),
            "ALS_centre_to_glass_top_edge": round(-ALS[1], 2),
            "ALS_centre_to_active_area_top_left_corner (7.32, 8.03)": round(((ALS[0] - 7.32) ** 2 + (ALS[1] - 8.03) ** 2) ** 0.5, 2),
            "ALS_pipe_rear_face_to_PCB_F": round(Z_PCB - ALS_Z_TOP, 2),
-           "fin_plate_total_depth_behind_bezel_face": SHELL_DEPTH + FP_T + FIN_H}
+           "V6_strip_rear_face_Z": SHELL_DEPTH + FP_T + STRIP_PAD + EXL1_H,
+           "fan_filter_cover_rear_face_Z (total depth behind ring face = this + 4.0)": SHELL_DEPTH + FP_T + FAN_GASKET + FAN_T + FILTER_T,
+           "display_rear_to_PCB_front_airgap_TFT_area (x<75 HV zone)": round(Z_PCB - (0.05 + DZ + CTP_TFT), 2),
+           "display_rear_to_PCB_front_airgap_source_band (min)": round(Z_PCB - 0.05 - DZ - MOD_D, 2)}
+    clr["HV"] = hv_checks(parts)
     # clamp test at panel extremes: clamps must not hit the panel; panel must not hit shell
     for t in (PANEL_MIN, PANEL_MAX):
         cp = customer_panel(t)

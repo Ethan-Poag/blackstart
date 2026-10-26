@@ -1,0 +1,275 @@
+{
+"J28": {
+"side": "B.Cu",
+"val": "J7 GEN voltage (L1 L2 L3 N)",
+"fp": "PhoenixContact_PC5_4-GF-7.62_1720819",
+"pads": [
+[
+"",
+-0.415,
+54.305,
+3.2,
+""
+],
+[
+"",
+-0.415,
+15.325,
+3.2,
+""
+],
+[
+"1",
+4.215,
+46.245,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_L1"
+],
+[
+"1",
+6.755,
+46.245,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_L1"
+],
+[
+"1",
+10.005,
+46.245,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_L1"
+],
+[
+"2",
+4.215,
+38.625,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_L2"
+],
+[
+"2",
+6.755,
+38.625,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_L2"
+],
+[
+"2",
+10.005,
+38.625,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_L2"
+],
+[
+"3",
+4.215,
+31.005,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_L3"
+],
+[
+"3",
+6.755,
+31.005,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_L3"
+],
+[
+"3",
+10.005,
+31.005,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_L3"
+],
+[
+"4",
+4.215,
+23.385,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_N"
+],
+[
+"4",
+6.755,
+23.385,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_N"
+],
+[
+"4",
+10.005,
+23.385,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/GEN_N"
+]
+]
+},
+"J29": {
+"side": "B.Cu",
+"val": "J8 BUS voltage (L1 L2 L3 N)",
+"fp": "PhoenixContact_PC5_4-GF-7.62_1720819",
+"pads": [
+[
+"",
+-0.415,
+104.123,
+3.2,
+""
+],
+[
+"",
+-0.415,
+65.142,
+3.2,
+""
+],
+[
+"1",
+4.215,
+96.062,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_L1"
+],
+[
+"1",
+6.755,
+96.062,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_L1"
+],
+[
+"1",
+10.005,
+96.062,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_L1"
+],
+[
+"2",
+4.215,
+88.442,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_L2"
+],
+[
+"2",
+6.755,
+88.442,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_L2"
+],
+[
+"2",
+10.005,
+88.442,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_L2"
+],
+[
+"3",
+4.215,
+80.823,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_L3"
+],
+[
+"3",
+6.755,
+80.823,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_L3"
+],
+[
+"3",
+10.005,
+80.823,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_L3"
+],
+[
+"4",
+4.215,
+73.203,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_N"
+],
+[
+"4",
+6.755,
+73.203,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_N"
+],
+[
+"4",
+10.005,
+73.203,
+2.0,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/BUS_N"
+]
+]
+},
+"J30": {
+"side": "B.Cu",
+"val": "J9 CT secondaries (5A)",
+"fp": "KF2EDGRM-5.08-8P",
+"pads": [
+[
+"1",
+7.79,
+154.08,
+2.5,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/CT1_S1"
+],
+[
+"2",
+7.79,
+149.0,
+2.5,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/CT1_S2"
+],
+[
+"3",
+7.79,
+143.92,
+2.5,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/CT2_S1"
+],
+[
+"4",
+7.79,
+138.84,
+2.5,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/CT2_S2"
+],
+[
+"5",
+7.79,
+133.76,
+2.5,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/CT3_S1"
+],
+[
+"6",
+7.79,
+128.68,
+2.5,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/CT3_S2"
+],
+[
+"7",
+7.79,
+123.6,
+2.5,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/CT4_S1"
+],
+[
+"8",
+7.79,
+118.52,
+2.5,
+"/AC metering: 2x ADE9000 (gen + bus), isolated/CT4_S2"
+]
+]
+}
+}
