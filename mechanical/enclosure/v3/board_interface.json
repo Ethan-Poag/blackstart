@@ -8,7 +8,7 @@
   194.755
  ],
  "board_outline": "284.0 x 210.0 rect, R2 corners, x -3.72..280.28, y -15.27..194.73 (MEASURED)",
- "internal_slots": "6 isolation slots 1.5 wide, x 3.465..10.755 (incl. R0.75 ends) at y centres 27.195, 34.815, 42.435, 77.0125, 84.6325, 92.2525 (MEASURED) - HV barrier slots, not notches",
+ "internal_slots": "6 isolation slots 2.0 wide x 11.5 long, rectangular, x 2.0..13.5 at y centres 27.195, 34.815, 42.435, 77.013, 84.6325, 92.252 (MEASURED on m7-wip board) - HV barrier slots, not notches",
  "rule_areas": {
   "CM5_UNDER": [
    203,
