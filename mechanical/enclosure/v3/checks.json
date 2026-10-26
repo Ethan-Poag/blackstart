@@ -209,6 +209,46 @@
      "pass_8.0": true
     }
    },
+   "ground_stud_to_live_mm (rule 38.0)": {
+    "stud_M4x30_A2_hex_bolt": {
+     "to_live_copper": 96.19,
+     "nearest": "RV1 GEN_N",
+     "to_J28J29_plug": 127.92,
+     "to_J30_plug(old model)": 182.29
+    },
+    "strap_0p5x6_tinned_Cu": {
+     "to_live_copper": 95.1,
+     "nearest": "RV1 GEN_N",
+     "to_J28J29_plug": 127.9,
+     "to_J30_plug(old model)": 180.59
+    },
+    "landing_screw_M3": {
+     "to_live_copper": 95.48,
+     "nearest": "RV1 GEN_N",
+     "to_J28J29_plug": 128.65,
+     "to_J30_plug(old model)": 182.02
+    },
+    "outer_washer_nut": {
+     "to_live_copper": 98.56,
+     "nearest": "RV1 GEN_N",
+     "to_J28J29_plug": 129.1,
+     "to_J30_plug(old model)": 187.35
+    },
+    "ring_terminal_envelope": {
+     "to_live_copper": 99.51,
+     "nearest": "RV1 GEN_N",
+     "to_J28J29_plug": 129.41,
+     "to_J30_plug(old model)": 189.66
+    },
+    "installer_washer_nut": {
+     "to_live_copper": 101.19,
+     "nearest": "RV1 GEN_N",
+     "to_J28J29_plug": 130.86,
+     "to_J30_plug(old model)": 191.45
+    },
+    "min": 95.1,
+    "pass_38.0": true
+   },
    "J30_surface_path_to_left_clamp_insert_MODELLED (reinforced 12.6)": 26.69,
    "J30_surface_path_legs [wire-insulation leg, rim, rear face, outer wall, clamp top]": [
     11.49,
@@ -229,7 +269,7 @@
   "insertion: shell bbox vs cutout per side (min gap, must be >0)": 1.0
  },
  "volumes_cm3": {
-  "bezel": 231.5,
+  "bezel": 231.7,
   "display": 451.3,
   "key_caps": 36.5,
   "key_membrane": 7.0,
@@ -241,7 +281,7 @@
   "thermal_pads": 1.4,
   "gasket": 12.8,
   "customer_panel": 151.1,
-  "rear_shell": 206.6,
+  "rear_shell": 206.5,
   "clamps": 20.6,
   "clamp_screws": 3.4,
   "front_ring": 99.7,
@@ -258,7 +298,9 @@
   "cover_gaskets": 7.2,
   "grommets": 8.4,
   "tunnel_seals": 0.2,
-  "bond_hw": 1.0
+  "bond_hw": 1.0,
+  "ground_stud": 1.6,
+  "ground_stud_gasket": 0.2
  },
  "bbox": {
   "bezel": [
@@ -410,6 +452,16 @@
    162.1,
    20.2,
    39.0
+  ],
+  "ground_stud": [
+   11.0,
+   29.5,
+   47.0
+  ],
+  "ground_stud_gasket": [
+   12.0,
+   1.5,
+   12.0
   ]
  },
  "shell_outer_WxH": [

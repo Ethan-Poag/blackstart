@@ -26,7 +26,7 @@
     "ref": "J30",
     "net": "CT3_S1"
    },
-   "finger_positions_entering": 5931,
+   "finger_positions_entering": 6524,
    "touches_plug_body": [
     "J28",
     "J29",
@@ -173,16 +173,16 @@
    "result": "PASS"
   },
   "J10_port_tunnel": {
-   "min_dist_to_live_copper_mm": 13.98,
+   "min_dist_to_live_copper_mm": 13.96,
    "entry_xy": [
     217.0,
-    48.07
+    47.07
    ],
    "direction": "normal",
    "penetration_mm": 13.5,
    "tip_xyz": [
     217.0,
-    48.07,
+    47.07,
     34.5
    ],
    "stopped_by": "rear_parts",

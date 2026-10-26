@@ -206,3 +206,25 @@ Rolled-up (ESTIMATED). Delta vs the CNC baseline = Phase 9 V6 + dual fans plus t
 | Rolled-up unit total, before (baseline $660 / $390 + delta) | 932.8 | 560.1 |
 | **Rolled-up unit total, after** | **920.1** | **553.55** |
 These totals exclude the PCB, display, CM5, shipping and tax (as above), the BCR-10 board parts (~$6) and the J30 Phoenix connector (no quote). Earlier phase sections are left unchanged for history; their PE, nylon, lip, latch and label lines are superseded by this table.
+
+## Phase 20: primary ground stud (USD per unit, qty 1 / qty 10, ESTIMATED; no quotes)
+| item | qty | qty 1 | qty 10 | label |
+|---|---|---|---|---|
+| M4x30 A2 hex bolt (stud) | 1 | +0.3 | +0.15 | ESTIMATED |
+| A2 M4 nuts x2, washers x2, internal-tooth washer x1 | 1 set | +0.4 | +0.2 | ESTIMATED |
+| EPDM gasket washer 12x12x1.5 | 1 | +0.3 | +0.15 | ESTIMATED |
+| Tinned-Cu strap 0.5x6, ~30 mm | 1 | +1.0 | +0.5 | ESTIMATED |
+| M3 A2 landing screw + tooth washer | 1 | +0.2 | +0.1 | ESTIMATED |
+| Bezel landing boss + M3 tap (same CNC setup) | 1 | +2.5 | +1.0 | ESTIMATED |
+| Anodise mask-off, landing spot | 1 | +3.0 | +1.0 | ESTIMATED (same per-spot rate) |
+| M4 ring terminal 1.5-2.5 mm² (blue), supplied loose | 1 | +0.15 | +0.1 | ESTIMATED (phase 14 price) |
+| Ground-symbol printed sticker | 1 | +0.3 | +0.15 | ESTIMATED |
+| Ø4.5 wall hole (in the SLS geometry) | - | 0 | 0 | ESTIMATED |
+| **Phase 20 delta** | | **+8.15** | **+3.35** | ESTIMATED |
+
+| | qty 1 | qty 10 |
+|---|---|---|
+| Delta vs baseline, after Phase 19 (928bbe8) | +260.1 | +163.55 |
+| **Delta vs baseline, after Phase 20** | **+268.25** | **+166.9** |
+| Rolled-up unit total, after Phase 19 | 920.1 | 553.55 |
+| **Rolled-up unit total, after Phase 20** | **928.25** | **556.9** |

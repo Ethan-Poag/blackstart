@@ -115,6 +115,7 @@ def bezel():
     for (x, y) in JOINT_SCREWS: b = b.cut(cyl(x, y, 3.3, 0.8, FIELD_T + 0.1))   # blind M4 taps, face intact
     b = b.cut(cyl(*ALS, ALS_BORE, -1, 30))                                        # ALS light-pipe bore
     b = b.union(bond_parts()[0])                                                  # phase 19 bare bond landings
+    b = b.union(ground_stud()[0]).cut(cyl(*GS_XY, 2.5, 3.0, 10.1))                  # phase 20 ground landing + M3 tap
     for (p_, sd_) in BOND_CLAMPS: b = b.cut(cyl(p_ + 20.0, SY0 + WALL + 3.47, 2.5, 3.0, 10.1))   # M3 tap
     for (x, y) in PCB_HOLES: b = b.cut(cyl(x, y, 3.3, 3.0, Z_PCB + 3))
     for x in (256.0, 271.0): b = b.cut(cyl(x, (BOSS[1] + BOSS[3]) / 2, 3.3, Z_HB0 - 10, Z_HB0 + 0.1))  # heat-bar M4 taps
@@ -131,7 +132,7 @@ def keys():
     caps, memb, nibs = [], [], []
     for yc, sg in ((KEYS[0][2], -1), (KEYS[6][2], 1)):   # strip: 1.5 bond land on the outer side, 0.1 on the display-rim side
         a, b = yc - sg * (CAP_H / 2 + 0.1), yc + sg * (CAP_H / 2 + 1.5)
-        memb.append(box(7.0, min(a, b), 267.5, max(a, b), GUIDE_L, GUIDE_L + MEMB_T).cut(box(BOSS[0] - 0.3, BOSS[1] - 1, BOSS[2] + 1, BOSS[3] + 0.3, 0, 30)).cut(cyl(*ALS, 5.0, 0, 30)).cut(U([cyl(q + 20.0, SY0 + WALL + 3.47, 8.0, 0, 30) for (q, _s) in BOND_CLAMPS])))   # notch round heat boss, ALS hole, bond landings
+        memb.append(box(7.0, min(a, b), 267.5, max(a, b), GUIDE_L, GUIDE_L + MEMB_T).cut(box(BOSS[0] - 0.3, BOSS[1] - 1, BOSS[2] + 1, BOSS[3] + 0.3, 0, 30)).cut(cyl(*ALS, 5.0, 0, 30)).cut(U([cyl(q + 20.0, SY0 + WALL + 3.47, 8.0, 0, 30) for (q, _s) in BOND_CLAMPS])).cut(cyl(*GS_XY, 8.0, 0, 30)))   # notch round heat boss, ALS hole, bond landings
     for _, x, y in KEYS:
         c = box(x - CAP_W / 2, y - CAP_H / 2, x + CAP_W / 2, y + CAP_H / 2, -HEAD_GAP, GUIDE_L)
         c = c.union(box(x - CAP_W / 2 - HEAD_OVER, y - CAP_H / 2 - HEAD_OVER, x + CAP_W / 2 + HEAD_OVER, y + CAP_H / 2 + HEAD_OVER, -HEAD_GAP - HEAD_T, -HEAD_GAP))
@@ -203,6 +204,7 @@ def rear_shell():
     for (x, y) in SHELL_POSTS:
         s = s.union(cyl(x, y, 6.0, ZR + 0.3, SHELL_DEPTH - 1))
     if WRAP_LIPS_ON: s = s.cut(lip_grooves())                                # phase 16 lip grooves; OFF since phase 19
+    s = s.cut(box(GS_X - GS_HOLE / 2, SY0 - 1, GS_X + GS_HOLE / 2, SY0 + WALL + 1, GS_Z - GS_HOLE / 2, GS_Z + GS_HOLE / 2))   # phase 20 stud hole (gasket-sealed)
     for (p, sd) in BOND_CLAMPS:                                               # phase 19: d3.4 holes for the bond M3 screws
         s = s.cut(box(p - 6.7, SY0 - 1, p - 3.3, SY0 + WALL + 3.6, BOND_Z - 1.7, BOND_Z + 1.7))
     return s
@@ -411,6 +413,45 @@ def bond_parts():
         BOND_PIECES[f"{sd}{p:g}"] = dict(zip(BOND_NAMES, [head, shank, strap, foot, lscr, ins3, bridge]))
     return U(land), U(met)
 
+# ---- phase 20: PRIMARY earth = M4 ground stud on bare bezel metal, out through a gasketed rear-wall hole ------------------
+# Bezel boss (6061, bare/masked end) at GS_XY carries an A2 M4 stud screwed into its tap. Inside: flanged nut clamps the shell
+# rear wall from below; outside: EPDM gasket washer + A2 washer + nut seal the hole. Installer: ring terminal + washer + nut.
+# No PCB hole, no PCB pad, not via H1-H3. The clamp bond (BOND_CLAMPS) stays as the backup.
+GS_X, GS_Z = 140.0, 30.0                        # stud axis: horizontal (-y) through the TOP side wall at x 140, Z 30
+GS_XY = (GS_X, SY0 + WALL + 3.47)               # bezel landing (y -19.8), between key caps (y <= -16.2) and the inner wall
+GS_HOLE = 4.5
+GS_PIECES = {}
+def ground_stud():
+    """returns (bezel landing, metal parts union, gasket). Pieces in GS_PIECES. y outward = -y."""
+    x, z = GS_X, GS_Z; yo, yi = SY0, SY0 + WALL           # outer / inner wall faces (-26.27 / -23.27)
+    lx, ly = GS_XY
+    land = cyl(lx, ly, 6.0, FIELD_T, 10.0)
+    GS_PIECES.clear()
+    GS_PIECES["stud_M4x30_A2_hex_bolt"] = box(x - 2, yo - 20.0, x + 2, yi, z - 2, z + 2).union(box(x - 3.5, yi + 0.6, x + 3.5, yi + 3.4, z - 3.5, z + 3.5))   # head inside, over strap eye + tooth washer
+    GS_PIECES["strap_0p5x6_tinned_Cu"] = box(x - 3, yi + 0.01, x + 3, yi + 0.6, 10.0, z + 4).union(box(x - 3, yi, x + 3, ly + 3.0, 10.0, 10.5))
+    GS_PIECES["landing_screw_M3"] = cyl(lx, ly, 5.5, 10.5, 12.5)
+    GS_PIECES["outer_washer_nut"] = box(x - 4.5, yo - 2.3, x + 4.5, yo - 1.5, z - 4.5, z + 4.5).union(box(x - 4, yo - 5.5, x + 4, yo - 2.3, z - 4, z + 4))
+    GS_PIECES["ring_terminal_envelope"] = box(x - 5.5, yo - 7.0, x + 5.5, yo - 5.5, z - 5.5, z + 27.0)    # tongue/barrel/wire toward the cabinet rear (+Z)
+    GS_PIECES["installer_washer_nut"] = box(x - 4.5, yo - 7.8, x + 4.5, yo - 7.0, z - 4.5, z + 4.5).union(box(x - 4, yo - 11.0, x + 4, yo - 7.8, z - 4, z + 4))
+    gk = box(x - 6, yo - 1.5, x + 6, yo, z - 6, z + 6).cut(box(x - 2.25, yo - 2, x + 2.25, yo + 1, z - 2.25, z + 2.25))
+    return land, U(list(GS_PIECES.values())), gk
+def ground_stud_distances(pl, pl30):
+    import json as _j, numpy as _np
+    LJ = _j.load(open(os.path.join(HERE, "finger", "hv_copper.json")))["points"]
+    P = _np.array([[q[0], q[1], Z_PCB if q[2] == "F" else ZR, q[3]] for q in LJ])
+    ground_stud(); res = {}
+    for nm, sh in GS_PIECES.items():
+        bb = sh.val().BoundingBox()
+        x0, x1, y0, y1, z0, z1 = bb.xmin, bb.xmax, -bb.ymax, -bb.ymin, -bb.zmax, -bb.zmin
+        dx = _np.maximum(_np.maximum(x0 - P[:, 0], P[:, 0] - x1), 0); dy = _np.maximum(_np.maximum(y0 - P[:, 1], P[:, 1] - y1), 0)
+        dz = _np.maximum(_np.maximum(z0 - P[:, 2], P[:, 2] - z1), 0)
+        d = _np.sqrt(dx*dx + dy*dy + dz*dz) - P[:, 3]; i = int(_np.argmin(d))
+        res[nm] = {"to_live_copper": round(float(d[i]), 2), "nearest": f"{LJ[i][4]} {LJ[i][5]}",
+                   "to_J28J29_plug": dist(sh, pl), "to_J30_plug(old model)": dist(sh, pl30)}
+    res["min"] = min(min(v for v in r.values() if isinstance(v, float)) for r in res.values())
+    res["pass_38.0"] = res["min"] >= 38.0
+    return res
+
 def tunnel_seals():
     """phase 15: closed-cell foam ring closing the 0.5 mm TUN_GAP between each J10/J11 tunnel foot and the jack shell."""
     out = []
@@ -432,7 +473,8 @@ def build():
             "exl1_strip": (exl1_strip(), (0.8, 0.8, 0.85)), "strip_pad": (strip_pad(), (0.9, 0.3, 0.6)),
             "fans": (fn, (0.1, 0.1, 0.1)), "fan_gaskets": (fg, (0.3, 0.3, 0.3)), "filter_covers": (fc, (0.4, 0.45, 0.42)), "fan_screws": (fs, (0.85, 0.85, 0.9)),
             "window_covers": (wc, (0.35, 0.4, 0.5)), "cover_gaskets": (wg, (0.1, 0.1, 0.1)), "grommets": (wm, (0.2, 0.2, 0.2)),
-            "tunnel_seals": (tunnel_seals(), (0.1, 0.1, 0.1)), "bond_hw": (bond_parts()[1], (0.85, 0.6, 0.3))}
+            "tunnel_seals": (tunnel_seals(), (0.1, 0.1, 0.1)), "bond_hw": (bond_parts()[1], (0.85, 0.6, 0.3)),
+            "ground_stud": (ground_stud()[1], (0.2, 0.8, 0.2)), "ground_stud_gasket": (ground_stud()[2], (0.1, 0.1, 0.1))}
 
 def vol(a, b):
     try: return a.intersect(b).val().Volume()
@@ -501,6 +543,7 @@ def hv_checks(parts):
     # phase 19: per-clamp steel M4 x 35 screw + brass insert distances to live metal (rule: >= 8.0 mm clearance)
     out["clamp_metal_to_live_mm (rule 8.0)"] = clamp_metal_distances(pl, pl30)
     out["bond_path_metal_to_live_mm (rule 8.0)"] = bond_distances(pl, pl30)
+    out["ground_stud_to_live_mm (rule 38.0)"] = ground_stud_distances(pl, pl30)
     # J30 creepage, phase 14: surface path (MODELLED, hand-route over CAD surfaces; see CLAMP_RETENTION.md / README phase 14)
     ins118 = [p for (p, sd) in CLAMPS if sd == "L" and FP["J30"]["bbox"][1] - 15 < p < FP["J30"]["bbox"][3] + 15]
     leg1 = ((max(FP["J30"]["bbox"][0], BX0) - (BX0 - 1)) ** 2 + ((SHELL_DEPTH - WALL) - (ZR + 16.0)) ** 2) ** 0.5   # plug top-left edge -> rear-window rim (along field-wire insulation)
@@ -524,7 +567,7 @@ def checks(parts):
     names = list(parts)
     allowed = {("pcb", "rear_parts"), ("pcb", "switches"), ("heat_bar", "thermal_pads"), ("bezel", "thermal_pads"),
                ("clamps", "rear_shell"), ("clamp_screws", "customer_panel"), ("heat_bar", "heat_pillar"),
-               ("fan_screws", "fin_plate"), ("fan_screws", "fans"), ("fan_screws", "fan_gaskets"), ("fan_screws", "filter_covers"), ("bond_hw", "bezel"), ("bond_hw", "clamps"), ("bond_hw", "rear_shell_UNUSED")}
+               ("fan_screws", "fin_plate"), ("fan_screws", "fans"), ("fan_screws", "fan_gaskets"), ("fan_screws", "filter_covers"), ("bond_hw", "bezel"), ("ground_stud", "bezel"), ("ground_stud", "ground_stud_gasket"), ("bond_hw", "clamps"), ("bond_hw", "rear_shell_UNUSED")}
     for a, b in itertools.combinations(names, 2):
         if (a, b) in allowed or (b, a) in allowed: continue
         if "customer_panel" in (a, b) and "gasket" in (a, b): continue

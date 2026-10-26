@@ -162,3 +162,20 @@ Pairwise boolean intersections of all 15 parts (intended contacts excluded: PCB/
 - HV values unchanged: lead tips 1.0 mm to the bezel 8.0 and to the display 10.44; J30 surface path 26.69.
 - Thermal: no relevant geometry changed, so the thermal docs are not updated.
 - Costs: PARTS_COSTED.md "Phase 19".
+
+## Phase 20 (Ethan's decision, Oct 25 2026): primary ground stud + clamp bond kept as backup
+- **Primary earth:** M4 x 30 A2 stud (hex bolt) through a gasketed Ø4.5 hole in the TOP side wall at x 140, Z 30. Inside, a tinned-Cu strap runs from the stud head to a bare (masked) bezel landing at (140, -19.8). See GROUND.md for the geometry, parts and why this location.
+  - No board change; BCR-11 stays withdrawn.
+  - Ground-symbol sticker (IEC 60417-5019 symbol) next to the stud.
+- **Installer notes:**
+  - Primary: Land one green/yellow wire (at least 2.5 mm2) on the stud to panel/cabinet earth.
+  - Backup (clamp bond, unchanged from Phase 19): Mount to a bare-metal panel contact or scrape paint under the clamp tips; check continuity from bezel to panel with a meter (under 1 ohm).
+- **Checks (MODELLED):**
+  - 0 interferences with 1 mm and 6 mm panels.
+  - Left wall y15-105 solid 1.000.
+  - Stud stack minimum to live copper 95.1 mm (rule 38.0).
+  - Clamp bond 38.18 / 54.86 mm (unchanged).
+  - HV values unchanged: lead tips to the bezel 8.0, to the display 10.44.
+  - Finger check: covers on, no entry; covers off, unchanged (LEFT_HV 8.30, TOP 24.25, BOTTOM 31.18, RIGHT 9.89, J10 13.96).
+  - Thermal: geometry near the heat path is unchanged (the stud is 65 mm from the heat bar), so the thermal numbers are unchanged.
+- Costs: PARTS_COSTED.md "Phase 20".

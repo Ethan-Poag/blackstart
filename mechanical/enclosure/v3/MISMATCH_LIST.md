@@ -72,3 +72,8 @@ Inventory checked: geometry.py, PANEL_V2.md, display_mech.md, draw_front_panel.p
 | 48 | CLOSED/REMOVED: wrap lips, beads and grooves removed; the left wall is plain (solid fraction y15-105 = 1.000). |
 | 49 | CLOSED/REMOVED: captive latch screw, tab and boss removed; the J28-J30 cover is snap-only again (3 hooks). |
 | 50 | CLOSED/REMOVED: the probe-B checklist is removed; finger_check.py is kept as an informal CAD sanity check. |
+
+## Phase 20
+| # | Status |
+|---|---|
+| 51 | NEW/CLOSED: a primary earth path is reinstated as an M4 ground stud through the top side wall at x 140, Z 30, strapped to a bare bezel landing at (140, -19.8) (GROUND.md). The old PE_NEW location (12.3, -7.5) is not reused because it needed a PCB hole and sat near HV; the top-right corner is blocked by the heat bar. No board change. The clamp bond is unchanged as the backup. |

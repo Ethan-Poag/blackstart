@@ -68,3 +68,16 @@ P19-6,Anodise mask-off 2 landings + 1 test spot,3 spots,-,-,n/a,,9,3,ESTIMATED,2
 P19-T1,TOTAL Phase 19 net delta,-,-,-,n/a,sum,-12.7,-6.55,ESTIMATED,2026-10-25,no
 P19-T2,TOTAL delta vs baseline after Phase 19 (before 272.8/170.1),-,-,-,n/a,sum,260.1,163.55,ESTIMATED,2026-10-25,no
 P19-T3,ROLLED-UP unit total after Phase 19 (before 932.8/560.1),-,-,-,n/a,sum,920.1,553.55,ESTIMATED,2026-10-25,no
+
+P20-1,M4x30 A2 hex bolt ground stud,1,-,-,n/a,,0.3,0.15,ESTIMATED,2026-10-25,no
+P20-2,A2 M4 nuts x2 + washers x2 + tooth washer,1 set,-,-,n/a,,0.4,0.2,ESTIMATED,2026-10-25,no
+P20-3,EPDM gasket washer 12x12x1.5,1,-,-,n/a,,0.3,0.15,ESTIMATED,2026-10-25,no
+P20-4,Tinned-Cu strap 0.5x6 ~30 mm,1,-,-,n/a,,1.0,0.5,ESTIMATED,2026-10-25,no
+P20-5,M3 A2 landing screw + tooth washer,1,-,-,n/a,,0.2,0.1,ESTIMATED,2026-10-25,no
+P20-6,Bezel ground landing boss + M3 tap,1,-,-,n/a,,2.5,1.0,ESTIMATED,2026-10-25,no
+P20-7,Anodise mask-off ground landing,1,-,-,n/a,,3.0,1.0,ESTIMATED,2026-10-25,no
+P20-8,M4 ring terminal 1.5-2.5 mm2 blue (loose),1,-,-,n/a,,0.15,0.1,ESTIMATED,2026-10-25,no
+P20-9,Ground symbol printed sticker,1,-,-,n/a,,0.3,0.15,ESTIMATED,2026-10-25,no
+P20-T1,TOTAL Phase 20 delta,-,-,-,n/a,sum,8.15,3.35,ESTIMATED,2026-10-25,no
+P20-T2,TOTAL delta vs baseline after Phase 20 (before 260.1/163.55),-,-,-,n/a,sum,268.25,166.9,ESTIMATED,2026-10-25,no
+P20-T3,ROLLED-UP unit total after Phase 20 (before 920.1/553.55),-,-,-,n/a,,928.25,556.9,ESTIMATED,2026-10-25,no
