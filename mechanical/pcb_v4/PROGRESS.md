@@ -262,3 +262,18 @@ Board only on m7-wip. Not fab-ready.
 ## 2026-10-25 ~7:00 PM HST — DSI83_REFCLK vias: kept at 0.15/0.3 (0.2/0.35 does not fit)
 - Trial: enlarging both vias to 0.2/0.35 caused 8 DRC errors (DIFF100 clearance 0.125 mm, hole clearance 0.18 mm, zone clearance 0.176 mm). Reverted; the board is unchanged.
 - My working .kicad_pro had min hole/via 0.2/0.35; I set it to the repo values (0.15/0.30). Both files now agree, so the 4 working-file DRC errors are gone: DRC errors are 0 with either file. The fab note (JLC "smaller via" option) is in README.md.
+
+## 2026-10-25 ~7:15 PM HST — .kicad_dru rule order fixed; four severities back to error
+Rules/project files only; the board is unchanged.
+- **Override bug fixed.** The 5.5 mm line-to-neutral rule used to match every pair of different HV nets. Because it came after the 6.6 mm phase-to-phase rule, KiCad applied 5.5 mm to phase-to-phase pairs too. Now:
+  - the line-to-neutral rule only matches pairs where one net is a neutral (`_N`);
+  - the 6.6 mm phase-to-phase rule comes after it;
+  - no 600 V value was lowered.
+- **New divider rule (warning).** Divider-chain nodes (HV_LINE_DIV) vs line copper, outer layers: 2.5 mm floor. The exact node-voltage requirement stays with hvsheet.py.
+- **Severities back to error:** net_conflict, hole_to_hole, copper_sliver and isolated_copper, in the repo .kicad_pro (my working copy matches).
+- **HV-sheet rules NOT raised to error (flagged).** Test-raised, they gave 379 errors, all false positives, because DRC cannot model slot creepage, chain membership or node voltage:
+  - 199 edge errors: the internal J28/J29 slots counted as board edge;
+  - 111 phase-to-phase: J28/J29 pin pairs across the slots, and the L-L MOV RV5's own pads;
+  - 69 divider: nodes next to their own chain's line.
+  They stay at warning, with the reason written in the file. hvsheet.py stays the arbiter, and it reports 0 pairs.
+- **Result: DRC now shows 63 hole_to_hole errors.** They come from the severity change, not from a board change. They are real DFM items: vias too close to connector THT holes (J26 12, J20 8, J27 8, J21 6, J18 4, J1 4, …). They are on the fix list (DFM hole spacing). Warnings: 1008.
