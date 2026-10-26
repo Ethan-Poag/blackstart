@@ -228,3 +228,22 @@ These totals exclude the PCB, display, CM5, shipping and tax (as above), the BCR
 | **Delta vs baseline, after Phase 20** | **+268.25** | **+166.9** |
 | Rolled-up unit total, after Phase 19 | 920.1 | 553.55 |
 | **Rolled-up unit total, after Phase 20** | **928.25** | **556.9** |
+
+## Phase 21: rear-face stud + metal-to-metal joint, anti-rotation, joint compound (USD per unit, qty 1 / qty 10, ESTIMATED)
+| item | qty | qty 1 | qty 10 | label |
+|---|---|---|---|---|
+| M4x30 -> M4x25 A2 hex bolt | 1 | 0 | 0 | ESTIMATED |
+| A2 M4 nylock inner nut + 2nd internal-tooth washer | 1 set | +0.2 | +0.1 | ESTIMATED |
+| Longer tinned-Cu strap (~30 -> ~120 mm) | 1 | +1.0 | +0.5 | ESTIMATED |
+| PA12 hex-pocket cup boss (in the SLS shell) | 1 | +0.2 | +0.1 | ESTIMATED |
+| Anti-oxidant joint compound, dab on 3 landings + eyes (share of a small tube) | 1 | +0.5 | +0.2 | ESTIMATED |
+| Conversion coat on masked spots (ALTERNATIVE to compound, not in totals) | 3 spots | (+3) | (+1) | ESTIMATED |
+| Bezel test spot: reuse the 928bbe8 spot | - | 0 | 0 | ESTIMATED |
+| **Phase 21 delta** | | **+1.9** | **+0.9** | ESTIMATED |
+
+| | qty 1 | qty 10 |
+|---|---|---|
+| Delta vs baseline, after Phase 20 (47c94e7) | +268.25 | +166.9 |
+| **Delta vs baseline, after Phase 21** | **+270.15** | **+167.8** |
+| Rolled-up unit total, after Phase 20 | 928.25 | 556.9 |
+| **Rolled-up unit total, after Phase 21** | **930.15** | **557.8** |

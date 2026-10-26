@@ -204,7 +204,7 @@ def rear_shell():
     for (x, y) in SHELL_POSTS:
         s = s.union(cyl(x, y, 6.0, ZR + 0.3, SHELL_DEPTH - 1))
     if WRAP_LIPS_ON: s = s.cut(lip_grooves())                                # phase 16 lip grooves; OFF since phase 19
-    s = s.cut(box(GS_X - GS_HOLE / 2, SY0 - 1, GS_X + GS_HOLE / 2, SY0 + WALL + 1, GS_Z - GS_HOLE / 2, GS_Z + GS_HOLE / 2))   # phase 20 stud hole (gasket-sealed)
+    s = s.union(gs_boss()).cut(cyl(GS_X, GS_Y, GS_HOLE, SHELL_DEPTH - WALL - 1, SHELL_DEPTH + 1))   # phase 21 rear stud boss + hole (gasket-sealed)
     for (p, sd) in BOND_CLAMPS:                                               # phase 19: d3.4 holes for the bond M3 screws
         s = s.cut(box(p - 6.7, SY0 - 1, p - 3.3, SY0 + WALL + 3.6, BOND_Z - 1.7, BOND_Z + 1.7))
     return s
@@ -417,24 +417,34 @@ def bond_parts():
 # Bezel boss (6061, bare/masked end) at GS_XY carries an A2 M4 stud screwed into its tap. Inside: flanged nut clamps the shell
 # rear wall from below; outside: EPDM gasket washer + A2 washer + nut seal the hole. Installer: ring terminal + washer + nut.
 # No PCB hole, no PCB pad, not via H1-H3. The clamp bond (BOND_CLAMPS) stays as the backup.
-GS_X, GS_Z = 140.0, 30.0                        # stud axis: horizontal (-y) through the TOP side wall at x 140, Z 30
-GS_XY = (GS_X, SY0 + WALL + 3.47)               # bezel landing (y -19.8), between key caps (y <= -16.2) and the inner wall
+GS_X, GS_Y = 257.5, -19.2                      # phase 21: stud axis VERTICAL through the REAR face; right of the TOP cover (x<=251),
+                                                # above the heat bar (Z<=28.3), outside the RIGHT window/cover (y>=31)
+GS_XY = (182.0, SY0 + WALL + 3.47)              # bare bezel landing (y -19.8) between keys SW12/SW13 (x 172-191)
 GS_HOLE = 4.5
 GS_PIECES = {}
+def gs_boss():
+    """PA12 cup boss under the rear wall: hex pocket (anti-rotation for the bolt head) + strap slot."""
+    x, y, z = GS_X, GS_Y, SHELL_DEPTH - WALL
+    cup = cyl(x, y, 13.0, 36.5, z + 0.5).cut(cyl(x, y, 9.0, 36.0, z - 0.2))
+    return cup.cut(box(x - 3.5, SY0 + WALL - 0.5, x + 3.5, y, 36.0, 41.2))     # strap slot from the wall side
 def ground_stud():
-    """returns (bezel landing, metal parts union, gasket). Pieces in GS_PIECES. y outward = -y."""
-    x, z = GS_X, GS_Z; yo, yi = SY0, SY0 + WALL           # outer / inner wall faces (-26.27 / -23.27)
-    lx, ly = GS_XY
+    """returns (bezel landing, metal parts union, gasket). Pieces in GS_PIECES."""
+    x, y, z = GS_X, GS_Y, SHELL_DEPTH; yi = SY0 + WALL; lx, ly = GS_XY
     land = cyl(lx, ly, 6.0, FIELD_T, 10.0)
     GS_PIECES.clear()
-    GS_PIECES["stud_M4x30_A2_hex_bolt"] = box(x - 2, yo - 20.0, x + 2, yi, z - 2, z + 2).union(box(x - 3.5, yi + 0.6, x + 3.5, yi + 3.4, z - 3.5, z + 3.5))   # head inside, over strap eye + tooth washer
-    GS_PIECES["strap_0p5x6_tinned_Cu"] = box(x - 3, yi + 0.01, x + 3, yi + 0.6, 10.0, z + 4).union(box(x - 3, yi, x + 3, ly + 3.0, 10.0, 10.5))
+    GS_PIECES["stud_M4x25_A2_hex_bolt (head in hex pocket)"] = cyl(x, y, 8.0, 37.0, 39.8).union(cyl(x, y, 4.0, 39.8, z + 13.0))
+    GS_PIECES["inner_joint: tooth washers + strap eye + A2 nylock nut"] = cyl(x, y, 8.0, 39.8, 41.6).union(cyl(x, y, 7.6, 41.6, 44.8))
+    GS_PIECES["strap_0p5x6_tinned_Cu"] = U([box(lx - 3, yi + 0.01, lx + 3, yi + 0.6, 10.0, 35.0),           # leg up from landing
+                                           box(lx - 3, yi + 0.01, lx + 3, ly + 3.0, 10.0, 10.5),            # foot on the landing
+                                           box(lx - 3, yi + 0.01, x + 3, yi + 0.6, 30.0, 35.0),             # run along the top wall, over the heat bar
+                                           box(x - 3, yi + 0.01, x + 3, yi + 0.6, 30.0, 41.0),              # rise to the stud
+                                           box(x - 3, yi + 0.01, x + 3, y, 40.4, 41.0)]).cut(cyl(x, y, 4.4, 0, 100))   # tab to the eye
     GS_PIECES["landing_screw_M3"] = cyl(lx, ly, 5.5, 10.5, 12.5)
-    GS_PIECES["outer_washer_nut"] = box(x - 4.5, yo - 2.3, x + 4.5, yo - 1.5, z - 4.5, z + 4.5).union(box(x - 4, yo - 5.5, x + 4, yo - 2.3, z - 4, z + 4))
-    GS_PIECES["ring_terminal_envelope"] = box(x - 5.5, yo - 7.0, x + 5.5, yo - 5.5, z - 5.5, z + 27.0)    # tongue/barrel/wire toward the cabinet rear (+Z)
-    GS_PIECES["installer_washer_nut"] = box(x - 4.5, yo - 7.8, x + 4.5, yo - 7.0, z - 4.5, z + 4.5).union(box(x - 4, yo - 11.0, x + 4, yo - 7.8, z - 4, z + 4))
-    gk = box(x - 6, yo - 1.5, x + 6, yo, z - 6, z + 6).cut(box(x - 2.25, yo - 2, x + 2.25, yo + 1, z - 2.25, z + 2.25))
-    return land, U(list(GS_PIECES.values())), gk
+    GS_PIECES["outer_washer_seal_nut"] = cyl(x, y, 9.0, z + 1.5, z + 2.3).union(cyl(x, y, 8.0, z + 2.3, z + 5.5))
+    GS_PIECES["ring_terminal_envelope"] = cyl(x, y, 11.0, z + 5.5, z + 7.0).union(box(x - 5.5, y - 27.0, x + 5.5, y, z + 5.5, z + 10.0))
+    GS_PIECES["installer_washer_nut"] = cyl(x, y, 9.0, z + 7.0, z + 7.8).union(cyl(x, y, 8.0, z + 7.8, z + 11.0))
+    gk = cyl(x, y, 12.0, z, z + 1.5).cut(cyl(x, y, GS_HOLE, 0, 200))
+    return land, U([v for k, v in GS_PIECES.items() if k != "strap_0p5x6_tinned_Cu"]).union(GS_PIECES["strap_0p5x6_tinned_Cu"]), gk
 def ground_stud_distances(pl, pl30):
     import json as _j, numpy as _np
     LJ = _j.load(open(os.path.join(HERE, "finger", "hv_copper.json")))["points"]

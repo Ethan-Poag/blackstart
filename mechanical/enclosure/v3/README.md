@@ -179,3 +179,21 @@ Pairwise boolean intersections of all 15 parts (intended contacts excluded: PCB/
   - Finger check: covers on, no entry; covers off, unchanged (LEFT_HV 8.30, TOP 24.25, BOTTOM 31.18, RIGHT 9.89, J10 13.96).
   - Thermal: geometry near the heat path is unchanged (the stud is 65 mm from the heat bar), so the thermal numbers are unchanged.
 - Costs: PARTS_COSTED.md "Phase 20".
+
+## Phase 21: stud moved to the REAR face; Compliance phase 20 notes folded in (DIY, cheap parts)
+- **Stud:** vertical M4 x 25 A2 hex bolt through the rear face at (257.5, -19.2), top-right.
+  - The strap (~120 mm tinned Cu) runs from a new bare bezel landing at (182, -19.8), along the inner top wall over the heat bar.
+  - The strap joint is metal-to-metal: bolt head, tooth washer, strap eye, tooth washer, nylock. No plastic or gasket is in that clamp.
+  - The hex head is held in a PA12 hex pocket (anti-rotation). The outer gasket and seal nut close the hole. Installer nut about 1.2 N·m (ESTIMATED).
+  - See GROUND.md.
+- **Assembly step:** dab anti-oxidant joint compound on the bare landings (stud landing, both clamp-bond landings) and the strap eyes before fitting. Or conversion-coat the masked spots.
+- **Test spot:** the existing bare spot (928bbe8, top-left bezel edge) is reused.
+- **Clamp backup unchanged.** Installer notes unchanged (stud primary, clamp bond backup).
+- **Checks (MODELLED):**
+  - 0 interferences with 1 mm and 6 mm panels.
+  - Left wall 1.000.
+  - Stud stack minimum to live copper 40.33 mm (rule 38).
+  - Clamp bond 38.18 / 54.86 (unchanged).
+  - Lead tips 8.0 / 10.44 (unchanged).
+  - Finger check: covers on, no entry; covers off unchanged.
+  - Thermal: heat-path geometry unchanged (the strap passes 1.7 mm above the heat bar, not touching it), so the thermal numbers are unchanged.

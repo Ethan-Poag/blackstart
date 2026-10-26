@@ -81,3 +81,11 @@ P20-9,Ground symbol printed sticker,1,-,-,n/a,,0.3,0.15,ESTIMATED,2026-10-25,no
 P20-T1,TOTAL Phase 20 delta,-,-,-,n/a,sum,8.15,3.35,ESTIMATED,2026-10-25,no
 P20-T2,TOTAL delta vs baseline after Phase 20 (before 260.1/163.55),-,-,-,n/a,sum,268.25,166.9,ESTIMATED,2026-10-25,no
 P20-T3,ROLLED-UP unit total after Phase 20 (before 920.1/553.55),-,-,-,n/a,,928.25,556.9,ESTIMATED,2026-10-25,no
+
+P21-1,A2 M4 nylock inner nut + 2nd tooth washer,1 set,-,-,n/a,,0.2,0.1,ESTIMATED,2026-10-25,no
+P21-2,Longer tinned-Cu strap ~120 mm (delta),1,-,-,n/a,,1.0,0.5,ESTIMATED,2026-10-25,no
+P21-3,PA12 hex-pocket cup boss (in SLS shell),1,-,-,n/a,,0.2,0.1,ESTIMATED,2026-10-25,no
+P21-4,Anti-oxidant joint compound (3 landings + eyes),1,-,-,n/a,,0.5,0.2,ESTIMATED,2026-10-25,no
+P21-T1,TOTAL Phase 21 delta,-,-,-,n/a,sum,1.9,0.9,ESTIMATED,2026-10-25,no
+P21-T2,TOTAL delta vs baseline after Phase 21 (before 268.25/166.9),-,-,-,n/a,sum,270.15,167.8,ESTIMATED,2026-10-25,no
+P21-T3,ROLLED-UP unit total after Phase 21 (before 928.25/556.9),-,-,-,n/a,,930.15,557.8,ESTIMATED,2026-10-25,no
