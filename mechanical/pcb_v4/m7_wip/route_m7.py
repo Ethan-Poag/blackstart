@@ -158,6 +158,8 @@ for name,k in per.items():
         (ref,num),q=g[0][0].rsplit(".",1),g[0][1]
         cand=[p for p in b.FindFootprintByReference(ref).Pads() if p.GetNumber()==num]
         rep+=sorted(cand,key=lambda p:(TM(p.GetPosition().x)-q[0])**2+(TM(p.GetPosition().y)-q[1])**2)[:1]
+    _ex=[e for e in os.environ.get('EXCL','').split(',') if e]
+    rep=[p for p in rep if p.GetParentFootprint().GetReference() not in _ex]
     if len(rep)<2:continue
     xs=[TM(p.GetPosition().x) for p in rep];ys=[TM(p.GetPosition().y) for p in rep]
     jobs.append((max(xs)-min(xs)+max(ys)-min(ys),name,c,rep))

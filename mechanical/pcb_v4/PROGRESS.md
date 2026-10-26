@@ -245,3 +245,16 @@ Board only on m7-wip. Not fab-ready.
   - 1 locked item remains: a GEN_N F.Cu track at 3.594 mm vs 3.62 mm. It is one of the accepted locked F.Cu segments.
 - **GEN_L1:** J28.1, R422.1 and RV1.1 are already connected (hvopen no longer lists GEN_L1), so the chain did not need re-placing for reach. No GEN_L1 via is within 8.0 mm of the edge on this board (checked with my hvrules and a via-to-Edge.Cuts scan). The 7.675 mm via from the earlier review no longer exists.
 - **Metrics (measured):** KiCad unconnected 965, geometric 935, HV opens 9, hvsheet 0 pairs. DRC errors: 0 with the repo project file; 4 with the working project file (the 2 DSI83_REFCLK vias, still open); 891 warnings.
+
+## 2026-10-25 ~6:45 PM HST — m7-wip: GEN_N partly joined, HV opens 9 → 7
+Board only on m7-wip. Not fab-ready.
+- **GEN_N:** J28.4, RV1.2 and RV2.2 are now one copper island. Routed with VC=2000; the run with VC=200 put a GEN_N via 2.23 mm from a GEN_L3-chain track, which breaks the 3 mm .kicad_dru rule, so it was discarded. The router now has an EXCL option to skip named pads.
+- **Still open:**
+  - R443.1 (GEN_N): not reachable under the HV rules.
+  - RV3.1 and RV3.2: RV3 sits in the BUS area. Waiting for the RV3 study.
+  - GEN_L3, J28.3 to R436.1: the inner-layer path reaches R436, but there is no legal via spot near R436.1.
+  - BUS_L3, R462.1 / J29.3 / RV6.1: nothing reachable from R462.1.
+- **Router limits found:**
+  - Without HVSHEET=1, the router does not apply the slot-corner rule (a test route gave 13 violations), so HV nets must always be routed with HVSHEET=1.
+  - The HVSHEET model does not include the .kicad_dru 3 mm "HV line outer" rule against divider nodes, so DRC is still needed on every batch.
+- **Metrics (measured):** KiCad unconnected 963, geometric 933, HV opens 7, hvsheet 0 pairs, slotchk2 0 unlocked. DRC errors: 0 with the repo project file; 4 with the working project file (the DSI83 vias); 891 warnings.
