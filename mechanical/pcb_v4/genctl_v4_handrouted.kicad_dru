@@ -23,3 +23,21 @@
   (constraint via_diameter (min 0.4mm))
   (constraint hole_size (min 0.2mm))
   (constraint annular_width (min 0.1mm)))
+
+# --- M7 (2026-10-25): binding sheet /workspace/compliance/hv_layout_rules_600V.md (also cited in LAYOUT_RULES.md).
+# Severity "warning" so they are reported separately from the legacy error set; the authoritative check is
+# hvrules.py (node-voltage aware, slot creepage). These are NOT relaxations: none of the error rules above changed.
+(rule "HV sheet: line-line outer 6.6mm (phase-phase incl GEN vs BUS)"
+  (severity warning)
+  (layer outer)
+  (condition "A.hasNetclass('HV_LINE') && B.hasNetclass('HV_LINE') && A.NetName != B.NetName && !A.NetName.contains('_N') && !B.NetName.contains('_N')")
+  (constraint clearance (min 6.6mm)))
+(rule "HV sheet: line-N outer 5.5mm"
+  (severity warning)
+  (layer outer)
+  (condition "A.hasNetclass('HV_LINE') && B.hasNetclass('HV_LINE') && A.NetName != B.NetName")
+  (constraint clearance (min 5.5mm)))
+(rule "HV sheet: hot copper to board edge 8.0mm"
+  (severity warning)
+  (condition "A.hasNetclass('HV_LINE') || A.hasNetclass('HV_LINE_DIV')")
+  (constraint edge_clearance (min 8.0mm)))

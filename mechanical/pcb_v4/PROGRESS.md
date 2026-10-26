@@ -165,3 +165,25 @@ heal.py (dedupe plus gap bridging) was tried and rejected: no connectivity gain.
 - HV clearance values are still not certified against IEC 60664-1 / UL 61010.
 - The new C1 parts were placed on B near U21 but are not yet fully routed.
 - **The Quilter package (job 6ade7072) is now STALE.** It predates the C1 netlist and the M6 placement and must not be used.
+
+
+## Milestone 7, step 1 (2026-10-25): CR1 CT clearance, J28/J29 slots, CR2 passive moves
+
+**Done:**
+- CR1: BUS_VC_TAP and GEN_VC_P ripped (71 locked items, flagged: locked copper touched) and rerouted with a CT-pad keepout (route_m7.py, CTKEEP). Min distance to T1-T4/J30 pads: BUS_VC_TAP 0.117 -> 3.134 mm, GEN_VC_P 0.184 -> 6.177 mm (ctclr.py).
+- J28/J29 inter-pin slots widened 1.5 -> 2.0 mm and lengthened (x 2.72-11.50 -> 2.00-12.50) per sheet. Outline edited (flagged). 11 locked BUS_L1 In2 segments crossing the new slot were ripped and BUS_L1 rerouted.
+- CR2: mover.py moved 109 passives next to their owner pin (plan from reviewer decap.json + L2/L3/L4/C17/C18/R506). 44 found no legal closer spot (incl. L2, L4, C17, C18, C3, C4, C136, C138); HV-class parts (R462/R448/R455/R443) not moved. C17/C18 owner taken as Q6 (LM5176 output FET), an inference.
+- DRU: sheet rules added at severity warning. LAYOUT_RULES.md section 4 added.
+
+**Metrics (before f03c57a -> after):**
+- Unconnected (unc.py): 1119 -> 1277; routed 61.89 % -> 56.51 %. Worse because moved parts lost their copper; bulk re-route not yet done.
+- DRC errors (kicad-cli, severity error): 0 -> 0. Footprints 1181 -> 1181. Locked tracks+vias 3108 -> 2899 (ripped CR1/BUS_L1 + moved-part copper).
+- place_audit.py decaps median/p90/max 2.2/6.2/81.3 -> 2.3/6.5/81.3 mm; signal 3.5/10.4/63.3 -> 3.5/8.2/63.3 mm; signal >10 mm 64 -> 48.
+- Reviewer decap.py (pad edge to owner pin): decaps 1.61/15.5/78.31 -> 1.47/6.08/78.31 mm, >5 mm 39 -> 20, >10 mm 21 -> 4; signal 2.95/31.9/140.32 -> 2.68/12.26/216.69 mm, >10 mm 138 -> 73. Signal max rose because R506 now sits at SW14 (its LED end); the TCA9555 end is inherently far.
+- hvrules.py: hv-hv 26 -> 21 net-pairs (592 -> 477 raw); hot-edge 16 (J28/J29 pads 6.94 mm from left edge); hot-SELV 2 groups (R471 9.0 mm from U70.12, an unconnected comparator output).
+
+**Unmet / unverified:**
+- 21 HV net-pairs still below the sheet (divider chains not re-spaced per phase; planned together with the new MOV footprint).
+- J28/J29 pads are 6.94 mm from the board edge (< 8.0 mm). Fix needs a connector move, frozen by BCR-7: lead decision.
+- Slot-end creepage ~6.9 mm (right) / 7.15 mm (left) between adjacent phases: meets 6.6 mm only by ~0.3 mm, marginal against fab tolerance.
+- NOT fab-ready.

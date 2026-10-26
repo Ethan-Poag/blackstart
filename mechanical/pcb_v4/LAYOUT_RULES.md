@@ -100,3 +100,14 @@ Compiled 2026-10-25. Each rule cites a document that was **actually fetched and 
 - **AN4488 and AN5419:** not fetched. They don't apply to this part (see AN4938 above).
 - **CM5 "design guide":** no separate document was found or fetched. CM5 datasheet rel. 3 was used instead.
 - **ADE9000 and AN4938:** curl downloads failed, so they were read via web fetch. There are no local PDF copies.
+
+
+## 4. 600 V HV rules (Milestone 7, BINDING)
+Source: hv_layout_rules_600V.md (compliance sheet, /workspace/compliance/hv_layout_rules_600V.md, 2026-10-25). Not certified; needs professional safety review.
+- Phase-phase (incl. GEN vs BUS): 6.6 mm outer / 1.5 mm inner. Phase-N: 5.5 mm outer / 1.5 mm inner.
+- HOT to SELV: 8.0 mm clearance, 12.6 mm creepage, and >=12.6 mm copper-free on every inner layer.
+- Slots >=2.0 mm wide; where HOT to SELV, >=12.6 mm path around each slot end.
+- Hot copper >=8.0 mm from the board edge and >=12.6 mm from H1-H4. Solder mask never counts.
+- Exempt: same-chain adjacent divider nodes (>=1.5 mm) and tap nodes (>=0.2 mm). J30 (CT inputs) is treated as HOT.
+- J28/J29: >=2.0 mm slots between pins (done in M7: 2.0 x 10.5 mm, x 2.0-12.5).
+- Checker: hvrules.py (node-voltage aware, credits creepage around slots). DRU carries the sheet rules at severity warning; no existing error rule was relaxed.
