@@ -103,3 +103,14 @@ Pairwise boolean intersections of all 15 parts (intended contacts excluded: PCB/
   - Opening a cover needs a flat screwdriver. Disconnect the J28/J29 sources before opening LEFT_HV.
 - BCR-11 / PE_BOND numbers corrected to Compliance MEASURED values: web to H1 is 1.20 mm; hot copper is 19.0 mm from the hole centre.
 - J30 connector swap: pending Ethan; not acted on.
+
+## Phase 16 (NOT committed; lead has not said commit)
+- **Outer wrap lips** on the LEFT_HV / BOTTOM / RIGHT covers: 10 mm PA12 lip segments with a 0.6 mm bead in blind 0.8 mm outer-wall grooves (WINDOW_COVERS.md §4). 0 interferences, left wall 1.000, HV and finger results unchanged. **FIRST PRINT FIT TEST REQUIRED** (snap force, far-edge flatness, gasket compression).
+- LEFT_HV grommet slot widened from 7 to 9 mm for J30 wire up to 10 mm².
+- **J30 = Phoenix PC 5/8-GF-7,62 (1720851) + SPC 5/8-STF-7,62 (1996184)** (Ethan approved). Wire range is rigid 0.2–10 mm², flexible 0.2–6 mm² (VERIFIED, Phoenix page). Data in J30_PHOENIX_DATA.md. The CAD J30 model is NOT changed yet.
+- **PENDING (new J30 footprint from Layout):** redo the CAD J30 model from the Phoenix 3D/drawing; the J28–J30 window, slot and cover size (plus the wrap-lip positions); clamp clearances at y 118 and y 178; the creepage / J30 surface-path numbers; and the finger check. Download the Phoenix drawing / 3D model for 1996184 and 1720851 first, so the mated height is verified. See MISMATCH #46.
+
+## Phase 17
+- **LEFT cover lip bead and groove deferred** until Compliance rules on the 2.2 mm wall next to J30 (`LEFT_LIP_BEAD = False`; set it to True to restore). The left lips only locate the cover, so far-edge hold-down is reduced and the first print fit test must cover it. BOTTOM and RIGHT keep their beads and grooves. Details in WINDOW_COVERS.md.
+- PENDING J30 redo (MISMATCH #46) also requires: **download the Phoenix drawing / 3D model for plug 1996184 and header 1720851 so the mated height is verified, not inferred.**
+- Costs unchanged (removing the bead and groove has no cost effect; ESTIMATED).

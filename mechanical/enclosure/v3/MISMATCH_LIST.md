@@ -47,6 +47,10 @@ Inventory checked: geometry.py, PANEL_V2.md, display_mech.md, draw_front_panel.p
 
 | 41 | Chimney slots | 2 × 12 unfiltered side-wall slots were still in CAD after the fan change (phase 9); they bypass the PD2 filters. Deleted in phase 15 | phase 15 |
 | 42 | Rear windows | Phase 14 called the PE cover optional and left the terminal windows open (unfiltered inlets). Phase 15: all 5 covered, tunnel feet foam-sealed | phase 15 |
-| 43 | One-edge cover hooks | LEFT_HV, BOTTOM and RIGHT covers can only hook on 1 edge (other edge < 2.5 mm from the inner wall). Far edge retention not validated | open |
+| 43 | One-edge cover hooks | LEFT_HV, BOTTOM and RIGHT covers can only hook on 1 edge (other edge < 2.5 mm from the inner wall). Phase 16: outer wrap lips with bead and groove added; FIRST PRINT FIT TEST required | phase 16 (fit test open) |
 | 44 | Plug finger safety | J28/J29/J30 plug-face live metal (screws) not modelled; IP20 / finger-safe datasheet statements not obtained; finger reaches the plug bodies with the cover off | open |
-| 45 | J30 wire range | KF2EDGRM / KNM wire range not in repo docs (ASSUMED 0.2–2.5 mm²) | open |
+| 45 | J30 wire range | Was ASSUMED 0.2–2.5 mm² (Kefa). Phase 16: J30 → Phoenix SPC 5/8-STF-7,62, rigid 0.2–10 / flexible 0.2–6 mm² VERIFIED (phoenixcontact.com 1996184) | phase 16 |
+
+| 46 | **PENDING: J30 footprint** | Ethan approved PC 5/8-GF-7,62 + SPC 5/8-STF-7,62 (7.62 mm pitch, plug 76.18 wide; or 2 × 4-pin). Layout has not given the footprint. When it does, redo: CAD J30 model (Phoenix 3D/drawing), J28–J30 window/slot/cover and wrap-lip positions, clamp clearances y 118 / y 178, creepage + J30 surface path, finger_check. Also **download the Phoenix drawing / 3D model for 1996184 and 1720851 so the mated height is verified, not inferred**. CAD still has the old KF2EDGRM J30 | **PENDING** |
+| 47 | J30 finger safety / header voltage | The Phoenix pages carry no finger-safe / IP20 statement. Header 1720851: rated III/3 630 V, but its UL listing is mixed (300 V/41 A, 150 V, 600 V/5 A, 600 V/41 A by use group). The plug is UL 600 V/35 A. Compliance to rule | open |
+| 48 | Left wall groove | Wrap-lip grooves would thin the left wall to 2.2 mm at y 140/157 next to J30. Phase 17: **left groove and bead DEFERRED pending a Compliance ruling** (`LEFT_LIP_BEAD = False`; set it to True to restore). Left wall full 3.0 mm; left cover far-edge hold-down reduced (locating lips only), first print fit test required | open (Compliance) |

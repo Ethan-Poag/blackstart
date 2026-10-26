@@ -148,3 +148,13 @@ Every ESTIMATED figure above would be replaced by a quote: the SendCutSend plate
 | Phase 14 "optional PE cover" line (was not in totals) | – | 0 | 0 | superseded by the PE cover above |
 | Nylon screw humidity-soak qualification (one-off, NOT per unit) | – | (150–400 once) | – | ESTIMATED |
 | **Phase 15 delta** | | **+43.1** | **+25.3** | ESTIMATED |
+
+## Phase 16 changes (USD per unit, qty 1 / qty 10, ESTIMATED; no quotes)
+| item | qty | qty 1 | qty 10 | label |
+|---|---|---|---|---|
+| Wrap lips on LEFT_HV / BOTTOM / RIGHT covers (8 segments, ≈ 1.4 cm³ extra PA12 SLS) | 8 | +1.5 | +0.9 | ESTIMATED |
+| Blind lip grooves in the rear shell (8 × 11 mm, in the SLS geometry) | 8 | 0 | 0 | ESTIMATED |
+| LEFT_HV slot 7 → 9 mm and a wider membrane | 1 | 0 | 0 | ESTIMATED |
+| First print fit test (one-off, not per unit; 1 extra cover set) | – | (≈ 30 once) | – | ESTIMATED |
+| **Phase 16 delta** | | **+1.5** | **+0.9** | ESTIMATED |
+- The J30 connector change (Phoenix 1720851 + 1996184) cost is not included here; there is no quote (no vendor contact).

@@ -203,6 +203,7 @@ def rear_shell():
     s = s.union(box(bx, SY0 + WALL, bx + 2, 175, ZR + 1.0 + 18.0, SHELL_DEPTH - 1))
     for (x, y) in SHELL_POSTS:
         s = s.union(cyl(x, y, 6.0, ZR + 0.3, SHELL_DEPTH - 1))
+    s = s.cut(lip_grooves())                                                 # phase 16: blind wrap-lip grooves (outer wall)
     return s
 
 def clamps(t=PANEL_T):
@@ -314,7 +315,7 @@ COV_T, COV_GSK = 3.0, 1.5                       # cover plate / gasket (ESTIMATE
 # name: (window x0, y0, x1, y1), cover (x0, y0, x1, y1), grommet: ("slot", x0, y0, x1, y1) or ("hole", x, y, D)
 COVERS = {
     "PE":     ((3.0, -21.0, 20.0, -1.0),            (1.5, -22.5, 21.5, 0.5),   ("hole", 11.5, -15.0, 10.0)),
-    "LEFT_HV":((BX0 - 1, 9, BX0 + 17, 164),          (-8.0, 6.0, 15.5, 167.0),  ("slot", 1.0, 14.0, 8.0, 159.0)),
+    "LEFT_HV":((BX0 - 1, 9, BX0 + 17, 164),          (-8.0, 6.0, 15.5, 167.0),  ("slot", 0.0, 14.0, 9.0, 159.0)),
     "TOP":    ((28, BY0 - 1, 248, BY0 + 13),          (25.0, BY0 - 4, 251.0, -0.27), ("slot", 33.0, BY0 + 2.0, 243.0, BY0 + 10.0)),
     "BOTTOM": ((28, BY1 - 13, 248, BY1 + 1),          (25.0, 178.5, 251.0, BY1 + 4), ("slot", 33.0, BY1 - 10.0, 243.0, BY1 - 2.0)),
     "RIGHT":  ((BX1 - 18, 34, BX1 + 1, 182),          (259.0, 31.0, 284.5, 185.0), ("slot", BX1 - 12.5, 39.0, BX1 - 4.5, 177.0)),
@@ -353,7 +354,43 @@ def covers():
             if (gx1 - gx0) >= (gy1 - gy0): m = m.cut(box(gx0, (gy0 + gy1) / 2 - 0.3, gx1, (gy0 + gy1) / 2 + 0.3, 0, 200))
             else: m = m.cut(box((gx0 + gx1) / 2 - 0.3, gy0, (gx0 + gx1) / 2 + 0.3, gy1, 0, 200))
             mb.append(m)
-    return U(cv), U(gk), U(mb)
+    return U(cv).union(wrap_lips()), U(gk), U(mb)
+# ---- phase 16: outer wrap lips on the single-hook covers (far edge < 2.5 mm from the inner wall) -------------------------
+# Lip segments 10 mm long hug the OUTER shell wall (0.2 mm gap) and carry a 0.6 mm bead into a blind 0.8 mm groove cut in
+# the outer wall (Z 43.8-45.0). Segments avoid the clamp T-slot zones and the left wall y 15-105 (kept 1.000 solid).
+LIP_T, LIP_GAP, LIP_LEN, LIP_Z0 = 1.5, 0.2, 10.0, 43.3
+LEFT_LIP_BEAD = False   # phase 17: left (LEFT_HV) bead+groove DEFERRED pending Compliance ruling on 2.2 mm wall next to J30; set True to restore
+GRV_D, GRV_Z = 0.8, (43.8, 45.0)
+WRAP_LIPS = {"LEFT_HV": ("x0", [140.0, 157.0]), "BOTTOM": ("y1", [40.0, 138.0, 235.0]), "RIGHT": ("x1", [50.0, 140.0, 170.0])}
+def _lip_geo(edge, c):
+    """returns (plate extension, lip, bead, groove) for one segment centre c."""
+    z = SHELL_DEPTH; zt = z + COV_GSK + COV_T; h = LIP_LEN / 2
+    if edge == "x0":
+        o = SX0; ext = box(o - LIP_GAP - LIP_T, c - h, -8.0, c + h, z + COV_GSK, zt)
+        lip = box(o - LIP_GAP - LIP_T, c - h, o - LIP_GAP, c + h, LIP_Z0, zt)
+        bead = box(o - LIP_GAP, c - h, o + GRV_D - 0.2, c + h, GRV_Z[0] + 0.2, GRV_Z[1] - 0.2)
+        grv = box(o - 1, c - h - 0.5, o + GRV_D, c + h + 0.5, *GRV_Z)
+    elif edge == "x1":
+        o = SX1; ext = box(284.5, c - h, o + LIP_GAP + LIP_T, c + h, z + COV_GSK, zt)
+        lip = box(o + LIP_GAP, c - h, o + LIP_GAP + LIP_T, c + h, LIP_Z0, zt)
+        bead = box(o - GRV_D + 0.2, c - h, o + LIP_GAP, c + h, GRV_Z[0] + 0.2, GRV_Z[1] - 0.2)
+        grv = box(o - GRV_D, c - h - 0.5, o + 1, c + h + 0.5, *GRV_Z)
+    else:  # y1
+        o = SY1; ext = box(c - h, BY1 + 4, c + h, o + LIP_GAP + LIP_T, z + COV_GSK, zt)
+        lip = box(c - h, o + LIP_GAP, c + h, o + LIP_GAP + LIP_T, LIP_Z0, zt)
+        bead = box(c - h, o - GRV_D + 0.2, c + h, o + LIP_GAP, GRV_Z[0] + 0.2, GRV_Z[1] - 0.2)
+        grv = box(c - h - 0.5, o - GRV_D, c + h + 0.5, o + 1, *GRV_Z)
+    return ext, lip, bead, grv
+def wrap_lips():
+    out = []
+    for n, (e, cs) in WRAP_LIPS.items():
+        for c in cs:
+            ext, lip, bead, _ = _lip_geo(e, c)
+            out.append(U([ext, lip, bead]) if (n != "LEFT_HV" or LEFT_LIP_BEAD) else U([ext, lip]))
+    return U(out)
+def lip_grooves():
+    return U([_lip_geo(e, c)[3] for n, (e, cs) in WRAP_LIPS.items() for c in cs if n != "LEFT_HV" or LEFT_LIP_BEAD])
+
 def tunnel_seals():
     """phase 15: closed-cell foam ring closing the 0.5 mm TUN_GAP between each J10/J11 tunnel foot and the jack shell."""
     out = []

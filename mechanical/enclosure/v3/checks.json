@@ -102,9 +102,9 @@
   "filter_covers": 5.7,
   "fan_screws": 1.0,
   "pe_bond": 0.3,
-  "window_covers": 35.8,
+  "window_covers": 36.3,
   "cover_gaskets": 7.4,
-  "grommets": 8.2,
+  "grommets": 8.5,
   "tunnel_seals": 0.2
  },
  "bbox": {
@@ -239,9 +239,9 @@
    13.0
   ],
   "window_covers": [
-   292.5,
-   221.2,
-   8.5
+   297.4,
+   223.9,
+   9.2
   ],
   "cover_gaskets": [
    292.5,
@@ -249,7 +249,7 @@
    1.5
   ],
   "grommets": [
-   278.8,
+   279.8,
    216.7,
    1.0
   ],
