@@ -88,7 +88,7 @@
   "thermal_pads": 1.4,
   "gasket": 12.8,
   "customer_panel": 151.1,
-  "rear_shell": 202.2,
+  "rear_shell": 205.6,
   "clamps": 20.6,
   "clamp_screws": 3.4,
   "front_ring": 99.7,
@@ -101,7 +101,11 @@
   "fan_gaskets": 0.9,
   "filter_covers": 5.7,
   "fan_screws": 1.0,
-  "pe_bond": 0.3
+  "pe_bond": 0.3,
+  "window_covers": 35.8,
+  "cover_gaskets": 7.4,
+  "grommets": 8.2,
+  "tunnel_seals": 0.2
  },
  "bbox": {
   "bezel": [
@@ -233,6 +237,26 @@
    9.0,
    14.0,
    13.0
+  ],
+  "window_covers": [
+   292.5,
+   221.2,
+   8.5
+  ],
+  "cover_gaskets": [
+   292.5,
+   221.2,
+   1.5
+  ],
+  "grommets": [
+   278.8,
+   216.7,
+   1.0
+  ],
+  "tunnel_seals": [
+   48.0,
+   28.0,
+   7.4
   ]
  },
  "shell_outer_WxH": [

@@ -324,3 +324,7 @@ Cabinet air temperature remains an ASSUMPTION to verify with a thermocouple duri
 - TODO: EXL1 fin dims ASSUMED until the ATS drawing/sample; strip conductance carries that uncertainty.
 - Fan control/derating per firmware/ARCHITECTURE.md section 11 (one fan failed: survivor 100 %, backlight cap 60 %; both failed: backlight 25 %).
 - Compliance ruled (phase 9): rim trim OK as basic with a tested PE bond (PE_BOND.md), leads clipped to <= 1.0 mm (8.0 mm), PP film dropped (no thermal effect either way); +5V budget being checked by Layout/Firmware.
+
+## Phase 15 notes
+- Chimney slots (2 × 12, 4 × 12 mm, top/bottom walls) **deleted in CAD**: they were unfiltered inlets bypassing the fan filters (PD2). The phase-9 model did not credit them, so results are unchanged (INFERRED). The both-fans-failed case keeps 0.20 W/K (stalled rotors + filters).
+- All wiring windows now have gasketed covers. **No positive pressure is claimed** (push-pull series, not computed). The PD2 basis is that every opening is filtered or sealed.

@@ -9,10 +9,10 @@ Nothing here is certified; Compliance / NRTL to review.
 - **H1/H2/H3** (M4 bezel bosses at (2.0, -9.25), (274.56, -9.25), (2.0, 188.71)) carry the board net **CHASSIS** on Ø9 plated pads (functional earth via R33 1M // C48 4.7n, MEASURED). They are **not** part of the PE path: the PE conductor lands on the PE_NEW boss face only, on bare Al, and touches no PCB pad (hole is NPTH, no copper; lug sits 1.0 mm above the board rear on the boss).
 
 ## What is around PE_NEW (MEASURED, genctl_v4_handrouted.kicad_pcb read-only; distances to the Ø9.5 hole edge)
-- Board top edge web: 3.02 mm. H1 CHASSIS pad: 1.05 mm (FR4 web; same potential as the bezel, OK electrically, thin mechanically).
+- Board top edge web: 3.02 mm. H1 CHASSIS pad: **1.20 mm** (Compliance phase 15 MEASURED pad edge to hole edge; Mechanical's earlier 1.05 used a different pad/annulus reference) (FR4 web; ask fab for ≥ 1.0 mm web; same potential as the bezel, OK electrically, thin mechanically).
 - **Conflicts that need Layout (BCR-11):** D5 SMBJ5.0A (+5V TVS, B side, body (8.7, -12.9)-(13.3, -5.6)) sits under the hole; 4 GND stitching vias at (10.55/11.45, -10.91/-11.93) and GND F.Cu tracks cross the hole; inner fills GND1/GND2 (GND) and PWR (+3V3_SAFE) cover it (they will clear automatically around an NPTH).
 - Nearby SELV parts: R492 1.9 mm (body), R490/R491/R492 pads 2.2-4.0 mm (SW9 backlight nets), SW9 body 9.7 mm (CAD switch).
-- **Hot copper:** none nearby. Nearest 600 V divider parts (R437-R439, B side, y ≥ 13.6) are about 17 mm from the hole edge (MEASURED bbox), ≥ 5.5 clearance / 6.6 creepage (basic, earthed).
+- **Hot copper:** none nearby. Nearest 600 V divider parts (R437-R439, B side, y ≥ 13.6) are 17.57 mm from the hole edge (R438.1), and the nearest hot copper (GND_AC / +3V3_AC zones, GND1/GND2/PWR) is **19.0 mm from the hole centre** (14.25 mm from the edge; Compliance phase 15 MEASURED, all 6 layers), ≥ 5.5 clearance / 6.6 creepage (basic, earthed).
 - CAD (checks.json): boss to display 3.5 mm, to front-ring sleeve 1.5, to key caps 1.08, to switches 9.68, to the ALS light pipe 119.9, to clamps 22.8; boss to J28/J29 plug envelope 14.5 and PE hardware to it 14.0 (≥ 5.5 basic); 0 interferences (key membrane notched Ø9 round the boss).
 
 ## Stack at PE_NEW (CAD part `pe_bond`, step/pe_bond.step), bottom to top
@@ -54,3 +54,7 @@ Nothing here is certified; Compliance / NRTL to review.
 1. README/BCR language "H4 PE" (phase 11-13) meant a **bezel** boss; from phase 14 the PE boss is PE_NEW; the PCB has no PE net or PE terminal. No PE pin exists on any board connector (J28/J29 carry L1-L3/N only). The PE conductor therefore lands only on the bezel stud. OK, but the installation manual must say so.
 2. H1-H3 CHASSIS pads bond to PE only if those boss faces are masked. This was not specified before phase 11.
 3. The rim trim (Z 7.0, 7.0 mm at 2 mm leads) counts as **basic** only with this bond made and tested. With leads clipped to ≤ 1.0 mm it is 8.0 mm (reinforced), per Compliance phase 9.
+
+## Phase 15
+- Numbers corrected (Compliance MEASURED): web to the H1 CHASSIS pad is **1.20 mm** (pad edge); the nearest hot copper is **19.0 mm from the hole centre** (GND_AC / +3V3_AC zones, 14.25 from the edge). This passes basic and also reinforced (INFERRED by Compliance). BCR-11 is not yet on the board (d151ff7).
+- **The PE window cover is now REQUIRED:** a PA12 snap cover 20 × 23 mm with a 1.5 mm EPDM gasket and a Ø10 hole with a split rubber grommet for 2.5–4 mm² PE (jacket ≈ 3.4–4.8 mm, ESTIMATED). Lug access: unsnap with a screwdriver; the PE wire stays in its grommet. Finger check with the cover off: 8.39 mm to GEN_N copper (MODELLED); with it on, the finger cannot enter.

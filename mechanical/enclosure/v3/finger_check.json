@@ -1,0 +1,238 @@
+{
+ "probe": "straight rigid finger d12 x 80 mm, flat tip (MODELLED; IEC 61032 probe B dims SECONDARY via vendor pages; articulation not modelled)",
+ "live_set": "outer-layer copper of all '/AC metering' nets + GND_AC + +3V3_AC + U22/U23 CT (ASSUMED conservative), 2433 points",
+ "pass_rule": "no contact and >= 8.0 mm to live copper (ASSUMED; Compliance to set)",
+ "bare_no_covers": {
+  "PE_window": {
+   "min_dist_to_live_copper_mm": 8.39,
+   "entry_xy": [
+    13.0,
+    -10.0
+   ],
+   "direction": "30deg+y",
+   "penetration_mm": 31.64,
+   "tip_xyz": [
+    13.0,
+    5.82,
+    20.6
+   ],
+   "stopped_by": "pcb",
+   "nearest_live": {
+    "xy": [
+     14.755,
+     19.605
+    ],
+    "layer": "F",
+    "ref": "track",
+    "net": "GEN_N"
+   },
+   "finger_positions_entering": 287,
+   "touches_plug_body": [],
+   "result": "PASS"
+  },
+  "LEFT_HV_window": {
+   "min_dist_to_live_copper_mm": 8.3,
+   "entry_xy": [
+    6.28,
+    134.0
+   ],
+   "direction": "normal",
+   "penetration_mm": 14.4,
+   "tip_xyz": [
+    6.28,
+    134.0,
+    33.6
+   ],
+   "stopped_by": "rear_parts",
+   "nearest_live": {
+    "xy": [
+     7.79,
+     133.76
+    ],
+    "layer": "B",
+    "ref": "J30",
+    "net": "CT3_S1"
+   },
+   "finger_positions_entering": 5931,
+   "touches_plug_body": [
+    "J28",
+    "J29",
+    "J30"
+   ],
+   "result": "PASS"
+  },
+  "TOP_window": {
+   "min_dist_to_live_copper_mm": 24.25,
+   "entry_xy": [
+    47.0,
+    -9.27
+   ],
+   "direction": "normal",
+   "penetration_mm": 14.4,
+   "tip_xyz": [
+    47.0,
+    -9.27,
+    33.6
+   ],
+   "stopped_by": "rear_parts",
+   "nearest_live": {
+    "xy": [
+     47.0,
+     18.05
+    ],
+    "layer": "B",
+    "ref": "RV1",
+    "net": "GEN_N"
+   },
+   "finger_positions_entering": 2514,
+   "touches_plug_body": [],
+   "result": "PASS"
+  },
+  "BOTTOM_window": {
+   "min_dist_to_live_copper_mm": 31.18,
+   "entry_xy": [
+    34.0,
+    187.73
+   ],
+   "direction": "normal",
+   "penetration_mm": 14.4,
+   "tip_xyz": [
+    34.0,
+    187.73,
+    33.6
+   ],
+   "stopped_by": "rear_parts",
+   "nearest_live": {
+    "xy": [
+     23.654,
+     154.173
+    ],
+    "layer": "B",
+    "ref": "RV3",
+    "net": "GEN_L3"
+   },
+   "finger_positions_entering": 2295,
+   "touches_plug_body": [],
+   "result": "PASS"
+  },
+  "RIGHT_window": {
+   "min_dist_to_live_copper_mm": 9.89,
+   "entry_xy": [
+    271.28,
+    40.0
+   ],
+   "direction": "30deg-x",
+   "penetration_mm": 25.21,
+   "tip_xyz": [
+    258.68,
+    40.0,
+    26.17
+   ],
+   "stopped_by": "heat_bar",
+   "nearest_live": {
+    "xy": [
+     263.244,
+     26.518
+    ],
+    "layer": "B",
+    "ref": "U23",
+    "net": "Net-(U23-CT)"
+   },
+   "finger_positions_entering": 6444,
+   "touches_plug_body": [],
+   "result": "PASS"
+  },
+  "J10_port_tunnel": {
+   "min_dist_to_live_copper_mm": 13.96,
+   "entry_xy": [
+    217.0,
+    47.07
+   ],
+   "direction": "normal",
+   "penetration_mm": 13.5,
+   "tip_xyz": [
+    217.0,
+    47.07,
+    34.5
+   ],
+   "stopped_by": "rear_parts",
+   "nearest_live": {
+    "xy": [
+     228.932,
+     47.286
+    ],
+    "layer": "B",
+    "ref": "U22",
+    "net": "Net-(U22-CT)"
+   },
+   "finger_positions_entering": 664,
+   "touches_plug_body": [],
+   "result": "PASS"
+  },
+  "J11_port_tunnel": {
+   "entry": "NO ENTRY: opening smaller than the 12 mm finger",
+   "result": "PASS"
+  },
+  "fan_fan_exhaust_through_filter_cover_slots(3mm)": {
+   "entry": "NO ENTRY: opening smaller than the 12 mm finger",
+   "result": "PASS"
+  },
+  "fan_fan_intake_through_filter_cover_slots(3mm)": {
+   "entry": "NO ENTRY: opening smaller than the 12 mm finger",
+   "result": "PASS"
+  }
+ },
+ "covers_fitted": {
+  "PE_cover_grommet": {
+   "entry": "NO ENTRY: opening smaller than the 12 mm finger",
+   "result": "PASS"
+  },
+  "LEFT_HV_cover_grommet": {
+   "entry": "NO ENTRY: opening smaller than the 12 mm finger",
+   "result": "PASS"
+  },
+  "TOP_cover_grommet": {
+   "entry": "NO ENTRY: opening smaller than the 12 mm finger",
+   "result": "PASS"
+  },
+  "BOTTOM_cover_grommet": {
+   "entry": "NO ENTRY: opening smaller than the 12 mm finger",
+   "result": "PASS"
+  },
+  "RIGHT_cover_grommet": {
+   "entry": "NO ENTRY: opening smaller than the 12 mm finger",
+   "result": "PASS"
+  },
+  "J10_port_tunnel": {
+   "min_dist_to_live_copper_mm": 13.96,
+   "entry_xy": [
+    217.0,
+    47.07
+   ],
+   "direction": "normal",
+   "penetration_mm": 13.5,
+   "tip_xyz": [
+    217.0,
+    47.07,
+    34.5
+   ],
+   "stopped_by": "rear_parts",
+   "nearest_live": {
+    "xy": [
+     228.932,
+     47.286
+    ],
+    "layer": "B",
+    "ref": "U22",
+    "net": "Net-(U22-CT)"
+   },
+   "finger_positions_entering": 664,
+   "touches_plug_body": [],
+   "result": "PASS"
+  },
+  "J11_port_tunnel": {
+   "entry": "NO ENTRY: opening smaller than the 12 mm finger",
+   "result": "PASS"
+  }
+ }
+}

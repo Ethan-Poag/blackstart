@@ -72,3 +72,15 @@ Hand calcs only. Labels: MEASURED (CAD/checks.json), ESTIMATED, ASSUMED. Nothing
     - If a shake/peel test on a 1 mm panel shows lift, use glass-filled PA66 or PEEK M4 screws, which are non-conductive and stiffer (ESTIMATED +$1-2 each).
   - **Assembly note changed:** nylon thumb screws are finger-tight, ≤ 0.15 N·m. Do not use a driver.
 - **Open:** gasket CFD, nylon creep data, a real vibration spec, and a shake/peel test.
+
+## Phase 15: nylon PA66 clamp screws, torque, flammability, humidity-soak retention test
+- **Torque: finger-tight, ≤ 0.15 N·m** (Compliance phase 15: right choice). Margin to the data in this file: 2× to RGA's 0.30 N·m recommended, 1.3× to TR's 0.2 N·m torsional strength, 2.4–2.9× to plasticnutsandbolts' 0.36–0.43 N·m. These sources conflict, so the margin range is ESTIMATED.
+- **Flammability: specify UL94 V-2 or better.** The Caterpillar Red PA66 screw datasheet lists "typical UL 94 V-2" (https://caterpillar-red.com/content/Product%5FData%5FSheets/Nylon-Polyamide-66-Screws-Bolts-Material-Datasheet.pdf, a SECONDARY "typical" value). The chosen supplier's own datasheet is to be confirmed. The screws are not credited in any insulation path, so CTI is not claimed.
+- **Humidity-soak retention test (SUGGESTED procedure; the acceptance values are ASSUMED design targets):**
+  1. Fixture: a printed shell section with one left clamp, its brass insert and a PA66 M4 × 35 thumb screw, on a **1.0 mm** steel/Al panel coupon (worst case: shortest screw engagement / most preload loss). Condition everything at 73 °F (23 °C) / 50 % RH for 24 h.
+  2. Tighten finger-tight with a torque screwdriver to 0.15 N·m. Record the screw position (mark plus calliper) and the clamp-to-panel force, measured with a load cell or a feeler / pull-off push gauge, as the baseline (expected ≈ 65 N design share, ESTIMATED).
+  3. Soak at **104 °F (40 °C) / 93 % RH for 96 h** (IEC 60068-2-78 Cab style; the 96 h duration is SUGGESTED, 21 days for a longer qualification).
+  4. Recover at 73 °F (23 °C) / 50 % RH for 1–2 h, then re-measure: (a) clamp lift, the gap at the clamp foot / panel rear; (b) breakaway torque in the tightening direction; (c) the 65 N retention or pull-off; (d) visual cracks / thread stripping.
+  5. Acceptance (ASSUMED): lift ≤ 0.2 mm; breakaway torque ≥ 50 % of the installed 0.15 N·m; retention ≥ 65 N per clamp, or the unit still holds when pushed out at 8 × 65 N; no cracking. If it fails, use a PA66-GF or PEEK screw, or a steel screw with an insulating sleeve and a re-checked creepage.
+  6. Sample size: 3 screws (SUGGESTED). Lab cost is a one-off qualification, not per unit (ESTIMATED $150–400 if outsourced; in-house is a sealed box plus saturated KNO3 salt, which gives ≈ 92–94 % RH, ESTIMATED).
+- Manual note: **re-check finger-tight on the left clamps at each annual service** (Compliance binding).

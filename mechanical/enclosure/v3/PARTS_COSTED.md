@@ -134,3 +134,17 @@ Every ESTIMATED figure above would be replaced by a quote: the SendCutSend plate
 | PE boss moved H4 -> PE_NEW (12.3, -7.5); H4 boss deleted; membrane notch | 1 | 0 | 0 | ESTIMATED (same CNC ops) |
 | PE access window cover with grommet (OPTIONAL, not in totals) | 1 | 1 | 0.6 | ESTIMATED |
 | **Phase 14 delta** | | **+0.9** | **+0.55** | ESTIMATED |
+
+## Phase 15 changes (USD per unit, qty 1 / qty 10, all ESTIMATED; no quotes)
+| item | qty | qty 1 | qty 10 | label |
+|---|---|---|---|---|
+| PA12 SLS window covers: PE 20×23, LEFT_HV 23.5×161, TOP 226×19, BOTTOM 226×20, RIGHT 25.5×154, 3 mm | 5 | +30 | +18 | ESTIMATED ($2 / 6 / 8 / 8 / 6 qty 1) |
+| Closed-cell EPDM 1.5 mm gasket rings (hand/die cut) | 5 | +5 | +3 | ESTIMATED |
+| Slit EPDM membrane grommet strips 1.0 mm | 4 | +6 | +3.2 | ESTIMATED |
+| Split rubber grommet, PE hole Ø10 | 1 | +0.5 | +0.3 | ESTIMATED |
+| Foam rings at J10/J11 tunnel feet | 2 | +0.6 | +0.3 | ESTIMATED |
+| FIP silicone bead on the fin-plate land | 1 | +1 | +0.5 | ESTIMATED |
+| Chimney slots deleted | – | 0 | 0 | ESTIMATED |
+| Phase 14 "optional PE cover" line (was not in totals) | – | 0 | 0 | superseded by the PE cover above |
+| Nylon screw humidity-soak qualification (one-off, NOT per unit) | – | (150–400 once) | – | ESTIMATED |
+| **Phase 15 delta** | | **+43.1** | **+25.3** | ESTIMATED |

@@ -188,9 +188,8 @@ def rear_shell():
         s = s.union(box(cx - w / 2 - TUN_WALL, cy - h / 2 - TUN_WALL, cx + w / 2 + TUN_WALL, cy + h / 2 + TUN_WALL, zt + TUN_GAP, SHELL_DEPTH))
         s = s.cut(box(cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2, zt, SHELL_DEPTH + 1))
         s = s.cut(box(cx - w / 2 - LEAD_IN, cy - h / 2 - LEAD_IN, cx + w / 2 + LEAD_IN, cy + h / 2 + LEAD_IN, SHELL_DEPTH - LEAD_IN, SHELL_DEPTH + 1))  # lead-in step
-    for i in range(12):                                                         # chimney: bottom intake, top exhaust
-        xv = 100 + i * 9
-        s = s.cut(box(xv, SY0 - 1, xv + 4, SY0 + WALL + 1, 22, 34)).cut(box(xv, SY1 - WALL - 1, xv + 4, SY1 + 1, 22, 34))
+    # phase 15: the 2 x 12 chimney slots (pre-fan passive design) are DELETED: they were unfiltered side openings bypassing the
+    # fan filters (PD2 basis). The phase-9 thermal model never credited them (both-failed path = stalled rotors + filters).
     for (p, side) in CLAMPS:      # clamp seats: INWARD wall bosses + blind T-slot from outside; outer wall stays flush so the shell passes the cutout
         if side in "TB":
             y = SY0 if side == "T" else SY1; sg = -1 if side == "T" else 1
@@ -310,8 +309,61 @@ def plug_envelopes():
     cx, cy, _, _, zt = REAR_PORTS["J11"]; b = box(cx - 6.5, cy - 3.7, cx + 6.5, cy + 3.7, zt + 0.3, SHELL_DEPTH + 15)
     return a.union(b)
 
+# ---- phase 15: rear window covers (PA12 SLS) + 1.5 mm closed-cell EPDM gasket + grommets ----------------------------------
+COV_T, COV_GSK = 3.0, 1.5                       # cover plate / gasket (ESTIMATED design values)
+# name: (window x0, y0, x1, y1), cover (x0, y0, x1, y1), grommet: ("slot", x0, y0, x1, y1) or ("hole", x, y, D)
+COVERS = {
+    "PE":     ((3.0, -21.0, 20.0, -1.0),            (1.5, -22.5, 21.5, 0.5),   ("hole", 11.5, -15.0, 10.0)),
+    "LEFT_HV":((BX0 - 1, 9, BX0 + 17, 164),          (-8.0, 6.0, 15.5, 167.0),  ("slot", 1.0, 14.0, 8.0, 159.0)),
+    "TOP":    ((28, BY0 - 1, 248, BY0 + 13),          (25.0, BY0 - 4, 251.0, -0.27), ("slot", 33.0, BY0 + 2.0, 243.0, BY0 + 10.0)),
+    "BOTTOM": ((28, BY1 - 13, 248, BY1 + 1),          (25.0, 178.5, 251.0, BY1 + 4), ("slot", 33.0, BY1 - 10.0, 243.0, BY1 - 2.0)),
+    "RIGHT":  ((BX1 - 18, 34, BX1 + 1, 182),          (259.0, 31.0, 284.5, 185.0), ("slot", BX1 - 12.5, 39.0, BX1 - 4.5, 177.0)),
+}
+def _grom_cut(g, z0, z1):
+    return cyl(g[1], g[2], g[3], z0, z1) if g[0] == "hole" else box(g[1], g[2], g[3], g[4], z0, z1)
+COVER_HOOK_EDGES = {}
+def covers():
+    """PA12 cover plates (Z 49.5-52.5) on a 1.5 mm EPDM closed-cell gasket ring (Z 48-49.5), 2 snap tabs per long edge
+    hooking under the 3 mm rear wall (tool release through the grommet slot). Grommet: split EPDM membrane strip in the slot
+    (or split rubber grommet in the PE hole). Membrane modelled 1.0 mm thick with a 0.6 mm slit (non-rigid: ignored by finger_check)."""
+    z = SHELL_DEPTH; cv, gk, mb = [], [], []
+    for n, (w, c, g) in COVERS.items():
+        plate = box(*c[:2], *c[2:], z + COV_GSK, z + COV_GSK + COV_T).cut(_grom_cut(g, 0, 200))
+        x0, y0, x1, y1 = w; long_x = (x1 - x0) >= (y1 - y0)
+        tabs = []
+        iw = (SX0 + WALL, SY0 + WALL, SX1 - WALL, SY1 - WALL)       # inner wall faces: an edge < 2.5 mm from one gets no hook
+        free = {"x0": x0 - iw[0] >= 2.5, "y0": y0 - iw[1] >= 2.5, "x1": iw[2] - x1 >= 2.5, "y1": iw[3] - y1 >= 2.5}
+        fr = (0.2, 0.5, 0.8) if sum(free.values()) < 4 else (0.25, 0.75)
+        COVER_HOOK_EDGES[n] = [k for k, v in free.items() if v]
+        for f in fr:
+            if long_x:
+                xm = x0 + f * (x1 - x0)
+                if free["y0"]: tabs += [box(xm - 4, y0 + 0.2, xm + 4, y0 + 1.7, z - WALL - 1.0, z + COV_GSK), box(xm - 4, y0 - 1.0, xm + 4, y0 + 1.7, z - WALL - 1.0, z - WALL)]
+                if free["y1"]: tabs += [box(xm - 4, y1 - 1.7, xm + 4, y1 - 0.2, z - WALL - 1.0, z + COV_GSK), box(xm - 4, y1 - 1.7, xm + 4, y1 + 1.0, z - WALL - 1.0, z - WALL)]
+            else:
+                ym = y0 + f * (y1 - y0)
+                if free["x0"]: tabs += [box(x0 + 0.2, ym - 4, x0 + 1.7, ym + 4, z - WALL - 1.0, z + COV_GSK), box(x0 - 1.0, ym - 4, x0 + 1.7, ym + 4, z - WALL - 1.0, z - WALL)]
+                if free["x1"]: tabs += [box(x1 - 1.7, ym - 4, x1 - 0.2, ym + 4, z - WALL - 1.0, z + COV_GSK), box(x1 - 1.7, ym - 4, x1 + 1.0, ym + 4, z - WALL - 1.0, z - WALL)]
+        cv.append(U([plate] + tabs))
+        gk.append(box(*c[:2], *c[2:], z, z + COV_GSK).cut(box(x0 - 0.0, y0 - 0.0, x1, y1, 0, 200)))
+        if g[0] == "hole":
+            mb.append(cyl(g[1], g[2], g[3] + 4, z + COV_GSK + COV_T, z + COV_GSK + COV_T + 1.0).cut(cyl(g[1], g[2], 2.0, 0, 200)))
+        else:
+            gx0, gy0, gx1, gy1 = g[1:]; m = box(gx0 - 2, gy0 - 2, gx1 + 2, gy1 + 2, z + COV_GSK + COV_T, z + COV_GSK + COV_T + 1.0)
+            if (gx1 - gx0) >= (gy1 - gy0): m = m.cut(box(gx0, (gy0 + gy1) / 2 - 0.3, gx1, (gy0 + gy1) / 2 + 0.3, 0, 200))
+            else: m = m.cut(box((gx0 + gx1) / 2 - 0.3, gy0, (gx0 + gx1) / 2 + 0.3, gy1, 0, 200))
+            mb.append(m)
+    return U(cv), U(gk), U(mb)
+def tunnel_seals():
+    """phase 15: closed-cell foam ring closing the 0.5 mm TUN_GAP between each J10/J11 tunnel foot and the jack shell."""
+    out = []
+    for (cx, cy, w, h, zt) in REAR_PORTS.values():
+        out.append(box(cx - w / 2 - TUN_WALL, cy - h / 2 - TUN_WALL, cx + w / 2 + TUN_WALL, cy + h / 2 + TUN_WALL, zt, zt + TUN_GAP)
+                   .cut(box(cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2, 0, 200)))
+    return U(out)
+
 def build():
-    caps, memb, nibs = keys(); cb, cs = clamps(); fn, fg, fc, fs = fans()
+    caps, memb, nibs = keys(); cb, cs = clamps(); fn, fg, fc, fs = fans(); wc, wg, wm = covers()
     return {"bezel": (bezel(), (0.15, 0.15, 0.17)), "display": (display(), (0.05, 0.1, 0.3)),
             "key_caps": (caps, (0.6, 0.85, 1.0)), "key_membrane": (memb, (0.9, 0.9, 0.85)), "key_nibs": (nibs, (1, 1, 0.7)),
             "switches": (switches(), (0.3, 0.3, 0.3)), "pcb": (pcb(), (0.1, 0.5, 0.15)), "rear_parts": (rear_parts(), (0.2, 0.3, 0.6)),
@@ -322,7 +374,9 @@ def build():
             "heat_pillar": (heat_pillar(), (0.8, 0.55, 0.25)), "light_pipe": (light_pipe(), (0.9, 0.95, 1.0)),
             "exl1_strip": (exl1_strip(), (0.8, 0.8, 0.85)), "strip_pad": (strip_pad(), (0.9, 0.3, 0.6)),
             "fans": (fn, (0.1, 0.1, 0.1)), "fan_gaskets": (fg, (0.3, 0.3, 0.3)), "filter_covers": (fc, (0.4, 0.45, 0.42)), "fan_screws": (fs, (0.85, 0.85, 0.9)),
-            "pe_bond": (pe_bond(), (0.85, 0.7, 0.2))}
+            "pe_bond": (pe_bond(), (0.85, 0.7, 0.2)),
+            "window_covers": (wc, (0.35, 0.4, 0.5)), "cover_gaskets": (wg, (0.1, 0.1, 0.1)), "grommets": (wm, (0.2, 0.2, 0.2)),
+            "tunnel_seals": (tunnel_seals(), (0.1, 0.1, 0.1))}
 
 def vol(a, b):
     try: return a.intersect(b).val().Volume()

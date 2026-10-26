@@ -93,3 +93,13 @@ Pairwise boolean intersections of all 15 parts (intended contacts excluded: PCB/
 - **Coating wording** replaced everywhere with Compliance's text (conformal_coating_spec.md): no spacing credit, not IEC 60664-3 qualified, PD2 rests on filters + seal, 6.6 mm rule stays.
 - checks.json: 0 interferences; left wall y 15-105 solid 1.000; HV lead-tip/clamp clearances unchanged (7.0/8.0, 13.48/14.14, 11.29).
 - Open: KF2EDGRM (J30) voltage rating ≥ 600 V not verified (Compliance open item).
+
+## Phase 15 (window covers, finger probe, nylon screw docs, BCR-11 numbers)
+- **All 5 rear wiring windows are covered:** PA12 SLS snap covers on 1.5 mm closed-cell EPDM gaskets, with grommet slots (split EPDM membrane) or a Ø10 split grommet for PE. The **2 × 12 chimney slots in the top/bottom walls are deleted** (they were unfiltered side inlets). J10/J11 tunnels have foam rings at the 0.5 mm foot gap, and the fin-plate land gets a FIP silicone bead. No positive pressure is claimed (the fans are push-pull in series); the PD2 basis is "no unfiltered opening". Full list: **WINDOW_COVERS.md**.
+- **Finger probe:** `finger_check.py` (straight rigid Ø12 × 80; articulation not modelled) → `finger_check.json`. With covers on, no window admits the finger. With covers off, the minimum distance is 8.30 mm (LEFT_HV, the finger reaches the J28–J30 plug bodies), PE 8.39, RIGHT 9.89. Plug screw heads are not modelled; see WINDOW_COVERS.md §3.
+- **Assembly notes:**
+  - Left clamp PA66 nylon screws: finger-tight, ≤ 0.15 N·m, UL94 V-2 or better (supplier datasheet to be confirmed). Re-check at annual service. Humidity-soak retention test in CLAMP_RETENTION.md.
+  - Fit the covers after wiring. Thread the wires through the membrane slit, press the cover until all hooks click, then check that the gasket is compressed all round.
+  - Opening a cover needs a flat screwdriver. Disconnect the J28/J29 sources before opening LEFT_HV.
+- BCR-11 / PE_BOND numbers corrected to Compliance MEASURED values: web to H1 is 1.20 mm; hot copper is 19.0 mm from the hole centre.
+- J30 connector swap: pending Ethan; not acted on.
