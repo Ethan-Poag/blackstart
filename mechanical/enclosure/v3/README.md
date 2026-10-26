@@ -114,3 +114,10 @@ Pairwise boolean intersections of all 15 parts (intended contacts excluded: PCB/
 - **LEFT cover lip bead and groove deferred** until Compliance rules on the 2.2 mm wall next to J30 (`LEFT_LIP_BEAD = False`; set it to True to restore). The left lips only locate the cover, so far-edge hold-down is reduced and the first print fit test must cover it. BOTTOM and RIGHT keep their beads and grooves. Details in WINDOW_COVERS.md.
 - PENDING J30 redo (MISMATCH #46) also requires: **download the Phoenix drawing / 3D model for plug 1996184 and header 1720851 so the mated height is verified, not inferred.**
 - Costs unchanged (removing the bead and groove has no cost effect; ESTIMATED).
+
+## Phase 18
+- **Left lip bead and groove restored** (`LEFT_LIP_BEAD = True`; Compliance hv_rulings_phase16 §B(e)). Wall minimum 2.2 mm vs the 2.0 mm design minimum. Left wall y 15–105 solid 1.000. MISMATCH #48 closed.
+- **J28–J30 cover is tool-only:** a captive PA66 M3 slotted screw at (6, 173) into a PA12 boss, plus screwdriver-release hooks. All plastic.
+- **Cover-off warning label** (verbatim, hv_rulings_phase16.md §B(c)): "DANGER: Hazardous voltage up to 600 V AC. Isolate all voltage inputs and short CT secondaries at the external shorting terminals before removing this cover or unplugging J28/J29/J30. Do not plug or unplug under voltage." W012 + IEC 61010-1 symbols 14/12. One label on the cover outside face (5.5 × 140 mm) and one on the shell beside the window (30 × 15 mm). UL 969 laminated PET/polyimide for salt air. See WINDOW_COVERS.md.
+- The physical IEC 61032 probe-B test is still required (checklist in WINDOW_COVERS.md).
+- **UL note, J30 header 1720851:** at 600 V it may be used only under **UL use group D (600 V / 5 A) or group F (600 V / 41 A)**; groups B and C are 300 / 150 V. The plug 1996184 is cULus 600 V / 35 A. The NRTL decides the group. If group D governs, CT continuous current must be ≤ 5 A (Compliance §B(b)).

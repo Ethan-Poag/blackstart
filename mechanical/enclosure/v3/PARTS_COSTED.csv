@@ -44,3 +44,6 @@ P15-5,Closed-cell foam rings J10/J11 tunnel feet,2,cut,any,n/a,,0.6,0.3,ESTIMATE
 P15-6,FIP silicone bead fin-plate land,1,dispense,any,n/a,,1,0.5,ESTIMATED,2026-10-25,no
 
 P16-1,Wrap lips on LEFT_HV/BOTTOM/RIGHT window covers (8 x 10 mm segments + bead; shell grooves),8,SLS PA12,JLC3DP,n/a,,1.5,0.9,ESTIMATED,2026-10-25,no
+
+P18-1,Captive PA66 M3x10 slotted screw + retaining washer (J28-J30 cover latch),1,catalogue,any,n/a,,0.3,0.15,ESTIMATED,2026-10-25,no
+P18-2,Warning labels UL969 laminated PET/polyimide (cover 5.5x140 + shell 30x15),2,printed label,any,n/a,,3.0,1.2,ESTIMATED,2026-10-25,no

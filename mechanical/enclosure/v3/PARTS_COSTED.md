@@ -158,3 +158,10 @@ Every ESTIMATED figure above would be replaced by a quote: the SendCutSend plate
 | First print fit test (one-off, not per unit; 1 extra cover set) | – | (≈ 30 once) | – | ESTIMATED |
 | **Phase 16 delta** | | **+1.5** | **+0.9** | ESTIMATED |
 - The J30 connector change (Phoenix 1720851 + 1996184) cost is not included here; there is no quote (no vendor contact).
+
+## Phase 18 changes (USD per unit, qty 1 / qty 10, ESTIMATED; no quotes)
+| item | qty | qty 1 | qty 10 | label |
+|---|---|---|---|---|
+| Captive PA66 M3 × 10 slotted pan-head screw + nylon retaining washer (J28–J30 cover latch); boss and tab are in the SLS parts | 1 | +0.3 | +0.15 | ESTIMATED |
+| Warning labels, UL 969 laminated PET/polyimide, salt-air grade: cover strip 5.5 × 140 + shell 30 × 15 | 2 | +3.0 | +1.2 | ESTIMATED (custom short-run) |
+| **Phase 18 delta** | | **+3.3** | **+1.35** | ESTIMATED |

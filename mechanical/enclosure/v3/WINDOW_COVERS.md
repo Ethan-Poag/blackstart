@@ -76,3 +76,38 @@ Findings:
 - **Restore:** set `LEFT_LIP_BEAD = True` and re-run enclosure_v3.py, finger_check.py and render_v3.py. This restores the bead on the cover and the blind groove in the shell.
 - **Retention, LEFT_HV cover:** it is held by 3 snap hooks on the x1 edge only. The far edge (x0) has only the two locating lips, which stop sideways movement but **do not hold the edge down**. Gasket compression at the far edge depends on plate stiffness alone, so **far-edge hold-down is reduced**. It is not quantified; the **FIRST PRINT FIT TEST** must check far-edge lift / flatness and gasket compression along x0. If that fails and Compliance does not accept the groove, options are: a thicker or ribbed cover plate, or a PA66 nylon screw into a boss outside y 15–105 (both need a Compliance check).
 - Re-run (MODELLED): 0 interferences; HV distances, the 26.69 mm J30 surface path and the clamp clearances unchanged; finger check unchanged (covers on: no entry; covers off: worst 8.30 mm LEFT_HV).
+
+## Phase 18: left bead restored, tool-only latch, warning label, probe-B checklist
+### Left bead and groove restored
+- `LEFT_LIP_BEAD = True`. Compliance hv_rulings_phase16.md §B(e): the 2.2 mm PA12 wall is **acceptable**. IEC 61010-1 sets no minimum solid-insulation thickness, only the 6.8 dielectric test. The design minimum is **≥ 2.0 mm**.
+- MODELLED wall minimum at the grooves (y 140 / 157) is **2.2 mm vs the 2.0 mm design minimum**.
+- The left cover far edge is held down again by bead and groove, as on the bottom and right covers. The FIRST PRINT FIT TEST still applies.
+- Tests Compliance attached to the ruling:
+  - Dielectric test on a printed wall coupon that includes the groove, after 48 h humidity preconditioning (§6.8.2), at the NRTL's reinforced value (Compliance INFERRED ≈ 5.3 kV rms for 5 s).
+  - §8.1 rigidity/impact and the PA12 UL94 grade at the thinned section.
+
+### Tool-only opening of the J28–J30 cover (CAD `cover_screw`, cover tab, shell boss)
+- Before phase 18, the hooks sat under the plate and could only be reached through the 9 mm slot (finger cannot enter), so they needed a screwdriver. However, prying the plate edge by hand could not be ruled out, and Compliance wants proof that a hook cannot be released by finger.
+- **Added:** a captive **PA66 nylon M3 × 10 slotted pan-head screw** (not knurled or thumb-type, so it needs a screwdriver) at (6, 173). It goes through a cover tab (x 0–12, y 166–179, gasketed) into a Ø7 PA12 boss (Ø2.5 pilot) under the rear wall. A nylon retaining washer keeps it captive.
+- The latch is all plastic, so no new metal. It is outside y 15–105, 11 mm past the J30 body (y 162), and 10.9 mm from the nearest board part (MODELLED).
+- The cover now opens only by removing the screw *and* releasing the hooks with a screwdriver. This is tool-only by design (INFERRED); it still needs the cover-retention / drop test (§8.1) and a hand-pry test on the first print.
+- Checks: 0 interferences, HV and creepage unchanged, finger check unchanged.
+
+### Warning label (text VERBATIM from /workspace/compliance/hv_rulings_phase16.md §B(c))
+> "DANGER: Hazardous voltage up to 600 V AC. Isolate all voltage inputs and short CT secondaries at the external shorting terminals before removing this cover or unplugging J28/J29/J30. Do not plug or unplug under voltage."
+- Symbols: ISO 7010 **W012** (electricity warning triangle) plus IEC 61010-1 symbol 14 and symbol 12. Compliance marked the symbol numbering FROM-MEMORY; verify it against 61010-1 3rd ed Table 1.
+- **Label 1, on the cover, OUTSIDE face:** a strip on the plate land beside the slot, x 9.7–15.2, y 16–156 (≈ 5.5 × 140 mm, text running along y, W012 ≥ 5 mm). Text height ≈ 1.8 mm (ESTIMATED from the space available). If legibility is not accepted, the cover must get wider.
+- **Label 2, on the shell rear face next to the window:** x −7 to 23, y 180–195 (≈ 30 × 15 mm, clear of the latch tab and the bottom window).
+- Material (salt air): UL 969-recognised laminated polyester (PET) or polyimide with a permanent acrylic adhesive, overlaminated against UV and salt fog. Must pass the IEC 61010-1 §5.3 marking durability test (rub with water / petroleum spirit). The PA12 surface needs a smooth, degreased label land, or the label is moulded/engraved instead (ESTIMATED; supplier to confirm).
+- Manual text (Compliance §C(ii)) goes with it: isolate first, short the CT secondaries make-before-break, never open a CT secondary while primary current can flow.
+
+### Checklist: physical jointed-finger test (still REQUIRED)
+The CAD check used a **straight rigid** finger and does **not** model live metal inside the plugs. It is not evidence of finger safety (Compliance §B(a)). Articulated model: **not added**, because the joint section lengths are not available from a citable source (vendor pages give only Ø12 / 80 mm / stop face Ø50 × 20 / 90° joints).
+- [ ] IEC 61032 **probe B** (jointed test finger, per the standard's figure), with the test force per the 61010-1 accessibility clause (Compliance: 10 N, FROM-MEMORY; take the value from the standard).
+- [ ] Every opening, covers **on** and **off**.
+- [ ] J28/J29/J30 with plugs fitted **and** plugs removed (header pins).
+- [ ] Wire entries with no wire and with the specified wire.
+- [ ] Contact indicator ≥ 40 V (per the standard) on all hazardous-live parts.
+- [ ] Probe 13 (test pin) at the plug openings, if the reviewer asks.
+- [ ] Pass: **the probe cannot touch hazardous-live parts**; and the markings / labels are per the standard (§5.3 durability). Plus the cover hand-pry, retention and drop tests (§8.1).
+- [ ] Physical prototype, not CAD.

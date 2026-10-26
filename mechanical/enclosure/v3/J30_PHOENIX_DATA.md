@@ -26,3 +26,6 @@ All values are VERIFIED from the Phoenix product pages, fetched 2026-10-25 (manu
 ## Redo list when the footprint arrives
 First download the Phoenix drawing / 3D model for 1996184 and 1720851, so the mated height is verified, not inferred.
 CAD J30 model (Phoenix 3D/drawing) → J28–J30 window/slot/cover and wrap-lip segment positions → clamp clearances y 118 / y 178 → creepage and J30 surface path (26.69 mm now) → finger_check → checks.json, STEP, PNGs.
+
+## UL note (Compliance hv_rulings_phase16 §B(b))
+**The header 1720851 may be used at 600 V only under UL use group D (600 V / 5 A) or group F (600 V / 41 A).** Groups B (300 V) and C (150 V) do not cover 600 V. The use-group definitions (UL 1059) are not verified; the NRTL decides. If group D governs, specify the CTs and burden so continuous current is ≤ 5 A. The plug 1996184 is cULus 600 V / 35 A (B/C), so it has no issue.

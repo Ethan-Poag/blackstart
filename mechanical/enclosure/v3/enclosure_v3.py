@@ -203,6 +203,7 @@ def rear_shell():
     s = s.union(box(bx, SY0 + WALL, bx + 2, 175, ZR + 1.0 + 18.0, SHELL_DEPTH - 1))
     for (x, y) in SHELL_POSTS:
         s = s.union(cyl(x, y, 6.0, ZR + 0.3, SHELL_DEPTH - 1))
+    s = s.union(cover_latch()[2]).cut(cyl(*CS_XY, 2.5, 30, SHELL_DEPTH + 1))   # phase 18 latch boss + pilot
     s = s.cut(lip_grooves())                                                 # phase 16: blind wrap-lip grooves (outer wall)
     return s
 
@@ -354,12 +355,13 @@ def covers():
             if (gx1 - gx0) >= (gy1 - gy0): m = m.cut(box(gx0, (gy0 + gy1) / 2 - 0.3, gx1, (gy0 + gy1) / 2 + 0.3, 0, 200))
             else: m = m.cut(box((gx0 + gx1) / 2 - 0.3, gy0, (gx0 + gx1) / 2 + 0.3, gy1, 0, 200))
             mb.append(m)
-    return U(cv).union(wrap_lips()), U(gk), U(mb)
+    t_, g_, _, _ = cover_latch()
+    return U(cv).union(wrap_lips()).union(t_), U(gk).union(g_), U(mb)
 # ---- phase 16: outer wrap lips on the single-hook covers (far edge < 2.5 mm from the inner wall) -------------------------
 # Lip segments 10 mm long hug the OUTER shell wall (0.2 mm gap) and carry a 0.6 mm bead into a blind 0.8 mm groove cut in
 # the outer wall (Z 43.8-45.0). Segments avoid the clamp T-slot zones and the left wall y 15-105 (kept 1.000 solid).
 LIP_T, LIP_GAP, LIP_LEN, LIP_Z0 = 1.5, 0.2, 10.0, 43.3
-LEFT_LIP_BEAD = False   # phase 17: left (LEFT_HV) bead+groove DEFERRED pending Compliance ruling on 2.2 mm wall next to J30; set True to restore
+LEFT_LIP_BEAD = True    # phase 18: restored after Compliance hv_rulings_phase16 §B(e) (2.2 mm wall OK, design min 2.0 mm); False = locating lips only
 GRV_D, GRV_Z = 0.8, (43.8, 45.0)
 WRAP_LIPS = {"LEFT_HV": ("x0", [140.0, 157.0]), "BOTTOM": ("y1", [40.0, 138.0, 235.0]), "RIGHT": ("x1", [50.0, 140.0, 170.0])}
 def _lip_geo(edge, c):
@@ -391,6 +393,18 @@ def wrap_lips():
 def lip_grooves():
     return U([_lip_geo(e, c)[3] for n, (e, cs) in WRAP_LIPS.items() for c in cs if n != "LEFT_HV" or LEFT_LIP_BEAD])
 
+# ---- phase 18: tool-only latch on the J28-J30 (LEFT_HV) cover: captive PA66 M3 screw in a cover tab at (6, 173) ----------
+# all-plastic (no metal near HV); tab outside y 15-105 and 11 mm beyond the J30 body (y 162); PA12 boss under the rear wall.
+CS_XY = (6.0, 173.0)
+def cover_latch():
+    """returns (tab+gasket-free plate extension on the cover, inner PA12 boss on the shell, screw)."""
+    z = SHELL_DEPTH; zt = z + COV_GSK + COV_T
+    tab = box(0.0, 166.0, 12.0, 179.0, z + COV_GSK, zt).cut(cyl(*CS_XY, 3.4, 0, 200))
+    tgk = box(0.0, 167.0, 12.0, 179.0, z, z + COV_GSK).cut(cyl(*CS_XY, 3.4, 0, 200))
+    boss = cyl(*CS_XY, 7.0, 38.0, z - WALL + 0.01).cut(cyl(*CS_XY, 2.5, 0, 200))
+    scr = cyl(*CS_XY, 5.5, zt, zt + 2.0).union(cyl(*CS_XY, 3.0, 39.0, zt))
+    return tab, tgk, boss, scr
+
 def tunnel_seals():
     """phase 15: closed-cell foam ring closing the 0.5 mm TUN_GAP between each J10/J11 tunnel foot and the jack shell."""
     out = []
@@ -413,7 +427,7 @@ def build():
             "fans": (fn, (0.1, 0.1, 0.1)), "fan_gaskets": (fg, (0.3, 0.3, 0.3)), "filter_covers": (fc, (0.4, 0.45, 0.42)), "fan_screws": (fs, (0.85, 0.85, 0.9)),
             "pe_bond": (pe_bond(), (0.85, 0.7, 0.2)),
             "window_covers": (wc, (0.35, 0.4, 0.5)), "cover_gaskets": (wg, (0.1, 0.1, 0.1)), "grommets": (wm, (0.2, 0.2, 0.2)),
-            "tunnel_seals": (tunnel_seals(), (0.1, 0.1, 0.1))}
+            "tunnel_seals": (tunnel_seals(), (0.1, 0.1, 0.1)), "cover_screw": (cover_latch()[3], (0.95, 0.95, 0.9))}
 
 def vol(a, b):
     try: return a.intersect(b).val().Volume()
@@ -469,7 +483,7 @@ def checks(parts):
     names = list(parts)
     allowed = {("pcb", "rear_parts"), ("pcb", "switches"), ("heat_bar", "thermal_pads"), ("bezel", "thermal_pads"),
                ("clamps", "rear_shell"), ("clamp_screws", "customer_panel"), ("heat_bar", "heat_pillar"),
-               ("fan_screws", "fin_plate"), ("fan_screws", "fans"), ("fan_screws", "fan_gaskets"), ("fan_screws", "filter_covers"), ("pe_bond", "bezel")}
+               ("fan_screws", "fin_plate"), ("fan_screws", "fans"), ("fan_screws", "fan_gaskets"), ("fan_screws", "filter_covers"), ("pe_bond", "bezel"), ("cover_screw", "rear_shell")}
     for a, b in itertools.combinations(names, 2):
         if (a, b) in allowed or (b, a) in allowed: continue
         if "customer_panel" in (a, b) and "gasket" in (a, b): continue
