@@ -1,35 +1,8 @@
 {
- "probe": "straight rigid finger d12 x 80 mm, flat tip (MODELLED; IEC 61032 probe B dims SECONDARY via vendor pages; articulation not modelled)",
+ "probe": "straight rigid finger d12 x 80 mm, flat tip (MODELLED informal sanity check; articulation not modelled)",
  "live_set": "outer-layer copper of all '/AC metering' nets + GND_AC + +3V3_AC + U22/U23 CT (ASSUMED conservative), 2433 points",
  "pass_rule": "no contact and >= 8.0 mm to live copper (ASSUMED; Compliance to set)",
  "bare_no_covers": {
-  "PE_window": {
-   "min_dist_to_live_copper_mm": 8.39,
-   "entry_xy": [
-    13.0,
-    -10.0
-   ],
-   "direction": "30deg+y",
-   "penetration_mm": 31.64,
-   "tip_xyz": [
-    13.0,
-    5.82,
-    20.6
-   ],
-   "stopped_by": "pcb",
-   "nearest_live": {
-    "xy": [
-     14.755,
-     19.605
-    ],
-    "layer": "F",
-    "ref": "track",
-    "net": "GEN_N"
-   },
-   "finger_positions_entering": 287,
-   "touches_plug_body": [],
-   "result": "PASS"
-  },
   "LEFT_HV_window": {
    "min_dist_to_live_copper_mm": 8.3,
    "entry_xy": [
@@ -53,7 +26,7 @@
     "ref": "J30",
     "net": "CT3_S1"
    },
-   "finger_positions_entering": 6524,
+   "finger_positions_entering": 5931,
    "touches_plug_body": [
     "J28",
     "J29",
@@ -183,10 +156,6 @@
   }
  },
  "covers_fitted": {
-  "PE_cover_grommet": {
-   "entry": "NO ENTRY: opening smaller than the 12 mm finger",
-   "result": "PASS"
-  },
   "LEFT_HV_cover_grommet": {
    "entry": "NO ENTRY: opening smaller than the 12 mm finger",
    "result": "PASS"
@@ -204,16 +173,16 @@
    "result": "PASS"
   },
   "J10_port_tunnel": {
-   "min_dist_to_live_copper_mm": 13.96,
+   "min_dist_to_live_copper_mm": 13.98,
    "entry_xy": [
     217.0,
-    47.07
+    48.07
    ],
    "direction": "normal",
    "penetration_mm": 13.5,
    "tip_xyz": [
     217.0,
-    47.07,
+    48.07,
     34.5
    ],
    "stopped_by": "rear_parts",

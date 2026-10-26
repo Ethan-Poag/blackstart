@@ -165,3 +165,44 @@ Every ESTIMATED figure above would be replaced by a quote: the SendCutSend plate
 | Captive PA66 M3 × 10 slotted pan-head screw + nylon retaining washer (J28–J30 cover latch); boss and tab are in the SLS parts | 1 | +0.3 | +0.15 | ESTIMATED |
 | Warning labels, UL 969 laminated PET/polyimide, salt-air grade: cover strip 5.5 × 140 + shell 30 × 15 | 2 | +3.0 | +1.2 | ESTIMATED (custom short-run) |
 | **Phase 18 delta** | | **+3.3** | **+1.35** | ESTIMATED |
+
+## Phase 19: DIY cleanup + bezel-to-panel bond through the top clamps (USD per unit, qty 1 / qty 10, ESTIMATED; no quotes)
+Removed (Ethan's decisions):
+| item (row) | qty 1 | qty 10 | label |
+|---|---|---|---|
+| P11-1 PE bond hardware (star washer, ring terminal, washer, M4x10) | -2 | -1 | ESTIMATED |
+| P11-2 anodise mask-off M1-M5 (5 spots) | -15 | -5 | ESTIMATED |
+| P11-3 PE bond continuity test | -5 | -3 | ESTIMATED |
+| P14-1 all-nylon left clamp screws, back to ordinary steel M4x35 (delta) | -0.5 | -0.3 | ESTIMATED |
+| P14-2 PE ring terminals (blue + yellow) | -0.4 | -0.25 | ESTIMATED |
+| P15-1 PE window cover (its $2 share of the cover line; qty 10 pro rata 18 x 2/30) | -2 | -1.2 | ESTIMATED |
+| P15-2 PE gasket ring (1 of 5) | -1 | -0.6 | ESTIMATED |
+| P15-4 PE split grommet | -0.5 | -0.3 | ESTIMATED |
+| P16-1 wrap lips | -1.5 | -0.9 | ESTIMATED |
+| P18-1 captive nylon latch screw + washer | -0.3 | -0.15 | ESTIMATED |
+| P18-2 warning labels, two UL969 laminated -> one simple printed vinyl/polyester label ($0.5 / $0.25) | -2.5 | -0.95 | ESTIMATED |
+| Nylon humidity-soak test (one-off, never in the per-unit totals) | 0 | 0 | removed |
+| **Removals subtotal** | **-30.7** | **-13.65** | |
+
+Added (bond through TOP clamps x 72.9 / 203.5):
+| item | qty | qty 1 | qty 10 | label |
+|---|---|---|---|---|
+| A2 M4x35 cup-point clamp screw replacing the ordinary steel screw (delta) | 2 | +0.8 | +0.5 | ESTIMATED |
+| M3 brass heat-set insert in the clamp block | 2 | +0.4 | +0.2 | ESTIMATED |
+| M3x8 A2 through-boss screw + M3x6 A2 landing screw + 2 internal-tooth washers | 2 sets | +0.8 | +0.4 | ESTIMATED |
+| Tinned-Cu strip 0.5 x 6: internal strap (~50 mm) + bridge (~15 mm), cut and bent by hand | 2 sets | +2 | +1 | ESTIMATED |
+| Bezel: 2 landing bosses + M3 taps (same CNC setup) | 2 | +5 | +2 | ESTIMATED |
+| Anodise mask-off: 2 landings + 1 test spot | 3 spots | +9 | +3 | ESTIMATED (same $3/$1 per spot as M1-M5) |
+| Ø3.4 holes in shell + clamp blocks (in the SLS geometry) | - | 0 | 0 | ESTIMATED |
+| **Bond subtotal** | | **+18.0** | **+7.1** | |
+| **Phase 19 net delta** | | **-12.7** | **-6.55** | ESTIMATED |
+
+Rolled-up (ESTIMATED). Delta vs the CNC baseline = Phase 9 V6 + dual fans plus the later phase deltas (P11 +26/+12, P12 +4/+3, P14 +0.9/+0.55, P15 +43.1/+25.3, P16 +1.5/+0.9, P18 +3.3/+1.35):
+| | qty 1 | qty 10 |
+|---|---|---|
+| Delta vs baseline, before Phase 19 (a915be1) | +272.8 | +170.1 |
+| Phase 19 net | -12.7 | -6.55 |
+| **Delta vs baseline, after Phase 19** | **+260.1** | **+163.55** |
+| Rolled-up unit total, before (baseline $660 / $390 + delta) | 932.8 | 560.1 |
+| **Rolled-up unit total, after** | **920.1** | **553.55** |
+These totals exclude the PCB, display, CM5, shipping and tax (as above), the BCR-10 board parts (~$6) and the J30 Phoenix connector (no quote). Earlier phase sections are left unchanged for history; their PE, nylon, lip, latch and label lines are superseded by this table.

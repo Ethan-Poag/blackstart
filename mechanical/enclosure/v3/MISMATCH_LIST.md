@@ -57,3 +57,18 @@ Inventory checked: geometry.py, PANEL_V2.md, display_mech.md, draw_front_panel.p
 
 | 49 | J28–J30 cover tool-only | Snap hooks alone could not be proven finger-proof. Phase 18: captive PA66 M3 slotted screw latch added; hand-pry / retention / drop test on the first print | phase 18 (test open) |
 | 50 | Probe B articulated | CAD uses a rigid finger; the physical jointed-finger test is still required (WINDOW_COVERS checklist) | open |
+
+## Phase 19 closures (Ethan's decision, Oct 25 2026: DIY open-source, not a certified product). Rows above kept for history.
+| # | Status |
+|---|---|
+| 35 | CLOSED/REMOVED: no PE path. H4 stays a plain NPTH; H1-H3 are unchanged (CHASSIS bosses). The bezel bonds to the panel through the top clamps (README Phase 19). |
+| 36 | CLOSED/REMOVED: PE_NEW boss deleted; BCR-11 WITHDRAWN. |
+| 37 | CLOSED: 8 clamps confirmed in CAD (T2, B2, L3, R1). |
+| 38 | CLOSED: certification wording softened throughout. |
+| 39 | CLOSED/REMOVED: no ring terminal (PE hardware removed). |
+| 40 | CLOSED by decision: no rating claim is made (DIY). J30 data stays in J30_PHOENIX_DATA.md. |
+| 46 | still PENDING (J30 footprint from Layout; the J30 CAD model is not touched). |
+| 47 | CLOSED by decision: informational only (J30_PHOENIX_DATA.md). |
+| 48 | CLOSED/REMOVED: wrap lips, beads and grooves removed; the left wall is plain (solid fraction y15-105 = 1.000). |
+| 49 | CLOSED/REMOVED: captive latch screw, tab and boss removed; the J28-J30 cover is snap-only again (3 hooks). |
+| 50 | CLOSED/REMOVED: the probe-B checklist is removed; finger_check.py is kept as an informal CAD sanity check. |

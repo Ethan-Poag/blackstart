@@ -21,7 +21,7 @@ ZR = Z_PCB + PCB_T                              # PCB rear face 17.6
 KEYS = [(k, FP[k]["x"], FP[k]["y"]) for k in [f"SW{i}" for i in range(9, 21)]]
 PCB_HOLES = [(FP[h]["x"], FP[h]["y"]) for h in ("H1", "H2", "H3")]
 PE = (FP["H4"]["x"], FP["H4"]["y"])          # H4: plain NPTH clearance hole since phase 14 (no PE function)
-PE_NEW = (12.3, -7.5)    # phase 14: new bezel PE boss near J28/J29 (BCR-11 NPTH Ø9.5); (16, 3) is behind the glass -> moved
+# phase 19 (Ethan, Oct 25): no PE wire; bezel bonded to the panel through the TOP clamps (bond_parts); PE_NEW boss / BCR-11 hole / PE window / PE hardware removed
 # ---------------- parameters (INFERRED design choices) ----------------
 WIN_GAP = 0.5            # glass edge -> window wall per side
 # PHASE 6 (Ethan, Oct 25): glass FLUSH with the PA12 ring face. The display moves 4 mm forward (DZ) into the ring opening.
@@ -100,7 +100,6 @@ def bezel():
     for yc in (KEYS[0][2], KEYS[6][2]):                                          # 8 mm key band
         b = b.union(box(5.0, yc - CAP_H / 2 - 1.5, 271.5, yc + CAP_H / 2 + 1.5, 0, GUIDE_L))
     for (x, y) in PCB_HOLES: b = b.union(cyl(x, y, 7.0, 0.5, Z_PCB))
-    b = b.union(cyl(*PE_NEW, 8.0, 0.5, ZR + 1.0))                                # phase 14 PE boss (H4 boss deleted)
     b = b.union(box(*BOSS, 0.5, Z_HB0))                                           # heat boss
     rim = box(BZ0[0], BZ0[1], BZ1[0], BZ1[1], FIELD_T - 0.01, RIM_Z).cut(
         box(BZ0[0] + RIM_W, BZ0[1] + RIM_W, BZ1[0] - RIM_W, BZ1[1] - RIM_W, 0, 20))
@@ -115,7 +114,9 @@ def bezel():
         b = b.cut(box(x - CAP_W / 2 - GUIDE_CLR, y - CAP_H / 2 - GUIDE_CLR, x + CAP_W / 2 + GUIDE_CLR, y + CAP_H / 2 + GUIDE_CLR, -1, 30))
     for (x, y) in JOINT_SCREWS: b = b.cut(cyl(x, y, 3.3, 0.8, FIELD_T + 0.1))   # blind M4 taps, face intact
     b = b.cut(cyl(*ALS, ALS_BORE, -1, 30))                                        # ALS light-pipe bore
-    for (x, y) in PCB_HOLES + [PE_NEW]: b = b.cut(cyl(x, y, 3.3, 3.0, Z_PCB + 3))
+    b = b.union(bond_parts()[0])                                                  # phase 19 bare bond landings
+    for (p_, sd_) in BOND_CLAMPS: b = b.cut(cyl(p_ + 20.0, SY0 + WALL + 3.47, 2.5, 3.0, 10.1))   # M3 tap
+    for (x, y) in PCB_HOLES: b = b.cut(cyl(x, y, 3.3, 3.0, Z_PCB + 3))
     for x in (256.0, 271.0): b = b.cut(cyl(x, (BOSS[1] + BOSS[3]) / 2, 3.3, Z_HB0 - 10, Z_HB0 + 0.1))  # heat-bar M4 taps
     # PHASE 9 compliance fix: display-tray rim (earthed Al) came within 1.52 mm of the J28/J29 THT lead tips
     # (basic 5.5 mm required). Trim the rim rear edge to Z <= HV_RIM_Z over y 10..115 (left side only).
@@ -130,7 +131,7 @@ def keys():
     caps, memb, nibs = [], [], []
     for yc, sg in ((KEYS[0][2], -1), (KEYS[6][2], 1)):   # strip: 1.5 bond land on the outer side, 0.1 on the display-rim side
         a, b = yc - sg * (CAP_H / 2 + 0.1), yc + sg * (CAP_H / 2 + 1.5)
-        memb.append(box(7.0, min(a, b), 267.5, max(a, b), GUIDE_L, GUIDE_L + MEMB_T).cut(box(BOSS[0] - 0.3, BOSS[1] - 1, BOSS[2] + 1, BOSS[3] + 0.3, 0, 30)).cut(cyl(*ALS, 5.0, 0, 30)).cut(cyl(*PE_NEW, 9.0, 0, 30)))   # phase 14: notch round PE boss   # notch round heat boss, ALS hole
+        memb.append(box(7.0, min(a, b), 267.5, max(a, b), GUIDE_L, GUIDE_L + MEMB_T).cut(box(BOSS[0] - 0.3, BOSS[1] - 1, BOSS[2] + 1, BOSS[3] + 0.3, 0, 30)).cut(cyl(*ALS, 5.0, 0, 30)).cut(U([cyl(q + 20.0, SY0 + WALL + 3.47, 8.0, 0, 30) for (q, _s) in BOND_CLAMPS])))   # notch round heat boss, ALS hole, bond landings
     for _, x, y in KEYS:
         c = box(x - CAP_W / 2, y - CAP_H / 2, x + CAP_W / 2, y + CAP_H / 2, -HEAD_GAP, GUIDE_L)
         c = c.union(box(x - CAP_W / 2 - HEAD_OVER, y - CAP_H / 2 - HEAD_OVER, x + CAP_W / 2 + HEAD_OVER, y + CAP_H / 2 + HEAD_OVER, -HEAD_GAP - HEAD_T, -HEAD_GAP))
@@ -146,7 +147,6 @@ def pcb():
     p = box(BX0, BY0, BX1, BY1, Z_PCB, ZR)
     for (x, y) in PCB_HOLES: p = p.cut(cyl(x, y, 4.3, Z_PCB - 1, ZR + 1))
     p = p.cut(cyl(*PE, 9.5, Z_PCB - 1, ZR + 1))      # H4 (stays, plain clearance)
-    p = p.cut(cyl(*PE_NEW, 9.5, Z_PCB - 1, ZR + 1))  # BCR-11 proposed hole (not on the board yet)
     return p
 def rear_parts():
     parts = [box(*CM5, ZR, ZR + CM5_H)]
@@ -181,7 +181,6 @@ def rear_shell():
     s = s.cut(box(28, BY0 - 1, 248, BY0 + 13, zr0, SHELL_DEPTH + 1))           # top terminal row wiring window
     s = s.cut(box(28, BY1 - 13, 248, BY1 + 1, zr0, SHELL_DEPTH + 1))           # bottom terminal row
     s = s.cut(box(BX1 - 18, 34, BX1 + 1, 182, zr0, SHELL_DEPTH + 1))           # right edge terminals J1/J23/J6/J7 (phase 14: back to y 182)
-    s = s.cut(box(3.0, -21.0, 20.0, -1.0, zr0, SHELL_DEPTH + 1))              # phase 14: PE lug access window over PE_NEW (rear wall only)
     s = s.cut(box(BX0 - 1, 9, BX0 + 17, 164, zr0, SHELL_DEPTH + 1))            # left 600 V terminals J28/J29/J30
     s = s.cut(box(*REAR_OPEN, zr0, SHELL_DEPTH + 1))                          # phase 4: opening under the Al fin plate
     for (cx, cy, w, h, zt) in REAR_PORTS.values():
@@ -203,13 +202,14 @@ def rear_shell():
     s = s.union(box(bx, SY0 + WALL, bx + 2, 175, ZR + 1.0 + 18.0, SHELL_DEPTH - 1))
     for (x, y) in SHELL_POSTS:
         s = s.union(cyl(x, y, 6.0, ZR + 0.3, SHELL_DEPTH - 1))
-    s = s.union(cover_latch()[2]).cut(cyl(*CS_XY, 2.5, 30, SHELL_DEPTH + 1))   # phase 18 latch boss + pilot
-    s = s.cut(lip_grooves())                                                 # phase 16: blind wrap-lip grooves (outer wall)
+    if WRAP_LIPS_ON: s = s.cut(lip_grooves())                                # phase 16 lip grooves; OFF since phase 19
+    for (p, sd) in BOND_CLAMPS:                                               # phase 19: d3.4 holes for the bond M3 screws
+        s = s.cut(box(p - 6.7, SY0 - 1, p - 3.3, SY0 + WALL + 3.6, BOND_Z - 1.7, BOND_Z + 1.7))
     return s
 
 def clamps(t=PANEL_T):
     """6 SLS PA12 clamp blocks: 18 x 10 tongue in the shell pad's blind slot, body outside, M4 brass heat-set insert,
-    M4 thumb screw pushes forward onto the customer panel rear. Phase 14: LEFT clamps (HV side) use all-nylon PA66 M4x35 screws (non-conductive); T/B/R keep nylon-tip steel."""
+    M4 thumb screw pushes forward onto the customer panel rear. Phase 19: ALL clamps use ordinary M4 x 35 steel screws (Ethan, Oct 25)."""
     br, sc = [], []
     zt = Z_PANEL + t
     for (p, side) in CLAMPS:
@@ -286,16 +286,7 @@ def heat_pillar():
     return box(*PILLAR, Z_HB1, SHELL_DEPTH)
 HV_RIM_Z = 7.0                                     # phase 9: rim trimmed to Z 7.0 in the HV zone
 # phase 11: PP film dropped (Compliance phase 9 ruling: not required; leads clipped to <= 1.0 mm instead)
-PE_BOSS_D, PE_BOSS_Z = 8.0, ZR + 1.0            # bezel PE boss (existing) end face at Z 18.6, at H4
 PE_MASK_D = 12.0                                  # anodise mask-off: boss end face spot face (whole 8 mm face) + thread
-def pe_bond():
-    """phase 14: PE bond at the NEW bezel boss PE_NEW = M4 A2 screw + flat washer + M4 ring terminal + internal-tooth star washer on the BARE boss face."""
-    z = PE_BOSS_Z; P = PE_NEW
-    sw = cyl(*P, 8.0, z, z + 0.6).cut(cyl(*P, 4.3, z - 1, z + 2))             # star washer DIN 6797 J M4 (OD 8, t 0.6)
-    lug = cyl(*P, 8.0, z + 0.6, z + 1.4).cut(cyl(*P, 4.3, z, z + 2)).union(box(P[0] - 2.5, P[1] - 9.5, P[0] + 2.5, P[1] - 3.5, z + 0.6, z + 1.4))   # ring lug, tongue -y over the board top edge
-    fw = cyl(*P, 9.0, z + 1.4, z + 2.2).cut(cyl(*P, 4.3, z, z + 3))           # flat washer
-    sc = cyl(*P, 7.0, z + 2.2, z + 5.0).union(cyl(*P, 4.0, z - 8.0, z + 2.2))   # M4x10 head + shank into the 3.3 tap
-    return U([sw, lug, fw, sc])
 def hv_leads(lead=2.0):
     """J28/J29/J30 THT lead tips protruding from PCB F face (INFERRED 2.0 mm untrimmed, 1.0 trimmed)."""
     import json as _j
@@ -315,7 +306,6 @@ def plug_envelopes():
 COV_T, COV_GSK = 3.0, 1.5                       # cover plate / gasket (ESTIMATED design values)
 # name: (window x0, y0, x1, y1), cover (x0, y0, x1, y1), grommet: ("slot", x0, y0, x1, y1) or ("hole", x, y, D)
 COVERS = {
-    "PE":     ((3.0, -21.0, 20.0, -1.0),            (1.5, -22.5, 21.5, 0.5),   ("hole", 11.5, -15.0, 10.0)),
     "LEFT_HV":((BX0 - 1, 9, BX0 + 17, 164),          (-8.0, 6.0, 15.5, 167.0),  ("slot", 0.0, 14.0, 9.0, 159.0)),
     "TOP":    ((28, BY0 - 1, 248, BY0 + 13),          (25.0, BY0 - 4, 251.0, -0.27), ("slot", 33.0, BY0 + 2.0, 243.0, BY0 + 10.0)),
     "BOTTOM": ((28, BY1 - 13, 248, BY1 + 1),          (25.0, 178.5, 251.0, BY1 + 4), ("slot", 33.0, BY1 - 10.0, 243.0, BY1 - 2.0)),
@@ -355,12 +345,12 @@ def covers():
             if (gx1 - gx0) >= (gy1 - gy0): m = m.cut(box(gx0, (gy0 + gy1) / 2 - 0.3, gx1, (gy0 + gy1) / 2 + 0.3, 0, 200))
             else: m = m.cut(box((gx0 + gx1) / 2 - 0.3, gy0, (gx0 + gx1) / 2 + 0.3, gy1, 0, 200))
             mb.append(m)
-    t_, g_, _, _ = cover_latch()
-    return U(cv).union(wrap_lips()).union(t_), U(gk).union(g_), U(mb)
+    return (U(cv).union(wrap_lips()) if WRAP_LIPS_ON else U(cv)), U(gk), U(mb)
 # ---- phase 16: outer wrap lips on the single-hook covers (far edge < 2.5 mm from the inner wall) -------------------------
 # Lip segments 10 mm long hug the OUTER shell wall (0.2 mm gap) and carry a 0.6 mm bead into a blind 0.8 mm groove cut in
 # the outer wall (Z 43.8-45.0). Segments avoid the clamp T-slot zones and the left wall y 15-105 (kept 1.000 solid).
 LIP_T, LIP_GAP, LIP_LEN, LIP_Z0 = 1.5, 0.2, 10.0, 43.3
+WRAP_LIPS_ON = False   # phase 19: wrap lips, beads and grooves removed (Ethan: keep it simple); True restores phase 18 geometry
 LEFT_LIP_BEAD = True    # phase 18: restored after Compliance hv_rulings_phase16 §B(e) (2.2 mm wall OK, design min 2.0 mm); False = locating lips only
 GRV_D, GRV_Z = 0.8, (43.8, 45.0)
 WRAP_LIPS = {"LEFT_HV": ("x0", [140.0, 157.0]), "BOTTOM": ("y1", [40.0, 138.0, 235.0]), "RIGHT": ("x1", [50.0, 140.0, 170.0])}
@@ -393,17 +383,33 @@ def wrap_lips():
 def lip_grooves():
     return U([_lip_geo(e, c)[3] for n, (e, cs) in WRAP_LIPS.items() for c in cs if n != "LEFT_HV" or LEFT_LIP_BEAD])
 
-# ---- phase 18: tool-only latch on the J28-J30 (LEFT_HV) cover: captive PA66 M3 screw in a cover tab at (6, 173) ----------
-# all-plastic (no metal near HV); tab outside y 15-105 and 11 mm beyond the J30 body (y 162); PA12 boss under the rear wall.
-CS_XY = (6.0, 173.0)
-def cover_latch():
-    """returns (tab+gasket-free plate extension on the cover, inner PA12 boss on the shell, screw)."""
-    z = SHELL_DEPTH; zt = z + COV_GSK + COV_T
-    tab = box(0.0, 166.0, 12.0, 179.0, z + COV_GSK, zt).cut(cyl(*CS_XY, 3.4, 0, 200))
-    tgk = box(0.0, 167.0, 12.0, 179.0, z, z + COV_GSK).cut(cyl(*CS_XY, 3.4, 0, 200))
-    boss = cyl(*CS_XY, 7.0, 38.0, z - WALL + 0.01).cut(cyl(*CS_XY, 2.5, 0, 200))
-    scr = cyl(*CS_XY, 5.5, zt, zt + 2.0).union(cyl(*CS_XY, 3.0, 39.0, zt))
-    return tab, tgk, boss, scr
+# ---- phase 19: bezel-to-panel bond through the TOP clamps (Ethan via Enginerd, Oct 25). No wire out the back. -------------
+# path: panel rear (paint bitten by A2 cup-point M4 clamp screw) -> M4 brass insert -> tinned-Cu bridge strip on the clamp
+# block -> M3 brass insert in the clamp block -> M3 A2 screw through the shell wall/boss web (from inside) -> tinned-Cu strap
+# (0.5 x 6) down the inside of the top wall -> M3 A2 screw into a BARE (masked) tapped landing boss on the bezel.
+BOND_CLAMPS = [(72.9, "T"), (203.5, "T")]       # bottom/right: inner bosses overhang the PCB edge, no strap room (README)
+BOND_Z = 41.25                                  # through-boss screw height (mid clamp)
+BOND_PIECES = {}
+BOND_NAMES = ["m3_through_screw_head", "m3_through_screw_shank", "strap_vertical", "strap_foot", "landing_screw", "m3_insert", "bridge_strip"]
+def bond_parts():
+    """returns (bezel landings, metal: screws+strap+bridge+inserts)."""
+    land, met = [], []
+    for (p, sd) in BOND_CLAMPS:
+        yb = SY0 + WALL + 3.5                   # inner face of the clamp boss (y -19.77)
+        ys = yb + 2.0 + 0.0                     # strap plane just past the M3 head
+        lx, ly = p + 20.0, SY0 + WALL + 3.47          # landing between keys (key caps reach y -16.2), y -19.8
+        land.append(cyl(lx, ly, 6.0, FIELD_T, 10.0))
+        q = p - 5.0                             # through-screw / strap x: clear of the 600 V barrier rib x 73-75
+        head = box(q - 2.75, yb, q + 2.75, yb + 2.0, BOND_Z - 2.75, BOND_Z + 2.75)          # M3 pan head (square approx)
+        shank = box(q - 1.5, SY0 - 4.5, q + 1.5, yb, BOND_Z - 1.5, BOND_Z + 1.5)            # into the M3 insert in the tongue
+        strap = box(q - 3, ys, q + 3, ys + 0.5, 10.0, BOND_Z + 3.5)                        # vertical strap, eye under the head
+        foot = box(q - 3, ly - 3.0, lx + 3.5, ys + 0.5, 10.0, 10.5)                       # foot along x to the landing
+        lscr = cyl(lx, ly, 5.5, 10.5, 12.5).union(cyl(lx, ly, 3.0, 6.0, 10.5))
+        ins3 = box(q - 2.2, SY0 - 4.5, q + 2.2, SY0 - 0.5, BOND_Z - 2.2, BOND_Z + 2.2)    # M3 heat-set insert in the tongue
+        bridge = box(q - 3, SY0 - 11, p + 3, SY0 - 0.5, CL_Z1 - 0.5, CL_Z1).cut(cyl(p, SY0 - 8, 4.4, 0, 200))   # tinned-Cu bridge eye round the M4 insert
+        met += [head, shank, strap, foot, lscr, ins3, bridge]
+        BOND_PIECES[f"{sd}{p:g}"] = dict(zip(BOND_NAMES, [head, shank, strap, foot, lscr, ins3, bridge]))
+    return U(land), U(met)
 
 def tunnel_seals():
     """phase 15: closed-cell foam ring closing the 0.5 mm TUN_GAP between each J10/J11 tunnel foot and the jack shell."""
@@ -425,9 +431,8 @@ def build():
             "heat_pillar": (heat_pillar(), (0.8, 0.55, 0.25)), "light_pipe": (light_pipe(), (0.9, 0.95, 1.0)),
             "exl1_strip": (exl1_strip(), (0.8, 0.8, 0.85)), "strip_pad": (strip_pad(), (0.9, 0.3, 0.6)),
             "fans": (fn, (0.1, 0.1, 0.1)), "fan_gaskets": (fg, (0.3, 0.3, 0.3)), "filter_covers": (fc, (0.4, 0.45, 0.42)), "fan_screws": (fs, (0.85, 0.85, 0.9)),
-            "pe_bond": (pe_bond(), (0.85, 0.7, 0.2)),
             "window_covers": (wc, (0.35, 0.4, 0.5)), "cover_gaskets": (wg, (0.1, 0.1, 0.1)), "grommets": (wm, (0.2, 0.2, 0.2)),
-            "tunnel_seals": (tunnel_seals(), (0.1, 0.1, 0.1)), "cover_screw": (cover_latch()[3], (0.95, 0.95, 0.9))}
+            "tunnel_seals": (tunnel_seals(), (0.1, 0.1, 0.1)), "bond_hw": (bond_parts()[1], (0.85, 0.6, 0.3))}
 
 def vol(a, b):
     try: return a.intersect(b).val().Volume()
@@ -435,6 +440,48 @@ def vol(a, b):
 
 def dist(a, b):
     return round(a.val().distance(b.val()), 2) if hasattr(a.val(), "distance") else None
+def clamp_metal_distances(pl, pl30):
+    """per clamp: steel M4 screw (d4, from the thinnest-panel tip Z_PANEL+1.0 to 3 mm above the clamp, + head d7 x 3, ESTIMATED)
+    and brass insert (OD 5.6 ESTIMATED, Z CL_Z0..CL_Z1) -> J28/J29 plug envelopes, J30 envelope (old KF2EDGRM model), live outer copper."""
+    import json as _j, numpy as _np
+    LJ = _j.load(open(os.path.join(HERE, "finger", "hv_copper.json")))["points"]
+    P = _np.array([[q[0], q[1], Z_PCB if q[2] == "F" else ZR, q[3]] for q in LJ])
+    def cyl_pts(cx, cy, rad, z0, z1):
+        h = _np.hypot(P[:, 0] - cx, P[:, 1] - cy) - rad; h = _np.maximum(h, 0)
+        dz = _np.maximum(_np.maximum(z0 - P[:, 2], P[:, 2] - z1), 0)
+        return float(_np.min(_np.hypot(h, dz) - P[:, 3]))
+    res = {}
+    for (p, sd) in CLAMPS:
+        if sd in "TB": cx, cy = p, (SY0 - 8 if sd == "T" else SY1 + 8)
+        else: cx, cy = (SX0 - 8 if sd == "L" else SX1 + 8), p
+        sc = cyl(cx, cy, 4.0, Z_PANEL + 1.0, CL_Z1 + 3).union(cyl(cx, cy, 7.0, CL_Z1 + 3, CL_Z1 + 6))
+        ins = cyl(cx, cy, 5.6, CL_Z0, CL_Z1)
+        res[f"{sd}{p:g}"] = {"screw_to_J28J29_plug": dist(sc, pl), "screw_to_J30_plug(old model)": dist(sc, pl30),
+                             "insert_to_J28J29_plug": dist(ins, pl), "insert_to_J30_plug(old model)": dist(ins, pl30),
+                             "screw_to_live_copper": round(min(cyl_pts(cx, cy, 2.0, Z_PANEL + 1.0, CL_Z1 + 3), cyl_pts(cx, cy, 3.5, CL_Z1 + 3, CL_Z1 + 6)), 2),
+                             "insert_to_live_copper": round(cyl_pts(cx, cy, 2.8, CL_Z0, CL_Z1), 2)}
+        res[f"{sd}{p:g}"]["min"] = min(v for v in res[f"{sd}{p:g}"].values())
+        res[f"{sd}{p:g}"]["pass_8.0"] = res[f"{sd}{p:g}"]["min"] >= 8.0
+    return res
+def bond_distances(pl, pl30):
+    """phase 19: each bond-path metal part (bbox, conservative) -> live outer copper points, J28/J29 and J30 envelopes."""
+    import json as _j, numpy as _np
+    LJ = _j.load(open(os.path.join(HERE, "finger", "hv_copper.json")))["points"]
+    P = _np.array([[q[0], q[1], Z_PCB if q[2] == "F" else ZR, q[3]] for q in LJ])
+    bond_parts(); res = {}
+    for key, pcs in BOND_PIECES.items():
+        sub = {}
+        for nm, sh in pcs.items():
+            bb = sh.val().BoundingBox()
+            x0, x1, y0, y1, z0, z1 = bb.xmin, bb.xmax, -bb.ymax, -bb.ymin, -bb.zmax, -bb.zmin
+            dx = _np.maximum(_np.maximum(x0 - P[:, 0], P[:, 0] - x1), 0); dy = _np.maximum(_np.maximum(y0 - P[:, 1], P[:, 1] - y1), 0)
+            dz = _np.maximum(_np.maximum(z0 - P[:, 2], P[:, 2] - z1), 0)
+            sub[nm] = {"to_live_copper": round(float(_np.min(_np.sqrt(dx*dx + dy*dy + dz*dz) - P[:, 3])), 2),
+                       "to_J28J29_plug": dist(sh, pl), "to_J30_plug(old model)": dist(sh, pl30)}
+        sub["min"] = min(min(v.values()) for v in sub.values())
+        sub["pass_8.0"] = sub["min"] >= 8.0
+        res[key] = sub
+    return res
 def hv_checks(parts):
     """phase 9 compliance: 3D clearances from J28/J29 hot metal to display, bezel (earthed), clamp metal, joint screws."""
     out = {}
@@ -451,15 +498,9 @@ def hv_checks(parts):
     out["J28J29_plug_envelope_to_left_clamp_insert (reinforced 8.0)"] = dist(pl, ins)
     out["J28J29_pads_to_left_clamp_insert"] = dist(hv_leads(0.01).translate((0, 0, PCB_T + 0.01)), ins)
     out["J30_plug_envelope_to_left_clamp_insert"] = dist(pl30, ins)
-    out["pe_bond_hardware_to_nearest_HV_plug (earthed, basic 5.5)"] = dist(parts["pe_bond"][0], pl)
-    out["pe_boss_to_J28J29_plug_envelope (earthed, basic 5.5)"] = dist(cyl(*PE_NEW, 8.0, 0.5, ZR + 1.0), pl)
-    out["pe_bond_hardware_to_J30_plug_envelope"] = dist(parts["pe_bond"][0], pl30)
-    out["pe_boss_to_display"] = dist(cyl(*PE_NEW, 8.0, 0.5, ZR + 1.0), parts["display"][0])
-    out["pe_boss_to_switches"] = dist(cyl(*PE_NEW, 8.0, 0.5, ZR + 1.0), parts["switches"][0])
-    out["pe_boss_to_key_caps"] = dist(cyl(*PE_NEW, 8.0, 0.5, ZR + 1.0), parts["key_caps"][0])
-    out["pe_boss_to_light_pipe"] = dist(cyl(*PE_NEW, 8.0, 0.5, ZR + 1.0), parts["light_pipe"][0])
-    out["pe_boss_to_front_ring_sleeve"] = dist(cyl(*PE_NEW, 8.0, 0.5, ZR + 1.0), parts["front_ring"][0])
-    out["pe_boss_to_clamps"] = dist(cyl(*PE_NEW, 8.0, 0.5, ZR + 1.0), parts["clamps"][0])
+    # phase 19: per-clamp steel M4 x 35 screw + brass insert distances to live metal (rule: >= 8.0 mm clearance)
+    out["clamp_metal_to_live_mm (rule 8.0)"] = clamp_metal_distances(pl, pl30)
+    out["bond_path_metal_to_live_mm (rule 8.0)"] = bond_distances(pl, pl30)
     # J30 creepage, phase 14: surface path (MODELLED, hand-route over CAD surfaces; see CLAMP_RETENTION.md / README phase 14)
     ins118 = [p for (p, sd) in CLAMPS if sd == "L" and FP["J30"]["bbox"][1] - 15 < p < FP["J30"]["bbox"][3] + 15]
     leg1 = ((max(FP["J30"]["bbox"][0], BX0) - (BX0 - 1)) ** 2 + ((SHELL_DEPTH - WALL) - (ZR + 16.0)) ** 2) ** 0.5   # plug top-left edge -> rear-window rim (along field-wire insulation)
@@ -483,7 +524,7 @@ def checks(parts):
     names = list(parts)
     allowed = {("pcb", "rear_parts"), ("pcb", "switches"), ("heat_bar", "thermal_pads"), ("bezel", "thermal_pads"),
                ("clamps", "rear_shell"), ("clamp_screws", "customer_panel"), ("heat_bar", "heat_pillar"),
-               ("fan_screws", "fin_plate"), ("fan_screws", "fans"), ("fan_screws", "fan_gaskets"), ("fan_screws", "filter_covers"), ("pe_bond", "bezel"), ("cover_screw", "rear_shell")}
+               ("fan_screws", "fin_plate"), ("fan_screws", "fans"), ("fan_screws", "fan_gaskets"), ("fan_screws", "filter_covers"), ("bond_hw", "bezel"), ("bond_hw", "clamps"), ("bond_hw", "rear_shell_UNUSED")}
     for a, b in itertools.combinations(names, 2):
         if (a, b) in allowed or (b, a) in allowed: continue
         if "customer_panel" in (a, b) and "gasket" in (a, b): continue

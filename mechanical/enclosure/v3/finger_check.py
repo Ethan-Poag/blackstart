@@ -1,9 +1,5 @@
-"""Phase 15 CAD test-finger access check (MODELLED; not a substitute for the NRTL probe test).
-Probe: STRAIGHT RIGID finger, dia 12.0 mm, max penetration 80 mm (stop face dia 50 x 20 mm cannot pass any window, all < 50 mm
-in one dimension). Dimensions from vendor pages describing IEC 61032 Fig. 2 test probe B (SECONDARY, standard not read):
-  bndtestequipment.com/test-finger-probe/iec61032-iec60529-ip2x-test-probe-b-test-finger/  (12 mm, 80 mm, stop face 50 x 20)
-  merhein.com/products/iec61032-figure-2-test-probe-b  (12 mm, 80 mm, 50 mm stop face, joints 90 deg)
-  ormity.com/product-page/jointed-finger-probe-iec-61032  (12 x 80 mm, 50 mm stop face, 10 N)
+"""Informal CAD finger sanity check (MODELLED). DIY open-source project, not a certified product.
+Model: straight rigid finger, dia 12.0 mm, max penetration 80 mm, 50 x 20 mm stop face. Not a formal test.
 Joint section lengths and tip radius NOT verified -> articulation NOT modelled; tip modelled FLAT (reaches deeper than the
 real rounded tip = conservative for depth). The jointed finger can reach further sideways than any straight line: lateral
 'articulation margin' reported = min straight-line distance minus nothing is credited; see doc.
@@ -11,7 +7,7 @@ Method: all rigid CAD parts tessellated; for each opening the finger axis is swe
 opening and 9 directions (normal + 30/45 deg tilted toward +-x, +-y); the finger advances until any of 25 rays on its
 cross-section hits a solid. Distance = straight 3D distance from the finger body (segment, r 6) to hazardous-live outer-layer
 copper (hv_copper.json, read-only pcbnew export, pad half-diagonal subtracted). Grommet membranes are NOT rigid -> ignored.
-PASS criterion used here (ASSUMED, Compliance to confirm): finger does not touch live copper and >= 8.0 mm (reinforced
+PASS criterion used here (ASSUMED): finger does not touch live copper and >= 8.0 mm (reinforced
 clearance) from it; touching a J28/J29/J30 plug body is reported separately (the plug's own finger safety is unverified)."""
 import json, math, os, sys, numpy as np, trimesh
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
@@ -101,7 +97,7 @@ if __name__ == "__main__":
     for n, (w, c, g) in E.COVERS.items():
         cov[f"{n}_cover_grommet"] = ((("hole", g[1], g[2], g[3]) if g[0] == "hole" else ("rect",) + tuple(g[1:])), z_cov)
     for n, (cx, cy, w, h, zt) in E.REAR_PORTS.items(): cov[f"{n}_port_tunnel"] = (("rect", cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2), z_out)
-    out = {"probe": "straight rigid finger d12 x 80 mm, flat tip (MODELLED; IEC 61032 probe B dims SECONDARY via vendor pages; articulation not modelled)",
+    out = {"probe": "straight rigid finger d12 x 80 mm, flat tip (MODELLED informal sanity check; articulation not modelled)",
            "live_set": "outer-layer copper of all '/AC metering' nets + GND_AC + +3V3_AC + U22/U23 CT (ASSUMED conservative), %d points" % len(live),
            "pass_rule": "no contact and >= 8.0 mm to live copper (ASSUMED; Compliance to set)",
            "bare_no_covers": run("bare", parts, live, bare), "covers_fitted": run("covered", parts, live, cov)}

@@ -47,15 +47,168 @@
    "J28J29_plug_envelope_to_left_clamp_insert (reinforced 8.0)": 13.48,
    "J28J29_pads_to_left_clamp_insert": 35.26,
    "J30_plug_envelope_to_left_clamp_insert": 11.29,
-   "pe_bond_hardware_to_nearest_HV_plug (earthed, basic 5.5)": 14.0,
-   "pe_boss_to_J28J29_plug_envelope (earthed, basic 5.5)": 14.5,
-   "pe_bond_hardware_to_J30_plug_envelope": 113.68,
-   "pe_boss_to_display": 3.5,
-   "pe_boss_to_switches": 9.68,
-   "pe_boss_to_key_caps": 1.08,
-   "pe_boss_to_light_pipe": 119.89,
-   "pe_boss_to_front_ring_sleeve": 1.5,
-   "pe_boss_to_clamps": 22.79,
+   "clamp_metal_to_live_mm (rule 8.0)": {
+    "T72.9": {
+     "screw_to_J28J29_plug": 73.15,
+     "screw_to_J30_plug(old model)": 155.45,
+     "insert_to_J28J29_plug": 72.82,
+     "insert_to_J30_plug(old model)": 155.53,
+     "screw_to_live_copper": 54.97,
+     "insert_to_live_copper": 57.62,
+     "min": 54.97,
+     "pass_8.0": true
+    },
+    "T203.5": {
+     "screw_to_J28J29_plug": 193.33,
+     "screw_to_J30_plug(old model)": 239.29,
+     "insert_to_J28J29_plug": 193.64,
+     "insert_to_J30_plug(old model)": 239.59,
+     "screw_to_live_copper": 80.94,
+     "insert_to_live_copper": 82.55,
+     "min": 80.94,
+     "pass_8.0": true
+    },
+    "B72.9": {
+     "screw_to_J28J29_plug": 113.46,
+     "screw_to_J30_plug(old model)": 76.25,
+     "insert_to_J28J29_plug": 113.5,
+     "insert_to_J30_plug(old model)": 75.68,
+     "screw_to_live_copper": 60.16,
+     "insert_to_live_copper": 62.56,
+     "min": 60.16,
+     "pass_8.0": true
+    },
+    "B203.5": {
+     "screw_to_J28J29_plug": 212.25,
+     "screw_to_J30_plug(old model)": 196.6,
+     "insert_to_J28J29_plug": 212.59,
+     "insert_to_J30_plug(old model)": 196.81,
+     "screw_to_live_copper": 155.6,
+     "insert_to_live_copper": 156.06,
+     "min": 155.6,
+     "pass_8.0": true
+    },
+    "L2": {
+     "screw_to_J28J29_plug": 14.14,
+     "screw_to_J30_plug(old model)": 106.94,
+     "insert_to_J28J29_plug": 13.48,
+     "insert_to_J30_plug(old model)": 106.73,
+     "screw_to_live_copper": 26.51,
+     "insert_to_live_copper": 32.23,
+     "min": 13.48,
+     "pass_8.0": true
+    },
+    "L118": {
+     "screw_to_J28J29_plug": 14.45,
+     "screw_to_J30_plug(old model)": 11.4,
+     "insert_to_J28J29_plug": 13.79,
+     "insert_to_J30_plug(old model)": 11.29,
+     "screw_to_live_copper": 20.75,
+     "insert_to_live_copper": 27.69,
+     "min": 11.29,
+     "pass_8.0": true
+    },
+    "L178": {
+     "screw_to_J28J29_plug": 68.46,
+     "screw_to_J30_plug(old model)": 18.87,
+     "insert_to_J28J29_plug": 68.06,
+     "insert_to_J30_plug(old model)": 18.49,
+     "screw_to_live_copper": 30.48,
+     "insert_to_live_copper": 35.45,
+     "min": 18.49,
+     "pass_8.0": true
+    },
+    "R90": {
+     "screw_to_J28J29_plug": 277.7,
+     "screw_to_J30_plug(old model)": 281.66,
+     "insert_to_J28J29_plug": 278.13,
+     "insert_to_J30_plug(old model)": 282.02,
+     "screw_to_live_copper": 67.5,
+     "insert_to_live_copper": 69.58,
+     "min": 67.5,
+     "pass_8.0": true
+    }
+   },
+   "bond_path_metal_to_live_mm (rule 8.0)": {
+    "T72.9": {
+     "m3_through_screw_head": {
+      "to_live_copper": 43.86,
+      "to_J28J29_plug": 60.19,
+      "to_J30_plug(old model)": 140.14
+     },
+     "m3_through_screw_shank": {
+      "to_live_copper": 46.52,
+      "to_J28J29_plug": 62.32,
+      "to_J30_plug(old model)": 142.52
+     },
+     "strap_vertical": {
+      "to_live_copper": 38.18,
+      "to_J28J29_plug": 59.66,
+      "to_J30_plug(old model)": 139.5
+     },
+     "strap_foot": {
+      "to_live_copper": 38.56,
+      "to_J28J29_plug": 60.08,
+      "to_J30_plug(old model)": 139.68
+     },
+     "landing_screw": {
+      "to_live_copper": 54.32,
+      "to_J28J29_plug": 83.63,
+      "to_J30_plug(old model)": 152.3
+     },
+     "m3_insert": {
+      "to_live_copper": 51.68,
+      "to_J28J29_plug": 65.45,
+      "to_J30_plug(old model)": 148.66
+     },
+     "bridge_strip": {
+      "to_live_copper": 53.84,
+      "to_J28J29_plug": 65.32,
+      "to_J30_plug(old model)": 148.66
+     },
+     "min": 38.18,
+     "pass_8.0": true
+    },
+    "T203.5": {
+     "m3_through_screw_head": {
+      "to_live_copper": 73.0,
+      "to_J28J29_plug": 185.66,
+      "to_J30_plug(old model)": 226.49
+     },
+     "m3_through_screw_shank": {
+      "to_live_copper": 75.59,
+      "to_J28J29_plug": 187.23,
+      "to_J30_plug(old model)": 228.69
+     },
+     "strap_vertical": {
+      "to_live_copper": 69.42,
+      "to_J28J29_plug": 185.31,
+      "to_J30_plug(old model)": 225.95
+     },
+     "strap_foot": {
+      "to_live_copper": 54.86,
+      "to_J28J29_plug": 185.45,
+      "to_J30_plug(old model)": 226.06
+     },
+     "landing_screw": {
+      "to_live_copper": 54.98,
+      "to_J28J29_plug": 210.69,
+      "to_J30_plug(old model)": 248.14
+     },
+     "m3_insert": {
+      "to_live_copper": 81.38,
+      "to_J28J29_plug": 187.81,
+      "to_J30_plug(old model)": 232.17
+     },
+     "bridge_strip": {
+      "to_live_copper": 80.23,
+      "to_J28J29_plug": 187.21,
+      "to_J30_plug(old model)": 231.72
+     },
+     "min": 54.86,
+     "pass_8.0": true
+    }
+   },
    "J30_surface_path_to_left_clamp_insert_MODELLED (reinforced 12.6)": 26.69,
    "J30_surface_path_legs [wire-insulation leg, rim, rear face, outer wall, clamp top]": [
     11.49,
@@ -76,19 +229,19 @@
   "insertion: shell bbox vs cutout per side (min gap, must be >0)": 1.0
  },
  "volumes_cm3": {
-  "bezel": 231.7,
+  "bezel": 231.5,
   "display": 451.3,
   "key_caps": 36.5,
   "key_membrane": 7.0,
   "key_nibs": 0.2,
   "switches": 2.9,
-  "pcb": 95.1,
+  "pcb": 95.2,
   "rear_parts": 190.7,
   "heat_bar": 12.5,
   "thermal_pads": 1.4,
   "gasket": 12.8,
   "customer_panel": 151.1,
-  "rear_shell": 205.8,
+  "rear_shell": 206.6,
   "clamps": 20.6,
   "clamp_screws": 3.4,
   "front_ring": 99.7,
@@ -101,12 +254,11 @@
   "fan_gaskets": 0.9,
   "filter_covers": 5.7,
   "fan_screws": 1.0,
-  "pe_bond": 0.3,
-  "window_covers": 36.7,
-  "cover_gaskets": 7.6,
-  "grommets": 8.5,
+  "window_covers": 33.4,
+  "cover_gaskets": 7.2,
+  "grommets": 8.4,
   "tunnel_seals": 0.2,
-  "cover_screw": 0.1
+  "bond_hw": 1.0
  },
  "bbox": {
   "bezel": [
@@ -234,24 +386,19 @@
    161.0,
    17.3
   ],
-  "pe_bond": [
-   9.0,
-   14.0,
-   13.0
-  ],
   "window_covers": [
-   297.4,
-   223.9,
-   9.2
+   292.5,
+   218.0,
+   8.5
   ],
   "cover_gaskets": [
    292.5,
-   221.2,
+   218.0,
    1.5
   ],
   "grommets": [
    279.8,
-   216.7,
+   210.0,
    1.0
   ],
   "tunnel_seals": [
@@ -259,10 +406,10 @@
    28.0,
    7.4
   ],
-  "cover_screw": [
-   5.5,
-   5.5,
-   15.5
+  "bond_hw": [
+   162.1,
+   20.2,
+   39.0
   ]
  },
  "shell_outer_WxH": [

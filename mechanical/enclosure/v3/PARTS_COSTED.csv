@@ -47,3 +47,24 @@ P16-1,Wrap lips on LEFT_HV/BOTTOM/RIGHT window covers (8 x 10 mm segments + bead
 
 P18-1,Captive PA66 M3x10 slotted screw + retaining washer (J28-J30 cover latch),1,catalogue,any,n/a,,0.3,0.15,ESTIMATED,2026-10-25,no
 P18-2,Warning labels UL969 laminated PET/polyimide (cover 5.5x140 + shell 30x15),2,printed label,any,n/a,,3.0,1.2,ESTIMATED,2026-10-25,no
+
+P19-R1,REMOVED P11-1 PE bond hardware,-,-,-,n/a,,-2,-1,ESTIMATED,2026-10-25,no
+P19-R2,REMOVED P11-2 anodise masks M1-M5,-,-,-,n/a,,-15,-5,ESTIMATED,2026-10-25,no
+P19-R3,REMOVED P11-3 PE bond test,-,-,-,n/a,,-5,-3,ESTIMATED,2026-10-25,no
+P19-R4,REVERT P14-1 nylon -> ordinary steel M4x35 left clamp screws,3,-,-,n/a,,-0.5,-0.3,ESTIMATED,2026-10-25,no
+P19-R5,REMOVED P14-2 PE ring terminals,-,-,-,n/a,,-0.4,-0.25,ESTIMATED,2026-10-25,no
+P19-R6,REMOVED PE window cover share of P15-1,-,-,-,n/a,,-2,-1.2,ESTIMATED,2026-10-25,no
+P19-R7,REMOVED PE gasket ring (P15-2),-,-,-,n/a,,-1,-0.6,ESTIMATED,2026-10-25,no
+P19-R8,REMOVED P15-4 PE grommet,-,-,-,n/a,,-0.5,-0.3,ESTIMATED,2026-10-25,no
+P19-R9,REMOVED P16-1 wrap lips,-,-,-,n/a,,-1.5,-0.9,ESTIMATED,2026-10-25,no
+P19-R10,REMOVED P18-1 nylon latch screw,-,-,-,n/a,,-0.3,-0.15,ESTIMATED,2026-10-25,no
+P19-R11,SIMPLIFIED P18-2 labels -> one printed vinyl/polyester label,1,-,-,n/a,,-2.5,-0.95,ESTIMATED,2026-10-25,no
+P19-1,A2 M4x35 cup-point bond clamp screw (delta vs steel),2,-,-,n/a,,0.8,0.5,ESTIMATED,2026-10-25,no
+P19-2,M3 brass heat-set insert in clamp block,2,-,-,n/a,,0.4,0.2,ESTIMATED,2026-10-25,no
+P19-3,M3x8 + M3x6 A2 screws + internal-tooth washers,2 sets,-,-,n/a,,0.8,0.4,ESTIMATED,2026-10-25,no
+P19-4,Tinned-Cu strap + bridge strip 0.5x6,2 sets,-,-,n/a,,2,1,ESTIMATED,2026-10-25,no
+P19-5,Bezel bond landing bosses + M3 taps,2,-,-,n/a,,5,2,ESTIMATED,2026-10-25,no
+P19-6,Anodise mask-off 2 landings + 1 test spot,3 spots,-,-,n/a,,9,3,ESTIMATED,2026-10-25,no
+P19-T1,TOTAL Phase 19 net delta,-,-,-,n/a,sum,-12.7,-6.55,ESTIMATED,2026-10-25,no
+P19-T2,TOTAL delta vs baseline after Phase 19 (before 272.8/170.1),-,-,-,n/a,sum,260.1,163.55,ESTIMATED,2026-10-25,no
+P19-T3,ROLLED-UP unit total after Phase 19 (before 932.8/560.1),-,-,-,n/a,sum,920.1,553.55,ESTIMATED,2026-10-25,no

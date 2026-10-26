@@ -1,4 +1,6 @@
 # Blackstart enclosure v3 (Phase 1, 2026-10-25) - nothing committed
+
+> **DIY open-source project, not a certified product.** Build and install it at your own risk. The design rules used are 8.0 mm clearance and 6.6 mm creepage from live parts. Earlier phases mention compliance reviews; Phase 19 removed those requirements.
 Built against genctl_v4_handrouted.kicad_pcb @ f03c57a (read-only). Supersedes PANEL_V2 / rev C where Ethan's 2026-10-25 constraints differ; old files untouched.
 
 ## Design (all in `enclosure_v3.py`, parametric, reads `board_interface.json`)
@@ -121,3 +123,42 @@ Pairwise boolean intersections of all 15 parts (intended contacts excluded: PCB/
 - **Cover-off warning label** (verbatim, hv_rulings_phase16.md §B(c)): "DANGER: Hazardous voltage up to 600 V AC. Isolate all voltage inputs and short CT secondaries at the external shorting terminals before removing this cover or unplugging J28/J29/J30. Do not plug or unplug under voltage." W012 + IEC 61010-1 symbols 14/12. One label on the cover outside face (5.5 × 140 mm) and one on the shell beside the window (30 × 15 mm). UL 969 laminated PET/polyimide for salt air. See WINDOW_COVERS.md.
 - The physical IEC 61032 probe-B test is still required (checklist in WINDOW_COVERS.md).
 - **UL note, J30 header 1720851:** at 600 V it may be used only under **UL use group D (600 V / 5 A) or group F (600 V / 41 A)**; groups B and C are 300 / 150 V. The plug 1996184 is cULus 600 V / 35 A. The NRTL decides the group. If group D governs, CT continuous current must be ≤ 5 A (Compliance §B(b)).
+
+## Phase 19 (Ethan's decisions, Oct 25 2026): DIY cleanup + bezel-to-panel bond through the clamps
+**Removed (history in git, a915be1):**
+- PE: the PE_NEW boss (12.3, -7.5), rear PE window, PE cover and grommet, ring terminals, star washer, screw, lug, PE wire spec, bond-test masks M1-M5 and the bond-test procedure. PE_BOND.md is now a short note. BCR-11 is **WITHDRAWN**. MISMATCH #35-40 and #47-50 are closed by decision (#46, the J30 footprint, is still pending). H1-H3 CHASSIS bosses stay; H4 stays a plain hole.
+- Nylon clamp screws, the UL94 note, the 0.15 N·m limit and the humidity soak test. All clamps are ordinary steel M4 x 35 (CLAMP_RETENTION.md). L118 metal is 11.29 mm from the J30 envelope (≥ 8.0), so no nylon is needed.
+- Wrap lips, beads and grooves (`WRAP_LIPS_ON = False`; left wall plain). The captive nylon latch screw, tab and boss (the J28-J30 cover is snap-only, 3 hooks). The probe-B checklist and probe-B language. `finger_check.py` stays as an informal sanity check.
+- Restored PE-only geometry: the key membrane is no longer notched for the PE boss. The right window is already at y 182 (since Phase 14).
+- Kept: snap covers with gaskets and membranes, one simple printed label (verbatim text, WINDOW_COVERS.md), and J30_PHOENIX_DATA.md.
+
+**Bezel-to-panel bond (CAD part `bond_hw` plus 2 landings on `bezel`; `BOND_CLAMPS` in enclosure_v3.py):**
+- **Bond clamps: TOP x 72.9 and TOP x 203.5 (2 in parallel).**
+  - BOTTOM (x 72.9, 203.5) and RIGHT (y 90) are not used. Their inward wall bosses overhang the PCB edge (inner boss face y 193.23 vs PCB edge 194.73; x 278.78 vs 280.28), so an internal strap would have to pass within about 0.8 mm of the PCB edge, between the board and the 2 mm wall gap. That does not fit with margin. The top has an 8 mm gap between the inner wall and the PCB (y -23.27 to -15.27).
+  - The 3 left clamps are not bond clamps (steering).
+- **Path, per bond clamp:**
+  1. **A2 stainless M4 x 35 cup-point screw.** The cup bites through the paint on the rear panel face.
+  2. **M4 brass heat-set insert** in the clamp block.
+  3. **Tinned-Cu bridge strip** 0.5 x 6 mm, on top of the clamp block, from the M4 insert to the M3 insert. Its eye is captured under the M4 insert flange (pressed through the eye while heat-setting).
+  4. The bridge strip bends into the tongue to an **M3 brass heat-set insert** in the clamp block just outside the wall, at Z 41.25 (x = clamp x - 5, so the strap clears the 600 V barrier rib at x 73-75; y -30.8 to -26.8).
+  5. **M3 x 8 A2 screw** from INSIDE the shell, through a Ø3.4 hole (modelled as a 3.4 mm square) in the shell wall and the 2 mm PA12 web of the wall boss between the T-slot end (y -21.77) and the boss inner face (y -19.77), into that M3 insert.
+  6. Its head clamps the eye of an **internal tinned-Cu strap** 0.5 x 6 mm. The strap runs down the inside of the top wall in the plane y -17.77 to -17.27, from Z 44.75 to Z 10, then turns into a foot along +x (Z 10-10.5) to the landing.
+  7. **M3 x 6 A2 screw** with an internal-tooth washer into a **bare tapped landing boss** on the bezel: Ø6, Z 4-10, at (x+20, -19.8), i.e. (92.9, -19.8) and (223.5, -19.8). That is between the key caps (they reach y -16.2) and the inner shell wall (y -23.27).
+  - The key membrane is notched Ø8 around each landing.
+  - Nothing passes through H1-H3, any PCB pad or the PCB. There is no wire out the back and nothing goes through the panel.
+  - The path has several thread joints, so it relies on the meter check below.
+- **Anodise:** mask off each landing face and its M3 tap (2 spots), plus one Ø6 **bare test spot** on the bezel outer edge at the top-left corner, for the meter probe. All three can be plugs or caps, or a post-anodise spot-face.
+- **Installer note:** Mount to a bare-metal panel contact or scrape paint under the clamp tips; check continuity from bezel to panel with a meter (under 1 ohm).
+
+**Checks (checks.json, MODELLED):**
+- 0 interferences, with 1 mm and 6 mm panels, the sealed shell, the PCB, parts, keys and membrane. The bond hardware is allowed to touch only the bezel landing and its own clamp; it is checked against the shell, which has Ø3.4 holes for the bond screws.
+- Left wall y 15-105 solid fraction 1.000.
+- Bond-path metal minimum distance to live copper and the J28-J30 envelopes:
+  - T72.9: 38.18 mm (strap vertical)
+  - T203.5: 54.86 mm (strap foot)
+  - Both ≥ 8.0. The right clamp is not in the bond set; its steel screw is 67.5 mm away (≥ 13).
+- Per-clamp screw/insert minimum (mm): L2 13.48, L118 11.29, L178 18.49, T72.9 54.97, T203.5 80.94, B72.9 60.16, B203.5 155.6, R90 67.5.
+- Finger check (informal): covers off, worst LEFT_HV 8.30. Covers on: no entry.
+- HV values unchanged: lead tips 1.0 mm to the bezel 8.0 and to the display 10.44; J30 surface path 26.69.
+- Thermal: no relevant geometry changed, so the thermal docs are not updated.
+- Costs: PARTS_COSTED.md "Phase 19".
