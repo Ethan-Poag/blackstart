@@ -9,3 +9,8 @@ Status: schematic complete (ERC 0/0), layout and enclosure in progress. Prototyp
 Not certified. Do not rely on it for safety until independently tested and reviewed.
 
 See DESIGN_NOTES.md, docs/, and LICENSING.md.
+
+## +12V rail notes (m7-wip, 2026-10-26)
+- The 470 uF bulk caps C17/C18 (CP_Elec_10x10.5) on +12V sit about 160 mm (C17) and 174 mm (C18) from the LM5176 output FET Q6. The builder may want to move them near Q6. No ceramic bulk sits at Q6: the nearest +12V caps are C96 100 nF (11.6 mm) and C14 1 uF (24.6 mm).
+- Trunk limit (inferred, IPC-2221 10 C, 1 oz outer assumed): narrowest trunk segment 1.5 mm, about 3.2 A supported against roughly 3.7 A estimated for U3+U15.
+- Still unpowered on +12V: U24.3/C125 (backlight boost), U2.24 (LM5176 BIAS), C17, C18.
