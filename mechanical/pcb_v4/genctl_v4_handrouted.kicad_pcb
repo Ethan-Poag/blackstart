@@ -455457,7 +455457,7 @@
 	(segment
 		(start 227.3 64.9)
 		(end 227.6 65.2)
-		(width 0.6)
+		(width 0.3)
 		(layer "B.Cu")
 		(net 706)
 		(uuid "3d6f1bb9-8612-45bc-8730-a64af38c6f8b")
