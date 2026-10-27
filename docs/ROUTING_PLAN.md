@@ -319,3 +319,12 @@ cls.py counts on the gated boards (its signal split differs from §1: 138 nets /
   - R115.2, R204.2, U21 H9 (GND): caged by DI2_D, DSI83_IRQ_1V8, AI_SH_EN4, DI_PD_B and LVDS3 tracks. They need signal rip-up, not a nudge → **OPEN**.
   - U70.2 (GND): U70 is the ISO7741 with a hot +3V3_AC pin, so it is not moved → **OPEN**.
 - **Gate:** project and pro-only DRC 0 errors, unconnected_items 499 unchanged. Default-rules DRC timed out at 25 min (not measured). HV A/B 7/23, hvsheet 0, slot-edge 0 / corner 1, viachk clean, courtyards 0, VBAT_F F 2.435 / B 1.999, In2 neck 1.384, fem unchanged.
+
+### 7.8 Batch 1d — rip-up attempts for the boxed-in GND pins (no board change) [M]
+Through-via sites within ±1 mm of each pad, checked at 0.15 mm clearance on all 6 layers, 0.45 mm hole-to-hole, landing in GND1/GND2: **0 sites** for R115.2, R204.2 and U21 H9. Other-net copper blocks every site on F, B and In2. Local rip-up and reroute with the grid router (0.15 mm), routing the GND link first (0.30 mm):
+- **R204.2 → R209.2 (GND, B):** the link routes (1.74 mm), but DI_PD_B (113 mm, U31.20/R209.1 → Q41.1) then cannot be reconnected. The U31/R209 pocket is sealed even with a 45 × 40 mm search area. **OPEN.**
+- **R115.2 → C115.2 (GND, F):** the link routes (1.97 mm), but DSI83_IRQ_1V8 (R115.1/U21.J9 → U79.3) cannot be reconnected (54k cells searched). **OPEN.**
+- **U21 H9:** inside the BGA field, under the LVDS2/LVDS3/LVDSC pair vias. Not touched, so pair matching is kept. **OPEN.**
+- **U70.2:** stays open (ISO7741, hot side).
+- **U22-CT and U24-OVP:** need a bigger change, after the hot-side batch.
+These need placement or multi-net rework, not small reroutes.
