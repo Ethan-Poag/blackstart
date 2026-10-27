@@ -418,3 +418,14 @@ Fix: design.py now emits the 90d8a8e values for RV1-RV6 and the TPS48100 shunts 
   - DRC project rules and no custom rules 0 errors; copper_edge (no custom rules) 0.
   - HV opens A/B 7/23; hvsheet 0; dangling vias 12; slot-edge 0, corner 1; viachk 0 bad; courtyards 0.
   - Islands: GND 29, +3V3_SAFE 2, +5V 13, VBAT_P 63, VBAT_F 1, +12V 1 (was 3); VBAT_P pieces 23.
+
+### BOM vs schematic fixes (step 5)
+- Programmatic diff (/workspace/m7/bomcmp.py; ranges expanded): schematic BOM export vs docs/genctl_bom.csv (ref, value, footprint, MPN, LCSC) and mechanical/bom.csv (ref, value, footprint) over all 1183 refs. Before: 44 mismatches (R297/R303 MPN+LCSC; RV1-RV6 value/footprint/MPN/LCSC in both BOMs). After: 0.
+  - R297/R303 -> WSLP25121L000FEA C844705. C2933264 is FRC0603F8870TS (887 ohm 0603), not a shunt.
+  - RV1-RV6 -> TMOV20RP460E / genctl:TMOV20RP_P7.5mm_inline / TMOV20RP460EL2T7 C3260792.
+- LCSC actual value vs schematic value sweep. Sources: jlc_raw.csv descriptions, MPN value codes decoded from lifecycle_table.csv (61 rows decodable), and LCSC pages fetched 10/26 for each confirmation. Three wrong LCSC numbers were found; the schematic values are the intended ones, so the LCSC numbers were fixed (tools/design.py RCX, tools/gen.py RLCSC, BOM):
+  - R295/R301 10R: C22936 = 0603WAF100KT5E 1 ohm -> C22859 0603WAF100JT5E 10 ohm 1%. These are TPS48100 G1PU gate series resistors; design.py writes '10R' explicitly.
+  - R9 140k (LM5176 FB top, 140k/10k = 12 V assuming 0.8 V ref): C22806 = 15.8 ohm -> C22875 0603WAF1403T5E 140k 1%.
+  - R474-R487 (8x) 24.9R CT burden: C23111 = 787 ohm -> C22916 0603WAF249JT5E 24.9 ohm 1%. The note says "0.1% burden"; C22916 is 1%. A 0.1% part is an open item.
+- Schematic field diff vs 0cc821f: only these 11 LCSC fields changed. Netlist identical. ERC 0. No board change: the board holds LCSC only for RV1-RV6/R297/R303, which already match; footprints are unchanged.
+- Open: bom/ac_metering_bom.csv "CT burden" row (1-2 ohm 0805, pre-design estimate) disagrees with the 24.9R design; docs/ISOLATION_CHECK.md still describes V20E385P 10 mm pitch; docs/genctl_schematic.pdf not regenerated.
