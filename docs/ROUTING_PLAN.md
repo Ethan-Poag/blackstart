@@ -258,3 +258,51 @@ Everything else is estimated completable with rip-up. That estimate is not yet b
 - All day estimates.
 
 Scratch scripts for the recount: `/workspace/m7/rp/{rn2.py,cls.py,cap.py,occ.py}`. They are not committed.
+
+## 7. Routing Batch 1 — status, budgets, targets (2026-10-26, HST)
+
+Tags: [M] measured on the committed board, [I] inferred, [A] assumed.
+
+### 7.1 Current budget used for Batch 1 copper [A/I]
+- Basis: IPC-2221, I = k·ΔT^0.44·A^0.725, k 0.048 outer / 0.024 inner, ΔT 18 °F. Copper 1 oz outer / 0.5 oz inner **ASSUMED** (no stackup defined). Source table: /workspace/review/cur/current_budget.md.
+- GND pad-to-plane links (Batch 1a): 0.30 mm outer track (~1.0 A at 18 °F [I]) + one 0.6/0.3 via (0.76–0.90 A [I]) or 0.45/0.2 via (0.57–0.67 A [I]). Assumed current per link: return of a signal/decoupling pad or a connector GND pin carrying ≤0.5 A [A]. Connector GND pins (J1/J7/J8/J18/J21/J25/J27) carry their circuit return through one via each; if any connector return exceeds ~0.8 A this is NOT sufficient [I] (not checked per pin).
+- VBAT_P: known capacity ~1.8 A through In2 effective width (Q2→Q3 In2 1.384 mm ≈ 0.92 A at 18 °F per current_budget.md). Nothing in this file claims more.
+
+### 7.2 Power targets for the later power batch (NOT routed; lead must confirm the power batch) [A]
+Assumptions: 18 °F rise, 1 oz outer / 0.5 oz inner ASSUMED, no stackup defined. System rating: **"fuse 10 A, continuous 8 A or less"**.
+
+| Net / branch | Current | Min width | Layers | Stitching | Status |
+|---|---|---|---|---|---|
+| VBAT_F / VBAT_DD existing copper | ≤8 A cont. | existing (VBAT_F ~9.9 A [I], VBAT_DD 5.29 mm B ≈ 8.0 A [I]) | existing | existing | OK up to 8 A continuous |
+| VBAT_P Q2 (260,165) → Q3 (227,140), ~41 mm | ≤5 A per layer | ≥2.9 mm each | F.Cu + B.Cu pours (+ In2) | ≥8 vias each end | see 7.3 |
+| Crank/fuel branches, VBAT_ESTOP → shunts/FETs → J23 | 15 A real | ≥6.3 mm each, or 4.2 mm at 36 °F | F + B pours | per pour | OPEN — power batch |
+| +12V trunk | — | ≥1.9 mm | outer | — | OPEN — power batch |
+| +5V L2 → every +5V load | — | ≥1.4 mm (2.6 mm for 4.7 A) | outer | — | OPEN — power batch |
+| Outputs U47–U61 | — | ≥0.3 mm each; 1.37 mm for full limit; 1.0 mm where room | outer | — | OPEN — power batch |
+| U68 ESTOP_TRIP | 7.5 A pulse ~2.2 s | 1.2 mm In2 feed now; widen to ≥2 mm if easy | In2 | — | NOTE: not widened in Batch 1 |
+
+### 7.3 RV3 — documented exception (bodge wire)
+- Do NOT route the 124 mm inner-layer GEN_L3 run (J28.3→RV3.1) or the 125 mm GEN_N run at +1.0 mm margin on a 1.5 mm rule.
+- RV3 is wired with a **600 V insulated bodge wire, ≥0.5 mm², sleeved and tied down, ≥12.6 mm from SELV**.
+- **Until it is wired, the GEN input has NO surge protection.**
+- Also recorded in PROGRESS.md and docs/BENCH_12V_TEST.md (no dedicated bring-up checklist exists in docs/; BENCH_12V_TEST.md is the closest bench doc).
+
+### 7.4 Hot-side / HV batch — recorded approach only (not started; lead confirmation required)
+Cut back and re-pour hot zones; HV on inner layers; nudge R436/R443 if needed; no vias in barrier areas; 6.6 mm L-L and 5.5 mm L-N outer, 1.5 mm inner, 12.6 mm hot-to-SELV, 6.6 mm to edge. HV opens A/B (7/23) untouched in Batch 1.
+
+### 7.5 Status table — opens per class (rn2.py/cls.py union-find; KiCad GetUnconnectedCount) [M]
+cls.py counts on the gated boards (its signal split differs from §1: 138 nets / 272 opens; same tool both columns).
+
+| Class | 2f4c9ec | Batch 1a |
+|---|---|---|
+| signal | 272 | 272 |
+| power | 188 | 188 |
+| HV/hot | 88 | 88 |
+| VBAT_P | 62 | 62 |
+| GND | 28 | **5** |
+| nameless | 21 | 21 |
+| **KiCad unconnected** | 659 | **636** |
+
+### 7.6 Batch log
+- **Batch 1a — GND (this commit, parent b84eb0e):** 23 GND pad-to-plane links (0.30 mm track + via; 22 × 0.6/0.3, 1 × 0.45/0.2 at U21 D5) into the GND1/GND2 fill. Zones refilled (33). Gate [M]: DRC 0 errors with project rules and with pro-only rules (unconnected_items 499 both before/after); KiCad default-rules DRC timed out at 25 min before and after (NOT MEASURED); HV opens A/B 7/23 unchanged; hvsheet 0; dangling vias 12; viachk 23 checked 0 bad; slot-edge 0, slot-corner 1 (unchanged); courtyard overlaps 0; isl.py unchanged; VBAT_F necks F 2.435 / B 1.999 mm unchanged. VBAT_P fill −39.1 mm² of 21 664 mm² (−0.18 %, accepted by the lead under 0.5 %); VBAT_P Q2→Q3 In2 neck (review/cur scripts/neck.py, erosion) 1.384 mm on HEAD, 1.384 mm with the new vias, 1.384 mm with the six vias near Q2 (x 268–274, y 160–168) removed → unchanged.
+- **Remaining GND opens (5): R115.2, U70.2, R204.2, U21 B9, U21 H9 — needs a part nudge or via-in-pad decision** (no legal via site within ~4 mm at 0.15 mm clearance without via-in-pad).

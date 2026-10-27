@@ -58,3 +58,6 @@ Assumptions (not measured):
 - TDK SPM10065VT-4R7M-D datasheet: 4.7 uH SMD power inductor (L1).
 - Compensation figures: /workspace/review/c65/lm5176_compensation_analysis.md (model estimates).
 - Items marked "general practice" are not taken from a datasheet.
+
+## Before any generator (GEN) AC connection
+- **RV3 is not PCB-routed.** It must be wired with a 600 V insulated bodge wire, ≥0.5 mm², sleeved and tied down, ≥12.6 mm from SELV (see docs/ROUTING_PLAN.md §7.3). **Until it is wired, the GEN input has NO surge protection.**

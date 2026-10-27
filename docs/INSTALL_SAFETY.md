@@ -43,7 +43,7 @@ directly without a second relay.
 | Fuse | Minimum copper |
 |---|---|
 | 3 A | 0.5 mm² (20 AWG) |
-| 10 A | 1.0 mm² (18–16 AWG) |
+| 10 A | 0.82–1.3 mm² (18–16 AWG) |
 | 15 A | 1.5–2.5 mm² (16–14 AWG) |
 | 30 A | 4–6 mm² (12–10 AWG) |
 

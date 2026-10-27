@@ -487,3 +487,4 @@ These need a decision from a qualified safety engineer. No layout change has bee
 - J11 (HRO TYPE-C-31-D-06B) courtyard NOT added: its S1 shield-tab pad copper edge (y=52.800) is 0.009 mm from the R107 courtyard (y=52.809), so any courtyard margin overlaps R107 without moving parts. Open item.
 
 - 2026-10-26: routing plan written (plan only, no routing): see docs/ROUTING_PLAN.md.
+- 2026-10-26: Routing Batch 1a (GND 23 of 28) — see docs/ROUTING_PLAN.md §7. RV3 is a documented exception: 600 V insulated bodge wire (≥0.5 mm², sleeved, tied down, ≥12.6 mm from SELV); until it is wired the GEN input has NO surge protection. Checklist: docs/BRINGUP_CHECKLIST.md.
