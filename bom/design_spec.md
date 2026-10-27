@@ -29,7 +29,7 @@ Status: 2026-10-24 (display: RVT121HVLNWCA0-B; previous version design_spec_rvt1
 ## 6. E-stop (estop_notes.md)
 - External E-stop **NC1**: Battery+ -> 30 A fuse -> NC1 -> J4 VBAT_ESTOP (2 pins). This rail is the only supply for the fuel/crank FETs and their drivers, so the engine stops with no firmware involved.
 - **E-stop sense**: VBAT_ESTOP goes through a clamped divider to the MCU, plus an optional NC2 independent sense on J3-1. The MCU logs the event, pulses GCB OPEN and drops all enables. It also backs up the trip with an MCU open command (GPIO through the WDO AND gate, diode-ORed into EN, limited to ~2 s).
-- **Hardware breaker trip**: when VBAT_ESTOP opens, the TLC555-Q1 one-shot (its own TPS7B6950-Q1 5 V rail) fires the ESTOP_TRIP output (TPS1HTC30, J5-6) for nominal 0.48 s (0.44-0.53 s tolerance, possibly down to about 0.26 s with cap DC bias; INFERRED, must be measured on a built board cold and hot). The MCU checks coil current during the pulse.
+- **Hardware breaker trip**: when VBAT_ESTOP opens, the TLC555-Q1 one-shot (its own TPS7B6950-Q1 5 V rail) fires the ESTOP_TRIP output (TPS1HTC30, J24.6) for nominal 0.48 s (0.44-0.53 s tolerance; must be measured on a built board cold and hot). The MCU checks coil current during the pulse.
 - **Shunt trip is the standard.** UVR is optional. If used, it is wired battery -> own fuse -> NC2 -> time-delay UVR module, and **never through the controller**.
 
 ## 7. AC metering (ac_metering_bom_jlc.csv)

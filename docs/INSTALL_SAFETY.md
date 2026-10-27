@@ -37,7 +37,7 @@ Total draw and ESTOP_TRIP (inference, not certified):
 - Total controller draw on the board battery input (F1) is limited to 3.6 A continuous (INFERRED from PCB copper rating at 18 °F (10 °C) rise). The 12 V electronics and all AUX/GCB/MCB/GLOW outputs share this limit.
 - AUX/GCB/MCB/GLOW outputs are for relay coils and indicators only, ≤ 0.5 A each, combined ≤ 1 A while the controller display is on (INFERRED; firmware-enforced).
 - ESTOP_TRIP (J24.6) drives an installer-supplied 12 V DC relay coil, ≤ 0.5 A, with a suppression diode. It must NOT drive a breaker shunt coil directly. The relay contact switches the shunt trip from the installer's own control supply.
-- ESTOP_TRIP pulse: nominal 0.48 s (0.44–0.53 s from component tolerance; possibly down to about 0.26 s with DC bias on the timing capacitor; INFERRED). It must be measured on a built board, cold and hot, before relying on it. For a held signal, or a UVR, wire the UVR from the E-stop chain, never through the controller.
+- ESTOP_TRIP pulse: nominal 0.48 s (0.44–0.53 s from component tolerance). It must be measured on a built board, cold and hot, before relying on it. For a held signal, or a UVR, wire the UVR from the E-stop chain, never through the controller.
 
 Connectors:
 - J24, J26, J27 (Kefa KF2EDGRM-5.08-6P headers): rated 10 A UL / 15 A IEC per pin (Kefa drawing rev A). The rating is for a
