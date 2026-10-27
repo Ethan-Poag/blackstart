@@ -370,3 +370,24 @@ Fix: design.py now emits the 90d8a8e values for RV1-RV6 and the TPS48100 shunts 
 - What the page showed: "Production (NRND)", recommended alternate SPM10065VC-4R7M-D, "Interchangeability is not guaranteed". Other values on the page: 4.7 uH ±20%, 26.2 A typ (30% L drop), 11.7 A typ (40 °C / 72 °F rise), DCR 9.2 mOhm typ / 10.12 mOhm max, 10.5 x 10.0 x 6.5 mm max, AEC-Q200.
 - The alternate was listed by TDK at 4.7 uH, 12.1 A and 10.5 x 10.0 x 6.5 mm. I did not check its full datasheet, saturation current or land pattern.
 - No part number, LCSC number, value, board or schematic was changed. The note is in bom/power_bom.csv (notes column) only. docs/genctl_bom.csv and mechanical/bom.csv have no notes column.
+
+### U1.10 VS connected (step 1, reviewer necessary_changes_e50f4a2 item d)
+- U1.10 (LM74800-Q1 VS) was open, so the controller could not drive DGATE/HGATE (reviewer, cited TI LM7480-Q1 DS pin table).
+- Fix (B.Cu only):
+  - C2 (0603, CAP-VS 100 nF) moved 0.65 mm south to (252.91, 166.89). Rotation, pads and nets are unchanged.
+  - Old CAP stubs deleted. New CAP track: U1.11 -> (252.25, 165.75) -> C2.1, 0.15 mm.
+  - VBAT_DD sense track (U1.12 -> 254.8, 166.25) rerouted through the C2 pad gap at y 166.89, 0.15 mm.
+  - C2.2 -> VBAT_F via (253.0, 168.3), 0.3 mm.
+  - New 0.2 mm track U1.10 -> new 0.4/0.2 via at (252.55, 165.25). The via lands in the VBAT_F_FCU and VBAT_F_PWR fills (hit-tested after refill).
+  - C8 untouched. The reviewer's options (C2 east, C8 east) gave courtyard overlaps with C8/Q2 (measured).
+- Connectivity (KiCad pcbnew GetUnconnectedCount after refill):
+  - 664 -> 662.
+  - Deleting only the new U1.10 track on a copy gives 663, so KiCad counts U1.10 as joined.
+  - isl.py VBAT_F groups 2 -> 1 (U1.10 island gone).
+- Gate (measured):
+  - DRC project rules 0 errors; no custom rules 0 errors, copper_edge 0.
+  - HV opens A/B 7/23; hvsheet 0; dangling vias 12; slot-edge 0, slot-corner 1 (inherited); viachk 1 checked, 0 bad; courtyards 0.
+  - Islands: GND 29, +3V3_SAFE 2, +5V 13, VBAT_P 63, VBAT_F 1, +12V 4; VBAT_P pieces 23.
+  - mneck VBAT_F F1->Q1 necks unchanged (F 2.435, B 1.999 mm), so the ~9.9 A INFERRED figure stands.
+  - The vgroups.py VBAT_P-opens script failed with an IndexError on both the before and after boards, so the 70 figure was not re-measured.
+- One extra unconnected item also closed (664 -> 662 is 2). It was not identified.
