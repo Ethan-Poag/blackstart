@@ -438,7 +438,7 @@ for n in ('FUEL','CRANK'):
     ou.R('100k','VBAT_ESTOP',n+'_UVLO'); ou.R('27k',n+'_UVLO','GND'); ou.R('35.7k',n+'_ISCP','GND',note='RISCP to GND per DS eq.5: Isc=(35.7k*2uA+19mV)/1mR = 90A'); ou.C('68n',n+'_TMR','GND')
     ou.C('470n',n+'_BST',n+'_OUT'); ou.C('100n','VBAT_ESTOP','GND',pkg='0805')
     ou.R('10R',n+'_GPU',n+'_G'); ou.R('0R',n+'_GPD',n+'_G')
-    ou.R('1m','VBAT_ESTOP',n+'_DRN',pkg='2512',mpn='WSLP2512 1mR',note='shunt')
+    ou.R('1m','VBAT_ESTOP',n+'_DRN',pkg='2512',mpn='WSLP25121L000FEA',lcsc='C844705',mfr='Vishay',note='shunt')  # R297/R303: manual sch edit 32b12c7/7eaa27d folded into design.py
     for _ in range(2): fet(ou,'Transistor_FET:BSC070N10NS5','BSC070N10NS5',n+'_G',n+'_OUT',n+'_DRN')
     ou.p('Amplifier_Current:INA281A2','INA281A2',{'OUT':n+'_ISNS','GND':'GND','Vin+':'VBAT_ESTOP','Vin-':n+'_DRN','V+':'+3V3'},prefix='U',mpn='INA281A2QDBVRQ1'); ou.C('100n','+3V3','GND')
     tvs(ou,'SMBJ33CA',n+'_OUT')
@@ -520,7 +520,7 @@ ac.p('Device:Crystal_GND24','24.576MHz',{'1':'ADE_XI','3':'ADE_XO','2':'GND_AC',
 for tag,J in (('GEN','J7'),('BUS','J8')):
     conn(ac,4,[tag+'_L1',tag+'_L2',tag+'_L3',tag+'_N'],'%s %s voltage (L1 L2 L3 N)'%(J,tag),note='external DIN fuses assumed (spec); >=600VAC rated terminal')
     for ph,L in zip('ABC',('L1','L2','L3')):
-        ac.p('Device:Varistor','V20E385P',{'1':tag+'_'+L,'2':tag+'_N'},prefix='RV',mpn='V20E385P',lcsc='C1527447',fp='Varistor:RV_Disc_D21.5mm_W7.5mm_P10mm')
+        ac.p('Device:Varistor','TMOV20RP460E',{'1':tag+'_'+L,'2':tag+'_N'},prefix='RV',mpn='TMOV20RP460EL2T7',lcsc='C3260792',mfr='Littelfuse',fp='genctl:TMOV20RP_P7.5mm_inline')  # RV1-RV6: manual sch edit 32b12c7/7eaa27d folded into design.py
         a=tag+'_'+L
         for j in range(4):
             b=('%s_%s_HV%d'%(tag,L,j+1)) if j<3 else '%s_V%s_TAP'%(tag,ph)
