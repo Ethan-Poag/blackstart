@@ -429,3 +429,8 @@ Fix: design.py now emits the 90d8a8e values for RV1-RV6 and the TPS48100 shunts 
   - R474-R487 (8x) 24.9R CT burden: C23111 = 787 ohm -> C22916 0603WAF249JT5E 24.9 ohm 1%. The note says "0.1% burden"; C22916 is 1%. A 0.1% part is an open item.
 - Schematic field diff vs 0cc821f: only these 11 LCSC fields changed. Netlist identical. ERC 0. No board change: the board holds LCSC only for RV1-RV6/R297/R303, which already match; footprints are unchanged.
 - Open: bom/ac_metering_bom.csv "CT burden" row (1-2 ohm 0805, pre-design estimate) disagrees with the 24.9R design; docs/ISOLATION_CHECK.md still describes V20E385P 10 mm pitch; docs/genctl_schematic.pdf not regenerated.
+
+### LM5176 MODE wording (step 6)
+- R6 93.1k = CCM with hiccup ENABLED. Verified in the TI datasheet on the box (/tmp/ds/lm5176.txt, SNVSAI1D rev Aug 2021): pin table p3 says "1.38 V < MODE < 2.22 V: CCM, hiccup enabled (RMODE = 93.1 kΩ)" and "2.6 V < MODE < VCC: hiccup disabled (200 kΩ or VCC)"; the MODE table on p20 agrees. The reviewer flagged it first.
+- Fixed: tools/design.py R6 note (schematic: only this 1 field changed; netlist identical; ERC 0) and the docs/BENCH_12V_TEST.md safety line. No other file mentions hiccup; the board carries no Note field.
+- The no-sustained-short warning stays: hiccup cycles, but every restart still pushes peak current through Q3-Q6, L1 and the sense resistor.

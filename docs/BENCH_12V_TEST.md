@@ -18,7 +18,7 @@ Assumptions (not measured):
 - ESD (general practice): use a grounded wrist strap and mat when handling the board or reworking R9.
 - Eye protection (general practice): wear safety glasses while powered, especially near the electrolytics and when soldering.
 - Thermocouple placement (general practice): attach fine-gauge (e.g. type K) thermocouples with Kapton tape and a dab of thermal paste. Place them on the U2 package top, the Q3–Q6 package tops or drain tabs, the L1 body and the R12 body. Route the leads away from the SW nodes and log the ambient air separately.
-- Do not run a sustained output short. MODE (R6 93.1k) disables hiccup and ISNS+/- are tied to +12V, so a short only heats parts.
+- Do not run a sustained output short. MODE (R6 93.1k) sets CCM with hiccup ENABLED (LM5176 SNVSAI1D pin table p3: 93.1 kΩ = hiccup enabled; 200 kΩ or VCC = disabled). ISNS+/- are tied to +12V, so output-current limiting is not used. Under a short the controller cycles in hiccup, but each restart still drives peak current through Q3–Q6, L1 and the sense resistor, so a sustained short repeatedly stresses and heats parts. Keep any short test brief and current-limited at the bench supply.
 
 **Expected loop figures (model estimates from the c65 compensation analysis, R8 = 4.7k, C11 33n, C12 220p; model uncertainty about ±1.5x on fc and ±10–15° on PM):**
 - 8 V in (boost): crossover 3.7–12.9 kHz, PM 64–74° (A1 12.9 kHz/64°, A3 5.1 kHz/74°, C 3.7 kHz/72°).

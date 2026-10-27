@@ -56,7 +56,7 @@ pw.p('genctl:LM5176PWPR','LM5176PWPR',{'VIN':'VBAT_P','VISNS':'VBAT_P','EN/UVLO'
    'HDRV1':'BB_HDRV1','BOOT1':'BB_BOOT1','SW1':'BB_SW1','LDRV1':'BB_LDRV1','HDRV2':'BB_HDRV2','BOOT2':'BB_BOOT2','SW2':'BB_SW2','LDRV2':'BB_LDRV2',
    'CS':'BB_CS','CSG':'GND','PGOOD':'PG_12V','VCC':'BB_VCC','BIAS':None,'PGND':'GND'},mpn='LM5176PWPR')
 pw.R('100k','VBAT_P','BB_EN'); pw.R('33k','BB_EN','GND')
-pw.R('93.1k','BB_MODE','GND',note='MODE: 93.1k = CCM, hiccup OFF (DS MODE table)')
+pw.R('93.1k','BB_MODE','GND',note='MODE: 93.1k = CCM, hiccup ENABLED (SNVSAI1D pin table p3; 200k/VCC = disabled)')
 pw.R('27.4k','BB_RT','GND',note='fsw ~300kHz per DS RT equation - see DESIGN_NOTES')
 pw.C('220p','BB_SLOPE','GND',note='slope comp per DS eq. (see DESIGN_NOTES)')
 pw.C('47n','BB_SS','GND'); pw.R('4.7k','BB_COMP','BB_COMP_RC',mpn='0603WAF4701T5E',lcsc='C23162',mfr='UNI-ROYAL',note='Rc (review c65: 22.1k->4.7k)'); pw.C('33n','BB_COMP_RC','GND',note='Cc1'); pw.C('220p','BB_COMP','GND',note='Cc2')
