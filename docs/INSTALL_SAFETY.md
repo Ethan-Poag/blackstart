@@ -1,7 +1,7 @@
 # Installation safety: output wiring and fusing
 
 > Genctl is an open-source DIY design. It is NOT certified. Fuse and wire values below are
-> inference, not certified; the wire table has not been checked against SAE J1128, ISO 6722 or ISO 8820.
+> inference, not certified. Wire table basis: ABYC E-11 Table 4B (105 °C wire, inside the engine space, bundled); not checked against SAE J1128, ISO 6722 or ISO 8820.
 
 > **WARNING: Output copper on this board revision is not yet rated for the fuse values in this
 > table. Do not build or load this revision beyond the bench-test limits until the routing plan's
@@ -26,14 +26,18 @@ Every output must have its own external fuse, supplied and installed by the inst
 | CRANK | J23.4 | TPS48100-Q1 + 2 MOSFETs | 15 A | 15 A blade (ATO/ATC), 32 V DC |
 | GLOW | J24.1 | TPS1HTC30-Q1 | limit 2.49 A (1.99–2.99 A) | 2 A blade, 32 V DC |
 | GCB_CL, GCB_OP, MCB_CL, MCB_OP | J24.2, .3, .4, .5 | TPS1HTC30-Q1 | limit 2.49 A | 2 A blade each |
-| ESTOP_TRIP | J24.6 | TPS1HTC30-Q1 | limit 7.5 A (6.0–9.0 A), ~2.2 s pulse | 10 A blade |
+| ESTOP_TRIP | J24.6 | TPS1HTC30-Q1 | limit 7.5 A (6.0–9.0 A), ~2.2 s pulse | 7.5 A blade |
 | AUX1–AUX6 | J26.1–6 | TPS1HTC30-Q1 | limit 2.49 A | 2 A blade each |
 | AUX7–AUX10 | J27.1–4 (J27.5/6 = GND) | TPS1HTC30-Q1 | limit 2.49 A | 2 A blade each |
 | Battery feed | to J23 VBAT_ESTOP via NC E-stop | — | system | 30 A (existing) |
 
 32 V DC blade fuses suit 12 V and 24 V systems.
 
-Connectors J24, J26 and J27 (KF2EDGRM-5.08-6P headers): current rating UNVERIFIED (not found in the repo).
+Connectors:
+- J24, J26, J27 (Kefa KF2EDGRM-5.08-6P headers): rated 10 A UL / 15 A IEC per pin (Kefa drawing rev A). The rating is for a
+  single pole; no derating is given for all poles loaded (UNVERIFIED for that case). The mating plug's wire range is
+  unknown: Ethan has to check it. A 10 A ESTOP_TRIP fuse would sit exactly at the UL limit, hence 7.5 A.
+- J23 (Phoenix 1720819, PC 5/4-GF-7.62): 32 A nominal, 41 A UL; covers 15 A (subject to the maker's derating curve).
 
 **FUEL/CRANK fuse type (installer's check):** if the starter/fuel solenoid's pull-in current
 exceeds its steady-state current, use a time-delay (slow-blow) 15 A blade fuse; otherwise a
@@ -45,13 +49,15 @@ directly without a second relay.
 > the 30 A fuse; board copper, connectors and wiring rated for 15 A can overheat first.
 > Fit the per-output fuses.
 
-## Wire size vs fuse (inference, not certified; not checked against SAE J1128 / ISO 6722)
+## Wire size vs fuse (inference, not certified; basis ABYC E-11 Table 4B, 105 °C wire, engine space, bundled)
 | Fuse | Minimum copper |
 |---|---|
-| 3 A | 0.5 mm² (20 AWG) |
-| 10 A | 1.5 mm² (16 AWG minimum, 14 AWG preferred) |
-| 15 A | 2.5 mm² (14 AWG, or 12 AWG for long or bundled runs) |
-| 30 A | 6 mm² (10 AWG) |
+| 2 A | 18 AWG / 0.82 mm² |
+| 7.5 A (ESTOP_TRIP) or 10 A | 16 AWG / 1.31 mm² |
+| 15 A | 14 AWG / 2.08 mm² |
+| 30 A | 10 AWG / 5.26 mm² |
+
+For circuits under 50 V, also check voltage drop.
 
 Never use wire smaller than the stated mm², whatever AWG is used.
 
@@ -64,5 +70,5 @@ at the coil keeps that energy off the board and the cable.
 ## Open for installer / Ethan (does not block this document)
 1. Starter/fuel solenoid pull-in current and duration: standard or time-delay 15 A fuse.
 2. GLOW: relay coil (2 A max fuse) or glow plugs driven directly (not supported at 2.49 A; use an external relay).
-3. Shunt-trip coil current on ESTOP_TRIP: confirm the 10 A maximum, or size down.
+3. Shunt-trip coil current on ESTOP_TRIP: confirm the 7.5 A maximum, or size down.
 4. Actual relay coil currents on GLOW/GCB/MCB/AUX: size each fuse down from 2 A.

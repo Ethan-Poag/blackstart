@@ -17,6 +17,6 @@ See DESIGN_NOTES.md, docs/, and LICENSING.md.
 
 **Fusing:** Genctl has no on-board output fuses. Every output (FUEL, CRANK, GLOW, GCB/MCB,
 AUX1–10, ESTOP_TRIP) needs an external fuse fitted by the installer ahead of the relay or
-solenoid, no larger than the output's maximum (15 A FUEL/CRANK; 2 A small outputs; 10 A
+solenoid, no larger than the output's maximum (15 A FUEL/CRANK; 2 A small outputs; 7.5 A
 ESTOP_TRIP) and sized down to the real load. The 30 A battery fuse does not protect individual
 outputs. Fit a flyback diode across every external coil. See docs/INSTALL_SAFETY.md. Not certified.
