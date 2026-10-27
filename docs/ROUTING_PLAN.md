@@ -139,12 +139,12 @@ Ethan's rules govern this plan:
 | power rails 188 | Connectivity yes [I]; **current targets no** for +5V (0.50 mm neck ≈ 1.8 A vs 4.7 A) and the outputs (0.15 mm necks ≈ 0.5 A vs 2 A) [M-prev] | Pinch points need rerouting; see §5 |
 | CRANK/FUEL drains | **No at 15 A in this area** [M-prev/I] | 12.6 mm is needed at the 2512 shunt pad at 1 oz; branches measure 6.6–9.4 A each |
 | +12V trunk | **No at 3.7 A ASSUMED** [R] | 3.2 A capacity vs 3.7 A assumed load (brief; not re-measured here) |
-| VBAT_P 62 | Connectivity yes [I]; **10 A no** | Q2→Q3 In2 hop ≈ 1.8 A by IPC internal (In2-only FEM ≈ 2.3 A), and VBAT_F F1→Q1 ≈ 9.9 A [M-prev/I]. Fixes: 2 oz outer / 1 oz inner, a lower rating, or area |
+| VBAT_P 62 | Connectivity yes [I]; **10 A yes at 18 °F (S3c/c6b, see §8)** [I] | VBAT_P Q2→Q3 F 8.76 / B 5.22 mm (11.5 / 7.9 A; F+B 19.5 A, B alone < 10 A, so F+B sharing through 24 / 23 VBAT_P vias at the Q2 / Q3 ends is required), VBAT_DD Q1→Q2 F 7.54 / B 7.51 mm (10.3 / 10.3 A; F+B 20.7 A), VBAT_F F1→Q1 B 8.09 mm (10.9 A; B only at Q1, F 9.01 mm not counted) [M widths, tneck erosion on gate/s3c6b; amps I by IPC-2221 outer k 0.048 at 18 °F (10 °C) rise, 1 oz ASSUMED]. Superseded: the old In2 hop (≈ 1.8 A) no longer carries VBAT_P |
 | HV/hot 88 | **No for at least 7 HV_LINE opens (hvopen2 A = 7)** [M-prev + decision] | RV3 has no legal 600 V path (GEN_L3/GEN_N would cross BUS HV copper; growth declined, HV_ACCEPTED_DEVIATIONS.md); the GEN_L1 divider chain walls J28.1 off. The other ~81 hot-side LV opens (ADE, CT, LDO, XO) are routable inside the hot region [E, unverified] |
 
 **Cannot be completed in the current area, with today's placement and stackup:**
 1. **HV:** at least 7 HV_LINE opens (hvopen2 A), including the RV3 pads.
-2. **VBAT_P and CRANK/FUEL:** current capacity, not connectivity. 1.8 A vs 10 A; 6.6–9.4 A per branch vs 15 A.
+2. **VBAT_P and CRANK/FUEL:** current capacity, not connectivity. VBAT_P now ≥ 10 A at 18 °F with F+B sharing (S3c/c6b, §8); CRANK/FUEL 6.6–9.4 A per branch vs 15 A.
 3. **+12V trunk:** 3.2 A vs 3.7 A [R].
 4. **Signals:** an estimated 10–30 opens need moves or a pin remap [E].
 
@@ -266,14 +266,14 @@ Tags: [M] measured on the committed board, [I] inferred, [A] assumed.
 ### 7.1 Current budget used for Batch 1 copper [A/I]
 - Basis: IPC-2221, I = k·ΔT^0.44·A^0.725, k 0.048 outer / 0.024 inner, ΔT 18 °F. Copper 1 oz outer / 0.5 oz inner **ASSUMED** (no stackup defined). Source table: /workspace/review/cur/current_budget.md.
 - GND pad-to-plane links (Batch 1a): 0.30 mm outer track (~1.0 A at 18 °F [I]) + one 0.6/0.3 via (0.76–0.90 A [I]) or 0.45/0.2 via (0.57–0.67 A [I]). Assumed current per link: return of a signal/decoupling pad or a connector GND pin carrying ≤0.5 A [A]. Connector GND pins (J1/J7/J8/J18/J21/J25/J27) carry their circuit return through one via each; if any connector return exceeds ~0.8 A this is NOT sufficient [I] (not checked per pin).
-- VBAT_P: known capacity ~1.8 A through In2 effective width (Q2→Q3 In2 1.384 mm ≈ 0.92 A at 18 °F per current_budget.md). Nothing in this file claims more.
+- VBAT_P: superseded by S3c/c6b (§8). The In2 VBAT_P zone was removed; Q2→Q3 now runs on F+B (F+B 19.5 A at 18 °F [I]).
 
 ### 7.2 Power targets for the later power batch (NOT routed; lead must confirm the power batch) [A]
-Assumptions: 18 °F rise, 1 oz outer / 0.5 oz inner ASSUMED, no stackup defined. System rating: **"fuse 10 A, continuous 8 A or less"**.
+Assumptions: 18 °F rise, 1 oz outer / 0.5 oz inner ASSUMED, no stackup defined. System rating: **"fuse F1 10 A; battery path 10 A continuous at 18 °F rise [I]"** (S3c/c6b, §8).
 
 | Net / branch | Current | Min width | Layers | Stitching | Status |
 |---|---|---|---|---|---|
-| VBAT_F / VBAT_DD existing copper | ≤8 A cont. | existing (VBAT_F ~9.9 A [I], VBAT_DD 5.29 mm B ≈ 8.0 A [I]) | existing | existing | OK up to 8 A continuous |
+| VBAT_F / VBAT_DD copper (S3c/c6b) | 10 A cont. | VBAT_F B 8.09 mm ≈ 10.9 A [M/I]; VBAT_DD F 7.54 / B 7.51 mm, F+B ≈ 20.7 A [M/I] | per §8 | per §8 | OK for 10 A at 18 °F [I] |
 | VBAT_P Q2 (260,165) → Q3 (227,140), ~41 mm | ≤5 A per layer | ≥2.9 mm each | F.Cu + B.Cu pours (+ In2) | ≥8 vias each end | see 7.3 |
 | Crank/fuel branches, VBAT_ESTOP → shunts/FETs → J23 | 15 A real | ≥6.3 mm each, or 4.2 mm at 36 °F | F + B pours | per pour | OPEN — power batch |
 | +12V trunk | — | ≥1.9 mm | outer | — | OPEN — power batch |
@@ -328,3 +328,11 @@ Through-via sites within ±1 mm of each pad, checked at 0.15 mm clearance on all
 - **U70.2:** stays open (ISO7741, hot side).
 - **U22-CT and U24-OVP:** need a bigger change, after the hot-side batch.
 These need placement or multi-net rework, not small reroutes.
+
+## 8. S3c/c6b battery-path move — status (2026-10-27, HST)
+Accepted by Ethan: c6 (including the S3b Q1/Q2 move) as the 10 A battery path. Design rule 18 °F (10 °C) rise. Scratch work: /workspace/m7/scen/s3c (c6) and /workspace/m7/scen/s3c6b (c6b). Not fab-ready, not certified.
+- **Parts moved (all B.Cu, no pad net changes) [M]:** Q1 (255.46,171.45,0° → 257.0,143.5,−90°), Q2 (260.0,165.0,−90° → 257.5,151.0,0°), U16 (→258.4,158.0), R96 (→261.2,156.6,−90°), R97 (→255.4,155.0,180°), C96 (→255.1,158.6,0°), C293 (→251.8,156.6,−90°), C294 (→247.0,156.6,−90°), C295 (→249.4,156.6,−90°), C296 100 nF (→244.6,156.6,−90°).
+- **Copper changed vs 0087a67 (uuid diff) [M]:** tracks +76/−286 (219 removed are +12V), vias +109/−127, zones +11/−2/4 modified. Nets: +12V, +3V3_SAFE, GND, VBAT_P, VBAT_F, VBAT_DD, LM748_DGATE, LM748_HGATE, BAT_IN, Net-(U16-CL), ROUTER_12V_EN. No HV net touched; nearest changed item to HV copper 162.66 mm, to a barrier slot 211.33 mm.
+- **Necks [M widths / I amps]:** VBAT_P Q2→Q3 F 8.76 / B 5.22 mm (11.5 / 7.9 A; F+B 19.5 A, B alone < 10 A, so F+B sharing through 24 / 23 VBAT_P vias at the Q2 / Q3 ends is required), VBAT_DD Q1→Q2 F 7.54 / B 7.51 mm (10.3 / 10.3 A; F+B 20.7 A), VBAT_F F1→Q1 B 8.09 mm (10.9 A; B only at Q1, F 9.01 mm not counted) [M widths, tneck erosion on gate/s3c6b; amps I by IPC-2221 outer k 0.048 at 18 °F (10 °C) rise, 1 oz ASSUMED]. Every per-layer width ≥ 3.6 mm.
+- **Output-loop (LM5176 boost) risk [M/I]:** the 100 nF C296 is in the west spot nearest the Q6 tab (center 6.62 mm) and R12 GND; C293 moved to the east end, 7.87 mm edge from BB_SW1 (was 0.67 mm in c6). C296 is 1.09 mm from BB_SW1 (Q4.5). Each cap GND pad has 3 GND vias (one added per cap). Loop inductance and ringing are not measured; this is a layout trade-off (see review/s3c/c6_review.md).
+- **Gate (gate/s3c6b, on a byte copy of the saved file) [M]:** DRC 0 errors on repo / own / no-.dru rule sets, default set 1119 (= baseline), unconnected 631, cls 631 / VBAT_P 62, HV opens 7/23, hvsheet 0, dangling vias 12, courtyards 0, viachk 0 bad, slot-edge 0 / slot-corner 1 (= baseline), uuid net-swap 0, hidden via shorts 0, schematic/netlist unchanged.
