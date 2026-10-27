@@ -434,3 +434,10 @@ Fix: design.py now emits the 90d8a8e values for RV1-RV6 and the TPS48100 shunts 
 - R6 93.1k = CCM with hiccup ENABLED. Verified in the TI datasheet on the box (/tmp/ds/lm5176.txt, SNVSAI1D rev Aug 2021): pin table p3 says "1.38 V < MODE < 2.22 V: CCM, hiccup enabled (RMODE = 93.1 kΩ)" and "2.6 V < MODE < VCC: hiccup disabled (200 kΩ or VCC)"; the MODE table on p20 agrees. The reviewer flagged it first.
 - Fixed: tools/design.py R6 note (schematic: only this 1 field changed; netlist identical; ERC 0) and the docs/BENCH_12V_TEST.md safety line. No other file mentions hiccup; the board carries no Note field.
 - The no-sustained-short warning stays: hiccup cycles, but every restart still pushes peak current through Q3-Q6, L1 and the sense resistor.
+
+### Safety-engineer items: 600 V terminals and CT insulation (step 7, docs only)
+These need a decision from a qualified safety engineer. No layout change has been made for them. Sources: /workspace/review/bom/necessary_changes_e50f4a2.md (reviewer), hv_layout_rules_600V.md §4, HV_ACCEPTED_DEVIATIONS.md item 3.
+1. J30 (CT secondaries): KF2EDGRM-5.08-8P C441294 has an LCSC voltage rating of 300 V. hv_layout_rules_600V.md §4 recommends treating J30 as HOT, which needs a finger-safe pluggable rated >= 600 V. If that option stands, J30 has to change: a >= 600 V part, a new footprint and layout. Decide this before any more layout near T1-T4/J30.
+2. T1-T4 AC1005 CTs: no insulation rating (rules §4). ZMCT103C C94571 is the named candidate; it needs a new footprint. This is the same decision as J30.
+3. RV1-RV6 TMOV20RP460E: the earthed-Y-only MOV arrangement is still an open decision. RV3 (GEN-side MOV) is unrouted (HV_ACCEPTED_DEVIATIONS item 3), so it gives no surge protection on the GEN input until wired, and any new RV3 copper must pass hvsheet/hvrules/slotchk2.
+- Stock (procurement, not layout): AC1005 LCSC stock 0; KF2EDGRM is also flagged in the reviewer's stock list; TMOV20RP460E C3260792 has 25 in stock = 4 boards (alternates listed by the reviewer: C598658, C522853); TPS1HTC30 is short.
