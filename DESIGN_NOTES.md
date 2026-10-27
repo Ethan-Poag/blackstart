@@ -286,7 +286,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
   - VBAT_ESTOP → 47k/10k → NPN holds the 555 RESET low.
   - TRIG RC is 100k/100 nF. One-shot = 1.1 × 200k × 10 µF ≈ 2.2 s.
 - Output:
-  - BAT54C OR of the 555 and the gated MCU_TRIP → TPS1HTC30 (ILIM 13.3k).
+  - BAT54C OR of the 555 and the gated MCU_TRIP → TPS1HTC30 (ILIM 47k: 1.70/2.13/2.55 A relay-drive limit; was 13.3k).
   - The trip current-sense line goes to MUXB S6.
 - VESTOP_SNS: 100k/10k divider + BAT54S clamp → PA1.
 
