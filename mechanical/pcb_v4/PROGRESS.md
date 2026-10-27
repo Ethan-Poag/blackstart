@@ -364,3 +364,9 @@ Fix: design.py now emits the 90d8a8e values for RV1-RV6 and the TPS48100 shunts 
 
 ### Smallest copper gap (review 0ee)
 - The board-wide minimum gap is 0.1016 mm (B.Cu, U4-FB to GND), the same at 14c9c43 and 90d8a8e, per the reviewer's 0ee8934 report. The 0.1328 mm figure was only 90d8a8e's smallest NEW gap, not the overall minimum. Smallest gap for the C293-C296 items: 0.2177 mm (R97, B.Cu).
+
+### L1 lifecycle note (review e50)
+- L1 SPM10065VT-4R7M-D (LCSC C501976) is listed by TDK as NRND (not recommended for new designs). This was the reviewer's finding (/workspace/review/e50/verdict_e50f4a2.md), and I confirmed it on TDK's product page on 2026-10-26 at about 17:12 HST (product.tdk.com part page).
+- What the page showed: "Production (NRND)", recommended alternate SPM10065VC-4R7M-D, "Interchangeability is not guaranteed". Other values on the page: 4.7 uH ±20%, 26.2 A typ (30% L drop), 11.7 A typ (40 °C / 72 °F rise), DCR 9.2 mOhm typ / 10.12 mOhm max, 10.5 x 10.0 x 6.5 mm max, AEC-Q200.
+- The alternate was listed by TDK at 4.7 uH, 12.1 A and 10.5 x 10.0 x 6.5 mm. I did not check its full datasheet, saturation current or land pattern.
+- No part number, LCSC number, value, board or schematic was changed. The note is in bom/power_bom.csv (notes column) only. docs/genctl_bom.csv and mechanical/bom.csv have no notes column.
