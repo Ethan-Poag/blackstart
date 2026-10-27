@@ -441,3 +441,10 @@ These need a decision from a qualified safety engineer. No layout change has bee
 2. T1-T4 AC1005 CTs: no insulation rating (rules §4). ZMCT103C C94571 is the named candidate; it needs a new footprint. This is the same decision as J30.
 3. RV1-RV6 TMOV20RP460E: the earthed-Y-only MOV arrangement is still an open decision. RV3 (GEN-side MOV) is unrouted (HV_ACCEPTED_DEVIATIONS item 3), so it gives no surge protection on the GEN input until wired, and any new RV3 copper must pass hvsheet/hvrules/slotchk2.
 - Stock (procurement, not layout): AC1005 LCSC stock 0; KF2EDGRM is also flagged in the reviewer's stock list; TMOV20RP460E C3260792 has 25 in stock = 4 boards (alternates listed by the reviewer: C598658, C522853); TPS1HTC30 is short.
+
+### Stale zone fills in the committed board (fixed)
+- PROCESS ERROR (ours): c8caadf..fd4a608 were committed with stale zone fills. The earlier "DRC clean" was measured on a refilled scratch copy, not on the committed file. As saved, the new VBAT_F via at (252.55,165.25) sat at 0.0 mm from the GND1, GND2 and In2 VBAT_P fills: 6 DRC errors in every rule set (reviewer, /workspace/review/fd4/master_gate_check_fd4a608.md).
+- Fix: refilled all 33 zones with pcbnew ZONE_FILLER (/workspace/m7/refill.py) and saved in place. Diff vs fd4a608: only filled_polygon contents changed (42 blocks before and after; 0 lines differ outside them).
+- DRC on byte copies of the saved file (md5 63a49aba8a668bb58d9ab9ef74bfd352 checked on each copy), rc 0: project rules 0 errors; no custom rules 0 errors, copper_edge 0.
+- Gate: KiCad unconnected 659; HV opens A/B 7/23 (hvopen2); hvsheet 0 pairs; dangling vias 12; slot-edge 0, slot-corner 1 (0 unlocked); viachk 0 bad; courtyards 0.
+- PROCEDURE from now on: every board commit is refilled, saved in place, then DRC'd on byte copies of the saved file (md5 = committed file) with both rule sets.
