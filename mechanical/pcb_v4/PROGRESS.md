@@ -391,3 +391,15 @@ Fix: design.py now emits the 90d8a8e values for RV1-RV6 and the TPS48100 shunts 
   - mneck VBAT_F F1->Q1 necks unchanged (F 2.435, B 1.999 mm), so the ~9.9 A INFERRED figure stands.
   - The vgroups.py VBAT_P-opens script failed with an IndexError on both the before and after boards, so the 70 figure was not re-measured.
 - One extra unconnected item also closed (664 -> 662 is 2). It was not identified.
+
+### U2.24 BIAS no-connect (step 2)
+- tools/design.py: LM5176 BIAS changed from '+12V' to None (no-connect). The board had it open, and the schematic now agrees.
+- TI SNVSAI1D allows BIAS open: the VCC regulator then draws from VIN. This is cited from the reviewer report /workspace/review/bom/necessary_changes_e50f4a2.md item (a); I did not re-read the datasheet.
+- Thermal cost (reviewer's model, INFERRED by him, cited not re-derived): about +27 °F typical / +66 °F worst-case extra U2 heating at 30 V in (0.45 W / 1.12 W regulator loss, RthJA 32.6 °C/W JEDEC).
+- Verification (measured):
+  - Scratch regeneration first, then in the repo.
+  - Full schematic field diff vs c8caadf: 0 field diffs, refs 1185 = 1185.
+  - Netlist: U2.24 leaves +12V and becomes the new net unconnected-(U2-BIAS-Pad24). Nothing else changed.
+  - ERC 0.
+- Board: the U2.24 pad net was changed from +12V to unconnected-(U2-BIAS-Pad24) to match. No copper touches it.
+- Board results: KiCad unconnected 662 -> 661; DRC project rules and no custom rules 0 errors; copper_edge (no custom rules) 0; HV opens 7; +12V islands 4 -> 3.

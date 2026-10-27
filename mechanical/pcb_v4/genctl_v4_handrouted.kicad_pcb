@@ -1130,6 +1130,7 @@
 	(net 1046 "/Display: DSI->LVDS bridge, panel power, backlight, touch/DISP_SCL_1V8")
 	(net 1047 "/Display: DSI->LVDS bridge, panel power, backlight, touch/DISP_SDA_1V8")
 	(net 1048 "Net-(U77-EN)")
+	(net 1049 "unconnected-(U2-BIAS-Pad24)")
 	(footprint "C_0603_1608Metric"
 		(layer "F.Cu")
 		(uuid "020359f2-2796-4741-8bde-0193bdf6f94e")
@@ -180579,7 +180580,7 @@
 			(size 1.475 0.4)
 			(layers "B.Cu" "B.Mask" "B.Paste")
 			(roundrect_rratio 0.25)
-			(net 12 "+12V")
+			(net 1049 "unconnected-(U2-BIAS-Pad24)")
 			(uuid "e92b4880-3831-437b-9d30-52a20665b0a6")
 		)
 		(pad "25" smd roundrect
