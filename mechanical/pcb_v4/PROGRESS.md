@@ -457,3 +457,8 @@ These need a decision from a qualified safety engineer. No layout change has bee
 - Chose FTSH-105-01-L-DV, the part C5199898 actually is (LCSC page fetched 10/26: 2x5, 1.27 mm, SMD vertical, 3.05 mm mating pin). bom/other_bom.csv already listed -01. The schematic MPN now matches (1 field changed; netlist identical; ERC 0; BOM diff 0).
 - Samtec FTSH drawing: lead style only sets the post height (-01 = 3.05 mm/.120", mates FFSD, FLE, CLP-DH; -02 = 1.91 mm/.075", mates FLE). Same SMT land pattern, so the footprint is unchanged. The footprint name genctl:FTSH-105-02_SWD stays as a name only (renaming it would be a board change).
 - J2 is on B side (BOARD_INTERFACE.md). Enclosure clearance at J2 is UNKNOWN; -01 is 1.14 mm taller. That the -01 suits the usual FFSD-type 10-pin Cortex debug cable is INFERRED from Samtec's mating list.
+
+### D23 MPN text
+- C9421 is TI LM4040A25IDBZR (LCSC page fetched 10/26): 2.5 V shunt reference, ±0.1% (A grade, 100 ppm/°C max), SOT-23 (DBZ), -40 to +85 °C (-40 to 185 °F).
+- The old text LM4040AIM3-2.5 is the legacy National name. That it is the same A-grade 2.5 V SOT-23 device is INFERRED from the naming; no TI cross-reference page was fetched.
+- design.py symbol MPN and map entry changed to LM4040A25IDBZR. The symbol (Reference_Voltage:LM4040DBZ-2.5) and footprint SOT-23 are unchanged. 1 field changed; netlist identical; ERC 0; BOM diff 0. bom/inputs_bom.csv already said LM4040A25IDBZR.

@@ -339,7 +339,7 @@ inp.R('10k','+3V3','VMID_REF'); inp.R('10k','VMID_REF','GND'); inp.C('100n','VMI
 inp.p('Amplifier_Operational:TLV9062','TLV9062',{'3':'VMID_REF','2':'VMID','1':'VMID','5':'GND','6':'VMID_SP','7':'VMID_SP','8':'+3V3','4':'GND'},prefix='U',mpn='TLV9062IDR',note='unit B spare as follower to GND')
 inp.C('1u','VMID','GND'); dec(inp,'+3V3')
 # AI ref
-inp.p('Reference_Voltage:LM4040DBZ-2.5','LM4040A25',{'K':'VBAT_P','A':'AI_VSET'},prefix='D',mpn='LM4040AIM3-2.5')
+inp.p('Reference_Voltage:LM4040DBZ-2.5','LM4040A25',{'K':'VBAT_P','A':'AI_VSET'},prefix='D',mpn='LM4040A25IDBZR')
 inp.R('10k','AI_VSET','GND',pkg='1206',note='ref bias ~1-2.8mA')
 inp.C('100n','VBAT_P','AI_VSET')
 ADC={1:('ADC1','AIN0'),2:('ADC1','AIN1'),3:('ADC1','AIN2'),4:('ADC2','AIN0'),5:('ADC2','AIN1'),6:('ADC2','AIN2')}
@@ -603,7 +603,7 @@ FPMAP={  # libid -> (fp, lcsc, mpn)
  'Interface_USB:USB2514B_Bi':('Package_DFN_QFN:QFN-36-1EP_6x6mm_P0.5mm_EP3.7x3.7mm',None,None),
  'Amplifier_Operational:TLV9062':('Package_SO:SOIC-8_3.9x4.9mm_P1.27mm',None,None),'Amplifier_Operational:LM2904':('Package_SO:SOIC-8_3.9x4.9mm_P1.27mm',None,None),
  'Comparator:LM393':('Package_SO:SOIC-8_3.9x4.9mm_P1.27mm',None,None),'Analog_ADC:ADS1115IDGS':('Package_SO:MSOP-10_3x3mm_P0.5mm',None,None),
- 'Reference_Voltage:LM4040DBZ-2.5':('Package_TO_SOT_SMD:SOT-23','C9421','LM4040AIM3-2.5'),
+ 'Reference_Voltage:LM4040DBZ-2.5':('Package_TO_SOT_SMD:SOT-23','C9421','LM4040A25IDBZR'),
  '74xx:74HC14':('Package_SO:SOIC-14_3.9x8.7mm_P1.27mm','C5605','74HC14D,653'),'Regulator_Linear:LM317_TO-252':('Package_TO_SOT_SMD:TO-252-2',None,None),
  '74xGxx:74LVC1G08':('Package_TO_SOT_SMD:SOT-23-5',None,None),'Amplifier_Current:INA281A2':('Package_TO_SOT_SMD:SOT-23-5',None,None),
  'Timer:TLC555xD':('Package_SO:SOIC-8_3.9x4.9mm_P1.27mm','C130208','TLC555QDRQ1'),
