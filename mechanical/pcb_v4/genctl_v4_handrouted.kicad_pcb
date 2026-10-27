@@ -3139,7 +3139,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "100k"
 			(at 0 1.43 270)
 			(layer "F.Fab")
 			(uuid "fb7510b9-38e7-44b0-9624-278faf66d073")
@@ -24812,7 +24812,7 @@
 			)
 		)
 		(sheetname "/Power: input protection, ideal diode, 12V buck-boost, 5V, 3V3/")
-		(attr smd)
+		(attr smd exclude_from_pos_files exclude_from_bom dnp)
 		(fp_line
 			(start -0.237258 -0.5225)
 			(end 0.237258 -0.5225)
@@ -244521,7 +244521,7 @@
 				(justify mirror)
 			)
 		)
-		(property "LCSC Part" "C83451"
+		(property "LCSC Part" "C79272"
 			(at 0 0 180)
 			(layer "B.Fab")
 			(hide yes)
@@ -255818,7 +255818,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "13.3k"
+		(property "Value" "47k"
 			(at 0 -1.43 270)
 			(layer "B.Fab")
 			(uuid "cf64f1e7-69a1-4444-8acb-398ebf030e01")
@@ -258638,7 +258638,7 @@
 			)
 		)
 		(sheetname "/Power: input protection, ideal diode, 12V buck-boost, 5V, 3V3/")
-		(attr smd)
+		(attr smd exclude_from_pos_files exclude_from_bom dnp)
 		(fp_line
 			(start -0.237258 -0.5225)
 			(end 0.237258 -0.5225)
@@ -267086,7 +267086,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "10u"
+		(property "Value" "2.2u"
 			(at 0 -1.68 90)
 			(layer "B.Fab")
 			(uuid "ee157df2-818a-4444-861f-24b595e82495")
