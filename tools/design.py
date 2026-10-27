@@ -470,7 +470,7 @@ conn(ou,6,['AUX7_OUT','AUX8_OUT','AUX9_OUT','AUX10_OUT','GND','GND'],'J6B AUX7-1
 
 # =====================================================================
 es=S('estop','E-stop trip and sense',
- 'E-STOP (estop_notes v5). VBAT_ESTOP open -> Q 47k/10k releases 555 RESET; TRIG RC (100k/100n) fires one-shot 1.1*200k*10u = 2.2s.\n'
+ 'E-STOP (estop_notes v5). VBAT_ESTOP open -> Q 47k/10k releases 555 RESET; TRIG RC (100k/100n) fires one-shot 1.1*200k*2.2u = 0.48s.\n'
  '555 powered from +5V_TRIP (TPS7B6950 from VBAT_P via SS110 + hold-up). BAT54C OR of 555 Q and (MCU_TRIP AND WDO) -> TPS1HTC30 ESTOP_TRIP.\n'
  'ADDED: 4th LVC1G08 gates MCU_TRIP with WDO. Hold-up cap changed to 50V (BOM 25V part < 30V OV threshold).')
 schottky(es,'SS110','VBAT_P','TRIP_LDO_IN',mpn='SS110')
@@ -480,7 +480,7 @@ es.C('2.2u','+5V_TRIP','GND',pkg='0805'); es.C('100n','+5V_TRIP','GND')
 es.R('47k','VBAT_ESTOP','TRIP_QB'); es.R('10k','TRIP_QB','GND'); npn(es,'TRIP_QB','GND','TRIP_RST')
 es.R('10k','+5V_TRIP','TRIP_RST'); es.R('100k','TRIP_RST','TRIP_TRIG'); es.C('100n','TRIP_TRIG','GND')
 es.p('Timer:TLC555xD','TLC555CDR',{'VCC':'+5V_TRIP','GND':'GND','TR':'TRIP_TRIG','CV':'TRIP_CV','R':'TRIP_RST','Q':'TRIP_555_Q','DIS':'TRIP_TIM','THR':'TRIP_TIM'},prefix='U',mpn='TLC555CDR')
-es.R('200k','+5V_TRIP','TRIP_TIM'); es.C('10u','TRIP_TIM','GND',pkg='0805'); es.C('100n','TRIP_CV','GND'); es.C('100n','+5V_TRIP','GND')
+es.R('200k','+5V_TRIP','TRIP_TIM'); es.C('2.2u','TRIP_TIM','GND',pkg='0805',note='tw 1.1*200k*2.2u = 0.48s (0.44-0.53s tol; ~0.26s worst w/ DC bias); measure cold/hot'); es.C('100n','TRIP_CV','GND'); es.C('100n','+5V_TRIP','GND')
 es.p('74xGxx:74LVC1G08','74LVC1G08',{'1':'MCU_TRIP','2':'WDO_N','4':'MCU_TRIP_G','5':'+3V3_SAFE','3':'GND'},prefix='U',mpn='SN74LVC1G08DBVR',note='ADDED 4th gate'); es.C('100n','+3V3_SAFE','GND')  # +3V3_SAFE explicit (POST-PASS 1 maps estop +3V3 -> +3V3_SAFE anyway; matches board U67.5)
 es.R('100k','MCU_TRIP','GND')
 es.p('Diode:BAT54C','BAT54C',{'1':'TRIP_555_Q','2':'MCU_TRIP_G','3':'ESTOP_TRIP_EN'},prefix='D',mpn='BAT54C'); es.R('100k','ESTOP_TRIP_EN','GND')

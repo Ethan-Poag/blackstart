@@ -284,7 +284,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - Supply: TPS7B6950 (SOT-23 pin 4 assumed NC) fed from VBAT_P through SS110 and a 10 µF/50 V hold-up cap.
 - Detection and timing:
   - VBAT_ESTOP → 47k/10k → NPN holds the 555 RESET low.
-  - TRIG RC is 100k/100 nF. One-shot = 1.1 × 200k × 10 µF ≈ 2.2 s.
+  - TRIG RC is 100k/100 nF. One-shot = 1.1 × 200k × 2.2 µF (C229) ≈ 0.48 s nominal (0.44–0.53 s tolerance; possibly down to about 0.26 s with DC bias, INFERRED); measure on a built board, cold and hot.
 - Output:
   - BAT54C OR of the 555 and the gated MCU_TRIP → TPS1HTC30 (ILIM 47k: 1.70/2.13/2.55 A relay-drive limit; was 13.3k).
   - The trip current-sense line goes to MUXB S6.
