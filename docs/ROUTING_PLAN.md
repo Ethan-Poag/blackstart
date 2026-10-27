@@ -310,3 +310,12 @@ cls.py counts on the gated boards (its signal split differs from §1: 138 nets /
 - **Batch 1b — nameless signal nets (this commit, parent e6d5e70):** Net-(D3-A) 2 opens (C13.1, D4.2; 0.20 mm B.Cu) and Net-(D46-A1) 2 opens (R211.1 and the R210/D46 fragment; 0.25 mm B.Cu, field-input surge net) routed: 58 B.Cu segments, no vias. Gate [M], vs 2dab1e7: DRC 0 errors in project rules and pro-only rules (unconnected_items 499/499 both); default-rules DRC timed out at 25 min (NOT MEASURED); KiCad unconnected 636 → **632**; nameless 21 → 17; all other classes unchanged; HV A/B 7/23; hvsheet 0; dangling vias 12; slot-edge 0 / corner 1; courtyards 0; isl.py, VBAT_F necks (F 2.435 / B 1.999) and VBAT_P fem (12.253 sq) unchanged.
 - **Left open in Batch 1b:** Net-(U22-CT) U22.4 (B) ↔ C117.1 (F), 0.77 mm apart on opposite sides: the only via site the router found is inside U22.4 (via-in-pad) → needs a via-in-pad decision. Net-(U24-OVP) (R123.2, U24.11): no legal path at 0.15 mm / 0.12 mm clearance on F or B in the U24 area (router FAIL) → needs rip-up or a part nudge. Net-(Q42-G): R262.1 fragment (y≈12) to R261/Q42 (y≈152) is a ~140 mm cross-board run at ≥0.25 mm and ≥0.3 mm from VBAT copper; not attempted in this batch.
 - Excluded from "nameless" as current/power nets (power batch): Net-(D68-A1) (= FUEL_OUT), Net-(D15-K) (router 12 V out, J8.1), Net-(U11-EN) (supercap boost input), Net-(C74-Pad2) (series supercap midpoint), Net-(D22-A) (boost switch node).
+
+### 7.7 Batch 1c — small nudges (≤1.0 mm) [M]
+- **Routed:** GND U21 B9 → U21 A8, 0.15 mm B.Cu track, 0.71 mm long (BGA escape; no via, no nudge). GND opens 5 → 4; KiCad unconnected 632 → 631.
+- **No nudge made.** Every nudge that was legal on courtyard and pads still left the route blocked:
+  - U22-CT: no legal via site on any C117 (dy ±0.5…+1.0) or U22 (±0.25/0, −0.25) nudge; via-in-pad is not allowed → **OPEN**.
+  - U24-OVP: R123 nudges up to 0.5/0.75 mm pass courtyard checks, but the router fails (track-caged); R124 has no legal nudge → **OPEN**.
+  - R115.2, R204.2, U21 H9 (GND): caged by DI2_D, DSI83_IRQ_1V8, AI_SH_EN4, DI_PD_B and LVDS3 tracks. They need signal rip-up, not a nudge → **OPEN**.
+  - U70.2 (GND): U70 is the ISO7741 with a hot +3V3_AC pin, so it is not moved → **OPEN**.
+- **Gate:** project and pro-only DRC 0 errors, unconnected_items 499 unchanged. Default-rules DRC timed out at 25 min (not measured). HV A/B 7/23, hvsheet 0, slot-edge 0 / corner 1, viachk clean, courtyards 0, VBAT_F F 2.435 / B 1.999, In2 neck 1.384, fem unchanged.
