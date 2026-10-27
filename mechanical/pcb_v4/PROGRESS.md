@@ -452,3 +452,8 @@ These need a decision from a qualified safety engineer. No layout change has bee
 ### JP1 part fix
 - C68234 is BOOMELE 2.54-2*8P, a 16-pin 2x8 header (LCSC page fetched 10/26). The JP1 symbol (Conn_02x04_Odd_Even) and the board footprint (PinHeader_2x04, 8 pads) are both 8 pins, so the part was wrong, not the BOM.
 - Changed to CJT A2541WV-2x4P C225519: 2x4, 2.54 mm, TH, 2.54 mm insulator, 6 mm post (LCSC and JLC pages; JLC stock not shown). Schematic: 2 field changes; netlist identical; ERC 0; BOM diff 0. No board change (no MPN/LCSC fields on JP1).
+
+### J2 SWD header variant
+- Chose FTSH-105-01-L-DV, the part C5199898 actually is (LCSC page fetched 10/26: 2x5, 1.27 mm, SMD vertical, 3.05 mm mating pin). bom/other_bom.csv already listed -01. The schematic MPN now matches (1 field changed; netlist identical; ERC 0; BOM diff 0).
+- Samtec FTSH drawing: lead style only sets the post height (-01 = 3.05 mm/.120", mates FFSD, FLE, CLP-DH; -02 = 1.91 mm/.075", mates FLE). Same SMT land pattern, so the footprint is unchanged. The footprint name genctl:FTSH-105-02_SWD stays as a name only (renaming it would be a board change).
+- J2 is on B side (BOARD_INTERFACE.md). Enclosure clearance at J2 is UNKNOWN; -01 is 1.14 mm taller. That the -01 suits the usual FFSD-type 10-pin Cortex debug cable is INFERRED from Samtec's mating list.
