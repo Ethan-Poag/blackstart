@@ -448,3 +448,7 @@ These need a decision from a qualified safety engineer. No layout change has bee
 - DRC on byte copies of the saved file (md5 63a49aba8a668bb58d9ab9ef74bfd352 checked on each copy), rc 0: project rules 0 errors; no custom rules 0 errors, copper_edge 0.
 - Gate: KiCad unconnected 659; HV opens A/B 7/23 (hvopen2); hvsheet 0 pairs; dangling vias 12; slot-edge 0, slot-corner 1 (0 unlocked); viachk 0 bad; courtyards 0.
 - PROCEDURE from now on: every board commit is refilled, saved in place, then DRC'd on byte copies of the saved file (md5 = committed file) with both rule sets.
+
+### JP1 part fix
+- C68234 is BOOMELE 2.54-2*8P, a 16-pin 2x8 header (LCSC page fetched 10/26). The JP1 symbol (Conn_02x04_Odd_Even) and the board footprint (PinHeader_2x04, 8 pads) are both 8 pins, so the part was wrong, not the BOM.
+- Changed to CJT A2541WV-2x4P C225519: 2x4, 2.54 mm, TH, 2.54 mm insulator, 6 mm post (LCSC and JLC pages; JLC stock not shown). Schematic: 2 field changes; netlist identical; ERC 0; BOM diff 0. No board change (no MPN/LCSC fields on JP1).
