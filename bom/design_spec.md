@@ -133,7 +133,7 @@ Rows still unpriced inside the BOMs: power (display 12 V load switch, 3V3 LDO ba
 - Back-powering at the domain boundary: every SAFE<->unpowered-domain signal (CM5 SPI/UART/links, CAN/RS-485 TX/RX/DE, ADE isolator I/O) goes through 1k series -> injection < 3 mA/pin into unpowered clamp diodes (within abs max of CM5/transceivers). SPI to CM5 limited to <=4 MHz by the 1k + pin C. Firmware must tri-state these pins when PSU_MAIN_OK is low.
 
 ### Calculations replacing placeholders
-- LM5176: RT 27.4k; slope 220p; comp 22.1k/33n/220p; sense single 8 mOhm 2512; MODE 93.1k; external BAS70 boot diodes VCC->BOOT1/2.
+- LM5176: RT 27.4k; slope 220p; comp 4.7k/33n/220p (R8 changed from 22.1k, review c65); sense single 8 mOhm 2512; MODE 93.1k; external BAS70 boot diodes VCC->BOOT1/2.
 - TPS56637 (5V, 3V3; modem buck removed rev e): EN 121k/16k -> 12*16/137 = 1.40 V > 1.2 V rising (modem: DS-suggested 27k also acceptable, kept 121k/16k for consistency); MODE 0R DNP (float = valid; 100k was in the invalid band); 3.3 uH; feed-forward 100p+20k. 5V FB kept 75k/10k (5.1 V; 73.2k gives 5.0 V if preferred).
 - TPS48100: RISCP 35.7k -> Isc = (35.7k*2 uA + 19 mV)/1 mOhm = 90 A.
 - TPS61500: VIN max 18 V (abs 20 V) on +12 V OK; FREQ 180k (~580 kHz; 176k low stock); SS 47n; L 10 uH SWPA6045S100MT; SS36 diode.
