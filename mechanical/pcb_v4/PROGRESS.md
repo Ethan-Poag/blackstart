@@ -317,8 +317,8 @@ Board only on m7-wip. Not fab-ready.
 - **(this commit)** — VBAT_P parallel F.Cu pour VBAT_P_FCU_PAR (x 224–251.6, y 134–163.5) + 65 stitching vias (0.6/0.3) to the In2 VBAT_P plane. In2 FEM (fem.py, F pour treated as ideal — INFERRED optimistic): Q2 sources→Q3 path 2.531 → 0.789 squares; peak-density effective width 2.59 → 3.45 mm at (252.08, 156.43). Full gate passed; GND/+3V3_SAFE/VBAT_P island counts unchanged.
 
 ### Known current limits (IPC-2221, 10 °C / 18 °F rise, 1 oz outer, 0.5 oz inner — copper weights INFERRED, no stackup in file)
-- **VBAT_F F1→Q1:** erosion necks F 2.435 + B 1.999 + PWR 2.435 mm → ≈4.56 + 3.95 + 1.38 = **≈9.9 A continuous** (INFERRED). Short of 10 A. Limited by B-side fanout vias (UVLO/HGATE/GND) in the F pour, the HGATE via at (262.6, 158.8), and the VBAT_P_Q2S via field.
-- **VBAT_P Q2→Q3 (In2 hop to the new F pour):** peak-density width 3.45 mm on 0.5 oz In2 → **≈1.8 A by IPC internal** (INFERRED, IPC internal is very conservative for planes). Not a 10 A path.
+- **VBAT_F F1→Q1:** erosion necks F 2.435 + B 1.999 + PWR 2.435 mm → ≈4.56 + 3.95 + 1.38 = **≈9.9 A continuous** (INFERRED). Short of 10 A. **[SUPERSEDED 2026-10-27 by S3c/c6b: see docs/ROUTING_PLAN.md §8]** Limited by B-side fanout vias (UVLO/HGATE/GND) in the F pour, the HGATE via at (262.6, 158.8), and the VBAT_P_Q2S via field.
+- **VBAT_P Q2→Q3 (In2 hop to the new F pour):** peak-density width 3.45 mm on 0.5 oz In2 → **≈1.8 A by IPC internal** (INFERRED, IPC internal is very conservative for planes). Not a 10 A path. **[SUPERSEDED 2026-10-27 by S3c/c6b: In2 VBAT_P removed, Q2→Q3 on F+B; see docs/ROUTING_PLAN.md §8]**
 - Builder options: 2 oz outer/1 oz inner, or a lower system rating. Not hidden; open.
 - **(crank/fuel drains)** — CRANK_DRN and FUEL_DRN F.Cu+B.Cu pours (priority 3; hull of shunt pad 2 + both FET drain tabs, FET source/gate side excluded) + 13/24 stitching vias. Erosion (mneck.py, F terminals = 3 mm halo of B pads, INFERRED): CRANK R303→Q47 B 4.05 mm; R303→Q48 F 6.60 mm (B split by a crossing track); FUEL R297→Q45 B 6.57 mm; R297→Q46 F 4.57 mm. IPC-2221 1 oz ext 10 °C: 6.6 / 9.4 / 9.4 / 7.2 A per branch. Each pair is two FETs in parallel, so ~7.5 A per branch at 15 A total (INFERRED even split). The full 15 A at the 2512 shunt pad needs 12.6 mm at 1 oz: **not reached** (known limit; the 30 A inrush is a short pulse, not rated here). Was 0.15 mm tracks.
 - **(output widening, partial)** — widen.py: tracks of AUX1–10/GCB/MCB/GLOW *_OUT stepped up toward 0.8 mm (2 A, IPC 1 oz ext 10 °C INFERRED) and +5V toward 2.7 mm (4.7 A), only where ≥0.25 mm to other-net copper on the same layer; 582 of 734 segments widened. Length at target: outputs 12–71 %, +5V 11 %. **Every output still has 0.15 mm bottleneck segments (≈0.5 A IPC) and +5V a 0.50 mm one (≈1.8 A): not yet 2 A / 4.7 A paths.** Needs rerouting at the pinch points.
@@ -388,7 +388,7 @@ Fix: design.py now emits the 90d8a8e values for RV1-RV6 and the TPS48100 shunts 
   - DRC project rules 0 errors; no custom rules 0 errors, copper_edge 0.
   - HV opens A/B 7/23; hvsheet 0; dangling vias 12; slot-edge 0, slot-corner 1 (inherited); viachk 1 checked, 0 bad; courtyards 0.
   - Islands: GND 29, +3V3_SAFE 2, +5V 13, VBAT_P 63, VBAT_F 1, +12V 4; VBAT_P pieces 23.
-  - mneck VBAT_F F1->Q1 necks unchanged (F 2.435, B 1.999 mm), so the ~9.9 A INFERRED figure stands.
+  - mneck VBAT_F F1->Q1 necks unchanged (F 2.435, B 1.999 mm), so the ~9.9 A INFERRED figure stands. **[SUPERSEDED 2026-10-27 by S3c/c6b, docs/ROUTING_PLAN.md §8]**
   - The vgroups.py VBAT_P-opens script failed with an IndexError on both the before and after boards, so the 70 figure was not re-measured.
 - One extra unconnected item also closed (664 -> 662 is 2). It was not identified.
 
