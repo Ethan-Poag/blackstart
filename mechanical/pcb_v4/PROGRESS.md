@@ -403,3 +403,18 @@ Fix: design.py now emits the 90d8a8e values for RV1-RV6 and the TPS48100 shunts 
   - ERC 0.
 - Board: the U2.24 pad net was changed from +12V to unconnected-(U2-BIAS-Pad24) to match. No copper touches it.
 - Board results: KiCad unconnected 662 -> 661; DRC project rules and no custom rules 0 errors; copper_edge (no custom rules) 0; HV opens 7; +12V islands 4 -> 3.
+
+### C17/C18 deleted (step 3)
+- Reason: the two 470 uF caps were never connected on the board and sat about 160 mm from Q6. The reviewer's model (/workspace/review/bom/necessary_changes_e50f4a2.md item b) finds the ~215 uF nominal ceramics adequate and suggests about 110 uF effective for margin (model and derating ASSUMED). The four extra 22 uF caps were NOT added.
+- tools/design.py: the C17/C18 loop is replaced by REFC['C']+=2, so later C refs keep their numbers.
+  - Full field diff vs bffcc04: removed C17 and C18 only, 0 field diffs (refs 1185 -> 1183).
+  - Netlist: +12V and GND each lose only C17.1/C18.1 and C17.2/C18.2.
+  - ERC 0.
+- BOMs: the C17,C18 row was removed from docs/genctl_bom.csv (233 -> 232 lines) and mechanical/bom.csv (229 -> 228). The "12V bus hold-up/output cap" EEHZK1E471P row was removed from bom/power_bom.csv.
+- Board: footprints C17 (90.95, 119.26) and C18 (80.78, 98.93) deleted. No tracks touched either pad 1 (+12V). Each pad 2 had 4 GND stitching vias; they were kept because they tie the GND planes (dangling vias stay 12).
+  - Mechanical keepouts are irrelevant: parts were removed, not placed.
+- Gate (measured):
+  - KiCad unconnected 661 -> 659.
+  - DRC project rules and no custom rules 0 errors; copper_edge (no custom rules) 0.
+  - HV opens A/B 7/23; hvsheet 0; dangling vias 12; slot-edge 0, corner 1; viachk 0 bad; courtyards 0.
+  - Islands: GND 29, +3V3_SAFE 2, +5V 13, VBAT_P 63, VBAT_F 1, +12V 1 (was 3); VBAT_P pieces 23.

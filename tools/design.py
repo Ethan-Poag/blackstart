@@ -69,7 +69,7 @@ for g,s_,d in (('BB_HDRV1','BB_SW1','VBAT_P'),('BB_LDRV1','BB_CS','BB_SW1'),('BB
     fet(pw,'Transistor_FET:BSC070N10NS5','BSC070N10NS5',g,s_,d)
 pw.p('Device:L','4.7u',{'1':'BB_SW1','2':'BB_SW2'},prefix='L',mpn='SPM10065VT-4R7M-D',lcsc='C501976',fp='genctl:L_SPM10065',note='4.7uH 10x10')
 pw.R('8m','BB_CS','GND',pkg='2512',mpn='YLR12-2-8F-W',lcsc='C469375',note='buck-boost sense: 8mR -> ~9.4A peak limit (see DESIGN_NOTES)')
-for _ in range(2): pw.C('470u 25V','+12V','GND',pol=True,mpn='EEHZK1E471P',pkg='Capacitor_SMD:CP_Elec_10x10.5')
+REFC['C']+=2  # C17/C18 470u removed (review e50: never connected on board, 160 mm from Q6; ~215 uF ceramics sufficient per reviewer model). Counter bump keeps later C refs stable.
 # Review e65 (LM5176 COUT): local ceramics at Q6 drain (QH2), B.Cu. Fixed refs keep annotation stable.
 for r in ('C293','C294','C295'): pw.C('22u','+12V','GND',pkg='1206',ref=r,note='LM5176 COUT local to Q6 drain (review e65)')
 pw.C('100n','+12V','GND',ref='C296',note='LM5176 COUT HF local to Q6 drain (review e65)')
