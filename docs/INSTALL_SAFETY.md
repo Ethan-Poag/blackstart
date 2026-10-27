@@ -36,7 +36,7 @@ Every output must have its own external fuse, supplied and installed by the inst
 Total draw and ESTOP_TRIP (inference, not certified):
 - The board battery path (F1 → Q1 → Q2 → Q3) is a 10 A path (F1 10 A) at 18 °F (10 °C) copper rise. This is INFERRED from the measured copper widths by IPC-2221 with 1 oz outer copper ASSUMED; it is not certified and not measured on a built board. The 12 V electronics and all AUX/GCB/MCB/GLOW outputs share this limit.
 - Load shedding (the controller switching outputs off) is a fault-only response, not a normal-operation behavior. Size the installation so the normal load stays within the limits on this page.
-- AUX/GCB/MCB/GLOW outputs are for relay coils and indicators only, ≤ 0.5 A each, combined ≤ 1 A while the controller display is on (INFERRED; firmware-enforced).
+- AUX/GCB/MCB/GLOW outputs are for relay coils and indicators only, ≤ 0.5 A each, combined ≤ 1 A while the controller display is on (INFERRED). This is a load budget the installer must stay within by design; the controller does not drop or switch off outputs to meet it in normal operation. Outputs are switched off only by fault protection (overload/fault, e.g. a channel's current limit or the watchdog trip).
 - ESTOP_TRIP (J24.6) drives an installer-supplied 12 V DC relay coil, ≤ 0.5 A, with a suppression diode. It must NOT drive a breaker shunt coil directly. The relay contact switches the shunt trip from the installer's own control supply.
 - ESTOP_TRIP pulse: nominal 0.48 s (0.44–0.53 s from component tolerance). It must be measured on a built board, cold and hot, before relying on it. For a held signal, or a UVR, wire the UVR from the E-stop chain, never through the controller.
 
