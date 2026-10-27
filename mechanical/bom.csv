@@ -108,7 +108,7 @@
 "R5,R212,R215,R218,R221,R224,R227,R230,R233,R236,R239,R242,R245,R248,R250,R252","33k","Resistor_SMD:R_0603_1608Metric","16"
 "R6","93.1k","Resistor_SMD:R_0603_1608Metric","1"
 "R7","27.4k","Resistor_SMD:R_0603_1608Metric","1"
-"R8","22.1k","Resistor_SMD:R_0603_1608Metric","1"
+"R8","4.7k","Resistor_SMD:R_0603_1608Metric","1"
 "R9","140k","Resistor_SMD:R_0603_1608Metric","1"
 "R12","8m","Resistor_SMD:R_2512_6332Metric","1"
 "R13,R20","121k","Resistor_SMD:R_0603_1608Metric","2"

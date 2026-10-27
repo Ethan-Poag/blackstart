@@ -109,7 +109,7 @@
 "R5,R212,R215,R218,R221,R224,R227,R230,R233,R236,R239,R242,R245,R248,R250,R252","33k","Resistor_SMD:R_0603_1608Metric","","C4216","16",""
 "R6","93.1k","Resistor_SMD:R_0603_1608Metric","","C23266","1",""
 "R7","27.4k","Resistor_SMD:R_0603_1608Metric","","C22964","1",""
-"R8","22.1k","Resistor_SMD:R_0603_1608Metric","","C23059","1",""
+"R8","4.7k","Resistor_SMD:R_0603_1608Metric","0603WAF4701T5E","C23162","1",""
 "R9","140k","Resistor_SMD:R_0603_1608Metric","","C22806","1",""
 "R12","8m","Resistor_SMD:R_2512_6332Metric","YLR12-2-8F-W","C469375","1",""
 "R13,R20","121k","Resistor_SMD:R_0603_1608Metric","","C25809","2",""
