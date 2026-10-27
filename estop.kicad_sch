@@ -2153,7 +2153,7 @@
 (property "LCSC" "C5137595" (at 307.34 132.08 0) (effects (font (size 1.27 1.27)) hide))
 (property "MPN" "" (at 307.34 132.08 0) (effects (font (size 1.27 1.27)) hide))
 (property "Manufacturer" "" (at 307.34 132.08 0) (effects (font (size 1.27 1.27)) hide))
-(property "Note" "tw 1.1*200k*2.2u = 0.48s (0.44-0.53s tol; ~0.26s worst w/ DC bias); measure cold/hot" (at 307.34 132.08 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "tw 1.1*200k*2.2u = 0.48s (0.44-0.53s tol); measure cold/hot" (at 307.34 132.08 0) (effects (font (size 1.27 1.27)) hide))
 (pin "1" (uuid "c40af411-1bcd-4833-b2a2-dec229fcf503"))
 (pin "2" (uuid "f7fabc9c-cf6a-4eaa-8dc1-f634261e8fc8"))
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/bf2b4d33-db1c-4f32-83fb-5781585769ff" (reference "C229") (unit 1))))
