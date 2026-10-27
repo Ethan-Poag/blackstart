@@ -14,3 +14,9 @@ See DESIGN_NOTES.md, docs/, and LICENSING.md.
 - The 470 uF bulk caps C17/C18 (CP_Elec_10x10.5) on +12V sit about 160 mm (C17) and 174 mm (C18) from the LM5176 output FET Q6. The builder may want to move them near Q6. No ceramic bulk sits at Q6: the nearest +12V caps are C96 100 nF (11.6 mm) and C14 1 uF (24.6 mm).
 - Trunk limit (inferred, IPC-2221 10 C, 1 oz outer assumed): narrowest trunk segment 1.5 mm, about 3.2 A supported against roughly 3.7 A estimated for U3+U15.
 - Still unpowered on +12V: U24.3/C125 (backlight boost), U2.24 (LM5176 BIAS), C17, C18.
+
+**Fusing:** Genctl has no on-board output fuses. Every output (FUEL, CRANK, GLOW, GCB/MCB,
+AUX1–10, ESTOP_TRIP) needs an external fuse fitted by the installer ahead of the relay or
+solenoid, no larger than the output's maximum (15 A FUEL/CRANK; 3 A small outputs; 10 A
+ESTOP_TRIP) and sized down to the real load. The 30 A battery fuse does not protect individual
+outputs. Fit a flyback diode across every external coil. See docs/INSTALL_SAFETY.md. Not certified.
