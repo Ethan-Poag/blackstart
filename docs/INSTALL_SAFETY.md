@@ -26,17 +26,23 @@ Every output must have its own external fuse, supplied and installed by the inst
 | CRANK | J23.4 | TPS48100-Q1 + 2 MOSFETs | 15 A | 15 A blade (ATO/ATC), 32 V DC |
 | GLOW | J24.1 | TPS1HTC30-Q1 | limit 2.49 A (1.99–2.99 A) | 2 A blade, 32 V DC |
 | GCB_CL, GCB_OP, MCB_CL, MCB_OP | J24.2, .3, .4, .5 | TPS1HTC30-Q1 | limit 2.49 A | 2 A blade each |
-| ESTOP_TRIP | J24.6 | TPS1HTC30-Q1 | limit 7.5 A (6.0–9.0 A), ~2.2 s pulse | 7.5 A blade |
+| ESTOP_TRIP | J24.6 | TPS1HTC30-Q1 | relay drive, limit 2.1 A (1.7–2.6 A), ~0.5 s pulse | 2 A blade |
 | AUX1–AUX6 | J26.1–6 | TPS1HTC30-Q1 | limit 2.49 A | 2 A blade each |
 | AUX7–AUX10 | J27.1–4 (J27.5/6 = GND) | TPS1HTC30-Q1 | limit 2.49 A | 2 A blade each |
 | Battery feed | to J23 VBAT_ESTOP via NC E-stop | — | system | 30 A (existing) |
 
 32 V DC blade fuses suit 12 V and 24 V systems.
 
+Total draw and ESTOP_TRIP (inference, not certified):
+- Total controller draw on the board battery input (F1) is limited to 3.6 A continuous (INFERRED from PCB copper rating at 18 °F (10 °C) rise). The 12 V electronics and all AUX/GCB/MCB/GLOW outputs share this limit.
+- AUX/GCB/MCB/GLOW outputs are for relay coils and indicators only, ≤ 0.5 A each, combined ≤ 1 A while the controller display is on (INFERRED; firmware-enforced).
+- ESTOP_TRIP (J24.6) drives an installer-supplied 12 V DC relay coil, ≤ 0.5 A, with a suppression diode. It must NOT drive a breaker shunt coil directly. The relay contact switches the shunt trip from the installer's own control supply.
+- ESTOP_TRIP pulse: nominal 0.48 s (0.44–0.53 s from component tolerance; possibly down to about 0.26 s with DC bias on the timing capacitor; INFERRED). It must be measured on a built board, cold and hot, before relying on it. For a held signal, or a UVR, wire the UVR from the E-stop chain, never through the controller.
+
 Connectors:
 - J24, J26, J27 (Kefa KF2EDGRM-5.08-6P headers): rated 10 A UL / 15 A IEC per pin (Kefa drawing rev A). The rating is for a
   single pole; no derating is given for all poles loaded (UNVERIFIED for that case). The mating plug's wire range is
-  unknown: Ethan has to check it. A 10 A ESTOP_TRIP fuse would sit exactly at the UL limit, hence 7.5 A.
+  unknown: Ethan has to check it.
 - J23 (Phoenix 1720819, PC 5/4-GF-7.62): 32 A nominal, 41 A UL; covers 15 A (subject to the maker's derating curve).
 
 **FUEL/CRANK fuse type (installer's check):** if the starter/fuel solenoid's pull-in current
@@ -53,7 +59,7 @@ directly without a second relay.
 | Fuse | Minimum copper |
 |---|---|
 | 2 A | 18 AWG / 0.82 mm² |
-| 7.5 A (ESTOP_TRIP) or 10 A | 16 AWG / 1.31 mm² |
+| 10 A | 16 AWG / 1.31 mm² |
 | 15 A | 14 AWG / 2.08 mm² |
 | 30 A | 10 AWG / 5.26 mm² |
 
@@ -70,5 +76,5 @@ at the coil keeps that energy off the board and the cable.
 ## Open for installer / Ethan (does not block this document)
 1. Starter/fuel solenoid pull-in current and duration: standard or time-delay 15 A fuse.
 2. GLOW: relay coil (2 A max fuse) or glow plugs driven directly (not supported at 2.49 A; use an external relay).
-3. Shunt-trip coil current on ESTOP_TRIP: confirm the 7.5 A maximum, or size down.
+3. ESTOP_TRIP relay: confirm the installer relay coil is 12 V DC, ≤ 0.5 A, with a suppression diode; size the 2 A fuse down to it. The relay contact, not ESTOP_TRIP, switches the breaker shunt trip.
 4. Actual relay coil currents on GLOW/GCB/MCB/AUX: size each fuse down from 2 A.
