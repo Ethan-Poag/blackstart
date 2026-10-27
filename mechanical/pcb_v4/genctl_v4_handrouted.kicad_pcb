@@ -136504,7 +136504,7 @@
 			)
 		)
 	)
-	(footprint "FTSH-105-02_SWD"
+	(footprint "FTSH-105-01_SWD"
 		(layer "B.Cu")
 		(uuid "752826b3-c50a-4468-9f27-5784eae245c7")
 		(at 197.364521 69.708699)
@@ -136723,6 +136723,17 @@
 			(fill no)
 			(layer "B.SilkS")
 			(uuid "43bfed92-462f-4064-a986-d30752f2bd1b")
+		)
+		(fp_rect
+			(start -3.425 -3.685)
+			(end 3.425 3.685)
+			(stroke
+				(width 0.05)
+				(type default)
+			)
+			(fill no)
+			(layer "B.CrtYd")
+			(uuid "28a8bce5-c014-4da8-8c0c-f6335ca0cd1e")
 		)
 		(fp_text user "${REFERENCE}"
 			(at 0 0 180)

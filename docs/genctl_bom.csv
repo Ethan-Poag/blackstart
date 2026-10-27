@@ -57,7 +57,7 @@
 "FB1","600R@100MHz","Inductor_SMD:L_0603_1608Metric","GZ1608D601TF","C1002","1",""
 "H1-H4","MountingHole_Pad","MountingHole:MountingHole_3.2mm_M3_Pad","","","4",""
 "J1","PC 5/4-GF-7,62 (battery in)","genctl:PhoenixContact_PC5_4-GF-7.62_1720819","1720819","C3579760","1",""
-"J2","SWD","genctl:FTSH-105-02_SWD","FTSH-105-01-L-DV","C5199898","1",""
+"J2","SWD","genctl:FTSH-105-01_SWD","FTSH-105-01-L-DV","C5199898","1",""
 "J3","Header B (MCU spare)","genctl:PZ254-2-05-S_2x05_SMD","PZ254-2-05-S","C3294463","1",""
 "J4","Fan header (SM04B)","Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal","SM04B-SRSS-TB","C51940130","1",""
 "J5","Header A (CM5 I2C/SPI)","genctl:PZ254-2-05-S_2x05_SMD","PZ254-2-05-S","C3294463","1",""

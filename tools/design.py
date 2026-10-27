@@ -595,7 +595,7 @@ FPMAP={  # libid -> (fp, lcsc, mpn)
  'MCU_ST_STM32H7:STM32H743VITx':('Package_QFP:LQFP-100_14x14mm_P0.5mm','C114409',None),
  'Memory_NVRAM:FM24C64B':('Package_SO:SOIC-8_3.9x4.9mm_P1.27mm','C9829',None),
  'Switch:SW_Push':('Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A','C318884',None),
- 'Connector:Conn_ARM_JTAG_SWD_10':('genctl:FTSH-105-02_SWD','C5199898','FTSH-105-01-L-DV'),
+ 'Connector:Conn_ARM_JTAG_SWD_10':('genctl:FTSH-105-01_SWD','C5199898','FTSH-105-01-L-DV'),
  'Connector_Generic:Conn_02x04_Odd_Even':('Connector_PinHeader_2.54mm:PinHeader_2x04_P2.54mm_Vertical','C225519','A2541WV-2x4P'),
  'Connector_Generic:Conn_02x05_Odd_Even':('genctl:PZ254-2-05-S_2x05_SMD','C3294463','PZ254-2-05-S'),
  'Connector:USB_C_Receptacle_USB2.0_16P':('genctl:USB_C_Receptacle_HRO_TYPE-C-31-D-06B_Vertical','C47817619','TYPE-C-31-D-06B'),

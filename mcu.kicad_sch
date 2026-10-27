@@ -4680,7 +4680,7 @@
 (symbol (lib_id "Connector:Conn_ARM_JTAG_SWD_10") (at 378.46 133.35 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "a60b409d-aa2a-4e55-bbac-6128c3a4eb51")
 (property "Reference" "J2" (at 378.46 157.48 0) (effects (font (size 1.27 1.27))))
 (property "Value" "SWD" (at 378.46 160.02 0) (effects (font (size 1.27 1.27))))
-(property "Footprint" "genctl:FTSH-105-02_SWD" (at 378.46 133.35 0) (effects (font (size 1.27 1.27)) hide))
+(property "Footprint" "genctl:FTSH-105-01_SWD" (at 378.46 133.35 0) (effects (font (size 1.27 1.27)) hide))
 (property "Datasheet" "http://infocenter.arm.com/help/topic/com.arm.doc.ddi0314h/DDI0314H_coresight_components_trm.pdf" (at 369.57 165.1 90) (effects (font (size 1.27 1.27)) hide))
 (property "Description" "Cortex Debug Connector, standard ARM Cortex-M SWD and JTAG interface" (at 378.46 133.35 0) (effects (font (size 1.27 1.27)) hide))
 (property "LCSC" "C5199898" (at 378.46 133.35 0) (effects (font (size 1.27 1.27)) hide))
