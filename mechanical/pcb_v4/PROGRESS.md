@@ -3,7 +3,7 @@
 ## Checkpoint 1 (2026-10-25 01:20 HST): placed, planes, critical power fan-out
 - All 1167/1167 footprints placed by `place_v4.py`, connectivity-driven, with decaps at their pins.
 - Netclasses, plane zones and 1,111 plane fan-out vias added. 10 pads had no room: isolator U69/U70 GND pins at the barrier, U21.F4 and D67.2. Those are left for hand or autorouting.
-- DRC errors: 2. Both are HV_LINE 1.5 mm clearances in the HV divider strings (R469/R470 and R464/R422), which need a nudge. Unconnected: 499 (the report is capped at 499).
+- (Historical, checkpoint 1. Superseded by the latest gate at the end of this file.) DRC errors: 2. Both are HV_LINE 1.5 mm clearances in the HV divider strings (R469/R470 and R464/R422), which need a nudge. Unconnected: 499 (the report is capped at 499).
 - Freerouting run 1 on the remaining signals is in progress.
 - **Still not done:**
   - hand-routed diff pairs (ETH, USB, LVDS, DSI)
@@ -196,7 +196,7 @@ Board = /workspace/m7/u25 (from t20 = 32b12c7 board).
 - HV opens (hvopen.py, pad islands): 17 -> 20 -> 9.
 - HV pairs, my hvrules.py: 21 net-pairs -> 0 -> 0. Reviewer hvsheet.py (m7): 28 pairs (21 chain) -> n/a -> 13 pairs (0 chain); the 13 are 191-382 V divider-node vs CT/GND_AC/BUS_VC_N gaps that my checker does not model -> NOT 0 by the reviewer's method.
 - hot-edge<8 mm: 48 groups (J28/J29 pads 6.94 mm on all layers = accepted, no edge plating) + GEN_L1 via 7.675 mm (open item).
-- KiCad DRC errors with the repo .kicad_pro: 0 -> 0 (warnings 860 -> 891, mostly track_dangling/copper_edge_clearance/silk). With the stricter work .kicad_pro (min hole 0.2/via 0.35) 4 errors: two pre-existing DSI83_REFCLK vias 0.3/0.15 at (161.5,126.7),(162.0,125.65), also in d151ff7. Footprints 1181 -> 1181. Locked tracks 2899 -> 2541 (earlier M7 rips, already flagged).
+- (Historical. These DRC numbers were not re-checked on a saved, refilled file; see "Stale zone fills" at the end.) KiCad DRC errors with the repo .kicad_pro: 0 -> 0 (warnings 860 -> 891, mostly track_dangling/copper_edge_clearance/silk). With the stricter work .kicad_pro (min hole 0.2/via 0.35) 4 errors: two pre-existing DSI83_REFCLK vias 0.3/0.15 at (161.5,126.7),(162.0,125.65), also in d151ff7. Footprints 1181 -> 1181. Locked tracks 2899 -> 2541 (earlier M7 rips, already flagged).
 - Reviewer unconn.py crashes (GetConnectedItems SWIG) - not measured that way.
 
 **What changed:**
@@ -360,7 +360,7 @@ Fix: design.py now emits the 90d8a8e values for RV1-RV6 and the TPS48100 shunts 
 - R8 (Rc, BB_COMP to BB_COMP_RC) changed from 22.1k to 4.7k 0603 1%: UNI-ROYAL 0603WAF4701T5E, LCSC C23162 (read from the LCSC product page). Changed in tools/design.py, docs/genctl_bom.csv and mechanical/bom.csv. bom/power_bom.csv has no R8 row. C11 33n and C12 220p are unchanged.
 - Board: the R8 footprint is already R_0603_1608Metric, so no copper change. The board R8 Value text was stale at 22.1k; RESOLVED in 0ee8934 (Value text set to 4.7k, one text line changed, no copper).
 - The 12 V load of about 3.7 A is an ASSUMED value. Ceramic derating is ASSUMED. The compensation is MODEL-ESTIMATED. Only a Bode measurement confirms stability; see docs/BENCH_12V_TEST.md.
-- C17/C18 (470 uF) are connected to +12V/GND in the schematic and are open only on the board (not routed).
+- C17/C18 (470 uF) are connected to +12V/GND in the schematic and are open only on the board (not routed). (Superseded: C17/C18 were deleted in step 3, 0cc821f.)
 
 ### Smallest copper gap (review 0ee)
 - The board-wide minimum gap is 0.1016 mm (B.Cu, U4-FB to GND), the same at 14c9c43 and 90d8a8e, per the reviewer's 0ee8934 report. The 0.1328 mm figure was only 90d8a8e's smallest NEW gap, not the overall minimum. Smallest gap for the C293-C296 items: 0.2177 mm (R97, B.Cu).
@@ -462,3 +462,20 @@ These need a decision from a qualified safety engineer. No layout change has bee
 - C9421 is TI LM4040A25IDBZR (LCSC page fetched 10/26): 2.5 V shunt reference, ±0.1% (A grade, 100 ppm/°C max), SOT-23 (DBZ), -40 to +85 °C (-40 to 185 °F).
 - The old text LM4040AIM3-2.5 is the legacy National name. That it is the same A-grade 2.5 V SOT-23 device is INFERRED from the naming; no TI cross-reference page was fetched.
 - design.py symbol MPN and map entry changed to LM4040A25IDBZR. The symbol (Reference_Voltage:LM4040DBZ-2.5) and footprint SOT-23 are unchanged. 1 field changed; netlist identical; ERC 0; BOM diff 0. bom/inputs_bom.csv already said LM4040A25IDBZR.
+
+### Docs fixes (stale items)
+- C74/C75 C7471020 (JIERONG JRCD3R0206N120030E, 20 F 3 V), checked 10/26 ~7:40 PM HST:
+  - LCSC product-detail page: "Page Not Found" (WebFetch 404; curl gets a 200 page titled "Page Not Found | LCSC").
+  - JLC partdetail page: FOUND, Extended part, "Wave Soldering", 12.5x30 mm, 20 F 3 V, -20/+50 %, 1000 h at 185 °F (85 °C). The page did not show stock or price.
+  - No change made. Orderability at JLC (stock) is UNVERIFIED.
+- C2 / VBAT_DD (measured on the saved board, pcbnew shape collision):
+  - Segment d60b476d (0.15 mm, y 166.893) runs on B.Cu between C2's pads, inside C2's courtyard. Copper gap is 0.25 mm to C2.1 (Net-(U1-CAP)) and 0.25 mm to C2.2 (VBAT_F); next segment 6ea26da2 is 0.315/0.374 mm.
+  - Pad mask expansion is 0, so the track is under solder mask; DRC on the saved file is 0 errors.
+  - No short. The residual assembly risk under the 0603 body (solder ball or bridge under the part) is INFERRED small.
+  - Not moved: the pad gap was the route chosen to avoid the C8/Q2 courtyard overlaps.
+- Burden accuracy (R474-R487, 24.9R 1% C22916):
+  - The design docs state no metering accuracy class, so the required accuracy is UNDETERMINED.
+  - ADE9000 datasheet (/workspace/genctl/datasheets/ade9000.txt): "Class 0.2 metrology with standard external components". ADC gain error ±1 % max, so per-channel gain calibration is needed anyway; a 1 % burden error is calibrated out.
+  - Tempco is not calibrated out: C22916 is ±100 ppm/°C (LCSC).
+  - 1 % is used. A 0.1 % low-tempco burden would only be needed for revenue-grade / class-0.2 accuracy. That is the reviewer's call.
+- Also fixed: bom/ac_metering_bom.csv burden row; docs/ISOLATION_CHECK.md MOV row (7.5 mm pitch; creepage UNVERIFIED); DESIGN_NOTES.md lines ~308/~372 (V20E385P); PROGRESS lines ~6/~199/~363 marked historical or superseded.

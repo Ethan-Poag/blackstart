@@ -305,7 +305,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - AVDDOUT, DVDDOUT and REF each get 4.7 µF + 100 nF.
 
 **Voltage inputs**
-- Per phase: 4 × 1M (1206 HV) to a 1k low-side resistor → 4001:1. V20E385P MOV L–N.
+- Per phase: 4 × 1M (1206 HV) to a 1k low-side resistor → 4001:1. MOV L–N: TMOV20RP460E C3260792 (M7; was V20E385P).
 - **Separate neutrals (Rev B):** GEN_N and BUS_N each have their own 4 × 1M / 1k divider (GEN_VN_TAP, BUS_VN_TAP). Each VxN input is fed from its own system's neutral tap through 1k/33 nF, and each VxP from the line tap through 1k/33 nF. Gen phases are therefore measured against N-gen and bus phases against N-bus, fully differentially.
 - The 0R neutral → GND_AC links are removed. GND_AC is defined by the dividers' 1k low sides and floats at about the mean of the 8 conductors / 4001. The ADE9000 needs all inputs within ±0.6 V of AGND and ±1 V differential. The full-scale tap is about 0.1 Vrms, and even 1 kV of neutral-to-neutral difference gives only ~0.25 V of common mode. The CT inputs are referenced to GND_AC through their burden.
 - The 1k/33 nF networks on P and N see slightly different source impedances (tap ∥ 1k each), but both legs match within a system.
@@ -369,7 +369,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 
 ### Open items
 - OVP raised to 33.2 V (done, Rev c). TVS/op-amp items below are RESOLVED in Rev d: SMBJ28CA on VBAT_P and VBAT_ESTOP (schematic) has Vbr min 31.1 V, so it will conduct when charging at 32 V; power_bom lists SMDJ33CA (Vbr min 36.7 V), so the schematic and BOM disagree. Replace with SMBJ33CA/36CA. LM2904DR (non-V, 26 V max) on VBAT_P: change to LM2904B/LM2904V (36 V) or a 40 V op-amp.
-- EasyEDA footprints unverified (esp. CTS 228E holes, AC1005 pads, M.2 pinout); 1720819 low stock (50); USB3-A replaced by HC-USB3.0-L168-WP C7501850 (Rev c); V20E385P stock 2.
+- EasyEDA footprints unverified (esp. CTS 228E holes, AC1005 pads, M.2 pinout); 1720819 low stock (50); USB3-A replaced by HC-USB3.0-L168-WP C7501850 (Rev c); V20E385P stock 2 (superseded M7: RV1-RV6 = TMOV20RP460E C3260792, 25 in stock per reviewer).
 
 ## Rev 2026-10-24 (b): schematic redrawn with real wires
 - tools/layout.py (enabled by gen.WIRED=True): ICs anchor functional clusters; passives attach to the IC they share a local net with (chains followed), decoupling caps attach to the IC whose rail they bypass and are wired to its rail pin. Clusters flow left->right in design order, wrapped onto the smallest A-size paper.
