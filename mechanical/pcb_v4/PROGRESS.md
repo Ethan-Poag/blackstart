@@ -485,3 +485,5 @@ These need a decision from a qualified safety engineer. No layout change has bee
 - FTSH-105-01-L-DV is unshrouded (no -K option): the SWD header has no polarizing shroud, so mind pin 1 when mating the cable. It sits on the bottom side, so programming requires the enclosure to be open. Mechanical confirmed the FTSH-105-01 (3.05 mm post) clears the enclosure (per Enginerd).
 - J2 courtyard added: rectangle +/-3.425 x +/-3.685 mm (B.CrtYd on board, F.CrtYd in library). Source: Samtec FTSH SMT drawing (F-210): body length = 5 pos x 1.27 = 6.35 mm, -DV tail-to-tail 5.84 mm; footprint pads extend +/-2.91 x +/-3.435 mm (pads govern Y); 0.25 mm margin. Exact insulator outline not verified from drawing (inferred). No 3D model added.
 - J11 (HRO TYPE-C-31-D-06B) courtyard NOT added: its S1 shield-tab pad copper edge (y=52.800) is 0.009 mm from the R107 courtyard (y=52.809), so any courtyard margin overlaps R107 without moving parts. Open item.
+
+- 2026-10-26: routing plan written (plan only, no routing): see docs/ROUTING_PLAN.md.
