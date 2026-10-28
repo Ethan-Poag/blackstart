@@ -79,9 +79,9 @@ Sources: Riverdi DS_RVT121HVLNWCA0-B Rev 1.1, drawing DR_RVT121HVLNWCA0-B Rev 1.
 |---|---|---|---|
 | Inputs | 16.87 | 92.12 | 24.72 |
 | Outputs | 124.16 | 190.36 | 145.42 |
-| Power | 25.56 | 41.46 | 43.58 (Rev B; was 41.46) |
+| Power | 25.56 | 41.46 | 46.85 (s3c6h: recomputed Σ qty × unit from power_bom.csv incl. C297; the earlier 43.58 and the file's 53.29/53.56 were not reproducible) |
 | AC metering + MCU + CM5 conn | 73.47 | 122.94 | 95.77 (Rev B; was 106.95) |
-| **Grand total** | **240.06** | **446.88** | **309.50** (was 318.56) |
+| **Grand total** | **240.06** | **446.88** | **312.76** (s3c6h, power recomputed; was 309.50, before that 318.56) |
 | Connectors only | 6.04 (AC ones were unpriced) | 212.86 | 84.54 (the all-cheap screw-7.62 option would be 25.38 / total 259.40) |
 
 Rows still unpriced inside the BOMs: power (display 12 V load switch, 3V3 LDO backup option) and AC (HV divider chain, low side, CT burden, anti-alias RC, ADC TVS). Several prices are marked UNVERIFIED.
@@ -89,7 +89,7 @@ Rows still unpriced inside the BOMs: power (display 12 V load switch, 3V3 LDO ba
 **Comms and other BOMs (comms_bom.csv, other_bom.csv):**
 - Rev B: comms_bom TOTAL is **$36.46** (gigabit HanRun HR911131A replaces HR911130C, -$0.04). Before that it was **$36.50** (was $28.25 with the RVT101). Removed the touch USB-C, TPS2051C and USBLC6 (-$0.79). Added the SN65DSI83 bridge, 1.8 V LDO, LVDS/touch FPC connectors, 2x TPS22918, TPS61500 backlight driver and passives (+$9.04). 4 unpriced rows are excluded.
 - Rev B: other_bom TOTAL is **$396.38** (+$50.32). 12x CTS 228EMVARGBFR RGB-backlit IP67 buttons replace the KSC241JLFS + 10 status LEDs, plus 2 more TCA9555 expanders, resistors and a PWM PFET. Before that it was **$346.06** (was $385.63). It includes the CM5 at $105 and the RVT121HVLNWCA0-B at $226.04 (X-On; -$39.57 vs the RVT101HVHNWC00-B at $265.61). The unpriced HDMI connector row was removed. 4 unpriced/ESTIMATE rows are excluded.
-- **Per-controller parts total (Rev B): $309.50 + $36.46 + $396.38 = $742.34** (+$41.22 vs $701.12; before that ~$732.44).
+- **Per-controller parts total (s3c6h): $312.76 + $36.46 + $396.38 = $745.60** (Rev B was $309.50 + $36.46 + $396.38 = $742.34) (+$41.22 vs $701.12; before that ~$732.44).
 - Bezel/overlay/gasket estimate is ~$30-50 for the proto. The separate glass window (~$20-40) has been removed.
 
 **Not priced yet:** PCB fab and assembly (including JLC Extended and global-sourcing fees) and the enclosure/bezel (estimates only), plus the UNVERIFIED rows.

@@ -41,6 +41,7 @@ conn(pw,4,['BAT_IN','BAT_IN','GND','GND'],'PC 5/4-GF-7,62 (battery in)',mpn='172
 pw.p('Device:Fuse','10A ATO (3557-2 clips)',{'1':'BAT_IN','2':'VBAT_F'},prefix='F',mpn='3557-2')
 pw.p('Device:D_TVS','SMDJ36CA',{'1':'VBAT_F','2':'GND'},prefix='D',mpn='SMDJ36CA',mfr='Littelfuse',lcsc='C224075')
 pw.C('100n','VBAT_DD','GND',pkg='0805',note='100V')
+pw.C('100n','VBAT_F','GND',pkg='0805',ref='C297',note='100V; CIN on VBAT_F per TI SNOSD95C p23 (0.1 uF min)')
 pw.p('genctl:LM74800QDRRRQ1','LM74800QDRRRQ1',{'A':'VBAT_F','VS':'VBAT_DD','VSNS':'VBAT_F','SW':'VBAT_F','EN/UVLO':'LM748_EN','OV':'LM748_OV','GND':'GND','RTN':None,
      'DGATE':'LM748_DGATE','C':'VBAT_DD','HGATE':'LM748_HGATE','OUT':'VBAT_P','CAP':'LM748_CAP'},mpn='LM74800QDRRRQ1',lcsc='C3215600',note='EP=RTN left floating per DS')
 pw.C('100n','LM748_CAP','VBAT_DD',note='CAP-VS charge-pump cap, 0.1uF per DS typ app')
