@@ -79,7 +79,7 @@ Sources: Riverdi DS_RVT121HVLNWCA0-B Rev 1.1, drawing DR_RVT121HVLNWCA0-B Rev 1.
 |---|---|---|---|
 | Inputs | 16.87 | 92.12 | 24.72 |
 | Outputs | 124.16 | 190.36 | 145.42 |
-| Power | 25.56 | 41.46 | 46.85 (s3c6h: recomputed Σ qty × unit from power_bom.csv incl. C297; the earlier 43.58 and the file's 53.29/53.56 were not reproducible) |
+| Power | 25.56 | 41.46 | 46.85 (s3c6i: Σ qty × unit from power_bom.csv = 46.8511 with C297 220 nF C513710 $0.0226; s3c6h 46.8484 with 100 nF; the earlier 43.58 and the file's 53.29/53.56 were not reproducible) |
 | AC metering + MCU + CM5 conn | 73.47 | 122.94 | 95.77 (Rev B; was 106.95) |
 | **Grand total** | **240.06** | **446.88** | **312.76** (s3c6h, power recomputed; was 309.50, before that 318.56) |
 | Connectors only | 6.04 (AC ones were unpriced) | 212.86 | 84.54 (the all-cheap screw-7.62 option would be 25.38 / total 259.40) |

@@ -41,7 +41,7 @@ conn(pw,4,['BAT_IN','BAT_IN','GND','GND'],'PC 5/4-GF-7,62 (battery in)',mpn='172
 pw.p('Device:Fuse','10A ATO (3557-2 clips)',{'1':'BAT_IN','2':'VBAT_F'},prefix='F',mpn='3557-2')
 pw.p('Device:D_TVS','SMDJ36CA',{'1':'VBAT_F','2':'GND'},prefix='D',mpn='SMDJ36CA',mfr='Littelfuse',lcsc='C224075')
 pw.C('100n','VBAT_DD','GND',pkg='0805',note='100V')
-pw.C('100n','VBAT_F','GND',pkg='0805',ref='C297',note='100V; CIN on VBAT_F per TI SNOSD95C p23 (0.1 uF min)')
+pw.C('220n','VBAT_F','GND',pkg='0805',ref='C297',mpn='CC0805KKX7R0BB224',lcsc='C513710',mfr='YAGEO',note='100V X7R; CIN on VBAT_F per TI SNOSD95C p23 (0.1 uF min); 220n for DC-bias margin')
 pw.p('genctl:LM74800QDRRRQ1','LM74800QDRRRQ1',{'A':'VBAT_F','VS':'VBAT_DD','VSNS':'VBAT_F','SW':'VBAT_F','EN/UVLO':'LM748_EN','OV':'LM748_OV','GND':'GND','RTN':None,
      'DGATE':'LM748_DGATE','C':'VBAT_DD','HGATE':'LM748_HGATE','OUT':'VBAT_P','CAP':'LM748_CAP'},mpn='LM74800QDRRRQ1',lcsc='C3215600',note='EP=RTN left floating per DS')
 pw.C('100n','LM748_CAP','VBAT_DD',note='CAP-VS charge-pump cap, 0.1uF per DS typ app')
@@ -627,7 +627,7 @@ RCX={  # (value, fp) -> lcsc for passives not in gen.RLCSC/CLCSC (all checked on
  ('53.6k',_r6):'C23074',('680R',_r6):'C23228',('93.1k',_r6):'C23266',('1.1k',_r6):'C22764',('1.33k',_r6):'C22838',('13.3k',_r6):'C25952',
  ('10R',_r6):'C22859',('1M',_r12):'C17927',('120R',_r12):'C17909',('62R',_r12):'C17971',('10k',_r12):'C17902',('4.7k',_r12):'C17936',
  ('100R',_r12):'C319961',('715k',_r6):'C23237',('33.2k',_r6):'C23003',('29.4k',_r6):'C22974',('150R',_r12):'C17917',('1.1R','Resistor_SMD:R_0805_2012Metric'):'C2933354',('10R','Resistor_SMD:R_2512_6332Metric'):'C47019',
- ('100n','Capacitor_SMD:C_0805_2012Metric'):'C28233',('100n','Capacitor_SMD:C_1206_3216Metric'):'C1945',('100p',_c6):'C14858',
+ ('100n','Capacitor_SMD:C_0805_2012Metric'):'C28233',('220n','Capacitor_SMD:C_0805_2012Metric'):'C513710',('100n','Capacitor_SMD:C_1206_3216Metric'):'C1945',('100p',_c6):'C14858',
  ('10n',_c6):'C57112',('18p','Capacitor_SMD:C_0402_1005Metric'):'C1549',('2.2u','Capacitor_SMD:C_0805_2012Metric'):'C5137595',
  ('220p',_c6):'C1603',('270p',_c6):'C1608',('4.7n','Capacitor_SMD:C_1206_3216Metric'):'C41017',('4.7u','Capacitor_SMD:C_0805_2012Metric'):'C1779',
  ('470n',_c6):'C1623',('47n',_c6):'C1622',('68n',_c6):'C5137586',
