@@ -40,8 +40,9 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 
 **Ideal diode (LM74800-Q1)**
 - Two BSC070N10NS5 back-to-back, common drain (VBAT_DD).
-- VS, A and VSNS all on VBAT_F.
-- CAP: 100 nF from CAP to VS (*assumed*, typical application).
+- A and VSNS on VBAT_F; **VS on VBAT_DD** (common-drain midpoint). Wiring fix 2026-10-27 (s3c6d) per TI SNOSD95C p3 and review/hv/lm74800_pins.md: VS abs max is -1 V to GND, so it must sit behind Q1. Before this, VS was on VBAT_F.
+- CVS: C1 100 nF 0805 100 V from VS (VBAT_DD) to GND (moved from VBAT_F with VS).
+- CAP: C2 100 nF from CAP to VS (now VBAT_DD; *assumed*, typical application).
 - SW → 210k / 49.9k / 10k ladder to EN/UVLO and OV (Rev 2026-10-24 c; was 191k/45.3k/10k = 30.3 V OV):
   - DS: V(OVR) 1.231 V typ (1.195-1.267), V(OVF) 1.13 V; V(UVLOR) 1.231 V, V(UVLOF) 1.132 V.
   - OV trip (rising) = 1.231 × 269.9/10 = **33.2 V** (tol. 32.3-34.2 V from Vref spread only; +1% R adds ~±0.3 V)
