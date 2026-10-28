@@ -24,7 +24,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 2. **Output readback.** Each readback uses a 100k/10k divider into an MMBT3904, which pulls the expander pin low (inverted logic).
    A plain 100k/10k divider gives only about 1.1 V at 12 V, which is below the expander's VIH, and up to 3.3 V at 36 V.
 3. **Output status LEDs.** The series resistor is now **10k 1206**, not 1k. With 1k the resistor dissipates about 0.5 W at 24 V.
-4. **E-stop hold-up cap.** Changed to **10 µF 50 V 1210**. The BOM part (CL31B106KAHNNNE) is rated 25 V, but VBAT_P can reach the 30.3 V OV threshold.
+4. **E-stop hold-up cap.** Changed to **10 µF 50 V 1210**. The BOM part (CL31B106KAHNNNE) is rated 25 V, but VBAT_P can reach the OV trip (now 32.39-35.74 V with R3 9.76k, s3c6f; was 30.3 V at the time of this note).
 5. **4th SN74LVC1G08** gates MCU_TRIP with the watchdog (WDO), so a hung MCU cannot fire the trip.
    - The 555 hardware path still goes straight to the BAT54C OR, as in estop_notes v5.
 6. **Watchdog inverter.** An MMBT3904 drives the LVC541 /OE from WDO. A watchdog fault puts all small-output enables into Hi-Z, and 100k pull-downs turn the outputs off.
@@ -44,12 +44,13 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - CVS: C1 100 nF 0805 100 V from VS (VBAT_DD) to GND (moved from VBAT_F with VS).
 - CAP: C2 100 nF from CAP to VS (now VBAT_DD; *assumed*, typical application).
 - Ladder top R1.1 on **VBAT_F** (2026-10-27 s3c6e, review/s3c6c/divider_check.md: EN/UVLO was fed only from SW, so the EN-gated VSNS–SW switch latched off, TI SNOSD95C p13/p16). SW (U1.4) strapped to VSNS (U1.3), both VBAT_F; OVUV_TOP net removed. Trip points unchanged (R(SW) ≤ 46 Ω); always-on divider drain 44.5 µA at 12 V, 115 µA at 31 V [I]. Was: SW → ladder.
-- 210k / 49.9k / **9.76k** ladder (s3c6f: R3 10k→9.76k; OV trip (rising) 32.39 / 34.01 / 35.74 V (min/typ/max, 1 % R + Vref spread + 200 nA pin leakage), release (falling) 29.57 / 31.22 / 32.70 V, UV rising 5.32 / 5.56 / 5.86 V). History below is for the old 10k R3. Old: 210k / 49.9k / 10k ladder to EN/UVLO and OV (Rev 2026-10-24 c; was 191k/45.3k/10k = 30.3 V OV):
-  - DS: V(OVR) 1.231 V typ (1.195-1.267), V(OVF) 1.13 V; V(UVLOR) 1.231 V, V(UVLOF) 1.132 V.
-  - OV trip (rising) = 1.231 × 269.9/10 = **33.2 V** (tol. 32.3-34.2 V from Vref spread only; +1% R adds ~±0.3 V)
-  - OV release (falling) = 1.13 × 26.99 = **30.5 V** (2.7 V hysteresis)
-  - UV rising = 1.231 × 269.9/59.9 = **5.55 V**, falling = 1.132 × 4.506 = **5.10 V**
-  - Ladder current ~0.12 mA at 32 V. R1 210k = C22952 (extended, 25k stock), R2 49.9k = C23184 (basic), R3 10k = C25804 (basic).
+- 210k / 49.9k / **9.76k** ladder to EN/UVLO and OV (s3c6f 2026-10-27: R3 10k→9.76k; was 191k/45.3k/10k then 210k/49.9k/10k). Max operating battery **31 V**.
+  - DS (SNOSD95C p5-6): V(OVR) 1.231 V typ (1.195-1.267), V(OVF) 1.13 V; V(UVLOR) 1.231 V, V(UVLOF) 1.132 V.
+  - OV trip (rising) **32.39 / 34.01 / 35.74 V** min/typ/max (1 % R + Vref spread; max incl. 200 nA pin leakage) [I].
+  - OV release (falling) **29.57 / 31.22 / 32.70 V** [I]. OV-min margin vs 31 V = 1.39 V; 0.1 % resistors are an option.
+  - UV rising **5.32 / 5.56 / 5.86 V** [I].
+  - Ladder drain 44.5 µA at 12 V, 115 µA at 31 V [I]. R1 210k = C22952 (extended), R2 49.9k = C23184 (basic), R3 9.76k = 0603WAF9761T5E C23128.
+- CIN: **C297 100 nF 0805 100 V (CL21B104KCFNNNE, C28233) VBAT_F→GND** (s3c6h; TI SNOSD95C p23 §10.2.3.3 "A minimum input capacitance CIN of 0.1 µF … is recommended", read this pass). F.Cu at (249.6, 137.0), GND pad on the existing C1/U1.7 GND trace and via (249.8,139.5); about 9 mm from U1.2/U1.3.
 - Check the 5.5 V UV against cold-crank requirements.
 
 **+12V (LM5176)**
@@ -370,7 +371,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - Auto PWR_FLAGs (gen.py): only on nets with power_in but no power_out, i.e. rails sourced through passive pins (inductor/fuse) or module-internal; list in tools output. Note gen.py was extended with a `types` arg.
 
 ### Open items
-- OVP raised to 33.2 V (done, Rev c). TVS/op-amp items below are RESOLVED in Rev d: SMBJ28CA on VBAT_P and VBAT_ESTOP (schematic) has Vbr min 31.1 V, so it will conduct when charging at 32 V; power_bom lists SMDJ33CA (Vbr min 36.7 V), so the schematic and BOM disagree. Replace with SMBJ33CA/36CA. LM2904DR (non-V, 26 V max) on VBAT_P: change to LM2904B/LM2904V (36 V) or a 40 V op-amp.
+- (History; superseded by s3c6f OV 32.39-35.74 V.) OVP raised to 33.2 V (done, Rev c). TVS/op-amp items below are RESOLVED in Rev d: SMBJ28CA on VBAT_P and VBAT_ESTOP (schematic) has Vbr min 31.1 V, so it will conduct when charging at 32 V; power_bom lists SMDJ33CA (Vbr min 36.7 V), so the schematic and BOM disagree. Replace with SMBJ33CA/36CA. LM2904DR (non-V, 26 V max) on VBAT_P: change to LM2904B/LM2904V (36 V) or a 40 V op-amp.
 - EasyEDA footprints unverified (esp. CTS 228E holes, AC1005 pads, M.2 pinout); 1720819 low stock (50); USB3-A replaced by HC-USB3.0-L168-WP C7501850 (Rev c); V20E385P stock 2 (superseded M7: RV1-RV6 = TMOV20RP460E C3260792, 25 in stock per reviewer).
 
 ## Rev 2026-10-24 (b): schematic redrawn with real wires
@@ -380,9 +381,9 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - Verified: netlist partition identical to the label-only version (1082 nets), ERC 0 errors/0 warnings, BOM identical. Local nets lost their label names (now auto Net-(...)).
 
 ## Rev 2026-10-24 (c): OVP raised for 24 V charging; USB3-A part swap
-- LM74800 OV/UV ladder 191k/45.3k/10k -> 210k/49.9k/10k: OV 33.2 V rise / 30.5 V release, UV 5.55 V / 5.10 V (see Ideal diode section).
+- (History; superseded by s3c6f R3 9.76k.) LM74800 OV/UV ladder 191k/45.3k/10k -> 210k/49.9k/10k: OV 33.2 V rise / 30.5 V release, UV 5.55 V / 5.10 V (see Ideal diode section).
 - Fixed wrong LCSC codes in gen.py RLCSC: 191k was C25860 (actually 1.1k 0402), now C22932. 45.3k was C23171 (actually 432k), now C23058, which affects the +3V3 FB R23.
-- Voltage ratings on VBAT_P at 33.2 V + margin: BSC070N10NS5 100 V, LM5176 55 V, LMR36506 65 V, TPS1HTC30 64 V, TPS48100, INA281 and SS110 fine, EEHZA1H101P 50 V, 10u 1210 CL32B106KBJNNNE 50 V, 100n 0603 C14663 50 V, 2.2u 1206 100 V: all OK.
+- (History, at OV 33.2 V; now OV max 35.74 V.) Voltage ratings on VBAT_P at 33.2 V + margin: BSC070N10NS5 100 V, LM5176 55 V, LMR36506 65 V, TPS1HTC30 64 V, TPS48100, INA281 and SS110 fine, EEHZA1H101P 50 V, 10u 1210 CL32B106KBJNNNE 50 V, 100n 0603 C14663 50 V, 2.2u 1206 100 V: all OK.
   NOT OK: SMBJ28CA (VBAT_P, VBAT_ESTOP; Vbr min 31.1 V) and LM2904DR (26 V supply). See Open items. 0805 100n on VBAT rails has no LCSC code assigned; specify 50 V or higher.
 - J11 USB3 Type-A: Molex 48393-0003 / C3032863 (no stock) -> Hong Cheng HC-USB3.0-L168-WP, LCSC C7501850 (JLC extended, 20,774 stock, $0.1249 qty 1 on 2026-10-24). THT right-angle, 9 pins + 2 shell pegs.
   Per DS: 1 VBUS, 2 D-, 3 D+, 4 GND, 5 SSRX-, 6 SSRX+, 7 GND_DRAIN, 8 SSTX-, 9 SSTX+, shell = pad 10 -> CHASSIS. Net mapping unchanged.
@@ -390,8 +391,8 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - Cost total now $755.36 (comms +$0.12 for the now-priced USB-A; resistors sit in the misc lump).
 
 ## Rev 2026-10-24 (d): 33 V-safe TVS, 36 V op-amp, 0805 cap codes
-- All 18 SMBJ28CA -> SMBJ33CA, Brightking C78420 (JLC extended, 132,283 stock, $0.0575). That covers VBAT_P, VBAT_ESTOP and the 16 output TVS, which also see raw battery when on. Vbr min 36.7 V > 33.2 V OVP; Vc 53.3 V @ 11.3 A < TPS1HTC30 64 V / FETs 100 V. Same package (DO-214AA), footprint Diode_SMD:D_SMB unchanged.
-- power_bom aligned to the schematic: post-cutoff TVS is SMBJ33CA (SMB), not SMDJ33CA. SMB 600 W is enough because the SMDJ58CA at the input absorbs the load-dump surge and the LM74800 opens on OV, so the downstream TVS only takes cutoff overshoot and local inductive transients (mJ level).
+- All 18 SMBJ28CA -> SMBJ33CA, Brightking C78420 (JLC extended, 132,283 stock, $0.0575). That covers VBAT_P, VBAT_ESTOP and the 16 output TVS, which also see raw battery when on. Vbr min 36.7 V > 33.2 V OVP (now > 35.74 V OV max, s3c6f); Vc 53.3 V @ 11.3 A < TPS1HTC30 64 V / FETs 100 V. Same package (DO-214AA), footprint Diode_SMD:D_SMB unchanged.
+- power_bom aligned to the schematic: post-cutoff TVS is SMBJ33CA (SMB), not SMDJ33CA. SMB 600 W is enough because the input TVS (now SMDJ36CA, s3c6f) absorbs suppressed transients and the LM74800 opens on OV (no longer true for an unsuppressed load dump, which is out of scope: see docs/INSTALL_SAFETY.md and the s3c6f section), so the downstream TVS only takes cutoff overshoot and local inductive transients (mJ level).
 - U24-U26 LM2904DR -> LM2904BIDR (TI) C1849422 (extended, 4,110 stock, $0.1046), 3-36 V supply (datasheets/lm2904b.pdf, Family Comparison table: LM2904 = 26 V). SOIC-8 pinout identical (1 OUT1, 2 IN1-, 3 IN1+, 4 V-, 5 IN2+, 6 IN2-, 7 OUT2, 8 V+).
 - All 0805 100 nF (22 pcs, incl. VBAT_F/VBAT_P/VBAT_ESTOP/DPX_VI) -> Samsung CL21B104KCFNNNE 100 V X7R C28233 (basic, 1.5M stock), via gen.CLCSC.
 - Cost total $755.07 (was $755.36): outputs and power TVS cheaper, inputs op-amp +$0.12.
