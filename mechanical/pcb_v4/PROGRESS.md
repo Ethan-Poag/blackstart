@@ -488,3 +488,4 @@ These need a decision from a qualified safety engineer. No layout change has bee
 
 - 2026-10-26: routing plan written (plan only, no routing): see docs/ROUTING_PLAN.md.
 - 2026-10-26: Routing Batch 1a (GND 23 of 28) — see docs/ROUTING_PLAN.md §7. RV3 is a documented exception: 600 V insulated bodge wire (≥0.5 mm², sleeved, tied down, ≥12.6 mm from SELV); until it is wired the GEN input has NO surge protection. Checklist: docs/BRINGUP_CHECKLIST.md.
+- 2026-10-27: S3c/c6c — U1/C1/C2 moved to F.Cu next to Q1/Q2 (see docs/ROUTING_PLAN.md §8.1). HGATE 18.5 mm (950b8a1 19.1; 17.6 target not met, constraint documented). cls 630/61 (U1.9 OUT now connected, only change); other gate items = baseline. Via counts by both methods (edge-to-edge primary 25/40, 25/35; reviewer centre-to-point 17/34, 14/25) unchanged. Not certified.
