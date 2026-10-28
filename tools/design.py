@@ -41,10 +41,10 @@ conn(pw,4,['BAT_IN','BAT_IN','GND','GND'],'PC 5/4-GF-7,62 (battery in)',mpn='172
 pw.p('Device:Fuse','10A ATO (3557-2 clips)',{'1':'BAT_IN','2':'VBAT_F'},prefix='F',mpn='3557-2')
 tvs(pw,'SMDJ58CA','VBAT_F')
 pw.C('100n','VBAT_DD','GND',pkg='0805',note='100V')
-pw.p('genctl:LM74800QDRRRQ1','LM74800QDRRRQ1',{'A':'VBAT_F','VS':'VBAT_DD','VSNS':'VBAT_F','SW':'OVUV_TOP','EN/UVLO':'LM748_EN','OV':'LM748_OV','GND':'GND','RTN':None,
+pw.p('genctl:LM74800QDRRRQ1','LM74800QDRRRQ1',{'A':'VBAT_F','VS':'VBAT_DD','VSNS':'VBAT_F','SW':'VBAT_F','EN/UVLO':'LM748_EN','OV':'LM748_OV','GND':'GND','RTN':None,
      'DGATE':'LM748_DGATE','C':'VBAT_DD','HGATE':'LM748_HGATE','OUT':'VBAT_P','CAP':'LM748_CAP'},mpn='LM74800QDRRRQ1',lcsc='C3215600',note='EP=RTN left floating per DS')
 pw.C('100n','LM748_CAP','VBAT_DD',note='CAP-VS charge-pump cap, 0.1uF per DS typ app')
-pw.R('210k','OVUV_TOP','LM748_EN'); pw.R('49.9k','LM748_EN','LM748_OV'); pw.R('10k','LM748_OV','GND')
+pw.R('210k','VBAT_F','LM748_EN'); pw.R('49.9k','LM748_EN','LM748_OV'); pw.R('10k','LM748_OV','GND')
 fet(pw,'Transistor_FET:BSC070N10NS5','BSC070N10NS5','LM748_DGATE','VBAT_F','VBAT_DD')
 fet(pw,'Transistor_FET:BSC070N10NS5','BSC070N10NS5','LM748_HGATE','VBAT_P','VBAT_DD')
 tvs(pw,'SMBJ33CA','VBAT_P')
