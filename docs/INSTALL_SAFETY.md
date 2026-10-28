@@ -7,6 +7,13 @@
 > table. Do not build or load this revision beyond the bench-test limits until the routing plan's
 > current targets are met (see ROUTING_PLAN.md).**
 
+## Load dump / supply assumptions
+(From review/hv/load_dump_external.md §(c), pasted exactly.)
+
+> **Load dump / supply assumptions.** This controller assumes a battery-backed, suppressed 12 V or 24 V DC supply bus: a healthy battery permanently connected across the charging alternator, with the alternator's own regulator or centralised suppression limiting transients. The controller is **not designed to survive an unsuppressed load dump**, the high-energy surge (up to about 100 V on 12 V systems and about 200 V on 24 V systems, lasting hundreds of milliseconds) produced when the battery is disconnected while the alternator is charging. Do not run the generator with the battery disconnected. Do not open the battery master or isolator switch while the engine is running or the alternator is charging. Keep battery terminals clean and tight. Stop the engine before isolating the battery. If your installation can lose the battery while running, fit a separately designed load-dump surge protector on the battery feed after the 30 A battery fuse, feeding both the controller supply and the E-stop supply. The on-board TVS only covers short transients. Damage from load dump is not covered by any rating. This design is not certified to ISO 16750-2, SAE J1113 or any other standard. Have a qualified professional review the installation.
+
+- Board battery input fuse F1: **10 A** ATO blade (installer-fit).
+
 ## No on-board fusing
 There is no on-board fusing on any output. The installer-supplied fuses are the only
 overcurrent protection beyond each driver's electronic current limit. The electronic limit

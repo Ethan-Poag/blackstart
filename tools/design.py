@@ -33,18 +33,18 @@ def S(name,title,notes=''):
 
 # =====================================================================
 pw=S('power','Power: input protection, ideal diode, 12V buck-boost, 5V, 3V3',
- 'POWER. J0 battery in -> 10A ATO -> SMDJ58CA -> LM74800 + 2x BSC070N10NS5 back-to-back (VBAT_P).\n'
- 'OV 33.2V rise/30.5V fall, UV 5.55V/5.1V (210k/49.9k/10k, 1.231/1.13V thresholds). LM5176 buck-boost -> +12V (FB 140k/10k, RT 27.4k ~300kHz, 8mR sense).\n'
+ 'POWER. J0 battery in -> 10A ATO -> SMDJ36CA -> LM74800 + 2x BSC070N10NS5 back-to-back (VBAT_P).\n'
+ 'OV 34.0V rise/31.2V fall typ (32.39-35.74 / 29.57-32.70 V), UV 5.56V/5.12V (210k/49.9k/9.76k, 1.231/1.13V thresholds). LM5176 buck-boost -> +12V (FB 140k/10k, RT 27.4k ~300kHz, 8mR sense).\n'
  'TPS56637 -> +5V (FB 75k/10k = 5.1V, 3.3uH). TPS56637 -> +3V3 from +12V (FB 45.3k/10k, 2.2uH, 3x22u), >=3A. MODE open = FCCM.\n'
  'SAFE DOMAIN: LMR36506 buck VBAT_P -> +3V3_BK (always on); TPS2116 priority mux VIN1=+3V3 / VIN2=+3V3_BK -> +3V3_SAFE (MCU, FRAM, WDT, I/O, E-stop logic).')
 conn(pw,4,['BAT_IN','BAT_IN','GND','GND'],'PC 5/4-GF-7,62 (battery in)',mpn='1720819 Phoenix',note='J0 battery input')
 pw.p('Device:Fuse','10A ATO (3557-2 clips)',{'1':'BAT_IN','2':'VBAT_F'},prefix='F',mpn='3557-2')
-tvs(pw,'SMDJ58CA','VBAT_F')
+pw.p('Device:D_TVS','SMDJ36CA',{'1':'VBAT_F','2':'GND'},prefix='D',mpn='SMDJ36CA',mfr='Littelfuse',lcsc='C224075')
 pw.C('100n','VBAT_DD','GND',pkg='0805',note='100V')
 pw.p('genctl:LM74800QDRRRQ1','LM74800QDRRRQ1',{'A':'VBAT_F','VS':'VBAT_DD','VSNS':'VBAT_F','SW':'VBAT_F','EN/UVLO':'LM748_EN','OV':'LM748_OV','GND':'GND','RTN':None,
      'DGATE':'LM748_DGATE','C':'VBAT_DD','HGATE':'LM748_HGATE','OUT':'VBAT_P','CAP':'LM748_CAP'},mpn='LM74800QDRRRQ1',lcsc='C3215600',note='EP=RTN left floating per DS')
 pw.C('100n','LM748_CAP','VBAT_DD',note='CAP-VS charge-pump cap, 0.1uF per DS typ app')
-pw.R('210k','VBAT_F','LM748_EN'); pw.R('49.9k','LM748_EN','LM748_OV'); pw.R('10k','LM748_OV','GND')
+pw.R('210k','VBAT_F','LM748_EN'); pw.R('49.9k','LM748_EN','LM748_OV'); pw.R('9.76k','LM748_OV','GND',mpn='0603WAF9761T5E',lcsc='C23128',mfr='UNI-ROYAL')
 fet(pw,'Transistor_FET:BSC070N10NS5','BSC070N10NS5','LM748_DGATE','VBAT_F','VBAT_DD')
 fet(pw,'Transistor_FET:BSC070N10NS5','BSC070N10NS5','LM748_HGATE','VBAT_P','VBAT_DD')
 tvs(pw,'SMBJ33CA','VBAT_P')

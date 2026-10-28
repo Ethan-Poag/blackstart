@@ -104339,7 +104339,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "SMDJ58CA"
+		(property "Value" "SMDJ36CA"
 			(at 0 -4.2 180)
 			(layer "B.Fab")
 			(uuid "862bc5da-abc9-481d-94b2-844a6c703a1b")
@@ -167592,7 +167592,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "9.76k"
 			(at 0 -1.43 0)
 			(layer "B.Fab")
 			(uuid "cd736c39-06a7-4eec-adc3-7b70df963925")

@@ -14,8 +14,9 @@ Status: 2026-10-24 (display: RVT121HVLNWCA0-B; previous version design_spec_rvt1
 - TPS3431 window watchdog on the MCU. On a trip (WDO) it forces all outputs off, except the hardware E-stop trip (section 6).
 
 ## 3. Power (power_bom.csv)
-- Battery enters on J0 (Phoenix PC 5/SPC 5, 7.62 mm), then a blade fuse, SMDJ58CA, LM74800-Q1 ideal diode + OV cutoff (BSC070N10NS5 back-to-back), SMDJ33CA, and an LM5176 4-switch buck-boost to a 12 V bus. A buck then supplies 5 V for the CM5. Rev B: +3V3 is a second TPS56637 (6 A part, >=3 A rail) from the 12 V bus (replaces the 1 A TPS629210 + MBR0540 diode-OR).
-- Decision: the OV cutoff threshold must be **<= 30.5 V** (load-dump simulation still open).
+- Battery enters on J0 (Phoenix PC 5/SPC 5, 7.62 mm), then a 10 A blade fuse (F1), SMDJ36CA, LM74800-Q1 ideal diode + OV cutoff (BSC070N10NS5 back-to-back), SMDJ33CA, and an LM5176 4-switch buck-boost to a 12 V bus. A buck then supplies 5 V for the CM5. Rev B: +3V3 is a second TPS56637 (6 A part, >=3 A rail) from the 12 V bus (replaces the 1 A TPS629210 + MBR0540 diode-OR).
+- Max operating battery voltage: **31 V**. OV trip (R3 9.76k): OV trip (rising) 32.39 / 34.01 / 35.74 V (min/typ/max, 1 % R + Vref spread + 200 nA pin leakage), release (falling) 29.57 / 31.22 / 32.70 V, UV rising 5.32 / 5.56 / 5.86 V. OV-min margin vs 31 V = 1.39 V (4.5 %, INFERRED; TCR not included; 0.1 % resistors are an option). (Was: "OV cutoff <= 30.5 V"; superseded.)
+- Supply assumption: the board assumes a battery-backed, suppressed 35 V-class supply. A 3 kW SMC TVS (D1) will NOT survive an unsuppressed 24 V alternator load dump; it is not designed for one (see docs/INSTALL_SAFETY.md).
 
 ## 4. Inputs (inputs_bom.csv)
 - 6 analogue inputs (resistive / 4-20 mA / 0-10 V) on 2x ADS1115 with excitation current sources, an MPU input, 12 DIs (HC14 thresholds meet DSE <2.1 V closed / >6.6 V open), D+, VBAT sense and the E-stop sense. SMAJ36CA TVS + 100 nF on every pin.
@@ -96,7 +97,7 @@ Rows still unpriced inside the BOMs: power (display 12 V load switch, 3V3 LDO ba
 - **Rev h (2026-10-24):** supercaps -$5.68, 2x TPS2553 USB switches + passives +$1.10, 8x 1k DI resistors +$0.004 -> **-$4.57; per-controller total $769.87 -> $765.30**.
 
 ## 12. Open cautions
-- LM74800 OV cutoff must be <= 30.5 V. Run the load-dump simulation.
+- LM74800 OV trip 32.39-35.74 V vs 31 V max battery (s3c6f). Unsuppressed load dump is out of scope (external module, future work); surge test still needed (OPEN RISK, DESIGN_NOTES).
 - The TPS7B6950 is a 40 V part and the residual surge is ~45 V. Verify, or use a 45 V+ LDO.
 - Unchecked: fuel TVS energy, MOSFET SOA, the 1 mOhm shunt pulse rating (60 A pull-in), and analogue mux injection current.
 - Some LCSC codes and prices are unverified (see the BOM notes).
@@ -145,5 +146,5 @@ Rows still unpriced inside the BOMs: power (display 12 V load switch, 3V3 LDO ba
 - Auto PWR_FLAGs (gen.py): only on nets with power_in but no power_out, i.e. rails sourced through passive pins (inductor/fuse) or module-internal; list in tools output. Note gen.py was extended with a `types` arg.
 
 ### Open items
-- OVP 30.3 V vs 32 V max operating battery: either raise OVP or define 30 V max.
+- STALE (superseded 2026-10-27 s3c6f): "OVP 30.3 V vs 32 V max operating battery". Now max operating battery 31 V, OV trip min 32.39 V.
 - EasyEDA footprints unverified (esp. CTS 228E holes, AC1005 pads, M.2 pinout); 1720819 low stock (50); USB3-A C3032863 no stock; V20E385P stock 2 (M7: RV1-RV6 now TMOV20RP460E C3260792).

@@ -36,7 +36,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 ## Power (power.kicad_sch)
 **Input protection**
 - J0 → 10 A ATO blade fuse in Keystone 3557-2 clips → VBAT_F.
-- SMDJ58CA (bidirectional) TVS on VBAT_F.
+- SMDJ36CA (bidirectional, Littelfuse C224075) TVS on VBAT_F (s3c6f; was SMDJ58CA). Suppressed transients only.
 
 **Ideal diode (LM74800-Q1)**
 - Two BSC070N10NS5 back-to-back, common drain (VBAT_DD).
@@ -44,7 +44,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - CVS: C1 100 nF 0805 100 V from VS (VBAT_DD) to GND (moved from VBAT_F with VS).
 - CAP: C2 100 nF from CAP to VS (now VBAT_DD; *assumed*, typical application).
 - Ladder top R1.1 on **VBAT_F** (2026-10-27 s3c6e, review/s3c6c/divider_check.md: EN/UVLO was fed only from SW, so the EN-gated VSNS–SW switch latched off, TI SNOSD95C p13/p16). SW (U1.4) strapped to VSNS (U1.3), both VBAT_F; OVUV_TOP net removed. Trip points unchanged (R(SW) ≤ 46 Ω); always-on divider drain 44.5 µA at 12 V, 115 µA at 31 V [I]. Was: SW → ladder.
-- 210k / 49.9k / 10k ladder to EN/UVLO and OV (Rev 2026-10-24 c; was 191k/45.3k/10k = 30.3 V OV):
+- 210k / 49.9k / **9.76k** ladder (s3c6f: R3 10k→9.76k; OV trip (rising) 32.39 / 34.01 / 35.74 V (min/typ/max, 1 % R + Vref spread + 200 nA pin leakage), release (falling) 29.57 / 31.22 / 32.70 V, UV rising 5.32 / 5.56 / 5.86 V). History below is for the old 10k R3. Old: 210k / 49.9k / 10k ladder to EN/UVLO and OV (Rev 2026-10-24 c; was 191k/45.3k/10k = 30.3 V OV):
   - DS: V(OVR) 1.231 V typ (1.195-1.267), V(OVF) 1.13 V; V(UVLOR) 1.231 V, V(UVLOF) 1.132 V.
   - OV trip (rising) = 1.231 × 269.9/10 = **33.2 V** (tol. 32.3-34.2 V from Vref spread only; +1% R adds ~±0.3 V)
   - OV release (falling) = 1.13 × 26.99 = **30.5 V** (2.7 V hysteresis)
@@ -517,3 +517,22 @@ Sources read this session: SN65DSI83 SLLSEC1I; PCA9306 SCPS113O; SN74LVC1T45 SCE
 - **ADDR:** ball A1 tied to GND, giving 0x2C. Checked in the netlist.
 - **Checks:** ERC 0 errors. Netlist diff vs the previous revision shows only the intended nets (DISP_SCL/SDA_1V8, DSI83_EN/IRQ_1V8, PCA_VREF2 [auto-named Net-(U77-EN)], R113 back on DSI83_REFCLK). Pin-by-pin rail check: /workspace/w8/c1_railcheck.txt, 0 connectivity mismatches.
 - **Unverified:** JLC basic/extended class and stock for C33196, C7843 and C840096 (LCSC numbers for PCA9306/LVC1T45 are taken from the brief); PCA9306 behaviour with VREF1 unpowered; the real EN power-up timing; the I2C rise time at 400 kHz with 2.2k + 1.8k and unknown bus capacitance.
+
+### s3c6f (2026-10-27): D1 SMDJ36CA, R3 9.76k, supply assumptions, open risks
+- D1 SMDJ58CA (C152071) -> **SMDJ36CA (Littelfuse, LCSC C224075, Extended)**, same D_SMC footprint, D1 GND vias untouched. Reason: SMDJ58CA clamps at 93.6 V, above the 70 V abs max of U1 A/VS/VSNS/SW/C (TI SNOSD95C p4). SMDJ36CA: VR 36 V, VBR 40.0-44.2 V, VC 58.1 V @ 51.6 A, 3 kW (product page/tables per review/s3c6c/divider_check.md; manufacturer PDF NOT opened; price/stock UNVERIFIED this pass).
+- R3 10k -> **9.76k (0603WAF9761T5E, LCSC C23128)**. Recomputed here (OV = Vth·ΣR/R3, UV = Vth·ΣR/(R2+R3), 1 % R worst case, DS p5-6 thresholds) [INFERRED, matches the reviewer]: OV rising 32.39 / 34.01 / 35.69 V (35.74 V with 200 nA leakage), OV falling 29.57 / 31.22 / 32.65 V (reviewer 32.70 with leakage), UV rising 5.32 / 5.56 / 5.82 V (5.86 with leakage).
+- Max operating battery 31 V. OV-trip minimum margin vs 31 V = 32.39 − 31 = **1.39 V** (4.5 %) [INFERRED]. Resistor TCR is not in the stack; 0.1 % resistors are an option.
+- After an OV trip the load may stay off until the battery falls below OV falling (as low as **29.57 V** min) [INFERRED, divider_check.md §7].
+- **OPEN RISK (needs surge test):** D1 clamp (old SMDJ58CA 93.6 V; new SMDJ36CA 58.1 V per product page, PDF not opened) can still reach VBAT_P during the 4-5.4 µs OV turn-off (DS p7). LM2904B on VBAT_P is 40 V abs max (Compliance citation, not opened) and D2 SMBJ33CA clamps at 53.3 V. NOT VERIFIED.
+- **Supply assumption:** a 3 kW SMC TVS will not survive an unsuppressed 24 V alternator load dump. The board assumes a battery-backed, suppressed 35 V-class supply; it is NOT designed for an unsuppressed load dump (Ethan's decision 2026-10-27). See docs/INSTALL_SAFETY.md.
+- F1 is **10 A** (Ethan's requirement). Any 5 A F1 figure in reviewer files (review/cur/final_power_spec.md) is not adopted.
+
+### Future work: inline surge module (short faithful summary of review/hv/load_dump_external.md §(b); see that file for SM8S datasheet figures)
+**Where it goes.** Fit it on the battery positive feed downstream of the external 30 A battery fuse, at the point that feeds *both* J0 (BAT_IN) and the E-stop/VBAT_ESTOP branch. If the TVS fails short, the 30 A fuse clears it.
+
+**What it must handle.** For 12 V it should withstand ISO 16750-2 Test A 12 V: up to 101 V, Ri ≥ 0.5 Ω, 400 ms, 10 pulses. For 24 V the equivalent is up to 202 V, Ri ≥ 1 Ω, 350 ms. With either system, it should hold the bus ≤ 50 V. The 50 V caps and VBAT_DD are the weakest pre-cutoff parts; the location of the 50 V EEHZA1H101P is UNVERIFIED, so that number needs checking.
+
+**Suggested approach.** The simplest fit is a bank of automotive load-dump TVS (Vishay SM8S series, DO-218AB, AEC-Q101). The best is an active surge stopper with series FETs, e.g. TI LM74800 with OV cutoff (the 200 V topology in SNOSD95C Fig 10-25, p29) or LTC4366. The active route also covers 24 V Test A, where TVS energy gets large. SM8S33A preferred over SM8S36A (see the source file for datasheet figures and LCSC listings).
+
+**Limits.** A 48 V jump start on a 24 V system (TI SNOSD95C p34) would destroy any 33-36 V TVS. So would the 24 V 58-65 V suppressed level. For 24 V systems the active surge stopper is required, not a TVS (INFERRED).
+(ISO levels are SECONDARY sources, not read from the standard; separate project, not part of this board.)
