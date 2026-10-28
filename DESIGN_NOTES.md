@@ -50,7 +50,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
   - OV release (falling) **29.57 / 31.22 / 32.70 V** [I]. OV-min margin vs 31 V = 1.39 V; 0.1 % resistors are an option.
   - UV rising **5.32 / 5.56 / 5.86 V** [I].
   - Ladder drain 44.5 µA at 12 V, 115 µA at 31 V [I]. R1 210k = C22952 (extended), R2 49.9k = C23184 (basic), R3 9.76k = 0603WAF9761T5E C23128.
-- CIN: **C297 100 nF 0805 100 V (CL21B104KCFNNNE, C28233) VBAT_F→GND** (s3c6h; TI SNOSD95C p23 §10.2.3.3 "A minimum input capacitance CIN of 0.1 µF … is recommended", read this pass). F.Cu at (249.6, 137.0), GND pad on the existing C1/U1.7 GND trace and via (249.8,139.5); about 9 mm from U1.2/U1.3.
+- CIN: **C297 220 nF 0805 100 V X7R (YAGEO CC0805KKX7R0BB224, LCSC C513710) VBAT_F→GND** (s3c6i: changed from 100 nF CL21B104KCFNNNE C28233 because X7R 0805 DC-bias loss at 13–31 V may take 100 nF below the 0.1 µF minimum; the C-V curve was not opened, INFERRED; s3c6h; TI SNOSD95C p23 §10.2.3.3 "A minimum input capacitance CIN of 0.1 µF … is recommended", read this pass). F.Cu at (249.6, 137.0), GND pad on the existing C1/U1.7 GND trace and via (249.8,139.5); about 9 mm from U1.2/U1.3.
 - Check the 5.5 V UV against cold-crank requirements.
 
 **+12V (LM5176)**

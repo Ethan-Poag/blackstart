@@ -352,6 +352,15 @@ Accepted by Ethan: c6 (including the S3b Q1/Q2 move) as the 10 A battery path. D
 - U1.10 (VS), C2.2 and C1.1 are now VBAT_DD (TI SNOSD95C p3; review/hv/lm74800_pins.md). C1 position unchanged; C1.1 reaches VBAT_DD by via (250.0,132.0) and a 0.3 mm PWR-layer track to the VBAT_DD via (261.9,142.6). (Superseded by §8.3: that link now runs on GND2.) VS/C2.2 tie to the U1.12 VBAT_DD track on F.Cu (253.125,137.6→253.125,138.6→255.6,138.6). [M] necks/vias unchanged.
 
 ### 8.3 s3c6h CIN and VBAT_DD layer change (2026-10-27)
-- C297 100 nF / 100 V X7R 0805 (CL21B104KCFNNNE, LCSC C28233) is the LM74800 input capacitor on VBAT_F (TI SNOSD95C p23 §10.2.3.3: 0.1 µF min). It sits at F.Cu (249.6, 137.0), about 9 mm from U1.2/U1.3. Pad 2 lands on the existing GND trace/via at (249.8, 139.5), so it adds no new via.
+- C297 (now 220 nF / 100 V X7R 0805, YAGEO CC0805KKX7R0BB224, LCSC C513710, since s3c6i; was 100 nF CL21B104KCFNNNE C28233) is the LM74800 input capacitor on VBAT_F (TI SNOSD95C p23 §10.2.3.3: 0.1 µF min). It sits at F.Cu (249.6, 137.0), about 9 mm from U1.2/U1.3. Pad 2 lands on the existing GND trace/via at (249.8, 139.5), so it adds no new via.
 - The C1.1 VBAT_DD link (via (250.0,132.0)) no longer uses the PWR layer. It now runs as 0.3 mm GND2 tracks (250.0,132.0)→(256.4,138.4)→(256.4,143.0) to a new VBAT_DD via at (256.4,143.0). An In2 route was tried first and rejected because it split the In2 VBAT_P plane (19→20 pieces). With GND2: In2 19 pieces, GND1 and GND2 1 piece each, VBAT_F_PWR 1 piece (267.1 mm²). [M]
 - Necks [M, necks_c6c.py]: VBAT_F F1→Q1 PWR 1.66 → 8.952 mm, B 8.021 (tneck 8.07), F 1.924; VBAT_DD 7.538/7.509; VBAT_P 8.76/4.535 (unchanged). Via counts: VBAT_F and VBAT_P unchanged, VBAT_DD +1. Gate at baseline. Not certified.
+
+### 8.4 s3c6i floating In2 VBAT_P islands, C297 220 nF, refilled board (2026-10-27)
+- The SIG_In2 plane LV_VBAT_P_SIG_In2 fills in 19 pieces. Two of them, pieces 8 and 10, touch no via, track or pad, so they are floating copper (MEASURED, review/s3c6c/3a8/scripts/zisl.py on the committed board):
+  - Piece 8: 5.30 mm², bbox x 188.86–191.63, y 149.60–153.38 mm.
+  - Piece 10: 97.51 mm², bbox x 184.73–196.08, y 122.68–148.93 mm.
+- They were the same before s3c6h. Both are in the low-voltage VBAT_P area, away from HV copper. They are left in place and documented as harmless floating copper (INFERRED: no net current; at worst a small EMI antenna). Removing them would need zone keepouts or a minimum-island-area change, which is not done here.
+- C297 is now 220 nF / 100 V X7R 0805 (YAGEO CC0805KKX7R0BB224, LCSC C513710). This is a value change only, on the same 0805 footprint, with no copper change.
+- The committed board is now refilled and saved in place, with the .kicad_pro/.kicad_dru beside it, and gated on those exact bytes. The s3c6h file (md5 3a67a66e) had a stale fill: 204 HV_LINE vs GND_AC clearance errors in the repo, own and no-dru rule sets.
+
