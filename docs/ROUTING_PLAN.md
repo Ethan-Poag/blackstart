@@ -93,7 +93,7 @@ Ethan's rules govern this plan:
 |---|---|---|---|---|
 | GND (28) | return only | Stitch to the GND1/GND2 planes with a via at the pad | 0.3/0.15 or 0.4/0.2 via, short neck ≥ 0.3 mm | **1st** |
 | VBAT_P (62) | 10 A system rating [A] | F.Cu pour + In2 plane, stitching vias | pours, not tracks | **1st** (safety/power) |
-| power rails: +3V3 / +1V8_DSI / CM5_3V3 / +5V / +5V_CM5 / +3V3_* (≈110) | +3V3 ≤ 1 A, +1V8_DSI ≤ 0.3 A, CM5_3V3 ≤ 0.6 A, +5V 4.7 A, +5V_CM5 ≈ 3 A [A] | outer tracks; In2 only for short hops; existing pours where present | 0.3–0.5 mm low-current rails; +5V ≥ 2.7 mm, +5V_CM5 ≥ 1.4 mm [I] | 2nd |
+| power rails: +3V3 / +1V8_DSI / CM5_3V3 / +5V / +5V_CM5 / +3V3_* (≈110) | +3V3 copper target ≥ 3 A (derived loads ≤ 1.47 A [DERIVED, docs/RAIL_PLAN.md Rev 4]; U4 TPS56637 capability is the earlier '≥ 3 A'), +1V8_DSI ≤ 0.3 A, CM5_3V3 ≤ 0.6 A, +5V 4.7 A, +5V_CM5 3.76 A (TPS2121 current limit; CM5 design figure 2.5 A, FW 3.2 A from the CM5) [A] | outer tracks; In2 only for short hops; existing pours where present | 0.3–0.5 mm low-current rails; +5V ≥ 2.7 mm, +5V_CM5 ≥ 1.4 mm [I] | 2nd |
 | VBAT_ESTOP (21), CRANK_OUT (14), *_OUT loads, CHASSIS (10) | outputs 2 A each, CRANK/FUEL 15 A [A]; CHASSIS: ESD/shield only | outer layers; pours for CRANK | outputs 0.8 mm; CRANK pour; CHASSIS 0.5 mm | 2nd |
 | HV/hot (88) | signal level except the line nets (mA) | B/F on the hot side only; respect 3 mm outer / 1.5 mm inner, the barrier slots and J28/J29 conditions | 0.25 mm (ADE analog), lines per HV rule file | **3rd, after power**; each batch is a creepage check |
 | signal (254) | < 50 mA | F.Cu/B.Cu + SIG_In2 | 0.15–0.2 mm | 4th |
@@ -356,11 +356,11 @@ Accepted by Ethan: c6 (including the S3b Q1/Q2 move) as the 10 A battery path. D
 - The C1.1 VBAT_DD link (via (250.0,132.0)) no longer uses the PWR layer. It now runs as 0.3 mm GND2 tracks (250.0,132.0)→(256.4,138.4)→(256.4,143.0) to a new VBAT_DD via at (256.4,143.0). An In2 route was tried first and rejected because it split the In2 VBAT_P plane (19→20 pieces). With GND2: In2 19 pieces, GND1 and GND2 1 piece each, VBAT_F_PWR 1 piece (267.1 mm²). [M]
 - Necks [M, necks_c6c.py]: VBAT_F F1→Q1 PWR 1.66 → 8.952 mm, B 8.021 (tneck 8.07), F 1.924; VBAT_DD 7.538/7.509; VBAT_P 8.76/4.535 (unchanged). Via counts: VBAT_F and VBAT_P unchanged, VBAT_DD +1. Gate at baseline. Not certified.
 
-### 8.4 s3c6i floating In2 VBAT_P islands, C297 220 nF, refilled board (2026-10-27)
-- The SIG_In2 plane LV_VBAT_P_SIG_In2 fills in 19 pieces. Two of them, pieces 8 and 10, touch no via, track or pad, so they are floating copper (MEASURED, review/s3c6c/3a8/scripts/zisl.py on the committed board):
+### 8.4 s3c6i cut-off In2 VBAT_P islands, C297 220 nF, refilled board (2026-10-27)
+- The SIG_In2 plane LV_VBAT_P_SIG_In2 fills in 19 pieces. Two of them, pieces 8 and 10, are cut-off VBAT_P islands, not floating copper (MEASURED, Design Reviewer review/s3c6c/f7a6c86.md, scripts/isl_via.py): each has a flashed 0.2/0.4 mm VBAT_P via whose annulus overlaps the piece by about 0.10 mm, piece 8 via (190.27, 153.15) to R163.1, piece 10 via (185.14, 147.90) to C146.1. They are not joined to the main VBAT_P copper, so they are part of the 61 VBAT_P opens and R163 and C146 get no VBAT_P. (An earlier version of this section called them floating; that came from review/s3c6c/3a8/scripts/zisl.py, which counts a via only when its centre lies inside the piece. The correct test is via pad/annulus area overlapping the piece. zisl.py, outside this repo, still uses the centre test and was not changed.)
   - Piece 8: 5.30 mm², bbox x 188.86–191.63, y 149.60–153.38 mm.
   - Piece 10: 97.51 mm², bbox x 184.73–196.08, y 122.68–148.93 mm.
-- They were the same before s3c6h. Both are in the low-voltage VBAT_P area, away from HV copper. They are left in place and documented as harmless floating copper (INFERRED: no net current; at worst a small EMI antenna). Removing them would need zone keepouts or a minimum-island-area change, which is not done here.
+- They were the same before s3c6h. Both are in the low-voltage VBAT_P area, away from HV copper. They are an open, not harmless copper: R163 and C146 need VBAT_P joined to these islands (or another feed). Not fixed here.
 - C297 is now 220 nF / 100 V X7R 0805 (YAGEO CC0805KKX7R0BB224, LCSC C513710). This is a value change only, on the same 0805 footprint, with no copper change.
 - The committed board is now refilled and saved in place, with the .kicad_pro/.kicad_dru beside it, and gated on those exact bytes. The s3c6h file (md5 3a67a66e) had a stale fill: 204 HV_LINE vs GND_AC clearance errors in the repo, own and no-dru rule sets.
 

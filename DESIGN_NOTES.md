@@ -420,7 +420,7 @@ plug WJ15EDGK-3.81-02P (C8466), same 3.81 family as CAN/RS-485/expansion (polari
 SWD header kept; JP1 reduced to CM5 SWD (pins 5-8 NC). Touch power TPS22918 now shares PANEL_VDD_EN (frees GPIO17).
 Note: H743 bootloader also scans USART1 PB14/PB15 (DI10/DI11) and other ports when BOOT0=1; field input activity could select the wrong port - CM5 should
 assert BOOT0/NRST and send 0x7F promptly.
-**Hold-up (CM5 only, +5V_CM5):** CM5 datasheet: ~0.9 A (4.5 W) operating, ~0.4 A idle, 1.3 mA with PMIC_EN low. 10 s at 4.5 W = 45 J.
+**Hold-up (CM5 only, +5V_CM5):** CM5 datasheet: ~0.9 A (4.5 W) operating (typical, not for sizing copper), ~0.4 A idle, 1.3 mA with PMIC_EN low. 10 s at 4.5 W = 45 J.
 Bulk options rejected: 5 V bulk gives only 0.5*C*(5.0^2-4.75^2) = 1.2 J/F (needs ~40 F); VBAT_P bulk 35->8 V needs ~0.15 F/50 V. TPS61094 rejected
 (1.7-2.6 A valley limit -> <1 A at 5 V). Chosen: 2x Eaton HV1030-2R7106-R 10 F/2.7 V in series (5 F, 10k balancing), charged from +5V via SS34 + 50R
 (<=92 mA, tau 250 s) to ~4.9 V; TPS61023 boost (C919459, Vout = 0.595*(1+715k/100k) = 4.85 V, 1 uH FNR5020S1R0MT) -> TPS2121 (C485916) IN2;
