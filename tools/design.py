@@ -33,13 +33,13 @@ def S(name,title,notes=''):
 
 # =====================================================================
 pw=S('power','Power: input protection, ideal diode, 12V buck-boost, 5V, 3V3',
- 'POWER. J0 battery in (BAT_IN; NO on-board fuse: installer fits an external fuse <=10 A fast-acting, >=58 V DC in the battery lead) -> SMDJ36CA -> LM74800 + 2x BSC070N10NS5 back-to-back (VBAT_P).\n'
+ 'POWER. J0 battery in (BAT_IN; NO on-board fuse: installer fits an external fuse <=10 A fast-acting, >=58 V DC in the battery lead) -> SMDJ40CA -> LM74800 + 2x BSC070N10NS5 back-to-back (VBAT_P).\n'
  'OV 38.17V rise typ (36.36-40.11 V, fixes_safety.md H3), 35.04V fall typ, UV 5.65V/5.18V (210k/49.9k/8.66k, 1.231/1.13V thresholds; fall/UV INFERRED). LM5176 buck-boost -> +12V (FB 140k/10k, RT 27.4k ~300kHz, 8mR sense).\n'
  'TPS56637 -> +5V (FB 75k/10k = 5.1V, 3.3uH). TPS56637 -> +3V3 from +12V (FB 45.3k/10k, 2.2uH, 3x22u), >=3A. MODE open = FCCM.\n'
  'SAFE DOMAIN: LMR36506 buck VBAT_P -> +3V3_BK (always on); TPS2116 priority mux VIN1=+3V3 / VIN2=+3V3_BK -> +3V3_SAFE (MCU, FRAM, WDT, I/O, E-stop logic).')
 conn(pw,4,['BAT_IN','BAT_IN','GND','GND'],'PC 5/4-GF-7,62 (battery in)',mpn='1720819 Phoenix',note='J0 battery input')
 REFC['F']+=1  # F1 (10A ATO + 2x Keystone 3557-2 clips) deleted in m7-step12: fuse is external; ref reserved so later refs stay stable
-pw.p('Device:D_TVS','SMDJ36CA',{'1':'BAT_IN','2':'GND'},prefix='D',mpn='SMDJ36CA',mfr='Littelfuse',lcsc='C224075')
+pw.p('Device:D_TVS','SMDJ40CA',{'1':'BAT_IN','2':'GND'},prefix='D',mpn='SMDJ40CA',mfr='Littelfuse',lcsc='C224077')  # Rev 3 H4
 pw.C('100n','VBAT_DD','GND',pkg='0805',note='100V')
 pw.C('220n','BAT_IN','GND',pkg='0805',ref='C297',mpn='CC0805KKX7R0BB224',lcsc='C513710',mfr='YAGEO',note='100V X7R; CIN on BAT_IN (LM74800 A/VSNS input) per TI SNOSD95C p23 (0.1 uF min); 220n for DC-bias margin')
 pw.p('genctl:LM74800QDRRRQ1','LM74800QDRRRQ1',{'A':'BAT_IN','VS':'VBAT_DD','VSNS':'BAT_IN','SW':'BAT_IN','EN/UVLO':'LM748_EN','OV':'LM748_OV','GND':'GND','RTN':None,
@@ -48,7 +48,7 @@ pw.C('100n','LM748_CAP','VBAT_DD',note='CAP-VS charge-pump cap, 0.1uF per DS typ
 pw.R('210k','BAT_IN','LM748_EN'); pw.R('49.9k','LM748_EN','LM748_OV'); pw.R('8.66k','LM748_OV','GND',mpn='0603WAF8661T5E',lcsc='C23114',mfr='UNI-ROYAL')
 fet(pw,'Transistor_FET:BSC070N10NS5','BSC070N10NS5','LM748_DGATE','BAT_IN','VBAT_DD')
 fet(pw,'Transistor_FET:BSC070N10NS5','BSC070N10NS5','LM748_HGATE','VBAT_P','VBAT_DD')
-tvs(pw,'SMBJ33CA','VBAT_P')
+tvs(pw,'SMBJ40CA','VBAT_P')  # Rev 3 H4
 for _ in range(2): pw.C('100u 50V','VBAT_P','GND',pol=True,mpn='EEHZA1H101P',pkg='Capacitor_SMD:CP_Elec_10x10.5')
 for _ in range(4): pw.C('10u','VBAT_P','GND',pkg='1210',note='50V X7R')
 # LM5176
@@ -458,7 +458,7 @@ for n in ('FUEL','CRANK'):
     ou.R('1m','VBAT_ESTOP',n+'_DRN',pkg='2512',mpn='WSLP25121L000FEA',lcsc='C844705',mfr='Vishay',note='shunt')  # R297/R303: manual sch edit 32b12c7/7eaa27d folded into design.py
     for _ in range(2): fet(ou,'Transistor_FET:BSC070N10NS5','BSC070N10NS5',n+'_G',n+'_OUT',n+'_DRN')
     ou.p('Amplifier_Current:INA281A1','INA281A1',{'OUT':n+'_ISNS','GND':'GND','Vin+':'VBAT_ESTOP','Vin-':n+'_DRN','V+':'+3V3'},prefix='U',mpn='INA281A1QDBVRQ1',lcsc='C2862615')  # m7-sch FW-011 gain 20; ou.C('100n','+3V3','GND')
-    tvs(ou,'SMBJ33CA',n+'_OUT')
+    tvs(ou,'SMDJ40CA',n+'_OUT')  # D68/D69 Rev 3 H5
 schottky(ou,'SK1010C','GND','FUEL_CLMP',mpn='SK1010C'); tvs(ou,'SMDJ24A','FUEL_CLMP','FUEL_OUT',uni=True)
 schottky(ou,'SK1010C','GND','CRANK_OUT',mpn='SK1010C')
 # small outputs
@@ -467,7 +467,7 @@ mux={}
 for i,n in enumerate(outs):
     ou.p('genctl:TPS1HTC30QPWPRQ1','TPS1HTC30QPWPRQ1',{'VS':'VBAT_P','EN':n+'_EN','DIAG_EN':'DIAG_EN','LATCH':'GND','ILIM':n+'_ILIM','GND':'GND','VOUT':n+'_OUT','SNS':n+'_SNS','FAULT':'OUT_FAULT_N','NC':None,'EP':'GND'},mpn='TPS1HTC30QPWPRQ1')
     ou.R('40.2k',n+'_ILIM','GND'); ou.R('1.1k',n+'_SNS','GND'); ou.R('1k',n+'_SNS',n+'_SNSM'); ou.C('100n','VBAT_P','GND',pkg='0805')
-    schottky(ou,'SS110','GND',n+'_OUT',mpn='SS110'); tvs(ou,'SMBJ33CA',n+'_OUT')
+    schottky(ou,'SS110','GND',n+'_OUT',mpn='SS110'); tvs(ou,'SMBJ40CA',n+'_OUT')  # Rev 3 H4
     mux[n]=n+'_SNSM'
 rb=['FUEL','CRANK']+outs
 for n in rb:
@@ -516,10 +516,10 @@ es.R('100k','MCU_TRIP','GND')
 es.p('Diode:BAT54C','BAT54C',{'1':'TRIP_555_Q','2':'MCU_TRIP_G','3':'ESTOP_TRIP_EN'},prefix='D',mpn='BAT54C'); es.R('100k','ESTOP_TRIP_EN','GND')
 es.p('genctl:TPS1HTC30QPWPRQ1','TPS1HTC30QPWPRQ1',{'VS':'VBAT_P','EN':'ESTOP_TRIP_EN','DIAG_EN':'DIAG_EN','LATCH':'GND','ILIM':'ESTOP_TRIP_ILIM','GND':'GND','VOUT':'ESTOP_TRIP_OUT','SNS':'ESTOP_TRIP_SNS','FAULT':'OUT_FAULT_N','NC':None,'EP':'GND'},mpn='TPS1HTC30QPWPRQ1')
 es.R('47k','ESTOP_TRIP_ILIM','GND',note='ILIM 100A*kOhm/47k = 2.13A typ (1.70-2.55A); relay drive'); es.R('1.1k','ESTOP_TRIP_SNS','GND'); es.R('1k','ESTOP_TRIP_SNS','ESTOP_TRIP_SNSM'); es.C('100n','VBAT_P','GND',pkg='0805')
-schottky(es,'SS110','GND','ESTOP_TRIP_OUT',mpn='SS110'); tvs(es,'SMBJ33CA','ESTOP_TRIP_OUT')
+schottky(es,'SS110','GND','ESTOP_TRIP_OUT',mpn='SS110'); tvs(es,'SMBJ40CA','ESTOP_TRIP_OUT')  # D123 Rev 3 H4
 es.R('10k','ESTOP_TRIP_OUT','ESTOP_TRIP_LED',pkg='1206'); es.LED('red','ESTOP_TRIP_LED','GND',lcsc='C2295')
 es.R('100k','VBAT_ESTOP','VESTOP_SNS',note='0.1%'); es.R('10k','VESTOP_SNS','GND',note='0.1%'); es.C('100n','VESTOP_SNS','GND'); clamp(es,'VESTOP_SNS','BAT54S')
-tvs(es,'SMBJ33CA','VBAT_ESTOP')
+tvs(es,'SMDJ40CA','VBAT_ESTOP')  # D126 Rev 3 H5
 
 # =====================================================================
 ac=S('ac_metering','AC metering: 2x ADE9000 (gen + bus), isolated',
@@ -648,7 +648,7 @@ MPNLCSC={'BSS84':'C8492','DMN6075S':'C155242','SI2309CDS-T1-GE3':'C10493','AO340
  '1N4148W':'C81598','SM712':'C12067','NUP2105LT1G':'C14486','USBLC6-2SC6':'C7519','SRV05-4':'C85364','TPS2051CDBVR':'C129581',
  'USB2514B-AEZC-TR':'C51062','TLV9062IDR':'C398355','LM2904BIDR':'C1849422','LM393DR':'C7955','ADS1115IDGSR':'C37593','LM317MDT-TR':'C3015165',
  'SN74LVC1G08DBVR':'C7666','INA281A2QDBVRQ1':'C2908677','INA281A1QDBVRQ1':'C2862615','STM32H743VIT6':'C114409','FM24CL64B-GTR':'C9829',
- 'SMDJ36CA':'C224075','SMBJ33CA':'C78420','SMBJ5.0A':'C78423','SMAJ36CA':'C10757','SMBJ58CA':'C114007','SMBJ36CA':'C78421','SMDJ24A':'C362107',
+ 'SMDJ36CA':'C224075','SMBJ33CA':'C78420','SMDJ40CA':'C224077','SMBJ40CA':'C114004','SMBJ5.0A':'C78423','SMAJ36CA':'C10757','SMBJ58CA':'C114007','SMBJ36CA':'C78421','SMDJ24A':'C362107',
  'SS110':'C2482','SS34':'C8678','SK1010C':'C3018527','EEHZA1H101P':'C109086','EEHZK1E471P':'C242138','TS-1187A-B-A-B':'C318884',
  'SM04B-SRSS-TB':'C51940130','TYPE-C-31-M-12':'C165948','TYPE-C-31-D-06B':'C47817619','MMBT3904':'C20526','MMBT3906':'C2143'}
 DIODEFP={'SMDJ':'Diode_SMD:D_SMC','SMBJ':'Diode_SMD:D_SMB','SMAJ':'Diode_SMD:D_SMA','SS110':'Diode_SMD:D_SMA','SS34':'Diode_SMD:D_SMA','SK1010C':'Diode_SMD:D_SMC'}

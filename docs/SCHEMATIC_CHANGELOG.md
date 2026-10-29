@@ -215,3 +215,12 @@ Not changed (open question, see report): INSTALL_SAFETY.md output-fuse table (l.
 | R3 (power) | 9.76k 0603WAF9761T5E C23128 | 8.66k 1 % 0603 0603WAF8661T5E C23114 (LIVE LCSC 2026-10-28 ~3:55 PM HST: UNI-ROYAL, stock 10800) | OV trip 36.36/38.17/40.11 V so the board runs at 36 V | fixes_safety.md §1 H3, R2-5 (code), Notes "LM7480 OV" |
 | POWER sheet note + design.py note | OV 34.0/31.2 V, UV 5.56/5.12 V (9.76k) | OV 38.17 V rise typ (36.36–40.11 V spec), 35.04 V fall typ, UV 5.65/5.18 V | INFERRED arithmetic: ratio (210+49.9+8.66)/8.66 = 31.01; 1.231×31.01 = 38.17; 1.13×31.01 = 35.04; UV 1.231×268.56/58.56 = 5.65, 1.13×4.586 = 5.18 | spec equation H3 notes |
 | bom/power_bom.csv row 3 note | — | Rev 3 prefix (new R3, OV, old figures superseded) | BOM | — |
+
+## B3-3: TVS uprate SMBJ33CA/SMDJ36CA -> SMBJ40CA/SMDJ40CA (Safety H4/H5)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| D2, D74, D76, D78, D80, D82, D84, D86, D88, D90, D92, D94, D96, D98, D100, D102, D123 (17) | SMBJ33CA C78420 D_SMB | SMBJ40CA MDD C114004 D_SMB (LIVE LCSC 2026-10-28: stock 41590, $0.056 @10) | OV trip now 36.4–40.1 V; SMBJ40CA cold VBR min 41.5 V stays off in normal running | fixes_safety.md H4 table l.448 |
+| D1 | SMDJ36CA C224075 D_SMC | SMDJ40CA Littelfuse C224077 D_SMC (LIVE: stock 1990, $0.2803 @5) | same | fixes_safety.md H4 l.447 |
+| D68, D69, D126 | SMBJ33CA C78420 D_SMB | SMDJ40CA C224077 **D_SMC** | 3 kW on the VBAT_ESTOP side (no OV cut-off) | fixes_safety.md H5 l.449. Spec says "on VBAT_ESTOP"; MEASURED nets: D126 = VBAT_ESTOP, D69 = CRANK_OUT, D68 = Net-(D68-A1) (FUEL clamp side). Refs are explicit so applied as listed |
+| POWER sheet note, design.py | "-> SMDJ36CA ->" | "-> SMDJ40CA ->" | doc sync | — |
+PCB: D68/D69/D126 footprint SMB -> SMC, see deferred_layout.md D9. outputs_bom/power_bom TOTAL lines updated by delta.
