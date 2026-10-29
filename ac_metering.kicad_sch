@@ -2333,7 +2333,7 @@
 					(font
 						(size 1.27 1.27)))))))
 
-(symbol "Diode:BAV99"
+(symbol "genctl:BAV99"
 	(pin_names
 		(hide yes))
 	(exclude_from_sim no)
@@ -2361,7 +2361,7 @@
 			(font
 				(size 1.27 1.27))
 			(hide yes)))
-	(property "Description" "BAV99 High-speed switching diodes, SOT-23"
+	(property "Description" "BAV99 dual series switching diode, SOT-23. Pin names per Nexperia BAV99_SER Rev 8 Table 3: 1 = anode diode 1, 2 = cathode diode 2, 3 = cathode diode 1 / anode diode 2"
 		(at 0 0 0)
 		(effects
 			(font
@@ -2456,7 +2456,7 @@
 		(pin passive line
 			(at -7.62 0 0)
 			(length 2.54)
-			(name "K"
+			(name "A1"
 				(effects
 					(font
 						(size 1.27 1.27))))
@@ -2467,7 +2467,7 @@
 		(pin passive line
 			(at 0 -5.08 90)
 			(length 2.54)
-			(name "K"
+			(name "K1/A2"
 				(effects
 					(font
 						(size 1.27 1.27))))
@@ -2478,7 +2478,7 @@
 		(pin passive line
 			(at 7.62 0 180)
 			(length 2.54)
-			(name "A"
+			(name "K2"
 				(effects
 					(font
 						(size 1.27 1.27))))
@@ -6483,7 +6483,7 @@
 )
 (label "BUS_N_C7" (at 172.72 539.75 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "ec101164-13a9-4b2a-855d-9def4cbff667"))
 (label "BUS_N_C8" (at 172.72 547.37 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "ed0aeae7-60e6-4d64-b39a-6f8de83f605b"))
-(symbol (lib_id "Diode:BAV99") (at 330.2 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "20ae87c7-a829-4eb6-825d-2b68abebe112")
+(symbol (lib_id "genctl:BAV99") (at 330.2 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "20ae87c7-a829-4eb6-825d-2b68abebe112")
 (property "Reference" "D138" (at 335.28 302.26 0) (effects (font (size 1.27 1.27))))
 (property "Value" "BAV99" (at 335.28 307.34 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 330.2 304.8 0) (effects (font (size 1.27 1.27)) hide))
@@ -6501,7 +6501,7 @@
 (label "GEN_IA_P" (at 322.58 304.8 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "8f2f1a1f-6088-40bc-a6c9-a32d98013967"))
 (label "GEN_IA_N" (at 337.82 304.8 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "8d9485b5-465a-445c-94a0-684a1a74dfa0"))
 (no_connect (at 330.2 309.88) (uuid "de9ee1b1-781c-4523-9c4e-f9bd1a2a569d"))
-(symbol (lib_id "Diode:BAV99") (at 355.6 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "c5eb8e4a-41ad-49c5-b8eb-b4812dde2392")
+(symbol (lib_id "genctl:BAV99") (at 355.6 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "c5eb8e4a-41ad-49c5-b8eb-b4812dde2392")
 (property "Reference" "D139" (at 360.68 302.26 0) (effects (font (size 1.27 1.27))))
 (property "Value" "BAV99" (at 360.68 307.34 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 355.6 304.8 0) (effects (font (size 1.27 1.27)) hide))
@@ -6519,7 +6519,7 @@
 (label "GEN_IA_N" (at 347.98 304.8 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "54267dde-6389-4e3e-a90f-3d442a474840"))
 (label "GEN_IA_P" (at 363.22 304.8 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "fcb34c7f-5e87-4d8a-a86a-fcb342732ce2"))
 (no_connect (at 355.6 309.88) (uuid "102c2ae2-8436-4db6-a9f3-10277bd5a059"))
-(symbol (lib_id "Diode:BAV99") (at 381.0 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "e67f7511-f843-46a4-b70b-50d778ba532d")
+(symbol (lib_id "genctl:BAV99") (at 381.0 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "e67f7511-f843-46a4-b70b-50d778ba532d")
 (property "Reference" "D140" (at 386.08 302.26 0) (effects (font (size 1.27 1.27))))
 (property "Value" "BAV99" (at 386.08 307.34 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 381.0 304.8 0) (effects (font (size 1.27 1.27)) hide))
@@ -6537,7 +6537,7 @@
 (label "GEN_IB_P" (at 373.38 304.8 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "85ef5dac-6fdb-4395-b144-84281db959ba"))
 (label "GEN_IB_N" (at 388.62 304.8 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "ea1bdc60-a3c1-42ce-b809-ac60f01982f1"))
 (no_connect (at 381.0 309.88) (uuid "795dbea3-40fd-47b1-92f5-e1970f5a4bbb"))
-(symbol (lib_id "Diode:BAV99") (at 406.4 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "72fb220a-d154-480d-aefd-00420283c483")
+(symbol (lib_id "genctl:BAV99") (at 406.4 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "72fb220a-d154-480d-aefd-00420283c483")
 (property "Reference" "D141" (at 411.48 302.26 0) (effects (font (size 1.27 1.27))))
 (property "Value" "BAV99" (at 411.48 307.34 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 406.4 304.8 0) (effects (font (size 1.27 1.27)) hide))
@@ -6555,7 +6555,7 @@
 (label "GEN_IB_N" (at 398.78 304.8 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "1146c4ed-0b8b-47da-86cb-ec5606556784"))
 (label "GEN_IB_P" (at 414.02 304.8 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "79de873c-83b5-4d64-9bdc-639f26b2843c"))
 (no_connect (at 406.4 309.88) (uuid "6f2fd5ca-a8bf-4b87-b89d-e98a1a1c31f0"))
-(symbol (lib_id "Diode:BAV99") (at 431.8 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "1b274f68-5a7f-4fbe-8670-9c10d8c1383a")
+(symbol (lib_id "genctl:BAV99") (at 431.8 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "1b274f68-5a7f-4fbe-8670-9c10d8c1383a")
 (property "Reference" "D142" (at 436.88 302.26 0) (effects (font (size 1.27 1.27))))
 (property "Value" "BAV99" (at 436.88 307.34 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 431.8 304.8 0) (effects (font (size 1.27 1.27)) hide))
@@ -6573,7 +6573,7 @@
 (label "GEN_IC_P" (at 424.18 304.8 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "dcac77ca-55f5-424e-9854-ed329374e302"))
 (label "GEN_IC_N" (at 439.42 304.8 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "090767e2-41b3-49a7-9132-bb2ff78a91a2"))
 (no_connect (at 431.8 309.88) (uuid "78891021-1894-48d7-a60a-a66eac52e238"))
-(symbol (lib_id "Diode:BAV99") (at 457.2 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "bde18d1a-379d-4579-a95d-748a25f831b8")
+(symbol (lib_id "genctl:BAV99") (at 457.2 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "bde18d1a-379d-4579-a95d-748a25f831b8")
 (property "Reference" "D143" (at 462.28 302.26 0) (effects (font (size 1.27 1.27))))
 (property "Value" "BAV99" (at 462.28 307.34 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 457.2 304.8 0) (effects (font (size 1.27 1.27)) hide))
@@ -6591,7 +6591,7 @@
 (label "GEN_IC_N" (at 449.58 304.8 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "6fb130ad-45df-4f22-9610-5b319acfbe0c"))
 (label "GEN_IC_P" (at 464.82 304.8 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "f7aab42b-963d-40f8-943f-7eb08f287464"))
 (no_connect (at 457.2 309.88) (uuid "c2025797-e0bd-4718-b333-2b8943d5cf53"))
-(symbol (lib_id "Diode:BAV99") (at 482.6 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "d03cd6b2-9bb3-4b12-bcc2-28fd7b453b10")
+(symbol (lib_id "genctl:BAV99") (at 482.6 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "d03cd6b2-9bb3-4b12-bcc2-28fd7b453b10")
 (property "Reference" "D144" (at 487.68 302.26 0) (effects (font (size 1.27 1.27))))
 (property "Value" "BAV99" (at 487.68 307.34 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 482.6 304.8 0) (effects (font (size 1.27 1.27)) hide))
@@ -6609,7 +6609,7 @@
 (label "GEN_IN_P" (at 474.98 304.8 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "68aa218f-920b-4eba-86d5-77c9c0ff13c1"))
 (label "GEN_IN_N" (at 490.22 304.8 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "6fa5fd73-55cf-496f-96a5-091b0facb9af"))
 (no_connect (at 482.6 309.88) (uuid "851b8383-0170-4ace-905d-5b9a7bdfff7f"))
-(symbol (lib_id "Diode:BAV99") (at 508.0 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "7e366fe3-bbbc-49e1-aabb-6005db56beec")
+(symbol (lib_id "genctl:BAV99") (at 508.0 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "7e366fe3-bbbc-49e1-aabb-6005db56beec")
 (property "Reference" "D145" (at 513.08 302.26 0) (effects (font (size 1.27 1.27))))
 (property "Value" "BAV99" (at 513.08 307.34 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 508.0 304.8 0) (effects (font (size 1.27 1.27)) hide))

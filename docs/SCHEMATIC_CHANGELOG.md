@@ -490,3 +490,13 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
   - outputs_bom C114004 17 -> 18;
   - outputs_bom R554 row MPN "(C22961)" -> 0603WAF2203T5E.
 - Board: the PCB still names the net Net-(D68-A1); this becomes a rename at the next board update (PCB not touched).
+
+### 4-4: BAV99 symbol pin names corrected (safety_rereview LOW-12 / (c); item 6)
+- DATASHEET: Nexperia BAV99_SER Rev 8, Table 3 p2 (fetched 2026-10-28): pin 1 = anode (diode 1), pin 2 = cathode (diode 2), pin 3 = cathode (diode 1) + anode (diode 2).
+- The KiCad stock Diode:BAV99 symbol names the pins 1 K, 2 A, 3 K, which is wrong. Its graphic is right (pin1 -|>|- pin3 -|>|- pin2).
+- Wiring check (MEASURED netlist, all 18 BAV99):
+  - D26/D29/D32/D35/D38/D41/D43/D45/D60/D62: pin1 = GND, pin2 = +3V3_SAFE, pin3 = signal. This is correct for the real pinout (A to GND, K to the rail).
+  - D138-D145: pin1/pin2 across GEN_Ix_P/N, alternating, with pin3 NC (2 diodes in series, anti-parallel pairs). Correct.
+  - **No wiring change needed.**
+- Fix: new project symbol genctl:BAV99 (in genctl.kicad_sym and embedded) with pin names 1 A1, 2 K2, 3 K1/A2 and the same graphic and pin numbers/positions. All 18 instances repointed from Diode:BAV99, because pin numbers are unchanged.
+- Netlist: 0 connectivity changes. NC net names change (unconnected-(D138-K-Pad3) -> unconnected-(D138-K1/A2-Pad3), etc.).

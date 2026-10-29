@@ -1566,7 +1566,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))))
-(symbol "Diode:BAV99"
+(symbol "genctl:BAV99"
 		(pin_names
 			hide)
 		(exclude_from_sim no)
@@ -1594,7 +1594,7 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(property "Description" "BAV99 High-speed switching diodes, SOT-23"
+		(property "Description" "BAV99 dual series switching diode, SOT-23. Pin names per Nexperia BAV99_SER Rev 8 Table 3: 1 = anode diode 1, 2 = cathode diode 2, 3 = cathode diode 1 / anode diode 2"
 			(at 0 0 0)
 			(effects
 				(font
@@ -1689,7 +1689,7 @@
 			(pin passive line
 				(at -7.62 0 0)
 				(length 2.54)
-				(name "K"
+				(name "A1"
 					(effects
 						(font
 							(size 1.27 1.27))))
@@ -1700,7 +1700,7 @@
 			(pin passive line
 				(at 0 -5.08 90)
 				(length 2.54)
-				(name "K"
+				(name "K1/A2"
 					(effects
 						(font
 							(size 1.27 1.27))))
@@ -1711,7 +1711,7 @@
 			(pin passive line
 				(at 7.62 0 180)
 				(length 2.54)
-				(name "A"
+				(name "K2"
 					(effects
 						(font
 							(size 1.27 1.27))))
@@ -4564,7 +4564,7 @@
 (pin "2" (uuid "66f28bfd-6387-4885-828d-48c96b46b9ac"))
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "C133") (unit 1))))
 )
-(symbol (lib_id "Diode:BAV99") (at 411.48 373.38 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "91a5ad0e-ad88-48e5-a009-18a7212472d5")
+(symbol (lib_id "genctl:BAV99") (at 411.48 373.38 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "91a5ad0e-ad88-48e5-a009-18a7212472d5")
 (property "Reference" "D26" (at 411.48 368.3 0) (effects (font (size 1.27 1.27))))
 (property "Value" "BAV99" (at 411.48 370.84 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 411.48 386.08 0) (effects (font (size 1.27 1.27)) hide))
@@ -4835,7 +4835,7 @@
 (pin "2" (uuid "fce4d6b4-f5a6-44f5-8e01-874bb94be20c"))
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "C135") (unit 1))))
 )
-(symbol (lib_id "Diode:BAV99") (at 411.48 325.12 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "ac72f5df-1fea-4ee3-90f0-7294b4f86ace")
+(symbol (lib_id "genctl:BAV99") (at 411.48 325.12 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "ac72f5df-1fea-4ee3-90f0-7294b4f86ace")
 (property "Reference" "D29" (at 411.48 320.04 0) (effects (font (size 1.27 1.27))))
 (property "Value" "BAV99" (at 411.48 322.58 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 411.48 337.82 0) (effects (font (size 1.27 1.27)) hide))
@@ -5106,7 +5106,7 @@
 (pin "2" (uuid "ec3fa995-4e2f-4f08-8301-5407c00d571b"))
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "C137") (unit 1))))
 )
-(symbol (lib_id "Diode:BAV99") (at 294.64 353.06 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "843cf835-1ac0-4ae0-af00-65fe1b295c5f")
+(symbol (lib_id "genctl:BAV99") (at 294.64 353.06 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "843cf835-1ac0-4ae0-af00-65fe1b295c5f")
 (property "Reference" "D32" (at 294.64 347.98 0) (effects (font (size 1.27 1.27))))
 (property "Value" "BAV99" (at 294.64 350.52 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 294.64 365.76 0) (effects (font (size 1.27 1.27)) hide))
@@ -5377,7 +5377,7 @@
 (pin "2" (uuid "441b1444-1651-4211-9e7a-9a3e324b3590"))
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "C139") (unit 1))))
 )
-(symbol (lib_id "Diode:BAV99") (at 707.39 335.28 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "f132a26e-e642-4ced-8b8a-eed81a1eeec3")
+(symbol (lib_id "genctl:BAV99") (at 707.39 335.28 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "f132a26e-e642-4ced-8b8a-eed81a1eeec3")
 (property "Reference" "D35" (at 707.39 330.2 0) (effects (font (size 1.27 1.27))))
 (property "Value" "BAV99" (at 707.39 332.74 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 707.39 347.98 0) (effects (font (size 1.27 1.27)) hide))
@@ -5648,7 +5648,7 @@
 (pin "2" (uuid "6f9c5b6d-9d23-41ac-af68-648f94a47b0e"))
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "C141") (unit 1))))
 )
-(symbol (lib_id "Diode:BAV99") (at 707.39 363.22 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "65ae8b96-4313-4137-9133-ae6eb6c1581a")
+(symbol (lib_id "genctl:BAV99") (at 707.39 363.22 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "65ae8b96-4313-4137-9133-ae6eb6c1581a")
 (property "Reference" "D38" (at 707.39 358.14 0) (effects (font (size 1.27 1.27))))
 (property "Value" "BAV99" (at 707.39 360.68 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 707.39 375.92 0) (effects (font (size 1.27 1.27)) hide))
@@ -5919,7 +5919,7 @@
 (pin "2" (uuid "a527d39c-1c10-45dc-b7c8-a4469e73b36d"))
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "C143") (unit 1))))
 )
-(symbol (lib_id "Diode:BAV99") (at 621.03 340.36 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "9beb3ee9-3c9a-44c0-bcb2-3281156ed352")
+(symbol (lib_id "genctl:BAV99") (at 621.03 340.36 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "9beb3ee9-3c9a-44c0-bcb2-3281156ed352")
 (property "Reference" "D41" (at 621.03 335.28 0) (effects (font (size 1.27 1.27))))
 (property "Value" "BAV99" (at 621.03 337.82 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 621.03 353.06 0) (effects (font (size 1.27 1.27)) hide))
@@ -6161,7 +6161,7 @@
 (pin "2" (uuid "176e3f12-cae8-4d41-9ad7-8b403b525487"))
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "C148") (unit 1))))
 )
-(symbol (lib_id "Diode:BAV99") (at 228.6 355.6 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "e655fcad-8bba-4632-bab0-27d9aab99f3c")
+(symbol (lib_id "genctl:BAV99") (at 228.6 355.6 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "e655fcad-8bba-4632-bab0-27d9aab99f3c")
 (property "Reference" "D43" (at 228.6 350.52 0) (effects (font (size 1.27 1.27))))
 (property "Value" "BAV99" (at 228.6 353.06 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 228.6 368.3 0) (effects (font (size 1.27 1.27)) hide))
@@ -6241,7 +6241,7 @@
 (pin "2" (uuid "bae2e8b2-3ac5-4c38-a549-d81931c9694f"))
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "C150") (unit 1))))
 )
-(symbol (lib_id "Diode:BAV99") (at 554.99 342.9 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "ba41793a-8812-448c-8990-f78c3cd6fb9a")
+(symbol (lib_id "genctl:BAV99") (at 554.99 342.9 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "ba41793a-8812-448c-8990-f78c3cd6fb9a")
 (property "Reference" "D45" (at 554.99 337.82 0) (effects (font (size 1.27 1.27))))
 (property "Value" "BAV99" (at 554.99 340.36 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 554.99 355.6 0) (effects (font (size 1.27 1.27)) hide))
@@ -8064,7 +8064,7 @@
 (pin "2" (uuid "e1b55958-6c28-4ced-bbb6-189f0e0e4c65"))
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "R254") (unit 1))))
 )
-(symbol (lib_id "Diode:BAV99") (at 1043.94 76.2 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "33292dd7-97ff-4cde-95c3-ad06a52a0bf0")
+(symbol (lib_id "genctl:BAV99") (at 1043.94 76.2 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "33292dd7-97ff-4cde-95c3-ad06a52a0bf0")
 (property "Reference" "D60" (at 1043.94 71.12 0) (effects (font (size 1.27 1.27))))
 (property "Value" "BAV99" (at 1043.94 73.66 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 1043.94 88.9 0) (effects (font (size 1.27 1.27)) hide))
@@ -8118,7 +8118,7 @@
 (pin "2" (uuid "61d294c8-f6b6-4128-a585-1248a9716cdd"))
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "R256") (unit 1))))
 )
-(symbol (lib_id "Diode:BAV99") (at 998.22 76.2 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "4256e6fc-42dd-4e02-9731-b7e0c3eba497")
+(symbol (lib_id "genctl:BAV99") (at 998.22 76.2 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "4256e6fc-42dd-4e02-9731-b7e0c3eba497")
 (property "Reference" "D62" (at 998.22 71.12 0) (effects (font (size 1.27 1.27))))
 (property "Value" "BAV99" (at 998.22 73.66 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 998.22 88.9 0) (effects (font (size 1.27 1.27)) hide))
