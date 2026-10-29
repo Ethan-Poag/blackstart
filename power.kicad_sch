@@ -1539,6 +1539,123 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))))
+(symbol "genctl:BAS70"
+		(pin_numbers
+			hide)
+		(pin_names
+			(offset 1.016)
+			hide)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "D"
+			(at 0 2.54 0)
+			(effects
+				(font
+					(size 1.27 1.27))))
+		(property "Value" "BAS70"
+			(at 0 -2.54 0)
+			(effects
+				(font
+					(size 1.27 1.27))))
+		(property "Footprint" ""
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(property "Datasheet" "~"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(property "Description" "BAS70 single Schottky, SOT-23: pin 1 = A, pin 2 = NC, pin 3 = K (JSCJ/JCET BAS70 datasheet p1, LCSC C77297)"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(property "ki_keywords" "diode Schottky"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(property "ki_fp_filters" "SOT?23*"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(symbol "BAS70_0_1"
+			(polyline
+				(pts
+					(xy -1.905 0.635)
+					(xy -1.905 1.27)
+					(xy -1.27 1.27)
+					(xy -1.27 -1.27)
+					(xy -0.635 -1.27)
+					(xy -0.635 -0.635))
+				(stroke
+					(width 0.254)
+					(type default))
+				(fill
+					(type none)))
+			(polyline
+				(pts
+					(xy 1.27 1.27)
+					(xy 1.27 -1.27)
+					(xy -1.27 0)
+					(xy 1.27 1.27))
+				(stroke
+					(width 0.254)
+					(type default))
+				(fill
+					(type none)))
+			(polyline
+				(pts
+					(xy 1.27 0)
+					(xy -1.27 0))
+				(stroke
+					(width 0)
+					(type default))
+				(fill
+					(type none))))
+		(symbol "BAS70_1_1"
+			(pin passive line
+				(at -3.81 0 0)
+				(length 2.54)
+				(name "K"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin passive line
+				(at 3.81 0 180)
+				(length 2.54)
+				(name "A"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin no_connect line
+				(at 0 -1.27 90)
+				(length 0) hide
+				(name "NC"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)))))))
 (symbol "Device:L"
 		(pin_numbers
 			hide)
@@ -3522,32 +3639,34 @@
 (pin "2" (uuid "e0f318be-0162-48ca-9a55-5bde06e5ffdb"))
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb" (reference "C16") (unit 1))))
 )
-(symbol (lib_id "Device:D_Schottky") (at 558.8 102.87 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "e6fe2342-2d79-4a90-92ff-0641a6273e32")
+(symbol (lib_id "genctl:BAS70") (at 558.8 102.87 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "e6fe2342-2d79-4a90-92ff-0641a6273e32")
 (property "Reference" "D3" (at 558.8 100.33 0) (effects (font (size 1.27 1.27))))
 (property "Value" "BAS70" (at 558.8 105.41 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 558.8 102.87 0) (effects (font (size 1.27 1.27)) hide))
 (property "Datasheet" "~" (at 558.8 102.87 0) (effects (font (size 1.27 1.27)) hide))
-(property "Description" "Schottky diode" (at 558.8 102.87 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "BAS70 single Schottky SOT-23 (1 A, 2 NC, 3 K)" (at 558.8 102.87 0) (effects (font (size 1.27 1.27)) hide))
 (property "LCSC" "C77297" (at 558.8 102.87 0) (effects (font (size 1.27 1.27)) hide))
 (property "MPN" "BAS70" (at 558.8 102.87 0) (effects (font (size 1.27 1.27)) hide))
-(property "Manufacturer" "" (at 558.8 102.87 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "JSCJ" (at 558.8 102.87 0) (effects (font (size 1.27 1.27)) hide))
 (property "Note" "external 70V boot diode per LM5176 DS" (at 558.8 102.87 0) (effects (font (size 1.27 1.27)) hide))
 (pin "1" (uuid "faa160e1-9eed-4979-ba89-45567c2d0851"))
-(pin "2" (uuid "4d028acd-d5a3-47a2-b881-31ca4ab32c1c"))
+(pin "2" (uuid "7bac928f-6b58-4bf7-b70d-eb7522bf1937"))
+(pin "3" (uuid "8dcf7bca-483e-46cc-9499-46ec8d5c806a"))
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb" (reference "D3") (unit 1))))
 )
-(symbol (lib_id "Device:D_Schottky") (at 558.8 115.57 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "a2e830db-3621-4264-91a7-42a71f8e696e")
+(symbol (lib_id "genctl:BAS70") (at 558.8 115.57 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "a2e830db-3621-4264-91a7-42a71f8e696e")
 (property "Reference" "D4" (at 558.8 113.03 0) (effects (font (size 1.27 1.27))))
 (property "Value" "BAS70" (at 558.8 118.11 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 558.8 115.57 0) (effects (font (size 1.27 1.27)) hide))
 (property "Datasheet" "~" (at 558.8 115.57 0) (effects (font (size 1.27 1.27)) hide))
-(property "Description" "Schottky diode" (at 558.8 115.57 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "BAS70 single Schottky SOT-23 (1 A, 2 NC, 3 K)" (at 558.8 115.57 0) (effects (font (size 1.27 1.27)) hide))
 (property "LCSC" "C77297" (at 558.8 115.57 0) (effects (font (size 1.27 1.27)) hide))
 (property "MPN" "BAS70" (at 558.8 115.57 0) (effects (font (size 1.27 1.27)) hide))
-(property "Manufacturer" "" (at 558.8 115.57 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "JSCJ" (at 558.8 115.57 0) (effects (font (size 1.27 1.27)) hide))
 (property "Note" "external 70V boot diode per LM5176 DS" (at 558.8 115.57 0) (effects (font (size 1.27 1.27)) hide))
 (pin "1" (uuid "2b688eb0-c496-4037-86a3-5dbaa52d1fdf"))
-(pin "2" (uuid "2a124302-3aa0-45df-a613-e254d432aae3"))
+(pin "2" (uuid "67a3bbdd-1ea5-45f6-9004-56b7b2898ded"))
+(pin "3" (uuid "7cf3abe1-a7eb-44b3-b914-2b1bc40a238d"))
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb" (reference "D4") (unit 1))))
 )
 (symbol (lib_id "Transistor_FET:BSC070N10NS5") (at 560.07 74.93 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "10796c14-54fa-444f-8bae-d8467138e04e")

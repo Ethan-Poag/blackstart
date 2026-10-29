@@ -633,3 +633,18 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 - docs/INSTALL_SAFETY.md: added a new bullet after the ESTOP_TRIP bullet (l.47): "Hardware maximum per main output: interposing relay coil class <= 2.8 A (software trip 3.0 A). E-stop trip coil must draw < 1.70 A (U68 limit with R407 47k); measure on the bench. Where a circuit has a lower limit or a 2 A fuse, that lower limit governs."
 - The stricter existing limits are unchanged: the 0.5 A coil lines (l.46/47/87), the 2 A output fuses, and the FUEL/CRANK 15 A rating rows.
 - README.md "Fusing" paragraph (l.24-28): added the matching one-liner with the same wording that the lower limit governs. The 2 A fuses are kept.
+
+### 6-2: BAS70 D3/D4 pinout fixed (item 2)
+- Evidence:
+  - LCSC C77297, live 2026-10-28 HST: "BAS70", JSCJ, SOT-23, "1 Independent ... Single Diodes", stock 760, 20+ @ $0.0288. It is the single BAS70, not -04/-05/-06.
+  - The datasheet linked from the LCSC page (datasheet.lcsc.com/.../6b6204ac0be5490386d46c88466108be.pdf, JCET "BAS70/-04/-05/-06", rev E Oct 2015) shows on p1, in the BAS70 "Marking: 73" internal diagram with the SOT-23 package pin numbering: anode = pin 1 (bottom-left), cathode = pin 3 (top), pin 2 (bottom-right) not connected.
+- Intended polarity: LM5176 bootstrap. DESIGN_NOTES.md:362 says "external BAS70 boot diodes VCC->BOOT1/2", and the schematic shows A = U2.23 VCC (with C13) and K = BOOT1/BOOT2 (with C15/C16). The polarity is unambiguous.
+- Before, Device:D_Schottky (1 = K, 2 = A) on a SOT-23 footprint:
+  - D3: pad 1 = BB_BOOT1, pad 2 = Net-(D3-A) (VCC), pad 3 unconnected;
+  - D4: pad 1 = BB_BOOT2, pad 2 = VCC net, pad 3 unconnected.
+  - On the real part, pad 1 (anode) sat on BOOT, pad 3 (cathode) was floating, and VCC went to the NC pad, so the diodes were out of circuit.
+- After: new symbol genctl:BAS70 (in genctl.kicad_sym and embedded in power.kicad_sch). It is the same graphic with pin 1 = A, pin 2 = NC (hidden, no_connect type), pin 3 = K, and footprint filter SOT?23*. The pin positions are unchanged, so no wiring was moved.
+  - D3: pad 1 = Net-(D3-A) (U2.23 VCC), pad 2 = NC, pad 3 = BB_BOOT1;
+  - D4: pad 1 = VCC net, pad 2 = NC, pad 3 = BB_BOOT2.
+  - Manufacturer field set to JSCJ.
+- tools/design.py still emits Device:D_Schottky for D3/D4. The generator is not regenerated; this is a deferred generator fix. PCB: D3/D4 pad nets change, which is pending at layout.
