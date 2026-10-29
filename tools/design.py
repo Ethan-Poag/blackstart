@@ -112,7 +112,7 @@ pw.p('genctl:TPS56637RPAR','TPS56637RPAR',{'VIN':'+12V','EN':'EN_3V3','MODE':'MO
 pw.R('121k','+12V','EN_3V3'); pw.R('16k','EN_3V3','GND',note='EN 1.4V at 12V')
 pw.R('0R','MODE_3V3','GND',dnp=True,note='DNP: MODE open = FCCM')
 pw.C('100n','BOOT_3V3','SW_3V3')
-pw.p('Device:L','2.2u',{'1':'SW_3V3','2':'+3V3'},prefix='L',mpn='MWSA0503S-2R2MT',lcsc='C408408',fp='genctl:L_MWSA0503S',note='2.2uH per DS Table 4 (3.3V)')
+pw.p('Device:L','3.3u',{'1':'SW_3V3','2':'+3V3'},prefix='L',mpn='MWSA1004S-3R3MT',lcsc='C408483',mfr='Sunlord',fp='genctl:L_MWSA1004S',note='m7-sch 3b: fixes_safety M3/R3-6, same part as L2 (Isat 16 A)')
 pw.R('45.3k','+3V3','FB_3V3',note='DS Table 4: 45.3k/10k -> 3.32V'); pw.R('10k','FB_3V3','GND')
 pw.C('100p','+3V3','FF_3V3',note='C9 per DS Table 4'); pw.R('20k','FF_3V3','FB_3V3',note='R8 per DS Table 4 (C9+R8 in series across R6)')
 pw.R('100k','PG_3V3','+3V3_SAFE')

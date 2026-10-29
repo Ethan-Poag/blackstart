@@ -356,3 +356,10 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 |---|---|---|---|---|
 | bom/ac_metering_bom.csv l.15 | 6x 0685H0500-01 / 0215.500 600 VAC fuse, UNVERIFIED price | row deleted | the six metering fuses were never on the board; the voltage inputs use external DIN fuses (design.py J28/J29 note, bom/design_spec.md:40) | team lead ruling |
 - Scrubbed: the TOTAL excluded list (20 -> 19 rows; the total stays $45.75 because the row was unpriced) and the changelog l.31 open question (now marked DELETED). No other text references found (git grep 0685H/0215.500/"Fuse per V"). The binary PDF/PNG hits are byte coincidences; pdftotext shows no fuse text.
+
+### 3b-3: L3 (+3V3 TPS56637 buck) -> Sunlord MWSA1004S-3R3MT C408483 (fixes_safety.md M3, R3-6)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| L3 | 2.2u MWSA0503S-2R2MT C408408, genctl:L_MWSA0503S | 3.3u MWSA1004S-3R3MT C408483 Sunlord, genctl:L_MWSA1004S (same as L2) | Isat 5.6 A < IOCL 8.6 A max; R3-6 confirms that C408483 IS the MWSA1004S | fixes_safety.md M3 l.460, R3-6 l.157-161, Rev 3 change 6 |
+- C408483 stock/price are UNVERIFIED because the LCSC page is 404 (a live scrape this turn returned an unrelated recommended part). The power_bom L3 row is excluded from the TOTAL (6.94 -> $46.79, the old $0.1547 row is gone). L2's existing $0.2691 is also unverified (not changed).
+- Spec M3: check TPS56637 loop stability with 3.3 uH (internal compensation, UNVERIFIED). PCB: D-m7-6.
