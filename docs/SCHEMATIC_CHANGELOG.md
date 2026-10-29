@@ -744,13 +744,13 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 ### 9-1: INSTALL_SAFETY / README declared limit (R5-N1 resolved by restricting the declaration)
 | Ref | Old | New | Reason | Source |
 |---|---|---|---|---|
-| docs/INSTALL_SAFETY.md l.41 | Round 4 text: supply "centrally suppressed to 58 V maximum (ISO 16750-2 Test B)" | Round 5 line 41 text, verbatim (>=58 V DC fuses kept as margin; 9–36 V declared; load dump incl. suppressed 58 V not supported; TVS may fail short above ~44 V; energize-to-run fuel only) | R5-N1 | install_safety_text.md "ROUND 5 (R5-N1)" |
+| docs/INSTALL_SAFETY.md l.41 | Round 4 text: supply "centrally suppressed to 58 V maximum (ISO 16750-2 Test B)" | Round 5 line 41 text, verbatim (>=58 V DC fuses kept as margin; 9–36 V declared (superseded by Round 5c: 9–32 V continuous, 36 V ≤ 60 s); load dump incl. suppressed 58 V not supported; TVS may fail short above ~44 V; energize-to-run fuel only) | R5-N1 | install_safety_text.md "ROUND 5 (R5-N1)" |
 | docs/INSTALL_SAFETY.md l.43 | "Declared limit: The load dump must be centrally suppressed to 58 V or less ..." | Round 5 "Declared limit" text, verbatim | R5-N1 | same |
 | docs/INSTALL_SAFETY.md l.13 | "a battery-backed, suppressed 12 V or 24 V DC supply bus" | "a battery-backed 12 V or 24 V DC supply bus (9–36 V)" | consistency | same (l.13 note). This paragraph is labelled as pasted from review/hv/load_dump_external.md; the quote now differs from that source in this phrase |
 | README.md l.22 | "Declared limit: the load dump must be centrally suppressed to 58 V or less (ISO 16750-2 Test B, 24 V system). Unsuppressed load dump is not supported." | Round 5 "Declared limit" text, verbatim | consistency | same |
 - The >=58 V DC fuse-rating statements are kept everywhere.
 - Not changed (no 58 V / Test B declaration in them): DESIGN_NOTES.md l.528 and bom/design_spec.md l.19 ("battery-backed, suppressed 35 V-class supply"), DESIGN_NOTES.md l.39/395/538 and design_spec l.100 (historical design notes), ENCLOSURE_DFM l.230 (test plan).
-- 35 V reconnect check (INFERRED, not altered): R3 8.66k divider ratio 31.01 (changelog B3-2); SNOSD95C p5 V(OVF) 1.091/1.13/1.159 V -> OV release 33.8/35.0/35.9 V (nominal resistors), trip 1.195/1.231/1.267 V -> 37.1/38.2/39.3 V (36.35-40.06 V with resistor tolerance and leakage per B3-2). "Reconnects below about 35 V" matches the typical value. Flag for Safety: the worst-case release (~33.8 V) and the worst-case trip (~36.35 V) are both close to the 36 V continuous declared maximum; after an OV trip the board may stay off until the bus falls below ~33.8 V.
+- 35 V reconnect check (INFERRED, not altered): R3 8.66k divider ratio 31.01 (changelog B3-2); SNOSD95C p5 V(OVF) 1.091/1.13/1.159 V -> OV release 33.8/35.0/35.9 V (nominal resistors), trip 1.195/1.231/1.267 V -> 37.1/38.2/39.3 V (36.35-40.06 V with resistor tolerance and leakage per B3-2). "Reconnects below about 35 V" matches the typical value. Flag for Safety: the worst-case release (~33.2 V with 1 % resistors; 33.8 V is the nominal-resistor value) and the worst-case trip (~36.35 V) are both close to the 36 V continuous declared maximum; after an OV trip the board may stay off until the bus falls below ~33.2 V.
 
 ### 9-2: D126 SMDJ40CA -> SMDJ58CA (C192416): NOT DONE, blocked by the pre-swap check
 - Verified: JLCPCB C192416 = Littelfuse SMDJ58CA, SMC (DO-214AB), bidirectional, VRWM 58 V, VBR 71.2 V (listed), VC 93.6 V at Ipp 32.1 A (10/1000 µs), 3 kW. Stock not shown on the page (UNVERIFIED).
@@ -781,3 +781,15 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 - J23 load: FUEL 2.8 A + CRANK 2.8 A = 5.6 A max = 56 % of the 10 A fuse. RAIL_PLAN sizes that copper for 15 A (plan figure; not measured on the layout).
 - bom/off_board_external_bom.csv: new installer-supplied row for the 10 A ATO/ATC >=58 V DC J23-branch fuse, qty 1, no LCSC, no price (excluded from totals).
 - Option B text in Batch 10 and D-m7-15 replaced by Safety's revised Option B (see above); the 9-2 measured facts are kept.
+
+## Batch 12 (Safety FINAL Round 5c, team lead ruling, 2026-10-28 ~5:45 PM HST)
+- Round 5c: declared supply 9–32 V DC continuous, 36 V ≤ 60 s, OV release ≥ ~33 V; INSTALL_SAFETY l.13/40/42/44 + README l.22; no R3 change (R6-N1, R6-N2, R6-N3). Text verbatim from install_safety_text.md "FINAL Round 5c".
+- R6-N1 gap (the 22 SMAJ40CA switch/sensor inputs): covered by the new INSTALL_SAFETY fuse-note line ("the switch and sensor inputs (TVS at the connector pins; protected only by the installer's fuse on the field supply)").
+- 9-1 annotated: "9–36 V declared" marked superseded; worst-case OV release corrected to ~33.2 V with 1 % resistors (33.8 V was the nominal-resistor value). Kept as true hardware statements: B3-2 R3 trip 36.36/38.17/40.11 V, HC14 "~12V at 36V" notes, DESIGN_NOTES / SPEC_CHECKLIST_3b history.
+- R6-N4: empty MPN/Manufacturer filled (property text only, no net change):
+| Ref | Old | New | Source |
+|---|---|---|---|
+| R400 (estop.kicad_sch, 47k, C25819) | MPN "", Manufacturer "" | 0603WAF4702T5E, UNI-ROYAL | jlcpcb.com/partdetail/C25819 (opened 2026-10-28): 0603WAF4702T5E, UNI-ROYAL(Uniroyal Elec), 47k 1 % 75 V; bom/outputs_bom.csv row already carries this MPN |
+| R411 (estop.kicad_sch, 100k, C122538) | MPN "", Manufacturer "" | RT0603BRD07100KL, YAGEO | jlcpcb.com/partdetail/C122538 (opened 2026-10-28): RT0603BRD07100KL, YAGEO, 100k 0.1 % 75 V thin film; bom/inputs_bom.csv row already carries this MPN |
+- Other refs sharing those LCSC codes still have empty MPN in the schematic (R407, R533 on C25819; R139, R150, R161, R172, R183, R194, R268 on C122538); not in scope, left as-is. docs/genctl_bom.csv (generated export) not regenerated, same as 7-5.
+
