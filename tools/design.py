@@ -432,7 +432,7 @@ tvs(inp,'SMAJ36CA','VBAT_SENSE'); inp.R('100k','VBAT_SENSE','VBAT_SNS',note='0.1
 ou=S('outputs','Outputs: fuel/crank (TPS48100), 15x TPS1HTC30, watchdog gating, readback',
  'OUTPUTS. All MCU enables gated by TPS3431 WDO (LVC1G08 for fuel/crank/glow, LVC541 OE for the rest). Fuel/crank: TPS48100 + 2x BSC070N10NS5 + 1mR shunt +\n'
  'INA281A2 from VBAT_ESTOP. Small outputs TPS1HTC30 from VBAT_P: ILIM 40.2k, SNS 1.1k -> TMUX1208 -> ADC. Readback via NPN to TCA9555 @0x23.')
-ou.p('genctl:TPS3431SDRBR','TPS3431SQDRBRQ1',{'VDD':'+3V3','EN':'+3V3','SET1':'+3V3','CWD':'WD_CWD','WDI':'WDI','GND':'GND','EP':'GND','WDO':'WDO_N','ENOUT':'WD_REARM_RC'},mpn='TPS3431SQDRBRQ1',lcsc='C2878091')
+ou.p('genctl:TPS3431SDRBR','TPS3431SQDRBRQ1',{'VDD':'+3V3','EN':'+3V3','SET1':'+3V3','CWD':'WD_CWD','WDI':'WDI','GND':'GND','EP':'GND','WDO':'WDO_N','ENOUT':None},mpn='TPS3431SQDRBRQ1',lcsc='C2878091')
 ou.R('10k','WD_CWD','+3V3',note='CWD via 10k to VDD = factory timing (assumed)'); ou.R('10k','WDO_N','+3V3'); ou.C('100n','+3V3','GND')
 npn(ou,'WD_INV_B','GND','WD_OE_N'); ou.R('10k','WD_OK','WD_INV_B'); ou.R('100k','WD_INV_B','GND'); ou.R('10k','WD_OE_N','+3V3')
 for n in ('FUEL','CRANK','GLOW'):
@@ -481,10 +481,11 @@ conn(ou,6,['GLOW_OUT','GCB_CL_OUT','GCB_OP_OUT','MCB_CL_OUT','MCB_OP_OUT','ESTOP
 conn(ou,6,['GND','GND','GND','GND','GND','GND'],'J5B returns')
 conn(ou,6,['AUX1_OUT','AUX2_OUT','AUX3_OUT','AUX4_OUT','AUX5_OUT','AUX6_OUT'],'J6A AUX1-6')
 conn(ou,6,['AUX7_OUT','AUX8_OUT','AUX9_OUT','AUX10_OUT','GND','GND'],'J6B AUX7-10 + returns')
-# m7-sch FW-001/FW-027 watchdog trip latch (fixes_firmware.md s1, option A: ENOUT RC). WDO_N now only U37.7/R271/U84.6; gates + R272 + U76 P15 on WD_OK
+# m7-sch FW-001/FW-027 watchdog trip latch (fixes_firmware.md Rev 2 s1: POR RC re-arm 220k/4.7u/BAT54WS, ENOUT NC). WDO_N now only U37.7/R271/U84.6; gates + R272 + U76 P15 on WD_OK
 ou.p('74xGxx:74AUP1G74','74LVC1G74DP-Q100H',{'1':'WD_REARM','2':'+3V3_SAFE','3':None,'4':'GND','5':'WD_OK','6':'WDO_N','7':'+3V3_SAFE','8':'+3V3_SAFE'},ref='U84',mpn='74LVC1G74DP-Q100H',lcsc='C548409',mfr='Nexperia',fp='Package_SO:TSSOP-8_3x3mm_P0.65mm',note='Watchdog trip latch; stock 74AUP1G74 symbol, same pinout')
-ou.p('74xGxx:74LVC1G17','SN74LVC1G17DBVR',{'1':None,'2':'WD_REARM_RC','3':'GND','4':'WD_REARM','5':'+3V3_SAFE'},ref='U85',mpn='SN74LVC1G17DBVR',lcsc='C7836',mfr='TI',fp='Package_TO_SOT_SMD:SOT-23-5',note='Schmitt buffer ENOUT RC -> U84 CP')
-ou.R('100k','+3V3_SAFE','WD_REARM_RC',ref='R554',lcsc='C25803',note='U37 ENOUT pull-up / re-arm RC'); ou.C('10n','WD_REARM_RC','GND',ref='C298',mpn='CL10B103KB8NNNC',lcsc='C1589',mfr='Samsung')
+ou.p('74xGxx:74LVC1G17','SN74LVC1G17DBVR',{'1':None,'2':'WD_RC','3':'GND','4':'WD_REARM','5':'+3V3_SAFE'},ref='U85',mpn='SN74LVC1G17DBVR',lcsc='C7836',mfr='TI',fp='Package_TO_SOT_SMD:SOT-23-5',note='Schmitt buffer ENOUT RC -> U84 CP')
+ou.R('220k','+3V3_SAFE','WD_RC',ref='R554',lcsc='C22961',note='POR re-arm RC (Rev 2), tau 1.03 s'); ou.C('4.7u','WD_RC','GND',ref='C298',mpn='CL10A475KO8NNNC',lcsc='C19666',mfr='Samsung',note='POR re-arm RC cap (spec C293)')
+ou.p('Device:D_Schottky','BAT54WS-7-F',{'1':'+3V3_SAFE','2':'WD_RC'},ref='D136',mpn='BAT54WS-7-F',lcsc='C124205',mfr='Diodes',fp='Diode_SMD:D_SOD-323',note='WD_RC discharge diode')
 ou.C('100n','+3V3_SAFE','GND',ref='C299',lcsc='C14663',note='U84 decoupling'); ou.C('100n','+3V3_SAFE','GND',ref='C300',lcsc='C14663',note='U85 decoupling')
 # m7-sch FW-002/003/004 enable pull-downs (fixes_firmware.md s2, s3.1, s3.2)
 for _r,_n,_v in [('R534', 'FUEL_EN_MCU', '100k'), ('R535', 'CRANK_EN_MCU', '100k'), ('R536', 'AUX3_MCU', '4.7k'), ('R537', 'GLOW_EN_MCU', '100k'), ('R538', 'GCB_CL_MCU', '100k'), ('R539', 'GCB_OP_MCU', '100k'), ('R540', 'MCB_CL_MCU', '100k'), ('R541', 'MCB_OP_MCU', '100k'), ('R542', 'AUX1_MCU', '100k'), ('R543', 'AUX2_MCU', '100k'), ('R544', 'AUX4_MCU', '100k'), ('R545', 'AUX5_MCU', '100k'), ('R546', 'AUX6_MCU', '100k'), ('R547', 'AUX7_MCU', '100k'), ('R548', 'AUX8_MCU', '100k'), ('R549', 'AUX9_MCU', '10k'), ('R550', 'AUX10_MCU', '10k')]:

@@ -76,6 +76,7 @@ Spec: /workspace/review/cur/failsafe_latch.md Part 2 (§2.1) and Loose ends L4.
 - power_bom J0 BATTERY header (sch J1) and outputs_bom J4 header (sch J23) | LCSC "none (not at LCSC)" | C3579760, price/stock UNVERIFIED (DigiKey price 7.46 kept) | schematic J1/J23/J28/J29 carry LCSC C3579760, MPN 1720819 | https://www.lcsc.com/product-detail/C3579760.html (fetched 2026-10-28: Phoenix Contact 1720819, 4P 7.62 mm, colour listed Green)
 
 ## FW-1: watchdog trip latch (FW-001 / FW-027)
+**Re-arm part of this entry (ENOUT RC, R554 100k, C298 10n, U37.8 → WD_REARM_RC) is SUPERSEDED by FW-1 Rev 2 below.**
 Spec: /workspace/review/schematic_audit/fixes_firmware.md §1 (option A, ENOUT RC; option B POR-RC NOT applied, pending bench check 1c). Net name for the RC node is WD_REARM_RC (brief) where the spec says WD_RC.
 | ref | old | new | reason | source |
 |---|---|---|---|---|
@@ -110,3 +111,15 @@ Spec: /workspace/review/schematic_audit/fixes_firmware.md §1 (option A, ENOUT R
 | R57 (cm5, CM5_MCU_IRQ ↔ MCU_IRQ) | 1k C21190 | 10k C25804 | same, PE3 | §3.4 |
 | bom/other_bom.csv | — | +1 row (2x 10k) | BOM | — |
 | tools/design.py | — | 10k for the CM5_UART_RX and CM5_MCU_IRQ pairs | regen | — |
+
+## FW-1 Rev 2: watchdog re-arm from a power-on RC (FW-001 / FW-027)
+Spec: fixes_firmware.md Rev 2 §1.1/§1.2 (Ethan/Safety ruling 2026-10-28 3:34 PM HST: POR RC primary, ENOUT superseded). Arms 0.70–1.06 s after power-up (INFERRED, spec §1.3); re-arms only after a power cycle.
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| U37 pin 8 ENOUT | WD_REARM_RC | no-connect flag | arming no longer uses ENOUT | Rev 2 §1.1 |
+| net WD_REARM_RC | R554.2, C298.1, U85.2, U37.8 | renamed WD_RC = R554.2, C298.1, D136.2 (A), U85.2 | spec net name | Rev 2 §1.2 |
+| R554 | 100k C25803 | 220k 0603 C22961 | τ = 220k × 4.7 µF = 1.03 s | Rev 2 §1.1 (stock/price from spec, not re-checked) |
+| C298 (spec C293) | 10n C1589 | 4.7 µF 16 V X5R 0603 CL10A475KO8NNNC C19666 | POR RC | Rev 2 §1.1; DC-bias derating UNVERIFIED |
+| D136 (new) | — | BAT54WS-7-F C124205, Diode_SMD:D_SOD-323, symbol Device:D_Schottky; A = WD_RC, K = +3V3_SAFE | discharges C298 into a collapsing rail | Rev 2 §1.1 |
+| bom/outputs_bom.csv | — | R554/C298 rows replaced, D136 row added; TOTAL 159.98 → 160.11 | BOM | spec prices |
+| tools/design.py | — | ENOUT None, WD_RC, R554 220k, C298 4.7u, D136 | regen | — |
