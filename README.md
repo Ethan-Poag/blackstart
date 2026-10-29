@@ -17,6 +17,6 @@ See DESIGN_NOTES.md, docs/, and LICENSING.md.
 
 **Fusing:** Genctl has no on-board output fuses. Every output (FUEL, CRANK, GLOW, GCB/MCB,
 AUX1–10, ESTOP_TRIP) needs an external fuse fitted by the installer ahead of the relay or
-solenoid, no larger than the output's maximum (15 A FUEL/CRANK; 2 A small outputs; 2 A
+solenoid, no larger than the output's maximum (5 A standard blade for FUEL/CRANK, which are limited to 2.8 A; 2 A small outputs; 2 A
 ESTOP_TRIP relay drive) and sized down to the real load. The 30 A battery fuse does not protect individual
-outputs. Hardware maximum per main output: interposing relay coil class <= 2.8 A (software trip 3.0 A); E-stop trip coil < 1.70 A (U68, R407 47k; bench-measure); where a circuit has a lower limit or a 2 A fuse, that lower limit governs. Fit a flyback diode across every external coil. See docs/INSTALL_SAFETY.md. Not certified.
+outputs. Hardware maximum per main output: interposing relay coil class <= 2.8 A (software trip 3.0 A); E-stop trip coil < 1.70 A (U68, R407 47k; bench-measure); where a circuit has a lower limit or a 2 A fuse, that lower limit governs. Fit a flyback diode across every external coil. Declared limit: the load dump must be centrally suppressed to 58 V or less (ISO 16750-2 Test B, 24 V system). Unsuppressed load dump is not supported. See docs/INSTALL_SAFETY.md. Not certified.
