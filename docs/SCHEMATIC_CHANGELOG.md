@@ -464,3 +464,13 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 - BOM: inputs_bom +Q72 (1 @ $0.1310 at MOQ 5; stock 28,260), +D146 (1 @ $0.0239 at MOQ 50; stock 3,600), LIVE LCSC 16:44 HST. JLC class UNVERIFIED. C98220 78 -> 79. inputs 27.58 -> 27.73, other 142.27 -> 142.29.
 - design.py not regenerated/mirrored (schematic is source of truth).
 - Open (Safety, INFERRED in their file): AI compliance at 9 V battery with the rail about 2 V lower.
+
+### 4-2: BZT52C15 gate-source clamps on Q36/Q39/Q42 only (fixes_safety.md Rev 3 corrections (b); safety_rereview_30dd932.md (b), HIGH-2)
+| Ref | Part | Nets | Source |
+|---|---|---|---|
+| D147 (new) | BZT52C15 JSCJ C2104 SOD-123 | K = VBAT_P (Q36 source), A = Q36_G | Rev 3 (b) |
+| D148 (new) | same | K = VBAT_P (Q39 source), A = Q39_G | Rev 3 (b) |
+| D149 (new) | same | K = VBAT_P (Q42 source), A = Q42_G | Rev 3 (b) |
+- The gate nets were unnamed (Net-(Q36-G) etc.). A local label Q36_G/Q39_G/Q42_G was placed on each gate pin, so they are now named. Members unchanged apart from the zener (R200/R201 etc.). MEASURED netlist diff: 4 connectivity diffs, all the added zener pins.
+- **None on Q2/Q3** (per ruling). Q70/Q71 keep D137.
+- BOM: outputs_bom C2104 row qty 1 -> 4, price $0.0212 at the 50+ break (LIVE 16:44 HST, stock 10,600).

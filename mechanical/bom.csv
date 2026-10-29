@@ -55,7 +55,7 @@
 "D70,D72","SK1010C","Diode_SMD:D_SMC","2"
 "D71","SMDJ24A","Diode_SMD:D_SMC","1"
 "D136","BAT54WS-7-F","Diode_SMD:D_SOD-323","1"
-"D137","BZT52C15","Diode_SMD:D_SOD-123","1"
+"D137,D147-D149","BZT52C15","Diode_SMD:D_SOD-123","4"
 "D146","BZT52C33","Diode_SMD:D_SOD-123","1"
 "FB1","600R@100MHz","Inductor_SMD:L_0603_1608Metric","1"
 "J1","PC 5/4-GF-7,62 (battery in)","genctl:PhoenixContact_PC5_4-GF-7.62_1720819","1"
