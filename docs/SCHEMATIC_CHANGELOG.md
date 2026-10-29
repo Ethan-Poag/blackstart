@@ -398,3 +398,14 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 | U47-U61, U68 Value+MPN (+design.py) | TPS1HTC30QPWPRQ1 | TPS1HTC30AQPWPRQ1 (lib symbol id unchanged) | TI part-details: TPS1HTC30AQPWPRQ1 is ACTIVE; TPS1HTC30QPWPRQ1 returns 404 (not orderable). LCSC C22414694 = TPS1HTC30AQPWPRQ1. BOM already had the A suffix. | ti.com 2026-10-28, LCSC live |
 | outputs_bom rows 12, 28 price | 7.0093 | 14.2804 (LIVE LCSC 10+, stock 36 vs 16 needed) | live price rule | LCSC 2026-10-28 |
 - Not filled: H1-H4 and JP2-JP4 (no LCSC/MPN; they are mechanical or not in the JLC BOM).
+
+### 3b-9c: BOM reconciled against the committed schematic (tools/bom_from_sch.py)
+- Before (at e75218d-era baseline): 135 mismatches (QTY 39, SCH_ONLY 51, BOM_ONLY 45). Right before this commit (with D138-D145 and the MPN fill): 132 mismatches (QTY 40 / SCH_ONLY 50 / BOM_ONLY 42).
+- Fixed: 26 single-row QTY rows set to the schematic count (each row note has "3b bom_from_sch: qty a->b"), plus inputs_bom BAV99 15->10 (the multi-row case, resolved by the refs). 44 SCH_ONLY LCSC groups added to other_bom.csv as rows with UNVERIFIED prices (excluded from totals).
+- After: 63 mismatches (QTY 13, SCH_ONLY 7, BOM_ONLY 43). The rest need a ruling:
+  - multi-row QTY groups (100n/100k/1k/10k/MMBT3904 etc.), where it is unclear which row owns the delta;
+  - C28233 (24x 100n 0805), whose code is only a URL placeholder in other_bom's "small passives lump" row ($8.68). Its qty is left at 1, because adding a row would double-count the lump.
+  - T1-T4/Y3/J30: stale ac_metering rows with a different MPN (rows 9/4/19).
+  - CM5 U9/U10 and H1-H4 are off-BOM.
+  - BOM_ONLY: off-board plugs, display, CM5, the PCB and estimates, and the stale ac_metering ADuM141E/ADuM5020/ADP150/ERA-3AEB rows (not in the schematic).
+- Totals (bom_retotal): comms 28.18->28.37, inputs 24.88->24.71, other 407.85->407.83, outputs 281.59->281.69, power 46.79->46.57, ac 45.85 unchanged.
