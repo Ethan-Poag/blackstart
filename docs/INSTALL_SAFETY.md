@@ -29,16 +29,16 @@ Every output must have its own external fuse, supplied and installed by the inst
 
 | Output | Connector.pin | Driver | Rating / electronic limit | Max external fuse |
 |---|---|---|---|---|
-| FUEL | J23.3 (supply J23.1/2 VBAT_ESTOP) | TPS48100-Q1 + 2 MOSFETs | 15 A | 15 A blade (ATO/ATC), 32 V DC |
-| CRANK | J23.4 | TPS48100-Q1 + 2 MOSFETs | 15 A | 15 A blade (ATO/ATC), 32 V DC |
-| GLOW | J24.1 | TPS1HTC30-Q1 | limit 2.49 A (1.99–2.99 A) | 2 A blade, 32 V DC |
-| GCB_CL, GCB_OP, MCB_CL, MCB_OP | J24.2, .3, .4, .5 | TPS1HTC30-Q1 | limit 2.49 A | 2 A blade each |
-| ESTOP_TRIP | J24.6 | TPS1HTC30-Q1 | relay drive, limit 2.1 A (1.7–2.6 A), ~0.5 s pulse | 2 A blade |
-| AUX1–AUX6 | J26.1–6 | TPS1HTC30-Q1 | limit 2.49 A | 2 A blade each |
-| AUX7–AUX10 | J27.1–4 (J27.5/6 = GND) | TPS1HTC30-Q1 | limit 2.49 A | 2 A blade each |
-| Battery feed | to J23 VBAT_ESTOP via NC E-stop | — | system | 30 A (existing) |
+| FUEL | J23.3 (supply J23.1/2 VBAT_ESTOP) | TPS48100-Q1 + 2 MOSFETs | 15 A | 15 A blade (ATO/ATC), >=58 V DC |
+| CRANK | J23.4 | TPS48100-Q1 + 2 MOSFETs | 15 A | 15 A blade (ATO/ATC), >=58 V DC |
+| GLOW | J24.1 | TPS1HTC30-Q1 | limit 2.49 A (1.99–2.99 A) | 2 A blade, >=58 V DC |
+| GCB_CL, GCB_OP, MCB_CL, MCB_OP | J24.2, .3, .4, .5 | TPS1HTC30-Q1 | limit 2.49 A | 2 A blade each, >=58 V DC |
+| ESTOP_TRIP | J24.6 | TPS1HTC30-Q1 | relay drive, limit 2.1 A (1.7–2.6 A), ~0.5 s pulse | 2 A blade, >=58 V DC |
+| AUX1–AUX6 | J26.1–6 | TPS1HTC30-Q1 | limit 2.49 A | 2 A blade each, >=58 V DC |
+| AUX7–AUX10 | J27.1–4 (J27.5/6 = GND) | TPS1HTC30-Q1 | limit 2.49 A | 2 A blade each, >=58 V DC |
+| Battery feed | to J23 VBAT_ESTOP via NC E-stop | — | system | 30 A (existing), >=58 V DC |
 
-32 V DC blade fuses suit 12 V and 24 V systems.
+Every external fuse (battery feed, 30 A E-stop feed, and each output) must be rated **>=58 V DC**, because the suppressed load dump can reach 58 V. A 32 V DC blade fuse does not meet this. Amp ratings are unchanged (team-lead ruling R3-N1, m7-sch batch 4).
 
 Total draw and ESTOP_TRIP (inference, not certified):
 - The board battery path (J1 → BAT_IN → Q1 → Q2 → Q3) has **no on-board fuse**; the installer's external fuse (<=10 A fast-acting, >=58 V DC) is the only protection on this path and sets the maximum current. The 10 A copper capacity of J1 → Q1 is NOT demonstrated for the BAT_IN layout (board update pending; the old fused-path copper figure no longer applies). Caveat: if the installer uses a 10 A ATO, it carries at most about 8 A at 149 °F (65 °C) ambient (Littelfuse 287 ATOF derating, final_power_spec.md §1; datasheet pages UNVERIFIED). The battery wiring and the mating connector must be rated for the load as well. The 12 V electronics and all AUX/GCB/MCB/GLOW outputs share this limit.

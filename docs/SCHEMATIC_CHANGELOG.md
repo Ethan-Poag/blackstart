@@ -161,7 +161,7 @@ Crystal ESR still UNVERIFIED (spec §9: gain margin 2.8 < AN2867's 5). Footprint
 | U72 pin 29 CLKIN | ADE_XO | ADE_CLK_BUF | removed from the crystal node | §11 |
 | U72 pin 20 VAP | Net-(U72-VAP) (R453.2, C265.1) | BUS_VA_P | consistent naming (net-only) | §14 |
 | bom/ac_metering_bom.csv | — | +5 rows (only U87 priced; this file has no TOTAL row) | BOM | — |
-| tools/design.py | — | U87 block; BUS CLKIN = ADE_CLK_BUF (design.py already named BUS_VA_P) | regen | — |
+| tools/design.py | — | U87 block; BUS CLKIN = ADE_CLK_BUF. CORRECTED in batch 4 (reviewer R3-N7): design.py does NOT contain BUS_VA_P (grep count 0); the U72 VAP net name exists only in the schematic, which is the source of truth | regen | — |
 
 ## FW-8: Rev 3 part choices for the watchdog cap and VISO caps (fixes_firmware.md §18.3/§18.4)
 Ref mapping: spec "C293" = real **C298** (schematic C293 is an existing LM5176 22 µF COUT and is not touched). PCB footprint change deferred (deferred_layout.md D6).
@@ -500,3 +500,70 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
   - **No wiring change needed.**
 - Fix: new project symbol genctl:BAV99 (in genctl.kicad_sym and embedded) with pin names 1 A1, 2 K2, 3 K1/A2 and the same graphic and pin numbers/positions. All 18 instances repointed from Diode:BAV99, because pin numbers are unchanged.
 - Netlist: 0 connectivity changes. NC net names change (unconnected-(D138-K-Pad3) -> unconnected-(D138-K1/A2-Pad3), etc.).
+
+### 4-5: Documentation items (batch 4 rulings R3-N1, R3-N5; reviewer R3-N3/N4/N6/N7; Mechanical H4)
+- **R3-N1 (ruling): every external fuse is >=58 V DC; amp ratings unchanged.** docs/INSTALL_SAFETY.md:
+  - output-fuse table, l.32-34: FUEL/CRANK "15 A blade (ATO/ATC), 32 V DC" and GLOW "2 A blade, 32 V DC" -> ">=58 V DC";
+  - GCB/MCB, ESTOP_TRIP, AUX1-6, AUX7-10 rows: ", >=58 V DC" appended;
+  - battery feed row "30 A (existing)" -> "30 A (existing), >=58 V DC";
+  - l.41: "32 V DC blade fuses suit 12 V and 24 V systems." replaced by the >=58 V DC requirement sentence.
+  - l.15 (board feed) already said >=58 V DC.
+  - Schematic text: the only fuse label is power.kicad_sch "EXT FUSE <=10 A FAST, >=58 V DC" plus the POWER note (">=58 V DC"). grep for "32 V" in *.kicad_sch and bom/*.csv finds no fuse text, so no schematic or BOM change was needed.
+- **R3-N5 (ruling, accepted note, no schematic change):** new docs/FAILURE_MODES.md row: R627 open / D137 short -> Q70/Q71 body-diode conduction, about 2.4 W per FET, about 216 °F rise (INFERRED). The Design Reviewer's own table in review/schematic_audit/reviewer.md was not edited because that file is under concurrent audit.
+- **R3-N7:** changelog l.164 "design.py already named BUS_VA_P" corrected in place. design.py has 0 occurrences.
+- **R3-N4:** python csv check on HEAD: every bom/*.csv row has the header's 13 fields except power_bom.csv:3 (14 fields). Cause: an unquoted comma split the BSC070N10NS5 note at 30dd932 line 4, and 2fa36b7 then dropped the second half while leaving a duplicate LCSC field. Fixed: the note is rejoined (second half restored) and the duplicate field removed; totals unchanged.
+  - other_bom.csv:22 (the C28233 lump) was deleted in 2fa36b7.
+  - ac_metering_bom.csv:15 (the 6x 600 V fuse row) was deleted in 3b; the file has had a 13-column header since 2fa36b7.
+  - After the fix, all 7 files parse with 13 fields per row.
+- **R3-N3:** bom_from_sch on HEAD reports 0 mismatches (QTY 0 / SCH_ONLY 0 / BOM_ONLY 0). The batch-3 short quantities listed by the reviewer (C23162, C25819, C12447, C114004, C3579760, C98220) were set to the schematic count in 2fa36b7; later batch-4 changes are in 4-1..4-3.
+- **Item 7, H4 off CHASSIS: intentional.** review/schematic_audit/fixes_mechanical.md §5 l.83: "H4 → `MountingHole:MountingHole_4.3mm_M4` (no pad, a 0-pin symbol). **Remove H4 from the CHASSIS net.** CHASSIS then = H1–H3, J10.15, C48, C87, C93." Also l.81: "H4 is a 4.3 mm NPTH PE-boss clearance, D9.5". The PE strategy (Safety MEDIUM-8) is still for Mechanical/Safety to confirm.
+- **R3-N6: itemised list of every BOM row moved or deleted in 2fa36b7.** "Stale" = on-board BOM_ONLY row whose LCSC/MPN is carried by no schematic part.
+| Was | Function | MPN | LCSC | Qty | Why | Now |
+|---|---|---|---|---|---|---|
+| ac_metering_bom.csv:4 | Crystal | ABM8-24.576MHZ-B2-T (or equiv 24.576 MHz | - | ? | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| ac_metering_bom.csv:5 | Crystal load caps | GRM1555C1H220JA01D | - | 2 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| ac_metering_bom.csv:7 | V divider low side | ERA-3AEB1001V | - | 6 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| ac_metering_bom.csv:9 | Aux CT (5A secondary -> mA) | UNKNOWN (e.g. Talema AC1005 / CR Magneti | - | ? | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| ac_metering_bom.csv:10 | Anti-alias RC | ERJ-2RKF1001X + GRM155R71H333KA88D | - | 26 R + 26 C | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| ac_metering_bom.csv:11 | Isolated DC-DC | ADuM5020-5BRWZ | - | 1 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| ac_metering_bom.csv:12 | LDO hot side | ADP150AUJZ-3.3 | - | 1 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| ac_metering_bom.csv:13 | Digital isolator SPI | ADuM141E1BRWZ | - | 1 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| ac_metering_bom.csv:14 | Digital isolator CS2/IRQ/reset | ADuM141E1BRWZ | - | 1 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| ac_metering_bom.csv:16 | TVS at ADC inputs | SMAJ3.3CA or internal clamp | - | 0-14 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| ac_metering_bom.csv:17 | Terminal block HV (gen) | MSTB 2.5/4-GF-7.62 header + MSTB 2.5/4-S | - | ? | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| ac_metering_bom.csv:18 | Terminal block HV (bus) | MSTB 2.5/4-GF-7.62 + MSTB 2.5/4-STF-7.62 | - | 1 set | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| comms_bom.csv:8 | CAN1 field plug | WJ15EDGK-3.81-04P-14-00A | C7244 | 1 | off-board item (mating plug, module, accessory or cost estimate) | bom/off_board_external_bom.csv (excluded from totals) |
+| comms_bom.csv:13 | CAN2: EXP_12V TVS | SMF5.0A (use SMF15A equivalent) | none | 1 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| comms_bom.csv:15 | CAN2 expansion plug | WJ15EDGK-3.81-06P-14-00A | C7247 | 1 | off-board item (mating plug, module, accessory or cost estimate) | bom/off_board_external_bom.csv (excluded from totals) |
+| comms_bom.csv:20 | RS-485 plug | WJ15EDGK-3.81-03P-14-00A | C8413 | 1 | off-board item (mating plug, module, accessory or cost estimate) | bom/off_board_external_bom.csv (excluded from totals) |
+| comms_bom.csv:21 | Ethernet: RJ45 magjack w/ LEDs, 1000BASE-T (CM5 has on-modul | HR911131A | - | ? | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| comms_bom.csv:23 | USB-C service port (CM5 USB2 OTG: rpiboot flashing + gadget) | TYPE-C-31-M-12 | C165948 | 1 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| comms_bom.csv:25 | STM32<->CM5 link level/isolation | none (both 3.3 V) | none | 0 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| comms_bom.csv:29 | Display: DSI83 REFCLK oscillator 25 MHz 1.8 V (DNP option) | ASDMB-25.000MHZ-LC-T | - | 0 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| comms_bom.csv:33 | Display: DSI83 decoupling 100 nF | CL05B104KO5NNNC | C1525 | 6 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| comms_bom.csv:39 | Display: touch I2C/RST/INT pull-ups 2.2k | 0402WGF2201TCE | C25879 | 4 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| comms_bom.csv:52 | ROUTER_12V plug | WJ15EDGK-3.81-02P-14-00A | C8466 | 1 | off-board item (mating plug, module, accessory or cost estimate) | bom/off_board_external_bom.csv (excluded from totals) |
+| inputs_bom.csv:21 | AI: series protection after blocking diode | 1206W4F1001T5E | C4410 | 6 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| inputs_bom.csv:36 | VBAT / E-stop rail / D+ sense divider bottom | RT0805BRD0710KL | C110775 | 3 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| inputs_bom.csv:38 | Connector plug J1-J3 (6 plugs) | KF2EDGKNM-5.08-6P | C2974985 | 6 | off-board item (mating plug, module, accessory or cost estimate) | bom/off_board_external_bom.csv (excluded from totals) |
+| other_bom.csv:2 | UI processor | CM5104032 (SC1595) | none | 1 | off-board item (mating plug, module, accessory or cost estimate) | bom/off_board_external_bom.csv (excluded from totals) |
+| other_bom.csv:3 | Front display (aTouch, inset mount, touch-ready) | RVT121HVLNWCA0-B | none | 1 | off-board item (mating plug, module, accessory or cost estimate) | bom/off_board_external_bom.csv (excluded from totals) |
+| other_bom.csv:11 | CM5 cooling: passive heatsink | SC1752 | none | 1 | off-board item (mating plug, module, accessory or cost estimate) | bom/off_board_external_bom.csv (excluded from totals) |
+| other_bom.csv:13 | PCB fabrication (6-layer, ~240x180 mm, qty 5) | ESTIMATE | none | 1 | off-board item (mating plug, module, accessory or cost estimate) | bom/off_board_external_bom.csv (excluded from totals) |
+| other_bom.csv:14 | JLC assembly (setup, stencil, Extended part fees, THT, globa | ESTIMATE | - | ? | off-board item (mating plug, module, accessory or cost estimate) | bom/off_board_external_bom.csv (excluded from totals) |
+| other_bom.csv:15 | Enclosure (DSE 8610 cutout, rear housing) | ESTIMATE | none | 1 | off-board item (mating plug, module, accessory or cost estimate) | bom/off_board_external_bom.csv (excluded from totals) |
+| other_bom.csv:16 | Bezel + button overlay + gasket (no separate glass: display  | ESTIMATE | - | ? | off-board item (mating plug, module, accessory or cost estimate) | bom/off_board_external_bom.csv (excluded from totals) |
+| other_bom.csv:19 | Button backlight resistors B | 0603WAF2000T5E | C8218 | 12 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| outputs_bom.csv:20 | Bulk/decoupling on each switch VS | 0603B104K500NT | C30926 | 17 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| outputs_bom.csv:30 | E-stop trip: sense resistor / freewheel / TVS | (reuse 1.1k C22764, SS110 C2482, SMBJ40C | - | ? | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| outputs_bom.csv:37 | E-stop one-shot: LDO input hold-up C | CL31B106KAHNNNE | C13585 | 1 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| outputs_bom.csv:39 | E-stop one-shot: TRIG pull/RC + Q1 collector | 0603WAF1003T5E / 0603WAF1002T5E | - | 1 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| outputs_bom.csv:40 | E-stop one-shot: TRIG/CONT/LDO caps | 0603B104K500NT / CL21B225KBFNNNE | C30926 | 1 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| outputs_bom.csv:43 | Connector plug J4 FUEL/CRANK/VBAT_ESTOP x2 (>=15 A/pin) | SPC 5/4-STF-7,62 (1996142) | C5481482 | 1 | off-board item (mating plug, module, accessory or cost estimate) | bom/off_board_external_bom.csv (excluded from totals) |
+| outputs_bom.csv:45 | Connector plug J5-J6 (4 plugs) | KF2EDGKNM-5.08-6P | C2974985 | 4 | off-board item (mating plug, module, accessory or cost estimate) | bom/off_board_external_bom.csv (excluded from totals) |
+| power_bom.csv:13 | Display 12V load switch/feed | (use 12V bus direct + fuse) | - | 0 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| power_bom.csv:18 | 3V3 diode-OR | MBR0540 | C77337 | 0 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| power_bom.csv:19 | LDO backup option 3V3 | NCV8730ASN330T1G | C893327 | 0 | stale on-board row: no schematic part carries this LCSC code / MPN (superseded design text) | bom/off_board_external_bom.csv (excluded from totals) |
+| power_bom.csv:24 | Connector plug J0 BATTERY | SPC 5/4-STF-7,62 (1996142) | C5481482 | 1 | off-board item (mating plug, module, accessory or cost estimate) | bom/off_board_external_bom.csv (excluded from totals) |
+| other_bom.csv:22 | Small passives all sheets (R/C/ferrite/LEDs/load caps) previ | (lump) | C28233 placeholder | 1 @ $8.68 | placeholder lump replaced by real per-code rows | deleted |
+| power_bom.csv:22 | Misc R/C (dividers comp soft-start) | (lump) | C28233 placeholder | 1 @ $0.40 | placeholder lump replaced by real per-code rows | deleted |
