@@ -759,12 +759,19 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
   - R400 47k 0603 (C25819): BOM row states 75 V max working voltage; one end is the Q66 base (~0.7 V), so ~93 V would be across it at clamp. R251/R292/R298/R411 are the same 0603 class (UNI-ROYAL/Yageo 0603, rating not re-read; INFERRED 75 V), with 64-90 V across them at clamp.
   - D68/D69 SMDJ40CA output TVS on FUEL/CRANK (BOM "output TVS", VBR 44.4-49.1 V): with an output on, they see VBAT_ESTOP through the FETs and become the clamp anyway.
   - INFERRED: VESTOP_D divider 68k/33k gives ~30 V at the U34 74HC14 input at 93.6 V (already ~21 V at today's 64.5 V clamp; only the HC14 ESD diodes limit it).
-- Safety's premise "every downstream part on VBAT_ESTOP is rated >=100 V" is therefore not supported by the repo. D126 stays SMDJ40CA C224077; needs a Safety/lead ruling.
+- Safety's premise "every downstream part on VBAT_ESTOP is rated >=100 V" is therefore not supported by the repo. **Ruled: keep D126 SMDJ40CA (Enginerd, option a)**; see Batch 10.
 
 ### 9-3: Reviewer status
 | ID | Status |
 |---|---|
-| R5-N1 (MEDIUM) | RESOLVED by restricting the declaration (Safety Round 5 ruling, Enginerd): 9-1. D126 uprate not done (9-2) |
+| R5-N1 (MEDIUM) | RESOLVED by restricting the declaration (Safety Round 5 ruling, Enginerd): 9-1. D126 uprate not done (9-2); ruled: keep D126 SMDJ40CA (Enginerd, option a) |
 | R5-N4 (LOW) | open, lead decides; RAIL_PLAN note + D-m7-14 (8-3) |
 | R5-N5 (LOW) | done (8-1, D23 pin 3 -> AI_VSET; layout D-m7-13) |
+
+## Batch 10 (team lead Enginerd ruling on D126, 2026-10-28 ~5:35 PM HST; docs only)
+- Ruling: keep D126 SMDJ40CA C224077 (option a). No resistor change, no D68/D69 change. No part or net change in this batch.
+- docs/INSTALL_SAFETY.md: sentence added after the battery-feed row: J23.1/2 E-stop/fuel feed has a 40 V-class TVS that can fail short if the supply is held above about 44 V; the 30 A fuse protects the wiring, not the board; supply must never exceed the declared 40 V; overvoltage beyond that is the installer's responsibility; battery-backed bus only (lead wording, verbatim).
+- Option B, for Ethan to override: D126 to SMDJ58CA (C192416) plus a 100 V-class uprate of R400/R251/R292/R298/R411 and a ruling on D68/D69; cost is a few cents but there are unverified ratings; not adopted. Recorded as D-m7-15 (schematic/BOM option, not layout).
+- Measured facts (changelog 9-2): C192416 = Littelfuse SMDJ58CA SMC, VRWM 58 V, VC 93.6 V @ 32.1 A (JLCPCB page; stock not shown). On VBAT_ESTOP: R400 47k 0603 C25819 75 V max working (BOM row), ~93 V across it at that clamp (other end Q66 base); R251/R292/R298/R411 same 0603 class (75 V INFERRED, not re-read), 64-90 V across at clamp; D68/D69 SMDJ40CA output TVS (VBR 44.4-49.1 V) see VBAT_ESTOP through the FETs when an output is on; VESTOP_D divider ~30 V at U34 74HC14 input (INFERRED). 100 V-class or higher: C199/C203 C28233 100 V (verified), Q70/Q71 and Q45-Q48 100 V, TPS48100 100 V abs and INA281A1 110 V (BOM text).
+- docs/COST_NOTES.md: SQD40P10-40L (Q70/Q71, C141570) procurement buffer note. Stock 206 is Safety-reported; jlcpcb.com/partdetail/C141570 opened 2026-10-28 confirms the part (Vishay SQD40P10-40L_GE3, P-ch 100 V 38 A TO-252) but shows no stock figure, so 206 is NOT re-verified.
 

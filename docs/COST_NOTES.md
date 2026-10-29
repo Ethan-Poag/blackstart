@@ -25,3 +25,8 @@ Not MEASURED, so not listed with a figure: the J30 mate plug 1996184 (no LCSC li
 
 ## D146 BZT52C33 C2110 -> BZT52C30 C21561 (Batch 7)
 - inputs_bom $26.83 -> $26.84. Price $0.027 @50 and stock 11,250 are Safety-reported (5:14 PM HST), not re-checked; part identity verified on jlcpcb.com/partdetail/C21561.
+
+## SQD40P10-40L (C141570, Q70/Q71 E-stop reverse-block P-FETs): procurement (Batch 10)
+- Stock **206** on LCSC/JLCPCB is Safety-reported, not re-verified by us: jlcpcb.com/partdetail/C141570 (opened 2026-10-28) confirms the part identity (Vishay SQD40P10-40L_GE3, P-ch -100 V 38 A, TO-252) but showed no stock figure. The board uses 2.
+- Action: buy a buffer (order extra beyond the build qty) before stock runs out.
+
