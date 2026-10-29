@@ -26,6 +26,7 @@ for c in r.iter('comp'):
     sch[k].append(ref); info.setdefault(k,(c.findtext('value'),f.get('MPN',''),c.findtext('footprint')))
 bom=collections.defaultdict(float); rows=collections.defaultdict(list); bompn={}
 for p in sorted(glob.glob(os.path.join(root,'bom','*.csv'))):
+    if 'off_board' in os.path.basename(p): continue  # bom/off_board_external_bom.csv is excluded by design
     for i,row in enumerate(csv.DictReader(open(p,encoding='utf-8',errors='replace')),start=2):
         fn=(row.get('function') or '')
         if fn.startswith('TOTAL'): continue

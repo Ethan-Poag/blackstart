@@ -5,6 +5,7 @@ The total goes in column 11 (13-column files) or 5 (ac_metering). Line endings a
 import csv,io,glob,os,sys
 root=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 for p in sorted(glob.glob(os.path.join(root,'bom','*.csv'))):
+    if 'off_board' in os.path.basename(p): continue  # excluded from all totals by design
     raw=open(p,newline='',encoding='utf-8').read(); nl='\r\n' if '\r\n' in raw else '\n'
     L=list(csv.reader(io.StringIO(raw))); ti=[i for i,r in enumerate(L) if r and r[0].startswith('TOTAL')][0]
     tot=0.0; ex=[]
