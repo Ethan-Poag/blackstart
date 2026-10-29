@@ -693,3 +693,10 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 | D23 K, C131, 6x 2.49k, 6x BSS84 source, 6x 100k PG pull-up, LM2904 pin 8 + decoupling | VBAT_P | VBAT_AI | mirror 4-1 relabel (changelog 4-1 net list) | inputs.kicad_sch |
 | inputs sheet note (l.366) | "LM4040 2.5V ref from VBAT_P" | "... from VBAT_AI = clamped rail Q72 + D146 BZT52C30" | stale | - |
 - Checked and already consistent with the schematic: R3 8.66k C23114 (OV divider, l.50/61), U86 INA237AIDGSR C2864837, L2. Generator still not run; known drift list in the header still applies.
+
+### 7-5: R211/R212-type empty MPN fields (R4-N7)
+| Ref | Old | New | Reason | Source |
+|---|---|---|---|---|
+| R211, R214, R217, R220, R223, R226, R229, R232, R235, R238, R241, R244, R247, R249, R251 (68k 0603, LCSC C23231; 15 refs) | MPN "", Manufacturer "" | MPN 0603WAF6802T5E, Manufacturer UNI-ROYAL | R4-N7 empty MPN | bom/inputs_bom.csv C23231 row; LCSC page title C23231 = "0603WAF6802T5E ... UNI-ROYAL" (fetched 2026-10-28 ~5:30 PM HST) |
+| R5 (power), R212, R215, R218, R221, R224, R227, R230, R233, R236, R239, R242, R245, R248, R250, R252 (33k 0603, LCSC C4216; 16 refs) | MPN "", Manufacturer "" | MPN 0603WAF3302T5E, Manufacturer UNI-ROYAL | same | BOM C4216 row; LCSC page title C4216 = "0603WAF3302T5E ... UNI-ROYAL" |
+- Only properties changed; bom_from_sch 201/201, 0 mismatches.
