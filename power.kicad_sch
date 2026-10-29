@@ -3637,7 +3637,7 @@
 (property "LCSC" "C469375" (at 55.88 284.48 0) (effects (font (size 1.27 1.27)) hide))
 (property "MPN" "YLR12-2-8F-W" (at 55.88 284.48 0) (effects (font (size 1.27 1.27)) hide))
 (property "Manufacturer" "" (at 55.88 284.48 0) (effects (font (size 1.27 1.27)) hide))
-(property "Note" "buck-boost sense: 8mR -> ~9.4A peak limit (see DESIGN_NOTES)" (at 55.88 284.48 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "buck-boost sense 8mR. LM5176 DS Rev D (HTSSOP-28): boost peak limit 100/120/140 mV -> 12.5/15.0/17.5 A min/typ/max; buck valley limit 66/80/94 mV -> 8.25/10.0/11.75 A" (at 55.88 284.48 0) (effects (font (size 1.27 1.27)) hide))
 (pin "1" (uuid "ad2677d3-58b8-4f22-8c96-c8e82ce4c778"))
 (pin "2" (uuid "4aab6871-2361-4bf1-bda2-0e490aba725e"))
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb" (reference "R12") (unit 1))))

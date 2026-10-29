@@ -89,7 +89,7 @@ for bt in ('BB_BOOT1','BB_BOOT2'): schottky(pw,'BAS70','BB_VCC',bt,mpn='BAS70');
 for g,s_,d in (('BB_HDRV1','BB_SW1','VBAT_P'),('BB_LDRV1','BB_CS','BB_SW1'),('BB_LDRV2','BB_CS','BB_SW2'),('BB_HDRV2','BB_SW2','+12V')):
     fet(pw,'Transistor_FET:BSC070N10NS5','BSC070N10NS5',g,s_,d)
 pw.p('Device:L','4.7u',{'1':'BB_SW1','2':'BB_SW2'},prefix='L',mpn='SPM10065VT-4R7M-D',lcsc='C501976',fp='genctl:L_SPM10065',note='4.7uH 10x10')
-pw.R('8m','BB_CS','GND',pkg='2512',mpn='YLR12-2-8F-W',lcsc='C469375',note='buck-boost sense: 8mR -> ~9.4A peak limit (see DESIGN_NOTES)')
+pw.R('8m','BB_CS','GND',pkg='2512',mpn='YLR12-2-8F-W',lcsc='C469375',note='buck-boost sense 8mR. LM5176 DS Rev D (HTSSOP-28): boost peak limit 100/120/140 mV -> 12.5/15.0/17.5 A min/typ/max; buck valley limit 66/80/94 mV -> 8.25/10.0/11.75 A')
 REFC['C']+=2  # C17/C18 470u removed (review e50: never connected on board, 160 mm from Q6; ~215 uF ceramics sufficient per reviewer model). Counter bump keeps later C refs stable.
 # Review e65 (LM5176 COUT): local ceramics at Q6 drain (QH2), B.Cu. Fixed refs keep annotation stable.
 for r in ('C293','C294','C295'): pw.C('22u','+12V','GND',pkg='1206',ref=r,note='LM5176 COUT local to Q6 drain (review e65)')
@@ -239,7 +239,7 @@ cm.p('genctl:TPS2121RUXR','TPS2121RUXR',{'IN1':'+5V','IN2':'+5V_HU','PR1':'HU_PR
 cm.R('33.2k','+5V','HU_PR1',note='PR1 1.06V -> IN1 valid >4.58V rising / 4.49V falling'); cm.R('10k','HU_PR1','GND')
 cm.R('29.4k','HU_ILM','GND',note='ILIM ~3.5A'); cm.C('100n','HU_SS','GND'); cm.C('1u','+5V','GND'); cm.C('1u','+5V_HU','GND')
 # m7-sch S-L2: EEPROM write-protect, R558 0R fitted (fixes_firmware.md Rev 2 s12)
-cm.R('0','CM5_EEPROM_NWP','GND',ref='R558',mpn='0603WAF0000T5E',lcsc='C21189',mfr='UNI-ROYAL',note='FITTED; lift for bench EEPROM update')
+cm.R('0R','CM5_EEPROM_NWP','GND',ref='R558',mpn='0603WAF0000T5E',lcsc='C21189',mfr='UNI-ROYAL',note='FITTED; lift for bench EEPROM update')
 # m7-sch FW-004/FW-028 (fixes_firmware.md s3.3)
 cm.R('10k','CM5_OFF','GND',ref='R552',lcsc='C98220',note='CM5_OFF pull-down vs TCA9555 POR'); cm.R('10k','CM5_PWRBTN_MCU','GND',ref='R553',lcsc='C98220',note='CM5_PWRBTN_MCU pull-down vs TCA9555 POR')
 

@@ -50,7 +50,7 @@ Spec: /workspace/review/cur/failsafe_latch.md Part 2 (§2.1) and Loose ends L4.
 | bom/comms_bom.csv "RS-485: termination 120R" note | "via DIP switch pole 1; 680R bias pair via pole 2" | via JP4, bias deleted | stale | — |
 | bom/comms_bom.csv TOTAL | 27.86 | 26.71 (−2×0.5741) | DIP line removed | arithmetic on BOM rows |
 | docs/genctl_bom.csv, mechanical/bom.csv | rows SW5, SW7, SW8, "R103,R104" | removed (JP2–JP4 are in_bom no, not listed) | match schematic | schematic |
-| BOARD (out of scope) | SW5/SW7/SW8, R103/R104 still on .kicad_pcb; no JP2–JP4 | — | Board must later delete them and place JP2/JP3/JP4 (windows in failsafe_latch.md L4) on B.Cu | — |
+| BOARD (out of scope) | SW5/SW7/SW8, R103/R104 still on .kicad_pcb; no JP2–JP4 | — | Board must later delete them and place JP2/JP3/JP4 (windows in failsafe_latch.md L4) on F.Cu: the footprint genctl:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm is front-side, pads on F.Cu/F.Mask [corrected 3b, N6; previously wrongly said B.Cu] | — |
 
 ## Item 4: tools/design.py generator sync (no schematic change)
 - design.py pnp() | lcsc C2940 | C2143 | match schematic MMBT3906 | schematic LCSC field
@@ -382,3 +382,11 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 - SPEC CONFLICT: M5 says "8 channels / +16 SOT-23", but the schematic has only 4 CT channels (U71 IA/IB/IC/IN; U72 current inputs are tied to GND_AC, bus V only). I fitted 2 per real CT channel = 8 parts, per the brief ("2 per CT channel").
 - Live LCSC C2500: stock 100 (LOW), 50@$0.0119. ac_metering_bom gets +1 row (8 pcs), total +$0.10. PCB: D-m7-8.
 - Firmware (M5): confirm the ADE full-scale is below the clamp onset.
+
+### 3b-6/7a: reviewer notes N5/N6/N8, R558 value
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| R12 Note (power) + design.py | "8mR -> ~9.4A peak limit" | LM5176 thresholds / 8 mOhm: boost PEAK 100/120/140 mV -> 12.5/15.0/17.5 A; buck VALLEY 66/80/94 mV -> 8.25/10.0/11.75 A | 9.4 A matches no LM5176 threshold (75 mV/8 mOhm). The reviewer's 12.5 A = min boost peak (0.100 V / 0.008 Ohm). Old note clearly wrong. | N8, TI LM5176 DS Rev D sec 6.5 |
+| R558 Value | 0 | 0R | BOM/value consistency with the other 4 zero-ohm parts | 3b item 7 |
+| changelog line 53 (JP2-JP4 side) | B.Cu | F.Cu (footprint pads F.Cu/F.Mask) | text error | N6 |
+| fixes_mechanical.md:90 (review dir, not in repo) | "SW6 termination stays on the main board" | CAN2 has no on-board termination (SW6/R92/R93/C92 deleted, Item 2); loose terminator plugs go in the daughter-board sockets | text error | N5 |
