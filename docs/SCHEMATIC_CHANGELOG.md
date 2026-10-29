@@ -684,3 +684,12 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 | docs/RAIL_PLAN.md +3V3 row, issue 3; DESIGN_NOTES.md l.72 | L3 MWSA0503S-2R2MT 2.2 uH Isat 7 A | marked superseded with the deviation/bench note | stale | R4-N4 |
 - Bench load-step (pending): 0.5 -> 3 A at 1 A/us, VIN 9/12/32 V, 77F and hot; pass <=3 % over/undershoot, <=2 ringing cycles. Fail -> 2.2 uH MWSA1004S-2R2MT (LCSC code to be live-checked then; not chosen now).
 - Not changed: RAIL_PLAN l.105/207 L2 "Isat ~15 A verify mfr" historical analysis notes (L2 is per Table 4 5 V row).
+
+### 7-4: tools/design.py stale entries (text only, NOT run; DO NOT REGENERATE)
+| Ref | Old (design.py) | New (design.py) | Reason | Source |
+|---|---|---|---|---|
+| D3/D4 | schottky() -> Device:D_Schottky {'A','K'} | genctl:BAS70 {'1': BB_VCC (A), '2': NC, '3': BB_BOOTn (K)}, C77297, JSCJ | mirror 6-2 symbol fix | schematic power.kicad_sch, BAS70 DS p1 |
+| VBAT_AI rail (R628, Q72, D146) | absent | added: R628 10k C98220, Q72 BCP56-16TX C426787, D146 BZT52C30 C21561 | mirror 4-1 and 7-2 | inputs.kicad_sch |
+| D23 K, C131, 6x 2.49k, 6x BSS84 source, 6x 100k PG pull-up, LM2904 pin 8 + decoupling | VBAT_P | VBAT_AI | mirror 4-1 relabel (changelog 4-1 net list) | inputs.kicad_sch |
+| inputs sheet note (l.366) | "LM4040 2.5V ref from VBAT_P" | "... from VBAT_AI = clamped rail Q72 + D146 BZT52C30" | stale | - |
+- Checked and already consistent with the schematic: R3 8.66k C23114 (OV divider, l.50/61), U86 INA237AIDGSR C2864837, L2. Generator still not run; known drift list in the header still applies.

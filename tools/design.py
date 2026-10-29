@@ -85,7 +85,7 @@ pw.R('140k','+12V','BB_FB'); pw.R('10k','BB_FB','GND')
 pw.R('100k','PG_12V','+3V3_SAFE')
 pw.C('4.7u','BB_VCC','GND',pkg='1206'); pw.C('1u','+12V','GND',pkg='0805')
 pw.C('100n','BB_BOOT1','BB_SW1'); pw.C('100n','BB_BOOT2','BB_SW2')
-for bt in ('BB_BOOT1','BB_BOOT2'): schottky(pw,'BAS70','BB_VCC',bt,mpn='BAS70'); pw.parts[-1].lcsc='C77297'; pw.parts[-1].fp='Package_TO_SOT_SMD:SOT-23'; pw.parts[-1].note='external 70V boot diode per LM5176 DS'
+for bt in ('BB_BOOT1','BB_BOOT2'): pw.p('genctl:BAS70','BAS70',{'1':'BB_VCC','2':None,'3':bt},prefix='D',mpn='BAS70',lcsc='C77297',mfr='JSCJ',fp='Package_TO_SOT_SMD:SOT-23',note='external 70V boot diode per LM5176 DS; genctl:BAS70 pin 1 A, 2 NC, 3 K (m7-sch 6-2, 90c4879)')
 for g,s_,d in (('BB_HDRV1','BB_SW1','VBAT_P'),('BB_LDRV1','BB_CS','BB_SW1'),('BB_LDRV2','BB_CS','BB_SW2'),('BB_HDRV2','BB_SW2','+12V')):
     fet(pw,'Transistor_FET:BSC070N10NS5','BSC070N10NS5',g,s_,d)
 pw.p('Device:L','4.7u',{'1':'BB_SW1','2':'BB_SW2'},prefix='L',mpn='SPM10065VT-4R7M-D',lcsc='C501976',fp='genctl:L_SPM10065',note='4.7uH 10x10')
@@ -363,7 +363,7 @@ conn(di,2,['VLED','BL_FB'],'Backlight (JST SM02B-BHSS)',mpn='SM02B-BHSS-1-TB',lc
 
 # =====================================================================
 inp=S('inputs','Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense',
- 'INPUTS. AI: 1mA PNP current source (LM4040 2.5V ref from VBAT_P, LM2904, 2.49k), BSS84 disable; 4-20mA via 100R + DMN6075S shunt switch;\n'
+ 'INPUTS. AI: 1mA PNP current source (LM4040 2.5V ref from VBAT_AI = clamped rail Q72 BCP56 + D146 BZT52C30 30V zener, LM2904, 2.49k), BSS84 disable; 4-20mA via 100R + DMN6075S shunt switch;\n'
  '100k/18k divider to VMID(1.65V) -> ADS1115 x2 (0x48/0x49). DI: 68k/33k + 100nF -> 74HC14; bank bias via SI2309 (pull-up) / DMN6075S (pull-down).\n'
  'MPU: 10k series, 1M bias to VMID, LM393 w/ hysteresis -> TIM2_CH1. D+: LM317 125mA source (10R) + SS110, sense 100k/10k.')
 conn(inp,6,['AI1','AI2','AI3','AI4','AI5','AI6'],'J1A analog in (PC 5/6)',mpn='Phoenix PC 5/6-GF')
@@ -375,20 +375,24 @@ conn(inp,6,['DI_BIAS_B',None,None,None,None,None],'J3B')
 inp.R('10k','+3V3','VMID_REF'); inp.R('10k','VMID_REF','GND'); inp.C('100n','VMID_REF','GND')
 inp.p('Amplifier_Operational:TLV9062','TLV9062',{'3':'VMID_REF','2':'VMID','1':'VMID','5':'GND','6':'VMID_SP','7':'VMID_SP','8':'+3V3','4':'GND'},prefix='U',mpn='TLV9062IDR',note='unit B spare as follower to GND')
 inp.C('1u','VMID','GND'); dec(inp,'+3V3')
+# m7-sch 4-1 / Batch 7 (text only, DO NOT REGENERATE): VBAT_AI clamped rail for the AI sources and LM2904B
+inp.R('10k','VBAT_P','VBAT_AI_B',ref='R628',mpn='RC0603FR-0710KL',lcsc='C98220',mfr='YAGEO')
+inp.p('Transistor_BJT:BCP56','BCP56-16',{'B':'VBAT_AI_B','C':'VBAT_P','E':'VBAT_AI'},prefix='Q',ref='Q72',mpn='BCP56-16TX',lcsc='C426787',mfr='Nexperia',fp='Package_TO_SOT_SMD:SOT-223-3_TabPin2')
+inp.p('Device:D_Zener','BZT52C30',{'K':'VBAT_AI_B','A':'GND'},prefix='D',ref='D146',mpn='BZT52C30',lcsc='C21561',mfr='JSCJ',fp='Diode_SMD:D_SOD-123',note='Safety Round 4: was BZT52C33 C2110; VBAT_AI 27.4-31.4 V @77F, <=34.5 V @257F')
 # AI ref
-inp.p('Reference_Voltage:LM4040DBZ-2.5','LM4040A25',{'K':'VBAT_P','A':'AI_VSET'},prefix='D',mpn='LM4040A25IDBZR')
+inp.p('Reference_Voltage:LM4040DBZ-2.5','LM4040A25',{'K':'VBAT_AI','A':'AI_VSET'},prefix='D',mpn='LM4040A25IDBZR')  # m7-sch 4-1: K on VBAT_AI
 inp.R('10k','AI_VSET','GND',pkg='1206',note='ref bias ~1-2.8mA')
-inp.C('100n','VBAT_P','AI_VSET',mpn='CL10B104KC8NNNC',lcsc='C15725',mfr='Samsung Electro-Mechanics',note='100V (Rev 3 M6)')
+inp.C('100n','VBAT_AI','AI_VSET',mpn='CL10B104KC8NNNC',lcsc='C15725',mfr='Samsung Electro-Mechanics',note='100V (Rev 3 M6)')
 ADC={1:('ADC1','AIN0'),2:('ADC1','AIN1'),3:('ADC1','AIN2'),4:('ADC2','AIN0'),5:('ADC2','AIN1'),6:('ADC2','AIN2')}
 oas={}
 for ch in range(1,7):
     a='AI%d'%ch
     tvs(inp,'SMAJ40CA',a); inp.C('100n',a,'GND',pkg='1206',note='100V')
-    inp.R('2.49k','VBAT_P',a+'_E',pkg='1206',lcsc='C319805',mpn='AR06BTCV2491',note='0.1% 1mA set'); pnp(inp,a+'_B',a+'_E',a+'_C')
+    inp.R('2.49k','VBAT_AI',a+'_E',pkg='1206',lcsc='C319805',mpn='AR06BTCV2491',note='0.1% 1mA set'); pnp(inp,a+'_B',a+'_E',a+'_C')
     inp.p('Diode:1N4148W','1N4148W',{'A':a+'_C','K':a+'_D'},prefix='D',mpn='1N4148W'); inp.R('1k',a+'_D',a)
     inp.R('10k','AI_VSET',a+'_REF')
-    fet(inp,'Transistor_FET:BSS84','BSS84',a+'_PG','VBAT_P',a+'_REF')
-    inp.R('100k','VBAT_P',a+'_PG'); inp.R('100k',a+'_PG',a+'_PGC'); npn(inp,a+'_NB','GND',a+'_PGC')
+    fet(inp,'Transistor_FET:BSS84','BSS84',a+'_PG','VBAT_AI',a+'_REF')
+    inp.R('100k','VBAT_AI',a+'_PG'); inp.R('100k',a+'_PG',a+'_PGC'); npn(inp,a+'_NB','GND',a+'_PGC')
     inp.R('10k','AI_CS_DIS%d'%ch,a+'_NB'); inp.R('100k',a+'_NB','GND')
     inp.R('100R',a,a+'_SH',pkg='1206',note='4-20mA shunt 0.1%'); fet(inp,'Transistor_FET:DMN6075S','DMN6075S','AI_SH_EN%d'%ch,'GND',a+'_SH')
     inp.R('100k','AI_SH_EN%d'%ch,'GND')
@@ -396,10 +400,10 @@ for ch in range(1,7):
     oas.setdefault((ch-1)//2,[]).append(a)
 # op-amps LM2904 (3 packages, 2 ch each): unit A pins 1 out,2 -,3 +; unit B 7 out,6 -,5 +
 for k,chs in oas.items():
-    c={'8':'VBAT_P','4':'GND'}
+    c={'8':'VBAT_AI','4':'GND'}
     for (o,m,pl),a in zip((('1','2','3'),('7','6','5')),chs):
         c[o]=a+'_B'; c[m]=a+'_E'; c[pl]=a+'_REF'
-    inp.p('Amplifier_Operational:LM2904','LM2904',c,prefix='U',mpn='LM2904BIDR'); inp.C('100n','VBAT_P','GND',pkg='0805')
+    inp.p('Amplifier_Operational:LM2904','LM2904',c,prefix='U',mpn='LM2904BIDR'); inp.C('100n','VBAT_AI','GND',pkg='0805')
 for nm in ('COM_A','COM_B'):
     tvs(inp,'SMAJ40CA',nm); inp.C('100n',nm,'GND',pkg='1206')
     inp.R('100k',nm,nm+'_ADC'); inp.R('18k',nm+'_ADC','VMID'); inp.C('100n',nm+'_ADC','GND'); clamp(inp,nm+'_ADC')
