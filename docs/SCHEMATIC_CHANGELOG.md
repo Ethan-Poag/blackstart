@@ -208,3 +208,10 @@ Spec: fixes_safety.md Revision 3, "Changes" item 1 and R3-1 (label text); review
 | docs/INSTALL_SAFETY.md l.15, l.44 | ">=32 V DC" | ">=58 V DC" + voltage-requirement sentence (32 V DC blade fuse does not meet it; 10 A unchanged) | installer doc | R3-1, §0 |
 | bom/power_bom.csv row 4 (BSC070N10NS5) note | "at 10 A (external fuse max;" | "... 10 A FAST rated >=58 V DC per fixes_safety.md Rev 3 R3-1;" | BOM note | R3-1 |
 Not changed (open question, see report): INSTALL_SAFETY.md output-fuse table (l.32–34, l.41) still says 32 V DC blade fuses for FUEL/CRANK/GLOW; fixes_safety.md l.12 says external fuses DC-rated >=58 V, but item A/R3-1 covers only the battery-lead fuse.
+
+## B3-2: R3 LM7480 OV divider 9.76k -> 8.66k (Safety H3)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| R3 (power) | 9.76k 0603WAF9761T5E C23128 | 8.66k 1 % 0603 0603WAF8661T5E C23114 (LIVE LCSC 2026-10-28 ~3:55 PM HST: UNI-ROYAL, stock 10800) | OV trip 36.36/38.17/40.11 V so the board runs at 36 V | fixes_safety.md §1 H3, R2-5 (code), Notes "LM7480 OV" |
+| POWER sheet note + design.py note | OV 34.0/31.2 V, UV 5.56/5.12 V (9.76k) | OV 38.17 V rise typ (36.36–40.11 V spec), 35.04 V fall typ, UV 5.65/5.18 V | INFERRED arithmetic: ratio (210+49.9+8.66)/8.66 = 31.01; 1.231×31.01 = 38.17; 1.13×31.01 = 35.04; UV 1.231×268.56/58.56 = 5.65, 1.13×4.586 = 5.18 | spec equation H3 notes |
+| bom/power_bom.csv row 3 note | — | Rev 3 prefix (new R3, OV, old figures superseded) | BOM | — |
