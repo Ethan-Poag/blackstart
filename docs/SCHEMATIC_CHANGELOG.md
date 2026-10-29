@@ -340,3 +340,8 @@ Also fixed outputs_bom row 22: an unquoted comma in "(U38-U40, U67)" had shifted
 | J4,J12,J13 | gen.py LCSC table (reads /workspace/genctl/*.csv in the main checkout) gives C51940130 | forced C160404 / JST SM04B-SRSS-TB(LF)(SN) | match af42672 | — |
 
 Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all diffs left after this change are also in the 187984d baseline regen: 110 connectivity diffs from the generator's capacitor auto-numbering drift starting at C200 (regen is off by one ref from the committed schematic), duplicate U25-U28/U32-U35, and 2-pin nets left unnamed ('~'/Net-(...)) by the generator (name-only). This drift was there before this branch and is NOT fixed here. Open issue: gen.py builds its LCSC lookup from the main-checkout CSVs (/workspace/genctl/*.csv), not from this repo's bom/.
+
+### m7-sch: spec-error notes (no schematic change)
+- fixes_firmware.md :91 and :611 say U76.16; the WD_OK_MCU net actually lands on U76 pin 18 (R625 → U76.18, netlist-confirmed). The spec pin number is wrong.
+- fixes_firmware.md :439: BIAS (U2.24) was unconnected at 7f2a8df; the current schematic has +12V with C303 (netlist-confirmed, not redone).
+- Spec refs R559/R560 were already used by the H6 divider chain, so the parts are R625 (4.7k WD_OK series) and R626 (100k WDI pull-down).
