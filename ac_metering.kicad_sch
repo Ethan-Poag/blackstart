@@ -2332,6 +2332,160 @@
 				(effects
 					(font
 						(size 1.27 1.27)))))))
+
+(symbol "Diode:BAV99"
+	(pin_names
+		(hide yes))
+	(exclude_from_sim no)
+	(in_bom yes)
+	(on_board yes)
+	(property "Reference" "D"
+		(at 0 5.08 0)
+		(effects
+			(font
+				(size 1.27 1.27))))
+	(property "Value" "BAV99"
+		(at 0 2.54 0)
+		(effects
+			(font
+				(size 1.27 1.27))))
+	(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
+		(at 0 -12.7 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/BAV99_SER.pdf"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "Description" "BAV99 High-speed switching diodes, SOT-23"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "ki_keywords" "diode"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "ki_fp_filters" "SOT?23*"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(symbol "BAV99_0_1"
+		(polyline
+			(pts
+				(xy -5.08 0)
+				(xy 5.08 0))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none))))
+	(symbol "BAV99_1_1"
+		(polyline
+			(pts
+				(xy -3.81 1.27)
+				(xy -1.27 0)
+				(xy -3.81 -1.27)
+				(xy -3.81 1.27)
+				(xy -3.81 1.27)
+				(xy -3.81 1.27))
+			(stroke
+				(width 0.2032)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy -1.27 -1.27)
+				(xy -1.27 1.27)
+				(xy -1.27 1.27))
+			(stroke
+				(width 0.2032)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy 0 0)
+				(xy 0 -2.54))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none)))
+		(circle
+			(center 0 0)
+			(radius 0.254)
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type outline)))
+		(polyline
+			(pts
+				(xy 1.27 1.27)
+				(xy 3.81 0)
+				(xy 1.27 -1.27)
+				(xy 1.27 1.27)
+				(xy 1.27 1.27)
+				(xy 1.27 1.27))
+			(stroke
+				(width 0.2032)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy 3.81 1.27)
+				(xy 3.81 -1.27)
+				(xy 3.81 -1.27))
+			(stroke
+				(width 0.2032)
+				(type default))
+			(fill
+				(type none)))
+		(pin passive line
+			(at -7.62 0 0)
+			(length 2.54)
+			(name "K"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "1"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin passive line
+			(at 0 -5.08 90)
+			(length 2.54)
+			(name "K"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "3"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin passive line
+			(at 7.62 0 180)
+			(length 2.54)
+			(name "A"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "2"
+				(effects
+					(font
+						(size 1.27 1.27)))))))
 )
 (symbol (lib_id "Device:R") (at 29.21 328.93 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "a55f92c9-d318-4699-94a4-38f6657424bf")
 (property "Reference" "R413" (at 29.21 341.63 0) (effects (font (size 1.27 1.27))))
@@ -6326,4 +6480,148 @@
 )
 (label "BUS_N_C7" (at 172.72 539.75 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "ec101164-13a9-4b2a-855d-9def4cbff667"))
 (label "BUS_N_C8" (at 172.72 547.37 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "ed0aeae7-60e6-4d64-b39a-6f8de83f605b"))
+(symbol (lib_id "Diode:BAV99") (at 330.2 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "20ae87c7-a829-4eb6-825d-2b68abebe112")
+(property "Reference" "D138" (at 335.28 302.26 0) (effects (font (size 1.27 1.27))))
+(property "Value" "BAV99" (at 335.28 307.34 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 330.2 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 330.2 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "BAV99 series pair" (at 330.2 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C2500" (at 330.2 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "BAV99" (at 330.2 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Nexperia" (at 330.2 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "CT clamp IA (fixes_safety.md M5): 2x BAV99 anti-parallel across GEN_IA_P/GEN_IA_N, pin1->pin2 series string, pin3 NC" (at 330.2 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "5b63a4f6-5af7-44a3-b12c-61d687f4f68a"))
+(pin "3" (uuid "5bb76bc1-684b-40b6-be28-01acfe8f86aa"))
+(pin "2" (uuid "c7572aa4-7038-4eb0-a007-9685f9137cfa"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "D138") (unit 1))))
+)
+(label "GEN_IA_P" (at 322.58 304.8 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "8f2f1a1f-6088-40bc-a6c9-a32d98013967"))
+(label "GEN_IA_N" (at 337.82 304.8 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "8d9485b5-465a-445c-94a0-684a1a74dfa0"))
+(no_connect (at 330.2 309.88) (uuid "de9ee1b1-781c-4523-9c4e-f9bd1a2a569d"))
+(symbol (lib_id "Diode:BAV99") (at 355.6 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "c5eb8e4a-41ad-49c5-b8eb-b4812dde2392")
+(property "Reference" "D139" (at 360.68 302.26 0) (effects (font (size 1.27 1.27))))
+(property "Value" "BAV99" (at 360.68 307.34 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 355.6 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 355.6 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "BAV99 series pair" (at 355.6 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C2500" (at 355.6 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "BAV99" (at 355.6 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Nexperia" (at 355.6 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "CT clamp IA (fixes_safety.md M5): 2x BAV99 anti-parallel across GEN_IA_P/GEN_IA_N, pin1->pin2 series string, pin3 NC" (at 355.6 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "2b456e76-1607-4fbe-96a8-48d3106bcb2c"))
+(pin "3" (uuid "154e0620-1698-4d5f-8429-5fd49381d1f7"))
+(pin "2" (uuid "52523725-7c3e-4529-8122-67b000da7102"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "D139") (unit 1))))
+)
+(label "GEN_IA_N" (at 347.98 304.8 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "54267dde-6389-4e3e-a90f-3d442a474840"))
+(label "GEN_IA_P" (at 363.22 304.8 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "fcb34c7f-5e87-4d8a-a86a-fcb342732ce2"))
+(no_connect (at 355.6 309.88) (uuid "102c2ae2-8436-4db6-a9f3-10277bd5a059"))
+(symbol (lib_id "Diode:BAV99") (at 381.0 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "e67f7511-f843-46a4-b70b-50d778ba532d")
+(property "Reference" "D140" (at 386.08 302.26 0) (effects (font (size 1.27 1.27))))
+(property "Value" "BAV99" (at 386.08 307.34 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 381.0 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 381.0 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "BAV99 series pair" (at 381.0 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C2500" (at 381.0 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "BAV99" (at 381.0 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Nexperia" (at 381.0 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "CT clamp IB (fixes_safety.md M5): 2x BAV99 anti-parallel across GEN_IB_P/GEN_IB_N, pin1->pin2 series string, pin3 NC" (at 381.0 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "b239fc79-fee1-455f-a03c-1f0d14b781cc"))
+(pin "3" (uuid "280aaf00-ea8e-4b90-883b-79912d977581"))
+(pin "2" (uuid "9c018455-01c2-4d23-98c4-ebbdc06252b9"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "D140") (unit 1))))
+)
+(label "GEN_IB_P" (at 373.38 304.8 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "85ef5dac-6fdb-4395-b144-84281db959ba"))
+(label "GEN_IB_N" (at 388.62 304.8 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "ea1bdc60-a3c1-42ce-b809-ac60f01982f1"))
+(no_connect (at 381.0 309.88) (uuid "795dbea3-40fd-47b1-92f5-e1970f5a4bbb"))
+(symbol (lib_id "Diode:BAV99") (at 406.4 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "72fb220a-d154-480d-aefd-00420283c483")
+(property "Reference" "D141" (at 411.48 302.26 0) (effects (font (size 1.27 1.27))))
+(property "Value" "BAV99" (at 411.48 307.34 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 406.4 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 406.4 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "BAV99 series pair" (at 406.4 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C2500" (at 406.4 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "BAV99" (at 406.4 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Nexperia" (at 406.4 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "CT clamp IB (fixes_safety.md M5): 2x BAV99 anti-parallel across GEN_IB_P/GEN_IB_N, pin1->pin2 series string, pin3 NC" (at 406.4 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "399689ff-0268-4561-9524-6b8cf06b9ce0"))
+(pin "3" (uuid "024efac2-7aee-4069-bfab-72a40b2e40b6"))
+(pin "2" (uuid "13b66c1b-a0de-4f11-9616-a4f5a9e2bd8e"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "D141") (unit 1))))
+)
+(label "GEN_IB_N" (at 398.78 304.8 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "1146c4ed-0b8b-47da-86cb-ec5606556784"))
+(label "GEN_IB_P" (at 414.02 304.8 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "79de873c-83b5-4d64-9bdc-639f26b2843c"))
+(no_connect (at 406.4 309.88) (uuid "6f2fd5ca-a8bf-4b87-b89d-e98a1a1c31f0"))
+(symbol (lib_id "Diode:BAV99") (at 431.8 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "1b274f68-5a7f-4fbe-8670-9c10d8c1383a")
+(property "Reference" "D142" (at 436.88 302.26 0) (effects (font (size 1.27 1.27))))
+(property "Value" "BAV99" (at 436.88 307.34 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 431.8 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 431.8 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "BAV99 series pair" (at 431.8 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C2500" (at 431.8 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "BAV99" (at 431.8 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Nexperia" (at 431.8 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "CT clamp IC (fixes_safety.md M5): 2x BAV99 anti-parallel across GEN_IC_P/GEN_IC_N, pin1->pin2 series string, pin3 NC" (at 431.8 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "1500cc7f-2212-4316-aa54-bb68dc3ad66c"))
+(pin "3" (uuid "9af02b05-a7dc-49cc-b2bc-be17858c6e6f"))
+(pin "2" (uuid "e98135df-a00f-43a8-98f6-f514f23f936f"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "D142") (unit 1))))
+)
+(label "GEN_IC_P" (at 424.18 304.8 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "dcac77ca-55f5-424e-9854-ed329374e302"))
+(label "GEN_IC_N" (at 439.42 304.8 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "090767e2-41b3-49a7-9132-bb2ff78a91a2"))
+(no_connect (at 431.8 309.88) (uuid "78891021-1894-48d7-a60a-a66eac52e238"))
+(symbol (lib_id "Diode:BAV99") (at 457.2 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "bde18d1a-379d-4579-a95d-748a25f831b8")
+(property "Reference" "D143" (at 462.28 302.26 0) (effects (font (size 1.27 1.27))))
+(property "Value" "BAV99" (at 462.28 307.34 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 457.2 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 457.2 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "BAV99 series pair" (at 457.2 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C2500" (at 457.2 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "BAV99" (at 457.2 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Nexperia" (at 457.2 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "CT clamp IC (fixes_safety.md M5): 2x BAV99 anti-parallel across GEN_IC_P/GEN_IC_N, pin1->pin2 series string, pin3 NC" (at 457.2 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "c7787096-508b-4e57-ad67-22639f640741"))
+(pin "3" (uuid "baf18d63-81e5-4856-88ff-8dc4e2be0664"))
+(pin "2" (uuid "0fead6c9-9e96-43d7-9e0e-96c6aa1a51b3"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "D143") (unit 1))))
+)
+(label "GEN_IC_N" (at 449.58 304.8 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "6fb130ad-45df-4f22-9610-5b319acfbe0c"))
+(label "GEN_IC_P" (at 464.82 304.8 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "f7aab42b-963d-40f8-943f-7eb08f287464"))
+(no_connect (at 457.2 309.88) (uuid "c2025797-e0bd-4718-b333-2b8943d5cf53"))
+(symbol (lib_id "Diode:BAV99") (at 482.6 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "d03cd6b2-9bb3-4b12-bcc2-28fd7b453b10")
+(property "Reference" "D144" (at 487.68 302.26 0) (effects (font (size 1.27 1.27))))
+(property "Value" "BAV99" (at 487.68 307.34 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 482.6 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 482.6 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "BAV99 series pair" (at 482.6 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C2500" (at 482.6 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "BAV99" (at 482.6 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Nexperia" (at 482.6 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "CT clamp IN (fixes_safety.md M5): 2x BAV99 anti-parallel across GEN_IN_P/GEN_IN_N, pin1->pin2 series string, pin3 NC" (at 482.6 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "81a21c68-fd33-45b6-a73a-a8cab95ed16e"))
+(pin "3" (uuid "b9f6b661-75e7-4904-8f32-c7eafc7a15c1"))
+(pin "2" (uuid "a2935ff9-4b58-4d34-9099-2995b605fb94"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "D144") (unit 1))))
+)
+(label "GEN_IN_P" (at 474.98 304.8 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "68aa218f-920b-4eba-86d5-77c9c0ff13c1"))
+(label "GEN_IN_N" (at 490.22 304.8 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "6fa5fd73-55cf-496f-96a5-091b0facb9af"))
+(no_connect (at 482.6 309.88) (uuid "851b8383-0170-4ace-905d-5b9a7bdfff7f"))
+(symbol (lib_id "Diode:BAV99") (at 508.0 304.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "7e366fe3-bbbc-49e1-aabb-6005db56beec")
+(property "Reference" "D145" (at 513.08 302.26 0) (effects (font (size 1.27 1.27))))
+(property "Value" "BAV99" (at 513.08 307.34 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 508.0 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 508.0 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "BAV99 series pair" (at 508.0 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C2500" (at 508.0 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "BAV99" (at 508.0 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Nexperia" (at 508.0 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "CT clamp IN (fixes_safety.md M5): 2x BAV99 anti-parallel across GEN_IN_P/GEN_IN_N, pin1->pin2 series string, pin3 NC" (at 508.0 304.8 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "1b6b120a-3f8d-460a-ab6f-8b293bcf0ad1"))
+(pin "3" (uuid "dcd5768f-d3d6-4eb8-b4d5-a4bc1c255b72"))
+(pin "2" (uuid "071f8d10-0043-4548-a829-d858576722ac"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "D145") (unit 1))))
+)
+(label "GEN_IN_N" (at 500.38 304.8 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "d384cbd3-cb9f-49ef-bd3c-f249faf516c2"))
+(label "GEN_IN_P" (at 515.62 304.8 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "c63f7cc2-b343-4d8b-ad07-e8173e00a25c"))
+(no_connect (at 508.0 309.88) (uuid "d380c859-769c-49cf-bc14-a0cec933d706"))
 )

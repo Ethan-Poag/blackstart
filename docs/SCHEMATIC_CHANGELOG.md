@@ -371,6 +371,14 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 | Q70, Q71 (new; spec "Q", next free) | none | SQD40P10-40L_GE3 Vishay C141570, TO-252 (Package_TO_SOT_SMD:TO-252-2, KiCad SUD50P06-15 symbol G1/D2/S3), in parallel: D=VBAT_ESTOP_IN, S=VBAT_ESTOP, G=ESTOP_RPF_G | -100 V vs the 64.5 V SMDJ40CA clamp; thermal: 2 in parallel at 0.67 W each | R3-8 |
 | R627 (new) | none | 10k 0603 C98220 RC0603FR-0710KL YAGEO, ESTOP_RPF_G -> GND | gate drive | H1 "gate -> 10k -> GND" |
 | D137 (new) | none | BZT52C15 C2104 JSCJ SOD-123, A=gate, K=source (VBAT_ESTOP) | Vgs clamp 15 V < 20 V | H1 "BZT52C15 G-S (anode at gate)", R3-8 Gate |
-- NOT CMD60P06 / SUD50P06 (rejected by R3-8). Live LCSC 2026-10-28 (HST): C141570 stock 206 1@\$1.5676; C2104 stock 10,600 50@\$0.0212; C98220 stock 3,801,900 100@\$0.0027. outputs_bom +3 rows, TOTAL \$162.10 -> \$165.26.
+- NOT CMD60P06 / SUD50P06 (rejected by R3-8). Live LCSC 2026-10-28 (HST): C141570 stock 206 1@$1.5676; C2104 stock 10,600 50@$0.0212; C98220 stock 3,801,900 100@$0.0027. outputs_bom +3 rows, TOTAL $162.10 -> $165.26.
 - Kept as is (not specified): D126 SMDJ40CA and all other VBAT_ESTOP loads (R251 sense, R411, TPS48100s, INA281s, C199/C203) stay on the load side (VBAT_ESTOP). Only J23.1/2 moved.
 - Pinout of SQD40P10-40L vs the KiCad SUD50P06-15 symbol (G1, D2/tab, S3) is INFERRED from the TO-252 standard; the spec asks Layout to check it. PCB: D-m7-7.
+
+### 3b-4a: CT input clamps, 2x BAV99 per CT channel (fixes_safety.md M5 l.462)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| D138/D139 (IA), D140/D141 (IB), D142/D143 (IC), D144/D145 (IN) new | no clamp | BAV99 C2500 Nexperia SOT-23, anti-parallel across GEN_Ix_P/GEN_Ix_N at the ADE side of the 1k (R476/R477 etc.); pin1->pin2 series string, pin3 NC | ADE9000 inputs +/-2 V abs; clamp about +/-1.2-1.5 V (INFERRED) | M5 |
+- SPEC CONFLICT: M5 says "8 channels / +16 SOT-23", but the schematic has only 4 CT channels (U71 IA/IB/IC/IN; U72 current inputs are tied to GND_AC, bus V only). I fitted 2 per real CT channel = 8 parts, per the brief ("2 per CT channel").
+- Live LCSC C2500: stock 100 (LOW), 50@$0.0119. ac_metering_bom gets +1 row (8 pcs), total +$0.10. PCB: D-m7-8.
+- Firmware (M5): confirm the ADE full-scale is below the clamp onset.

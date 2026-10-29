@@ -595,6 +595,7 @@ cts=[]
 for i,ph in enumerate('ABCN',1):
     ac.p('genctl:AC1005','AC1005',{'P1':'CT%d_S1'%i,'P2':'CT%d_S2'%i,'S1':'GEN_CT%s_1'%ph,'S2':'GEN_CT%s_2'%ph,'NC':None},mpn='AC1005',lcsc='C6117861')
     ac.R('24.9R','GEN_CT%s_1'%ph,'GND_AC',note='0.1% burden'); ac.R('24.9R','GEN_CT%s_2'%ph,'GND_AC',note='0.1% burden')
+    ac.p('Diode:BAV99','BAV99',{'1':'GEN_I%s_P'%ph,'2':'GEN_I%s_N'%ph,'3':None},prefix='D',mpn='BAV99',lcsc='C2500',mfr='Nexperia'); ac.p('Diode:BAV99','BAV99',{'1':'GEN_I%s_N'%ph,'2':'GEN_I%s_P'%ph,'3':None},prefix='D',mpn='BAV99',lcsc='C2500',mfr='Nexperia')  # m7-sch 3b M5 (sch refs D138-D145)
     ac.R('1k','GEN_CT%s_1'%ph,'GEN_I%s_P'%ph); ac.C('33n','GEN_I%s_P'%ph,'GND_AC'); ac.R('1k','GEN_CT%s_2'%ph,'GEN_I%s_N'%ph); ac.C('33n','GEN_I%s_N'%ph,'GND_AC')
     cts+=['CT%d_S1'%i,'CT%d_S2'%i]
 conn(ac,8,cts,'J9 CT secondaries (5A)',note='external 5A CT loops pass through AC1005 cores')
