@@ -117,7 +117,8 @@ pw.R('18.7k','+3V3','MUX_PR1',note='switch to backup below ~2.87V'); pw.R('10k',
 pw.R('100k','PSU_MAIN_OK','+3V3_SAFE'); pw.C('1u','+3V3','GND'); pw.C('1u','+3V3_BK','GND')
 for _ in range(2): pw.C('22u','+3V3_SAFE','GND',pkg='1206')
 # chassis
-for i in range(4): pw.p('Mechanical:MountingHole_Pad','MountingHole_Pad',{'1':'CHASSIS'},prefix='H')
+for i in range(3): pw.p('Mechanical:MountingHole_Pad','MountingHole_Pad',{'1':'CHASSIS'},prefix='H')  # H1-H3 M4 pads on CHASSIS (fixes_mechanical s5)
+pw.p('Mechanical:MountingHole','MountingHole',{},prefix='H')  # H4: M4 NPTH PE-boss clearance, no pad, not on CHASSIS
 pw.R('1M','CHASSIS','GND',pkg='1206'); pw.C('4.7n','CHASSIS','GND',pkg='1206',note='2kV - chassis/0V RC bond (assumed)')
 
 # =====================================================================
@@ -648,7 +649,8 @@ FPMAP={  # libid -> (fp, lcsc, mpn)
  '74xGxx:74LVC1G08':('Package_TO_SOT_SMD:SOT-23-5',None,None),'Amplifier_Current:INA281A2':('Package_TO_SOT_SMD:SOT-23-5',None,None),'Amplifier_Current:INA281A1':('Package_TO_SOT_SMD:SOT-23-5',None,None),
  'Timer:TLC555xD':('Package_SO:SOIC-8_3.9x4.9mm_P1.27mm','C130208','TLC555QDRQ1'),
  'Switch:SW_DIP_x02':('genctl:DSHP02TSGER_DIP2','C367376','DSHP02TSGER'),
- 'Mechanical:MountingHole_Pad':('MountingHole:MountingHole_3.2mm_M3_Pad','',None),
+ 'Mechanical:MountingHole_Pad':('MountingHole:MountingHole_4.3mm_M4_Pad','',None),
+ 'Mechanical:MountingHole':('MountingHole:MountingHole_4.3mm_M4','',None),
 }
 MPNLCSC={'BSS84':'C8492','DMN6075S':'C155242','SI2309CDS-T1-GE3':'C10493','AO3401A':'C347476','BAV99':'C2500','BAT54S':'C8592','BAT54C':'C2135',
  '1N4148W':'C81598','SM712':'C12067','NUP2105LT1G':'C14486','USBLC6-2SC6':'C7519','SRV05-4':'C85364','TPS2051CDBVR':'C129581',

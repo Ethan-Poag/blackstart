@@ -2945,6 +2945,62 @@
 				(effects
 					(font
 						(size 1.27 1.27)))))))
+
+(symbol "Mechanical:MountingHole"
+	(pin_names
+		(offset 1.016))
+	(exclude_from_sim no)
+	(in_bom no)
+	(on_board yes)
+	(property "Reference" "H"
+		(at 0 5.08 0)
+		(effects
+			(font
+				(size 1.27 1.27))))
+	(property "Value" "MountingHole"
+		(at 0 3.175 0)
+		(effects
+			(font
+				(size 1.27 1.27))))
+	(property "Footprint" ""
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "Datasheet" "~"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "Description" "Mounting Hole without connection"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "ki_keywords" "mounting hole"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "ki_fp_filters" "MountingHole*"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(symbol "MountingHole_0_1"
+		(circle
+			(center 0 0)
+			(radius 1.27)
+			(stroke
+				(width 1.27)
+				(type default))
+			(fill
+				(type none)))))
 )
 (symbol (lib_id "Connector_Generic:Conn_01x04") (at 44.45 274.32 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "8a99abcb-2386-4808-af3e-5a0c1549cbd8")
 (property "Reference" "J1" (at 44.45 269.24 0) (effects (font (size 1.27 1.27))))
@@ -4435,7 +4491,7 @@
 (symbol (lib_id "Mechanical:MountingHole_Pad") (at 158.75 270.51 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "e4aac75b-661d-407f-ab5b-33dfbf2cf602")
 (property "Reference" "H1" (at 158.75 264.16 0) (effects (font (size 1.27 1.27))))
 (property "Value" "MountingHole_Pad" (at 158.75 266.065 0) (effects (font (size 1.27 1.27))))
-(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_Pad" (at 158.75 270.51 0) (effects (font (size 1.27 1.27)) hide))
+(property "Footprint" "MountingHole:MountingHole_4.3mm_M4_Pad" (at 158.75 270.51 0) (effects (font (size 1.27 1.27)) hide))
 (property "Datasheet" "~" (at 158.75 270.51 0) (effects (font (size 1.27 1.27)) hide))
 (property "Description" "Mounting Hole with connection" (at 158.75 270.51 0) (effects (font (size 1.27 1.27)) hide))
 (property "LCSC" "" (at 158.75 270.51 0) (effects (font (size 1.27 1.27)) hide))
@@ -4447,7 +4503,7 @@
 (symbol (lib_id "Mechanical:MountingHole_Pad") (at 168.91 270.51 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "9eba8d3a-96ea-487f-9aa0-a76d01373986")
 (property "Reference" "H2" (at 168.91 264.16 0) (effects (font (size 1.27 1.27))))
 (property "Value" "MountingHole_Pad" (at 168.91 266.065 0) (effects (font (size 1.27 1.27))))
-(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_Pad" (at 168.91 270.51 0) (effects (font (size 1.27 1.27)) hide))
+(property "Footprint" "MountingHole:MountingHole_4.3mm_M4_Pad" (at 168.91 270.51 0) (effects (font (size 1.27 1.27)) hide))
 (property "Datasheet" "~" (at 168.91 270.51 0) (effects (font (size 1.27 1.27)) hide))
 (property "Description" "Mounting Hole with connection" (at 168.91 270.51 0) (effects (font (size 1.27 1.27)) hide))
 (property "LCSC" "" (at 168.91 270.51 0) (effects (font (size 1.27 1.27)) hide))
@@ -4459,7 +4515,7 @@
 (symbol (lib_id "Mechanical:MountingHole_Pad") (at 179.07 270.51 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "1f7e3cbe-2648-44db-8550-26b9ff9c4e93")
 (property "Reference" "H3" (at 179.07 264.16 0) (effects (font (size 1.27 1.27))))
 (property "Value" "MountingHole_Pad" (at 179.07 266.065 0) (effects (font (size 1.27 1.27))))
-(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_Pad" (at 179.07 270.51 0) (effects (font (size 1.27 1.27)) hide))
+(property "Footprint" "MountingHole:MountingHole_4.3mm_M4_Pad" (at 179.07 270.51 0) (effects (font (size 1.27 1.27)) hide))
 (property "Datasheet" "~" (at 179.07 270.51 0) (effects (font (size 1.27 1.27)) hide))
 (property "Description" "Mounting Hole with connection" (at 179.07 270.51 0) (effects (font (size 1.27 1.27)) hide))
 (property "LCSC" "" (at 179.07 270.51 0) (effects (font (size 1.27 1.27)) hide))
@@ -4468,16 +4524,15 @@
 (pin "1" (uuid "6786d8e7-8be4-41f6-9c54-f7fef6ea0679"))
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb" (reference "H3") (unit 1))))
 )
-(symbol (lib_id "Mechanical:MountingHole_Pad") (at 189.23 270.51 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "ce2db3e5-111d-45b6-a35a-bb0c583fde61")
+(symbol (lib_id "Mechanical:MountingHole") (at 189.23 270.51 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "ce2db3e5-111d-45b6-a35a-bb0c583fde61")
 (property "Reference" "H4" (at 189.23 264.16 0) (effects (font (size 1.27 1.27))))
-(property "Value" "MountingHole_Pad" (at 189.23 266.065 0) (effects (font (size 1.27 1.27))))
-(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_Pad" (at 189.23 270.51 0) (effects (font (size 1.27 1.27)) hide))
+(property "Value" "MountingHole" (at 189.23 266.065 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "MountingHole:MountingHole_4.3mm_M4" (at 189.23 270.51 0) (effects (font (size 1.27 1.27)) hide))
 (property "Datasheet" "~" (at 189.23 270.51 0) (effects (font (size 1.27 1.27)) hide))
 (property "Description" "Mounting Hole with connection" (at 189.23 270.51 0) (effects (font (size 1.27 1.27)) hide))
 (property "LCSC" "" (at 189.23 270.51 0) (effects (font (size 1.27 1.27)) hide))
 (property "MPN" "" (at 189.23 270.51 0) (effects (font (size 1.27 1.27)) hide))
 (property "Manufacturer" "" (at 189.23 270.51 0) (effects (font (size 1.27 1.27)) hide))
-(pin "1" (uuid "7f3e3d2d-d87f-4f72-846c-786a3b4e1ea9"))
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb" (reference "H4") (unit 1))))
 )
 (symbol (lib_id "Device:R") (at 199.39 287.02 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "5a27e374-ecab-4247-b9df-20491df372b5")
@@ -4958,8 +5013,8 @@
 (global_label "CHASSIS" (shape passive) (at 168.91 275.59 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "e05b598c-34e7-4e68-8e75-c475f66d6322") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 168.91 275.59 0) (effects (font (size 1.27 1.27)) hide)))
 (wire (pts (xy 179.07 273.05) (xy 179.07 275.59)) (stroke (width 0) (type default)) (uuid "fc67bcbb-6f50-41a5-a29e-70a1be84d359"))
 (global_label "CHASSIS" (shape passive) (at 179.07 275.59 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "49781c7b-3d16-4eec-9df0-d3847703236f") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 179.07 275.59 0) (effects (font (size 1.27 1.27)) hide)))
-(wire (pts (xy 189.23 273.05) (xy 189.23 275.59)) (stroke (width 0) (type default)) (uuid "f89ac15d-57c4-4c38-8085-5ffa838dea35"))
-(global_label "CHASSIS" (shape passive) (at 189.23 275.59 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "dd7c3a74-88bf-4eeb-bbae-f02f381cc90a") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 189.23 275.59 0) (effects (font (size 1.27 1.27)) hide)))
+
+
 (wire (pts (xy 199.39 283.21) (xy 199.39 280.67)) (stroke (width 0) (type default)) (uuid "3b7a48c2-577b-45f3-97bc-4406dacd9835"))
 (global_label "CHASSIS" (shape passive) (at 199.39 280.67 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "382c3ca9-fa29-4415-a80d-8561dbad8eea") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 199.39 280.67 0) (effects (font (size 1.27 1.27)) hide)))
 (wire (pts (xy 199.39 290.83) (xy 199.39 293.37)) (stroke (width 0) (type default)) (uuid "071de141-10f4-4013-b393-fe16a434d05e"))

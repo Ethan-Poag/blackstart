@@ -265,3 +265,10 @@ Ref mapping: spec C296 → C304; filter parts have no spec refs → R623, R624, 
 | R294, R300 | 35.7k C23027 | 40.2k 0603WAF4022T5E C12447 (LIVE: 52,400) | V(SCP) 99.4 mV typ | l.453, l.518 |
 | C197, C201 | 68n C5137586 | 4.7n CC0603KRX7R9BB472 C106218 (LIVE: 2,377,600) | tSC ≈ 65 µs (INFERRED) | l.454, l.527 |
 INA281A1 gain 20 V/V × 20 mΩ = 0.40 V/A (INFERRED arithmetic; U44/U46 value already INA281A1). Same footprints; no layout change.
+
+## B3-9: mounting holes M3 -> M4; H4 off CHASSIS (fixes_mechanical.md §5)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| H1, H2, H3 | MountingHole_3.2mm_M3_Pad, pin 1 CHASSIS | MountingHole:MountingHole_4.3mm_M4_Pad, pin 1 CHASSIS | PCB and enclosure use M4 (MEASURED by mech reviewer) | fixes_mechanical.md §5 l.80-84 |
+| H4 | Mechanical:MountingHole_Pad 3.2mm M3 Pad on CHASSIS | Mechanical:MountingHole (0-pin) MountingHole:MountingHole_4.3mm_M4; CHASSIS label + wire removed | 4.3 mm NPTH PE-boss clearance, no pad | same |
+design.py: H1-H3 loop range(3), H4 separate 0-pin symbol; footprint map updated. PCB: already deferred as D3 (H4) in deferred_layout.md; H1-H3 PCB pads are already 4.3 mm per spec (MEASURED by mech).
