@@ -652,3 +652,25 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 6-3 docs/PIN_FOOTPRINT_SWEEP.md: 1309 parts pin/pad sweep + 19 LCSC datasheet pinout checks; no further fixes (BAS70 fixed in 90c4879).
 
 6-4 SMAJ36CA->SMAJ40CA on 22 terminal TVS (D24,D27,D30,D33,D36,D39,D42,D44,D46-D58,D66): Value/MPN, LCSC C10757->C113970 (MDD, DO-214AC SMA, live 2026-10-28 stock 50860, 20+ $0.0431), Manufacturer MDD, footprint D_SMA unchanged; inputs_bom row, design.py, design_spec. JLC class UNVERIFIED.
+
+## Batch 7 (team lead Enginerd + Safety Round 4, 2026-10-28 ~5:20 PM HST)
+### 7-1: INSTALL_SAFETY Round 4 text (commit 24f412e)
+| Ref | Old | New | Reason | Source |
+|---|---|---|---|---|
+| docs/INSTALL_SAFETY.md l.32-33 FUEL/CRANK rows | 15 A / 15 A blade, >=58 V DC | 2.8 A max (fuel solenoid incl. pull-in / interposing crank relay coil only); 5 A standard (non-fast) blade ATO/ATC, >=58 V DC, installer-supplied, recommended | R4-N3 | install_safety_text.md (verbatim) |
+| l.41 fuse-voltage paragraph | "suppressed load dump can reach 58 V" | ISO 16750-2 Test B (24 V, Us* <= 58 V) basis; TVS 64.5 V clamp does not set the fuse rating; + declared-limit sentence (Enginerd B) | R4-N2 | install_safety_text.md (verbatim) + Enginerd B |
+| l.46 outputs bullet | relay coils/indicators <= 0.5 A, combined <= 1 A | Safety text (2.8 A max incl. pull-in, interposing relay above that); GLOW = relay coil only, glow plugs via external relay; + "Where a circuit's own row above lists a lower limit or fuse (for example AUX 2.0 A, 2 A fuse), the lower limit governs." | Round 4 (d) | install_safety_text.md + Enginerd A |
+| l.47 ESTOP_TRIP bullet | 12 V relay coil <= 0.5 A, not a shunt coil | 12/24 V relay or shunt-trip coil < 1.70 A incl. pull-in (U68/R407 1.70/2.13/2.55 A) | Round 4 (d) | install_safety_text.md (verbatim) |
+| l.48 hardware-maximum line | unchanged | unchanged (consistent: 2.8 A / < 1.70 A) | check | - |
+| FUEL/CRANK fuse-type paragraph, WARNING, J23 line, open item 1 | 15 A blade / slow-blow, "drive starter directly" | 2.8 A, 5 A standard non-fast, starter only via interposing relay | consistency with R4-N3 | fixes_safety.md R4-N3 |
+| README.md Fusing paragraph | "15 A FUEL/CRANK" | 5 A blade, 2.8 A limit; + declared load-dump limit sentence | consistency, Enginerd B | - |
+- Not changed: docs/RAIL_PLAN.md still uses the 15 A FUEL/CRANK copper design rating (layout sizing doc, conservative for copper); flagged for the lead.
+
+### 7-2: D146 VBAT_AI zener BZT52C33 -> BZT52C30
+| Ref | Old | New | Reason | Source |
+|---|---|---|---|---|
+| D146 (inputs.kicad_sch) | BZT52C33, LCSC C2110, MPN BZT52C33, "Zener 33V 500mW" | BZT52C30, LCSC C21561, MPN BZT52C30, "Zener 30V 500mW"; footprint Diode_SMD:D_SOD-123 unchanged | Safety Round 4: VBAT_AI rail was 37.9 V at 257F, above LM2904B 36 V recommended max. New rail 27.4-31.4 V at 77F, <=33.3 V at 185F, <=34.5 V at 257F; op-amp headroom (LM4040 2.5 V > 2 V CM limit) unchanged | fixes_safety.md Round 4 "VBAT_AI fix" |
+- VERIFIED 2026-10-28 ~5:20 PM HST: jlcpcb.com/partdetail/C21561 = BZT52C30, Jiangsu Changjing (JSCJ), SOD-123, Vz 28-32 V (30 V nom), 500 mW, Extended; LCSC page title "BZT52C30 | Single Zener Diodes | JSCJ".
+- Price $0.027 @50 and stock 11,250 are **Safety-reported** (fixes_safety.md, 5:14 PM HST), not re-checked by me.
+- BOM: bom/inputs_bom.csv D146 row, docs/genctl_bom.csv, mechanical/bom.csv. inputs total 26.83 -> 26.84 (bom_retotal.py).
+- No other doc cites 33 V / BZT52C33 for VBAT_AI except the historical 4-1 entry above (left as history). tools/design.py has no D146 line (see 7-4).
