@@ -289,3 +289,10 @@ tools/design.py: MATES dict keyed by header MPN sets pt.extra; tools/gen.py fiel
 | U76.18 (P15) | on WD_OK | on new net WD_OK_MCU | TCA9555 P15 powers up as input, but a firmware/POR fault driving it as output would fight the WD_OK latch output | reviewer.md R2-N1 |
 | R625 (new; next free R) | — | 10k 0603 1% RC0603FR-0710KL C98220 (YAGEO), WD_OK → WD_OK_MCU | series isolation; gates U38/U39/U40/U67, R272, U84.5 stay on WD_OK (MEASURED from netlist) | LIVE LCSC 2026-10-28: stock 3,801,900, $0.0027 @100 |
 design.py: U76 P15 → WD_OK_MCU, R625 added with fixed ref.
+
+## R2-N2: output EN pull-downs 100k -> 47k (team lead ruling 2026-10-28)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| R277–R291 (GLOW, GCB_CL/OP, MCB_CL/OP, AUX1–AUX10 _EN; MEASURED from netlist) | 100k C25803 | 47k 0603 1% 0603WAF4702T5E C25819 (LIVE LCSC 2026-10-28: stock 609,800, $0.0020 @100) | stiffer default-off on TPS1HTC30 EN | reviewer.md R2-N2 |
+| R549 / R550 (AUX9/AUX10_MCU) | 10k | unchanged | ruling | — |
+FUEL_EN/CRANK_EN pull-downs stay 100k (not in the ruled list). outputs_bom row 24 qty 36 → 21, row 32 qty 1 → 16.

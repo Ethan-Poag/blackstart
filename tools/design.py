@@ -446,7 +446,7 @@ ou.p('genctl:TPS3431SDRBR','TPS3431SQDRBRQ1',{'VDD':'+3V3','EN':'+3V3','SET1':'+
 ou.R('10k','WD_CWD','+3V3',note='CWD via 10k to VDD = factory timing (assumed)'); ou.R('10k','WDO_N','+3V3'); ou.C('100n','+3V3','GND')
 npn(ou,'WD_INV_B','GND','WD_OE_N'); ou.R('10k','WD_OK','WD_INV_B'); ou.R('100k','WD_INV_B','GND'); ou.R('10k','WD_OE_N','+3V3')
 for n in ('FUEL','CRANK','GLOW'):
-    ou.p('74xGxx:74LVC1G08','74LVC1G08',{'1':n+'_EN_MCU','2':'WD_OK','4':n+'_EN','5':'+3V3','3':'GND'},prefix='U',mpn='SN74LVC1G08DBVR'); ou.C('100n','+3V3','GND'); ou.R('100k',n+'_EN','GND')
+    ou.p('74xGxx:74LVC1G08','74LVC1G08',{'1':n+'_EN_MCU','2':'WD_OK','4':n+'_EN','5':'+3V3','3':'GND'},prefix='U',mpn='SN74LVC1G08DBVR'); ou.C('100n','+3V3','GND'); ou.R('47k' if n=='GLOW' else '100k',n+'_EN','GND')  # m7-sch R2-N2: GLOW 47k
 small=['GCB_CL','GCB_OP','MCB_CL','MCB_OP']+['AUX%d'%i for i in range(1,11)]
 for k in range(2):
     grp=small[k*8:(k+1)*8]; c={'~{OE1}':'WD_OE_N','~{OE2}':'WD_OE_N','VCC':'+3V3','GND':'GND'}
@@ -454,7 +454,7 @@ for k in range(2):
         if i<len(grp): c['A%d'%(i+1)]=grp[i]+'_MCU'; c['Y%d'%(i+1)]=grp[i]+'_EN'
         else: c['A%d'%(i+1)]='GND'; c['Y%d'%(i+1)]=None
     ou.p('genctl:SN74LVC541APWR','SN74LVC541APWR',c,mpn='SN74LVC541APWR'); ou.C('100n','+3V3','GND')
-for n in small: ou.R('100k',n+'_EN','GND')
+for n in small: ou.R('47k',n+'_EN','GND')  # m7-sch R2-N2: 100k -> 47k
 # fuel / crank
 for n in ('FUEL','CRANK'):
     ou.p('genctl:TPS48100QDGXRQ1','TPS48100QDGXRQ1',{'VS':'VBAT_ESTOP','EN/UVLO':n+'_UVLO','INP1':n+'_EN','INP2':'GND','CS_SEL':'GND','ISCP':n+'_ISCP','TMR':n+'_TMR','SCP_TEST':'GND','GND':'GND','NC':None,
