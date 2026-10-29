@@ -123,3 +123,11 @@ Spec: fixes_firmware.md Rev 2 §1.1/§1.2 (Ethan/Safety ruling 2026-10-28 3:34 P
 | D136 (new) | — | BAT54WS-7-F C124205, Diode_SMD:D_SOD-323, symbol Device:D_Schottky; A = WD_RC, K = +3V3_SAFE | discharges C298 into a collapsing rail | Rev 2 §1.1 |
 | bom/outputs_bom.csv | — | R554/C298 rows replaced, D136 row added; TOTAL 159.98 → 160.11 | BOM | spec prices |
 | tools/design.py | — | ENOUT None, WD_RC, R554 220k, C298 4.7u, D136 | regen | — |
+
+## FW-4: TMUX1208 S-pin clamps (FW-007 / FW-014 / S-L1)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| D128–D131 (new, outputs) | — | BAT54C,215 Nexperia C37704 SOT-23; anodes U63 S1/S2, S3/S4, S5/S6, S7/S8 (GLOW/GCB_CL, GCB_OP/MCB_CL, MCB_OP/AUX1, AUX2/AUX3 _SNSM), cathode +3V3_SAFE | TPS1HTC30 SNS fault-high 3.82 V > TMUX1208 VS max 3.8 V | fixes_firmware.md §5; https://www.lcsc.com/product-detail/C37704.html (fetched 2026-10-28; price/stock not shown) |
+| D132–D135 (new, outputs) | — | same; U64 S1/S2 … S7/S8 (AUX4/AUX5, AUX6/AUX7, AUX8/AUX9, AUX10/ESTOP_TRIP _SNSM) | same | §5 |
+| bom/outputs_bom.csv | — | +1 row (8x, $0.015 from spec) | BOM | — |
+| tools/design.py | — | D128–D135 pairs from the mux lists | regen | — |

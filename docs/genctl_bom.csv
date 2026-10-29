@@ -55,6 +55,7 @@
 "D65,D67,D125","BAT54S","Package_TO_SOT_SMD:SOT-23","BAT54S","C8592","3",""
 "D70,D72","SK1010C","Diode_SMD:D_SMC","SK1010C","C3018527","2",""
 "D71","SMDJ24A","Diode_SMD:D_SMC","SMDJ24A","C362107","1",""
+"D128-D135","BAT54C","Package_TO_SOT_SMD:SOT-23","BAT54C,215","C37704","8",""
 "D136","BAT54WS-7-F","Diode_SMD:D_SOD-323","BAT54WS-7-F","C124205","1",""
 "FB1","600R@100MHz","Inductor_SMD:L_0603_1608Metric","GZ1608D601TF","C1002","1",""
 "H1-H4","MountingHole_Pad","MountingHole:MountingHole_3.2mm_M3_Pad","","","4",""

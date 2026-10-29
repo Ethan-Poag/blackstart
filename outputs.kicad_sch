@@ -3383,6 +3383,238 @@
 				(effects
 					(font
 						(size 1.27 1.27)))))))
+
+(symbol "Diode:BAT54C"
+	(pin_names
+		(offset 1.016))
+	(exclude_from_sim no)
+	(in_bom yes)
+	(on_board yes)
+	(property "Reference" "D"
+		(at 0.635 -3.81 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(justify left)))
+	(property "Value" "BAT54C"
+		(at -6.35 3.175 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(justify left)))
+	(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
+		(at 1.905 3.175 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(justify left)
+			(hide yes)))
+	(property "Datasheet" "http://www.diodes.com/_files/datasheets/ds11005.pdf"
+		(at -2.032 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "Description" "dual schottky barrier diode, common cathode"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "ki_keywords" "schottky diode common cathode"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "ki_fp_filters" "SOT?23*"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(symbol "BAT54C_0_1"
+		(polyline
+			(pts
+				(xy -3.175 -1.27)
+				(xy -3.175 1.27)
+				(xy -1.27 0)
+				(xy -3.175 -1.27))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy -1.905 1.27)
+				(xy -1.905 1.016))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy -1.905 0)
+				(xy 1.905 0))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy -1.27 1.27)
+				(xy -1.905 1.27))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy -1.27 1.27)
+				(xy -1.27 -1.27))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy -1.27 0)
+				(xy -3.81 0))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy -1.27 -1.27)
+				(xy -0.635 -1.27))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy -0.635 -1.27)
+				(xy -0.635 -1.016))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none)))
+		(circle
+			(center 0 0)
+			(radius 0.254)
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type outline)))
+		(polyline
+			(pts
+				(xy 0.635 -1.27)
+				(xy 0.635 -1.016))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy 1.27 1.27)
+				(xy 1.27 -1.27))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy 1.27 1.27)
+				(xy 1.905 1.27))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy 1.27 -1.27)
+				(xy 0.635 -1.27))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy 1.905 1.27)
+				(xy 1.905 1.016))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy 3.175 -1.27)
+				(xy 3.175 1.27)
+				(xy 1.27 0)
+				(xy 3.175 -1.27))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy 3.81 0)
+				(xy 1.27 0))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none))))
+	(symbol "BAT54C_1_1"
+		(pin passive line
+			(at -7.62 0 0)
+			(length 3.81)
+			(name "~"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "1"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin passive line
+			(at 0 -5.08 90)
+			(length 5.08)
+			(name "~"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "3"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin passive line
+			(at 7.62 0 180)
+			(length 3.81)
+			(name "~"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "2"
+				(effects
+					(font
+						(size 1.27 1.27)))))))
 )
 (symbol (lib_id "genctl:TPS3431SDRBR") (at 85.09 80.01 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "6c6128fd-3567-4c2b-a137-7ec25c0715e2")
 (property "Reference" "U37" (at 77.47 68.58 0) (effects (font (size 1.27 1.27))))
@@ -9764,4 +9996,148 @@
 )
 (global_label "+3V3_SAFE" (shape passive) (at 207.01 698.5 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c04e39b1-be10-4a78-9fc3-6e65ee0dac66") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 207.01 698.5 0) (effects (font (size 1.27 1.27)) hide)))
 (label "WD_RC" (at 214.63 698.5 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "dd867e3d-032f-4d8b-aa91-e2974e6533d3"))
+(symbol (lib_id "Diode:BAT54C") (at 60.96 749.3 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "4d65a111-4d5b-433c-a889-6409db66272d")
+(property "Reference" "D128" (at 66.04 746.76 0) (effects (font (size 1.27 1.27))))
+(property "Value" "BAT54C" (at 66.04 751.84 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 60.96 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 60.96 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Dual Schottky common cathode" (at 60.96 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C37704" (at 60.96 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "BAT54C,215" (at 60.96 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Nexperia" (at 60.96 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "TMUX1208 U63 S-pin clamp to +3V3_SAFE (fixes_firmware.md s5 FW-007/014/S-L1)" (at 60.96 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "ba9a62d5-338d-4b3e-9ddc-f654a64fc334"))
+(pin "3" (uuid "c0f64271-e46d-4792-b113-9df2ddc602fc"))
+(pin "2" (uuid "b80a6c36-3a77-40b1-bbbf-8a33c7bda442"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "D128") (unit 1))))
+)
+(label "GLOW_SNSM" (at 53.34 749.3 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "2422540d-2780-4031-91de-8d5173533747"))
+(label "GCB_CL_SNSM" (at 68.58 749.3 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "5040edef-399f-4a14-b016-8112296dffd4"))
+(global_label "+3V3_SAFE" (shape passive) (at 60.96 754.38 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "382d0f6c-3052-48df-b9a6-7b422bbe25b2") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 60.96 754.38 0) (effects (font (size 1.27 1.27)) hide)))
+(symbol (lib_id "Diode:BAT54C") (at 81.28 749.3 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "be37a728-0168-447c-a026-ef67606d16ec")
+(property "Reference" "D129" (at 86.36 746.76 0) (effects (font (size 1.27 1.27))))
+(property "Value" "BAT54C" (at 86.36 751.84 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 81.28 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 81.28 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Dual Schottky common cathode" (at 81.28 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C37704" (at 81.28 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "BAT54C,215" (at 81.28 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Nexperia" (at 81.28 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "TMUX1208 U63 S-pin clamp to +3V3_SAFE (fixes_firmware.md s5 FW-007/014/S-L1)" (at 81.28 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "1e4fa217-9297-4478-9749-01f9a8e6cbe3"))
+(pin "3" (uuid "39285a26-31dc-4b13-8bc1-2554bd35ae41"))
+(pin "2" (uuid "e609815c-6245-4465-a6e9-6735349cd950"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "D129") (unit 1))))
+)
+(label "GCB_OP_SNSM" (at 73.66 749.3 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "d218ebed-cb20-4ef5-8ca1-b410d7df2143"))
+(label "MCB_CL_SNSM" (at 88.9 749.3 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "38e0f5f5-27a4-455f-bb4f-60ca732aeabc"))
+(global_label "+3V3_SAFE" (shape passive) (at 81.28 754.38 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "ca97207b-2e00-4605-88a7-245d56dd1c9a") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 81.28 754.38 0) (effects (font (size 1.27 1.27)) hide)))
+(symbol (lib_id "Diode:BAT54C") (at 101.6 749.3 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "4adb6e79-b7b4-4382-89a0-15cbbce73371")
+(property "Reference" "D130" (at 106.68 746.76 0) (effects (font (size 1.27 1.27))))
+(property "Value" "BAT54C" (at 106.68 751.84 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 101.6 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 101.6 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Dual Schottky common cathode" (at 101.6 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C37704" (at 101.6 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "BAT54C,215" (at 101.6 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Nexperia" (at 101.6 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "TMUX1208 U63 S-pin clamp to +3V3_SAFE (fixes_firmware.md s5 FW-007/014/S-L1)" (at 101.6 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "a262be78-e8c2-46bd-9826-ba8b8b4ff3a7"))
+(pin "3" (uuid "3cbe6a42-ffa3-46c4-8dd7-219cacb8d85d"))
+(pin "2" (uuid "3ce2f142-9d24-4528-8931-47f9c8ae9fe6"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "D130") (unit 1))))
+)
+(label "MCB_OP_SNSM" (at 93.98 749.3 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "95acadb6-244b-496f-b619-a4e01b554da1"))
+(label "AUX1_SNSM" (at 109.22 749.3 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "598a53e2-5d8d-4e88-81d4-d852edebef4e"))
+(global_label "+3V3_SAFE" (shape passive) (at 101.6 754.38 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "3b508187-3897-4be0-856b-ea6b28e5b7d4") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 101.6 754.38 0) (effects (font (size 1.27 1.27)) hide)))
+(symbol (lib_id "Diode:BAT54C") (at 121.92 749.3 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "fcbbe435-b46a-4334-8bc5-e65806a492e6")
+(property "Reference" "D131" (at 127.0 746.76 0) (effects (font (size 1.27 1.27))))
+(property "Value" "BAT54C" (at 127.0 751.84 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 121.92 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 121.92 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Dual Schottky common cathode" (at 121.92 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C37704" (at 121.92 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "BAT54C,215" (at 121.92 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Nexperia" (at 121.92 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "TMUX1208 U63 S-pin clamp to +3V3_SAFE (fixes_firmware.md s5 FW-007/014/S-L1)" (at 121.92 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "afa784d6-880b-42c8-a1cf-155b4318f6b8"))
+(pin "3" (uuid "0636d761-0406-4c26-9487-52459563ad81"))
+(pin "2" (uuid "c669040a-17b8-4f95-b05b-981574af689f"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "D131") (unit 1))))
+)
+(label "AUX2_SNSM" (at 114.3 749.3 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "0242cefc-ac3c-477c-93fd-6adc1d511b83"))
+(label "AUX3_SNSM" (at 129.54 749.3 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "e54ecd45-b4b4-4c99-86e0-99fce36e58a8"))
+(global_label "+3V3_SAFE" (shape passive) (at 121.92 754.38 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "426eb93d-e9a9-4ccd-8a23-9e41b583d676") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 121.92 754.38 0) (effects (font (size 1.27 1.27)) hide)))
+(symbol (lib_id "Diode:BAT54C") (at 142.24 749.3 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "7665f561-7dc4-497b-b5c9-fdb2e39a5dbe")
+(property "Reference" "D132" (at 147.32 746.76 0) (effects (font (size 1.27 1.27))))
+(property "Value" "BAT54C" (at 147.32 751.84 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 142.24 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 142.24 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Dual Schottky common cathode" (at 142.24 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C37704" (at 142.24 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "BAT54C,215" (at 142.24 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Nexperia" (at 142.24 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "TMUX1208 U64 S-pin clamp to +3V3_SAFE (fixes_firmware.md s5 FW-007/014/S-L1)" (at 142.24 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "b6db2873-f88f-4166-8026-1e26ad23a1ca"))
+(pin "3" (uuid "4800c339-18c1-4068-93e5-ce3645ced774"))
+(pin "2" (uuid "5fe9d7ee-05e5-4fa2-818b-bba02512fa82"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "D132") (unit 1))))
+)
+(label "AUX4_SNSM" (at 134.62 749.3 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "c6a3fe98-e542-4ee5-b34e-79bb2baa0a64"))
+(label "AUX5_SNSM" (at 149.86 749.3 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "b79d2b67-6141-447b-a6d3-cf7fcf2d3ef9"))
+(global_label "+3V3_SAFE" (shape passive) (at 142.24 754.38 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "b7394123-f28c-4b4e-b925-206d68d3824d") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 142.24 754.38 0) (effects (font (size 1.27 1.27)) hide)))
+(symbol (lib_id "Diode:BAT54C") (at 162.56 749.3 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "044a780e-198d-4840-a4b2-99775ee17c1a")
+(property "Reference" "D133" (at 167.64 746.76 0) (effects (font (size 1.27 1.27))))
+(property "Value" "BAT54C" (at 167.64 751.84 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 162.56 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 162.56 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Dual Schottky common cathode" (at 162.56 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C37704" (at 162.56 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "BAT54C,215" (at 162.56 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Nexperia" (at 162.56 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "TMUX1208 U64 S-pin clamp to +3V3_SAFE (fixes_firmware.md s5 FW-007/014/S-L1)" (at 162.56 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "f6c25c12-d949-4c83-a28d-649fff22be6d"))
+(pin "3" (uuid "d837fdf8-f260-4e85-b606-eb95ad2fc796"))
+(pin "2" (uuid "bc25e6db-c9e8-47fa-bbdb-b39f0f40f36c"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "D133") (unit 1))))
+)
+(label "AUX6_SNSM" (at 154.94 749.3 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "0044bec1-158f-4b10-8a13-9234a2b5d62c"))
+(label "AUX7_SNSM" (at 170.18 749.3 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "672e1fa3-eff0-4ddf-ac62-6d88088d1dc2"))
+(global_label "+3V3_SAFE" (shape passive) (at 162.56 754.38 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "951b7fde-4055-40f7-8a22-fc27f2e83859") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 162.56 754.38 0) (effects (font (size 1.27 1.27)) hide)))
+(symbol (lib_id "Diode:BAT54C") (at 182.88 749.3 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "32c81b59-f4bb-4893-8b2a-2b7c84262085")
+(property "Reference" "D134" (at 187.96 746.76 0) (effects (font (size 1.27 1.27))))
+(property "Value" "BAT54C" (at 187.96 751.84 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 182.88 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 182.88 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Dual Schottky common cathode" (at 182.88 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C37704" (at 182.88 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "BAT54C,215" (at 182.88 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Nexperia" (at 182.88 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "TMUX1208 U64 S-pin clamp to +3V3_SAFE (fixes_firmware.md s5 FW-007/014/S-L1)" (at 182.88 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "91930d77-a8da-415f-b1fc-cb8ba68e015f"))
+(pin "3" (uuid "da470c92-b89c-4ca2-b676-9d3ff8b566c1"))
+(pin "2" (uuid "a2d95a03-422f-45ed-bd2f-9a3471f2b777"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "D134") (unit 1))))
+)
+(label "AUX8_SNSM" (at 175.26 749.3 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "52e8d12b-e546-4505-b2d3-c912dfd0bb94"))
+(label "AUX9_SNSM" (at 190.5 749.3 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "b5f61a6d-fa2f-4203-9743-edba5542c2a8"))
+(global_label "+3V3_SAFE" (shape passive) (at 182.88 754.38 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "723107a4-a2e7-4d9c-8ecc-73e3c598aa06") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 182.88 754.38 0) (effects (font (size 1.27 1.27)) hide)))
+(symbol (lib_id "Diode:BAT54C") (at 203.20000000000002 749.3 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "8f94473f-76a6-47fa-90e4-37057019c9c9")
+(property "Reference" "D135" (at 208.28 746.76 0) (effects (font (size 1.27 1.27))))
+(property "Value" "BAT54C" (at 208.28 751.84 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 203.20000000000002 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 203.20000000000002 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Dual Schottky common cathode" (at 203.20000000000002 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C37704" (at 203.20000000000002 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "BAT54C,215" (at 203.20000000000002 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Nexperia" (at 203.20000000000002 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "TMUX1208 U64 S-pin clamp to +3V3_SAFE (fixes_firmware.md s5 FW-007/014/S-L1)" (at 203.20000000000002 749.3 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "78d4590a-d03f-4ddc-94c5-b687d81d23a4"))
+(pin "3" (uuid "e0a238c6-3c13-49a0-a805-5269727d6d5b"))
+(pin "2" (uuid "b90b8ea1-e8b8-4c34-ae06-b190391a469d"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "D135") (unit 1))))
+)
+(label "AUX10_SNSM" (at 195.58 749.3 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "342490f0-cd99-46ee-9f22-5366a97db0de"))
+(global_label "ESTOP_TRIP_SNSM" (shape passive) (at 210.82 749.3 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "e0850a62-4492-4e14-b88e-fbfd23e40939") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 210.82 749.3 0) (effects (font (size 1.27 1.27)) hide)))
+(global_label "+3V3_SAFE" (shape passive) (at 203.2 754.38 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "e57021ac-09e7-449e-9614-277031eb2a03") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 203.2 754.38 0) (effects (font (size 1.27 1.27)) hide)))
 )

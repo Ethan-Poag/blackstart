@@ -476,6 +476,9 @@ for nm,lst in (('MUXA_OUT',mA),('MUXB_OUT',mB)):
     c={'D':nm,'A0':'MUX_A0','A1':'MUX_A1','A2':'MUX_A2','EN':'+3V3','VDD':'+3V3','GND':'GND','NC':None}
     for i,s_ in enumerate(lst): c['S%d'%(i+1)]=s_
     ou.p('genctl:TMUX1208PWR','TMUX1208PWR',c,mpn='TMUX1208PWR'); ou.C('100n','+3V3','GND'); ou.C('10n',nm,'GND')
+# m7-sch FW-007/014/S-L1: BAT54C clamps on TMUX1208 S pins to +3V3_SAFE (fixes_firmware.md s5)
+for _i,(_a,_b) in enumerate(zip((mA+mB)[0::2],(mA+mB)[1::2])):
+    ou.p('Diode:BAT54C','BAT54C',{'1':_a,'2':_b,'3':'+3V3_SAFE'},ref='D%d'%(128+_i),mpn='BAT54C,215',lcsc='C37704',mfr='Nexperia',fp='Package_TO_SOT_SMD:SOT-23',note='TMUX1208 S-pin clamp')
 conn(ou,4,['VBAT_ESTOP','VBAT_ESTOP','FUEL_OUT','CRANK_OUT'],'J4 E-stop/fuel/crank (PC 5/4-7.62)',mpn='Phoenix PC 5/4-GF-7,62')
 conn(ou,6,['GLOW_OUT','GCB_CL_OUT','GCB_OP_OUT','MCB_CL_OUT','MCB_OP_OUT','ESTOP_TRIP_OUT'],'J5A outputs')
 conn(ou,6,['GND','GND','GND','GND','GND','GND'],'J5B returns')
