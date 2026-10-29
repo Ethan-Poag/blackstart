@@ -648,3 +648,5 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
   - D4: pad 1 = VCC net, pad 2 = NC, pad 3 = BB_BOOT2.
   - Manufacturer field set to JSCJ.
 - tools/design.py still emits Device:D_Schottky for D3/D4. The generator is not regenerated; this is a deferred generator fix. PCB: D3/D4 pad nets change, which is pending at layout.
+
+6-3 docs/PIN_FOOTPRINT_SWEEP.md: 1309 parts pin/pad sweep + 19 LCSC datasheet pinout checks; no further fixes (BAS70 fixed in 90c4879).
