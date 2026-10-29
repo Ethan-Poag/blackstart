@@ -13,7 +13,7 @@ Status: DONE = schematic/BOM commit; DOC = declaration or firmware only, no sche
 | R3-7(a) BZT52C36 -> BORN C511892 | SKIP | no BZT52C36 / BCP56 / VBAT_AI rail exists in the schematic (the L1/L2 36 V rail was never implemented), so no refs to change. Needs a ruling on whether to implement L1 (VBAT_AI) |
 | R3-7(b) C3/C4 EEETG1J101UP C178628 | DONE | 5da6f56 |
 | R3-8 H1 2x SQD40P10-40L + 10k + BZT52C15 | DONE | 4e4c84f (Q70/Q71, R627, D137; J23 on VBAT_ESTOP_IN) |
-| R3-9 J30 Phoenix 1720851 | SKIP | J30 is still KF2EDGRM-5.08-8P C441294: there is no 1720851 footprint in genctl.pretty, and C6651769 has 0 stock (changelog l.283). Needs a footprint and a buy decision |
+| R3-9 J30 Phoenix 1720851 | DONE (3c, c4c54d2) | MPN 1720851, LCSC C6651769, Mate SPC 5/8-STF-7,62 (1996184), Mate_LCSC UNVERIFIED. Footprint is the pad-less PLACEHOLDER_PhoenixContact_PC5_8-GF-7.62_1720851 (DO-NOT-FAB) because no true-match footprint exists; deferred_layout D-m7-9. Stock 0 at 16:33 HST is a procurement note. ac_metering row at $9.8499 live |
 | R3 layout checklist | LAYOUT | D-m7-6 (L3), D-m7-7 (H1), D-m7-8 (BAV99), R3-5 slot |
 | R3 firmware checklist | DOC | firmware |
 
@@ -38,7 +38,7 @@ Status: DONE = schematic/BOM commit; DOC = declaration or firmware only, no sche
 | M1 F1 removal | DONE | changelog Item 2 (pre-batch) |
 | M2 TPS1HTC30 no BOM change | DOC | MPN corrected to TPS1HTC30AQPWPRQ1 in 06d1d4b (TI orderable) |
 | M3 L3 | DONE | 52e8028 |
-| M4 J30 keep KF2EDGRM | as-is | superseded by R3-9 (Phoenix), see SKIP above |
+| M4 J30 keep KF2EDGRM | superseded | R3-9 DONE in c4c54d2 (Phoenix 1720851) |
 | M5 CT clamps 2x BAV99 | DONE | d35e330 (8 parts: the board has 4 CT channels, not 8) |
 | M6 C3/C4/C5-C8/C225/C131 | DONE | 5da6f56 |
 | M6 C39/C144-146/C205-219/C233 | SKIP (not needed) | C28233 is already 100 V (live LCSC); changelog B3-4 |
@@ -55,10 +55,13 @@ Status: DONE = schematic/BOM commit; DOC = declaration or firmware only, no sche
 | S-L1/S-L2/S-M1 (Rev 3 header refs) | DONE | 5f080c9 (S-L1), bc778a6 (S-L2 R558), 8736729 (S-M1) |
 
 ## fixes_mechanical.md
-| §1 J30 Phoenix 1720851 | SKIP | see R3-9 |
+| §1 J30 Phoenix 1720851 | DONE | c4c54d2, see R3-9 |
 | §2 RV1-6 7.5 mm footprint | DONE in sch (no change); PCB LAYOUT D2 |
-| §3 mating plugs | DONE | af42672 (J30 has no Mate props; it waits on §1) |
+| §3 mating plugs | DONE | af42672 ; J30 Mate props added in c4c54d2 |
 | §4 J28/J29 gap | LAYOUT | D4 slot |
 | §5 H1-H4 M4 | DONE | 9743dec (CHASSIS = C48,C87,C93,H1-H3,J10,J11,R33,R89,R94; no H4) |
 | §6 CAN2 daughter board | separate board files; text corrected (N5, line 90): SW6 deleted, no on-board CAN2 termination |
 | §7 BOM consistency | DONE | af42672 (1720819 C3579760; "not at LCSC" count 0); 8ffcc67 (tools/bom_from_sch.py reconcile) |
+
+
+3c addendum: C28233 'small passives' placeholder row resolved in 2fa36b7 (real per-code rows, 0 bom_from_sch mismatches); N4 docs in 846134d.

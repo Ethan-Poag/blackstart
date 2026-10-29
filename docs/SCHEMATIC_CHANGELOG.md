@@ -446,3 +446,5 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 - Marked superseded, not rewritten, because they are records of the unchanged as-built board copper (F1 clips and net VBAT_F still exist on the .kicad_pcb): header banner in docs/RAIL_PLAN.md, docs/ROUTING_PLAN.md and mechanical/pcb_v4/README.md; a note under the F1 row in mechanical/enclosure/v3/BOARD_INTERFACE.md.
 - place_v4.py: only the comment on l.40 (U1 placement) was edited; no code references F1.
 - Not edited (not in scope): mechanical/enclosure/v3/board_interface.json F1 entry (generated from the PCB).
+
+### 3c-7: SPEC_CHECKLIST_3b.md updated: R3-9/§1 J30 DONE (c4c54d2), §3 J30 mate DONE; C28233 resolved (see 3c-5, 2fa36b7).
