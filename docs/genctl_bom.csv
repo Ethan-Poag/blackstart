@@ -165,6 +165,7 @@
 "R536","4.7k","Resistor_SMD:R_0603_1608Metric","","C23162","1",""
 "R554","220k","Resistor_SMD:R_0603_1608Metric","","C22961","1",""
 "R557","33","Resistor_SMD:R_0603_1608Metric","0603WAF330JT5E","C23140","1",""
+"R558","0","Resistor_SMD:R_0603_1608Metric","0603WAF0000T5E","C21189","1",""
 "RV1-RV6","TMOV20RP460E","genctl:TMOV20RP_P7.5mm_inline","TMOV20RP460EL2T7","C3260792","6",""
 "SW1","RESET","Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A","TS-1187A-B-A-B","C318884","1",""
 "SW2","BOOT0","Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A","TS-1187A-B-A-B","C318884","1",""

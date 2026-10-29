@@ -173,7 +173,7 @@ cma={'GND':'GND','5V':'+5V_CM5','CM5_3.3V':'CM5_3V3','CM5_1.8V':'CM5_1V8','GPIO_
  'GPIO8':'CM5_SPI_CE0X','GPIO9':'CM5_SPI_MISO','GPIO10':'CM5_SPI_MOSI','GPIO11':'CM5_SPI_SCK','GPIO12':'BL_PWM','GPIO13':'BTN_BL_PWM','GPIO14':'CM5_UART_TX','GPIO15':'CM5_UART_RX',
  'GPIO16':'PANEL_VDD_EN','GPIO17':'CM5_PWR_FAIL','GPIO18':'HDRA_SPI_CE0','GPIO19':'HDRA_SPI_MISO','GPIO20':'HDRA_SPI_MOSI','GPIO21':'HDRA_SPI_SCK',
  'GPIO22':'CM5_NRST','GPIO23':'CM5_SWCLK','GPIO24':'CM5_SWDIO','GPIO25':'CM5_MCU_IRQ','GPIO26':'CM5_HB','GPIO27':'CM5_BOOT0',
- 'LED_nACT':'CM5_LED_ACT_N','LED_nPWR':'CM5_LED_PWR_N','PWR_Button':'CM5_PWR_BTN','PMIC_Enable':'CM5_PMIC_EN','EEPROM_nWP':None}
+ 'LED_nACT':'CM5_LED_ACT_N','LED_nPWR':'CM5_LED_PWR_N','PWR_Button':'CM5_PWR_BTN','PMIC_Enable':'CM5_PMIC_EN','EEPROM_nWP':'CM5_EEPROM_NWP'}
 # fix GPIO7 = DSI83_IRQ, GPIO8 = SPI CE0
 cma['GPIO7']='DSI83_IRQ'; cma['GPIO8']='CM5_SPI_CE0'
 cm.p('genctl:RPi_CM5_A','CM5 (conn A)',cma,mpn='SC1xxx CM5 (variant TBD)')
@@ -217,6 +217,8 @@ for _ in range(2): cm.C('22u','+5V_HU','GND',pkg='1206')
 cm.p('genctl:TPS2121RUXR','TPS2121RUXR',{'IN1':'+5V','IN2':'+5V_HU','PR1':'HU_PR1','CP2':'GND','OV1':'GND','OV2':'GND','GND':'GND','OUT':'+5V_CM5','ST':'HU_ST','ILM':'HU_ILM','SS':'HU_SS'},mpn='TPS2121RUXR',lcsc='C485916',note='IN1 priority >4.58V')
 cm.R('33.2k','+5V','HU_PR1',note='PR1 1.06V -> IN1 valid >4.58V rising / 4.49V falling'); cm.R('10k','HU_PR1','GND')
 cm.R('29.4k','HU_ILM','GND',note='ILIM ~3.5A'); cm.C('100n','HU_SS','GND'); cm.C('1u','+5V','GND'); cm.C('1u','+5V_HU','GND')
+# m7-sch S-L2: EEPROM write-protect, R558 0R fitted (fixes_firmware.md Rev 2 s12)
+cm.R('0','CM5_EEPROM_NWP','GND',ref='R558',mpn='0603WAF0000T5E',lcsc='C21189',mfr='UNI-ROYAL',note='FITTED; lift for bench EEPROM update')
 # m7-sch FW-004/FW-028 (fixes_firmware.md s3.3)
 cm.R('10k','CM5_OFF','GND',ref='R552',lcsc='C25804',note='CM5_OFF pull-down vs TCA9555 POR'); cm.R('10k','CM5_PWRBTN_MCU','GND',ref='R553',lcsc='C25804',note='CM5_PWRBTN_MCU pull-down vs TCA9555 POR')
 

@@ -179,3 +179,12 @@ Ref mapping: spec "C293" = real **C298** (schematic C293 is an existing LM5176 2
 | bom/outputs_bom.csv | 2x 2.3975 | 2x 2.92 (spec, stock 2092); TOTAL 160.21 → 161.25 | BOM | §10.2 |
 | tools/design.py | — | INA281A1 + LCSC map | regen | — |
 Dependency: the 0.40 V/A scaling needs R297/R303 = 20 mΩ (Safety batch 3; still 1 mΩ in this branch).
+
+## FW-10: CM5 EEPROM write-protect (S-L2, Rev 2: fitted)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| U9 pin 20 EEPROM_nWP (cm5) | no-connect flag (internal 100k pull-up) | net CM5_EEPROM_NWP | hold EEPROM write-protected | fixes_firmware.md Rev 2 §12; CM5 datasheet §2.12.2, §3.1 (quoted in spec) |
+| R558 (new, cm5) | — | 0 Ω 0603 0603WAF0000T5E C21189, CM5_EEPROM_NWP → GND, FITTED | same; lift for bench update | §12, parent update 2026-10-28 3:42 PM HST |
+| bom/other_bom.csv | — | +1 row (price UNVERIFIED) | BOM | — |
+| tools/design.py | — | EEPROM_nWP net + R558 | regen | — |
+Software WP must also be set in the CM5 image (spec, UNVERIFIED).
