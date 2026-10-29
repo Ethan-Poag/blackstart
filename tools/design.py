@@ -6,7 +6,7 @@ def conn(sh,n,pinnets,value,mpn='',lcsc=None,note=''):
     return sh.p(lid,value,{str(i+1):v for i,v in enumerate(pinnets)},prefix='J',mpn=mpn,lcsc=lcsc,note=note)
 def tvs(sh,val,a,b='GND',uni=False):
     if uni: return sh.p('Device:D_Zener',val,{'K':a,'A':b},prefix='D',mpn=val,note='unidirectional TVS')
-    return sh.p('Device:D_TVS',val,{'1':a,'2':b},prefix='D',mpn=val)
+    return sh.p('Device:D_TVS',val,{'1':a,'2':b},prefix='D',mpn=val,mfr={'SMBJ40CA':'MDD(Microdiode Semiconductor)','SMDJ40CA':'Littelfuse'}.get(val,''))  # m7-sch Rev 3 H4/H5 mfr
 def schottky(sh,val,a,k,mpn=None):
     return sh.p('Device:D_Schottky',val,{'A':a,'K':k},prefix='D',mpn=mpn or val)
 def fet(sh,lib,val,g,s,d,mpn=None):
@@ -51,9 +51,9 @@ fet(pw,'Transistor_FET:BSC070N10NS5','BSC070N10NS5','LM748_HGATE','VBAT_PS','VBA
 # m7-sch B3-7 FW-006 / Safety R2-1, R3-3: battery shunt + INA237 (spec C296 -> C304)
 pw.R('2m','VBAT_PS','VBAT_P',pkg='2512',ref='R555',mpn='CSS2H-2512K-2L00F',lcsc='C2093761',mfr='Bourns',note='battery shunt 2 mOhm 5 W')
 pw.R('10R','VBAT_PS','INA_INP',ref='R623',mpn='0603WAF100JT5E',lcsc='C22859',mfr='UNI-ROYAL'); pw.R('10R','VBAT_P','INA_INN',ref='R624',mpn='0603WAF100JT5E',lcsc='C22859',mfr='UNI-ROYAL')
-pw.C('100n','INA_INP','INA_INN',ref='C305',lcsc='C14663')
+pw.C('100n','INA_INP','INA_INN',ref='C305',lcsc='C14663',mpn='CC0603KRX7R9BB104',mfr='YAGEO')
 pw.p('Sensor_Energy:INA237','INA237AIDGSR',{'Vin+':'INA_INP','Vin-':'INA_INN','Vbus':'VBAT_P','VS':'+3V3_SAFE','GND':'GND','A1':'GND','A0':'GND','SDA':'I2C1_SDA','SCL':'I2C1_SCL','~{Alert}':'OUT_FAULT_N'},prefix='U',ref='U86',mpn='INA237AIDGSR',lcsc='C2864837',mfr='Texas Instruments',fp='Package_SO:VSSOP-10_3x3mm_P0.5mm')
-pw.C('100n','+3V3_SAFE','GND',ref='C304',lcsc='C14663')
+pw.C('100n','+3V3_SAFE','GND',ref='C304',lcsc='C14663',mpn='CC0603KRX7R9BB104',mfr='YAGEO')
 tvs(pw,'SMBJ40CA','VBAT_P')  # Rev 3 H4
 for _ in range(2): pw.C('100u 63V','VBAT_P','GND',pol=True,mpn='EEETG1J101UP',lcsc='C178628',mfr='Panasonic',pkg='Capacitor_SMD:CP_Elec_10x10.5')  # C3/C4 Rev 3 R3-7
 for _ in range(4): pw.C('10u','VBAT_P','GND',pkg='1210',mpn='GRM32EC72A106KE05L',lcsc='C576517',mfr='Murata',note='100V X7S (Rev 3 M6)')
@@ -365,7 +365,7 @@ inp.C('1u','VMID','GND'); dec(inp,'+3V3')
 # AI ref
 inp.p('Reference_Voltage:LM4040DBZ-2.5','LM4040A25',{'K':'VBAT_P','A':'AI_VSET'},prefix='D',mpn='LM4040A25IDBZR')
 inp.R('10k','AI_VSET','GND',pkg='1206',note='ref bias ~1-2.8mA')
-inp.C('100n','VBAT_P','AI_VSET',mpn='CL10B104KC8NNNC',lcsc='C15725',mfr='Samsung',note='100V (Rev 3 M6)')
+inp.C('100n','VBAT_P','AI_VSET',mpn='CL10B104KC8NNNC',lcsc='C15725',mfr='Samsung Electro-Mechanics',note='100V (Rev 3 M6)')
 ADC={1:('ADC1','AIN0'),2:('ADC1','AIN1'),3:('ADC1','AIN2'),4:('ADC2','AIN0'),5:('ADC2','AIN1'),6:('ADC2','AIN2')}
 oas={}
 for ch in range(1,7):
@@ -559,20 +559,20 @@ ac.p('Device:Crystal_GND24','24.576MHz',{'1':'ADE_XI','3':'ADE_XO','2':'GND_AC',
 ac.p('74xGxx:74LVC1GU04','SN74LVC1GU04DBVR',{'2':'ADE_XO_AC','3':'GND_AC','4':'ADE_CLK_Y','5':'+3V3_AC'},ref='U87',mpn='SN74LVC1GU04DBVR',lcsc='C81934',mfr='TI',fp='Package_TO_SOT_SMD:SOT-23-5')
 ac.C('100p','ADE_XO','ADE_XO_AC',ref='C301',mpn='CL10C101JB8NNNC',lcsc='C14858',mfr='Samsung'); ac.R('1M','ADE_CLK_Y','ADE_XO_AC',ref='R556',lcsc='C22935')
 ac.R('33','ADE_CLK_Y','ADE_CLK_BUF',ref='R557',mpn='0603WAF330JT5E',lcsc='C23140',mfr='UNI-ROYAL'); ac.C('100n','+3V3_AC','GND_AC',ref='C302',lcsc='C14663')
-for tag,J in (('GEN','J7'),('BUS','J8')):
+for _ti,(tag,J) in enumerate((('GEN','J7'),('BUS','J8'))):
     conn(ac,4,[tag+'_L1',tag+'_L2',tag+'_L3',tag+'_N'],'%s %s voltage (L1 L2 L3 N)'%(J,tag),note='external DIN fuses assumed (spec); >=600VAC rated terminal')
     for ph,L in zip('ABC',('L1','L2','L3')):
         ac.p('Device:Varistor','TMOV20RP460E',{'1':tag+'_'+L,'2':tag+'_N'},prefix='RV',mpn='TMOV20RP460EL2T7',lcsc='C3260792',mfr='Littelfuse',fp='genctl:TMOV20RP_P7.5mm_inline')  # RV1-RV6: manual sch edit 32b12c7/7eaa27d folded into design.py
         a=tag+'_'+L
         for j in range(12):  # m7-sch Rev 3 H6/R2-3: 12 x 330k C17929 per leg (was 4 x 1M); C1..C8 are the 8 added links
             b=('%s_%s_C%d'%(tag,L,j+1)) if j<8 else (('%s_%s_HV%d'%(tag,L,j-7)) if j<11 else '%s_V%s_TAP'%(tag,ph))
-            ac.R('330k',a,b,pkg='1206',mpn='1206W4F3303T5E',lcsc='C17929',mfr='UNI-ROYAL',note='HV chain 1206 330k (Rev 3 H6)'); a=b
+            ac.R('330k',a,b,pkg='1206',mpn='1206W4F3303T5E',lcsc='C17929',mfr='UNI-ROYAL',note='HV chain 1206 330k (Rev 3 H6)',ref=('R%d'%(559+(_ti*4+'ABC'.index(ph))*8+j) if j<8 else None)); a=b  # fixed refs R559-R622 for the added links (matches schematic)
         ac.R('1k','%s_V%s_TAP'%(tag,ph),'GND_AC'); ac.R('1k','%s_V%s_TAP'%(tag,ph),'%s_V%s_P'%(tag,ph)); ac.C('33n','%s_V%s_P'%(tag,ph),'GND_AC')
         ac.R('1k',tag+'_VN_TAP','%s_V%s_N'%(tag,ph)); ac.C('33n','%s_V%s_N'%(tag,ph),'GND_AC')
     a=tag+'_N'
     for j in range(12):  # m7-sch Rev 3 H6: 12 x 330k per leg
         b=('%s_N_C%d'%(tag,j+1)) if j<8 else (('%s_N_HV%d'%(tag,j-7)) if j<11 else tag+'_VN_TAP')
-        ac.R('330k',a,b,pkg='1206',mpn='1206W4F3303T5E',lcsc='C17929',mfr='UNI-ROYAL',note='HV 1206 neutral divider (own reference per system), Rev 3 H6'); a=b
+        ac.R('330k',a,b,pkg='1206',mpn='1206W4F3303T5E',lcsc='C17929',mfr='UNI-ROYAL',note='HV 1206 neutral divider (own reference per system), Rev 3 H6',ref=('R%d'%(559+(_ti*4+3)*8+j) if j<8 else None)); a=b
     ac.R('1k',tag+'_VN_TAP','GND_AC',note='neutral divider tap - no direct N-GND_AC link')
 cts=[]
 for i,ph in enumerate('ABCN',1):
@@ -710,6 +710,7 @@ def _fill(pt):
                 pt.fp='genctl:KF2EDGRM-5.08-6P'; pt.lcsc='C441292'; pt.mpn='KF2EDGRM-5.08-6P'  # FIX rev f: field I/O are 5.08 mm Kefa per BOM (was 3.81 WJ15)
             if n==4 and 'voltage' in pt.value:
                 pt.fp='genctl:PhoenixContact_PC5_4-GF-7.62_1720819'; pt.lcsc='C3579760'; pt.mpn='1720819'  # FIX rev f: BOM part is Phoenix PC 5/4-GF-7,62 (was KF2 5.08 6P, 2.6 mm L-L gap)
+    if (pt.mpn or '').startswith('SM04B-SRSS-TB'): pt.lcsc='C160404'; pt.mpn='SM04B-SRSS-TB(LF)(SN)'; pt.mfr='JST'  # m7-sch B3-10: gen.py LCSC table (read from /workspace/genctl/*.csv) still maps the XY clone C51940130
     # m7-sch B3-10 (fixes_mechanical.md s3, fixes_mates.csv): mating plug properties keyed by header MPN (J30 excluded: header MPN mismatch)
     if pt.mpn in MATES: pt.extra=dict(zip(('Mate_MPN','Mate_LCSC','Mate_Qty'),MATES[pt.mpn]))
     if lid=='Device:LED' and pt.lcsc in ('C2297','C2295'): pt.fp='LED_SMD:LED_0805_2012Metric'

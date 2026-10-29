@@ -329,3 +329,14 @@ TOTAL = round(sum(qty × unit price), 2) over rows with a numeric qty and price;
 | other_bom | 407.83 | 407.85 | 7 (incl. 4 ESTIMATE fab/assembly/enclosure/bezel rows) |
 | ac_metering_bom | none | 45.75 (new TOTAL row) | 20 |
 Also fixed outputs_bom row 22: an unquoted comma in "(U38-U40, U67)" had shifted every column (qty read as text).
+
+### m7-sch: design.py/gen.py regen consistency (R2-N3/N5/N7)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| R559-R622 (design.py H6 loop) | auto-numbered (collided with fixed R531-R558 → duplicate refs on regen) | fixed refs R559+(chain*8+j), order GEN L1,L2,L3,N then BUS L1,L2,L3,N | regen must reproduce the committed refs | scratch regen /workspace/m7regen |
+| D2,D68,D69,D74-D98(even),D100,D102,D123,D126 (tvs()) | mfr blank in generator | MDD / Littelfuse per MPN | match committed schematic | Rev 3 H4/H5 commits |
+| C304,C305 | no MPN in generator | CC0603KRX7R9BB104 / YAGEO | match schematic | BIAS/INA commits |
+| C131 | mfr 'Samsung' | 'Samsung Electro-Mechanics' | match schematic | — |
+| J4,J12,J13 | gen.py LCSC table (reads /workspace/genctl/*.csv in the main checkout) gives C51940130 | forced C160404 / JST SM04B-SRSS-TB(LF)(SN) | match af42672 | — |
+
+Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all diffs left after this change are also in the 187984d baseline regen: 110 connectivity diffs from the generator's capacitor auto-numbering drift starting at C200 (regen is off by one ref from the committed schematic), duplicate U25-U28/U32-U35, and 2-pin nets left unnamed ('~'/Net-(...)) by the generator (name-only). This drift was there before this branch and is NOT fixed here. Open issue: gen.py builds its LCSC lookup from the main-checkout CSVs (/workspace/genctl/*.csv), not from this repo's bom/.
