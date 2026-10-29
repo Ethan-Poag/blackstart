@@ -588,3 +588,16 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
   - INSTALL_SAFETY output table l.34/35/37/38 "limit 2.49 A" -> "limit 4.02 A (3.18–4.87 A)";
   - l.86 "not supported at 2.49 A" reworded.
 - fixes_firmware.md §20 matches these refs and figures. §20.2 unrounded is 3.21/4.02/4.82 A; with ±1 % it is 3.18/4.02/4.87 A, the same as here.
+
+### 5-2: LM74800 U1 VSNS/SW to VBAT_DD (item 2; fixes_safety.md C5 / M5)
+- Verified before the edit:
+  - net VBAT_DD exists = C1.1, C2.2, Q1.5 (D), Q2.5 (D), U1.10 (VS), U1.12 (C). Per C5, VS and C are on VBAT_DD.
+  - U1.3 (VSNS) and U1.4 (SW) were on BAT_IN: pin 3 by a wire into the BAT_IN junction at (90.17, 91.44); pin 4 by a BAT_IN power symbol #PWR1030 at (88.9, 93.98).
+- Change, power.kicad_sch:
+  - removed wire (90.17, 91.44)-(91.44, 91.44);
+  - removed #PWR1030;
+  - added wire U1.3-U1.4 (x 91.44) and a VBAT_DD local label at (88.9, 93.98).
+- U1.3 and U1.4 stay shorted together and are now on VBAT_DD with VS. No resistor. R1 (210k) stays on BAT_IN, so OV/UVLO still sense the raw battery.
+- Netlist diff vs previous HEAD: only U1.3 and U1.4 moved from BAT_IN (11 -> 9 nodes) to VBAT_DD (6 -> 8 nodes).
+- Datasheet SNOSD95C p3: "If the internal disconnect switch between VSNS and SW is not used then short them together and connect to VS pin." $0.
+- PCB: U1 pads 3/4 net change pending at layout (PCB untouched).
