@@ -224,3 +224,12 @@ Not changed (open question, see report): INSTALL_SAFETY.md output-fuse table (l.
 | D68, D69, D126 | SMBJ33CA C78420 D_SMB | SMDJ40CA C224077 **D_SMC** | 3 kW on the VBAT_ESTOP side (no OV cut-off) | fixes_safety.md H5 l.449. Spec says "on VBAT_ESTOP"; MEASURED nets: D126 = VBAT_ESTOP, D69 = CRANK_OUT, D68 = Net-(D68-A1) (FUEL clamp side). Refs are explicit so applied as listed |
 | POWER sheet note, design.py | "-> SMDJ36CA ->" | "-> SMDJ40CA ->" | doc sync | — |
 PCB: D68/D69/D126 footprint SMB -> SMC, see deferred_layout.md D9. outputs_bom/power_bom TOTAL lines updated by delta.
+
+## B3-4: VBAT_P-side capacitor voltage uprate (Safety R3-7(b), M6)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| C3, C4 | 100u 50V EEHZA1H101P C109086 | 100u 63V Panasonic EEETG1J101UP C178628 (LIVE LCSC 2026-10-28: stock 3323, $0.7511 @1); footprint CP_Elec_10x10.5 kept | 40.1 V OV max on 50 V part | fixes_safety.md l.30, l.170. Land match INFERRED (D10); ESR 0.8 Ω vs 28 mΩ polymer, ripple to re-check |
+| C5, C6, C7, C8, C225 | 10u 1210 CL32B106KBJNNNE C138687 (50 V) | Murata GRM32EC72A106KE05L C576517 10u 100V X7S 1210 (LIVE: stock 6144, $0.5403 @1) | M6 | fixes_safety.md l.463 |
+| C131 | 100n 0603 C14663 (50 V) | Samsung CL10B104KC8NNNC C15725 100 V 0603 (LIVE: 335750, $0.0134 @50) | M6 | l.465 |
+| C39, C144–C146, C205–C219, C233 (19) | — | **NOT CHANGED** | Spec row l.466 says these are "100 nF 50 V 0805 (C28233)", but LIVE LCSC shows C28233 = Samsung CL21B104KCFNNNE **100 V** X7R 0805 (stock 27450), so they are already 100 V. Skipped; reported | live LCSC |
+power_bom row 7 qty 6 -> 5 (netlist count). inputs_bom C14663 row 32 -> 31 + new C131 row.

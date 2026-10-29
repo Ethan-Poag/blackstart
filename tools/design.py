@@ -49,8 +49,8 @@ pw.R('210k','BAT_IN','LM748_EN'); pw.R('49.9k','LM748_EN','LM748_OV'); pw.R('8.6
 fet(pw,'Transistor_FET:BSC070N10NS5','BSC070N10NS5','LM748_DGATE','BAT_IN','VBAT_DD')
 fet(pw,'Transistor_FET:BSC070N10NS5','BSC070N10NS5','LM748_HGATE','VBAT_P','VBAT_DD')
 tvs(pw,'SMBJ40CA','VBAT_P')  # Rev 3 H4
-for _ in range(2): pw.C('100u 50V','VBAT_P','GND',pol=True,mpn='EEHZA1H101P',pkg='Capacitor_SMD:CP_Elec_10x10.5')
-for _ in range(4): pw.C('10u','VBAT_P','GND',pkg='1210',note='50V X7R')
+for _ in range(2): pw.C('100u 63V','VBAT_P','GND',pol=True,mpn='EEETG1J101UP',lcsc='C178628',mfr='Panasonic',pkg='Capacitor_SMD:CP_Elec_10x10.5')  # C3/C4 Rev 3 R3-7
+for _ in range(4): pw.C('10u','VBAT_P','GND',pkg='1210',mpn='GRM32EC72A106KE05L',lcsc='C576517',mfr='Murata',note='100V X7S (Rev 3 M6)')
 # LM5176
 pw.p('genctl:LM5176PWPR','LM5176PWPR',{'VIN':'VBAT_P','VISNS':'VBAT_P','EN/UVLO':'BB_EN','MODE':'BB_MODE','DITH':'GND','RT/SYNC':'BB_RT','SLOPE':'BB_SLOPE',
    'SS':'BB_SS','COMP':'BB_COMP','FB':'BB_FB','VOSNS':'+12V','ISNS+':'GND','ISNS-':'GND','AGND':'GND','EP':'GND',
@@ -358,7 +358,7 @@ inp.C('1u','VMID','GND'); dec(inp,'+3V3')
 # AI ref
 inp.p('Reference_Voltage:LM4040DBZ-2.5','LM4040A25',{'K':'VBAT_P','A':'AI_VSET'},prefix='D',mpn='LM4040A25IDBZR')
 inp.R('10k','AI_VSET','GND',pkg='1206',note='ref bias ~1-2.8mA')
-inp.C('100n','VBAT_P','AI_VSET')
+inp.C('100n','VBAT_P','AI_VSET',mpn='CL10B104KC8NNNC',lcsc='C15725',mfr='Samsung',note='100V (Rev 3 M6)')
 ADC={1:('ADC1','AIN0'),2:('ADC1','AIN1'),3:('ADC1','AIN2'),4:('ADC2','AIN0'),5:('ADC2','AIN1'),6:('ADC2','AIN2')}
 oas={}
 for ch in range(1,7):
@@ -504,7 +504,7 @@ es=S('estop','E-stop trip and sense',
  '555 powered from +5V_TRIP (TPS7B6950 from VBAT_P via SS110 + hold-up). BAT54C OR of 555 Q and (MCU_TRIP AND WDO) -> TPS1HTC30 ESTOP_TRIP.\n'
  'ADDED: 4th LVC1G08 gates MCU_TRIP with WDO. Hold-up cap changed to 50V (BOM 25V part < 30V OV threshold).')
 schottky(es,'SS110','VBAT_P','TRIP_LDO_IN',mpn='SS110')
-es.C('10u','TRIP_LDO_IN','GND',pkg='1210',note='50V (BOM 25V too low)')
+es.C('10u','TRIP_LDO_IN','GND',pkg='1210',mpn='GRM32EC72A106KE05L',lcsc='C576517',mfr='Murata',note='100V X7S (Rev 3 M6; was 50V)')
 es.p('genctl:TPS7B6950QDBVRQ1','TPS7B6950QDBVRQ1',{'IN':'TRIP_LDO_IN','GND':'GND','OUT':'+5V_TRIP','NC':None},mpn='TPS7B6950QDBVRQ1',lcsc='C132202')
 es.C('2.2u','+5V_TRIP','GND',pkg='0805'); es.C('100n','+5V_TRIP','GND')
 es.R('47k','VBAT_ESTOP','TRIP_QB'); es.R('10k','TRIP_QB','GND'); npn(es,'TRIP_QB','GND','TRIP_RST')
