@@ -186,7 +186,8 @@ for _ in range(2): cm.C('22u','+5V_CM5','GND',pkg='1206')
 dec(cm,'+5V_CM5',2); cm.C('100n','CM5_3V3','GND'); cm.C('1u','CM5_3V3','GND'); cm.C('100n','CM5_1V8','GND')
 for a,b in (('CM5_SPI_SCK','MCU_SPI_SCK'),('CM5_SPI_MOSI','MCU_SPI_MOSI'),('CM5_SPI_MISO','MCU_SPI_MISO'),('CM5_SPI_CE0','MCU_SPI_NSS'),
             ('CM5_UART_TX','MCU_UART_RX'),('CM5_UART_RX','MCU_UART_TX'),('CM5_MCU_IRQ','MCU_IRQ')):
-    cm.R('1k',a,b,note='1k domain-boundary R: limits back-power injection to <3mA when one side is unpowered; SPI <=4MHz')
+    _v='10k' if a in ('CM5_UART_RX','CM5_MCU_IRQ') else '1k'  # m7-sch FW-019: R56/R57 1k->10k (fixes_firmware.md s3.4)
+    cm.R(_v,a,b,lcsc='C25804' if _v=='10k' else None,note=_v+' domain-boundary R: limits back-power injection when one side is unpowered; SPI <=4MHz')
 cm.R('1k','CM5_VBAT','CM5_VBAT_D'); cm.p('Diode:BAT54C','BAT54C',{'1':'VBAT_CELL','2':None,'3':'CM5_VBAT_D'},prefix='D',mpn='BAT54C',note='CR2032 to CM5 RTC; 2nd anode unused')
 cm.p('Switch:SW_Push','nRPIBOOT',{'1':'CM5_NRPIBOOT','2':'GND'},prefix='SW',mpn='TS-1187A-B-A-B')
 cm.p('Switch:SW_Push','CM5 PWR',{'1':'CM5_PWR_BTN','2':'GND'},prefix='SW',mpn='TS-1187A-B-A-B',note='optional power button')

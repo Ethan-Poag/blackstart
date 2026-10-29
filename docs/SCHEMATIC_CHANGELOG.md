@@ -102,3 +102,11 @@ Spec: /workspace/review/schematic_audit/fixes_firmware.md §1 (option A, ENOUT R
 | R552, R553 (new, cm5) | — | 10k 0603 C25804, CM5_OFF / CM5_PWRBTN_MCU to GND | TCA9555 POR pull-up would hold CM5 off / power button | §3.3 |
 | bom/outputs_bom.csv, comms_bom.csv, other_bom.csv | — | +3 / +1 / +1 rows (4.7k price UNVERIFIED, left out of total) | BOM | — |
 | tools/design.py | — | same parts with fixed refs | regen | — |
+
+## FW-3: CM5 boundary resistors (FW-019 / FW-012)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| R56 (cm5, CM5_UART_RX ↔ MCU_UART_TX) | 1k C21190 | 10k C25804 | limits PA9 injection into an unpowered CM5 to ≤0.27 mA | fixes_firmware.md §3.4, table line 592 |
+| R57 (cm5, CM5_MCU_IRQ ↔ MCU_IRQ) | 1k C21190 | 10k C25804 | same, PE3 | §3.4 |
+| bom/other_bom.csv | — | +1 row (2x 10k) | BOM | — |
+| tools/design.py | — | 10k for the CM5_UART_RX and CM5_MCU_IRQ pairs | regen | — |
