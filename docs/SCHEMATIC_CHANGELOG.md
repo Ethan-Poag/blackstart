@@ -302,3 +302,11 @@ FUEL_EN/CRANK_EN pull-downs stay 100k (not in the ruled list). outputs_bom row 2
 |---|---|---|---|---|
 | all 77 10k 0603 parts that carried C25804 (incl. R56/R57, R549/R550, R552/R553, R274, readback bottoms, FB/MUX dividers; list = netlist val:10k + LCSC C25804 at f8d92af, MEASURED) | 0603WAF1002T5E C25804 (UNI-ROYAL) | RC0603FR-0710KL C98220 (YAGEO), same 0603 1% 100 mW | C25804 LIVE LCSC 2026-10-28: stock **0** | LIVE LCSC 2026-10-28: C98220 stock 3,801,900, $0.0027 @100 |
 Spec note: steering called C25804 "0402"; LCSC lists it as 0603 (MEASURED), and all affected footprints are R_0603_1608Metric, so the 0603 replacement is the same package. 10k 1206 C17902 and 0.1% 10k (PREC) parts are untouched. design.py/gen.py RLCSC and explicit lcsc= entries updated.
+
+## Correction (team lead 2026-10-28) + fixes_firmware.md Rev 4: R625 4.7k, R626 WDI pull-down
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| R625 (spec R559; R559 already used by the H6 divider chain, so next free ref kept) | 10k C98220 | 4.7k 0603 1% 0603WAF4701T5E C23162 (LIVE: stock 3,664,500, $0.0028 @100) | 10k: 0.1 mA × 10k + 0.1 V = 1.10 V > 0.99 V VIL (fails); 4.7k → 0.67 V | fixes_firmware.md §19.1 (TI SCPS200E IIL/VIL, MEASURED there) |
+| R626 (new; spec R560 taken) | — | 100k 0603 1% C25803 WDI → GND (LIVE: stock 8,411,500, $0.0031 @100) | WDI (U7.71 PA12 → U37.6) had no pull; floats in reset/bootloader | fixes_firmware.md §19.4 |
+| U2.24 BIAS | +12V + C303 (batch 2) | unchanged, re-checked in the netlist | spec C299 = real C303 | §19.2 |
+Rev 3 approvals and Rev 4 items checked: see report.

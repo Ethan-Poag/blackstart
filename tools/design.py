@@ -455,6 +455,7 @@ for k in range(2):
         else: c['A%d'%(i+1)]='GND'; c['Y%d'%(i+1)]=None
     ou.p('genctl:SN74LVC541APWR','SN74LVC541APWR',c,mpn='SN74LVC541APWR'); ou.C('100n','+3V3','GND')
 for n in small: ou.R('47k',n+'_EN','GND')  # m7-sch R2-N2: 100k -> 47k
+ou.R('100k','WDI','GND',ref='R626',mpn='0603WAF1003T5E',lcsc='C25803',mfr='UNI-ROYAL',note='WDI pull-down: static WDI while PA12 Hi-Z (reset/bootloader/blank flash) so the TPS3431 times out (fixes_firmware Rev 4 s19.4; spec ref R560)')  # m7-sch Rev4 R560->R626
 # fuel / crank
 for n in ('FUEL','CRANK'):
     ou.p('genctl:TPS48100QDGXRQ1','TPS48100QDGXRQ1',{'VS':'VBAT_ESTOP','EN/UVLO':n+'_UVLO','INP1':n+'_EN','INP2':'GND','CS_SEL':'GND','ISCP':n+'_ISCP','TMR':n+'_TMR','SCP_TEST':'GND','GND':'GND','NC':None,
@@ -603,7 +604,7 @@ for addr,chunk in ((1,ch[0:16]),(4,ch[16:32]),(5,ch[32:36])):
     for pn,net in zip(pins,chunk): m[pn]=net
     if addr==5: m.update({'P04':'ROUTER_12V_EN','P05':'CM5_OFF','P06':'CM5_PWRBTN_MCU','P07':'PWR_FAIL_MCU','P10':'AUX9_MCU','P11':'AUX10_MCU','P12':'AUX10_RB_N','P13':'USB0_EN','P14':'USB1_EN','P15':'WD_OK_MCU'})  # P15 = WD_OK readback (fixes_firmware.md s1)
     tca(fp_,addr,m)
-fp_.R('10k','WD_OK','WD_OK_MCU',ref='R625',mpn='RC0603FR-0710KL',lcsc='C98220',mfr='YAGEO',note='WD_OK -> U76 P15 series 10k (R2-N1): TCA9555 POR/misconfig as output cannot fight WD_OK')  # m7-sch R2-N1
+fp_.R('4.7k','WD_OK','WD_OK_MCU',ref='R625',mpn='0603WAF4701T5E',lcsc='C23162',mfr='UNI-ROYAL',note='WD_OK -> U76 P15 series 4.7k (R2-N1 / fixes_firmware Rev 4 s19.1; spec ref R559): 0.1 mA IIL x 4.7k + VOL = 0.67 V < 0.99 V VIL')  # m7-sch R2-N1
 fp_.R('1k','BTN_BL_PWM','BL_Q_B'); fp_.R('100k','BL_Q_B','GND',note='default off'); npn(fp_,'BL_Q_B','GND','BL_PG')
 fp_.R('10k','+5V','BL_PG',note='PFET gate pull-up'); fet(fp_,'Transistor_FET:AO3401A','AO3401A','BL_PG','+5V','BTN_LED_V')
 fp_.C('1u','BTN_LED_V','GND',pkg='0603'); fp_.C('10u','+5V','GND',pkg='0805')
