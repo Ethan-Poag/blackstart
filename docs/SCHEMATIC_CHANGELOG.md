@@ -310,3 +310,10 @@ Spec note: steering called C25804 "0402"; LCSC lists it as 0603 (MEASURED), and 
 | R626 (new; spec R560 taken) | — | 100k 0603 1% C25803 WDI → GND (LIVE: stock 8,411,500, $0.0031 @100) | WDI (U7.71 PA12 → U37.6) had no pull; floats in reset/bootloader | fixes_firmware.md §19.4 |
 | U2.24 BIAS | +12V + C303 (batch 2) | unchanged, re-checked in the netlist | spec C299 = real C303 | §19.2 |
 Rev 3 approvals and Rev 4 items checked: see report.
+
+## Steering (3): BAT54C one LCSC code per part number
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| outputs_bom row 41 (D121) | LCSC C19190 (= GATEMODE YD3082EESA, RS-485 IC; wrong code, MEASURED live) | C2135 (JSCJ BAT54C), matching schematic D121 | code error | LIVE LCSC 2026-10-28: C2135 stock 212,020, $0.0248 @20 |
+| comms_bom row 48 | qty 1 (D8 uncounted) | qty 2 (D7 + D8), $0.0248 live | qty matches schematic | netlist |
+Mapping now: BAT54C (JSCJ) → C2135 on D7, D8, D121; BAT54C,215 (Nexperia) → C37704 on D128–D135 (LIVE: 137,400, $0.0156 @50). Schematic, docs/genctl_bom.csv and design.py (MPNLCSC BAT54C→C2135, D128–D135 explicit C37704) already agreed; no codes swapped.
