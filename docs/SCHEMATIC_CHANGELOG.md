@@ -448,3 +448,19 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 - Not edited (not in scope): mechanical/enclosure/v3/board_interface.json F1 entry (generated from the PCB).
 
 ### 3c-7: SPEC_CHECKLIST_3b.md updated: R3-9/§1 J30 DONE (c4c54d2), §3 J30 mate DONE; C28233 resolved (see 3c-5, 2fa36b7).
+
+## Batch 4
+### 4-1: VBAT_AI clamped rail for the AI current sources and LM2904B (fixes_safety.md Rev 3 corrections (a); safety_rereview_30dd932.md (a), HIGH-1)
+| Item | Before | After | Source |
+|---|---|---|---|
+| Q72 (new) | none | BCP56-16 (BCP56-16TX, Nexperia, LCSC C426787), SOT-223-3_TabPin2: C (pins 2, 4) = VBAT_P, B = VBAT_AI_B, E = VBAT_AI | Rev 3 (a) |
+| R628 (new) | none | 10k 0603 C98220 (RC0603FR-0710KL): VBAT_P to VBAT_AI_B | Rev 3 (a) |
+| D146 (new) | none | BZT52C33 (JSCJ, C2110) SOD-123: K = VBAT_AI_B, A = GND. Not BZT52C36. | Rev 3 (a) |
+| #FLG (new) | none | PWR_FLAG on VBAT_AI. The rail is driven by a passive BJT emitter, so without the flag ERC raises power_pin_not_driven on U26.8. | ERC |
+| 26 VBAT_P global labels on inputs.kicad_sch -> VBAT_AI | VBAT_P | VBAT_AI: U26/U27/U28 pin 8; their decoupling caps C144/C145/C146; D23.1 (LM4040 K); Q13/Q17/Q21/Q25/Q29/Q33 pin 2; R130/R133/R141/R144/R152/R155/R163/R166/R174/R177/R185/R188 pin 1; **C131** | Rev 3 (a) list |
+| VBAT_P (unchanged) | | Q36/Q39/Q42 sources and R200/R205/R261 (DI bias) remain on VBAT_P. Not in the Safety list. | |
+- **Deviation from the literal Safety list, flagged for Safety:** C131 (100n, D23 K to AI_VSET, the reference bypass) was moved with D23. Leaving it on VBAT_P would bridge VBAT_P to the AI_VSET reference node once D23.K is on VBAT_AI. Revert = rename one label (inputs.kicad_sch 862.33,74.93).
+- Labels mapped per pin by probe-renaming each of the 32 VBAT_P labels on the sheet and exporting the netlist (MEASURED). VBAT_AI net now = C131 C144 C145 C146 D23 Q13 Q17 Q21 Q25 Q29 Q33 Q72 R130 R133 R141 R144 R152 R155 R163 R166 R174 R177 R185 R188 U26 U27 U28.
+- BOM: inputs_bom +Q72 (1 @ $0.1310 at MOQ 5; stock 28,260), +D146 (1 @ $0.0239 at MOQ 50; stock 3,600), LIVE LCSC 16:44 HST. JLC class UNVERIFIED. C98220 78 -> 79. inputs 27.58 -> 27.73, other 142.27 -> 142.29.
+- design.py not regenerated/mirrored (schematic is source of truth).
+- Open (Safety, INFERRED in their file): AI compliance at 9 V battery with the rail about 2 V lower.
