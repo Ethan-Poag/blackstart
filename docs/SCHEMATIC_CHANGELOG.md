@@ -390,3 +390,11 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 | R558 Value | 0 | 0R | BOM/value consistency with the other 4 zero-ohm parts | 3b item 7 |
 | changelog line 53 (JP2-JP4 side) | B.Cu | F.Cu (footprint pads F.Cu/F.Mask) | text error | N6 |
 | fixes_mechanical.md:90 (review dir, not in repo) | "SW6 termination stays on the main board" | CAN2 has no on-board termination (SW6/R92/R93/C92 deleted, Item 2); loose terminator plugs go in the daughter-board sockets | text error | N5 |
+
+### 3b-7b/c: MPN fill and TPS1HTC30 reconcile
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| 314 parts across C14663/C14858/C23184/C25803/C23162/C98220/C21189/C12447/C22859 | MPN blank | MPN copied from the same-LCSC parts (one MPN per code) | BOM consistency | 3b item 7 |
+| U47-U61, U68 Value+MPN (+design.py) | TPS1HTC30QPWPRQ1 | TPS1HTC30AQPWPRQ1 (lib symbol id unchanged) | TI part-details: TPS1HTC30AQPWPRQ1 is ACTIVE; TPS1HTC30QPWPRQ1 returns 404 (not orderable). LCSC C22414694 = TPS1HTC30AQPWPRQ1. BOM already had the A suffix. | ti.com 2026-10-28, LCSC live |
+| outputs_bom rows 12, 28 price | 7.0093 | 14.2804 (LIVE LCSC 10+, stock 36 vs 16 needed) | live price rule | LCSC 2026-10-28 |
+- Not filled: H1-H4 and JP2-JP4 (no LCSC/MPN; they are mechanical or not in the JLC BOM).

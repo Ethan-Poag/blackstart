@@ -486,7 +486,7 @@ schottky(ou,'SK1010C','GND','CRANK_OUT',mpn='SK1010C')
 outs=['GLOW']+small
 mux={}
 for i,n in enumerate(outs):
-    ou.p('genctl:TPS1HTC30QPWPRQ1','TPS1HTC30QPWPRQ1',{'VS':'VBAT_P','EN':n+'_EN','DIAG_EN':'DIAG_EN','LATCH':'GND','ILIM':n+'_ILIM','GND':'GND','VOUT':n+'_OUT','SNS':n+'_SNS','FAULT':'OUT_FAULT_N','NC':None,'EP':'GND'},mpn='TPS1HTC30QPWPRQ1')
+    ou.p('genctl:TPS1HTC30QPWPRQ1','TPS1HTC30AQPWPRQ1',{'VS':'VBAT_P','EN':n+'_EN','DIAG_EN':'DIAG_EN','LATCH':'GND','ILIM':n+'_ILIM','GND':'GND','VOUT':n+'_OUT','SNS':n+'_SNS','FAULT':'OUT_FAULT_N','NC':None,'EP':'GND'},mpn='TPS1HTC30QPWPRQ1')
     ou.R('40.2k',n+'_ILIM','GND'); ou.R('1.1k',n+'_SNS','GND'); ou.R('1k',n+'_SNS',n+'_SNSM'); ou.C('100n','VBAT_P','GND',pkg='0805')
     schottky(ou,'SS110','GND',n+'_OUT',mpn='SS110'); tvs(ou,'SMBJ40CA',n+'_OUT')  # Rev 3 H4
     mux[n]=n+'_SNSM'
@@ -539,7 +539,7 @@ es.R('200k','+5V_TRIP','TRIP_TIM'); es.C('2.2u','TRIP_TIM','GND',pkg='0805',note
 es.p('74xGxx:74LVC1G08','74LVC1G08',{'1':'MCU_TRIP','2':'WD_OK','4':'MCU_TRIP_G','5':'+3V3_SAFE','3':'GND'},prefix='U',mpn='SN74LVC1G08DBVR',note='ADDED 4th gate'); es.C('100n','+3V3_SAFE','GND')  # +3V3_SAFE explicit (POST-PASS 1 maps estop +3V3 -> +3V3_SAFE anyway; matches board U67.5)
 es.R('100k','MCU_TRIP','GND')
 es.p('Diode:BAT54C','BAT54C',{'1':'TRIP_555_Q','2':'MCU_TRIP_G','3':'ESTOP_TRIP_EN'},prefix='D',mpn='BAT54C'); es.R('100k','ESTOP_TRIP_EN','GND')
-es.p('genctl:TPS1HTC30QPWPRQ1','TPS1HTC30QPWPRQ1',{'VS':'VBAT_P','EN':'ESTOP_TRIP_EN','DIAG_EN':'DIAG_EN','LATCH':'GND','ILIM':'ESTOP_TRIP_ILIM','GND':'GND','VOUT':'ESTOP_TRIP_OUT','SNS':'ESTOP_TRIP_SNS','FAULT':'OUT_FAULT_N','NC':None,'EP':'GND'},mpn='TPS1HTC30QPWPRQ1')
+es.p('genctl:TPS1HTC30QPWPRQ1','TPS1HTC30AQPWPRQ1',{'VS':'VBAT_P','EN':'ESTOP_TRIP_EN','DIAG_EN':'DIAG_EN','LATCH':'GND','ILIM':'ESTOP_TRIP_ILIM','GND':'GND','VOUT':'ESTOP_TRIP_OUT','SNS':'ESTOP_TRIP_SNS','FAULT':'OUT_FAULT_N','NC':None,'EP':'GND'},mpn='TPS1HTC30QPWPRQ1')
 es.R('47k','ESTOP_TRIP_ILIM','GND',note='ILIM 100A*kOhm/47k = 2.13A typ (1.70-2.55A); relay drive'); es.R('1.1k','ESTOP_TRIP_SNS','GND'); es.R('1k','ESTOP_TRIP_SNS','ESTOP_TRIP_SNSM'); es.C('100n','VBAT_P','GND',pkg='0805')
 schottky(es,'SS110','GND','ESTOP_TRIP_OUT',mpn='SS110'); tvs(es,'SMBJ40CA','ESTOP_TRIP_OUT')  # D123 Rev 3 H4
 es.R('10k','ESTOP_TRIP_OUT','ESTOP_TRIP_LED',pkg='1206'); es.LED('red','ESTOP_TRIP_LED','GND',lcsc='C2295')
