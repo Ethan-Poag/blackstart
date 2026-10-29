@@ -627,3 +627,9 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 ### 5-8: correction to 4-3 (reviewer L1): U26-U28 Value on every unit
 - 6733aac set Value LM2904B on only one unit instance of each 3-unit symbol (U26/U27/U28 each have units A, B and power). The netlist export takes the value from another unit, so it still read "LM2904". This was found in the final netlist diff vs 37327c2.
 - Fixed: Value "LM2904B" on all units of U26, U27 and U28 (6 unit blocks). The netlist now shows LM2904B. The lib_symbols cache entry is unchanged. MPN LM2904BIDR / C1849422 unchanged. bom_from_sch: 0 mismatches.
+
+## Batch 6 (team lead Enginerd, 2026-10-28 5:00 PM HST)
+### 6-1: output hardware-maximum line (item 1)
+- docs/INSTALL_SAFETY.md: added a new bullet after the ESTOP_TRIP bullet (l.47): "Hardware maximum per main output: interposing relay coil class <= 2.8 A (software trip 3.0 A). E-stop trip coil must draw < 1.70 A (U68 limit with R407 47k); measure on the bench. Where a circuit has a lower limit or a 2 A fuse, that lower limit governs."
+- The stricter existing limits are unchanged: the 0.5 A coil lines (l.46/47/87), the 2 A output fuses, and the FUEL/CRANK 15 A rating rows.
+- README.md "Fusing" paragraph (l.24-28): added the matching one-liner with the same wording that the lower limit governs. The 2 A fuses are kept.
