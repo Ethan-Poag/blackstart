@@ -197,3 +197,14 @@ Software WP must also be set in the CM5 image (spec, UNVERIFIED).
 | C303 (new; spec C299) | — | 100 nF 50 V X7R 0603 C14663, +12V → GND at U2.24 | lm5176 p30 | §7. Renumbered: C299 is the U84 decoupling cap |
 | bom/power_bom.csv | — | +1 row (price UNVERIFIED) | BOM | — |
 | tools/design.py | — | BIAS +12V, ISNS± GND, C303 | regen | — |
+
+## B3-1: external battery fuse voltage rating >=58 V DC (Reviewer N1)
+Spec: fixes_safety.md Revision 3, "Changes" item 1 and R3-1 (label text); reviewer.md N1. Board/fuse current stays 10 A (15 A NOT approved; Rev 2 15 A item superseded).
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| power.kicad_sch text at J1 (35.56/287.02) | "EXT FUSE <=10 A FAST, >=32 V DC" | "EXT FUSE <=10 A FAST, >=58 V DC" | fuse must withstand the declared <=58 V suppressed load dump | fixes_safety.md R3-1 |
+| power.kicad_sch POWER sheet note | "... >=32 V DC in the battery lead" | "... >=58 V DC in the battery lead" | same | R3-1 |
+| tools/design.py POWER note | same | same | regen | — |
+| docs/INSTALL_SAFETY.md l.15, l.44 | ">=32 V DC" | ">=58 V DC" + voltage-requirement sentence (32 V DC blade fuse does not meet it; 10 A unchanged) | installer doc | R3-1, §0 |
+| bom/power_bom.csv row 4 (BSC070N10NS5) note | "at 10 A (external fuse max;" | "... 10 A FAST rated >=58 V DC per fixes_safety.md Rev 3 R3-1;" | BOM note | R3-1 |
+Not changed (open question, see report): INSTALL_SAFETY.md output-fuse table (l.32–34, l.41) still says 32 V DC blade fuses for FUEL/CRANK/GLOW; fixes_safety.md l.12 says external fuses DC-rated >=58 V, but item A/R3-1 covers only the battery-lead fuse.
