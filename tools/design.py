@@ -232,7 +232,7 @@ for i,(tx,rx,iso) in enumerate((('CAN1_TX','CAN1_RX','GND_CAN1'),('CAN2_TX','CAN
     n='CAN%d'%i
     co.R('1k',tx,tx+'_T',note='domain-boundary R (SAFE MCU -> +5V transceiver)'); co.R('1k',rx+'_T',rx,note='domain-boundary R')
     co.p('genctl:CA-IS3062W','CA-IS3062W',{'VCC':'+5V','TXD':tx+'_T','RXD':rx+'_T','GND1':'GND','NC':None,'VISO':'VISO_%s'%n,'CANH':n+'_H','CANL':n+'_L','GND2':iso},mpn='CA-IS3062W')
-    co.C('100n','+5V','GND'); co.C('10u','+5V','GND',pkg='0805'); co.C('100n','VISO_'+n,iso); co.C('10u','VISO_'+n,iso,pkg='0805')
+    co.C('100n','+5V','GND'); co.C('10u','+5V','GND',pkg='0805'); co.C('100n','VISO_'+n,iso); co.C('47u','VISO_'+n,iso,pkg='1206',mpn='CL31A476MPHNNNE',lcsc='C96123',mfr='Samsung',note='VISO 47uF per CA-IS3062W p15 (m7-sch FW-008, fixes_firmware.md s6)')
     co.p('genctl:ACT45B-510-2P','ACT45B-510-2P',{'1':n+'_H','4':n+'_HB','2':n+'_L','3':n+'_LB'},mpn='ACT45B-510-2P-TL003')
     co.p('Power_Protection:NUP2105L','NUP2105L',{'1':n+'_HB','2':n+'_LB','3':iso},prefix='D',mpn='NUP2105LT1G')
     if i==1:

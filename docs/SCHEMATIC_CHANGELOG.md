@@ -131,3 +131,12 @@ Spec: fixes_firmware.md Rev 2 §1.1/§1.2 (Ethan/Safety ruling 2026-10-28 3:34 P
 | D132–D135 (new, outputs) | — | same; U64 S1/S2 … S7/S8 (AUX4/AUX5, AUX6/AUX7, AUX8/AUX9, AUX10/ESTOP_TRIP _SNSM) | same | §5 |
 | bom/outputs_bom.csv | — | +1 row (8x, $0.015 from spec) | BOM | — |
 | tools/design.py | — | D128–D135 pairs from the mux lists | regen | — |
+
+## FW-5: CAN isolator VISO capacitance (FW-008, APPROVED/CLOSED by Safety + Reviewer 2026-10-28 ~3:34 PM HST)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| C85 (U13 VISO, comms) | 10u 0805 C15850 | 47u 10 V X5R 1206 Samsung CL31A476MPHNNNE C96123 | CA-IS3062W p15 recommends 47 µF on VISO | fixes_firmware.md Rev 2 §6; https://www.lcsc.com/product-detail/C96123.html (fetched 2026-10-28; price/stock not shown) |
+| C91 (U14 VISO, comms) | 10u 0805 C15850 | same | same | same |
+| bom/comms_bom.csv | — | +1 row (2x $0.17 from spec); TOTAL 26.69 → 27.03 | BOM | — |
+| tools/design.py | — | VISO bulk 47u 1206 | regen | — |
+Footprint grows 0805 → 1206: the PCB is not changed in this branch; layout must follow.
