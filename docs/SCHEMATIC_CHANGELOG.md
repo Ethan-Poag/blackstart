@@ -739,3 +739,32 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 | R5-N1 (MEDIUM) | Declared 58 V suppressed load dump (ISO 16750-2 Test B, 24 V) exceeds the breakdown of the battery-facing 40 V-standoff TVSs: D1, D126 SMDJ40CA (VBR 44.4-49.1 V) and the 22 SMAJ40CA inputs (same VBR) | awaiting Safety ruling; INSTALL_SAFETY l.41 / README load-dump wording deliberately not touched |
 | R5-N4 (LOW) | RAIL_PLAN FUEL/CRANK copper sized 15 A | lead decides; note in 8-3 / D-m7-14 |
 | R5-N5 (LOW) | LM4040 pin 3 tie to anode | done in 8-1 per lead amendment |
+
+## Batch 9 (Safety Round 5 ruling on R5-N1, team lead Enginerd, 2026-10-28 ~5:45 PM HST)
+### 9-1: INSTALL_SAFETY / README declared limit (R5-N1 resolved by restricting the declaration)
+| Ref | Old | New | Reason | Source |
+|---|---|---|---|---|
+| docs/INSTALL_SAFETY.md l.41 | Round 4 text: supply "centrally suppressed to 58 V maximum (ISO 16750-2 Test B)" | Round 5 line 41 text, verbatim (>=58 V DC fuses kept as margin; 9–36 V declared; load dump incl. suppressed 58 V not supported; TVS may fail short above ~44 V; energize-to-run fuel only) | R5-N1 | install_safety_text.md "ROUND 5 (R5-N1)" |
+| docs/INSTALL_SAFETY.md l.43 | "Declared limit: The load dump must be centrally suppressed to 58 V or less ..." | Round 5 "Declared limit" text, verbatim | R5-N1 | same |
+| docs/INSTALL_SAFETY.md l.13 | "a battery-backed, suppressed 12 V or 24 V DC supply bus" | "a battery-backed 12 V or 24 V DC supply bus (9–36 V)" | consistency | same (l.13 note). This paragraph is labelled as pasted from review/hv/load_dump_external.md; the quote now differs from that source in this phrase |
+| README.md l.22 | "Declared limit: the load dump must be centrally suppressed to 58 V or less (ISO 16750-2 Test B, 24 V system). Unsuppressed load dump is not supported." | Round 5 "Declared limit" text, verbatim | consistency | same |
+- The >=58 V DC fuse-rating statements are kept everywhere.
+- Not changed (no 58 V / Test B declaration in them): DESIGN_NOTES.md l.528 and bom/design_spec.md l.19 ("battery-backed, suppressed 35 V-class supply"), DESIGN_NOTES.md l.39/395/538 and design_spec l.100 (historical design notes), ENCLOSURE_DFM l.230 (test plan).
+- 35 V reconnect check (INFERRED, not altered): R3 8.66k divider ratio 31.01 (changelog B3-2); SNOSD95C p5 V(OVF) 1.091/1.13/1.159 V -> OV release 33.8/35.0/35.9 V (nominal resistors), trip 1.195/1.231/1.267 V -> 37.1/38.2/39.3 V (36.35-40.06 V with resistor tolerance and leakage per B3-2). "Reconnects below about 35 V" matches the typical value. Flag for Safety: the worst-case release (~33.8 V) and the worst-case trip (~36.35 V) are both close to the 36 V continuous declared maximum; after an OV trip the board may stay off until the bus falls below ~33.8 V.
+
+### 9-2: D126 SMDJ40CA -> SMDJ58CA (C192416): NOT DONE, blocked by the pre-swap check
+- Verified: JLCPCB C192416 = Littelfuse SMDJ58CA, SMC (DO-214AB), bidirectional, VRWM 58 V, VBR 71.2 V (listed), VC 93.6 V at Ipp 32.1 A (10/1000 µs), 3 kW. Stock not shown on the page (UNVERIFIED).
+- VBAT_ESTOP net (kicad-cli netlist of e484b81): C199, C203 (C28233 CL21B104KCFNNNE 100 V, verified JLCPCB); D126; D137 BZT52C15 (G-S clamp, sees <=15 V); Q70/Q71 SQD40P10-40L -100 V; R297/R303 FMF25 2512 20 mΩ; U43/U45 TPS48100 VS/CS+ (100 V abs per BOM text; datasheet not reopened); U44/U46 INA281A1 (-4..110 V CM per BOM text); R251 68k, R292 100k, R298 100k, R400 47k, R411 100k (all 0603). Behind D126: VBAT_ESTOP_IN (J23, Q70/Q71 drains), FUEL_DRN/CRANK_DRN (Q45-Q48 BSC070N10NS5 100 V).
+- Blockers (parts rated below the 93.6 V clamp):
+  - R400 47k 0603 (C25819): BOM row states 75 V max working voltage; one end is the Q66 base (~0.7 V), so ~93 V would be across it at clamp. R251/R292/R298/R411 are the same 0603 class (UNI-ROYAL/Yageo 0603, rating not re-read; INFERRED 75 V), with 64-90 V across them at clamp.
+  - D68/D69 SMDJ40CA output TVS on FUEL/CRANK (BOM "output TVS", VBR 44.4-49.1 V): with an output on, they see VBAT_ESTOP through the FETs and become the clamp anyway.
+  - INFERRED: VESTOP_D divider 68k/33k gives ~30 V at the U34 74HC14 input at 93.6 V (already ~21 V at today's 64.5 V clamp; only the HC14 ESD diodes limit it).
+- Safety's premise "every downstream part on VBAT_ESTOP is rated >=100 V" is therefore not supported by the repo. D126 stays SMDJ40CA C224077; needs a Safety/lead ruling.
+
+### 9-3: Reviewer status
+| ID | Status |
+|---|---|
+| R5-N1 (MEDIUM) | RESOLVED by restricting the declaration (Safety Round 5 ruling, Enginerd): 9-1. D126 uprate not done (9-2) |
+| R5-N4 (LOW) | open, lead decides; RAIL_PLAN note + D-m7-14 (8-3) |
+| R5-N5 (LOW) | done (8-1, D23 pin 3 -> AI_VSET; layout D-m7-13) |
+
