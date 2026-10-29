@@ -674,3 +674,13 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 - Price $0.027 @50 and stock 11,250 are **Safety-reported** (fixes_safety.md, 5:14 PM HST), not re-checked by me.
 - BOM: bom/inputs_bom.csv D146 row, docs/genctl_bom.csv, mechanical/bom.csv. inputs total 26.83 -> 26.84 (bom_retotal.py).
 - No other doc cites 33 V / BZT52C33 for VBAT_AI except the historical 4-1 entry above (left as history). tools/design.py has no D146 line (see 7-4).
+
+### 7-3: stale L3 2.2 uH text (L2/L3 stay 3.3 uH MWSA1004S-3R3MT C408483, R4-N4 / Enginerd D)
+| Ref | Old | New | Reason | Source |
+|---|---|---|---|---|
+| L3 Note (power.kicad_sch l.4206) | "2.2uH per DS Table 4 (3.3V)" | "3.3uH MWSA1004S-3R3MT C408483 kept (Safety R4-N4); deviates from TI TPS56637 Table 4 (SLVSEG1A p19: 2.2uH for 3.3V); bench load-step 0.5-3A at 9/12/32V in required; fallback 2.2uH MWSA1004S-2R2MT same footprint" | stale text; value/LCSC/MPN already 3.3u/C408483 | fixes_safety.md R4-N4 |
+| tools/design.py l.51 and L3 line (text only) | "2.2uH" / "Isat 16 A" | same deviation note; Isat 12.8 A typ | stale | R4-N4 (Sunlord p17) |
+| bom/power_bom.csv l.11 | "Sunlord? (verify mfr)", "Isat ~15A", "likely 1.5-2.2uH ... verify loop" | Sunlord, Isat 12.8 A typ, L2 per Table 4 5 V row, L3 deviation note | stale | R4-N4 |
+| docs/RAIL_PLAN.md +3V3 row, issue 3; DESIGN_NOTES.md l.72 | L3 MWSA0503S-2R2MT 2.2 uH Isat 7 A | marked superseded with the deviation/bench note | stale | R4-N4 |
+- Bench load-step (pending): 0.5 -> 3 A at 1 A/us, VIN 9/12/32 V, 77F and hot; pass <=3 % over/undershoot, <=2 ringing cycles. Fail -> 2.2 uH MWSA1004S-2R2MT (LCSC code to be live-checked then; not chosen now).
+- Not changed: RAIL_PLAN l.105/207 L2 "Isat ~15 A verify mfr" historical analysis notes (L2 is per Table 4 5 V row).

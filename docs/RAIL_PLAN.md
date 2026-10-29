@@ -103,7 +103,7 @@ Labels: **DERIVED** means datasheet, BOM or design note plus arithmetic, with th
 |---|---|---|
 | +12V | U2 LM5176 buck-boost (L1 SPM10065VT-4R7M, Isat 19.3 A [power_bom:11]) | Input limited by 16 mΩ: 2.69/3.12/3.56 A on VBAT_P [final_power_spec §2, LM5176 Eq. 4] |
 | +5V | U3 TPS56637 + L2 MWSA1004S-3R3MT | 6 A continuous; valley limit 6.3/7.5/8.6 A [tps56637 p1, l.301]. L2 Isat "~15 A, verify mfr" [power_bom:16] = **UNVERIFIED** |
-| +3V3 | U4 TPS56637 + L3 MWSA0503S-2R2MT | 6 A [tps56637 p1]; L3 Isat 7 A, 29 mΩ [power_bom:26] |
+| +3V3 | U4 TPS56637 + L3 MWSA1004S-3R3MT C408483 (3.3 µH; was MWSA0503S-2R2MT, changed 52e8028) | 6 A [tps56637 p1]; L3 Isat 12.8 A typ (Sunlord p17, Safety R4-N4). 3.3 µH deviates from TI Table 4 (p19, 2.2 µH for 3.3 V): bench load-step 0.5-3 A at 9/12/32 V in required; fallback 2.2 µH same footprint |
 | +3V3_BK | U5 LMR36506 (VBAT_P) + L4 SWPA6045S330MT | 0.6 A; LS limit 0.6/0.7/0.752 A, HS 0.87–1.11 A [lmr36506 l.4, l.355]; L4 Isat 1.65/1.80 A, Irms 1.45/1.60 A [swpa6045 l.934] |
 | +3V3_SAFE | U6 TPS2116 mux (+3V3 priority, +3V3_BK backup) | 2.5 A continuous [tps2116 p1] |
 | +3V3_PANEL / +3V3_TOUCH | U22 / U23 TPS22918 from +3V3 | 2 A each [tps22918 p1] |
@@ -200,7 +200,7 @@ None of these is required in order to lay the copper. Items 1–2 change the cop
    - Either accept that the converter limit is the real limit (copper for 3.6 A), or, for 24 V installs, size the copper at 7.64 A.
    - This decision is needed before the +12V trunk is laid.
 2. **VBAT_ESTOP J23 node at 30 A** if fuel and crank can be on at once. J23 PC 5 is 41 A (OK) [design_spec:44]. The shunts are 54.8 A each (OK). The copper at the J23 pins needs 30 A (F+B pour), not 15 A. Ethan should confirm simultaneity.
-3. **L3 MWSA0503S-2R2MT Isat 7 A < U4 TPS56637 valley limit max 8.6 A.** The inductor saturates before the regulator limits on a short or overload. The load is only 1.47 A, so this is fault behaviour only.
+3. [SUPERSEDED: L3 is now MWSA1004S-3R3MT C408483, Isat 12.8 A typ > 8.6 A + ripple; it deviates from TI Table 4 (2.2 µH), bench load-step 0.5-3 A at 9/12/32 V in required, fallback 2.2 µH same footprint.] **L3 MWSA0503S-2R2MT Isat 7 A < U4 TPS56637 valley limit max 8.6 A.** The inductor saturates before the regulator limits on a short or overload. The load is only 1.47 A, so this is fault behaviour only.
    - Option A: swap to an inductor with Isat ≥10 A in the same footprint family (UNVERIFIED availability).
    - Option B: accept it.
 4. **L8 SWPA6045S100MT Isat 3.2/3.5 A < TPS61500 switch ILIM 3/3.8/5 A.** Normal peak at 12 V in is about 1.3 A (ASSUMED), so this too is fault-only. The same accept-or-swap choice applies. The bom/comms_bom:44 already marks it UNVERIFIED.

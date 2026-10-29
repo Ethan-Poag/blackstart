@@ -69,7 +69,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - SMBJ5.0A on the rail.
 
 **+3V3 (TPS56637, Rev B)**
-- Second TPS56637RPAR (6 A part) from +12V. Per DS Table 4 for 3.3 V: FB 45.3k/10k (3.32 V), L 2.2 µH (Sunlord MWSA0503S-2R2MT, Isat 7 A), 3x22 µF out, 2x10 µF in, feed-forward 150 pF + 20k (check the topology against the DS figure). EN 100k/27k, MODE 100k (placeholder, same as the 5V rail).
+- Second TPS56637RPAR (6 A part) from +12V. Per DS Table 4 for 3.3 V: FB 45.3k/10k (3.32 V), L 2.2 µH (Sunlord MWSA0503S-2R2MT, Isat 7 A) [SUPERSEDED: L3 is now 3.3 µH MWSA1004S-3R3MT C408483, a deviation from TI Table 4 (p19, 2.2 µH); bench load-step 0.5-3 A at 9/12/32 V in required; fallback 2.2 µH same footprint], 3x22 µF out, 2x10 µF in, feed-forward 150 pF + 20k (check the topology against the DS figure). EN 100k/27k, MODE 100k (placeholder, same as the 5V rail).
 - The rail now supports >=3 A. The MBR0540 diode-OR path is gone, so the STM32 no longer has an always-on 3V3 independent of the 12 V bus. **Open:** is that acceptable?
 
 **Chassis**

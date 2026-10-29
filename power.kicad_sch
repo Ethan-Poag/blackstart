@@ -4203,7 +4203,7 @@
 (property "LCSC" "C408483" (at 379.73 224.79 0) (effects (font (size 1.27 1.27)) hide))
 (property "MPN" "MWSA1004S-3R3MT" (at 379.73 224.79 0) (effects (font (size 1.27 1.27)) hide))
 (property "Manufacturer" "Sunlord" (at 379.73 224.79 0) (effects (font (size 1.27 1.27)) hide))
-(property "Note" "2.2uH per DS Table 4 (3.3V)" (at 379.73 224.79 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "3.3uH MWSA1004S-3R3MT C408483 kept (Safety R4-N4); deviates from TI TPS56637 Table 4 (SLVSEG1A p19: 2.2uH for 3.3V); bench load-step 0.5-3A at 9/12/32V in required; fallback 2.2uH MWSA1004S-2R2MT same footprint" (at 379.73 224.79 0) (effects (font (size 1.27 1.27)) hide))
 (pin "1" (uuid "814b5ca8-8fb6-4b37-b121-0a82e5266e03"))
 (pin "2" (uuid "9b5c9e55-0c2d-4fcc-9808-f637f6329db7"))
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb" (reference "L3") (unit 1))))

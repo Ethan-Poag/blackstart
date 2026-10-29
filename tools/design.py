@@ -48,7 +48,7 @@ def S(name,title,notes=''):
 pw=S('power','Power: input protection, ideal diode, 12V buck-boost, 5V, 3V3',
  'POWER. J0 battery in (BAT_IN; NO on-board fuse: installer fits an external fuse <=10 A fast-acting, >=58 V DC in the battery lead) -> SMDJ40CA -> LM74800 + 2x BSC070N10NS5 back-to-back (VBAT_P).\n'
  'OV 38.17V rise typ (36.36-40.11 V, fixes_safety.md H3), 35.04V fall typ, UV 5.65V/5.18V (210k/49.9k/8.66k, 1.231/1.13V thresholds; fall/UV INFERRED). LM5176 buck-boost -> +12V (FB 140k/10k, RT 27.4k ~300kHz, 8mR sense).\n'
- 'TPS56637 -> +5V (FB 75k/10k = 5.1V, 3.3uH). TPS56637 -> +3V3 from +12V (FB 45.3k/10k, 2.2uH, 3x22u), >=3A. MODE open = FCCM.\n'
+ 'TPS56637 -> +5V (FB 75k/10k = 5.1V, 3.3uH). TPS56637 -> +3V3 from +12V (FB 45.3k/10k, L3 3.3uH C408483 [deviates from TI Table 4 p19 2.2uH; bench load-step 0.5-3A at 9/12/32V in; fallback 2.2uH same fp], 3x22u), >=3A. MODE open = FCCM.\n'
  'SAFE DOMAIN: LMR36506 buck VBAT_P -> +3V3_BK (always on); TPS2116 priority mux VIN1=+3V3 / VIN2=+3V3_BK -> +3V3_SAFE (MCU, FRAM, WDT, I/O, E-stop logic).')
 conn(pw,4,['BAT_IN','BAT_IN','GND','GND'],'PC 5/4-GF-7,62 (battery in)',mpn='1720819 Phoenix',note='J0 battery input')
 REFC['F']+=1  # F1 (10A ATO + 2x Keystone 3557-2 clips) deleted in m7-step12: fuse is external; ref reserved so later refs stay stable
@@ -112,7 +112,7 @@ pw.p('genctl:TPS56637RPAR','TPS56637RPAR',{'VIN':'+12V','EN':'EN_3V3','MODE':'MO
 pw.R('121k','+12V','EN_3V3'); pw.R('16k','EN_3V3','GND',note='EN 1.4V at 12V')
 pw.R('0R','MODE_3V3','GND',dnp=True,note='DNP: MODE open = FCCM')
 pw.C('100n','BOOT_3V3','SW_3V3')
-pw.p('Device:L','3.3u',{'1':'SW_3V3','2':'+3V3'},prefix='L',mpn='MWSA1004S-3R3MT',lcsc='C408483',mfr='Sunlord',fp='genctl:L_MWSA1004S',note='m7-sch 3b: fixes_safety M3/R3-6, same part as L2 (Isat 16 A)')
+pw.p('Device:L','3.3u',{'1':'SW_3V3','2':'+3V3'},prefix='L',mpn='MWSA1004S-3R3MT',lcsc='C408483',mfr='Sunlord',fp='genctl:L_MWSA1004S',note='3.3uH MWSA1004S-3R3MT C408483 kept (Safety R4-N4); deviates from TI TPS56637 Table 4 (SLVSEG1A p19: 2.2uH for 3.3V); bench load-step 0.5-3A at 9/12/32V in required; fallback 2.2uH MWSA1004S-2R2MT same footprint; Isat 12.8 A typ (Sunlord p17, Safety R4-N4)')
 pw.R('45.3k','+3V3','FB_3V3',note='DS Table 4: 45.3k/10k -> 3.32V'); pw.R('10k','FB_3V3','GND')
 pw.C('100p','+3V3','FF_3V3',note='C9 per DS Table 4'); pw.R('20k','FF_3V3','FB_3V3',note='R8 per DS Table 4 (C9+R8 in series across R6)')
 pw.R('100k','PG_3V3','+3V3_SAFE')
