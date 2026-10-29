@@ -408,4 +408,7 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
   - T1-T4/Y3/J30: stale ac_metering rows with a different MPN (rows 9/4/19).
   - CM5 U9/U10 and H1-H4 are off-BOM.
   - BOM_ONLY: off-board plugs, display, CM5, the PCB and estimates, and the stale ac_metering ADuM141E/ADuM5020/ADP150/ERA-3AEB rows (not in the schematic).
-- Totals (bom_retotal): comms 28.18->28.37, inputs 24.88->24.71, other 407.85->407.83, outputs 281.59->281.69, power 46.79->46.57, ac 45.85 unchanged.
+- Totals (bom_retotal): comms 28.18->28.37, inputs 24.88->24.65 (incl. BAV99 15->10), other 407.85->407.83, outputs 281.59->281.69, power 46.79->46.57, ac 45.85 unchanged.
+
+### 3b-4b: spec checklist
+- docs/SPEC_CHECKLIST_3b.md: each fixes_safety.md (Rev 3/2/§1/§6) and fixes_mechanical.md item, with its hash or skip reason.
