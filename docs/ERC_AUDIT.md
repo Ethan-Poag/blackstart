@@ -1,0 +1,35 @@
+# ERC audit: why the result is 0 errors / 0 warnings (m7-sch batch 4, item 8)
+Scope: the batch-4 HEAD (from 1074b13 onward), KiCad 9 kicad-cli. The per-commit json is review/schematic_audit/out/m7sch_<hash>_erc.json.
+
+## 1. Nothing is suppressed in the project
+- genctl.kicad_pro has `"erc": {"rule_severities": {}}`: no severity overrides, no `erc_exclusions`, and no custom `pin_map`. KiCad's built-in defaults apply.
+- No sheet contains any ERC exclusion marker.
+- check.sh and audit.sh both run `kicad-cli sch erc --severity-all`, so errors, warnings and exclusions are all reported. check.sh prints only the first 40 lines of the listing, but the TOTAL line comes from the full json.
+
+## 2. Deliberate suppressors in the schematic (counted, not hidden)
+- no_connect flags: 220 total. ac_metering 26, cm5 76, comms 14, display 41, estop 2, frontpanel 6, inputs 12, mcu 11, outputs 28, power 4. They sit on unused IC pins (CM5 module, display bridge, MCU spare pins, unused BAV99/ADE pins).
+- PWR_FLAGs (#FLG): 23 unique references. Each sits on a rail driven only by passive parts, connectors or FET channels, so KiCad cannot see a driver. Examples: VBAT_P, VBAT_AI (new in 4-1), VBAT_ESTOP, BAT_IN, ISO rails.
+- Hazard: a PWR_FLAG makes ERC accept a rail that has no real source. Each flagged rail still needs a source in the design review. This audit did not re-prove each one.
+
+## 3. Checks KiCad ignores by default: scratch run with every rule set to "error"
+Run on a scratch copy (/tmp/ercx) with all 45 rule keys forced to error: **75 violations**, all from two rules that are off by default.
+- **four_way_junction (17):** Q1-Q6 and Q45-Q48 (stacked or hidden FET pins on one node), U7, J11, #PWR0157 and #PWR0339, plus a few very short wire stubs (0.025-0.37 mm). These are benign drawing-style items with no connectivity effect. The short stubs could be cleaned up cosmetically.
+- **footprint filter mismatch (58, reported as type footprint_link_issues):** the assigned footprint does not match the symbol's generic filter. Groups:
+  - J1/J23/J28/J29 Phoenix 1720819 on generic Conn_01x04;
+  - J2, J3/J5, J4/J12/J13, J6-J9, J14/J15/J16, J17-J22, J24-J27 (vendor connector footprints on generic connector symbols);
+  - J30 (DO-NOT-FAB placeholder, deferred D-m7-9);
+  - RV1-RV6 (varistors);
+  - U32-U34 74HC14 SOIC-14;
+  - U84 74LVC1G74DP (TSSOP-8; the DP package is TSSOP-8, so this matches);
+  - **D3/D4**: see section 4.
+  All of these were checked by eye: the footprint matches the MPN for everything except D3/D4.
+
+## 4. Real finding (NOT fixed; needs a ruling)
+- **D3/D4 BAS70 (LCSC C77297, SOT-23) are drawn with the 2-pin Device:D_Schottky symbol (pin 1 = K, pin 2 = A) on a SOT-23 footprint.**
+- The standard BAS70 SOT-23 pinout (Nexperia) is 1 = anode, 2 = n.c., 3 = cathode. The C77297 maker's pinout is UNVERIFIED.
+- As drawn, pad 1 carries BB_BOOT1/2 (intended cathode) and pad 2 carries Net-(D3-A) (intended anode). Pad 3, the real cathode, is unconnected.
+- With the Nexperia pinout, the diode is not in circuit at all: pad 2 is n.c.
+- Fix options: a 3-pin BAS70 symbol, or pad remapping after the C77297 datasheet is opened. This needs a decision from the lead.
+
+## 5. Conclusion
+ERC 0/0 is genuine for the default rule set. Nothing is excluded or downgraded. The 75 default-ignored items are benign apart from D3/D4.

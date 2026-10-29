@@ -567,3 +567,6 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 | power_bom.csv:24 | Connector plug J0 BATTERY | SPC 5/4-STF-7,62 (1996142) | C5481482 | 1 | off-board item (mating plug, module, accessory or cost estimate) | bom/off_board_external_bom.csv (excluded from totals) |
 | other_bom.csv:22 | Small passives all sheets (R/C/ferrite/LEDs/load caps) previ | (lump) | C28233 placeholder | 1 @ $8.68 | placeholder lump replaced by real per-code rows | deleted |
 | power_bom.csv:22 | Misc R/C (dividers comp soft-start) | (lump) | C28233 placeholder | 1 @ $0.40 | placeholder lump replaced by real per-code rows | deleted |
+
+### 4-6: docs/ERC_AUDIT.md (item 8)
+- Added docs/ERC_AUDIT.md. Findings: no exclusions or severity overrides in the project; 220 no_connect flags; 23 PWR_FLAGs; an all-error scratch run gives 75 default-ignored items (four_way_junction 17, footprint filter 58). One real finding, left open: D3/D4 BAS70 2-pin symbol on SOT-23, pinout likely wrong.
