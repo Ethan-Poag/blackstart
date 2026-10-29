@@ -60,6 +60,8 @@ Labels: HAND-BUILT = placed by a person in the GUI. SCRIPTED-HAND = our own scri
 | GND_CAN1/2, GND_485 (8 each) | signal-level isolated grounds | 0.15 mm | — | 5–6 | 2 / 2 / 3 | AUTO-ROUTED (f03c57a) | Opens |
 | CHASSIS (14) | ESD/shield only [RP] | 0.15 mm | — | 5 | 11 | AUTO-ROUTED | Open |
 
+- Note (m7-sch batch 8, R5-N4): FUEL/CRANK copper sized for 15 A; 7 A would suffice for a 2.8 A load on a 5 A fuse; deferred layout item (D-m7-14). Numbers above unchanged. VBAT_ESTOP keeps its rating (30 A-fused feed).
+
 Small "power-like" nets, all AUTO-ROUTED by f03c57a/f16d8de, no rating, at most mA (INFERRED): Net-(U11-EN), Net-(C74-Pad2), Net-(U17-VISO), Net-(U7-VDDA), MUXA/B_OUT, VBAT_SENSE, VBAT_CELL, VBAT_SNS (UNROUTED), HSE_OUT. Full numbers are in stats.json and islands.json.
 
 ## Flags (auto-routed or under spec)
@@ -71,6 +73,7 @@ Small "power-like" nets, all AUTO-ROUTED by f03c57a/f16d8de, no rating, at most 
 ## Proposed hand-placement order (plan only)
 1. **VBAT_P distribution** (Q3 → U2 VIN and the VS pins of U47–U61 and U68) as a planned F+B pour tree with ≥4 vias per output switch (2.99 A / 0.76 A), and ≥5 at U2.2/U2.3 (3.56 A). This comes first because every downstream rail and output depends on it. Sources: FPS §3, RP §7.2.
 2. **VBAT_ESTOP → shunts → Q45/Q46 (FUEL) and Q47/Q48 (CRANK_OUT) → J23**, 15 A: F+B pours ≥6.3 mm each (RP target; IPC 12.6 mm on one outer layer), ≥20 vias at each FET/shunt transition. Remove the auto-routed 0.15 mm FUEL tracks.
+   Note (m7-sch batch 8, R5-N4): FUEL/CRANK copper sized for 15 A; 7 A would suffice for a 2.8 A load on a 5 A fuse; deferred layout item (D-m7-14). Numbers above unchanged. VBAT_ESTOP keeps its rating (30 A-fused feed).
 3. **+12V trunk Q6 → U3** at ≥1.83 mm (3.7 A) on both outer layers, or a pour. Add 4 vias at U3.8 (about 226.3–226.7, 63.3–64.3; the area west/south of the pad, DRC-check first) to reach 5. Widen the U16 branch to ≥0.78 mm (2 A) and add 3 vias near U16.8 (257.4,160.2) if it changes layer.
 4. **+5V L2 → U12/U13/U14/U18/U19/J3/J4/J5**: one planned pour or ≥2.54 mm outer trunk (4.7 A). No In2 hops (0.5 mm In2 carries 0.44 A). 7 vias per transition, starting at L2.2 (222.5,76.1), which has 0 today.
 5. **+3V3 (≥3 A copper target, REV3) from U4/L3** and **+5V_CM5 (3.76 A limit)**: +3V3 trunk ≥1.37 mm outer, 4×0.3 mm or 6×0.2 mm vias per transition; +5V_CM5 ≥1.87 mm outer, 5 vias per transition. The +3V3 conflict is resolved in 'Derived currents'.

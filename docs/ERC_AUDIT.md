@@ -12,16 +12,16 @@ Scope: the batch-4 HEAD (from 1074b13 onward), KiCad 9 kicad-cli. The per-commit
 - Hazard: a PWR_FLAG makes ERC accept a rail that has no real source. Each flagged rail still needs a source in the design review. This audit did not re-prove each one.
 
 ## 3. Checks KiCad ignores by default: scratch run with every rule set to "error"
-Run on a scratch copy (/tmp/ercx) with all 45 rule keys forced to error: **75 violations**, all from two rules that are off by default.
+Run on a scratch copy (/tmp/ercx) with all 45 rule keys forced to error: **73 violations** at b47aea0 (75 before batch 6; re-run 2026-10-28 on a git-archive extract with all 47 rule keys forced, out/m7sch_b47aea0_erc_forced.json), all from two rules that are off by default.
 - **four_way_junction (17):** Q1-Q6 and Q45-Q48 (stacked or hidden FET pins on one node), U7, J11, #PWR0157 and #PWR0339, plus a few very short wire stubs (0.025-0.37 mm). These are benign drawing-style items with no connectivity effect. The short stubs could be cleaned up cosmetically.
-- **footprint filter mismatch (58, reported as type footprint_link_issues):** the assigned footprint does not match the symbol's generic filter. Groups:
+- **footprint filter mismatch (56 at b47aea0; 58 before D3/D4 moved to genctl:BAS70 in batch 6, reported as type footprint_link_issues):** the assigned footprint does not match the symbol's generic filter. Groups:
   - J1/J23/J28/J29 Phoenix 1720819 on generic Conn_01x04;
   - J2, J3/J5, J4/J12/J13, J6-J9, J14/J15/J16, J17-J22, J24-J27 (vendor connector footprints on generic connector symbols);
   - J30 (DO-NOT-FAB placeholder, deferred D-m7-9);
   - RV1-RV6 (varistors);
   - U32-U34 74HC14 SOIC-14;
   - U84 74LVC1G74DP (TSSOP-8; the DP package is TSSOP-8, so this matches);
-  - **D3/D4**: see section 4.
+  - **D3/D4** (until batch 6 only; on genctl:BAS70 they no longer appear): see section 4.
   All of these were checked by eye: the footprint matches the MPN for everything except D3/D4.
 
 ## 4. Real finding (NOT fixed; needs a ruling)
@@ -32,7 +32,7 @@ Run on a scratch copy (/tmp/ercx) with all 45 rule keys forced to error: **75 vi
 - Fix options: a 3-pin BAS70 symbol, or pad remapping after the C77297 datasheet is opened. This needs a decision from the lead.
 
 ## 5. Conclusion
-ERC 0/0 is genuine for the default rule set. Nothing is excluded or downgraded. The 75 default-ignored items are benign apart from D3/D4.
+ERC 0/0 is genuine for the default rule set. Nothing is excluded or downgraded. The 73 default-ignored items at b47aea0 (17 four_way_junction + 56 footprint_link_issues) are benign drawing/filter items; D3/D4, the two extra items in the earlier 75, were fixed in batch 6.
 
 ## D23 LM4040A25 polarity check (m7-sch Batch 7, 2026-10-28 ~5:35 PM HST)
 - Datasheet: TI LM4040, SLOS456Q (rev. April 2026), ti.com/lit/ds/symlink/lm4040.pdf, opened this session. **Table 5-1 Pin Functions, p4:** DBZ (SOT-23) pin 1 = CATHODE ("Shunt Current/Voltage input"), pin 2 = ANODE ("Common pin, normally connected to ground"), pin 3 = "*" ("Must float or connect to anode"; TI recommends tying it to the anode in high-EMI / high-switching-noise applications). IZ max 15 mA (abs max table, p4-5). §8.2.2.2 "Cathode and Load Currents" p27.

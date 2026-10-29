@@ -380,7 +380,7 @@ inp.R('10k','VBAT_P','VBAT_AI_B',ref='R628',mpn='RC0603FR-0710KL',lcsc='C98220',
 inp.p('Transistor_BJT:BCP56','BCP56-16',{'B':'VBAT_AI_B','C':'VBAT_P','E':'VBAT_AI'},prefix='Q',ref='Q72',mpn='BCP56-16TX',lcsc='C426787',mfr='Nexperia',fp='Package_TO_SOT_SMD:SOT-223-3_TabPin2')
 inp.p('Device:D_Zener','BZT52C30',{'K':'VBAT_AI_B','A':'GND'},prefix='D',ref='D146',mpn='BZT52C30',lcsc='C21561',mfr='JSCJ',fp='Diode_SMD:D_SOD-123',note='Safety Round 4: was BZT52C33 C2110; VBAT_AI 27.4-31.4 V @77F, <=34.5 V @257F')
 # AI ref
-inp.p('Reference_Voltage:LM4040DBZ-2.5','LM4040A25',{'K':'VBAT_AI','A':'AI_VSET'},prefix='D',mpn='LM4040A25IDBZR')  # m7-sch 4-1: K on VBAT_AI
+inp.p('Reference_Voltage:LM4040DBZ-2.5','LM4040A25',{'K':'VBAT_AI','A':'AI_VSET'},prefix='D',mpn='LM4040A25IDBZR')  # m7-sch 4-1: K on VBAT_AI; batch 8: schematic uses genctl:LM4040DBZ-2.5_A3 with pin 3 tied to AI_VSET (not mirrored here)
 inp.R('10k','AI_VSET','GND',pkg='1206',note='ref bias ~1-2.8mA')
 inp.C('100n','VBAT_AI','AI_VSET',mpn='CL10B104KC8NNNC',lcsc='C15725',mfr='Samsung Electro-Mechanics',note='100V (Rev 3 M6)')
 ADC={1:('ADC1','AIN0'),2:('ADC1','AIN1'),3:('ADC1','AIN2'),4:('ADC2','AIN0'),5:('ADC2','AIN1'),6:('ADC2','AIN2')}

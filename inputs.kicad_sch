@@ -511,7 +511,7 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))))
-(symbol "Reference_Voltage:LM4040DBZ-2.5"
+(symbol "genctl:LM4040DBZ-2.5_A3"
 		(pin_names
 			(offset 0.0254)
 			hide)
@@ -542,7 +542,7 @@
 					(size 1.27 1.27)
 					(italic yes))
 				hide))
-		(property "Description" "2.500V Precision Micropower Shunt Voltage Reference, SOT-23"
+		(property "Description" "2.500V shunt reference, SOT-23 (DBZ); pin 3 passive, tied to anode per TI SLOS456Q Table 5-1"
 			(at 0 0 0)
 			(effects
 				(font
@@ -560,7 +560,7 @@
 				(font
 					(size 1.27 1.27))
 				hide))
-		(symbol "LM4040DBZ-2.5_0_1"
+		(symbol "LM4040DBZ-2.5_A3_0_1"
 			(polyline
 				(pts
 					(xy -1.27 0)
@@ -593,7 +593,7 @@
 					(type default))
 				(fill
 					(type none))))
-		(symbol "LM4040DBZ-2.5_1_1"
+		(symbol "LM4040DBZ-2.5_A3_1_1"
 			(pin passive line
 				(at -3.81 0 0)
 				(length 2.54)
@@ -605,11 +605,11 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))
-			(pin no_connect line
+			(pin passive line
 				(at -1.27 0 0)
 				(length 2.54)
 				hide
-				(name "NC"
+				(name "A"
 					(effects
 						(font
 							(size 1.27 1.27))))
@@ -4267,7 +4267,7 @@
 (pin "2" (uuid "4064dc47-174c-4ce9-accf-82f5532862d3"))
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "C130") (unit 1))))
 )
-(symbol (lib_id "Reference_Voltage:LM4040DBZ-2.5") (at 887.73 81.28 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "d7881385-7501-4fd1-9dd7-7a53ffebde03")
+(symbol (lib_id "genctl:LM4040DBZ-2.5_A3") (at 887.73 81.28 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "d7881385-7501-4fd1-9dd7-7a53ffebde03")
 (property "Reference" "D23" (at 887.73 78.74 0) (effects (font (size 1.27 1.27))))
 (property "Value" "LM4040A25" (at 887.73 84.455 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 887.73 86.36 0) (effects (font (size 1.27 1.27)) hide))
@@ -8639,7 +8639,7 @@
 (symbol (lib_id "power:GND") (at 480.06 316.23 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "a1bf9313-586f-4a91-9458-a47df96bcb3d")(property "Reference" "#PWR0439" (at 480.06 316.23 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 480.06 320.04 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 480.06 316.23 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 480.06 316.23 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "b04e5c5e-bfe9-44d0-9721-3226599f4795"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "#PWR0439") (unit 1)))))
 (wire (pts (xy 883.92 81.28) (xy 881.38 81.28)) (stroke (width 0) (type default)) (uuid "2de89398-f330-45b1-9614-9ebfa35da47f"))
 (label "AI_VSET" (at 881.38 81.28 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "92d0bde4-d4f5-42df-a6ca-7ab8ec00e34b"))
-(no_connect (at 886.46 81.28) (uuid "91b2a7cc-9956-4e35-840a-8fba0e6c9328"))
+(wire (pts (xy 886.46 81.28) (xy 883.92 81.28)) (stroke (width 0) (type default)) (uuid "5c0e3a8e-7d41-4f2a-9b63-2e1d40a4d023"))
 (wire (pts (xy 891.54 81.28) (xy 894.08 81.28)) (stroke (width 0) (type default)) (uuid "764344bc-478f-4f68-93eb-11cca39c9d00"))
 (global_label "VBAT_AI" (shape passive) (at 894.08 81.28 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c1e611bc-f364-415c-9d7a-40756a946a42") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 894.08 81.28 0) (effects (font (size 1.27 1.27)) hide)))
 (wire (pts (xy 902.97 104.14) (xy 902.97 101.6)) (stroke (width 0) (type default)) (uuid "1d154bd6-edac-4f2b-92d5-3e13fd213963"))

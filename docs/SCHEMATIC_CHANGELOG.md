@@ -673,7 +673,7 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 - VERIFIED 2026-10-28 ~5:20 PM HST: jlcpcb.com/partdetail/C21561 = BZT52C30, Jiangsu Changjing (JSCJ), SOD-123, Vz 28-32 V (30 V nom), 500 mW, Extended; LCSC page title "BZT52C30 | Single Zener Diodes | JSCJ".
 - Price $0.027 @50 and stock 11,250 are **Safety-reported** (fixes_safety.md, 5:14 PM HST), not re-checked by me.
 - BOM: bom/inputs_bom.csv D146 row, docs/genctl_bom.csv, mechanical/bom.csv. inputs total 26.83 -> 26.84 (bom_retotal.py).
-- No other doc cites 33 V / BZT52C33 for VBAT_AI except the historical 4-1 entry above (left as history). tools/design.py has no D146 line (see 7-4).
+- No other doc cites 33 V / BZT52C33 for VBAT_AI except the historical 4-1 entry above (left as history). tools/design.py had no D146 line when 7-2 was made; 7-4 then added it (design.py l.381, BZT52C30 C21561). Wording corrected in batch 8 (R5-N3).
 
 ### 7-3: stale L3 2.2 uH text (L2/L3 stay 3.3 uH MWSA1004S-3R3MT C408483, R4-N4 / Enginerd D)
 | Ref | Old | New | Reason | Source |
@@ -704,7 +704,7 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 ### 7-6: Reviewer Re-audit 4 (R4-N1..N8) and Safety Round 4 resolutions
 | ID | Reviewer finding (reviewer.md RA4) | Resolution | Commit / status |
 |---|---|---|---|
-| R4-N1 (MEDIUM) | D2 SMBJ40CA Vc 64.5 V on VBAT_P > LM5176 60 V abs max / SI2309CDS 60 V | **No TVS change** (Enginerd C). LM74800 OV cut-off (<=40.06 V, tOVP_OFF <=5.4 µs, SNOSD95C p5-6) disconnects VBAT_P, so VBAT_P peaks ≈41.5 V (INFERRED); D2 (VBR min 44.4 V) is a single-fault backstop. No in-stock part fits VBR(min,cold) > 40.11 V with Vc <= 60 V. >60 V exposure needs a single fault plus load dump (UNVERIFIED by test) | ruling, no change |
+| R4-N1 (MEDIUM) | D2 SMBJ40CA Vc 64.5 V on VBAT_P > LM5176 60 V abs max / SI2309CDS 60 V | **No TVS change** (Enginerd C). LM74800 OV cut-off (<=40.06 V, tOVP_OFF <=5.4 µs, SNOSD95C p7; corrected from "p5-6" in batch 8) disconnects VBAT_P, so VBAT_P peaks ≈41.5 V (INFERRED); D2 (VBR min 44.4 V) is a single-fault backstop. No in-stock part fits VBR(min,cold) > 40.11 V with Vc <= 60 V. >60 V exposure needs a single fault plus load dump (UNVERIFIED by test) | ruling, no change |
 | R4-N2 (MEDIUM) | fuse 58 V basis stale | 58 V = ISO 16750-2 Test B Us* (24 V, centrally suppressed); TVS clamp does not set the fuse rating. INSTALL_SAFETY l.41 replaced; declared limit added to INSTALL_SAFETY and README | 7-1 (24f412e) |
 | R4-N3 (MEDIUM) | FUEL/CRANK "15 A" + 15 A fuse | 2.8 A max; 5 A standard (non-fast) ATO/ATC blade, >=58 V DC, installer-supplied; starter only via interposing relay | 7-1 (24f412e) |
 | R4-N4 (LOW) | L3 3.3 µH vs Table 4 2.2 µH; stale text | L3 3.3 µH C408483 kept as a documented deviation; bench load-step 0.5-3 A at 9/12/32 V in; fallback 2.2 µH same footprint; stale text fixed | 7-3 |
@@ -715,3 +715,27 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 | Safety (a) | C131 100n VBAT_AI-AI_VSET | kept: decouples the D23 LM4040 reference | no change |
 | Safety (c) | SMAJ40CA on D46-type inputs | already in 17d3485 (6-4) | done |
 | D23 | polarity | confirmed correct vs TI SLOS456Q Table 5-1 p4 (ERC_AUDIT.md) | no change |
+
+## Batch 8 (Reviewer Re-audit 5 + team lead Enginerd amendments, 2026-10-28 ~5:40 PM HST)
+### 8-1: D23 LM4040 pin 3 tied to the anode (AI_VSET): NET CHANGE (1 pin)
+| Ref | Old | New | Reason | Source |
+|---|---|---|---|---|
+| D23 (inputs.kicad_sch) | Reference_Voltage:LM4040DBZ-2.5 (pin 3 type no_connect, hidden) with a no-connect flag; netlist unconnected-(D23-NC-Pad3) | genctl:LM4040DBZ-2.5_A3 (copy of the stock symbol, pin 3 type passive, name "A", still hidden; added to genctl.kicad_sym); NC flag removed; 2.54 mm wire pin 3 -> pin 2 (A), so D23.3 = AI_VSET | R5-N5 / Enginerd amendment 1: TI recommends tying pin 3 to the anode in high-EMI / high-switching-noise applications | TI SLOS456Q (rev. April 2026) Table 5-1 p4: DBZ pin 3 "Must float or connect to anode", note (1). Both options are allowed by TI, so the reference function is unchanged |
+- The stock symbol's pin 3 is type no_connect; wiring it gave ERC no_connect_connected, hence the project-library copy with pin 3 passive. Value, footprint (SOT-23), LCSC C9421 and MPN are unchanged.
+- Netlist diff vs b47aea0 (kicad-cli export): exactly one pin-net change, D23.3 unconnected -> AI_VSET; 4250 nodes on both sides.
+- PCB is frozen (md5 49a6a6a7... unchanged): layout sync item D-m7-13 in deferred_layout.md.
+- tools/design.py: comment only on the D23 line (generator not run).
+
+### 8-2: Reviewer Re-audit 5 doc fixes (no schematic change)
+- R5-N2: docs/ERC_AUDIT.md 75 -> 73 forced items (17 four_way_junction + 56 footprint_link_issues), re-measured on a git-archive extract of b47aea0 with all 47 rule keys forced to error (review out/m7sch_b47aea0_erc_forced.json). The two items that dropped out are D3/D4, which lost their filter mismatch on moving to genctl:BAS70 (6-2). The "75 / 58" in the earlier ERC_AUDIT entry above is left as history (it was measured before batch 6). Forced run after 8-1: still 73 (17 four_way_junction + 56 footprint_link_issues).
+- R5-N3: 7-6 R4-N1 citation p5-6 -> p7 (verified in SNOSD95C pdf page 7: tOVP_OFF(deg) 3.98 typ / 5.4 max µs, LM74800-Q1 only). 7-2 vs 7-4 D146 wording reconciled against the repo (design.py l.381 has the D146 line).
+
+### 8-3: RAIL_PLAN FUEL/CRANK copper note (R5-N4, Enginerd amendment 2)
+- docs/RAIL_PLAN.md: copper numbers unchanged; note added that FUEL/CRANK copper is sized for 15 A and 7 A would suffice for a 2.8 A load on a 5 A fuse; deferred layout item D-m7-14. VBAT_ESTOP rating unchanged.
+
+### 8-4: Open Reviewer items (record only, no schematic change)
+| ID | Finding | Status |
+|---|---|---|
+| R5-N1 (MEDIUM) | Declared 58 V suppressed load dump (ISO 16750-2 Test B, 24 V) exceeds the breakdown of the battery-facing 40 V-standoff TVSs: D1, D126 SMDJ40CA (VBR 44.4-49.1 V) and the 22 SMAJ40CA inputs (same VBR) | awaiting Safety ruling; INSTALL_SAFETY l.41 / README load-dump wording deliberately not touched |
+| R5-N4 (LOW) | RAIL_PLAN FUEL/CRANK copper sized 15 A | lead decides; note in 8-3 / D-m7-14 |
+| R5-N5 (LOW) | LM4040 pin 3 tie to anode | done in 8-1 per lead amendment |
