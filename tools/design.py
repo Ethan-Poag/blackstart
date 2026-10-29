@@ -556,15 +556,15 @@ for tag,J in (('GEN','J7'),('BUS','J8')):
     for ph,L in zip('ABC',('L1','L2','L3')):
         ac.p('Device:Varistor','TMOV20RP460E',{'1':tag+'_'+L,'2':tag+'_N'},prefix='RV',mpn='TMOV20RP460EL2T7',lcsc='C3260792',mfr='Littelfuse',fp='genctl:TMOV20RP_P7.5mm_inline')  # RV1-RV6: manual sch edit 32b12c7/7eaa27d folded into design.py
         a=tag+'_'+L
-        for j in range(4):
-            b=('%s_%s_HV%d'%(tag,L,j+1)) if j<3 else '%s_V%s_TAP'%(tag,ph)
-            ac.R('1M',a,b,pkg='1206',note='HV 1206 (>=200V each)'); a=b
+        for j in range(12):  # m7-sch Rev 3 H6/R2-3: 12 x 330k C17929 per leg (was 4 x 1M); C1..C8 are the 8 added links
+            b=('%s_%s_C%d'%(tag,L,j+1)) if j<8 else (('%s_%s_HV%d'%(tag,L,j-7)) if j<11 else '%s_V%s_TAP'%(tag,ph))
+            ac.R('330k',a,b,pkg='1206',mpn='1206W4F3303T5E',lcsc='C17929',mfr='UNI-ROYAL',note='HV chain 1206 330k (Rev 3 H6)'); a=b
         ac.R('1k','%s_V%s_TAP'%(tag,ph),'GND_AC'); ac.R('1k','%s_V%s_TAP'%(tag,ph),'%s_V%s_P'%(tag,ph)); ac.C('33n','%s_V%s_P'%(tag,ph),'GND_AC')
         ac.R('1k',tag+'_VN_TAP','%s_V%s_N'%(tag,ph)); ac.C('33n','%s_V%s_N'%(tag,ph),'GND_AC')
     a=tag+'_N'
-    for j in range(4):
-        b=('%s_N_HV%d'%(tag,j+1)) if j<3 else tag+'_VN_TAP'
-        ac.R('1M',a,b,pkg='1206',note='HV 1206 neutral divider (own reference per system)'); a=b
+    for j in range(12):  # m7-sch Rev 3 H6: 12 x 330k per leg
+        b=('%s_N_C%d'%(tag,j+1)) if j<8 else (('%s_N_HV%d'%(tag,j-7)) if j<11 else tag+'_VN_TAP')
+        ac.R('330k',a,b,pkg='1206',mpn='1206W4F3303T5E',lcsc='C17929',mfr='UNI-ROYAL',note='HV 1206 neutral divider (own reference per system), Rev 3 H6'); a=b
     ac.R('1k',tag+'_VN_TAP','GND_AC',note='neutral divider tap - no direct N-GND_AC link')
 cts=[]
 for i,ph in enumerate('ABCN',1):
