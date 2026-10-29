@@ -4648,7 +4648,7 @@
 (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 198.12 190.5 90) (effects (font (size 1.27 1.27)) hide))
 (property "Datasheet" "~" (at 199.39 190.5 0) (effects (font (size 1.27 1.27)) hide))
 (property "Description" "Resistor" (at 199.39 190.5 0) (effects (font (size 1.27 1.27)) hide))
-(property "LCSC" "C25804" (at 199.39 190.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C98220" (at 199.39 190.5 0) (effects (font (size 1.27 1.27)) hide))
 (property "MPN" "" (at 199.39 190.5 0) (effects (font (size 1.27 1.27)) hide))
 (property "Manufacturer" "" (at 199.39 190.5 0) (effects (font (size 1.27 1.27)) hide))
 (pin "1" (uuid "edab3b61-0a59-406a-8170-0ace32e4799f"))

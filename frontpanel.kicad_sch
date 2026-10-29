@@ -2419,7 +2419,7 @@
 (property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 113.03 72.39 90) (effects (font (size 1.27 1.27)) hide))
 (property "Datasheet" "~" (at 114.3 72.39 0) (effects (font (size 1.27 1.27)) hide))
 (property "Description" "Resistor" (at 114.3 72.39 0) (effects (font (size 1.27 1.27)) hide))
-(property "LCSC" "C25804" (at 114.3 72.39 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C98220" (at 114.3 72.39 0) (effects (font (size 1.27 1.27)) hide))
 (property "MPN" "" (at 114.3 72.39 0) (effects (font (size 1.27 1.27)) hide))
 (property "Manufacturer" "" (at 114.3 72.39 0) (effects (font (size 1.27 1.27)) hide))
 (property "Note" "PFET gate pull-up" (at 114.3 72.39 0) (effects (font (size 1.27 1.27)) hide))

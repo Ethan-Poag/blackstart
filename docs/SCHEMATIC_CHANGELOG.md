@@ -296,3 +296,9 @@ design.py: U76 P15 → WD_OK_MCU, R625 added with fixed ref.
 | R277–R291 (GLOW, GCB_CL/OP, MCB_CL/OP, AUX1–AUX10 _EN; MEASURED from netlist) | 100k C25803 | 47k 0603 1% 0603WAF4702T5E C25819 (LIVE LCSC 2026-10-28: stock 609,800, $0.0020 @100) | stiffer default-off on TPS1HTC30 EN | reviewer.md R2-N2 |
 | R549 / R550 (AUX9/AUX10_MCU) | 10k | unchanged | ruling | — |
 FUEL_EN/CRANK_EN pull-downs stay 100k (not in the ruled list). outputs_bom row 24 qty 36 → 21, row 32 qty 1 → 16.
+
+## R2-N5 / steering: 10k 0603 C25804 out of stock -> C98220 (all parts)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| all 77 10k 0603 parts that carried C25804 (incl. R56/R57, R549/R550, R552/R553, R274, readback bottoms, FB/MUX dividers; list = netlist val:10k + LCSC C25804 at f8d92af, MEASURED) | 0603WAF1002T5E C25804 (UNI-ROYAL) | RC0603FR-0710KL C98220 (YAGEO), same 0603 1% 100 mW | C25804 LIVE LCSC 2026-10-28: stock **0** | LIVE LCSC 2026-10-28: C98220 stock 3,801,900, $0.0027 @100 |
+Spec note: steering called C25804 "0402"; LCSC lists it as 0603 (MEASURED), and all affected footprints are R_0603_1608Metric, so the 0603 replacement is the same package. 10k 1206 C17902 and 0.1% 10k (PREC) parts are untouched. design.py/gen.py RLCSC and explicit lcsc= entries updated.

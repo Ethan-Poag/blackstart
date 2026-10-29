@@ -195,7 +195,7 @@ dec(cm,'+5V_CM5',2); cm.C('100n','CM5_3V3','GND'); cm.C('1u','CM5_3V3','GND'); c
 for a,b in (('CM5_SPI_SCK','MCU_SPI_SCK'),('CM5_SPI_MOSI','MCU_SPI_MOSI'),('CM5_SPI_MISO','MCU_SPI_MISO'),('CM5_SPI_CE0','MCU_SPI_NSS'),
             ('CM5_UART_TX','MCU_UART_RX'),('CM5_UART_RX','MCU_UART_TX'),('CM5_MCU_IRQ','MCU_IRQ')):
     _v='10k' if a in ('CM5_UART_RX','CM5_MCU_IRQ') else '1k'  # m7-sch FW-019: R56/R57 1k->10k (fixes_firmware.md s3.4)
-    cm.R(_v,a,b,lcsc='C25804' if _v=='10k' else None,note=_v+' domain-boundary R: limits back-power injection when one side is unpowered; SPI <=4MHz')
+    cm.R(_v,a,b,lcsc='C98220' if _v=='10k' else None,note=_v+' domain-boundary R: limits back-power injection when one side is unpowered; SPI <=4MHz')
 cm.R('1k','CM5_VBAT','CM5_VBAT_D'); cm.p('Diode:BAT54C','BAT54C',{'1':'VBAT_CELL','2':None,'3':'CM5_VBAT_D'},prefix='D',mpn='BAT54C',note='CR2032 to CM5 RTC; 2nd anode unused')
 cm.p('Switch:SW_Push','nRPIBOOT',{'1':'CM5_NRPIBOOT','2':'GND'},prefix='SW',mpn='TS-1187A-B-A-B')
 cm.p('Switch:SW_Push','CM5 PWR',{'1':'CM5_PWR_BTN','2':'GND'},prefix='SW',mpn='TS-1187A-B-A-B',note='optional power button')
@@ -228,7 +228,7 @@ cm.R('29.4k','HU_ILM','GND',note='ILIM ~3.5A'); cm.C('100n','HU_SS','GND'); cm.C
 # m7-sch S-L2: EEPROM write-protect, R558 0R fitted (fixes_firmware.md Rev 2 s12)
 cm.R('0','CM5_EEPROM_NWP','GND',ref='R558',mpn='0603WAF0000T5E',lcsc='C21189',mfr='UNI-ROYAL',note='FITTED; lift for bench EEPROM update')
 # m7-sch FW-004/FW-028 (fixes_firmware.md s3.3)
-cm.R('10k','CM5_OFF','GND',ref='R552',lcsc='C25804',note='CM5_OFF pull-down vs TCA9555 POR'); cm.R('10k','CM5_PWRBTN_MCU','GND',ref='R553',lcsc='C25804',note='CM5_PWRBTN_MCU pull-down vs TCA9555 POR')
+cm.R('10k','CM5_OFF','GND',ref='R552',lcsc='C98220',note='CM5_OFF pull-down vs TCA9555 POR'); cm.R('10k','CM5_PWRBTN_MCU','GND',ref='R553',lcsc='C98220',note='CM5_PWRBTN_MCU pull-down vs TCA9555 POR')
 
 
 # =====================================================================
@@ -502,7 +502,7 @@ ou.p('Device:D_Schottky','BAT54WS-7-F',{'1':'+3V3_SAFE','2':'WD_RC'},ref='D136',
 ou.C('100n','+3V3_SAFE','GND',ref='C299',lcsc='C14663',note='U84 decoupling'); ou.C('100n','+3V3_SAFE','GND',ref='C300',lcsc='C14663',note='U85 decoupling')
 # m7-sch FW-002/003/004 enable pull-downs (fixes_firmware.md s2, s3.1, s3.2)
 for _r,_n,_v in [('R534', 'FUEL_EN_MCU', '100k'), ('R535', 'CRANK_EN_MCU', '100k'), ('R536', 'AUX3_MCU', '4.7k'), ('R537', 'GLOW_EN_MCU', '100k'), ('R538', 'GCB_CL_MCU', '100k'), ('R539', 'GCB_OP_MCU', '100k'), ('R540', 'MCB_CL_MCU', '100k'), ('R541', 'MCB_OP_MCU', '100k'), ('R542', 'AUX1_MCU', '100k'), ('R543', 'AUX2_MCU', '100k'), ('R544', 'AUX4_MCU', '100k'), ('R545', 'AUX5_MCU', '100k'), ('R546', 'AUX6_MCU', '100k'), ('R547', 'AUX7_MCU', '100k'), ('R548', 'AUX8_MCU', '100k'), ('R549', 'AUX9_MCU', '10k'), ('R550', 'AUX10_MCU', '10k')]:
-    ou.R(_v,_n,'GND',ref=_r,lcsc={'100k': 'C25803', '10k': 'C25804', '4.7k': 'C23162'}[_v],note='enable pull-down (fixes_firmware.md s2)')
+    ou.R(_v,_n,'GND',ref=_r,lcsc={'100k': 'C25803', '10k': 'C98220', '4.7k': 'C23162'}[_v],note='enable pull-down (fixes_firmware.md s2)')
 
 
 # =====================================================================
