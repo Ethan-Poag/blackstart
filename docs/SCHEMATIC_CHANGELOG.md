@@ -188,3 +188,12 @@ Dependency: the 0.40 V/A scaling needs R297/R303 = 20 mΩ (Safety batch 3; still
 | bom/other_bom.csv | — | +1 row (price UNVERIFIED) | BOM | — |
 | tools/design.py | — | EEPROM_nWP net + R558 | regen | — |
 Software WP must also be set in the CM5 image (spec, UNVERIFIED).
+
+## FW-11: LM5176 BIAS and ISNS (FW-009, APPROVED/CLOSED 2026-10-28 ~3:34 PM HST)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| U2 pin 24 BIAS (power) | no-connect flag (unconnected) | +12V | VBIAS > 8 V supplies VCC (lm5176 p4) | fixes_firmware.md §7, parent ruling "BIAS to +12V with 0.1 µF". NOTE: §7 says a.net already had BIAS = +12V; this schematic had it unconnected (MEASURED, 7f2a8df netlist) |
+| U2 pins 13 ISNS−, 14 ISNS+ | +12V | GND (the board has one ground net; U2.10 AGND is on GND) | lm5176 p17: disable the average-current loop by shorting ISNS± to AGND | §7 |
+| C303 (new; spec C299) | — | 100 nF 50 V X7R 0603 C14663, +12V → GND at U2.24 | lm5176 p30 | §7. Renumbered: C299 is the U84 decoupling cap |
+| bom/power_bom.csv | — | +1 row (price UNVERIFIED) | BOM | — |
+| tools/design.py | — | BIAS +12V, ISNS± GND, C303 | regen | — |

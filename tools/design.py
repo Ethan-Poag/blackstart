@@ -53,9 +53,10 @@ for _ in range(2): pw.C('100u 50V','VBAT_P','GND',pol=True,mpn='EEHZA1H101P',pkg
 for _ in range(4): pw.C('10u','VBAT_P','GND',pkg='1210',note='50V X7R')
 # LM5176
 pw.p('genctl:LM5176PWPR','LM5176PWPR',{'VIN':'VBAT_P','VISNS':'VBAT_P','EN/UVLO':'BB_EN','MODE':'BB_MODE','DITH':'GND','RT/SYNC':'BB_RT','SLOPE':'BB_SLOPE',
-   'SS':'BB_SS','COMP':'BB_COMP','FB':'BB_FB','VOSNS':'+12V','ISNS+':'+12V','ISNS-':'+12V','AGND':'GND','EP':'GND',
+   'SS':'BB_SS','COMP':'BB_COMP','FB':'BB_FB','VOSNS':'+12V','ISNS+':'GND','ISNS-':'GND','AGND':'GND','EP':'GND',
    'HDRV1':'BB_HDRV1','BOOT1':'BB_BOOT1','SW1':'BB_SW1','LDRV1':'BB_LDRV1','HDRV2':'BB_HDRV2','BOOT2':'BB_BOOT2','SW2':'BB_SW2','LDRV2':'BB_LDRV2',
-   'CS':'BB_CS','CSG':'GND','PGOOD':'PG_12V','VCC':'BB_VCC','BIAS':None,'PGND':'GND'},mpn='LM5176PWPR')
+   'CS':'BB_CS','CSG':'GND','PGOOD':'PG_12V','VCC':'BB_VCC','BIAS':'+12V','PGND':'GND'},mpn='LM5176PWPR')  # m7-sch FW-009: BIAS=+12V, ISNS+/- to AGND (=GND net) per lm5176 p17/p30
+pw.C('100n','+12V','GND',ref='C303',mpn='CC0603KRX7R9BB104',lcsc='C14663',mfr='YAGEO',note='LM5176 BIAS cap at U2.24 (spec C299)')
 pw.R('100k','VBAT_P','BB_EN'); pw.R('33k','BB_EN','GND')
 pw.R('93.1k','BB_MODE','GND',note='MODE: 93.1k = CCM, hiccup ENABLED (SNVSAI1D pin table p3; 200k/VCC = disabled)')
 pw.R('27.4k','BB_RT','GND',note='fsw ~300kHz per DS RT equation - see DESIGN_NOTES')
