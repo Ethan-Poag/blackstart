@@ -383,7 +383,7 @@ ADC={1:('ADC1','AIN0'),2:('ADC1','AIN1'),3:('ADC1','AIN2'),4:('ADC2','AIN0'),5:(
 oas={}
 for ch in range(1,7):
     a='AI%d'%ch
-    tvs(inp,'SMAJ36CA',a); inp.C('100n',a,'GND',pkg='1206',note='100V')
+    tvs(inp,'SMAJ40CA',a); inp.C('100n',a,'GND',pkg='1206',note='100V')
     inp.R('2.49k','VBAT_P',a+'_E',pkg='1206',lcsc='C319805',mpn='AR06BTCV2491',note='0.1% 1mA set'); pnp(inp,a+'_B',a+'_E',a+'_C')
     inp.p('Diode:1N4148W','1N4148W',{'A':a+'_C','K':a+'_D'},prefix='D',mpn='1N4148W'); inp.R('1k',a+'_D',a)
     inp.R('10k','AI_VSET',a+'_REF')
@@ -401,7 +401,7 @@ for k,chs in oas.items():
         c[o]=a+'_B'; c[m]=a+'_E'; c[pl]=a+'_REF'
     inp.p('Amplifier_Operational:LM2904','LM2904',c,prefix='U',mpn='LM2904BIDR'); inp.C('100n','VBAT_P','GND',pkg='0805')
 for nm in ('COM_A','COM_B'):
-    tvs(inp,'SMAJ36CA',nm); inp.C('100n',nm,'GND',pkg='1206')
+    tvs(inp,'SMAJ40CA',nm); inp.C('100n',nm,'GND',pkg='1206')
     inp.R('100k',nm,nm+'_ADC'); inp.R('18k',nm+'_ADC','VMID'); inp.C('100n',nm+'_ADC','GND'); clamp(inp,nm+'_ADC')
 inp.p('Analog_ADC:ADS1115IDGS','ADS1115 @0x48',{'ADDR':'GND','ALERT/RDY':None,'GND':'GND','AIN0':'AI1_ADC','AIN1':'AI2_ADC','AIN2':'AI3_ADC','AIN3':'COM_A_ADC','VDD':'+3V3','SDA':'I2C1_SDA','SCL':'I2C1_SCL'},prefix='U',mpn='ADS1115IDGSR')
 inp.p('Analog_ADC:ADS1115IDGS','ADS1115 @0x49',{'ADDR':'+3V3','ALERT/RDY':None,'GND':'GND','AIN0':'AI4_ADC','AIN1':'AI5_ADC','AIN2':'AI6_ADC','AIN3':'COM_B_ADC','VDD':'+3V3','SDA':'I2C1_SDA','SCL':'I2C1_SCL'},prefix='U',mpn='ADS1115IDGSR')
@@ -420,11 +420,11 @@ for b in 'AB':
 # Schmitt inputs: list of (input node, output net)
 st=[]
 for n in range(1,13):
-    d='DI%d'%n; tvs(inp,'SMAJ36CA',d); inp.C('100n',d,'GND',pkg='1206')
+    d='DI%d'%n; tvs(inp,'SMAJ40CA',d); inp.C('100n',d,'GND',pkg='1206')
     inp.R('4.7k','DI_BIAS_'+('A' if n<=6 else 'B'),d,pkg='1206',note='wetting')
     inp.R('68k',d,d+'_D'); inp.R('33k',d+'_D','GND'); inp.C('100n',d+'_D','GND')
     st.append((d+'_D','DI%d_N'%n))
-tvs(inp,'SMAJ36CA','ESTOP_SENSE'); inp.C('100n','ESTOP_SENSE','GND',pkg='1206'); inp.R('4.7k','ESTOP_SENSE','GND',pkg='1206',note='wetting/pull-down')
+tvs(inp,'SMAJ40CA','ESTOP_SENSE'); inp.C('100n','ESTOP_SENSE','GND',pkg='1206'); inp.R('4.7k','ESTOP_SENSE','GND',pkg='1206',note='wetting/pull-down')
 inp.R('68k','ESTOP_SENSE','ESTOP_SENSE_D'); inp.R('33k','ESTOP_SENSE_D','GND'); inp.C('100n','ESTOP_SENSE_D','GND'); st.append(('ESTOP_SENSE_D','ESTOP2_DIG'))
 inp.R('68k','DPLUS','DPLUS_D'); inp.R('33k','DPLUS_D','GND'); inp.C('100n','DPLUS_D','GND'); st.append(('DPLUS_D','DPLUS_DIG'))
 inp.R('68k','VBAT_ESTOP','VESTOP_D'); inp.R('33k','VESTOP_D','GND'); inp.C('10n','VESTOP_D','GND'); st.append(('VESTOP_D','ESTOP_DIG'))
@@ -449,7 +449,7 @@ inp.p('Regulator_Linear:LM317_TO-252','LM317M',{'VI':'DPX_VI','VO':'DPX_VO','ADJ
 inp.R('10R','DPX_VO','DPX_ADJ',pkg='2512',note='1W'); inp.C('100n','DPX_VI','GND',pkg='0805')
 schottky(inp,'SS110','DPX_ADJ','DPLUS',mpn='SS110')
 inp.R('100k','DPLUS','DPLUS_SNS'); inp.R('10k','DPLUS_SNS','GND'); inp.C('100n','DPLUS_SNS','GND'); clamp(inp,'DPLUS_SNS','BAT54S')
-tvs(inp,'SMAJ36CA','VBAT_SENSE'); inp.R('100k','VBAT_SENSE','VBAT_SNS',note='0.1%'); inp.R('10k','VBAT_SNS','GND',note='0.1%'); inp.C('100n','VBAT_SNS','GND'); clamp(inp,'VBAT_SNS','BAT54S')
+tvs(inp,'SMAJ40CA','VBAT_SENSE'); inp.R('100k','VBAT_SENSE','VBAT_SNS',note='0.1%'); inp.R('10k','VBAT_SNS','GND',note='0.1%'); inp.C('100n','VBAT_SNS','GND'); clamp(inp,'VBAT_SNS','BAT54S')
 
 # =====================================================================
 ou=S('outputs','Outputs: fuel/crank (TPS48100), 15x TPS1HTC30, watchdog gating, readback',
@@ -676,7 +676,7 @@ MPNLCSC={'BSS84':'C8492','DMN6075S':'C155242','SI2309CDS-T1-GE3':'C10493','AO340
  '1N4148W':'C81598','SM712':'C12067','NUP2105LT1G':'C14486','USBLC6-2SC6':'C7519','SRV05-4':'C85364','TPS2051CDBVR':'C129581',
  'USB2514B-AEZC-TR':'C51062','TLV9062IDR':'C398355','LM2904BIDR':'C1849422','LM393DR':'C7955','ADS1115IDGSR':'C37593','LM317MDT-TR':'C3015165',
  'SN74LVC1G08DBVR':'C7666','INA281A2QDBVRQ1':'C2908677','INA281A1QDBVRQ1':'C2862615','STM32H743VIT6':'C114409','FM24CL64B-GTR':'C9829',
- 'SMDJ36CA':'C224075','SMBJ33CA':'C78420','SMDJ40CA':'C224077','SMBJ40CA':'C114004','SMBJ5.0A':'C78423','SMAJ36CA':'C10757','SMBJ58CA':'C114007','SMBJ36CA':'C78421','SMDJ24A':'C362107',
+ 'SMDJ36CA':'C224075','SMBJ33CA':'C78420','SMDJ40CA':'C224077','SMBJ40CA':'C114004','SMBJ5.0A':'C78423','SMAJ36CA':'C10757','SMAJ40CA':'C113970','SMBJ58CA':'C114007','SMBJ36CA':'C78421','SMDJ24A':'C362107',
  'SS110':'C2482','SS34':'C8678','SK1010C':'C3018527','EEHZA1H101P':'C109086','EEHZK1E471P':'C242138','TS-1187A-B-A-B':'C318884',
  'SM04B-SRSS-TB':'C160404','SM04B-SRSS-TB(LF)(SN)':'C160404','TYPE-C-31-M-12':'C165948','TYPE-C-31-D-06B':'C47817619','MMBT3904':'C20526','MMBT3906':'C2143'}
 DIODEFP={'SMDJ':'Diode_SMD:D_SMC','SMBJ':'Diode_SMD:D_SMB','SMAJ':'Diode_SMD:D_SMA','SS110':'Diode_SMD:D_SMA','SS34':'Diode_SMD:D_SMA','SK1010C':'Diode_SMD:D_SMC'}

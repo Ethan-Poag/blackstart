@@ -650,3 +650,5 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 - tools/design.py still emits Device:D_Schottky for D3/D4. The generator is not regenerated; this is a deferred generator fix. PCB: D3/D4 pad nets change, which is pending at layout.
 
 6-3 docs/PIN_FOOTPRINT_SWEEP.md: 1309 parts pin/pad sweep + 19 LCSC datasheet pinout checks; no further fixes (BAS70 fixed in 90c4879).
+
+6-4 SMAJ36CA->SMAJ40CA on 22 terminal TVS (D24,D27,D30,D33,D36,D39,D42,D44,D46-D58,D66): Value/MPN, LCSC C10757->C113970 (MDD, DO-214AC SMA, live 2026-10-28 stock 50860, 20+ $0.0431), Manufacturer MDD, footprint D_SMA unchanged; inputs_bom row, design.py, design_spec. JLC class UNVERIFIED.

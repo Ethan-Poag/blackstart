@@ -19,7 +19,7 @@ Status: 2026-10-24 (display: RVT121HVLNWCA0-B; previous version design_spec_rvt1
 - Supply assumption: the board assumes a battery-backed, suppressed 35 V-class supply. A 3 kW SMC TVS (D1) will NOT survive an unsuppressed 24 V alternator load dump; it is not designed for one (see docs/INSTALL_SAFETY.md).
 
 ## 4. Inputs (inputs_bom.csv)
-- 6 analogue inputs (resistive / 4-20 mA / 0-10 V) on 2x ADS1115 with excitation current sources, an MPU input, 12 DIs (HC14 thresholds meet DSE <2.1 V closed / >6.6 V open), D+, VBAT sense and the E-stop sense. SMAJ36CA TVS + 100 nF on every pin.
+- 6 analogue inputs (resistive / 4-20 mA / 0-10 V) on 2x ADS1115 with excitation current sources, an MPU input, 12 DIs (HC14 thresholds meet DSE <2.1 V closed / >6.6 V open), D+, VBAT sense and the E-stop sense. SMAJ40CA TVS + 100 nF on every pin.
 
 ## 5. Outputs (outputs_bom.csv, outputs_survey.md)
 - 17 outputs, all with current sensing, using TPS1HTC30-Q1 for the small outputs (glow, GCB/MCB close/open coil drivers for external DIN relays, AUX1-10, E-stop trip). Rev e: AUX1-10.
