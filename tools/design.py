@@ -658,7 +658,7 @@ MPNLCSC={'BSS84':'C8492','DMN6075S':'C155242','SI2309CDS-T1-GE3':'C10493','AO340
  'SN74LVC1G08DBVR':'C7666','INA281A2QDBVRQ1':'C2908677','INA281A1QDBVRQ1':'C2862615','STM32H743VIT6':'C114409','FM24CL64B-GTR':'C9829',
  'SMDJ36CA':'C224075','SMBJ33CA':'C78420','SMDJ40CA':'C224077','SMBJ40CA':'C114004','SMBJ5.0A':'C78423','SMAJ36CA':'C10757','SMBJ58CA':'C114007','SMBJ36CA':'C78421','SMDJ24A':'C362107',
  'SS110':'C2482','SS34':'C8678','SK1010C':'C3018527','EEHZA1H101P':'C109086','EEHZK1E471P':'C242138','TS-1187A-B-A-B':'C318884',
- 'SM04B-SRSS-TB':'C51940130','TYPE-C-31-M-12':'C165948','TYPE-C-31-D-06B':'C47817619','MMBT3904':'C20526','MMBT3906':'C2143'}
+ 'SM04B-SRSS-TB':'C160404','SM04B-SRSS-TB(LF)(SN)':'C160404','TYPE-C-31-M-12':'C165948','TYPE-C-31-D-06B':'C47817619','MMBT3904':'C20526','MMBT3906':'C2143'}
 DIODEFP={'SMDJ':'Diode_SMD:D_SMC','SMBJ':'Diode_SMD:D_SMB','SMAJ':'Diode_SMD:D_SMA','SS110':'Diode_SMD:D_SMA','SS34':'Diode_SMD:D_SMA','SK1010C':'Diode_SMD:D_SMC'}
 _r6='Resistor_SMD:R_0603_1608Metric'; _r12='Resistor_SMD:R_1206_3216Metric'; _c6='Capacitor_SMD:C_0603_1608Metric'
 RCX={  # (value, fp) -> lcsc for passives not in gen.RLCSC/CLCSC (all checked on JLC parts search 2026-10-24)
@@ -673,11 +673,12 @@ RCX={  # (value, fp) -> lcsc for passives not in gen.RLCSC/CLCSC (all checked on
  ('470n',_c6):'C1623',('47n',_c6):'C1622',('68n',_c6):'C5137586',
 }
 PREC={('100k',_r6):'C122538',('18k',_r6):'C309650'}  # 0.1% thin film where the note asks for 0.1%
+MATES={'1720819': ('SPC 5/4-STF-7,62 (1996142)', 'C5481482', '1'), 'KF2EDGRM-5.08-6P': ('KF2EDGKNM-5.08-6P', 'C2974985', '1'), 'WJ15EDGRC-3.81-04P': ('WJ15EDGK-3.81-04P', 'C7244', '1'), 'WJ15EDGRC-3.81-06P': ('WJ15EDGK-3.81-06P', 'C7247', '1'), 'WJ15EDGRC-3.81-02P': ('WJ15EDGK-3.81-02P', 'C8466', '1'), 'WJ15EDGRC-3.81-03P': ('WJ15EDGK-3.81-03P', 'C8413', '1')}
 CONNFP={  # value prefix -> (fp, lcsc, mpn)
  'PC 5/4-GF-7,62':('genctl:PhoenixContact_PC5_4-GF-7.62_1720819','C3579760','1720819'),
  'J4 E-stop':('genctl:PhoenixContact_PC5_4-GF-7.62_1720819','C3579760','1720819'),
- 'Fan header':('Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal','C160390','SM04B-SRSS-TB'),
- 'Internal USB':('Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal','C160390','SM04B-SRSS-TB'),
+ 'Fan header':('Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal','C160404','SM04B-SRSS-TB(LF)(SN)'),
+ 'Internal USB':('Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal','C160404','SM04B-SRSS-TB(LF)(SN)'),
  'Spare USB':('Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical','C2337','1x6 2.54 header'),
  'LVDS FPC':('genctl:FPC_40P_0.5_05A20L40P','C5362161','05A20L40P'),'Touch FPC':('genctl:FPC_10P_0.5_05B20L10P','C5362168','05B20L10P'),
  'Backlight':('genctl:SM02B-BHSS-1-TB','C485339','SM02B-BHSS-1-TB'),
@@ -707,6 +708,8 @@ def _fill(pt):
                 pt.fp='genctl:KF2EDGRM-5.08-6P'; pt.lcsc='C441292'; pt.mpn='KF2EDGRM-5.08-6P'  # FIX rev f: field I/O are 5.08 mm Kefa per BOM (was 3.81 WJ15)
             if n==4 and 'voltage' in pt.value:
                 pt.fp='genctl:PhoenixContact_PC5_4-GF-7.62_1720819'; pt.lcsc='C3579760'; pt.mpn='1720819'  # FIX rev f: BOM part is Phoenix PC 5/4-GF-7,62 (was KF2 5.08 6P, 2.6 mm L-L gap)
+    # m7-sch B3-10 (fixes_mechanical.md s3, fixes_mates.csv): mating plug properties keyed by header MPN (J30 excluded: header MPN mismatch)
+    if pt.mpn in MATES: pt.extra=dict(zip(('Mate_MPN','Mate_LCSC','Mate_Qty'),MATES[pt.mpn]))
     if lid=='Device:LED' and pt.lcsc in ('C2297','C2295'): pt.fp='LED_SMD:LED_0805_2012Metric'
     if lid=='Device:R' and '0.1%' in (pt.note or '') and (pt.value,pt.fp) in PREC: pt.lcsc=PREC[(pt.value,pt.fp)]
     if lid in ('Device:R','Device:C','Device:C_Polarized') and not pt.lcsc:

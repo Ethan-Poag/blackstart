@@ -272,3 +272,13 @@ INA281A1 gain 20 V/V × 20 mΩ = 0.40 V/A (INFERRED arithmetic; U44/U46 value al
 | H1, H2, H3 | MountingHole_3.2mm_M3_Pad, pin 1 CHASSIS | MountingHole:MountingHole_4.3mm_M4_Pad, pin 1 CHASSIS | PCB and enclosure use M4 (MEASURED by mech reviewer) | fixes_mechanical.md §5 l.80-84 |
 | H4 | Mechanical:MountingHole_Pad 3.2mm M3 Pad on CHASSIS | Mechanical:MountingHole (0-pin) MountingHole:MountingHole_4.3mm_M4; CHASSIS label + wire removed | 4.3 mm NPTH PE-boss clearance, no pad | same |
 design.py: H1-H3 loop range(3), H4 separate 0-pin symbol; footprint map updated. PCB: already deferred as D3 (H4) in deferred_layout.md; H1-H3 PCB pads are already 4.3 mm per spec (MEASURED by mech).
+
+## B3-10: connector sourcing and mating-plug properties (fixes_mechanical.md §3, §7; fixes_mates.csv)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| J4, J12, J13 | SM04B-SRSS-TB C51940130 (XY clone; design.py CONNFP had C160390 = BM04B vertical, wrong) | JST SM04B-SRSS-TB(LF)(SN) C160404 (LIVE LCSC 2026-10-28: 59,830, $0.2168 @5) | footprint is the horizontal SM04B; genuine part | §3 N2 l.57-62 |
+| J1, J23, J28, J29 | — | Mate_MPN "SPC 5/4-STF-7,62 (1996142)", Mate_LCSC C5481482 (LIVE: stock 100, $6.789 @1), Mate_Qty 1 | plug in BOM | fixes_mates.csv |
+| J6 / J7 / J8 / J9 | — | Mate WJ15EDGK-3.81-04P C7244 / -06P C7247 / -02P C8466 / -03P C8413, qty 1 | same | fixes_mates.csv (header MPNs match schematic, MEASURED) |
+| J17–J22, J24–J27 | — | Mate KF2EDGKNM-5.08-6P C2974985, qty 1 (screw plug) | same | fixes_mates.csv |
+| J30 | KF2EDGRM-5.08-8P C441294 | **NOT CHANGED; no Mate props** | spec header is Phoenix 1720851 (C6651769, stock 0) but genctl.pretty has no 1720851 footprint; header/plug decision held | §1 |
+tools/design.py: MATES dict keyed by header MPN sets pt.extra; tools/gen.py fields_xml emits pt.extra as hidden props. power_bom/outputs_bom 1720819 rows: LCSC column now C3579760 (LIVE: stock 49, $5.5261 @1; row price kept at DigiKey $7.46); plug rows LCSC C5481482. "not at LCSC": 0 hits (MEASURED). SW1–SW4 qty already 4; SW5–SW8 no longer exist in the netlist (MEASURED), so the comms qty fix does not apply.

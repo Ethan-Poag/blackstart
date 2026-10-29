@@ -291,6 +291,7 @@ def fields_xml(pt,X,Y,u):
     if not pt.power:
         vals+=[('LCSC',pt.lcsc,True),('MPN',pt.mpn,True),('Manufacturer',pt.mfr,True)]
         if pt.note: vals.append(('Note',pt.note,True))
+        for k,v in getattr(pt,'extra',{}).items(): vals.append((k,v,True))  # m7-sch B3-10 Mate_* props
     # beautify: ICs with top pins -> Ref/Value below body so they don't sit on the pin numbers
     rects=[(float(find1(r,'start')[1]),float(find1(r,'start')[2]),float(find1(r,'end')[1]),float(find1(r,'end')[2])) for sub in find(pt.sym,'symbol') for r in find(sub,'rectangle')]
     below=None
