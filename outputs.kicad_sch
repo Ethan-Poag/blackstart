@@ -3727,6 +3727,225 @@
 				(effects
 					(font
 						(size 1.27 1.27)))))))
+
+(symbol "Transistor_FET:SUD50P06-15"
+	(pin_names
+		(hide yes))
+	(exclude_from_sim no)
+	(in_bom yes)
+	(on_board yes)
+	(property "Reference" "Q"
+		(at 4.953 1.905 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(justify left)))
+	(property "Value" "SUD50P06-15"
+		(at 4.953 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(justify left)))
+	(property "Footprint" "Package_TO_SOT_SMD:TO-252-2"
+		(at 4.953 -1.905 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(italic yes))
+			(justify left)
+			(hide yes)))
+	(property "Datasheet" "https://www.vishay.com/docs/68940/sud50p06.pdf"
+		(at 5.08 -3.81 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(justify left)
+			(hide yes)))
+	(property "Description" "-50A Id, -60V Vds, TrenchFET P-Channel Power MOSFET, 15mOhm Ron, 165nC Qg, -55 to 150 °C, TO-252-2"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "ki_keywords" "TrenchFET P-Channel Power MOSFET"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "ki_fp_filters" "TO?252*"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(symbol "SUD50P06-15_0_1"
+		(polyline
+			(pts
+				(xy 0.254 1.905)
+				(xy 0.254 -1.905))
+			(stroke
+				(width 0.254)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy 0.254 0)
+				(xy -2.54 0))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy 0.762 2.286)
+				(xy 0.762 1.27))
+			(stroke
+				(width 0.254)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy 0.762 1.778)
+				(xy 3.302 1.778)
+				(xy 3.302 -1.778)
+				(xy 0.762 -1.778))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy 0.762 0.508)
+				(xy 0.762 -0.508))
+			(stroke
+				(width 0.254)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy 0.762 -1.27)
+				(xy 0.762 -2.286))
+			(stroke
+				(width 0.254)
+				(type default))
+			(fill
+				(type none)))
+		(circle
+			(center 1.651 0)
+			(radius 2.794)
+			(stroke
+				(width 0.254)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy 2.286 0)
+				(xy 1.27 0.381)
+				(xy 1.27 -0.381)
+				(xy 2.286 0))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type outline)))
+		(polyline
+			(pts
+				(xy 2.54 2.54)
+				(xy 2.54 1.778))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none)))
+		(circle
+			(center 2.54 1.778)
+			(radius 0.254)
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type outline)))
+		(circle
+			(center 2.54 -1.778)
+			(radius 0.254)
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type outline)))
+		(polyline
+			(pts
+				(xy 2.54 -2.54)
+				(xy 2.54 0)
+				(xy 0.762 0))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy 2.794 -0.508)
+				(xy 2.921 -0.381)
+				(xy 3.683 -0.381)
+				(xy 3.81 -0.254))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none)))
+		(polyline
+			(pts
+				(xy 3.302 -0.381)
+				(xy 2.921 0.254)
+				(xy 3.683 0.254)
+				(xy 3.302 -0.381))
+			(stroke
+				(width 0)
+				(type default))
+			(fill
+				(type none))))
+	(symbol "SUD50P06-15_1_1"
+		(pin input line
+			(at -5.08 0 0)
+			(length 2.54)
+			(name "G"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "1"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin passive line
+			(at 2.54 5.08 270)
+			(length 2.54)
+			(name "D"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "2"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin passive line
+			(at 2.54 -5.08 90)
+			(length 2.54)
+			(name "S"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "3"
+				(effects
+					(font
+						(size 1.27 1.27)))))))
 )
 (symbol (lib_id "genctl:TPS3431SDRBR") (at 85.09 80.01 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "6c6128fd-3567-4c2b-a137-7ec25c0715e2")
 (property "Reference" "U37" (at 77.47 68.58 0) (effects (font (size 1.27 1.27))))
@@ -9098,9 +9317,9 @@
 (wire (pts (xy 942.34 518.16) (xy 942.34 520.7)) (stroke (width 0) (type default)) (uuid "d40c0196-18e0-4875-b43f-619889803afc"))
 (symbol (lib_id "power:GND") (at 942.34 520.7 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "ae8a40ab-cfcf-4b59-bd13-f0f01e4f0707")(property "Reference" "#PWR0826" (at 942.34 520.7 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 942.34 524.51 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 942.34 520.7 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 942.34 520.7 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "ed74a870-d59e-4269-8d86-f29acc0be53e"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "#PWR0826") (unit 1)))))
 (wire (pts (xy 1007.11 114.3) (xy 1004.57 114.3)) (stroke (width 0) (type default)) (uuid "157861b1-47c2-4b2f-bbf3-334f2dd012d1"))
-(global_label "VBAT_ESTOP" (shape passive) (at 1004.57 114.3 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c860ae7c-f851-4697-ba73-9caa6669f6ee") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 1004.57 114.3 0) (effects (font (size 1.27 1.27)) hide)))
+(global_label "VBAT_ESTOP_IN" (shape passive) (at 1004.57 114.3 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "c860ae7c-f851-4697-ba73-9caa6669f6ee") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 1004.57 114.3 0) (effects (font (size 1.27 1.27)) hide)))
 (wire (pts (xy 1007.11 116.84) (xy 1004.57 116.84)) (stroke (width 0) (type default)) (uuid "424b63b3-5315-4174-98c8-7cd81d2d4aca"))
-(global_label "VBAT_ESTOP" (shape passive) (at 1004.57 116.84 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "9cf7cda0-bd2f-4f69-bfad-332a89c73c81") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 1004.57 116.84 0) (effects (font (size 1.27 1.27)) hide)))
+(global_label "VBAT_ESTOP_IN" (shape passive) (at 1004.57 116.84 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "9cf7cda0-bd2f-4f69-bfad-332a89c73c81") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 1004.57 116.84 0) (effects (font (size 1.27 1.27)) hide)))
 (wire (pts (xy 1007.11 121.92) (xy 1004.57 121.92)) (stroke (width 0) (type default)) (uuid "584423e7-91c9-42b6-bc08-fa7e1c0518e1"))
 (label "CRANK_OUT" (at 1004.57 121.92 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "ef42612b-e9e9-4fcf-bf2e-bfcd56194306"))
 (wire (pts (xy 1056.64 497.84) (xy 1054.1 497.84)) (stroke (width 0) (type default)) (uuid "c6f8f1cf-1f6f-467c-8f3c-4e71d659e409"))
@@ -10283,4 +10502,72 @@
 )
 (global_label "WDI" (shape passive) (at 60.96 768.35 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "2f065f89-c85a-404a-b039-6caa86df1403") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 60.96 768.35 0) (effects (font (size 1.27 1.27)) hide)))
 (symbol (lib_id "power:GND") (at 60.96 775.97 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "76fb2d04-0624-4a59-a90e-e8b7134f2956")(property "Reference" "#PWR1089" (at 60.96 775.97 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 60.96 775.97 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 60.96 775.97 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 60.96 775.97 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "eb572633-f2c2-4654-b85c-755eb1742efd"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "#PWR1089") (unit 1)))))
+(symbol (lib_id "Transistor_FET:SUD50P06-15") (at 1092.2 30.48 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "b83e2833-23db-49a4-9d69-47b4b1fbbe16")
+(property "Reference" "Q70" (at 1097.28 27.94 0) (effects (font (size 1.27 1.27))))
+(property "Value" "SQD40P10-40L" (at 1097.28 33.02 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_TO_SOT_SMD:TO-252-2" (at 1092.2 30.48 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 1092.2 30.48 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "P-MOSFET -100V TO-252" (at 1092.2 30.48 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C141570" (at 1092.2 30.48 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "SQD40P10-40L_GE3" (at 1092.2 30.48 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Vishay" (at 1092.2 30.48 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "Rev 3 H1/R3-8 E-stop feed reverse block, 2 in parallel: D=J23 side (VBAT_ESTOP_IN), S=load (VBAT_ESTOP)" (at 1092.2 30.48 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "97cdee68-1770-47e1-b469-9e8724ff82de"))
+(pin "2" (uuid "47ececf0-539e-4dd6-9c7d-26cb69832944"))
+(pin "3" (uuid "8f49c3c9-5faa-4afc-904a-c83c0cb10ddb"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "Q70") (unit 1))))
+)
+(label "ESTOP_RPF_G" (at 1087.12 30.48 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "aeeeb59f-2fca-4040-8b87-8755be4864f8"))
+(global_label "VBAT_ESTOP_IN" (shape passive) (at 1094.74 25.4 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "314f6921-384a-4780-aec1-4445dbb9bd50") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 1094.74 25.4 0) (effects (font (size 1.27 1.27)) hide)))
+(global_label "VBAT_ESTOP" (shape passive) (at 1094.74 35.56 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "cc787b1c-2937-4439-b977-96c7edd27d62") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 1094.74 35.56 0) (effects (font (size 1.27 1.27)) hide)))
+(symbol (lib_id "Transistor_FET:SUD50P06-15") (at 1117.6 30.48 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "394d8cf3-8304-40b8-bc73-8932942ae0f9")
+(property "Reference" "Q71" (at 1122.68 27.94 0) (effects (font (size 1.27 1.27))))
+(property "Value" "SQD40P10-40L" (at 1122.68 33.02 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_TO_SOT_SMD:TO-252-2" (at 1117.6 30.48 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 1117.6 30.48 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "P-MOSFET -100V TO-252" (at 1117.6 30.48 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C141570" (at 1117.6 30.48 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "SQD40P10-40L_GE3" (at 1117.6 30.48 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Vishay" (at 1117.6 30.48 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "Rev 3 H1/R3-8 E-stop feed reverse block, 2 in parallel: D=J23 side (VBAT_ESTOP_IN), S=load (VBAT_ESTOP)" (at 1117.6 30.48 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "3c79763a-686c-46ec-ac72-f8bf2184c022"))
+(pin "2" (uuid "1547ca1e-7975-4dfc-8969-877400897c41"))
+(pin "3" (uuid "08eaf189-465d-4c6f-9a9e-0c2e8f11d189"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "Q71") (unit 1))))
+)
+(label "ESTOP_RPF_G" (at 1112.52 30.48 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "30cda3e5-dae2-43de-8afd-259736a56f88"))
+(global_label "VBAT_ESTOP_IN" (shape passive) (at 1120.14 25.4 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c0e5fc8d-4828-4849-a335-aa7f8f10f10a") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 1120.14 25.4 0) (effects (font (size 1.27 1.27)) hide)))
+(global_label "VBAT_ESTOP" (shape passive) (at 1120.14 35.56 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "d918fa36-fd00-4d7c-a547-f846d0dae3c8") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 1120.14 35.56 0) (effects (font (size 1.27 1.27)) hide)))
+(symbol (lib_id "Device:R") (at 1092.2 50.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "b63f530b-b59a-4297-9df6-6765d4da9be8")
+(property "Reference" "R627" (at 1097.28 48.26 0) (effects (font (size 1.27 1.27))))
+(property "Value" "10k" (at 1097.28 53.34 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 1092.2 50.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 1092.2 50.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Resistor" (at 1092.2 50.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C98220" (at 1092.2 50.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "RC0603FR-0710KL" (at 1092.2 50.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "YAGEO" (at 1092.2 50.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "H1 gate pull-down for Q70/Q71" (at 1092.2 50.8 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "cde5f5d3-5cae-4c79-b53f-db37948becef"))
+(pin "2" (uuid "627e1f91-0ca2-4840-981b-fe8639799882"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "R627") (unit 1))))
+)
+(label "ESTOP_RPF_G" (at 1092.2 46.99 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "26023b32-965c-421b-b6d4-2e0dd42a415d"))
+(symbol (lib_id "power:GND") (at 1092.2 54.61 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "6156cb47-0988-4f16-8cbb-2bf0ce767a5d")(property "Reference" "#PWR1090" (at 1092.2 54.61 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 1092.2 54.61 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 1092.2 54.61 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 1092.2 54.61 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "993cf4d6-95f2-4c70-8751-73037116ab2e"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "#PWR1090") (unit 1)))))
+(symbol (lib_id "Device:D_Zener") (at 1117.6 50.8 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "76fb0baa-6b33-414b-8473-d38ee9a4a1ee")
+(property "Reference" "D137" (at 1122.68 48.26 0) (effects (font (size 1.27 1.27))))
+(property "Value" "BZT52C15" (at 1122.68 53.34 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Diode_SMD:D_SOD-123" (at 1117.6 50.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 1117.6 50.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Zener 15V 500mW SOD-123" (at 1117.6 50.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C2104" (at 1117.6 50.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "BZT52C15" (at 1117.6 50.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "JSCJ" (at 1117.6 50.8 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "H1 Q70/Q71 G-S clamp, anode at gate" (at 1117.6 50.8 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "1d8a3697-9689-4bb1-852d-b41dbee7b1df"))
+(pin "2" (uuid "ff96d906-5b40-43f1-adfd-86a7636ab1ef"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "D137") (unit 1))))
+)
+(global_label "VBAT_ESTOP" (shape passive) (at 1113.79 50.8 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "a4b4a525-1228-4062-bb4e-a32256e38684") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 1113.79 50.8 0) (effects (font (size 1.27 1.27)) hide)))
+(label "ESTOP_RPF_G" (at 1121.41 50.8 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "e4cac4fa-4e75-4d0e-a9f9-b53b29f35262"))
 )

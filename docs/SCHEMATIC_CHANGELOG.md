@@ -363,3 +363,14 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 | L3 | 2.2u MWSA0503S-2R2MT C408408, genctl:L_MWSA0503S | 3.3u MWSA1004S-3R3MT C408483 Sunlord, genctl:L_MWSA1004S (same as L2) | Isat 5.6 A < IOCL 8.6 A max; R3-6 confirms that C408483 IS the MWSA1004S | fixes_safety.md M3 l.460, R3-6 l.157-161, Rev 3 change 6 |
 - C408483 stock/price are UNVERIFIED because the LCSC page is 404 (a live scrape this turn returned an unrelated recommended part). The power_bom L3 row is excluded from the TOTAL (6.94 -> $46.79, the old $0.1547 row is gone). L2's existing $0.2691 is also unverified (not changed).
 - Spec M3: check TPS56637 loop stability with 3.3 uH (internal compensation, UNVERIFIED). PCB: D-m7-6.
+
+### 3b-1: E-stop feed reverse-polarity block, H1 (fixes_safety.md H1 l.450, R3-8 l.175-189, Rev 3 change 8)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| J23.1/J23.2 | net VBAT_ESTOP | net VBAT_ESTOP_IN (new; the name is not given in the spec) | the FET goes between the connector and the load | H1 "drain to J23, source to load side" |
+| Q70, Q71 (new; spec "Q", next free) | none | SQD40P10-40L_GE3 Vishay C141570, TO-252 (Package_TO_SOT_SMD:TO-252-2, KiCad SUD50P06-15 symbol G1/D2/S3), in parallel: D=VBAT_ESTOP_IN, S=VBAT_ESTOP, G=ESTOP_RPF_G | -100 V vs the 64.5 V SMDJ40CA clamp; thermal: 2 in parallel at 0.67 W each | R3-8 |
+| R627 (new) | none | 10k 0603 C98220 RC0603FR-0710KL YAGEO, ESTOP_RPF_G -> GND | gate drive | H1 "gate -> 10k -> GND" |
+| D137 (new) | none | BZT52C15 C2104 JSCJ SOD-123, A=gate, K=source (VBAT_ESTOP) | Vgs clamp 15 V < 20 V | H1 "BZT52C15 G-S (anode at gate)", R3-8 Gate |
+- NOT CMD60P06 / SUD50P06 (rejected by R3-8). Live LCSC 2026-10-28 (HST): C141570 stock 206 1@\$1.5676; C2104 stock 10,600 50@\$0.0212; C98220 stock 3,801,900 100@\$0.0027. outputs_bom +3 rows, TOTAL \$162.10 -> \$165.26.
+- Kept as is (not specified): D126 SMDJ40CA and all other VBAT_ESTOP loads (R251 sense, R411, TPS48100s, INA281s, C199/C203) stay on the load side (VBAT_ESTOP). Only J23.1/2 moved.
+- Pinout of SQD40P10-40L vs the KiCad SUD50P06-15 symbol (G1, D2/tab, S3) is INFERRED from the TO-252 standard; the spec asks Layout to check it. PCB: D-m7-7.

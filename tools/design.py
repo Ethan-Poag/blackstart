@@ -503,7 +503,11 @@ for nm,lst in (('MUXA_OUT',mA),('MUXB_OUT',mB)):
 # m7-sch FW-007/014/S-L1: BAT54C clamps on TMUX1208 S pins to +3V3_SAFE (fixes_firmware.md s5)
 for _i,(_a,_b) in enumerate(zip((mA+mB)[0::2],(mA+mB)[1::2])):
     ou.p('Diode:BAT54C','BAT54C',{'1':_a,'2':_b,'3':'+3V3_SAFE'},ref='D%d'%(128+_i),mpn='BAT54C,215',lcsc='C37704',mfr='Nexperia',fp='Package_TO_SOT_SMD:SOT-23',note='TMUX1208 S-pin clamp')
-conn(ou,4,['VBAT_ESTOP','VBAT_ESTOP','FUEL_OUT','CRANK_OUT'],'J4 E-stop/fuel/crank (PC 5/4-7.62)',mpn='Phoenix PC 5/4-GF-7,62')
+# m7-sch 3b H1/R3-8: E-stop feed reverse block, 2x SQD40P10-40L parallel (Q70/Q71), D=J23 side, S=VBAT_ESTOP
+for _q in ('Q70','Q71'): ou.p('Transistor_FET:SUD50P06-15','SQD40P10-40L',{'G':'ESTOP_RPF_G','D':'VBAT_ESTOP_IN','S':'VBAT_ESTOP'},ref=_q,mpn='SQD40P10-40L_GE3',lcsc='C141570',mfr='Vishay')
+ou.R('10k','ESTOP_RPF_G','GND',ref='R627',lcsc='C98220',mpn='RC0603FR-0710KL',mfr='YAGEO')
+ou.p('Device:D_Zener','BZT52C15',{'K':'VBAT_ESTOP','A':'ESTOP_RPF_G'},ref='D137',mpn='BZT52C15',lcsc='C2104',mfr='JSCJ')
+conn(ou,4,['VBAT_ESTOP_IN','VBAT_ESTOP_IN','FUEL_OUT','CRANK_OUT'],'J4 E-stop/fuel/crank (PC 5/4-7.62)',mpn='Phoenix PC 5/4-GF-7,62')
 conn(ou,6,['GLOW_OUT','GCB_CL_OUT','GCB_OP_OUT','MCB_CL_OUT','MCB_OP_OUT','ESTOP_TRIP_OUT'],'J5A outputs')
 conn(ou,6,['GND','GND','GND','GND','GND','GND'],'J5B returns')
 conn(ou,6,['AUX1_OUT','AUX2_OUT','AUX3_OUT','AUX4_OUT','AUX5_OUT','AUX6_OUT'],'J6A AUX1-6')
