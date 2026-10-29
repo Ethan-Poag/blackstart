@@ -18,3 +18,10 @@ Ethan decides on cost. All figures are per board, in USD, from the committed bom
 | BOM consolidation 3c | see changelog 3c-5 | see changelog 3c-5 |
 
 Not MEASURED, so not listed with a figure: the J30 mate plug 1996184 (no LCSC listing) and the JLC extended-part fees.
+
+## Stock risk: BAS70 JSCJ C77297 (D3/D4, LM5176 bootstrap) (Batch 7, Enginerd E)
+- Stock **760** on LCSC (Safety-reported, 2026-10-28 5:13 PM HST; the 6-2 live check also saw 760, 20+ @ $0.0288). The board uses 2.
+- Action: buy a buffer (order extra beyond the build qty, e.g. a full reel-strip for several builds) before stock runs out. No second source is named here: any replacement must be a single BAS70 in SOT-23 with the same pin 1 A / 2 NC / 3 K pinout (genctl:BAS70 symbol), and its LCSC code, pinout and stock must be live-checked before use (UNVERIFIED, none selected).
+
+## D146 BZT52C33 C2110 -> BZT52C30 C21561 (Batch 7)
+- inputs_bom $26.83 -> $26.84. Price $0.027 @50 and stock 11,250 are Safety-reported (5:14 PM HST), not re-checked; part identity verified on jlcpcb.com/partdetail/C21561.

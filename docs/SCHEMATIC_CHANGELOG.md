@@ -428,7 +428,7 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 - BAV99 CT clamps stay at **8 parts (4 CT channels)**. Lead ruling: Safety's M5 "8 channels / +16 SOT-23" was wrong, because only U71 has CT inputs and U72's current inputs are tied to GND_AC.
 
 ### 3c-5: BOM consolidation, one row per LCSC code with the exact schematic qty (lead ruling)
-- **Before (0797a5e): 61 mismatches (QTY 13, SCH_ONLY 6, BOM_ONLY 42). After: 0 mismatches (QTY 0 / SCH_ONLY 0 / BOM_ONLY 0)**, with 199 schematic groups = 199 BOM groups (tools/bom_from_sch.py vs the committed schematic).
+- **Before (0797a5e): 61 mismatches (QTY 13, SCH_ONLY 6, BOM_ONLY 42). After: 0 mismatches (QTY 0 / SCH_ONLY 0 / BOM_ONLY 0)**, with 199 schematic groups = 199 BOM groups at 37327c2 (tools/bom_from_sch.py vs the committed schematic); batches 4-6 added groups, so it is **201 = 201** from 17d3485 on (Reviewer Re-audit 4 INFO).
 - Schematic: H1-H4 mounting holes set to (in_bom no). They are bare holes, not purchased parts, and they were 2 of the SCH_ONLY groups. Not mirrored in design.py (DO NOT REGENERATE).
 - Every on-board row now has qty = the schematic count for exactly its LCSC code. The notes column gives "3c: SCH refs (n): ..." plus a live-price stamp. Codes whose refs carry different Values are label-only variants of one part (connector labels, I2C addresses, button names, CM5 conn A/B); each has a single row.
 - Live LCSC at 2026-10-28 16:38 HST: the unit price is the break for max(qty, MOQ). There is no live price for C408483, C83451, C1002, C7471020, C79272, so those are UNVERIFIED and excluded.
@@ -700,3 +700,18 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 | R211, R214, R217, R220, R223, R226, R229, R232, R235, R238, R241, R244, R247, R249, R251 (68k 0603, LCSC C23231; 15 refs) | MPN "", Manufacturer "" | MPN 0603WAF6802T5E, Manufacturer UNI-ROYAL | R4-N7 empty MPN | bom/inputs_bom.csv C23231 row; LCSC page title C23231 = "0603WAF6802T5E ... UNI-ROYAL" (fetched 2026-10-28 ~5:30 PM HST) |
 | R5 (power), R212, R215, R218, R221, R224, R227, R230, R233, R236, R239, R242, R245, R248, R250, R252 (33k 0603, LCSC C4216; 16 refs) | MPN "", Manufacturer "" | MPN 0603WAF3302T5E, Manufacturer UNI-ROYAL | same | BOM C4216 row; LCSC page title C4216 = "0603WAF3302T5E ... UNI-ROYAL" |
 - Only properties changed; bom_from_sch 201/201, 0 mismatches.
+
+### 7-6: Reviewer Re-audit 4 (R4-N1..N8) and Safety Round 4 resolutions
+| ID | Reviewer finding (reviewer.md RA4) | Resolution | Commit / status |
+|---|---|---|---|
+| R4-N1 (MEDIUM) | D2 SMBJ40CA Vc 64.5 V on VBAT_P > LM5176 60 V abs max / SI2309CDS 60 V | **No TVS change** (Enginerd C). LM74800 OV cut-off (<=40.06 V, tOVP_OFF <=5.4 µs, SNOSD95C p5-6) disconnects VBAT_P, so VBAT_P peaks ≈41.5 V (INFERRED); D2 (VBR min 44.4 V) is a single-fault backstop. No in-stock part fits VBR(min,cold) > 40.11 V with Vc <= 60 V. >60 V exposure needs a single fault plus load dump (UNVERIFIED by test) | ruling, no change |
+| R4-N2 (MEDIUM) | fuse 58 V basis stale | 58 V = ISO 16750-2 Test B Us* (24 V, centrally suppressed); TVS clamp does not set the fuse rating. INSTALL_SAFETY l.41 replaced; declared limit added to INSTALL_SAFETY and README | 7-1 (24f412e) |
+| R4-N3 (MEDIUM) | FUEL/CRANK "15 A" + 15 A fuse | 2.8 A max; 5 A standard (non-fast) ATO/ATC blade, >=58 V DC, installer-supplied; starter only via interposing relay | 7-1 (24f412e) |
+| R4-N4 (LOW) | L3 3.3 µH vs Table 4 2.2 µH; stale text | L3 3.3 µH C408483 kept as a documented deviation; bench load-step 0.5-3 A at 9/12/32 V in; fallback 2.2 µH same footprint; stale text fixed | 7-3 |
+| R4-N5 (LOW) | VBAT_AI 37.9 V hot > LM2904B 36 V rec. max | D146 BZT52C33 -> BZT52C30 C21561; rail <=34.5 V at 257F | 7-2 (3d3eff4) |
+| R4-N6 (LOW/FW) | AI invalid during crank | firmware should blank AI below VBAT 9 V (Safety, INFERRED); firmware item, no schematic change | open (firmware) |
+| R4-N7 (LOW) | R211/R212-type MPNs empty | filled from LCSC C23231/C4216 (31 refs) | 7-5 |
+| R4-N8 (LOW, bench) | BAS70 IFSM/trr unverified for bootstrap duty | D3/D4 BAS70 C77297 pinout confirmed correct (1 A / 2 NC / 3 K) by Safety and Reviewer; IFSM 100 mA from DS p1 (Safety); start-up CBOOT surge UNVERIFIED (bench). Stock only 760 (Safety, 5:13 PM HST): buy a buffer, see COST_NOTES | open (bench) |
+| Safety (a) | C131 100n VBAT_AI-AI_VSET | kept: decouples the D23 LM4040 reference | no change |
+| Safety (c) | SMAJ40CA on D46-type inputs | already in 17d3485 (6-4) | done |
+| D23 | polarity | confirmed correct vs TI SLOS456Q Table 5-1 p4 (ERC_AUDIT.md) | no change |
