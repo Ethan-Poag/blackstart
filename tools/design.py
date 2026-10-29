@@ -232,7 +232,7 @@ for i,(tx,rx,iso) in enumerate((('CAN1_TX','CAN1_RX','GND_CAN1'),('CAN2_TX','CAN
     n='CAN%d'%i
     co.R('1k',tx,tx+'_T',note='domain-boundary R (SAFE MCU -> +5V transceiver)'); co.R('1k',rx+'_T',rx,note='domain-boundary R')
     co.p('genctl:CA-IS3062W','CA-IS3062W',{'VCC':'+5V','TXD':tx+'_T','RXD':rx+'_T','GND1':'GND','NC':None,'VISO':'VISO_%s'%n,'CANH':n+'_H','CANL':n+'_L','GND2':iso},mpn='CA-IS3062W')
-    co.C('100n','+5V','GND'); co.C('10u','+5V','GND',pkg='0805'); co.C('100n','VISO_'+n,iso); co.C('47u','VISO_'+n,iso,pkg='1206',mpn='CL31A476MPHNNNE',lcsc='C96123',mfr='Samsung',note='VISO 47uF per CA-IS3062W p15 (m7-sch FW-008, fixes_firmware.md s6)')
+    co.C('100n','+5V','GND'); co.C('10u','+5V','GND',pkg='0805'); co.C('100n','VISO_'+n,iso); co.C('47u','VISO_'+n,iso,pkg='1210',mpn='CL32A476KOJNNNE',lcsc='C2932477',mfr='Samsung',note='VISO 47uF per CA-IS3062W p15 (m7-sch FW-008, fixes_firmware.md s6)')
     co.p('genctl:ACT45B-510-2P','ACT45B-510-2P',{'1':n+'_H','4':n+'_HB','2':n+'_L','3':n+'_LB'},mpn='ACT45B-510-2P-TL003')
     co.p('Power_Protection:NUP2105L','NUP2105L',{'1':n+'_HB','2':n+'_LB','3':iso},prefix='D',mpn='NUP2105LT1G')
     if i==1:
@@ -487,7 +487,7 @@ conn(ou,6,['AUX7_OUT','AUX8_OUT','AUX9_OUT','AUX10_OUT','GND','GND'],'J6B AUX7-1
 # m7-sch FW-001/FW-027 watchdog trip latch (fixes_firmware.md Rev 2 s1: POR RC re-arm 220k/4.7u/BAT54WS, ENOUT NC). WDO_N now only U37.7/R271/U84.6; gates + R272 + U76 P15 on WD_OK
 ou.p('74xGxx:74AUP1G74','74LVC1G74DP-Q100H',{'1':'WD_REARM','2':'+3V3_SAFE','3':None,'4':'GND','5':'WD_OK','6':'WDO_N','7':'+3V3_SAFE','8':'+3V3_SAFE'},ref='U84',mpn='74LVC1G74DP-Q100H',lcsc='C548409',mfr='Nexperia',fp='Package_SO:TSSOP-8_3x3mm_P0.65mm',note='Watchdog trip latch; stock 74AUP1G74 symbol, same pinout')
 ou.p('74xGxx:74LVC1G17','SN74LVC1G17DBVR',{'1':None,'2':'WD_RC','3':'GND','4':'WD_REARM','5':'+3V3_SAFE'},ref='U85',mpn='SN74LVC1G17DBVR',lcsc='C7836',mfr='TI',fp='Package_TO_SOT_SMD:SOT-23-5',note='Schmitt buffer ENOUT RC -> U84 CP')
-ou.R('220k','+3V3_SAFE','WD_RC',ref='R554',lcsc='C22961',note='POR re-arm RC (Rev 2), tau 1.03 s'); ou.C('4.7u','WD_RC','GND',ref='C298',mpn='CL10A475KO8NNNC',lcsc='C19666',mfr='Samsung',note='POR re-arm RC cap (spec C293)')
+ou.R('220k','+3V3_SAFE','WD_RC',ref='R554',lcsc='C22961',note='POR re-arm RC (Rev 2), tau 1.03 s'); ou.C('4.7u','WD_RC','GND',ref='C298',pkg='1206',mpn='CL31B475KAHNNNE',lcsc='C1872',mfr='Samsung',note='POR re-arm RC cap 25V X7R (spec C293, Rev 3)')
 ou.p('Device:D_Schottky','BAT54WS-7-F',{'1':'+3V3_SAFE','2':'WD_RC'},ref='D136',mpn='BAT54WS-7-F',lcsc='C124205',mfr='Diodes',fp='Diode_SMD:D_SOD-323',note='WD_RC discharge diode')
 ou.C('100n','+3V3_SAFE','GND',ref='C299',lcsc='C14663',note='U84 decoupling'); ou.C('100n','+3V3_SAFE','GND',ref='C300',lcsc='C14663',note='U85 decoupling')
 # m7-sch FW-002/003/004 enable pull-downs (fixes_firmware.md s2, s3.1, s3.2)

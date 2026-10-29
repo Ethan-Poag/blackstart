@@ -162,3 +162,12 @@ Crystal ESR still UNVERIFIED (spec §9: gain margin 2.8 < AN2867's 5). Footprint
 | U72 pin 20 VAP | Net-(U72-VAP) (R453.2, C265.1) | BUS_VA_P | consistent naming (net-only) | §14 |
 | bom/ac_metering_bom.csv | — | +5 rows (only U87 priced; this file has no TOTAL row) | BOM | — |
 | tools/design.py | — | U87 block; BUS CLKIN = ADE_CLK_BUF (design.py already named BUS_VA_P) | regen | — |
+
+## FW-8: Rev 3 part choices for the watchdog cap and VISO caps (fixes_firmware.md §18.3/§18.4)
+Ref mapping: spec "C293" = real **C298** (schematic C293 is an existing LM5176 22 µF COUT and is not touched). PCB footprint change deferred (deferred_layout.md D6).
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| C298 (spec C293, outputs) | 4.7 µF 16 V X5R 0603 CL10A475KO8NNNC C19666 | 4.7 µF 25 V X7R 1206 CL31B475KAHNNNE C1872 | X7R for > 85 °C, less DC-bias loss | §18.3 (recommended), parent ruling 2026-10-28 3:46 PM HST; stock 101175 per §18.4 |
+| C85, C91 (comms, U13/U14 VISO, verified in netlist) | 47 µF 10 V X5R 1206 C96123 | 47 µF 16 V X5R 1210 CL32A476KOJNNNE C2932477 | 10 V part at 47–55 % of rating | §18.3/§18.4 (stock 66634); parent ruling |
+| bom/outputs_bom.csv, comms_bom.csv | — | rows updated; prices not in spec → UNVERIFIED, removed from totals (160.23 → 160.21; 27.03 → 26.69) | BOM | — |
+| tools/design.py | — | pkg 1206 / 1210 + LCSC | regen | — |
