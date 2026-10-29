@@ -608,3 +608,18 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
   - L3 hidden "Note" property: "2.2uH per DS Table 4 (3.3V)". This is a datasheet-recommendation statement, not the fitted value; the 3.3uH choice vs DS Table 4 is for Safety/Power to confirm.
   - bom/power_bom.csv:11 note: "Check TPS56637 recommended L (likely 1.5-2.2u…)".
   - tools/design.py:51: same "2.2uH" note text. The generator is not regenerated; deferred.
+
+### 5-4..5-7: layout deferrals, M4, fuse text, 2.8 A declared limit (items 4, 5, 6, 7; lead 2.8 A ruling)
+- Item 4: review/schematic_audit/deferred_layout.md (outside the repo) gains D-m7-10: R297/R303 each need > 300 mm² of pad/trace copper (fixes_safety C2, datasheet p3 note iii). Layout only; no schematic change. Also added: D-m7-11 (batch-4 new parts and nets) and D-m7-12 (U1 pads 3/4 to VBAT_DD).
+- Item 5: deferred_layout.md D-m7-9 now reads "8 positions at 7.62 mm pitch" (it previously said "8 positions at 7.62 mm").
+- Item 6: **M4: no change per lead ruling** (74HC14 DI clamp; the optional 100k/22k change was not applied).
+- Item 7, fuse text, verified:
+  - power.kicad_sch board-feed label reads "EXT FUSE <=10 A FAST, >=58 V DC".
+  - INSTALL_SAFETY.md l.32-39 give each external fuse >=58 V DC with its own amp rating (4-5).
+  - grep for "32 V" in *.kicad_sch, bom/*.csv and INSTALL_SAFETY finds no fuse text. Remaining "32 V" hits concern battery range/OVP history, not fuses.
+- 2.8 A declared per-channel limit (lead ruling; fixes_firmware.md §21): grep of docs, INSTALL_SAFETY, schematic text/notes and BOM notes for a "3 A" stated as the declared per-channel output limit finds **no such statement**, so no edit was made.
+  - The "3 A"/"3A" hits are unrelated: TPS61500/SS36/SS34 ratings, the +3V3 >=3 A rail, RAIL_PLAN copper and ROUTING_PLAN widths.
+  - Not edited and reported instead (not clearly a "3 A declared limit"):
+    - INSTALL_SAFETY l.32-33 FUEL/CRANK "Rating 15 A" (§21.1 says 2.8 A applies to FUEL/CRANK too);
+    - l.36 ESTOP_TRIP;
+    - fixes_firmware §21.3's proposed INSTALL_SAFETY sentence (not inserted; awaiting the lead).
