@@ -36,9 +36,8 @@ Every output must have its own external fuse, supplied and installed by the inst
 | ESTOP_TRIP | J24.6 | TPS1HTC30-Q1 | relay drive, limit 2.1 A (1.7–2.6 A), ~0.5 s pulse | 2 A blade, >=58 V DC |
 | AUX1–AUX6 | J26.1–6 | TPS1HTC30-Q1 | limit 4.02 A (3.18–4.87 A) | 2 A blade each, >=58 V DC |
 | AUX7–AUX10 | J27.1–4 (J27.5/6 = GND) | TPS1HTC30-Q1 | limit 4.02 A (3.18–4.87 A) | 2 A blade each, >=58 V DC |
-| Battery feed | to J23 VBAT_ESTOP via NC E-stop | — | system | 30 A (existing), >=58 V DC |
-
-Battery feed (J23.1/2): The E-stop/fuel feed (J23.1/2) is protected on the board by a 40 V-class TVS. If the supply is held above about 44 V it can fail short. The 30 A battery fuse protects the wiring, not the board, so the supply must never exceed the declared 40 V. Overvoltage beyond that is the installer's responsibility. Use only a battery-backed bus.
+| Battery feed (E-stop/fuel) | J23.1/2 VBAT_ESTOP via NC E-stop | — | FUEL + CRANK 5.6 A max | 10 A ATO/ATC (standard or fast), >=58 V DC, fitted in the J23 branch after the existing 30 A battery fuse; wire >= 16 AWG / 1.31 mm² |
+The E-stop/fuel feed (J23.1/2) is NOT disconnected by the controller's 40 V over-voltage cut-off. Its only on-board protection is a 40 V TVS diode, which starts to conduct at about 44 V and can then fail short or partly short. The 30 A battery fuse will not protect the board against such a fault. Keep this feed at 40 V or below at all times, and always fit the 10 A fuse in the J23 branch: it protects the board copper and wiring; the 30 A fuse protects only the main battery cable. A partly shorted TVS can still overheat below the 10 A fuse rating. If the board shows heat damage near the J23 connector, take the controller out of service.
 
 Every external fuse in this table must be rated >=58 V DC (a 32 V DC blade fuse does not meet this); the extra voltage rating is margin, not a supported supply voltage. The controller is declared for 12 V and 24 V battery systems, 9–36 V, with the battery always connected. It disconnects its internal supply above about 40 V. Load dump, including a centrally suppressed 58 V load dump (ISO 16750-2 Test B), is not supported. If the supply ever exceeds about 44 V for longer than a short transient, the on-board TVS diodes can fail short-circuit. The external fuses are then what disconnects the fault, so every feed to the controller, including switch and sensor supplies wired to its inputs, must be fused at the values in this table. Use energize-to-run fuel solenoids only (team-lead ruling R5-N1; not certified).
 
@@ -66,7 +65,7 @@ relay whose coil is <= 2.8 A (Safety Round 4, R4-N3).
 > **WARNING: the 30 A battery fuse does NOT protect the FUEL/CRANK channels, the small
 > outputs, or their wiring.** A short on a channel can draw far more than its rating without
 > blowing the 30 A fuse; board copper, connectors and wiring can overheat first.
-> Fit the per-output fuses.
+> Fit the per-output fuses, and the 10 A fuse in the J23 (E-stop/fuel) branch.
 
 ## Wire size vs fuse (inference, not certified; basis ABYC E-11 Table 4B, 105 °C wire, engine space, bundled)
 | Fuse | Minimum copper |
