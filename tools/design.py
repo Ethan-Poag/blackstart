@@ -47,7 +47,13 @@ pw.p('genctl:LM74800QDRRRQ1','LM74800QDRRRQ1',{'A':'BAT_IN','VS':'VBAT_DD','VSNS
 pw.C('100n','LM748_CAP','VBAT_DD',note='CAP-VS charge-pump cap, 0.1uF per DS typ app')
 pw.R('210k','BAT_IN','LM748_EN'); pw.R('49.9k','LM748_EN','LM748_OV'); pw.R('8.66k','LM748_OV','GND',mpn='0603WAF8661T5E',lcsc='C23114',mfr='UNI-ROYAL')
 fet(pw,'Transistor_FET:BSC070N10NS5','BSC070N10NS5','LM748_DGATE','BAT_IN','VBAT_DD')
-fet(pw,'Transistor_FET:BSC070N10NS5','BSC070N10NS5','LM748_HGATE','VBAT_P','VBAT_DD')
+fet(pw,'Transistor_FET:BSC070N10NS5','BSC070N10NS5','LM748_HGATE','VBAT_PS','VBAT_DD')  # Q2 source -> VBAT_PS (m7-sch FW-006/R2-1)
+# m7-sch B3-7 FW-006 / Safety R2-1, R3-3: battery shunt + INA237 (spec C296 -> C304)
+pw.R('2m','VBAT_PS','VBAT_P',pkg='2512',ref='R555',mpn='CSS2H-2512K-2L00F',lcsc='C2093761',mfr='Bourns',note='battery shunt 2 mOhm 5 W')
+pw.R('10R','VBAT_PS','INA_INP',ref='R623',mpn='0603WAF100JT5E',lcsc='C22859',mfr='UNI-ROYAL'); pw.R('10R','VBAT_P','INA_INN',ref='R624',mpn='0603WAF100JT5E',lcsc='C22859',mfr='UNI-ROYAL')
+pw.C('100n','INA_INP','INA_INN',ref='C305',lcsc='C14663')
+pw.p('Sensor_Energy:INA237','INA237AIDGSR',{'Vin+':'INA_INP','Vin-':'INA_INN','Vbus':'VBAT_P','VS':'+3V3_SAFE','GND':'GND','A1':'GND','A0':'GND','SDA':'I2C1_SDA','SCL':'I2C1_SCL','~{Alert}':'OUT_FAULT_N'},prefix='U',ref='U86',mpn='INA237AIDGSR',lcsc='C2864837',mfr='Texas Instruments',fp='Package_SO:VSSOP-10_3x3mm_P0.5mm')
+pw.C('100n','+3V3_SAFE','GND',ref='C304',lcsc='C14663')
 tvs(pw,'SMBJ40CA','VBAT_P')  # Rev 3 H4
 for _ in range(2): pw.C('100u 63V','VBAT_P','GND',pol=True,mpn='EEETG1J101UP',lcsc='C178628',mfr='Panasonic',pkg='Capacitor_SMD:CP_Elec_10x10.5')  # C3/C4 Rev 3 R3-7
 for _ in range(4): pw.C('10u','VBAT_P','GND',pkg='1210',mpn='GRM32EC72A106KE05L',lcsc='C576517',mfr='Murata',note='100V X7S (Rev 3 M6)')

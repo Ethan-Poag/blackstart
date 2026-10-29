@@ -246,3 +246,14 @@ Ref mapping: spec "U18/U19 RILIM" = R109/R111 (MEASURED: Net-(U18-ILIM) = R109.1
 | R422–R425, R429–R432, R436–R439, R443–R446, R448–R451, R455–R458, R462–R465, R469–R472 (32) | 1M 1206 C17927 | 330k 1 % 1206 UNI-ROYAL 1206W4F3303T5E C17929 (LIVE LCSC 2026-10-28: stock 401,700, $0.0046 @100) | 12 × 330k = 3.96 MΩ/leg; per-part ≤ 55 Vrms steady, ≈207 V pulse < 400 V overload (spec, INFERRED) | fixes_safety.md l.24, l.121, R2-3 l.316 |
 | new R559–R566 (GEN_L1), R567–R574 (GEN_L2), R575–R582 (GEN_L3), R583–R590 (GEN_N), R591–R598 (BUS_L1), R599–R606 (BUS_L2), R607–R614 (BUS_L3), R615–R622 (BUS_N) (64) | — | 330k C17929, chained <leg> → <leg>_C1 … <leg>_C8 → old first resistor (R422 etc., pin-1 label renamed <leg> → <leg>_C8) | 8 added links per leg | same |
 Refs: next free after R558 (R555 kept for the INA237 shunt). Ratio change −1 % (calibration). ac_metering_bom row 6 replaced (old row stale: 24 × HVC1206). Layout D11.
+
+## B3-7: battery current monitor U86 INA237 + R555 2 mΩ shunt (FW-006, Safety R2-1/R3-3)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| Q2 pins 1-3 (S) | VBAT_P | **VBAT_PS** (new net; global label at Q2 S renamed) | shunt in series with Q2 source | fixes_firmware.md §4.1 |
+| R555 (new; spec ref R555) | — | 2m 2512 Bourns CSS2H-2512K-2L00F C2093761 (LIVE LCSC 2026-10-28: stock 2590, $0.801 @1), VBAT_PS → VBAT_P | full VBAT_P input current sense | §4.1, R2-1 |
+| U86 (new; spec ref U86) | — | INA237AIDGSR C2864837 (LIVE: 7325, $1.8659 @1), Sensor_Energy:INA237, VSSOP-10. IN+ (10)=INA_INP, IN− (9)=INA_INN, VBUS (8)=VBAT_P, VS=+3V3_SAFE, A0=A1=GND (0x40), SDA/SCL=I2C1_SDA/I2C1_SCL, ALERT (3)=OUT_FAULT_N (R44 10k to +3V3_SAFE exists) | load-shed measurement | §4.1, R3-3 (INA238 C2868250 preferred, stock 0) |
+| R623, R624 (new) | — | 10R 0603 C22859: VBAT_PS→INA_INP, VBAT_P→INA_INN | 10 Ω input filter | R2-1 "10 Ω + 100 nF"; part code is repo-standard (spec gives none) |
+| C305 (new) | — | 100n 0603 C14663 INA_INP–INA_INN | differential filter | same |
+| C304 (new; **spec C296**, which is taken by a +12V cap) | — | 100n 0603 C14663 +3V3_SAFE–GND | VS decoupling | §4.1 |
+Ref mapping: spec C296 → C304; filter parts have no spec refs → R623, R624, C305. I2C1 pull-ups 2.2k to +3V3 already exist (design.py:155). Layout D12.

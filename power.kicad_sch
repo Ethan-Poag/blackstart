@@ -2780,6 +2780,171 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))))
+
+(symbol "Sensor_Energy:INA237"
+	(exclude_from_sim no)
+	(in_bom yes)
+	(on_board yes)
+	(property "Reference" "U"
+		(at -6.35 11.43 0)
+		(effects
+			(font
+				(size 1.27 1.27))))
+	(property "Value" "INA237"
+		(at 3.81 11.43 0)
+		(effects
+			(font
+				(size 1.27 1.27))))
+	(property "Footprint" "Package_SO:VSSOP-10_3x3mm_P0.5mm"
+		(at 20.32 -11.43 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "Datasheet" "https://www.ti.com/lit/ds/symlink/ina237.pdf"
+		(at 8.89 -2.54 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "Description" "High-Side or Low-Side Measurement, Bi-Directional Current and Power Monitor (0-85V) with I2C, SMBus-, and PMBus-Compatible Interface, VSSOP-10"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "ki_keywords" "ADC I2C 16-Bit Oversampling Current Shunt"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "ki_fp_filters" "VSSOP*3x3mm*P0.5mm*"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(symbol "INA237_0_1"
+		(rectangle
+			(start 7.62 10.16)
+			(end -7.62 -10.16)
+			(stroke
+				(width 0.254)
+				(type default))
+			(fill
+				(type background))))
+	(symbol "INA237_1_1"
+		(pin input line
+			(at -10.16 7.62 0)
+			(length 2.54)
+			(name "Vbus"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "8"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin input line
+			(at -10.16 -2.54 0)
+			(length 2.54)
+			(name "Vin+"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "10"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin input line
+			(at -10.16 -5.08 0)
+			(length 2.54)
+			(name "Vin-"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "9"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin power_in line
+			(at 0 12.7 270)
+			(length 2.54)
+			(name "VS"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "6"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin power_in line
+			(at 0 -12.7 90)
+			(length 2.54)
+			(name "GND"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "7"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin input line
+			(at 10.16 7.62 180)
+			(length 2.54)
+			(name "A1"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "1"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin input line
+			(at 10.16 5.08 180)
+			(length 2.54)
+			(name "A0"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "2"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin bidirectional line
+			(at 10.16 0 180)
+			(length 2.54)
+			(name "SDA"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "4"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin input line
+			(at 10.16 -2.54 180)
+			(length 2.54)
+			(name "SCL"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "5"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin open_collector line
+			(at 10.16 -7.62 180)
+			(length 2.54)
+			(name "~{Alert}"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "3"
+				(effects
+					(font
+						(size 1.27 1.27)))))))
 )
 (symbol (lib_id "Connector_Generic:Conn_01x04") (at 44.45 274.32 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "8a99abcb-2386-4808-af3e-5a0c1549cbd8")
 (property "Reference" "J1" (at 44.45 269.24 0) (effects (font (size 1.27 1.27))))
@@ -4457,7 +4622,7 @@
 (wire (pts (xy 209.55 86.36) (xy 209.55 83.82)) (stroke (width 0) (type default)) (uuid "4a4134c2-e0ac-4b90-a3d2-380f2ebae1ba"))
 (label "VBAT_DD" (at 209.55 83.82 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "816a8555-b307-4604-b4ac-8f3fd0591cb1"))
 (wire (pts (xy 209.55 96.52) (xy 209.55 99.06)) (stroke (width 0) (type default)) (uuid "4880bf0f-1d91-49c3-b0ef-bb96447df7c2"))
-(global_label "VBAT_P" (shape passive) (at 209.55 99.06 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "8ed89e4c-03e8-4f39-8d7f-4a1a887dc3ed") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 209.55 99.06 0) (effects (font (size 1.27 1.27)) hide)))
+(global_label "VBAT_PS" (shape passive) (at 209.55 99.06 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "8ed89e4c-03e8-4f39-8d7f-4a1a887dc3ed") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 209.55 99.06 0) (effects (font (size 1.27 1.27)) hide)))
 (wire (pts (xy 168.91 116.84) (xy 171.45 116.84)) (stroke (width 0) (type default)) (uuid "03b3391e-934a-4d85-bfaa-4c961ab03e2b"))
 (symbol (lib_id "power:GND") (at 171.45 116.84 90) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "95ff7b6f-f9f1-4fc4-95e2-c99c6513c1eb")(property "Reference" "#PWR0010" (at 171.45 116.84 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 175.26 116.84 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 171.45 116.84 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 171.45 116.84 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "a8681a73-00f2-4b8b-a887-45348cfc7e85"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb" (reference "#PWR0010") (unit 1)))))
 (wire (pts (xy 223.52 101.6) (xy 223.52 104.14)) (stroke (width 0) (type default)) (uuid "cdc0b2ba-71ea-4490-9c6b-ed3793bcbfd3"))
@@ -5165,4 +5330,116 @@
 )
 (symbol (lib_id "power:VCC") (at 510.54 148.59 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "6f98744c-d280-42d8-9680-85a2b0463dd5")(property "Reference" "#PWR1083" (at 510.54 148.59 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "+12V" (at 510.54 148.59 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 510.54 148.59 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 510.54 148.59 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "d4e0e6a9-105e-4120-9e08-8f9077df4ab0"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb" (reference "#PWR1083") (unit 1)))))
 (symbol (lib_id "power:GND") (at 510.54 156.21 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "d5aeb533-115e-43e0-a0d5-9aafface4b41")(property "Reference" "#PWR1084" (at 510.54 156.21 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 510.54 156.21 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 510.54 156.21 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 510.54 156.21 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "78f24e8e-2e4a-43ac-9892-12c819f42391"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb" (reference "#PWR1084") (unit 1)))))
+(symbol (lib_id "Device:R") (at 40.64 335.28 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "637eb52c-1db3-4a2f-ba21-e6efad130e9b")
+(property "Reference" "R555" (at 45.72 332.74 0) (effects (font (size 1.27 1.27))))
+(property "Value" "2m" (at 45.72 337.82 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Resistor_SMD:R_2512_6332Metric" (at 40.64 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 40.64 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Resistor" (at 40.64 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C2093761" (at 40.64 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "CSS2H-2512K-2L00F" (at 40.64 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Bourns" (at 40.64 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "Battery input shunt 2 mOhm 5 W in series with Q2 source (VBAT_PS -> VBAT_P); Kelvin sense from inner pad edges (fixes_firmware.md s4.1, fixes_safety.md R2-1)" (at 40.64 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "6a7fb750-d970-49f8-8c0e-e900773e686b"))
+(pin "2" (uuid "96c7c557-3385-4942-b0da-3f426de02527"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb" (reference "R555") (unit 1))))
+)
+(global_label "VBAT_PS" (shape passive) (at 40.64 331.47 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "871fc1f3-c4b2-4c1c-b5fe-13ce2e00bbb1") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 40.64 331.47 0) (effects (font (size 1.27 1.27)) hide)))
+(global_label "VBAT_P" (shape passive) (at 40.64 339.09 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "49939db5-e513-4099-8a1f-faa733909a59") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 40.64 339.09 0) (effects (font (size 1.27 1.27)) hide)))
+(symbol (lib_id "Device:R") (at 60.96 335.28 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "cde8f0d7-2098-46e4-a704-e8160db94f1f")
+(property "Reference" "R623" (at 66.04 332.74 0) (effects (font (size 1.27 1.27))))
+(property "Value" "10R" (at 66.04 337.82 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 60.96 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 60.96 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Resistor" (at 60.96 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C22859" (at 60.96 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "0603WAF100JT5E" (at 60.96 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "UNI-ROYAL" (at 60.96 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "INA237 IN+ filter (VBAT_PS side)" (at 60.96 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "4e2781f2-349a-49c5-a3d9-b9e06722833d"))
+(pin "2" (uuid "06c72b5b-2d96-427e-823c-5655e78898a7"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb" (reference "R623") (unit 1))))
+)
+(global_label "VBAT_PS" (shape passive) (at 60.96 331.47 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "8c60100d-706f-4a8c-a4b0-ea36bdcbee70") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 60.96 331.47 0) (effects (font (size 1.27 1.27)) hide)))
+(label "INA_INP" (at 60.96 339.09 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "be3cc590-62a3-42b7-8c73-6d5b5d3d44bd"))
+(symbol (lib_id "Device:R") (at 76.2 335.28 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "a28b5148-3335-482b-8cf7-edd6d197d87d")
+(property "Reference" "R624" (at 81.28 332.74 0) (effects (font (size 1.27 1.27))))
+(property "Value" "10R" (at 81.28 337.82 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 76.2 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 76.2 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Resistor" (at 76.2 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C22859" (at 76.2 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "0603WAF100JT5E" (at 76.2 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "UNI-ROYAL" (at 76.2 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "INA237 IN- filter (VBAT_P side)" (at 76.2 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "f4676b94-0fba-4026-a277-024b79f6f9ec"))
+(pin "2" (uuid "254f5808-b8e8-4224-b410-a5a32e563de8"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb" (reference "R624") (unit 1))))
+)
+(global_label "VBAT_P" (shape passive) (at 76.2 331.47 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c0925da9-ae92-4b24-be32-14aab2180a72") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 76.2 331.47 0) (effects (font (size 1.27 1.27)) hide)))
+(label "INA_INN" (at 76.2 339.09 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "444a40d2-3e43-4136-a238-4d907e7984fd"))
+(symbol (lib_id "Device:C") (at 91.44 335.28 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "46b1ce69-355d-43be-b8a6-7d4b28f2e12d")
+(property "Reference" "C305" (at 96.52 332.74 0) (effects (font (size 1.27 1.27))))
+(property "Value" "100n" (at 96.52 337.82 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 91.44 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 91.44 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Unpolarized capacitor" (at 91.44 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C14663" (at 91.44 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "CC0603KRX7R9BB104" (at 91.44 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "YAGEO" (at 91.44 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "INA237 differential input filter" (at 91.44 335.28 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "0280f5a1-12f6-4a01-894d-fbfcb6b5cc96"))
+(pin "2" (uuid "48918975-651b-4e83-85fd-d07af9c32079"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb" (reference "C305") (unit 1))))
+)
+(label "INA_INP" (at 91.44 331.47 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "b7ca958f-a31e-4cab-bdc8-76c3a4a9b477"))
+(label "INA_INN" (at 91.44 339.09 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "e9616412-877c-4d1b-89dd-8af9c76644aa"))
+(symbol (lib_id "Sensor_Energy:INA237") (at 121.92 342.9 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "01dd80f0-2a90-4881-a2bb-9ec737b036b1")
+(property "Reference" "U86" (at 127.0 340.36 0) (effects (font (size 1.27 1.27))))
+(property "Value" "INA237AIDGSR" (at 127.0 345.44 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_SO:VSSOP-10_3x3mm_P0.5mm" (at 121.92 342.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 121.92 342.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "INA237" (at 121.92 342.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C2864837" (at 121.92 342.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "INA237AIDGSR" (at 121.92 342.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Texas Instruments" (at 121.92 342.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "Battery current monitor I2C1 0x40 (A1=A0=GND); INA238AIDGSR C2868250 preferred when back in stock (same DGS footprint)" (at 121.92 342.9 0) (effects (font (size 1.27 1.27)) hide))
+(pin "8" (uuid "88753864-2351-41d1-89e0-0bd42a1afdb6"))
+(pin "10" (uuid "842da742-913b-40f2-ac56-1791f6da1ba7"))
+(pin "9" (uuid "43d3cc46-9b98-4bbc-b05e-027b8e4c2867"))
+(pin "6" (uuid "2b2ee40f-b8ff-4ba3-9855-f1c6c0de80a4"))
+(pin "7" (uuid "0ccd16f2-cfc0-4db3-89ce-0ec35be86740"))
+(pin "1" (uuid "554581ac-c104-419d-9084-50e9ce23f3cb"))
+(pin "2" (uuid "2e5b0b32-afb3-4475-b4ed-15b425ddd069"))
+(pin "4" (uuid "9f2452b3-ef6c-4086-8aef-37a87e103618"))
+(pin "5" (uuid "4648e39e-fb55-4258-a0fb-74b8164315df"))
+(pin "3" (uuid "f7efd593-f38e-43bc-9942-f219cf5b4a6f"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb" (reference "U86") (unit 1))))
+)
+(label "INA_INP" (at 111.76 345.44 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "4b59992b-0567-43c2-a131-17123178fb82"))
+(label "INA_INN" (at 111.76 347.98 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "9451fc4f-d20c-498e-9beb-8f1d1e05cd04"))
+(global_label "VBAT_P" (shape passive) (at 111.76 335.28 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "5724a5fb-dc59-423d-b98b-7b9a9d463bfa") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 111.76 335.28 0) (effects (font (size 1.27 1.27)) hide)))
+(global_label "+3V3_SAFE" (shape passive) (at 121.92 330.2 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "c14a7b70-71ee-4ec8-be61-3c9fd9e5f0a0") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 121.92 330.2 0) (effects (font (size 1.27 1.27)) hide)))
+(symbol (lib_id "power:GND") (at 121.92 355.6 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "931eceef-36e7-48b1-82da-d54ab0fb8972")(property "Reference" "#PWR1085" (at 121.92 355.6 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 121.92 355.6 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 121.92 355.6 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 121.92 355.6 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "bde92667-ce62-434b-a823-ae02c9cc7216"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb" (reference "#PWR1085") (unit 1)))))
+(symbol (lib_id "power:GND") (at 132.08 335.28 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "12a4612f-2880-4495-b3b3-87374c4ed456")(property "Reference" "#PWR1086" (at 132.08 335.28 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 132.08 335.28 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 132.08 335.28 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 132.08 335.28 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "34382047-6fb5-4ce1-b3f6-caa00e684de0"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb" (reference "#PWR1086") (unit 1)))))
+(symbol (lib_id "power:GND") (at 132.08 337.82 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "96798778-1382-46c9-9078-4060ff4eef9f")(property "Reference" "#PWR1087" (at 132.08 337.82 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 132.08 337.82 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 132.08 337.82 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 132.08 337.82 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "93a388ff-6472-4579-ac49-af3fbe4e7c44"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb" (reference "#PWR1087") (unit 1)))))
+(global_label "I2C1_SDA" (shape passive) (at 132.08 342.9 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "2e552d7a-3ee0-4a6d-9a19-5e4580d8ccca") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 132.08 342.9 0) (effects (font (size 1.27 1.27)) hide)))
+(global_label "I2C1_SCL" (shape passive) (at 132.08 345.44 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "597a5fc7-5a9d-474b-9b94-92f4c52a2e02") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 132.08 345.44 0) (effects (font (size 1.27 1.27)) hide)))
+(global_label "OUT_FAULT_N" (shape passive) (at 132.08 350.52 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "3b1cb6f2-b6bb-4ecb-8de7-9d19eb3ca9b7") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 132.08 350.52 0) (effects (font (size 1.27 1.27)) hide)))
+(symbol (lib_id "Device:C") (at 152.4 342.9 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "1f01fa25-6290-4db8-92a6-d7c399fcbf4e")
+(property "Reference" "C304" (at 157.48 340.36 0) (effects (font (size 1.27 1.27))))
+(property "Value" "100n" (at 157.48 345.44 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 152.4 342.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 152.4 342.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Unpolarized capacitor" (at 152.4 342.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C14663" (at 152.4 342.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "CC0603KRX7R9BB104" (at 152.4 342.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "YAGEO" (at 152.4 342.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "U86 VS decoupling (spec C296)" (at 152.4 342.9 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "819bf945-e0f6-4b53-a0cd-e1178f641925"))
+(pin "2" (uuid "0c8c2b52-54b2-4250-b5b4-c629a26d69d4"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb" (reference "C304") (unit 1))))
+)
+(global_label "+3V3_SAFE" (shape passive) (at 152.4 339.09 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "261b153d-7908-43a6-91da-0e8212db11a0") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 152.4 339.09 0) (effects (font (size 1.27 1.27)) hide)))
+(symbol (lib_id "power:GND") (at 152.4 346.71 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "a3b2355c-325a-44b5-8d39-849daf8c95f7")(property "Reference" "#PWR1088" (at 152.4 346.71 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 152.4 346.71 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 152.4 346.71 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 152.4 346.71 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "7fa6dc7d-19dc-4a07-af20-8dd388ce6bd0"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb" (reference "#PWR1088") (unit 1)))))
 )
