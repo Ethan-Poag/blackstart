@@ -33,3 +33,9 @@ Run on a scratch copy (/tmp/ercx) with all 45 rule keys forced to error: **75 vi
 
 ## 5. Conclusion
 ERC 0/0 is genuine for the default rule set. Nothing is excluded or downgraded. The 75 default-ignored items are benign apart from D3/D4.
+
+## D23 LM4040A25 polarity check (m7-sch Batch 7, 2026-10-28 ~5:35 PM HST)
+- Datasheet: TI LM4040, SLOS456Q (rev. April 2026), ti.com/lit/ds/symlink/lm4040.pdf, opened this session. **Table 5-1 Pin Functions, p4:** DBZ (SOT-23) pin 1 = CATHODE ("Shunt Current/Voltage input"), pin 2 = ANODE ("Common pin, normally connected to ground"), pin 3 = "*" ("Must float or connect to anode"; TI recommends tying it to the anode in high-EMI / high-switching-noise applications). IZ max 15 mA (abs max table, p4-5). §8.2.2.2 "Cathode and Load Currents" p27.
+- Netlist (MEASURED, kicad-cli export of the committed schematic): D23.1 (K) = VBAT_AI; D23.2 (A) = AI_VSET together with R129.1; R129 (10k) pin 2 = GND; D23.3 unconnected; C131 100n across VBAT_AI / AI_VSET.
+- Circuit intent: D23 is a "floating" shunt reference for the high-side PNP 1 mA current sources. Bias current flows VBAT_AI -> D23 K -> A -> R129 10k -> GND, so AI_VSET = VBAT_AI - 2.5 V, and each LM2904B forces 2.5 V across its 2.49k emitter resistor (~1 mA). The bias resistor is on the anode (low) side, which is valid for a shunt reference: the anode does not need to be at ground, only K must be 2.5 V above A with IZ in range. IZ = (VBAT_AI - 2.5)/10k ≈ 0.45 mA at a 7 V rail to ≈ 3.2 mA at the 34.5 V hot maximum (INFERRED), within the 15 mA rating and above the LM4040A25 minimum operating current (tens of µA, datasheet; exact figure not re-quoted here).
+- **Conclusion: polarity is correct and intended. No change.** Optional (not done, needs lead ruling): tie pin 3 to the anode (AI_VSET) per the Table 5-1 note for a noisy genset environment; this is a wiring change, so it is only listed.
