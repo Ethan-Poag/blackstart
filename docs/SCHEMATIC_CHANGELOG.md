@@ -28,7 +28,7 @@ Schematic/BOM/doc parts re-applied from commit 9af66ad (m7-step12) and the uncom
 | docs/genctl_bom.csv, mechanical/bom.csv | F1 row; "C86,C92" 2; "R87,R88,R92,R93" 4; "SW5,SW6" 2 | F1 row removed; "C86" 1; "R87,R88" 2; "SW5" 1 | match schematic | s12 edit |
 | docs/INSTALL_SAFETY.md l.15, l.44 | F1 10 A ATO / "F.Silk at J1"; "F1 → Q1 → Q2 → Q3 is a 10 A path" | no on-board fuse, external <=10 A fast >=32 V DC, schematic note at J1, silk pending board change; path J1→BAT_IN→Q1…, 10 A copper capacity NOT demonstrated for BAT_IN layout | stale (review_9af66ad §3.9/3.10) | — |
 | BOARD (out of scope) | .kicad_pcb still has F1 (Keystone clips), net VBAT_F, SW6/R92/R93/C92 | — | Board must be updated later (remove F1/clips, merge VBAT_F copper into BAT_IN, delete SW6/R92/R93/C92, add EXT FUSE silk near J1). Schematic and board are out of sync until then. | — |
-| bom/ac_metering_bom.csv l.15 (6x 600 V fuse) | unchanged | unchanged | Left as an open question: bom/design_spec.md:40 says the voltage inputs use external DIN fused terminals, but nothing says to drop the line | — |
+| bom/ac_metering_bom.csv l.15 (6x 600 V fuse) | unchanged | **DELETED in m7-sch 3b (team lead ruling 2026-10-28)** | Was an open question: bom/design_spec.md:40 says the voltage inputs use external DIN fused terminals, but nothing says to drop the line | — |
 
 ## Item 3 — SW5/SW7/SW8 termination DIP switches → solder jumpers; bias deleted
 Spec: /workspace/review/cur/failsafe_latch.md Part 2 (§2.1) and Loose ends L4.
@@ -350,3 +350,9 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 - tools/design.py and tools/gen.py get a header: the schematic is the source of truth and regen drifts (C200 numbering, unnamed 2-pin nets, external LCSC table).
 - The U25-U28/U32-U35 duplicate refs reported earlier were a false positive. They are multi-unit symbols; (ref, unit) is unique in the committed schematic (1319 instances) and in the regen. The netlist has 1291 comps and 0 duplicate refs. ERC e75218d: 0 violations, none of type duplicate_reference.
 - Generator fix: deferred, GEN-1 in deferred_layout.md.
+
+### 3b-5: ac_metering_bom.csv "Fuse per V input" row deleted (team lead ruling 2026-10-28)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| bom/ac_metering_bom.csv l.15 | 6x 0685H0500-01 / 0215.500 600 VAC fuse, UNVERIFIED price | row deleted | the six metering fuses were never on the board; the voltage inputs use external DIN fuses (design.py J28/J29 note, bom/design_spec.md:40) | team lead ruling |
+- Scrubbed: the TOTAL excluded list (20 -> 19 rows; the total stays $45.75 because the row was unpriced) and the changelog l.31 open question (now marked DELETED). No other text references found (git grep 0685H/0215.500/"Fuse per V"). The binary PDF/PNG hits are byte coincidences; pdftotext shows no fuse text.
