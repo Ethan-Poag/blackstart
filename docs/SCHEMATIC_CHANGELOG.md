@@ -317,3 +317,15 @@ Rev 3 approvals and Rev 4 items checked: see report.
 | outputs_bom row 41 (D121) | LCSC C19190 (= GATEMODE YD3082EESA, RS-485 IC; wrong code, MEASURED live) | C2135 (JSCJ BAT54C), matching schematic D121 | code error | LIVE LCSC 2026-10-28: C2135 stock 212,020, $0.0248 @20 |
 | comms_bom row 48 | qty 1 (D8 uncounted) | qty 2 (D7 + D8), $0.0248 live | qty matches schematic | netlist |
 Mapping now: BAT54C (JSCJ) → C2135 on D7, D8, D121; BAT54C,215 (Nexperia) → C37704 on D128–D135 (LIVE: 137,400, $0.0156 @50). Schematic, docs/genctl_bom.csv and design.py (MPNLCSC BAT54C→C2135, D128–D135 explicit C37704) already agreed; no codes swapped.
+
+## R2-N3 / steering (4): category BOM TOTALs recomputed exactly from rows
+TOTAL = round(sum(qty × unit price), 2) over rows with a numeric qty and price; rows priced UNVERIFIED/ESTIMATE/blank are excluded and named in the TOTAL label.
+| BOM | old TOTAL | new TOTAL | excluded rows |
+|---|---|---|---|
+| power_bom | 46.94 | 46.94 | 1 (C303, price UNVERIFIED; label no longer claims 0 unpriced) |
+| outputs_bom | 162.10 | 162.10 | 2 |
+| inputs_bom | 24.87 | 24.88 | 0 |
+| comms_bom | 27.07 | 28.18 | 7 (old running total had drifted by $1.11 through incremental edits) |
+| other_bom | 407.83 | 407.85 | 7 (incl. 4 ESTIMATE fab/assembly/enclosure/bezel rows) |
+| ac_metering_bom | none | 45.75 (new TOTAL row) | 20 |
+Also fixed outputs_bom row 22: an unquoted comma in "(U38-U40, U67)" had shifted every column (qty read as text).
