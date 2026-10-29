@@ -474,3 +474,19 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 - The gate nets were unnamed (Net-(Q36-G) etc.). A local label Q36_G/Q39_G/Q42_G was placed on each gate pin, so they are now named. Members unchanged apart from the zener (R200/R201 etc.). MEASURED netlist diff: 4 connectivity diffs, all the added zener pins.
 - **None on Q2/Q3** (per ruling). Q70/Q71 keep D137.
 - BOM: outputs_bom C2104 row qty 1 -> 4, price $0.0212 at the 50+ break (LIVE 16:44 HST, stock 10,600).
+
+### 4-3: D63 SMBJ40CA; U26-U28 Value; MPN fields; FUEL_OUT label (Safety re-review M4/L10; Design Reviewer re-audit 3 L1/L2)
+| Item | Before | After | Source |
+|---|---|---|---|
+| D63 (DPLUS TVS) | SMBJ36CA, LCSC C78421, Brightking | SMBJ40CA, LCSC C114004, MDD (same code as D2/D74-D102/D123) | safety_rereview MEDIUM-4 |
+| U26/U27/U28 Value | LM2904 | LM2904B (MPN LM2904BIDR, C1849422, unchanged) | reviewer L1 |
+| R277-R291 (47k, C25819) MPN/Manufacturer | empty | 0603WAF4702T5E / UNI-ROYAL (LIVE LCSC 16:48 HST) | safety_rereview LOW-10 |
+| R554 (220k, C22961) | empty | 0603WAF2203T5E / UNI-ROYAL (LIVE) | same |
+| R556 (1M, C22935) | empty | 0603WAF1004T5E / UNI-ROYAL (LIVE) | same |
+| H4 MPN | empty | "NONE (NPTH mounting hole, no purchased part)". H4 has no LCSC; it is in_bom no (3c). | same |
+| Fuel output net | Net-(D68-A1) | FUEL_OUT. Local label on J23.3 (outputs.kicad_sch 986.79,119.38). Members unchanged: C198.2 D68.1 D71.2 J23.3 Q45 Q46 (S) R349 R350 U43.13 (TPS48100 FUEL stage, FUEL_DRN/FUEL_GPD). Matches the ROUTING_PLAN:315 "(= FUEL_OUT)". | reviewer L2 |
+- BOM:
+  - other_bom row "SCH-only part added by 3b reconcile: D63" (SMBJ36CA C78421) deleted;
+  - outputs_bom C114004 17 -> 18;
+  - outputs_bom R554 row MPN "(C22961)" -> 0603WAF2203T5E.
+- Board: the PCB still names the net Net-(D68-A1); this becomes a rename at the next board update (PCB not touched).

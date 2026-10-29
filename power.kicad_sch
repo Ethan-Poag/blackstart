@@ -4534,7 +4534,7 @@
 (property "Datasheet" "~" (at 189.23 270.51 0) (effects (font (size 1.27 1.27)) hide))
 (property "Description" "Mounting Hole with connection" (at 189.23 270.51 0) (effects (font (size 1.27 1.27)) hide))
 (property "LCSC" "" (at 189.23 270.51 0) (effects (font (size 1.27 1.27)) hide))
-(property "MPN" "" (at 189.23 270.51 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "NONE (NPTH mounting hole, no purchased part)" (at 189.23 270.51 0) (effects (font (size 1.27 1.27)) hide))
 (property "Manufacturer" "" (at 189.23 270.51 0) (effects (font (size 1.27 1.27)) hide))
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb" (reference "H4") (unit 1))))
 )
