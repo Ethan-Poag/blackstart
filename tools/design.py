@@ -280,9 +280,9 @@ co.p('Power_Protection:USBLC6-2SC6','USBLC6-2SC6',{'1':'USB_SVC_P','6':'USB_SVC_
 # Internal USB2 headers direct from CM5 USB3-0/USB3-1 HS pairs (no hub, no USB-A host). SS pairs NC.
 for i,(dm,dp,lab) in enumerate((('USB30_DM','USB30_DP','Internal USB0 touch (SM04B)'),('USB31_DM','USB31_DP','Internal USB1 spare (SM04B)'))):
     vb='USB%d_5V'%i; en='USB%d_EN'%i; il='USB%d_ILIM'%i
-    # rev h: TPS2553 current-limited switch per header; 40.2k -> ~0.68A nom (>0.5A USB2), FAULT -> OUT_FAULT_N, EN from TCA9555 @0x25 (default ON)
+    # rev h: TPS2553 current-limited switch per header; m7-sch Rev 3 S-L4: 49.9k -> ~0.52A typ (was 40.2k ~0.68A nom) (>0.5A USB2), FAULT -> OUT_FAULT_N, EN from TCA9555 @0x25 (default ON)
     co.p('genctl:TPS2553DBVR','TPS2553DBVR',{'IN':'+5V','GND':'GND','EN':en,'FAULT':'OUT_FAULT_N','ILIM':il,'OUT':vb},mpn='TPS2553DBVR')
-    co.R('40.2k',il,'GND',note='IOS = 25230/R^0.977 ~ 0.68A'); co.R('100k',en,'+3V3_SAFE',note='default ON')
+    co.R('49.9k',il,'GND',mpn='0603WAF4992T5E',lcsc='C23184',mfr='UNI-ROYAL',note='IOS = 25230/R^0.977 ~ 0.52A (Rev 3 S-L4)'); co.R('100k',en,'+3V3_SAFE',note='default ON')
     co.C('1u','+5V','GND',pkg='0603'); co.C('10u',vb,'GND',pkg='0805')
     conn(co,4,[vb,dm,dp,'GND'],lab,mpn='SM04B-SRSS-TB')
     co.p('Power_Protection:USBLC6-2SC6','USBLC6-2SC6',{'1':dp,'6':dp,'3':dm,'4':dm,'5':vb,'2':'GND'},prefix='D',mpn='USBLC6-2SC6')

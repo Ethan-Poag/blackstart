@@ -233,3 +233,9 @@ PCB: D68/D69/D126 footprint SMB -> SMC, see deferred_layout.md D9. outputs_bom/p
 | C131 | 100n 0603 C14663 (50 V) | Samsung CL10B104KC8NNNC C15725 100 V 0603 (LIVE: 335750, $0.0134 @50) | M6 | l.465 |
 | C39, C144–C146, C205–C219, C233 (19) | — | **NOT CHANGED** | Spec row l.466 says these are "100 nF 50 V 0805 (C28233)", but LIVE LCSC shows C28233 = Samsung CL21B104KCFNNNE **100 V** X7R 0805 (stock 27450), so they are already 100 V. Skipped; reported | live LCSC |
 power_bom row 7 qty 6 -> 5 (netlist count). inputs_bom C14663 row 32 -> 31 + new C131 row.
+
+## B3-5: USB TPS2553 RILIM 40.2k -> 49.9k (Safety S-L4)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| R109 (U18 ILIM), R111 (U19 ILIM) | 40.2k 0603 C12447 | 49.9k 1 % 0603 0603WAF4992T5E C23184 (LIVE LCSC 2026-10-28: stock 1,310,800, $0.0029 @100) | limit ≈0.52 A typ instead of ≈0.70 A max; still ≥ 500 mA USB 2.0 | fixes_safety.md l.537, l.573 |
+Ref mapping: spec "U18/U19 RILIM" = R109/R111 (MEASURED: Net-(U18-ILIM) = R109.1+U18.5, Net-(U19-ILIM) = R111.1+U19.5). Same footprint; no layout change.
