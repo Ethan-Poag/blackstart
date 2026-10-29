@@ -422,3 +422,7 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 - Footprint search in kicad-footprints 9.0.2: there is no PC 5 / 1720851 footprint. The closest stock parts, Connector_Phoenix_GMSTB ..._8-GF-7,62_1x08_P7.62mm, are the GMSTB 2.5 family: 1 pin per position and a different body. The 1720851 has 3 pins per position, a 1.3 mm drill and is 77.06 mm wide (fixes_mechanical s1), so it is NOT a match and was not used.
 - Added genctl.pretty/PLACEHOLDER_PhoenixContact_PC5_8-GF-7.62_1720851.kicad_mod: NO PADS, marked DO-NOT-FAB. It exists only so ERC's footprint-link check passes (a missing footprint gives ERC footprint_link_issues=1). The real footprint is deferred_layout D-m7-9.
 - ac_metering_bom row 19 (MSTB 2.5/8-GF-5.08 + plug, stale) replaced with J30 1720851 C6651769 x1 @ $9.8499. LIVE 2026-10-28 16:33 HST, **stock 0** (procurement note). No 2x1720819 fallback. design.py CONNFP 'J9 CT' and MATES updated. PCB untouched.
+
+### 3c-1/3: cost notes, BAV99 count
+- docs/COST_NOTES.md created; outputs_bom has a NOTE row (no qty/price, so it is excluded from the total). TPS1HTC30AQPWPRQ1 C22414694 is kept at the live $14.2804@10 (lead ruling).
+- BAV99 CT clamps stay at **8 parts (4 CT channels)**. Lead ruling: Safety's M5 "8 channels / +16 SOT-23" was wrong, because only U71 has CT inputs and U72's current inputs are tied to GND_AC.
