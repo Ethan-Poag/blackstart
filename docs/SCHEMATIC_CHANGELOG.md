@@ -345,3 +345,8 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 - fixes_firmware.md :91 and :611 say U76.16; the WD_OK_MCU net actually lands on U76 pin 18 (R625 → U76.18, netlist-confirmed). The spec pin number is wrong.
 - fixes_firmware.md :439: BIAS (U2.24) was unconnected at 7f2a8df; the current schematic has +12V with C303 (netlist-confirmed, not redone).
 - Spec refs R559/R560 were already used by the H6 divider chain, so the parts are R625 (4.7k WD_OK series) and R626 (100k WDI pull-down).
+
+### 3b-a: DO-NOT-REGENERATE headers (team lead decision; no schematic change)
+- tools/design.py and tools/gen.py get a header: the schematic is the source of truth and regen drifts (C200 numbering, unnamed 2-pin nets, external LCSC table).
+- The U25-U28/U32-U35 duplicate refs reported earlier were a false positive. They are multi-unit symbols; (ref, unit) is unique in the committed schematic (1319 instances) and in the regen. The netlist has 1291 comps and 0 duplicate refs. ERC e75218d: 0 violations, none of type duplicate_reference.
+- Generator fix: deferred, GEN-1 in deferred_layout.md.

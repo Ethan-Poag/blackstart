@@ -1,3 +1,16 @@
+# =====================================================================================
+# DO NOT REGENERATE: the committed .kicad_sch files are the source of truth; regen drifts.
+#   Known drift (scratch regen vs committed schematic, 187984d and m7-sch HEAD):
+#   - capacitor auto-numbering is off by one from C200 onward (110 connectivity diffs);
+#   - 2-pin nets come out unnamed ('~' / Net-(...)), name-only diffs;
+#   - "U25-U28/U32-U35 duplicate refs" was reported first, but it was a FALSE POSITIVE
+#     of a raw reference-string count: these are multi-unit symbols (LM2904/TLV9062/LM393
+#     units 1-3, 74HC14 units 1-7), and every (ref, unit) is unique in both trees.
+#   - the LCSC lookup in gen.py reads /workspace/genctl/*.csv (another checkout).
+#   See docs/SCHEMATIC_CHANGELOG.md ("design.py/gen.py regen consistency") and the
+#   GEN-1 item in /workspace/review/schematic_audit/deferred_layout.md.
+#   Edit the schematic directly (fwtool/schlib.py), then mirror the change here only for reference.
+# =====================================================================================
 """genctl KiCad schematic generator framework."""
 import uuid, math, os, re, csv, glob, collections
 from sexp import parse, dump, find, find1, Sym, q
