@@ -282,3 +282,10 @@ design.py: H1-H3 loop range(3), H4 separate 0-pin symbol; footprint map updated.
 | J17–J22, J24–J27 | — | Mate KF2EDGKNM-5.08-6P C2974985, qty 1 (screw plug) | same | fixes_mates.csv |
 | J30 | KF2EDGRM-5.08-8P C441294 | **NOT CHANGED; no Mate props** | spec header is Phoenix 1720851 (C6651769, stock 0) but genctl.pretty has no 1720851 footprint; header/plug decision held | §1 |
 tools/design.py: MATES dict keyed by header MPN sets pt.extra; tools/gen.py fields_xml emits pt.extra as hidden props. power_bom/outputs_bom 1720819 rows: LCSC column now C3579760 (LIVE: stock 49, $5.5261 @1; row price kept at DigiKey $7.46); plug rows LCSC C5481482. "not at LCSC": 0 hits (MEASURED). SW1–SW4 qty already 4; SW5–SW8 no longer exist in the netlist (MEASURED), so the comms qty fix does not apply.
+
+## R2-N1: WD_OK series resistor to U76 P15 (team lead ruling 2026-10-28; overrides the earlier "do not touch WD_OK pin 18")
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| U76.18 (P15) | on WD_OK | on new net WD_OK_MCU | TCA9555 P15 powers up as input, but a firmware/POR fault driving it as output would fight the WD_OK latch output | reviewer.md R2-N1 |
+| R625 (new; next free R) | — | 10k 0603 1% RC0603FR-0710KL C98220 (YAGEO), WD_OK → WD_OK_MCU | series isolation; gates U38/U39/U40/U67, R272, U84.5 stay on WD_OK (MEASURED from netlist) | LIVE LCSC 2026-10-28: stock 3,801,900, $0.0027 @100 |
+design.py: U76 P15 → WD_OK_MCU, R625 added with fixed ref.

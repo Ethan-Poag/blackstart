@@ -601,8 +601,9 @@ pins=[('P0%d'%k) for k in range(8)]+[('P1%d'%k) for k in range(8)]
 for addr,chunk in ((1,ch[0:16]),(4,ch[16:32]),(5,ch[32:36])):
     m={pn:None for pn in pins}
     for pn,net in zip(pins,chunk): m[pn]=net
-    if addr==5: m.update({'P04':'ROUTER_12V_EN','P05':'CM5_OFF','P06':'CM5_PWRBTN_MCU','P07':'PWR_FAIL_MCU','P10':'AUX9_MCU','P11':'AUX10_MCU','P12':'AUX10_RB_N','P13':'USB0_EN','P14':'USB1_EN','P15':'WD_OK'})  # P15 = WD_OK readback (fixes_firmware.md s1)
+    if addr==5: m.update({'P04':'ROUTER_12V_EN','P05':'CM5_OFF','P06':'CM5_PWRBTN_MCU','P07':'PWR_FAIL_MCU','P10':'AUX9_MCU','P11':'AUX10_MCU','P12':'AUX10_RB_N','P13':'USB0_EN','P14':'USB1_EN','P15':'WD_OK_MCU'})  # P15 = WD_OK readback (fixes_firmware.md s1)
     tca(fp_,addr,m)
+fp_.R('10k','WD_OK','WD_OK_MCU',ref='R625',mpn='RC0603FR-0710KL',lcsc='C98220',mfr='YAGEO',note='WD_OK -> U76 P15 series 10k (R2-N1): TCA9555 POR/misconfig as output cannot fight WD_OK')  # m7-sch R2-N1
 fp_.R('1k','BTN_BL_PWM','BL_Q_B'); fp_.R('100k','BL_Q_B','GND',note='default off'); npn(fp_,'BL_Q_B','GND','BL_PG')
 fp_.R('10k','+5V','BL_PG',note='PFET gate pull-up'); fet(fp_,'Transistor_FET:AO3401A','AO3401A','BL_PG','+5V','BTN_LED_V')
 fp_.C('1u','BTN_LED_V','GND',pkg='0603'); fp_.C('10u','+5V','GND',pkg='0805')
