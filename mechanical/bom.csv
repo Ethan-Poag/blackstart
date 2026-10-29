@@ -88,7 +88,7 @@
 "J27","J6B AUX7-10 + returns","genctl:KF2EDGRM-5.08-6P","1"
 "J28","J7 GEN voltage (L1 L2 L3 N)","genctl:PhoenixContact_PC5_4-GF-7.62_1720819","1"
 "J29","J8 BUS voltage (L1 L2 L3 N)","genctl:PhoenixContact_PC5_4-GF-7.62_1720819","1"
-"J30","J9 CT secondaries (5A)","genctl:KF2EDGRM-5.08-8P","1"
+"J30","J9 CT secondaries (5A)","genctl:PLACEHOLDER_PhoenixContact_PC5_8-GF-7.62_1720851","1"
 "JP1","JP1 CM5->MCU SWD (opt)","Connector_PinHeader_2.54mm:PinHeader_2x04_P2.54mm_Vertical","1"
 "L1","4.7u","genctl:L_SPM10065","1"
 "L2,L3","3.3u","genctl:L_MWSA1004S","2"

@@ -1,0 +1,11 @@
+(footprint "PLACEHOLDER_PhoenixContact_PC5_8-GF-7.62_1720851"
+	(version 20241229)
+	(generator "m7-sch")
+	(layer "F.Cu")
+	(descr "PLACEHOLDER ONLY - NOT FOR FABRICATION. No pads. J30 Phoenix PC 5/8-GF-7,62 1720851 footprint must be created from the Phoenix datasheet (deferred_layout D-m7-9). Exists only so the schematic footprint link resolves.")
+	(tags "placeholder DO-NOT-FAB")
+	(attr through_hole)
+	(property "Reference" "REF**" (at 0 -3 0) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
+	(property "Value" "PLACEHOLDER_1720851" (at 0 3 0) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
+	(fp_text user "PLACEHOLDER - NO PADS - DO NOT FAB" (at 0 0 0) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
+)

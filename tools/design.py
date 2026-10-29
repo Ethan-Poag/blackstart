@@ -693,7 +693,7 @@ RCX={  # (value, fp) -> lcsc for passives not in gen.RLCSC/CLCSC (all checked on
  ('470n',_c6):'C1623',('47n',_c6):'C1622',('68n',_c6):'C5137586',
 }
 PREC={('100k',_r6):'C122538',('18k',_r6):'C309650'}  # 0.1% thin film where the note asks for 0.1%
-MATES={'1720819': ('SPC 5/4-STF-7,62 (1996142)', 'C5481482', '1'), 'KF2EDGRM-5.08-6P': ('KF2EDGKNM-5.08-6P', 'C2974985', '1'), 'WJ15EDGRC-3.81-04P': ('WJ15EDGK-3.81-04P', 'C7244', '1'), 'WJ15EDGRC-3.81-06P': ('WJ15EDGK-3.81-06P', 'C7247', '1'), 'WJ15EDGRC-3.81-02P': ('WJ15EDGK-3.81-02P', 'C8466', '1'), 'WJ15EDGRC-3.81-03P': ('WJ15EDGK-3.81-03P', 'C8413', '1')}
+MATES={'1720851': ('SPC 5/8-STF-7,62 (1996184)', 'UNVERIFIED', '1'), '1720819': ('SPC 5/4-STF-7,62 (1996142)', 'C5481482', '1'), 'KF2EDGRM-5.08-6P': ('KF2EDGKNM-5.08-6P', 'C2974985', '1'), 'WJ15EDGRC-3.81-04P': ('WJ15EDGK-3.81-04P', 'C7244', '1'), 'WJ15EDGRC-3.81-06P': ('WJ15EDGK-3.81-06P', 'C7247', '1'), 'WJ15EDGRC-3.81-02P': ('WJ15EDGK-3.81-02P', 'C8466', '1'), 'WJ15EDGRC-3.81-03P': ('WJ15EDGK-3.81-03P', 'C8413', '1')}
 CONNFP={  # value prefix -> (fp, lcsc, mpn)
  'PC 5/4-GF-7,62':('genctl:PhoenixContact_PC5_4-GF-7.62_1720819','C3579760','1720819'),
  'J4 E-stop':('genctl:PhoenixContact_PC5_4-GF-7.62_1720819','C3579760','1720819'),
@@ -704,7 +704,7 @@ CONNFP={  # value prefix -> (fp, lcsc, mpn)
  'Backlight':('genctl:SM02B-BHSS-1-TB','C485339','SM02B-BHSS-1-TB'),
  'CAN1':('genctl:WJ15EDGRC-3.81-4P','C7245','WJ15EDGRC-3.81-04P'),'Expansion':('genctl:WJ15EDGRC-3.81-6P','C7246','WJ15EDGRC-3.81-06P'),
  'RS-485':('genctl:WJ15EDGRC-3.81-3P','C8406','WJ15EDGRC-3.81-03P'),'Router':('genctl:WJ15EDGRC-3.81-2P','C8387','WJ15EDGRC-3.81-02P'),
- 'J9 CT':('genctl:KF2EDGRM-5.08-8P','C441294','KF2EDGRM-5.08-8P'),
+ 'J9 CT':('genctl:PLACEHOLDER_PhoenixContact_PC5_8-GF-7.62_1720851','C6651769','1720851'),  # m7-sch 3c: J30 Phoenix 1720851, footprint placeholder
 }
 def _fill(pt):
     lid=pt.libid
