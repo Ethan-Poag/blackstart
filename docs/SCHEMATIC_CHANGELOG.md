@@ -239,3 +239,10 @@ power_bom row 7 qty 6 -> 5 (netlist count). inputs_bom C14663 row 32 -> 31 + new
 |---|---|---|---|---|
 | R109 (U18 ILIM), R111 (U19 ILIM) | 40.2k 0603 C12447 | 49.9k 1 % 0603 0603WAF4992T5E C23184 (LIVE LCSC 2026-10-28: stock 1,310,800, $0.0029 @100) | limit ≈0.52 A typ instead of ≈0.70 A max; still ≥ 500 mA USB 2.0 | fixes_safety.md l.537, l.573 |
 Ref mapping: spec "U18/U19 RILIM" = R109/R111 (MEASURED: Net-(U18-ILIM) = R109.1+U18.5, Net-(U19-ILIM) = R111.1+U19.5). Same footprint; no layout change.
+
+## B3-6: H6 AC voltage dividers 4 x 1M -> 12 x 330k per leg (Safety H6, R2-3) — schematic/design.py in 24568d7, BOM/doc in the next commit
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| R422–R425, R429–R432, R436–R439, R443–R446, R448–R451, R455–R458, R462–R465, R469–R472 (32) | 1M 1206 C17927 | 330k 1 % 1206 UNI-ROYAL 1206W4F3303T5E C17929 (LIVE LCSC 2026-10-28: stock 401,700, $0.0046 @100) | 12 × 330k = 3.96 MΩ/leg; per-part ≤ 55 Vrms steady, ≈207 V pulse < 400 V overload (spec, INFERRED) | fixes_safety.md l.24, l.121, R2-3 l.316 |
+| new R559–R566 (GEN_L1), R567–R574 (GEN_L2), R575–R582 (GEN_L3), R583–R590 (GEN_N), R591–R598 (BUS_L1), R599–R606 (BUS_L2), R607–R614 (BUS_L3), R615–R622 (BUS_N) (64) | — | 330k C17929, chained <leg> → <leg>_C1 … <leg>_C8 → old first resistor (R422 etc., pin-1 label renamed <leg> → <leg>_C8) | 8 added links per leg | same |
+Refs: next free after R558 (R555 kept for the INA237 shunt). Ratio change −1 % (calibration). ac_metering_bom row 6 replaced (old row stale: 24 × HVC1206). Layout D11.
