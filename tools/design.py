@@ -12,7 +12,7 @@ def schottky(sh,val,a,k,mpn=None):
 def fet(sh,lib,val,g,s,d,mpn=None):
     return sh.p(lib,val,{'G':g,'S':s,'D':d},prefix='Q',mpn=mpn or val)
 def npn(sh,b,e,c): return sh.p('Transistor_BJT:MMBT3904','MMBT3904',{'B':b,'E':e,'C':c},prefix='Q',mpn='MMBT3904',lcsc='C20526')
-def pnp(sh,b,e,c): return sh.p('Transistor_BJT:MMBT3906','MMBT3906',{'B':b,'E':e,'C':c},prefix='Q',mpn='MMBT3906',lcsc='C2940')
+def pnp(sh,b,e,c): return sh.p('Transistor_BJT:MMBT3906','MMBT3906',{'B':b,'E':e,'C':c},prefix='Q',mpn='MMBT3906',lcsc='C2143')
 def clamp(sh,sig,part='BAV99'):
     # series dual diode: pin1 anode(lower)->GND, pin2 cathode(upper)->+3V3, pin3 common->signal
     lid='Diode:BAV99' if part=='BAV99' else 'Diode:BAT54S'
@@ -33,20 +33,20 @@ def S(name,title,notes=''):
 
 # =====================================================================
 pw=S('power','Power: input protection, ideal diode, 12V buck-boost, 5V, 3V3',
- 'POWER. J0 battery in -> 10A ATO -> SMDJ36CA -> LM74800 + 2x BSC070N10NS5 back-to-back (VBAT_P).\n'
+ 'POWER. J0 battery in (BAT_IN; NO on-board fuse: installer fits an external fuse <=10 A fast-acting, >=32 V DC in the battery lead) -> SMDJ36CA -> LM74800 + 2x BSC070N10NS5 back-to-back (VBAT_P).\n'
  'OV 34.0V rise/31.2V fall typ (32.39-35.74 / 29.57-32.70 V), UV 5.56V/5.12V (210k/49.9k/9.76k, 1.231/1.13V thresholds). LM5176 buck-boost -> +12V (FB 140k/10k, RT 27.4k ~300kHz, 8mR sense).\n'
  'TPS56637 -> +5V (FB 75k/10k = 5.1V, 3.3uH). TPS56637 -> +3V3 from +12V (FB 45.3k/10k, 2.2uH, 3x22u), >=3A. MODE open = FCCM.\n'
  'SAFE DOMAIN: LMR36506 buck VBAT_P -> +3V3_BK (always on); TPS2116 priority mux VIN1=+3V3 / VIN2=+3V3_BK -> +3V3_SAFE (MCU, FRAM, WDT, I/O, E-stop logic).')
 conn(pw,4,['BAT_IN','BAT_IN','GND','GND'],'PC 5/4-GF-7,62 (battery in)',mpn='1720819 Phoenix',note='J0 battery input')
-pw.p('Device:Fuse','10A ATO (3557-2 clips)',{'1':'BAT_IN','2':'VBAT_F'},prefix='F',mpn='3557-2')
-pw.p('Device:D_TVS','SMDJ36CA',{'1':'VBAT_F','2':'GND'},prefix='D',mpn='SMDJ36CA',mfr='Littelfuse',lcsc='C224075')
+REFC['F']+=1  # F1 (10A ATO + 2x Keystone 3557-2 clips) deleted in m7-step12: fuse is external; ref reserved so later refs stay stable
+pw.p('Device:D_TVS','SMDJ36CA',{'1':'BAT_IN','2':'GND'},prefix='D',mpn='SMDJ36CA',mfr='Littelfuse',lcsc='C224075')
 pw.C('100n','VBAT_DD','GND',pkg='0805',note='100V')
-pw.C('220n','VBAT_F','GND',pkg='0805',ref='C297',mpn='CC0805KKX7R0BB224',lcsc='C513710',mfr='YAGEO',note='100V X7R; CIN on VBAT_F per TI SNOSD95C p23 (0.1 uF min); 220n for DC-bias margin')
-pw.p('genctl:LM74800QDRRRQ1','LM74800QDRRRQ1',{'A':'VBAT_F','VS':'VBAT_DD','VSNS':'VBAT_F','SW':'VBAT_F','EN/UVLO':'LM748_EN','OV':'LM748_OV','GND':'GND','RTN':None,
+pw.C('220n','BAT_IN','GND',pkg='0805',ref='C297',mpn='CC0805KKX7R0BB224',lcsc='C513710',mfr='YAGEO',note='100V X7R; CIN on BAT_IN (LM74800 A/VSNS input) per TI SNOSD95C p23 (0.1 uF min); 220n for DC-bias margin')
+pw.p('genctl:LM74800QDRRRQ1','LM74800QDRRRQ1',{'A':'BAT_IN','VS':'VBAT_DD','VSNS':'BAT_IN','SW':'BAT_IN','EN/UVLO':'LM748_EN','OV':'LM748_OV','GND':'GND','RTN':None,
      'DGATE':'LM748_DGATE','C':'VBAT_DD','HGATE':'LM748_HGATE','OUT':'VBAT_P','CAP':'LM748_CAP'},mpn='LM74800QDRRRQ1',lcsc='C3215600',note='EP=RTN left floating per DS')
 pw.C('100n','LM748_CAP','VBAT_DD',note='CAP-VS charge-pump cap, 0.1uF per DS typ app')
-pw.R('210k','VBAT_F','LM748_EN'); pw.R('49.9k','LM748_EN','LM748_OV'); pw.R('9.76k','LM748_OV','GND',mpn='0603WAF9761T5E',lcsc='C23128',mfr='UNI-ROYAL')
-fet(pw,'Transistor_FET:BSC070N10NS5','BSC070N10NS5','LM748_DGATE','VBAT_F','VBAT_DD')
+pw.R('210k','BAT_IN','LM748_EN'); pw.R('49.9k','LM748_EN','LM748_OV'); pw.R('9.76k','LM748_OV','GND',mpn='0603WAF9761T5E',lcsc='C23128',mfr='UNI-ROYAL')
+fet(pw,'Transistor_FET:BSC070N10NS5','BSC070N10NS5','LM748_DGATE','BAT_IN','VBAT_DD')
 fet(pw,'Transistor_FET:BSC070N10NS5','BSC070N10NS5','LM748_HGATE','VBAT_P','VBAT_DD')
 tvs(pw,'SMBJ33CA','VBAT_P')
 for _ in range(2): pw.C('100u 50V','VBAT_P','GND',pol=True,mpn='EEHZA1H101P',pkg='Capacitor_SMD:CP_Elec_10x10.5')
@@ -219,10 +219,11 @@ cm.R('29.4k','HU_ILM','GND',note='ILIM ~3.5A'); cm.C('100n','HU_SS','GND'); cm.C
 
 # =====================================================================
 co=S('comms','Comms: CAN x2, RS-485, Ethernet, USB hub/ports, router 12V',
- 'COMMS. CAN1/CAN2 CA-IS3062W (VCC=+5V, 4.5-5.5V). Bus: CMC -> NUP2105L -> split termination via DIP (62R+62R, 4.7nF mid).\n'
- 'RS-485 CA-IS2092W, SEL=GND_485 (3.3V VISO bus; DS: SEL=VISO only valid with VCC=5V), DIP for 120R term + 680R bias. Shields -> CHASSIS via 1M||4.7nF.\n'
+ 'COMMS. CAN1/CAN2 CA-IS3062W (VCC=+5V, 4.5-5.5V). Bus: CMC -> NUP2105L. CAN1: split termination (62R+62R, 4.7nF mid) via solder jumpers JP2/JP3, open by default. CAN2 (expansion bus J7): NO on-board termination (SW6/R92/R93/C92 deleted m7-step12; decision (Ethan): CAN2 is terminated by loose terminator plugs in the daughter-board sockets).\n'
+ 'RS-485 CA-IS2092W, SEL=GND_485 (3.3V VISO bus; DS: SEL=VISO only valid with VCC=5V), 120R term via solder jumper JP4 (open by default); no on-board bias. Shields -> CHASSIS via 1M||4.7nF.\n'
  'USB: CM5 USB2 OTG -> USB-C service/rpiboot (only external USB). CM5 USB3-0 HS -> internal header (display touch), USB3-1 HS -> internal spare header. No hub, no USB-A. No on-board modem: external router on RJ45, powered from ROUTER_12V.\n'
- 'ROUTER_12V: TPS1H200A from +12V, ILIM 1.0k = 2.0A, default ON (100k pull-up), STM32 power-cycles via TCA9555 @0x25 P04.')
+ 'ROUTER_12V: TPS1H200A from +12V, ILIM 1.0k = 2.0A, default ON (100k pull-up), STM32 power-cycles via TCA9555 @0x25 P04.\n'
+ 'TERMINATION (solder jumpers, all OPEN by default): CAN1 JP2 (H) + JP3 (L); measure J6 powered off: about 60 ohm leave open, about 120 ohm bridge both. RS-485 JP4 (A to R102 120R, other end RS485_B): bridge only at a bus end. No on-board bias. CAN2: loose terminator plugs in the daughter-board sockets.')
 for i,(tx,rx,iso) in enumerate((('CAN1_TX','CAN1_RX','GND_CAN1'),('CAN2_TX','CAN2_RX','GND_CAN2')),1):
     n='CAN%d'%i
     co.R('1k',tx,tx+'_T',note='domain-boundary R (SAFE MCU -> +5V transceiver)'); co.R('1k',rx+'_T',rx,note='domain-boundary R')
@@ -230,8 +231,13 @@ for i,(tx,rx,iso) in enumerate((('CAN1_TX','CAN1_RX','GND_CAN1'),('CAN2_TX','CAN
     co.C('100n','+5V','GND'); co.C('10u','+5V','GND',pkg='0805'); co.C('100n','VISO_'+n,iso); co.C('10u','VISO_'+n,iso,pkg='0805')
     co.p('genctl:ACT45B-510-2P','ACT45B-510-2P',{'1':n+'_H','4':n+'_HB','2':n+'_L','3':n+'_LB'},mpn='ACT45B-510-2P-TL003')
     co.p('Power_Protection:NUP2105L','NUP2105L',{'1':n+'_HB','2':n+'_LB','3':iso},prefix='D',mpn='NUP2105LT1G')
-    co.p('Switch:SW_DIP_x02','TERM',{'1':n+'_HB','4':n+'_TH','2':n+'_LB','3':n+'_TL'},prefix='SW',mpn='DIP switch 2P (BOM)')
-    co.R('62R',n+'_TH',n+'_TMID',pkg='1206'); co.R('62R',n+'_TL',n+'_TMID',pkg='1206'); co.C('4.7n',n+'_TMID',iso)
+    if i==1:
+        REFC['SW']+=1  # SW5 DIP deleted (m7-sch): replaced by open solder jumpers JP2 (H) / JP3 (L) per failsafe_latch.md L4
+        co.p('Jumper:SolderJumper_2_Open','TERM_CAN1_H',{'1':n+'_HB','2':n+'_TH'},prefix='JP',ref='JP2',fp='genctl:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm',note='CAN1_HB to CAN1_TH (R87). Open by default (failsafe_latch.md L4)')
+        co.p('Jumper:SolderJumper_2_Open','TERM_CAN1_L',{'1':n+'_LB','2':n+'_TL'},prefix='JP',ref='JP3',fp='genctl:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm',note='CAN1_LB to CAN1_TL (R88). Open by default (failsafe_latch.md L4)')
+        co.R('62R',n+'_TH',n+'_TMID',pkg='1206'); co.R('62R',n+'_TL',n+'_TMID',pkg='1206'); co.C('4.7n',n+'_TMID',iso)
+    else:  # CAN2: SW6, R92, R93, C92 deleted in m7-step12 (no on-board termination); refs reserved so later refs stay stable
+        REFC['SW']+=1; REFC['R']+=2; REFC['C']+=1
     co.R('1M',n+'_SCR','CHASSIS',pkg='1206'); co.C('4.7n',n+'_SCR','CHASSIS',pkg='1206',note='2kV')
 conn(co,4,['CAN1_HB','CAN1_LB','CAN1_SCR','GND_CAN1'],'CAN1 (PC 5/4)',mpn='Phoenix PC 5/4-GF')
 co.p('genctl:TPS1H200AQDGNRQ1','TPS1H200AQDGNRQ1',{'VS':'+12V','IN':'EXP_12V_EN','DIAG_EN':'+3V3_SAFE','CL':'EXP12_CL','DELAY':None,'GND':'GND','EP':'GND','OUT':'EXP_12V','FAULT':'OUT_FAULT_N'},mpn='TPS1H200AQDGNRQ1')
@@ -247,10 +253,10 @@ co.p('genctl:CA-IS2092W','CA-IS2092W',{'VCC':'+3V3','DI':'RS485_TX_T','RO':'RS48
 co.C('100n','+3V3','GND'); co.C('10u','+3V3','GND',pkg='0805'); co.C('100n','VISO_485','GND_485'); co.C('10u','VISO_485','GND_485',pkg='0805')
 co.R('10k','RS485_DE_T','GND')
 co.p('Diode:SM712_SOT23','SM712',{'1':'RS485_A','2':'RS485_B','3':'GND_485'},prefix='D',mpn='SM712')
-co.p('Switch:SW_DIP_x02','TERM/BIAS',{'1':'RS485_A','4':'RS485_TA','2':'RS485_B','3':'RS485_TB'},prefix='SW',note='ADDED: SW1 term, SW2 term other end - see notes')
-co.R('120R','RS485_TA','RS485_TB',pkg='1206')
-co.p('Switch:SW_DIP_x02','BIAS',{'1':'VISO_485','4':'RS485_BIASP','2':'GND_485','3':'RS485_BIASN'},prefix='SW',note='ADDED: fail-safe bias enable')
-co.R('680R','RS485_BIASP','RS485_A'); co.R('680R','RS485_BIASN','RS485_B')
+REFC['SW']+=1  # SW7 DIP deleted (m7-sch): replaced by open solder jumper JP4 in series A -> TA; R102 other end on RS485_B (failsafe_latch.md L4)
+co.p('Jumper:SolderJumper_2_Open','TERM_485',{'1':'RS485_A','2':'RS485_TA'},prefix='JP',ref='JP4',fp='genctl:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm',note='RS485_A to RS485_TA (R102 120R; R102 other end on RS485_B). Open by default (failsafe_latch.md L4)')
+co.R('120R','RS485_TA','RS485_B',pkg='1206')
+REFC['SW']+=1; REFC['R']+=2  # SW8 + R103/R104 fail-safe bias deleted (m7-sch, failsafe_latch.md L4: no on-board bias); refs reserved
 conn(co,3,['RS485_A','RS485_B','GND_485'],'RS-485 (PC 5/3)',mpn='Phoenix PC 5/3-GF')
 # Ethernet (gigabit)
 co.p('genctl:HR963380AE','HR963380AE',{'TRD0+':'ETH0_P','TRD0-':'ETH0_N','TRD1+':'ETH1_P','TRD1-':'ETH1_N','TRD2+':'ETH2_P','TRD2-':'ETH2_N','TRD3+':'ETH3_P','TRD3-':'ETH3_N',
@@ -449,7 +455,7 @@ schottky(ou,'SK1010C','GND','CRANK_OUT',mpn='SK1010C')
 outs=['GLOW']+small
 mux={}
 for i,n in enumerate(outs):
-    ou.p('genctl:TPS1HTC30QPWPRQ1','TPS1HTC30QPWPRQ1',{'VS':'VBAT_P','EN':n+'_EN','DIAG_EN':'DIAG_EN','LATCH':'GND','ILIM':n+'_ILIM','GND':'GND','VOUT':n+'_OUT','SNS':n+'_SNS','FAULT':'OUT_FAULT_N','NC':None},mpn='TPS1HTC30QPWPRQ1')
+    ou.p('genctl:TPS1HTC30QPWPRQ1','TPS1HTC30QPWPRQ1',{'VS':'VBAT_P','EN':n+'_EN','DIAG_EN':'DIAG_EN','LATCH':'GND','ILIM':n+'_ILIM','GND':'GND','VOUT':n+'_OUT','SNS':n+'_SNS','FAULT':'OUT_FAULT_N','NC':None,'EP':'GND'},mpn='TPS1HTC30QPWPRQ1')
     ou.R('40.2k',n+'_ILIM','GND'); ou.R('1.1k',n+'_SNS','GND'); ou.R('1k',n+'_SNS',n+'_SNSM'); ou.C('100n','VBAT_P','GND',pkg='0805')
     schottky(ou,'SS110','GND',n+'_OUT',mpn='SS110'); tvs(ou,'SMBJ33CA',n+'_OUT')
     mux[n]=n+'_SNSM'
@@ -485,7 +491,7 @@ es.R('200k','+5V_TRIP','TRIP_TIM'); es.C('2.2u','TRIP_TIM','GND',pkg='0805',note
 es.p('74xGxx:74LVC1G08','74LVC1G08',{'1':'MCU_TRIP','2':'WDO_N','4':'MCU_TRIP_G','5':'+3V3_SAFE','3':'GND'},prefix='U',mpn='SN74LVC1G08DBVR',note='ADDED 4th gate'); es.C('100n','+3V3_SAFE','GND')  # +3V3_SAFE explicit (POST-PASS 1 maps estop +3V3 -> +3V3_SAFE anyway; matches board U67.5)
 es.R('100k','MCU_TRIP','GND')
 es.p('Diode:BAT54C','BAT54C',{'1':'TRIP_555_Q','2':'MCU_TRIP_G','3':'ESTOP_TRIP_EN'},prefix='D',mpn='BAT54C'); es.R('100k','ESTOP_TRIP_EN','GND')
-es.p('genctl:TPS1HTC30QPWPRQ1','TPS1HTC30QPWPRQ1',{'VS':'VBAT_P','EN':'ESTOP_TRIP_EN','DIAG_EN':'DIAG_EN','LATCH':'GND','ILIM':'ESTOP_TRIP_ILIM','GND':'GND','VOUT':'ESTOP_TRIP_OUT','SNS':'ESTOP_TRIP_SNS','FAULT':'OUT_FAULT_N','NC':None},mpn='TPS1HTC30QPWPRQ1')
+es.p('genctl:TPS1HTC30QPWPRQ1','TPS1HTC30QPWPRQ1',{'VS':'VBAT_P','EN':'ESTOP_TRIP_EN','DIAG_EN':'DIAG_EN','LATCH':'GND','ILIM':'ESTOP_TRIP_ILIM','GND':'GND','VOUT':'ESTOP_TRIP_OUT','SNS':'ESTOP_TRIP_SNS','FAULT':'OUT_FAULT_N','NC':None,'EP':'GND'},mpn='TPS1HTC30QPWPRQ1')
 es.R('47k','ESTOP_TRIP_ILIM','GND',note='ILIM 100A*kOhm/47k = 2.13A typ (1.70-2.55A); relay drive'); es.R('1.1k','ESTOP_TRIP_SNS','GND'); es.R('1k','ESTOP_TRIP_SNS','ESTOP_TRIP_SNSM'); es.C('100n','VBAT_P','GND',pkg='0805')
 schottky(es,'SS110','GND','ESTOP_TRIP_OUT',mpn='SS110'); tvs(es,'SMBJ33CA','ESTOP_TRIP_OUT')
 es.R('10k','ESTOP_TRIP_OUT','ESTOP_TRIP_LED',pkg='1206'); es.LED('red','ESTOP_TRIP_LED','GND',lcsc='C2295')
@@ -608,17 +614,16 @@ FPMAP={  # libid -> (fp, lcsc, mpn)
  '74xx:74HC14':('Package_SO:SOIC-14_3.9x8.7mm_P1.27mm','C5605','74HC14D,653'),'Regulator_Linear:LM317_TO-252':('Package_TO_SOT_SMD:TO-252-2',None,None),
  '74xGxx:74LVC1G08':('Package_TO_SOT_SMD:SOT-23-5',None,None),'Amplifier_Current:INA281A2':('Package_TO_SOT_SMD:SOT-23-5',None,None),
  'Timer:TLC555xD':('Package_SO:SOIC-8_3.9x4.9mm_P1.27mm','C130208','TLC555QDRQ1'),
- 'Device:Fuse':('genctl:Keystone_3557-2_ATO_clips','C352820','3557-2 (x2 clips per fuse)'),
  'Switch:SW_DIP_x02':('genctl:DSHP02TSGER_DIP2','C367376','DSHP02TSGER'),
  'Mechanical:MountingHole_Pad':('MountingHole:MountingHole_3.2mm_M3_Pad','',None),
 }
-MPNLCSC={'BSS84':'C8545','DMN6075S':'C2832191','SI2309CDS-T1-GE3':'C10487','AO3401A':'C15127','BAV99':'C2500','BAT54S':'C85099','BAT54C':'C37704',
- '1N4148W':'C81598','SM712':'C29359','NUP2105LT1G':'C14223','USBLC6-2SC6':'C7519','SRV05-4':'C85364','TPS2051CDBVR':'C129581',
- 'USB2514B-AEZC-TR':'C51062','TLV9062IDR':'C693209','LM2904BIDR':'C1849422','LM393DR':'C7955','ADS1115IDGSR':'C37593','LM317MDT-TR':'C15622',
- 'SN74LVC1G08DBVR':'C7813','INA281A2QDBVRQ1':'C2862726','STM32H743VIT6':'C114409','FM24CL64B-GTR':'C9829',
- 'SMDJ36CA':'C224075','SMBJ33CA':'C78420','SMBJ5.0A':'C114063','SMAJ36CA':'C114047','SMBJ58CA':'C114034','SMBJ36CA':'C78421','SMDJ24A':'C2963997',
- 'SS110':'C2847','SS34':'C8678','SK1010C':'C2847480','EEHZA1H101P':'C109086','EEHZK1E471P':'C242138','TS-1187A-B-A-B':'C318884',
- 'SM04B-SRSS-TB':'C160390','TYPE-C-31-M-12':'C165948','TYPE-C-31-D-06B':'C47817619','MMBT3904':'C20526','MMBT3906':'C2143'}
+MPNLCSC={'BSS84':'C8492','DMN6075S':'C155242','SI2309CDS-T1-GE3':'C10493','AO3401A':'C347476','BAV99':'C2500','BAT54S':'C8592','BAT54C':'C2135',
+ '1N4148W':'C81598','SM712':'C12067','NUP2105LT1G':'C14486','USBLC6-2SC6':'C7519','SRV05-4':'C85364','TPS2051CDBVR':'C129581',
+ 'USB2514B-AEZC-TR':'C51062','TLV9062IDR':'C398355','LM2904BIDR':'C1849422','LM393DR':'C7955','ADS1115IDGSR':'C37593','LM317MDT-TR':'C3015165',
+ 'SN74LVC1G08DBVR':'C7666','INA281A2QDBVRQ1':'C2908677','STM32H743VIT6':'C114409','FM24CL64B-GTR':'C9829',
+ 'SMDJ36CA':'C224075','SMBJ33CA':'C78420','SMBJ5.0A':'C78423','SMAJ36CA':'C10757','SMBJ58CA':'C114007','SMBJ36CA':'C78421','SMDJ24A':'C362107',
+ 'SS110':'C2482','SS34':'C8678','SK1010C':'C3018527','EEHZA1H101P':'C109086','EEHZK1E471P':'C242138','TS-1187A-B-A-B':'C318884',
+ 'SM04B-SRSS-TB':'C51940130','TYPE-C-31-M-12':'C165948','TYPE-C-31-D-06B':'C47817619','MMBT3904':'C20526','MMBT3906':'C2143'}
 DIODEFP={'SMDJ':'Diode_SMD:D_SMC','SMBJ':'Diode_SMD:D_SMB','SMAJ':'Diode_SMD:D_SMA','SS110':'Diode_SMD:D_SMA','SS34':'Diode_SMD:D_SMA','SK1010C':'Diode_SMD:D_SMC'}
 _r6='Resistor_SMD:R_0603_1608Metric'; _r12='Resistor_SMD:R_1206_3216Metric'; _c6='Capacitor_SMD:C_0603_1608Metric'
 RCX={  # (value, fp) -> lcsc for passives not in gen.RLCSC/CLCSC (all checked on JLC parts search 2026-10-24)
