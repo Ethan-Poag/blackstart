@@ -458,10 +458,10 @@ for n in small: ou.R('100k',n+'_EN','GND')
 for n in ('FUEL','CRANK'):
     ou.p('genctl:TPS48100QDGXRQ1','TPS48100QDGXRQ1',{'VS':'VBAT_ESTOP','EN/UVLO':n+'_UVLO','INP1':n+'_EN','INP2':'GND','CS_SEL':'GND','ISCP':n+'_ISCP','TMR':n+'_TMR','SCP_TEST':'GND','GND':'GND','NC':None,
         'CS+':'VBAT_ESTOP','CS-':n+'_DRN','G1PU':n+'_GPU','G1PD':n+'_GPD','G2':None,'BST':n+'_BST','SRC':n+'_OUT','FLT':'OUT_FAULT_N'},mpn='TPS48100QDGXRQ1')
-    ou.R('100k','VBAT_ESTOP',n+'_UVLO'); ou.R('27k',n+'_UVLO','GND'); ou.R('35.7k',n+'_ISCP','GND',note='RISCP to GND per DS eq.5: Isc=(35.7k*2uA+19mV)/1mR = 90A'); ou.C('68n',n+'_TMR','GND')
+    ou.R('100k','VBAT_ESTOP',n+'_UVLO'); ou.R('27k',n+'_UVLO','GND'); ou.R('40.2k',n+'_ISCP','GND',mpn='0603WAF4022T5E',lcsc='C12447',mfr='UNI-ROYAL',note='RISCP per DS eq.5: Isc=(40.2k*2uA+19mV)/20mR = 4.97A typ (Rev 3 H2)'); ou.C('4.7n',n+'_TMR','GND',mpn='CC0603KRX7R9BB472',lcsc='C106218',mfr='YAGEO',note='tSC ~65us INFERRED (Rev 3 H2)')
     ou.C('470n',n+'_BST',n+'_OUT'); ou.C('100n','VBAT_ESTOP','GND',pkg='0805')
     ou.R('10R',n+'_GPU',n+'_G'); ou.R('0R',n+'_GPD',n+'_G')
-    ou.R('1m','VBAT_ESTOP',n+'_DRN',pkg='2512',mpn='WSLP25121L000FEA',lcsc='C844705',mfr='Vishay',note='shunt')  # R297/R303: manual sch edit 32b12c7/7eaa27d folded into design.py
+    ou.R('20m','VBAT_ESTOP',n+'_DRN',pkg='2512',mpn='FMF25FPJR020-LH',lcsc='C105360',mfr='PSA',note='shunt 20 mOhm 2 W (Rev 3 H2)')  # R297/R303: manual sch edit 32b12c7/7eaa27d folded into design.py
     for _ in range(2): fet(ou,'Transistor_FET:BSC070N10NS5','BSC070N10NS5',n+'_G',n+'_OUT',n+'_DRN')
     ou.p('Amplifier_Current:INA281A1','INA281A1',{'OUT':n+'_ISNS','GND':'GND','Vin+':'VBAT_ESTOP','Vin-':n+'_DRN','V+':'+3V3'},prefix='U',mpn='INA281A1QDBVRQ1',lcsc='C2862615')  # m7-sch FW-011 gain 20; ou.C('100n','+3V3','GND')
     tvs(ou,'SMDJ40CA',n+'_OUT')  # D68/D69 Rev 3 H5

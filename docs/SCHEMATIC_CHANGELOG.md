@@ -257,3 +257,11 @@ Refs: next free after R558 (R555 kept for the INA237 shunt). Ratio change −1 %
 | C305 (new) | — | 100n 0603 C14663 INA_INP–INA_INN | differential filter | same |
 | C304 (new; **spec C296**, which is taken by a +12V cap) | — | 100n 0603 C14663 +3V3_SAFE–GND | VS decoupling | §4.1 |
 Ref mapping: spec C296 → C304; filter parts have no spec refs → R623, R624, C305. I2C1 pull-ups 2.2k to +3V3 already exist (design.py:155). Layout D12.
+
+## B3-8: TPS48100 fuel/crank short-circuit trip (Safety H2, FW-010/011)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| R297, R303 | 1m WSLP25121L000FEA C844705 | 20m 1 % 2 W 2512 PSA FMF25FPJR020-LH C105360 (LIVE LCSC 2026-10-28: 42,340, $0.0662 @10) | ISC 90 A → 4.97 A typ | fixes_safety.md l.452, l.519; fixes_firmware.md l.489 |
+| R294, R300 | 35.7k C23027 | 40.2k 0603WAF4022T5E C12447 (LIVE: 52,400) | V(SCP) 99.4 mV typ | l.453, l.518 |
+| C197, C201 | 68n C5137586 | 4.7n CC0603KRX7R9BB472 C106218 (LIVE: 2,377,600) | tSC ≈ 65 µs (INFERRED) | l.454, l.527 |
+INA281A1 gain 20 V/V × 20 mΩ = 0.40 V/A (INFERRED arithmetic; U44/U46 value already INA281A1). Same footprints; no layout change.
