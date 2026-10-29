@@ -3615,6 +3615,118 @@
 				(effects
 					(font
 						(size 1.27 1.27)))))))
+
+(symbol "Amplifier_Current:INA281A1"
+	(exclude_from_sim no)
+	(in_bom yes)
+	(on_board yes)
+	(property "Reference" "U"
+		(at -7.62 10.795 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(justify right)))
+	(property "Value" "INA281A1"
+		(at -7.62 8.89 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(justify right)))
+	(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "Datasheet" "https://www.ti.com/lit/ds/symlink/ina281.pdf"
+		(at 16.51 -17.78 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "Description" "-4...+110V High Voltage Current Shunt Monitor, 20V/V gain, 1.3 MHz bandwidth,  2.7..20Vcc, 55uV offset voltage, SOT-23-5"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "ki_keywords" "highside HS current sense amplifier linear buffered texas"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "ki_fp_filters" "SOT?23*"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(symbol "INA281A1_0_1"
+		(rectangle
+			(start -7.62 7.62)
+			(end 7.62 -7.62)
+			(stroke
+				(width 0.254)
+				(type default))
+			(fill
+				(type background))))
+	(symbol "INA281A1_1_1"
+		(pin power_in line
+			(at -10.16 -5.08 0)
+			(length 2.54)
+			(name "V+"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "5"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin input line
+			(at -5.08 10.16 270)
+			(length 2.54)
+			(name "Vin+"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "3"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin power_in line
+			(at 0 -10.16 90)
+			(length 2.54)
+			(name "GND"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "2"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin input line
+			(at 5.08 10.16 270)
+			(length 2.54)
+			(name "Vin-"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "4"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin output line
+			(at 10.16 0 180)
+			(length 2.54)
+			(name "OUT"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "1"
+				(effects
+					(font
+						(size 1.27 1.27)))))))
 )
 (symbol (lib_id "genctl:TPS3431SDRBR") (at 85.09 80.01 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "6c6128fd-3567-4c2b-a137-7ec25c0715e2")
 (property "Reference" "U37" (at 77.47 68.58 0) (effects (font (size 1.27 1.27))))
@@ -4306,14 +4418,14 @@
 (pin "3" (uuid "c30cac10-a60b-4d61-91af-8a69dc0bfecb"))
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "Q46") (unit 1))))
 )
-(symbol (lib_id "Amplifier_Current:INA281A2") (at 1070.61 81.28 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "2468d87d-fa9a-417f-9109-00edbb4c082d")
+(symbol (lib_id "Amplifier_Current:INA281A1") (at 1070.61 81.28 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "2468d87d-fa9a-417f-9109-00edbb4c082d")
 (property "Reference" "U44" (at 1070.61 100.33 0) (effects (font (size 1.27 1.27))))
-(property "Value" "INA281A2" (at 1070.61 102.87 0) (effects (font (size 1.27 1.27))))
+(property "Value" "INA281A1" (at 1070.61 102.87 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23-5" (at 1070.61 81.28 0) (effects (font (size 1.27 1.27)) hide))
 (property "Datasheet" "https://www.ti.com/lit/ds/symlink/ina281.pdf" (at 1087.12 99.06 0) (effects (font (size 1.27 1.27)) hide))
 (property "Description" "-4...+110V High Voltage Current Shunt Monitor, 50V/V gain, 1.3 MHz bandwidth,  2.7..20Vcc, 55uV offset voltage, SOT-23-5" (at 1070.61 81.28 0) (effects (font (size 1.27 1.27)) hide))
-(property "LCSC" "C2908677" (at 1070.61 81.28 0) (effects (font (size 1.27 1.27)) hide))
-(property "MPN" "INA281A2QDBVRQ1" (at 1070.61 81.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C2862615" (at 1070.61 81.28 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "INA281A1QDBVRQ1" (at 1070.61 81.28 0) (effects (font (size 1.27 1.27)) hide))
 (property "Manufacturer" "" (at 1070.61 81.28 0) (effects (font (size 1.27 1.27)) hide))
 (pin "5" (uuid "79254c0d-070a-4e1e-a233-95cba0768c55"))
 (pin "3" (uuid "811b0d33-1ed3-4458-a34d-8fcf73dc9f62"))
@@ -4529,14 +4641,14 @@
 (pin "3" (uuid "b5c76d5c-7eda-4fc0-b787-a801cf0642c1"))
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "Q48") (unit 1))))
 )
-(symbol (lib_id "Amplifier_Current:INA281A2") (at 350.52 212.09 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "f2bd3819-d552-4025-a33a-28056f2fe068")
+(symbol (lib_id "Amplifier_Current:INA281A1") (at 350.52 212.09 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "f2bd3819-d552-4025-a33a-28056f2fe068")
 (property "Reference" "U46" (at 350.52 231.14 0) (effects (font (size 1.27 1.27))))
-(property "Value" "INA281A2" (at 350.52 233.68 0) (effects (font (size 1.27 1.27))))
+(property "Value" "INA281A1" (at 350.52 233.68 0) (effects (font (size 1.27 1.27))))
 (property "Footprint" "Package_TO_SOT_SMD:SOT-23-5" (at 350.52 212.09 0) (effects (font (size 1.27 1.27)) hide))
 (property "Datasheet" "https://www.ti.com/lit/ds/symlink/ina281.pdf" (at 367.03 229.87 0) (effects (font (size 1.27 1.27)) hide))
 (property "Description" "-4...+110V High Voltage Current Shunt Monitor, 50V/V gain, 1.3 MHz bandwidth,  2.7..20Vcc, 55uV offset voltage, SOT-23-5" (at 350.52 212.09 0) (effects (font (size 1.27 1.27)) hide))
-(property "LCSC" "C2908677" (at 350.52 212.09 0) (effects (font (size 1.27 1.27)) hide))
-(property "MPN" "INA281A2QDBVRQ1" (at 350.52 212.09 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C2862615" (at 350.52 212.09 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "INA281A1QDBVRQ1" (at 350.52 212.09 0) (effects (font (size 1.27 1.27)) hide))
 (property "Manufacturer" "" (at 350.52 212.09 0) (effects (font (size 1.27 1.27)) hide))
 (pin "5" (uuid "072931e6-67ab-4932-9990-3008c0c2c0b9"))
 (pin "3" (uuid "5049c1a7-5ba5-4478-9633-e1dc07be2dfe"))

@@ -171,3 +171,11 @@ Ref mapping: spec "C293" = real **C298** (schematic C293 is an existing LM5176 2
 | C85, C91 (comms, U13/U14 VISO, verified in netlist) | 47 µF 10 V X5R 1206 C96123 | 47 µF 16 V X5R 1210 CL32A476KOJNNNE C2932477 | 10 V part at 47–55 % of rating | §18.3/§18.4 (stock 66634); parent ruling |
 | bom/outputs_bom.csv, comms_bom.csv | — | rows updated; prices not in spec → UNVERIFIED, removed from totals (160.23 → 160.21; 27.03 → 26.69) | BOM | — |
 | tools/design.py | — | pkg 1206 / 1210 + LCSC | regen | — |
+
+## FW-9: INA281 gain 20 (FW-010 / FW-011, APPROVED)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| U44 (FUEL_ISNS), U46 (CRANK_ISNS), outputs | INA281A2 (50 V/V) INA281A2QDBVRQ1 C2908677, symbol Amplifier_Current:INA281A2 | INA281A1 (20 V/V) INA281A1QDBVRQ1 C2862615, symbol Amplifier_Current:INA281A1 (same pins/footprint) | keeps the 3.86–6.14 A trip band linear with the 20 mΩ shunt | fixes_firmware.md §10.2, §18.1 (gain 20 V/V from TI SBOSA29A p.4), parent ruling "value field must read INA281A1" (§18.1 had said to only flag it) |
+| bom/outputs_bom.csv | 2x 2.3975 | 2x 2.92 (spec, stock 2092); TOTAL 160.21 → 161.25 | BOM | §10.2 |
+| tools/design.py | — | INA281A1 + LCSC map | regen | — |
+Dependency: the 0.40 V/A scaling needs R297/R303 = 20 mΩ (Safety batch 3; still 1 mΩ in this branch).

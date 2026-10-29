@@ -454,7 +454,7 @@ for n in ('FUEL','CRANK'):
     ou.R('10R',n+'_GPU',n+'_G'); ou.R('0R',n+'_GPD',n+'_G')
     ou.R('1m','VBAT_ESTOP',n+'_DRN',pkg='2512',mpn='WSLP25121L000FEA',lcsc='C844705',mfr='Vishay',note='shunt')  # R297/R303: manual sch edit 32b12c7/7eaa27d folded into design.py
     for _ in range(2): fet(ou,'Transistor_FET:BSC070N10NS5','BSC070N10NS5',n+'_G',n+'_OUT',n+'_DRN')
-    ou.p('Amplifier_Current:INA281A2','INA281A2',{'OUT':n+'_ISNS','GND':'GND','Vin+':'VBAT_ESTOP','Vin-':n+'_DRN','V+':'+3V3'},prefix='U',mpn='INA281A2QDBVRQ1'); ou.C('100n','+3V3','GND')
+    ou.p('Amplifier_Current:INA281A1','INA281A1',{'OUT':n+'_ISNS','GND':'GND','Vin+':'VBAT_ESTOP','Vin-':n+'_DRN','V+':'+3V3'},prefix='U',mpn='INA281A1QDBVRQ1',lcsc='C2862615')  # m7-sch FW-011 gain 20; ou.C('100n','+3V3','GND')
     tvs(ou,'SMBJ33CA',n+'_OUT')
 schottky(ou,'SK1010C','GND','FUEL_CLMP',mpn='SK1010C'); tvs(ou,'SMDJ24A','FUEL_CLMP','FUEL_OUT',uni=True)
 schottky(ou,'SK1010C','GND','CRANK_OUT',mpn='SK1010C')
@@ -636,7 +636,7 @@ FPMAP={  # libid -> (fp, lcsc, mpn)
  'Comparator:LM393':('Package_SO:SOIC-8_3.9x4.9mm_P1.27mm',None,None),'Analog_ADC:ADS1115IDGS':('Package_SO:MSOP-10_3x3mm_P0.5mm',None,None),
  'Reference_Voltage:LM4040DBZ-2.5':('Package_TO_SOT_SMD:SOT-23','C9421','LM4040A25IDBZR'),
  '74xx:74HC14':('Package_SO:SOIC-14_3.9x8.7mm_P1.27mm','C5605','74HC14D,653'),'Regulator_Linear:LM317_TO-252':('Package_TO_SOT_SMD:TO-252-2',None,None),
- '74xGxx:74LVC1G08':('Package_TO_SOT_SMD:SOT-23-5',None,None),'Amplifier_Current:INA281A2':('Package_TO_SOT_SMD:SOT-23-5',None,None),
+ '74xGxx:74LVC1G08':('Package_TO_SOT_SMD:SOT-23-5',None,None),'Amplifier_Current:INA281A2':('Package_TO_SOT_SMD:SOT-23-5',None,None),'Amplifier_Current:INA281A1':('Package_TO_SOT_SMD:SOT-23-5',None,None),
  'Timer:TLC555xD':('Package_SO:SOIC-8_3.9x4.9mm_P1.27mm','C130208','TLC555QDRQ1'),
  'Switch:SW_DIP_x02':('genctl:DSHP02TSGER_DIP2','C367376','DSHP02TSGER'),
  'Mechanical:MountingHole_Pad':('MountingHole:MountingHole_3.2mm_M3_Pad','',None),
@@ -644,7 +644,7 @@ FPMAP={  # libid -> (fp, lcsc, mpn)
 MPNLCSC={'BSS84':'C8492','DMN6075S':'C155242','SI2309CDS-T1-GE3':'C10493','AO3401A':'C347476','BAV99':'C2500','BAT54S':'C8592','BAT54C':'C2135',
  '1N4148W':'C81598','SM712':'C12067','NUP2105LT1G':'C14486','USBLC6-2SC6':'C7519','SRV05-4':'C85364','TPS2051CDBVR':'C129581',
  'USB2514B-AEZC-TR':'C51062','TLV9062IDR':'C398355','LM2904BIDR':'C1849422','LM393DR':'C7955','ADS1115IDGSR':'C37593','LM317MDT-TR':'C3015165',
- 'SN74LVC1G08DBVR':'C7666','INA281A2QDBVRQ1':'C2908677','STM32H743VIT6':'C114409','FM24CL64B-GTR':'C9829',
+ 'SN74LVC1G08DBVR':'C7666','INA281A2QDBVRQ1':'C2908677','INA281A1QDBVRQ1':'C2862615','STM32H743VIT6':'C114409','FM24CL64B-GTR':'C9829',
  'SMDJ36CA':'C224075','SMBJ33CA':'C78420','SMBJ5.0A':'C78423','SMAJ36CA':'C10757','SMBJ58CA':'C114007','SMBJ36CA':'C78421','SMDJ24A':'C362107',
  'SS110':'C2482','SS34':'C8678','SK1010C':'C3018527','EEHZA1H101P':'C109086','EEHZK1E471P':'C242138','TS-1187A-B-A-B':'C318884',
  'SM04B-SRSS-TB':'C51940130','TYPE-C-31-M-12':'C165948','TYPE-C-31-D-06B':'C47817619','MMBT3904':'C20526','MMBT3906':'C2143'}
