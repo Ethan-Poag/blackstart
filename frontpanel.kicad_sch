@@ -2953,7 +2953,7 @@
 (global_label "USB0_EN" (shape passive) (at 87.63 367.03 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "74e9e753-cc26-4ca4-930a-0048fb504dd8") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 87.63 367.03 0) (effects (font (size 1.27 1.27)) hide)))
 (wire (pts (xy 85.09 369.57) (xy 87.63 369.57)) (stroke (width 0) (type default)) (uuid "4aeedef0-35ab-4e1b-b7e7-c1f5ffb2a255"))
 (global_label "USB1_EN" (shape passive) (at 87.63 369.57 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "f73e4d51-aee3-4be6-85c9-406e3a936b7a") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 87.63 369.57 0) (effects (font (size 1.27 1.27)) hide)))
-(no_connect (at 85.09 372.11) (uuid "94aef741-2c7b-4fb4-87e6-7a55372dd4af"))
+
 (no_connect (at 85.09 374.65) (uuid "e527b832-efb3-4afe-ae0b-9d3d3217398e"))
 (no_connect (at 85.09 377.19) (uuid "c4d36c0d-b780-4f53-b569-ab038cd791a7"))
 (wire (pts (xy 27.94 378.46) (xy 27.94 381)) (stroke (width 0) (type default)) (uuid "ebb06421-cee9-42ad-ba58-a2760a14c142"))
@@ -3170,4 +3170,5 @@
 (rectangle (start 259.08 306.07) (end 274.32 349.25) (stroke (width 0.25) (type dash) (color 72 72 160 1)) (fill (type none)) (uuid "5c591a94-3423-4be7-a58d-cbaf946a661c"))
 (text "misc" (exclude_from_sim no) (at 260.35 305.435 0) (effects (font (size 2 2) (thickness 0.3) bold (color 72 72 160 1)) (justify left bottom)) (uuid "110f1782-7085-461e-9047-c28549bc1e0e"))
 (text "FRONT PANEL. 12x CTS 228EMVARGBFR IP67 RGB-backlit tactile switches. Switch -> TCA9555 @0x20 (internal pull-ups).\nBacklight: common anodes on BTN_LED_V (+5V via AO3401A high-side, gated by CM5 GPIO13 BTN_BL_PWM = global dimming, default off).\nCathodes R/G/B per button via 470R/470R/330R (~6mA, <=18mA/pin, ~96mA/expander worst case) to TCA9555 @0x21/@0x24/@0x25, active low. OFF = Hi-Z.\nTCA9555s on +3V3_SAFE; buzzer on main +3V3." (exclude_from_sim no) (at 15 12 0) (effects (font (size 1.6 1.6)) (justify left top)) (uuid "c766fcd0-55bf-4844-b88c-61e0a27a60ef"))
+(global_label "WD_OK" (shape passive) (at 85.09 372.11 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "7119b642-c1cb-46e1-adbb-ad8992e2eaf3") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 85.09 372.11 0) (effects (font (size 1.27 1.27)) hide)))
 )

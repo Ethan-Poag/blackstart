@@ -3099,6 +3099,290 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))))
+
+(symbol "74xGxx:74AUP1G74"
+	(pin_names
+		(offset 1.016))
+	(exclude_from_sim no)
+	(in_bom yes)
+	(on_board yes)
+	(property "Reference" "U"
+		(at -2.54 5.08 0)
+		(effects
+			(font
+				(size 1.27 1.27))))
+	(property "Value" "74AUP1G74"
+		(at 5.08 -5.08 0)
+		(effects
+			(font
+				(size 1.27 1.27))))
+	(property "Footprint" ""
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "Datasheet" "http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "Description" "Single D Flip-Flop, Low-Voltage CMOS"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "ki_keywords" "Single D Flip-Flop D CMOS"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "ki_fp_filters" "SSOP* VSSOP*"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(symbol "74AUP1G74_0_1"
+		(rectangle
+			(start -7.62 7.62)
+			(end 7.62 -7.62)
+			(stroke
+				(width 0.254)
+				(type default))
+			(fill
+				(type background))))
+	(symbol "74AUP1G74_1_1"
+		(pin input line
+			(at -12.7 5.08 0)
+			(length 5.08)
+			(name "D"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "2"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin input clock
+			(at -12.7 -5.08 0)
+			(length 5.08)
+			(name "C"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "1"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin input line
+			(at -2.54 12.7 270)
+			(length 5.08)
+			(name "~{PRE}"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "7"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin input line
+			(at -2.54 -12.7 90)
+			(length 5.08)
+			(name "~{CLR}"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "6"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin power_in line
+			(at 2.54 12.7 270)
+			(length 5.08)
+			(name "VCC"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "8"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin power_in line
+			(at 2.54 -12.7 90)
+			(length 5.08)
+			(name "GND"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "4"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin output line
+			(at 12.7 5.08 180)
+			(length 5.08)
+			(name "Q"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "5"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin output line
+			(at 12.7 -5.08 180)
+			(length 5.08)
+			(name "~{Q}"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "3"
+				(effects
+					(font
+						(size 1.27 1.27)))))))
+
+(symbol "74xGxx:74LVC1G17"
+	(exclude_from_sim no)
+	(in_bom yes)
+	(on_board yes)
+	(property "Reference" "U"
+		(at 0 3.81 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(justify left)))
+	(property "Value" "74LVC1G17"
+		(at 0 -3.81 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(justify left)))
+	(property "Footprint" ""
+		(at -2.54 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "Datasheet" "https://www.ti.com/lit/ds/symlink/sn74lvc1g17.pdf"
+		(at 0 -6.35 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(justify left)
+			(hide yes)))
+	(property "Description" "Single Schmitt Buffer Gate, Low-Voltage CMOS"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "ki_keywords" "Single Gate Buff Schmitt LVC CMOS"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "ki_fp_filters" "SOT?23* SOT?553* Texas?R-PDSO-G5?DCK* Texas?R-PDSO-N5?DRL* Texas?X2SON*0.8x0.8mm*P0.48mm*"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(symbol "74LVC1G17_0_1"
+		(polyline
+			(pts
+				(xy -7.62 6.35)
+				(xy -7.62 -6.35)
+				(xy 5.08 0)
+				(xy -7.62 6.35))
+			(stroke
+				(width 0.254)
+				(type default))
+			(fill
+				(type background)))
+		(polyline
+			(pts
+				(xy -3.81 -1.27)
+				(xy -2.54 -1.27)
+				(xy -2.54 1.27)
+				(xy -1.27 1.27))
+			(stroke
+				(width 0.254)
+				(type default))
+			(fill
+				(type background)))
+		(polyline
+			(pts
+				(xy -2.54 -1.27)
+				(xy -1.27 -1.27)
+				(xy -1.27 1.27)
+				(xy 0 1.27))
+			(stroke
+				(width 0.254)
+				(type default))
+			(fill
+				(type background))))
+	(symbol "74LVC1G17_1_1"
+		(pin input line
+			(at -12.7 0 0)
+			(length 5.08)
+			(name "~"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "2"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin no_connect line
+			(at -7.62 5.08 180)
+			(length 5.08)
+			(hide yes)
+			(name "NC"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "1"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin power_in line
+			(at -5.08 10.16 270)
+			(length 5.08)
+			(name "VCC"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "5"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin power_in line
+			(at -5.08 -10.16 90)
+			(length 5.08)
+			(name "GND"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "3"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin output line
+			(at 10.16 0 180)
+			(length 5.08)
+			(name "~"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "4"
+				(effects
+					(font
+						(size 1.27 1.27)))))))
 )
 (symbol (lib_id "genctl:TPS3431SDRBR") (at 85.09 80.01 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "6c6128fd-3567-4c2b-a137-7ec25c0715e2")
 (property "Reference" "U37" (at 77.47 68.58 0) (effects (font (size 1.27 1.27))))
@@ -7042,7 +7326,7 @@
 (symbol (lib_id "power:GND") (at 72.39 87.63 270) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0ae0bd5c-210b-45bf-8fc3-dd531205b554")(property "Reference" "#PWR0605" (at 72.39 87.63 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 68.58 87.63 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 72.39 87.63 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 72.39 87.63 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "1e0309f6-43f1-4465-b22a-521bb70f697e"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "#PWR0605") (unit 1)))))
 (wire (pts (xy 95.25 80.01) (xy 97.79 80.01)) (stroke (width 0) (type default)) (uuid "9ca6ede7-7be4-4c80-826c-2ce6f4f15836"))
 (global_label "WDO_N" (shape passive) (at 97.79 80.01 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "33da46c7-fd11-432c-93b2-7ba5a3572e40") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 97.79 80.01 0) (effects (font (size 1.27 1.27)) hide)))
-(no_connect (at 95.25 82.55) (uuid "7836a856-c746-4f4d-b8fb-871916c26aa7"))
+
 (wire (pts (xy 46.99 82.55) (xy 46.99 85.09)) (stroke (width 0) (type default)) (uuid "a3da8af8-0737-4bb5-bfb1-7247b32e527f"))
 (global_label "+3V3_SAFE" (shape passive) (at 46.99 85.09 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "fbebfacc-f2df-4605-9762-30327d24b252") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 46.99 85.09 0) (effects (font (size 1.27 1.27)) hide)))
 (wire (pts (xy 36.83 67.31) (xy 36.83 64.77)) (stroke (width 0) (type default)) (uuid "21cc20d9-27a2-47e7-8d3d-7aae2be6c4b4"))
@@ -7054,7 +7338,7 @@
 (wire (pts (xy 444.5 124.46) (xy 444.5 127)) (stroke (width 0) (type default)) (uuid "ff21e9f4-3048-4a4f-b733-a4cef6bc4cfc"))
 (symbol (lib_id "power:GND") (at 444.5 127 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "9c5dc6f4-1f20-4775-96f4-83b25dc378d5")(property "Reference" "#PWR0607" (at 444.5 127 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 444.5 130.81 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 444.5 127 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 444.5 127 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "589639c4-2b53-40fc-8ba8-c1ef7a49fd90"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "#PWR0607") (unit 1)))))
 (wire (pts (xy 443.23 67.31) (xy 443.23 64.77)) (stroke (width 0) (type default)) (uuid "7765bbfc-8411-41c9-8a44-46f1b0cfc518"))
-(global_label "WDO_N" (shape passive) (at 443.23 64.77 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "e415bbcb-d4e2-4606-8bbf-8972d5df6552") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 443.23 64.77 0) (effects (font (size 1.27 1.27)) hide)))
+(global_label "WD_OK" (shape passive) (at 443.23 64.77 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "e415bbcb-d4e2-4606-8bbf-8972d5df6552") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 443.23 64.77 0) (effects (font (size 1.27 1.27)) hide)))
 (wire (pts (xy 433.07 83.82) (xy 433.07 86.36)) (stroke (width 0) (type default)) (uuid "7656d7c4-5cd6-4bb8-ac0a-065e16852a5a"))
 (symbol (lib_id "power:GND") (at 433.07 86.36 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "88729751-deb9-4058-90e8-8181add96f84")(property "Reference" "#PWR0608" (at 433.07 86.36 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 433.07 90.17 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 433.07 86.36 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 433.07 86.36 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "062c37ad-0ebc-4e09-98e1-31457a0708e4"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "#PWR0608") (unit 1)))))
 (wire (pts (xy 412.75 113.03) (xy 412.75 110.49)) (stroke (width 0) (type default)) (uuid "e869d4e8-22e4-4f08-99e8-cd41e7c620f9"))
@@ -7064,7 +7348,7 @@
 (wire (pts (xy 146.05 123.19) (xy 143.51 123.19)) (stroke (width 0) (type default)) (uuid "0747af34-9bad-42d5-9cd5-ed6b0a0d1e8c"))
 (global_label "FUEL_EN_MCU" (shape passive) (at 143.51 123.19 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "fc80d219-9233-48a7-9896-277c8dd99dcd") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 143.51 123.19 0) (effects (font (size 1.27 1.27)) hide)))
 (wire (pts (xy 146.05 128.27) (xy 143.51 128.27)) (stroke (width 0) (type default)) (uuid "fbbbed67-d95f-4722-aa0c-53e0ad823c84"))
-(global_label "WDO_N" (shape passive) (at 143.51 128.27 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "a060e208-02f8-4012-bd92-123be7104fa4") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 143.51 128.27 0) (effects (font (size 1.27 1.27)) hide)))
+(global_label "WD_OK" (shape passive) (at 143.51 128.27 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "a060e208-02f8-4012-bd92-123be7104fa4") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 143.51 128.27 0) (effects (font (size 1.27 1.27)) hide)))
 (wire (pts (xy 161.29 115.57) (xy 161.29 113.03)) (stroke (width 0) (type default)) (uuid "1513f4be-7f84-45e3-bebe-3df64fbeb49f"))
 (global_label "+3V3_SAFE" (shape passive) (at 161.29 113.03 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "1ca97cbe-7ed4-4731-b4a1-a0ecac6c56bc") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 161.29 113.03 0) (effects (font (size 1.27 1.27)) hide)))
 (wire (pts (xy 161.29 135.89) (xy 161.29 138.43)) (stroke (width 0) (type default)) (uuid "bffb22f1-142c-4bba-8ff3-89c8e67ffa48"))
@@ -7082,7 +7366,7 @@
 (wire (pts (xy 237.49 123.19) (xy 234.95 123.19)) (stroke (width 0) (type default)) (uuid "bde58e74-877a-4405-8f2f-fe3902b94a38"))
 (global_label "CRANK_EN_MCU" (shape passive) (at 234.95 123.19 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "8a061472-e8a5-4880-ac0e-99aeeb95e049") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 234.95 123.19 0) (effects (font (size 1.27 1.27)) hide)))
 (wire (pts (xy 237.49 128.27) (xy 234.95 128.27)) (stroke (width 0) (type default)) (uuid "136f3a84-1d30-4dbf-bab9-dac0541ca23e"))
-(global_label "WDO_N" (shape passive) (at 234.95 128.27 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "895bc4ec-ccaa-4884-88ea-c1d0c7875609") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 234.95 128.27 0) (effects (font (size 1.27 1.27)) hide)))
+(global_label "WD_OK" (shape passive) (at 234.95 128.27 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "895bc4ec-ccaa-4884-88ea-c1d0c7875609") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 234.95 128.27 0) (effects (font (size 1.27 1.27)) hide)))
 (wire (pts (xy 252.73 115.57) (xy 252.73 113.03)) (stroke (width 0) (type default)) (uuid "256353ea-7e66-41bd-a5c5-d2c5b14e511b"))
 (global_label "+3V3_SAFE" (shape passive) (at 252.73 113.03 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "7119f7a3-3e96-4271-b3cf-abc7e4fceadb") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 252.73 113.03 0) (effects (font (size 1.27 1.27)) hide)))
 (wire (pts (xy 252.73 135.89) (xy 252.73 138.43)) (stroke (width 0) (type default)) (uuid "e393d76f-636f-4f5d-ab0a-817ed7448754"))
@@ -7100,7 +7384,7 @@
 (wire (pts (xy 330.2 123.19) (xy 327.66 123.19)) (stroke (width 0) (type default)) (uuid "bcf7c4bb-e8e3-40a2-b931-27626d753f3a"))
 (global_label "GLOW_EN_MCU" (shape passive) (at 327.66 123.19 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "58b93d04-401d-4ad8-bc25-6ddf03339079") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 327.66 123.19 0) (effects (font (size 1.27 1.27)) hide)))
 (wire (pts (xy 330.2 128.27) (xy 327.66 128.27)) (stroke (width 0) (type default)) (uuid "4d855c40-7d31-462d-b893-d2e629a82e9b"))
-(global_label "WDO_N" (shape passive) (at 327.66 128.27 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "93a79873-eea0-41b7-8fed-cb38579de8ec") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 327.66 128.27 0) (effects (font (size 1.27 1.27)) hide)))
+(global_label "WD_OK" (shape passive) (at 327.66 128.27 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "93a79873-eea0-41b7-8fed-cb38579de8ec") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 327.66 128.27 0) (effects (font (size 1.27 1.27)) hide)))
 (wire (pts (xy 345.44 115.57) (xy 345.44 113.03)) (stroke (width 0) (type default)) (uuid "40b472fe-8ddd-4fd9-95d9-d8dffb8fdb9f"))
 (global_label "+3V3_SAFE" (shape passive) (at 345.44 113.03 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "37060d01-dc60-429d-9f28-9839151c887f") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 345.44 113.03 0) (effects (font (size 1.27 1.27)) hide)))
 (wire (pts (xy 345.44 135.89) (xy 345.44 138.43)) (stroke (width 0) (type default)) (uuid "4a9abd6d-e25d-4e0e-ab17-c97525a4c0b9"))
@@ -9077,4 +9361,119 @@
 (rectangle (start 20.32 614.68) (end 55.88 647.7) (stroke (width 0.25) (type dash) (color 72 72 160 1)) (fill (type none)) (uuid "35952921-b867-4054-bda0-0e42123600fd"))
 (text "J27 J6B AUX7-10 + returns" (exclude_from_sim no) (at 21.59 614.045 0) (effects (font (size 2 2) (thickness 0.3) bold (color 72 72 160 1)) (justify left bottom)) (uuid "cd94137e-7f94-4152-8d62-af9b0d2d6937"))
 (text "OUTPUTS. All MCU enables gated by TPS3431 WDO (LVC1G08 for fuel/crank/glow, LVC541 OE for the rest). Fuel/crank: TPS48100 + 2x BSC070N10NS5 + 1mR shunt +\nINA281A2 from VBAT_ESTOP. Small outputs TPS1HTC30 from VBAT_P: ILIM 40.2k, SNS 1.1k -> TMUX1208 -> ADC. Readback via NPN to TCA9555 @0x23." (exclude_from_sim no) (at 15 12 0) (effects (font (size 1.6 1.6)) (justify left top)) (uuid "ad141697-fea8-4565-b837-34c7802dbb61"))
+(label "WD_REARM_RC" (at 95.25 82.55 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "d4a1d59d-18ac-45e9-9d80-a8e541cb541a"))
+(symbol (lib_id "74xGxx:74AUP1G74") (at 60.96 698.5 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "a497e836-5369-4ed4-b3f0-a7e236dfb14e")
+(property "Reference" "U84" (at 66.04 695.96 0) (effects (font (size 1.27 1.27))))
+(property "Value" "74LVC1G74DP-Q100H" (at 66.04 701.04 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_SO:TSSOP-8_3x3mm_P0.65mm" (at 60.96 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 60.96 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Single D flip-flop with set and reset" (at 60.96 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C548409" (at 60.96 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "74LVC1G74DP-Q100H" (at 60.96 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Nexperia" (at 60.96 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "Watchdog trip latch (FW-001/FW-027). Stock symbol 74AUP1G74 used (no 74LVC1G74 in KiCad 9 libs); pins 1 CP,2 D,3 /Q,4 GND,5 Q,6 /RD(CLR),7 /SD(PRE),8 VCC per fixes_firmware.md s1.1 (Nexperia 74LVC1G74 Rev18 p3-4)" (at 60.96 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(pin "2" (uuid "9b16b117-1726-4297-b41f-5ce36619d7ef"))
+(pin "1" (uuid "44ca92f8-c1a2-42cb-bab3-032c444ddaf5"))
+(pin "7" (uuid "0fed3b51-7819-4722-8b66-94992d62e5ff"))
+(pin "6" (uuid "7491e367-cca6-4bfe-a2d7-8f8747584572"))
+(pin "8" (uuid "1b34078d-e10b-4ad7-823d-0a4bfb60da49"))
+(pin "4" (uuid "a30b995c-d97b-4198-8e0b-dfef47643a52"))
+(pin "5" (uuid "f9b63c43-5951-4b7d-b246-b5ae8e8459ca"))
+(pin "3" (uuid "151a9d35-415c-4e56-b2f7-d700aa0d2b0a"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "U84") (unit 1))))
+)
+(label "WD_REARM" (at 48.26 703.58 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "7ac31d78-89d7-40d3-a8c5-0190676b5b08"))
+(global_label "+3V3_SAFE" (shape passive) (at 48.26 693.42 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "ee221ee3-6af3-49d7-bbcc-1571246531c3") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 48.26 693.42 0) (effects (font (size 1.27 1.27)) hide)))
+(no_connect (at 73.66 703.58) (uuid "8e5e36a0-7fcc-4209-9d12-ea2875a0d9b6"))
+(symbol (lib_id "power:GND") (at 63.5 711.2 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "8e9e7b8b-9d93-41b7-aa82-5a06d5e0b96e")(property "Reference" "#PWR1050" (at 63.5 711.2 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 63.5 711.2 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 63.5 711.2 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 63.5 711.2 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "c681be3b-fee9-4e9c-a128-025f2881eb33"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "#PWR1050") (unit 1)))))
+(global_label "WD_OK" (shape passive) (at 73.66 693.42 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "1e2e264f-aff9-4830-876a-c2d7e1e9d903") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 73.66 693.42 0) (effects (font (size 1.27 1.27)) hide)))
+(global_label "WDO_N" (shape passive) (at 58.42 711.2 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "150eafe0-072d-4671-bd5f-faa1160987ff") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 58.42 711.2 0) (effects (font (size 1.27 1.27)) hide)))
+(global_label "+3V3_SAFE" (shape passive) (at 58.42 685.8 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "5d80bd57-89af-42d3-b118-7a4cc429b19c") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 58.42 685.8 0) (effects (font (size 1.27 1.27)) hide)))
+(global_label "+3V3_SAFE" (shape passive) (at 63.5 685.8 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "0e8bdea7-df36-4030-ab42-01e67f4f39da") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 63.5 685.8 0) (effects (font (size 1.27 1.27)) hide)))
+(symbol (lib_id "74xGxx:74LVC1G17") (at 111.76 698.5 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "2a63dfce-f9a2-457d-a025-e1d4355ac238")
+(property "Reference" "U85" (at 116.84 695.96 0) (effects (font (size 1.27 1.27))))
+(property "Value" "SN74LVC1G17DBVR" (at 116.84 701.04 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5" (at 111.76 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 111.76 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Single Schmitt buffer" (at 111.76 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C7836" (at 111.76 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "SN74LVC1G17DBVR" (at 111.76 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "TI" (at 111.76 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "Schmitt buffer: ENOUT RC (WD_REARM_RC) -> U84 CP (WD_REARM). fixes_firmware.md s1" (at 111.76 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(pin "2" (uuid "e48eb536-a16c-4e69-81ae-75dfe30da2e0"))
+(pin "1" (uuid "a6b212d8-a0a2-425c-ad08-4e381658a5f0"))
+(pin "5" (uuid "33d8e0e2-0a77-4ebd-963a-ee9b25e35f83"))
+(pin "3" (uuid "c1141017-6893-4aae-8609-8a17df38cd06"))
+(pin "4" (uuid "baf54eae-caf6-4f68-af49-c2d2506d877b"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "U85") (unit 1))))
+)
+(no_connect (at 104.14 693.42) (uuid "b1032ef9-fc12-4dd0-9f2a-92a2fd68c64c"))
+(label "WD_REARM_RC" (at 99.06 698.5 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "fa963290-6924-474e-b5ad-21341ed59e52"))
+(symbol (lib_id "power:GND") (at 106.68 708.66 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "50aaa2f5-1201-4b0d-9fa4-5cfebff34c9a")(property "Reference" "#PWR1051" (at 106.68 708.66 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 106.68 708.66 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 106.68 708.66 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 106.68 708.66 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "2d55ad99-3df9-4f58-b532-7d9eb4df7670"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "#PWR1051") (unit 1)))))
+(label "WD_REARM" (at 121.92 698.5 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "b309d183-344e-4e62-adae-3203a1c94c74"))
+(global_label "+3V3_SAFE" (shape passive) (at 106.68 688.34 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "e61a6cbb-1da5-4655-9413-6e0516f97780") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 106.68 688.34 0) (effects (font (size 1.27 1.27)) hide)))
+(symbol (lib_id "Device:R") (at 149.86 698.5 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "95cb6d79-53bc-4f91-bcf5-217913423cbc")
+(property "Reference" "R554" (at 154.94 695.96 0) (effects (font (size 1.27 1.27))))
+(property "Value" "100k" (at 154.94 701.04 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 149.86 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 149.86 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Resistor" (at 149.86 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C25803" (at 149.86 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "" (at 149.86 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "" (at 149.86 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "U37 ENOUT pull-up / re-arm RC (tau 1 ms with C298). fixes_firmware.md s1 option A" (at 149.86 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "beddec67-0a31-4f3b-a546-2d99d4848425"))
+(pin "2" (uuid "818b1377-f455-4df7-95f9-f3a7311446a8"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "R554") (unit 1))))
+)
+(global_label "+3V3_SAFE" (shape passive) (at 149.86 694.69 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "7b433f59-b99c-40e5-a703-f2834f6bb7ea") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 149.86 694.69 0) (effects (font (size 1.27 1.27)) hide)))
+(label "WD_REARM_RC" (at 149.86 702.31 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "3ca43fd6-3a35-47af-9546-61c2fe3d6bcf"))
+(symbol (lib_id "Device:C") (at 165.1 698.5 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "396cc4e6-10a4-459e-b809-cde6f0926d5e")
+(property "Reference" "C298" (at 170.18 695.96 0) (effects (font (size 1.27 1.27))))
+(property "Value" "10n" (at 170.18 701.04 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 165.1 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 165.1 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Unpolarized capacitor" (at 165.1 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C1589" (at 165.1 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "CL10B103KB8NNNC" (at 165.1 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Samsung" (at 165.1 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "re-arm RC cap (spec ref C293, renumbered: C293-C297 already used)" (at 165.1 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "616ed271-a215-4dc2-9922-5486b25218e9"))
+(pin "2" (uuid "e8cec259-e782-462b-88dc-f629597f1188"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "C298") (unit 1))))
+)
+(label "WD_REARM_RC" (at 165.1 694.69 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "33503575-2578-4ecf-b6bf-46d20dfb8432"))
+(symbol (lib_id "power:GND") (at 165.1 702.31 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "00a64051-04ba-4505-bd73-d3a880a64d30")(property "Reference" "#PWR1052" (at 165.1 702.31 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 165.1 702.31 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 165.1 702.31 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 165.1 702.31 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "12ef17a2-658e-4e0f-8f77-bd2398372c9f"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "#PWR1052") (unit 1)))))
+(symbol (lib_id "Device:C") (at 180.34 698.5 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "1be636e9-44d5-4b77-881b-8d88dc770fc9")
+(property "Reference" "C299" (at 185.42 695.96 0) (effects (font (size 1.27 1.27))))
+(property "Value" "100n" (at 185.42 701.04 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 180.34 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 180.34 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Unpolarized capacitor" (at 180.34 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C14663" (at 180.34 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "" (at 180.34 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "" (at 180.34 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "U84 decoupling (spec ref C294, renumbered)" (at 180.34 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "b3421484-a4a8-4894-99de-d6150897867d"))
+(pin "2" (uuid "316e25c0-9571-4e30-b730-0b98587632dc"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "C299") (unit 1))))
+)
+(global_label "+3V3_SAFE" (shape passive) (at 180.34 694.69 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "b5c48b92-af1b-46b6-8741-c396990aedc9") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 180.34 694.69 0) (effects (font (size 1.27 1.27)) hide)))
+(symbol (lib_id "power:GND") (at 180.34 702.31 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "588cf23e-3cda-4346-b346-ed78e86d6cd9")(property "Reference" "#PWR1053" (at 180.34 702.31 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 180.34 702.31 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 180.34 702.31 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 180.34 702.31 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "1a30c2b9-3c4e-4b47-8527-7fef182a60a5"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "#PWR1053") (unit 1)))))
+(symbol (lib_id "Device:C") (at 195.58 698.5 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "014ed100-61f2-49ef-b98e-86a5e501a77d")
+(property "Reference" "C300" (at 200.66 695.96 0) (effects (font (size 1.27 1.27))))
+(property "Value" "100n" (at 200.66 701.04 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 195.58 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 195.58 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Unpolarized capacitor" (at 195.58 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C14663" (at 195.58 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "" (at 195.58 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "" (at 195.58 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "U85 decoupling (spec ref C295, renumbered)" (at 195.58 698.5 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "6637586f-8400-4696-90ef-20ec872dd671"))
+(pin "2" (uuid "5f89e3a9-deec-4298-9d5a-ecdda6aed810"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "C300") (unit 1))))
+)
+(global_label "+3V3_SAFE" (shape passive) (at 195.58 694.69 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "01dee10a-8931-4957-b7e3-fa360cdb99db") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 195.58 694.69 0) (effects (font (size 1.27 1.27)) hide)))
+(symbol (lib_id "power:GND") (at 195.58 702.31 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "ccce61a9-4d5e-4341-8d63-af3d085bc720")(property "Reference" "#PWR1054" (at 195.58 702.31 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 195.58 702.31 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 195.58 702.31 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 195.58 702.31 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "4fea1087-6f77-42c0-83ab-40f04cc71014"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40" (reference "#PWR1054") (unit 1)))))
 )

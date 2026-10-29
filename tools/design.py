@@ -425,11 +425,11 @@ tvs(inp,'SMAJ36CA','VBAT_SENSE'); inp.R('100k','VBAT_SENSE','VBAT_SNS',note='0.1
 ou=S('outputs','Outputs: fuel/crank (TPS48100), 15x TPS1HTC30, watchdog gating, readback',
  'OUTPUTS. All MCU enables gated by TPS3431 WDO (LVC1G08 for fuel/crank/glow, LVC541 OE for the rest). Fuel/crank: TPS48100 + 2x BSC070N10NS5 + 1mR shunt +\n'
  'INA281A2 from VBAT_ESTOP. Small outputs TPS1HTC30 from VBAT_P: ILIM 40.2k, SNS 1.1k -> TMUX1208 -> ADC. Readback via NPN to TCA9555 @0x23.')
-ou.p('genctl:TPS3431SDRBR','TPS3431SQDRBRQ1',{'VDD':'+3V3','EN':'+3V3','SET1':'+3V3','CWD':'WD_CWD','WDI':'WDI','GND':'GND','EP':'GND','WDO':'WDO_N','ENOUT':None},mpn='TPS3431SQDRBRQ1',lcsc='C2878091')
+ou.p('genctl:TPS3431SDRBR','TPS3431SQDRBRQ1',{'VDD':'+3V3','EN':'+3V3','SET1':'+3V3','CWD':'WD_CWD','WDI':'WDI','GND':'GND','EP':'GND','WDO':'WDO_N','ENOUT':'WD_REARM_RC'},mpn='TPS3431SQDRBRQ1',lcsc='C2878091')
 ou.R('10k','WD_CWD','+3V3',note='CWD via 10k to VDD = factory timing (assumed)'); ou.R('10k','WDO_N','+3V3'); ou.C('100n','+3V3','GND')
-npn(ou,'WD_INV_B','GND','WD_OE_N'); ou.R('10k','WDO_N','WD_INV_B'); ou.R('100k','WD_INV_B','GND'); ou.R('10k','WD_OE_N','+3V3')
+npn(ou,'WD_INV_B','GND','WD_OE_N'); ou.R('10k','WD_OK','WD_INV_B'); ou.R('100k','WD_INV_B','GND'); ou.R('10k','WD_OE_N','+3V3')
 for n in ('FUEL','CRANK','GLOW'):
-    ou.p('74xGxx:74LVC1G08','74LVC1G08',{'1':n+'_EN_MCU','2':'WDO_N','4':n+'_EN','5':'+3V3','3':'GND'},prefix='U',mpn='SN74LVC1G08DBVR'); ou.C('100n','+3V3','GND'); ou.R('100k',n+'_EN','GND')
+    ou.p('74xGxx:74LVC1G08','74LVC1G08',{'1':n+'_EN_MCU','2':'WD_OK','4':n+'_EN','5':'+3V3','3':'GND'},prefix='U',mpn='SN74LVC1G08DBVR'); ou.C('100n','+3V3','GND'); ou.R('100k',n+'_EN','GND')
 small=['GCB_CL','GCB_OP','MCB_CL','MCB_OP']+['AUX%d'%i for i in range(1,11)]
 for k in range(2):
     grp=small[k*8:(k+1)*8]; c={'~{OE1}':'WD_OE_N','~{OE2}':'WD_OE_N','VCC':'+3V3','GND':'GND'}
@@ -474,6 +474,11 @@ conn(ou,6,['GLOW_OUT','GCB_CL_OUT','GCB_OP_OUT','MCB_CL_OUT','MCB_OP_OUT','ESTOP
 conn(ou,6,['GND','GND','GND','GND','GND','GND'],'J5B returns')
 conn(ou,6,['AUX1_OUT','AUX2_OUT','AUX3_OUT','AUX4_OUT','AUX5_OUT','AUX6_OUT'],'J6A AUX1-6')
 conn(ou,6,['AUX7_OUT','AUX8_OUT','AUX9_OUT','AUX10_OUT','GND','GND'],'J6B AUX7-10 + returns')
+# m7-sch FW-001/FW-027 watchdog trip latch (fixes_firmware.md s1, option A: ENOUT RC). WDO_N now only U37.7/R271/U84.6; gates + R272 + U76 P15 on WD_OK
+ou.p('74xGxx:74AUP1G74','74LVC1G74DP-Q100H',{'1':'WD_REARM','2':'+3V3_SAFE','3':None,'4':'GND','5':'WD_OK','6':'WDO_N','7':'+3V3_SAFE','8':'+3V3_SAFE'},ref='U84',mpn='74LVC1G74DP-Q100H',lcsc='C548409',mfr='Nexperia',fp='Package_SO:TSSOP-8_3x3mm_P0.65mm',note='Watchdog trip latch; stock 74AUP1G74 symbol, same pinout')
+ou.p('74xGxx:74LVC1G17','SN74LVC1G17DBVR',{'1':None,'2':'WD_REARM_RC','3':'GND','4':'WD_REARM','5':'+3V3_SAFE'},ref='U85',mpn='SN74LVC1G17DBVR',lcsc='C7836',mfr='TI',fp='Package_TO_SOT_SMD:SOT-23-5',note='Schmitt buffer ENOUT RC -> U84 CP')
+ou.R('100k','+3V3_SAFE','WD_REARM_RC',ref='R554',lcsc='C25803',note='U37 ENOUT pull-up / re-arm RC'); ou.C('10n','WD_REARM_RC','GND',ref='C298',mpn='CL10B103KB8NNNC',lcsc='C1589',mfr='Samsung')
+ou.C('100n','+3V3_SAFE','GND',ref='C299',lcsc='C14663',note='U84 decoupling'); ou.C('100n','+3V3_SAFE','GND',ref='C300',lcsc='C14663',note='U85 decoupling')
 
 # =====================================================================
 es=S('estop','E-stop trip and sense',
@@ -488,7 +493,7 @@ es.R('47k','VBAT_ESTOP','TRIP_QB'); es.R('10k','TRIP_QB','GND'); npn(es,'TRIP_QB
 es.R('10k','+5V_TRIP','TRIP_RST'); es.R('100k','TRIP_RST','TRIP_TRIG'); es.C('100n','TRIP_TRIG','GND')
 es.p('Timer:TLC555xD','TLC555CDR',{'VCC':'+5V_TRIP','GND':'GND','TR':'TRIP_TRIG','CV':'TRIP_CV','R':'TRIP_RST','Q':'TRIP_555_Q','DIS':'TRIP_TIM','THR':'TRIP_TIM'},prefix='U',mpn='TLC555CDR')
 es.R('200k','+5V_TRIP','TRIP_TIM'); es.C('2.2u','TRIP_TIM','GND',pkg='0805',note='tw 1.1*200k*2.2u = 0.48s (0.44-0.53s tol); measure cold/hot'); es.C('100n','TRIP_CV','GND'); es.C('100n','+5V_TRIP','GND')
-es.p('74xGxx:74LVC1G08','74LVC1G08',{'1':'MCU_TRIP','2':'WDO_N','4':'MCU_TRIP_G','5':'+3V3_SAFE','3':'GND'},prefix='U',mpn='SN74LVC1G08DBVR',note='ADDED 4th gate'); es.C('100n','+3V3_SAFE','GND')  # +3V3_SAFE explicit (POST-PASS 1 maps estop +3V3 -> +3V3_SAFE anyway; matches board U67.5)
+es.p('74xGxx:74LVC1G08','74LVC1G08',{'1':'MCU_TRIP','2':'WD_OK','4':'MCU_TRIP_G','5':'+3V3_SAFE','3':'GND'},prefix='U',mpn='SN74LVC1G08DBVR',note='ADDED 4th gate'); es.C('100n','+3V3_SAFE','GND')  # +3V3_SAFE explicit (POST-PASS 1 maps estop +3V3 -> +3V3_SAFE anyway; matches board U67.5)
 es.R('100k','MCU_TRIP','GND')
 es.p('Diode:BAT54C','BAT54C',{'1':'TRIP_555_Q','2':'MCU_TRIP_G','3':'ESTOP_TRIP_EN'},prefix='D',mpn='BAT54C'); es.R('100k','ESTOP_TRIP_EN','GND')
 es.p('genctl:TPS1HTC30QPWPRQ1','TPS1HTC30QPWPRQ1',{'VS':'VBAT_P','EN':'ESTOP_TRIP_EN','DIAG_EN':'DIAG_EN','LATCH':'GND','ILIM':'ESTOP_TRIP_ILIM','GND':'GND','VOUT':'ESTOP_TRIP_OUT','SNS':'ESTOP_TRIP_SNS','FAULT':'OUT_FAULT_N','NC':None,'EP':'GND'},mpn='TPS1HTC30QPWPRQ1')
@@ -567,7 +572,7 @@ pins=[('P0%d'%k) for k in range(8)]+[('P1%d'%k) for k in range(8)]
 for addr,chunk in ((1,ch[0:16]),(4,ch[16:32]),(5,ch[32:36])):
     m={pn:None for pn in pins}
     for pn,net in zip(pins,chunk): m[pn]=net
-    if addr==5: m.update({'P04':'ROUTER_12V_EN','P05':'CM5_OFF','P06':'CM5_PWRBTN_MCU','P07':'PWR_FAIL_MCU','P10':'AUX9_MCU','P11':'AUX10_MCU','P12':'AUX10_RB_N','P13':'USB0_EN','P14':'USB1_EN'})
+    if addr==5: m.update({'P04':'ROUTER_12V_EN','P05':'CM5_OFF','P06':'CM5_PWRBTN_MCU','P07':'PWR_FAIL_MCU','P10':'AUX9_MCU','P11':'AUX10_MCU','P12':'AUX10_RB_N','P13':'USB0_EN','P14':'USB1_EN','P15':'WD_OK'})  # P15 = WD_OK readback (fixes_firmware.md s1)
     tca(fp_,addr,m)
 fp_.R('1k','BTN_BL_PWM','BL_Q_B'); fp_.R('100k','BL_Q_B','GND',note='default off'); npn(fp_,'BL_Q_B','GND','BL_PG')
 fp_.R('10k','+5V','BL_PG',note='PFET gate pull-up'); fet(fp_,'Transistor_FET:AO3401A','AO3401A','BL_PG','+5V','BTN_LED_V')
