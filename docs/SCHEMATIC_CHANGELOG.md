@@ -570,3 +570,21 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 
 ### 4-6: docs/ERC_AUDIT.md (item 8)
 - Added docs/ERC_AUDIT.md. Findings: no exclusions or severity overrides in the project; 220 no_connect flags; 23 PWR_FLAGs; an all-error scratch run gives 75 default-ignored items (four_way_junction 17, footprint filter 58). One real finding, left open: D3/D4 BAS70 2-pin symbol on SOT-23, pinout likely wrong.
+
+## Batch 5 (fixes_safety.md CLOSING ITEMS; lead approvals 1-5, 7; item 6 no change)
+### 5-1: TPS1HTC30 RILIM 40.2k -> 24.9k (item 1)
+- RILIM references are taken from the netlist (pin-function ILIM on U47-U61): R304, R307, R310, R313, R316, R319, R322, R325, R328, R331, R334, R337, R340, R343, R346, 15 parts. This matches the Safety/Firmware list. U68 ILIM = R407, which stays 47k.
+- Value 24.9k, LCSC C25962, MPN 0603WAF2492T5E (UNI-ROYAL). Live LCSC 2026-10-28 HST: stock 716,300; 100+ @ $0.0017.
+- Arithmetic: ICL = KCL/RILIM, KCL 80/100/120 A·kOhm (TPS1HTC30-Q1 SLVSGL4A p8), RILIM ±1 %:
+  - min 80/(24.9*1.01) = 3.18 A;
+  - typ 100/24.9 = 4.02 A;
+  - max 120/(24.9*0.99) = 4.87 A.
+  - Old 40.2k gave 1.97/2.49/3.02 A.
+- U68 R407 47k: 80/47.47 = 1.69, 100/47 = 2.13, 120/46.53 = 2.58 A. fixes_firmware.md §20.2 says 1.70/2.13/2.55 A. The rounding differs only slightly, but the max figure differs (2.58 vs 2.55). Trip-coil current UNVERIFIED (bench item).
+- BOM: outputs C12447 qty 18 -> 3 (the TPS48100 RISCP parts remain); new C25962 row, qty 15, JLC class UNVERIFIED.
+- Text:
+  - outputs.kicad_sch OUTPUTS note "ILIM 40.2k" -> "ILIM 24.9k (3.18/4.02/4.87 A)";
+  - DESIGN_NOTES.md:281;
+  - INSTALL_SAFETY output table l.34/35/37/38 "limit 2.49 A" -> "limit 4.02 A (3.18–4.87 A)";
+  - l.86 "not supported at 2.49 A" reworded.
+- fixes_firmware.md §20 matches these refs and figures. §20.2 unrounded is 3.21/4.02/4.82 A; with ±1 % it is 3.18/4.02/4.87 A, the same as here.

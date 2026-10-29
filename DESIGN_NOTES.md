@@ -278,7 +278,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 
 **Small outputs (TPS1HTC30 ×13)**
 - Channels: glow, GCB/MCB open/close, AUX1–8.
-- ILIM 40.2k. LATCH = GND (auto-retry). SNS 1.1k, then 1k into the TMUX1208s.
+- ILIM 24.9k (m7-sch batch 5-1; was 40.2k): ICL 3.18/4.02/4.87 A min/typ/max. LATCH = GND (auto-retry). SNS 1.1k, then 1k into the TMUX1208s.
 - SS110 freewheel diode, SMBJ28CA TVS.
 - **Open:** the exposed pad is not modelled; check the datasheet for whether it goes to GND or VS.
 - **Open:** TMUX1208 pin 3 is missing from the datasheet table. It is tied to GND here; verify.

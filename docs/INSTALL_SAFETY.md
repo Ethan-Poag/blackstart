@@ -31,11 +31,11 @@ Every output must have its own external fuse, supplied and installed by the inst
 |---|---|---|---|---|
 | FUEL | J23.3 (supply J23.1/2 VBAT_ESTOP) | TPS48100-Q1 + 2 MOSFETs | 15 A | 15 A blade (ATO/ATC), >=58 V DC |
 | CRANK | J23.4 | TPS48100-Q1 + 2 MOSFETs | 15 A | 15 A blade (ATO/ATC), >=58 V DC |
-| GLOW | J24.1 | TPS1HTC30-Q1 | limit 2.49 A (1.99–2.99 A) | 2 A blade, >=58 V DC |
-| GCB_CL, GCB_OP, MCB_CL, MCB_OP | J24.2, .3, .4, .5 | TPS1HTC30-Q1 | limit 2.49 A | 2 A blade each, >=58 V DC |
+| GLOW | J24.1 | TPS1HTC30-Q1 | limit 4.02 A (3.18–4.87 A) | 2 A blade, >=58 V DC |
+| GCB_CL, GCB_OP, MCB_CL, MCB_OP | J24.2, .3, .4, .5 | TPS1HTC30-Q1 | limit 4.02 A (3.18–4.87 A) | 2 A blade each, >=58 V DC |
 | ESTOP_TRIP | J24.6 | TPS1HTC30-Q1 | relay drive, limit 2.1 A (1.7–2.6 A), ~0.5 s pulse | 2 A blade, >=58 V DC |
-| AUX1–AUX6 | J26.1–6 | TPS1HTC30-Q1 | limit 2.49 A | 2 A blade each, >=58 V DC |
-| AUX7–AUX10 | J27.1–4 (J27.5/6 = GND) | TPS1HTC30-Q1 | limit 2.49 A | 2 A blade each, >=58 V DC |
+| AUX1–AUX6 | J26.1–6 | TPS1HTC30-Q1 | limit 4.02 A (3.18–4.87 A) | 2 A blade each, >=58 V DC |
+| AUX7–AUX10 | J27.1–4 (J27.5/6 = GND) | TPS1HTC30-Q1 | limit 4.02 A (3.18–4.87 A) | 2 A blade each, >=58 V DC |
 | Battery feed | to J23 VBAT_ESTOP via NC E-stop | — | system | 30 A (existing), >=58 V DC |
 
 Every external fuse (battery feed, 30 A E-stop feed, and each output) must be rated **>=58 V DC**, because the suppressed load dump can reach 58 V. A 32 V DC blade fuse does not meet this. Amp ratings are unchanged (team-lead ruling R3-N1, m7-sch batch 4).
@@ -83,6 +83,6 @@ at the coil keeps that energy off the board and the cable.
 
 ## Open for installer / Ethan (does not block this document)
 1. Starter/fuel solenoid pull-in current and duration: standard or time-delay 15 A fuse.
-2. GLOW: relay coil (2 A max fuse) or glow plugs driven directly (not supported at 2.49 A; use an external relay).
+2. GLOW: relay coil (2 A max fuse) or glow plugs driven directly (not supported: electronic limit 3.18 A minimum, see the table above; use an external relay).
 3. ESTOP_TRIP relay: confirm the installer relay coil is 12 V DC, ≤ 0.5 A, with a suppression diode; size the 2 A fuse down to it. The relay contact, not ESTOP_TRIP, switches the breaker shunt trip.
 4. Actual relay coil currents on GLOW/GCB/MCB/AUX: size each fuse down from 2 A.
