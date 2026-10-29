@@ -140,3 +140,12 @@ Spec: fixes_firmware.md Rev 2 §1.1/§1.2 (Ethan/Safety ruling 2026-10-28 3:34 P
 | bom/comms_bom.csv | — | +1 row (2x $0.17 from spec); TOTAL 26.69 → 27.03 | BOM | — |
 | tools/design.py | — | VISO bulk 47u 1206 | regen | — |
 Footprint grows 0805 → 1206: the PCB is not changed in this branch; layout must follow.
+
+## FW-6: 32.768 kHz LSE drive margin (FW-013)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| Y2 (mcu) | X321532768KGD2SI YXC C620155, CL 12.5 pF | SC-32S32.768kHz20PPM7pF, C97604, CL 7 pF, same 3215 footprint | lower gm_crit for STM32H7 LSE | fixes_firmware.md §9; https://www.lcsc.com/product-detail/C97604.html (fetched 2026-10-28: manufacturer Seiko, 7 pF, -40..+85 °C; spec says "YXC"; price/stock not shown) |
+| C63, C64 (mcu, LSE load) | 18p 0402 C1549 | 6.8p C0G 0603 FH 0603CG6R8C500NT C1679 | CL_eff 6.4–8.4 pF (INFERRED) | §9; https://www.lcsc.com/product-detail/C1679.html (fetched) |
+| bom/other_bom.csv | — | LSE row replaced (price UNVERIFIED, removed from total 407.89 → 407.65), +1 load-cap row | BOM | — |
+| tools/design.py | — | Y2 / LSE caps | regen | — |
+Crystal ESR still UNVERIFIED (spec §9: gain margin 2.8 < AN2867's 5). Footprint 0402 → 0603 for C63/C64; PCB not changed here.
