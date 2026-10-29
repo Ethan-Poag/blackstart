@@ -2230,6 +2230,108 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))))
+
+(symbol "74xGxx:74LVC1GU04"
+	(exclude_from_sim no)
+	(in_bom yes)
+	(on_board yes)
+	(property "Reference" "U"
+		(at -2.54 3.81 0)
+		(effects
+			(font
+				(size 1.27 1.27))))
+	(property "Value" "74LVC1GU04"
+		(at 0 -3.81 0)
+		(effects
+			(font
+				(size 1.27 1.27))))
+	(property "Footprint" ""
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "Datasheet" "http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "Description" "74LVC1G04, Single NOT Gate, Low-Voltage CMOS"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "ki_keywords" "Single Gate NOT LVC CMOS"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "ki_fp_filters" "SOT* SG-*"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(symbol "74LVC1GU04_0_1"
+		(polyline
+			(pts
+				(xy -7.62 6.35)
+				(xy -7.62 -6.35)
+				(xy 5.08 0)
+				(xy -7.62 6.35))
+			(stroke
+				(width 0.254)
+				(type default))
+			(fill
+				(type background))))
+	(symbol "74LVC1GU04_1_1"
+		(pin input line
+			(at -15.24 0 0)
+			(length 7.62)
+			(name "~"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "2"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin power_in line
+			(at -5.08 10.16 270)
+			(length 5.08)
+			(name "VCC"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "5"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin power_in line
+			(at -5.08 -10.16 90)
+			(length 5.08)
+			(name "GND"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "3"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin output inverted
+			(at 12.7 0 180)
+			(length 7.62)
+			(name "~"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "4"
+				(effects
+					(font
+						(size 1.27 1.27)))))))
 )
 (symbol (lib_id "Device:R") (at 29.21 328.93 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "a55f92c9-d318-4699-94a4-38f6657424bf")
 (property "Reference" "R413" (at 29.21 341.63 0) (effects (font (size 1.27 1.27))))
@@ -4447,7 +4549,7 @@
 (wire (pts (xy 243.84 248.92) (xy 241.3 248.92)) (stroke (width 0) (type default)) (uuid "4e5e2f29-4659-4ffc-9386-26a40f14fd6e"))
 (label "BUS_VC_N" (at 241.3 248.92 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "eef00b16-b317-41ef-a68a-ce8a0e0fc1fa"))
 (wire (pts (xy 243.84 251.46) (xy 241.3 251.46)) (stroke (width 0) (type default)) (uuid "2c700582-13ef-479e-a2fe-5a2629ade7b2"))
-(label "ADE_XO" (at 241.3 251.46 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "6cb72e8f-f33e-4e4e-8ca4-2174d4eac48d"))
+(label "ADE_CLK_BUF" (at 241.3 251.46 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "6cb72e8f-f33e-4e4e-8ca4-2174d4eac48d"))
 (no_connect (at 243.84 254) (uuid "c7a9362d-f7b9-4a8b-ba82-df2b37acb89f"))
 (wire (pts (xy 274.32 213.36) (xy 276.86 213.36)) (stroke (width 0) (type default)) (uuid "bae04659-9b9b-468d-8c18-d6f7ee519728"))
 (symbol (lib_id "power:VCC") (at 276.86 213.36 270) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "05d5eca2-03f1-4ab0-8e62-d9b1ed63b44b")(property "Reference" "#PWR0918" (at 276.86 213.36 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "+3V3_AC" (at 280.416 213.36 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 276.86 213.36 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 276.86 213.36 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "9b46a540-24f3-455e-98ca-da80b7702737"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "#PWR0918") (unit 1)))))
@@ -5109,4 +5211,89 @@
 (rectangle (start 123.19 303.53) (end 215.9 350.52) (stroke (width 0.25) (type dash) (color 72 72 160 1)) (fill (type none)) (uuid "a165843d-2532-4524-ab9d-af557151e0db"))
 (text "misc / support" (exclude_from_sim no) (at 124.46 302.895 0) (effects (font (size 2 2) (thickness 0.3) bold (color 72 72 160 1)) (justify left bottom)) (uuid "eb45496f-cc3a-4ba8-b25c-f46519821fcd"))
 (text "AC METERING. Hot side GND_AC isolated by ISOW7841 (data+power) + ISO7741, both 5kVrms reinforced, SOIC-16W 8mm. Barrier keep-out >=8mm + slot.\nVoltage: fully differential. Each line 4x1M -> tap (1k to GND_AC); each neutral (GEN_N, BUS_N separately) 4x1M -> N_TAP (1k to GND_AC); VxN <- 1k <- N_TAP.\nNo 0R neutral link: GND_AC floats at the divider mid-point, common-mode attenuated 4001:1. Current: AC1005 CTs, burden 2x24.9R." (exclude_from_sim no) (at 15 12 0) (effects (font (size 1.6 1.6)) (justify left top)) (uuid "cb291dc5-0b61-45f6-b659-b242aed16e99"))
+(label "BUS_VA_P" (at 243.84 236.22 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "d7b3a0c9-829a-4ee5-8e7f-6092ec3e3519"))
+(symbol (lib_id "74xGxx:74LVC1GU04") (at 60.96 355.6 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "5d57e5c7-645c-4d91-8eef-18804e1d2b45")
+(property "Reference" "U87" (at 66.04 353.06 0) (effects (font (size 1.27 1.27))))
+(property "Value" "SN74LVC1GU04DBVR" (at 66.04 358.14 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5" (at 60.96 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 60.96 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Unbuffered inverter" (at 60.96 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C81934" (at 60.96 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "SN74LVC1GU04DBVR" (at 60.96 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "TI" (at 60.96 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "ADE9000 CLKOUT buffer, self-biased, U71 CLKOUT -> U72 CLKIN (fixes_firmware.md s11 (S-M1))" (at 60.96 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(pin "2" (uuid "4a4330c2-682e-434b-aa3e-7942d67fa8bd"))
+(pin "5" (uuid "a2499839-c917-432b-8288-7600c0c7899c"))
+(pin "3" (uuid "0c75f3b7-d820-43f1-94c0-a888905c4b35"))
+(pin "4" (uuid "f3cb7f0f-095c-4050-b06a-59da0df92651"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "U87") (unit 1))))
+)
+(label "ADE_XO_AC" (at 45.72 355.6 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "8750e87d-8be6-41f0-9693-7e632e9876cf"))
+(symbol (lib_id "power:GND") (at 55.88 365.76 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "d9479908-178d-49c9-b88b-5e5f545495fd")(property "Reference" "#PWR1075" (at 55.88 365.76 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND_AC" (at 55.88 365.76 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 55.88 365.76 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 55.88 365.76 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "3580a47f-38a3-4c2b-90b9-9cc8a263ea42"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "#PWR1075") (unit 1)))))
+(label "ADE_CLK_Y" (at 73.66 355.6 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "f3f75857-af7f-4efc-a908-40a151c1fca4"))
+(symbol (lib_id "power:VCC") (at 55.88 345.44 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "021b009d-fc09-4e23-848e-e6de810cb3be")(property "Reference" "#PWR1076" (at 55.88 345.44 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "+3V3_AC" (at 55.88 345.44 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 55.88 345.44 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 55.88 345.44 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "71fc0d67-7444-4fa3-944f-fec8b2a1a694"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "#PWR1076") (unit 1)))))
+(symbol (lib_id "Device:C") (at 91.44 355.6 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "a8b6c404-00ce-4b83-9092-e12ed6b0264c")
+(property "Reference" "C301" (at 96.52 353.06 0) (effects (font (size 1.27 1.27))))
+(property "Value" "100p" (at 96.52 358.14 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 91.44 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 91.44 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Unpolarized capacitor" (at 91.44 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C14858" (at 91.44 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "CL10C101JB8NNNC" (at 91.44 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Samsung" (at 91.44 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "ADE_XO coupling to U87 (spec ref C297, renumbered: C297 exists)" (at 91.44 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "a52cb422-14b4-4af1-a240-34503efe45a9"))
+(pin "2" (uuid "ca6b88c9-0160-4a2a-881a-16d325621bc3"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "C301") (unit 1))))
+)
+(label "ADE_XO" (at 91.44 351.79 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "433e4cc8-efac-4286-9d66-2b4ad9685f29"))
+(label "ADE_XO_AC" (at 91.44 359.41 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "537156f1-4190-46f8-9696-7461a88a34d0"))
+(symbol (lib_id "Device:R") (at 106.68 355.6 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "2a921651-042c-4b8d-bfd1-c3ac7f33b32e")
+(property "Reference" "R556" (at 111.76 353.06 0) (effects (font (size 1.27 1.27))))
+(property "Value" "1M" (at 111.76 358.14 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 106.68 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 106.68 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Resistor" (at 106.68 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C22935" (at 106.68 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "" (at 106.68 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "" (at 106.68 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "U87 self-bias feedback (fixes_firmware.md s11 (S-M1))" (at 106.68 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "ce9e0574-0482-4c46-85b1-a2972e2c8dd8"))
+(pin "2" (uuid "6f84274c-7a6d-48f7-83f5-65622c952d4d"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "R556") (unit 1))))
+)
+(label "ADE_CLK_Y" (at 106.68 351.79 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "1aa7d6dc-9619-4d8c-a170-95ade13677fb"))
+(label "ADE_XO_AC" (at 106.68 359.41 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "b0925853-272b-48c8-8da2-42d6e7f14d75"))
+(symbol (lib_id "Device:R") (at 121.92 355.6 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "9eb48770-0cd9-481a-92ff-224ba42afa91")
+(property "Reference" "R557" (at 127.0 353.06 0) (effects (font (size 1.27 1.27))))
+(property "Value" "33" (at 127.0 358.14 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 121.92 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 121.92 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Resistor" (at 121.92 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C23140" (at 121.92 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "0603WAF330JT5E" (at 121.92 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "UNI-ROYAL" (at 121.92 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "U87 output series R -> U72 CLKIN (fixes_firmware.md s11 (S-M1))" (at 121.92 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "1c5660cd-fb3c-45b3-a38b-418fa2fe5a26"))
+(pin "2" (uuid "a9d8f70e-09b0-45d5-884c-a362fd2cecc3"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "R557") (unit 1))))
+)
+(label "ADE_CLK_Y" (at 121.92 351.79 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "bfbb1db0-9334-454c-a37c-954176c5f1b6"))
+(label "ADE_CLK_BUF" (at 121.92 359.41 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "412646bf-c587-4bc8-895a-b8459e5a9e86"))
+(symbol (lib_id "Device:C") (at 137.16 355.6 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "b913c92a-ee58-4412-8533-51b428eaf023")
+(property "Reference" "C302" (at 142.24 353.06 0) (effects (font (size 1.27 1.27))))
+(property "Value" "100n" (at 142.24 358.14 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 137.16 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "~" (at 137.16 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Unpolarized capacitor" (at 137.16 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C14663" (at 137.16 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "" (at 137.16 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "" (at 137.16 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "U87 decoupling (spec ref C298, renumbered)" (at 137.16 355.6 0) (effects (font (size 1.27 1.27)) hide))
+(pin "1" (uuid "fc580863-6d47-4a8a-b2dc-10ccf8b3753b"))
+(pin "2" (uuid "ec6b6ea9-4661-468d-b379-efdc1bbf00f0"))
+(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "C302") (unit 1))))
+)
+(symbol (lib_id "power:VCC") (at 137.16 351.79 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "d7bcbaa4-f572-4eab-8fae-609e149cb0f5")(property "Reference" "#PWR1077" (at 137.16 351.79 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "+3V3_AC" (at 137.16 351.79 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 137.16 351.79 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 137.16 351.79 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "20942f4b-8aa3-4d90-8447-58469e4ee909"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "#PWR1077") (unit 1)))))
+(symbol (lib_id "power:GND") (at 137.16 359.41 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "5c2909e0-734f-45d7-a7f2-d8817c644405")(property "Reference" "#PWR1078" (at 137.16 359.41 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND_AC" (at 137.16 359.41 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 137.16 359.41 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 137.16 359.41 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "155e045d-811a-4629-ad5a-87f97e0b12e6"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "#PWR1078") (unit 1)))))
 )

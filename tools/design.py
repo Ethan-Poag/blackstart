@@ -534,7 +534,7 @@ ac.R('10k','AC_IRQ_N','+3V3_AC'); ac.R('10k','AC_RST_N','+3V3_AC')
 for k,(tag,clkin,clkout) in enumerate((('GEN','ADE_XI','ADE_XO'),('BUS','ADE_XO2',None)),1):
     c={'VDD':'+3V3_AC','PULL_HIGH':'+3V3_AC','AVDDOUT':'AVDD_%s'%tag,'DVDDOUT':'DVDD_%s'%tag,'REF':'REF_%s'%tag,'SCLK':'AC_SCK','MOSI':'AC_MOSI','MISO':'AC_MISO',
        '~{SS}':'AC_CS%d_N'%k,'~{RESET}':'AC_RST_N','~{IRQ0}':'AC_IRQ_N' if k==1 else None,'~{IRQ1}':None,'CF1':None,'CF2':None,'CF3/ZX':None,'CF4/EVENT':None,'PM0':'GND_AC','PM1':'GND_AC',
-       'DGND':'GND_AC','REFGND':'GND_AC','NC1':'GND_AC','NC2':'GND_AC','AGND':'GND_AC','GND':'GND_AC','EP':'GND_AC','CLKIN':clkin if k==1 else 'ADE_XO','CLKOUT':clkout}
+       'DGND':'GND_AC','REFGND':'GND_AC','NC1':'GND_AC','NC2':'GND_AC','AGND':'GND_AC','GND':'GND_AC','EP':'GND_AC','CLKIN':clkin if k==1 else 'ADE_CLK_BUF','CLKOUT':clkout}
     for ph in 'ABC': c['V%sP'%ph]='%s_V%s_P'%(tag,ph); c['V%sN'%ph]='%s_V%s_N'%(tag,ph)
     if k==1:
         for i,ph in enumerate('ABCN'): c['I%sP'%ph]='GEN_I%s_P'%ph; c['I%sN'%ph]='GEN_I%s_N'%ph
@@ -544,6 +544,10 @@ for k,(tag,clkin,clkout) in enumerate((('GEN','ADE_XI','ADE_XO'),('BUS','ADE_XO2
     ac.C('4.7u','AVDD_'+tag,'GND_AC',pkg='0805'); ac.C('100n','AVDD_'+tag,'GND_AC'); ac.C('4.7u','DVDD_'+tag,'GND_AC',pkg='0805'); ac.C('100n','DVDD_'+tag,'GND_AC')
     ac.C('4.7u','REF_'+tag,'GND_AC',pkg='0805'); ac.C('100n','REF_'+tag,'GND_AC'); ac.C('10u','+3V3_AC','GND_AC',pkg='0805'); ac.C('100n','+3V3_AC','GND_AC')
 ac.p('Device:Crystal_GND24','24.576MHz',{'1':'ADE_XI','3':'ADE_XO','2':'GND_AC','4':'GND_AC'},prefix='Y',mpn='X322524576MOB4SI',lcsc='C70568',fp='Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm'); ac.C('22p','ADE_XI','GND_AC',pkg='0402'); ac.C('22p','ADE_XO','GND_AC',pkg='0402')
+# m7-sch S-M1: U87 GU04 self-biased buffer U71 CLKOUT -> U72 CLKIN (fixes_firmware.md s11); spec C297/C298 renumbered C301/C302
+ac.p('74xGxx:74LVC1GU04','SN74LVC1GU04DBVR',{'2':'ADE_XO_AC','3':'GND_AC','4':'ADE_CLK_Y','5':'+3V3_AC'},ref='U87',mpn='SN74LVC1GU04DBVR',lcsc='C81934',mfr='TI',fp='Package_TO_SOT_SMD:SOT-23-5')
+ac.C('100p','ADE_XO','ADE_XO_AC',ref='C301',mpn='CL10C101JB8NNNC',lcsc='C14858',mfr='Samsung'); ac.R('1M','ADE_CLK_Y','ADE_XO_AC',ref='R556',lcsc='C22935')
+ac.R('33','ADE_CLK_Y','ADE_CLK_BUF',ref='R557',mpn='0603WAF330JT5E',lcsc='C23140',mfr='UNI-ROYAL'); ac.C('100n','+3V3_AC','GND_AC',ref='C302',lcsc='C14663')
 for tag,J in (('GEN','J7'),('BUS','J8')):
     conn(ac,4,[tag+'_L1',tag+'_L2',tag+'_L3',tag+'_N'],'%s %s voltage (L1 L2 L3 N)'%(J,tag),note='external DIN fuses assumed (spec); >=600VAC rated terminal')
     for ph,L in zip('ABC',('L1','L2','L3')):

@@ -149,3 +149,16 @@ Footprint grows 0805 → 1206: the PCB is not changed in this branch; layout mus
 | bom/other_bom.csv | — | LSE row replaced (price UNVERIFIED, removed from total 407.89 → 407.65), +1 load-cap row | BOM | — |
 | tools/design.py | — | Y2 / LSE caps | regen | — |
 Crystal ESR still UNVERIFIED (spec §9: gain margin 2.8 < AN2867's 5). Footprint 0402 → 0603 for C63/C64; PCB not changed here.
+
+## FW-7: ADE9000 U72 CLKIN buffer (S-M1) and BUS_VA_P net name (§14)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| U87 (new, ac_metering) | — | SN74LVC1GU04DBVR TI C81934, SOT-23-5, on +3V3_AC / GND_AC; 2 A = ADE_XO_AC, 4 Y = ADE_CLK_Y | ADE9000 p11: buffer CLKOUT when driving external circuits | fixes_firmware.md §11; https://www.lcsc.com/product-detail/C81934.html (fetched 2026-10-28) |
+| C301 (new; spec C297) | — | 100 pF C0G 0603 CL10C101JB8NNNC C14858, ADE_XO → ADE_XO_AC | AC coupling | §11. Renumbered: C297 already exists (power) |
+| R556 (new) | — | 1M 0603 C22935, ADE_CLK_Y ↔ ADE_XO_AC | self-bias | §11 |
+| R557 (new) | — | 33 Ω 0603 0603WAF330JT5E C23140, ADE_CLK_Y → ADE_CLK_BUF | series R | §11; LCSC page fetched |
+| C302 (new; spec C298) | — | 100n 0603 C14663, +3V3_AC/GND_AC at U87 | decoupling | §11. Renumbered: C298 is the watchdog cap |
+| U72 pin 29 CLKIN | ADE_XO | ADE_CLK_BUF | removed from the crystal node | §11 |
+| U72 pin 20 VAP | Net-(U72-VAP) (R453.2, C265.1) | BUS_VA_P | consistent naming (net-only) | §14 |
+| bom/ac_metering_bom.csv | — | +5 rows (only U87 priced; this file has no TOTAL row) | BOM | — |
+| tools/design.py | — | U87 block; BUS CLKIN = ADE_CLK_BUF (design.py already named BUS_VA_P) | regen | — |

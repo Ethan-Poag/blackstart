@@ -18,3 +18,8 @@ TVS at ADC inputs,SMAJ3.3CA or internal clamp,Littelfuse,bidir TVS (optional),0-
 Terminal block HV (gen),MSTB 2.5/4-GF-7.62 header + MSTB 2.5/4-STF-7.62 plug,Phoenix Contact,4-pos 7.62 mm pluggable 630-1000 V rated,1 set,UNVERIFIED (~4+3),https://www.digikey.com/en/products/result?keywords=MSTB%202.5%2F4-GF-7.62,L1 L2 L3 N; verify UL rating 600V on part page; 7.62 pitch gives 7.6 mm minus contact
 Terminal block HV (bus),MSTB 2.5/4-GF-7.62 + MSTB 2.5/4-STF-7.62,Phoenix Contact,same as gen,1 set,UNVERIFIED (~7),,
 Terminal block CT,MSTB 2.5/8-GF-5.08 + plug,Phoenix Contact,8-pos 5.08 mm for 4 CTs (S1/S2),1 set,UNVERIFIED (~6),,CT side is isolated by aux CT; consider shorting-type CT terminals externally (opening CT secondary is dangerous)
+ADE9000 CLKIN buffer U87 (S-M1),SN74LVC1GU04DBVR,TI,Single unbuffered inverter SOT-23-5,1,0.33,https://www.lcsc.com/product-detail/C81934.html,"LCSC C81934 Extended; self-biased U71 CLKOUT -> C301 -> U87 -> R557 -> U72 CLKIN; price from spec s11, stock 7411 per spec s18.4"
+U87 input coupling C301 (spec C297),CL10C101JB8NNNC,Samsung,100 pF C0G 0603,1,UNVERIFIED,https://www.lcsc.com/product-detail/C14858.html,"LCSC C14858 Basic; page fetched 2026-10-28, price not shown"
+U87 bias R556,0603WAF1004T5E,UNI-ROYAL,1M 1% 0603,1,UNVERIFIED,https://www.lcsc.com/product-detail/C22935.html,LCSC C22935 Basic; MPN from spec s18.4
+U87 series R557,0603WAF330JT5E,UNI-ROYAL,33R 5% 0603,1,UNVERIFIED,https://www.lcsc.com/product-detail/C23140.html,LCSC C23140 Basic; page fetched 2026-10-28
+U87 decoupling C302 (spec C298),CC0603KRX7R9BB104,,100nF 0603,1,UNVERIFIED,https://www.lcsc.com/product-detail/C14663.html,LCSC C14663 Basic; MPN from spec s18.4
