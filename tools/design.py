@@ -216,6 +216,9 @@ for _ in range(2): cm.C('22u','+5V_HU','GND',pkg='1206')
 cm.p('genctl:TPS2121RUXR','TPS2121RUXR',{'IN1':'+5V','IN2':'+5V_HU','PR1':'HU_PR1','CP2':'GND','OV1':'GND','OV2':'GND','GND':'GND','OUT':'+5V_CM5','ST':'HU_ST','ILM':'HU_ILM','SS':'HU_SS'},mpn='TPS2121RUXR',lcsc='C485916',note='IN1 priority >4.58V')
 cm.R('33.2k','+5V','HU_PR1',note='PR1 1.06V -> IN1 valid >4.58V rising / 4.49V falling'); cm.R('10k','HU_PR1','GND')
 cm.R('29.4k','HU_ILM','GND',note='ILIM ~3.5A'); cm.C('100n','HU_SS','GND'); cm.C('1u','+5V','GND'); cm.C('1u','+5V_HU','GND')
+# m7-sch FW-004/FW-028 (fixes_firmware.md s3.3)
+cm.R('10k','CM5_OFF','GND',ref='R552',lcsc='C25804',note='CM5_OFF pull-down vs TCA9555 POR'); cm.R('10k','CM5_PWRBTN_MCU','GND',ref='R553',lcsc='C25804',note='CM5_PWRBTN_MCU pull-down vs TCA9555 POR')
+
 
 # =====================================================================
 co=S('comms','Comms: CAN x2, RS-485, Ethernet, USB hub/ports, router 12V',
@@ -279,6 +282,9 @@ for i,(dm,dp,lab) in enumerate((('USB30_DM','USB30_DP','Internal USB0 touch (SM0
     co.C('1u','+5V','GND',pkg='0603'); co.C('10u',vb,'GND',pkg='0805')
     conn(co,4,[vb,dm,dp,'GND'],lab,mpn='SM04B-SRSS-TB')
     co.p('Power_Protection:USBLC6-2SC6','USBLC6-2SC6',{'1':dp,'6':dp,'3':dm,'4':dm,'5':vb,'2':'GND'},prefix='D',mpn='USBLC6-2SC6')
+# m7-sch FW-015 (fixes_firmware.md s2, extra)
+co.R('100k','EXP_12V_EN','GND',ref='R551',lcsc='C25803',note='EXP_12V_EN pull-down')
+
 
 # =====================================================================
 di=S('display','Display: DSI->LVDS bridge, panel power, backlight, touch',
@@ -479,6 +485,10 @@ ou.p('74xGxx:74AUP1G74','74LVC1G74DP-Q100H',{'1':'WD_REARM','2':'+3V3_SAFE','3':
 ou.p('74xGxx:74LVC1G17','SN74LVC1G17DBVR',{'1':None,'2':'WD_REARM_RC','3':'GND','4':'WD_REARM','5':'+3V3_SAFE'},ref='U85',mpn='SN74LVC1G17DBVR',lcsc='C7836',mfr='TI',fp='Package_TO_SOT_SMD:SOT-23-5',note='Schmitt buffer ENOUT RC -> U84 CP')
 ou.R('100k','+3V3_SAFE','WD_REARM_RC',ref='R554',lcsc='C25803',note='U37 ENOUT pull-up / re-arm RC'); ou.C('10n','WD_REARM_RC','GND',ref='C298',mpn='CL10B103KB8NNNC',lcsc='C1589',mfr='Samsung')
 ou.C('100n','+3V3_SAFE','GND',ref='C299',lcsc='C14663',note='U84 decoupling'); ou.C('100n','+3V3_SAFE','GND',ref='C300',lcsc='C14663',note='U85 decoupling')
+# m7-sch FW-002/003/004 enable pull-downs (fixes_firmware.md s2, s3.1, s3.2)
+for _r,_n,_v in [('R534', 'FUEL_EN_MCU', '100k'), ('R535', 'CRANK_EN_MCU', '100k'), ('R536', 'AUX3_MCU', '4.7k'), ('R537', 'GLOW_EN_MCU', '100k'), ('R538', 'GCB_CL_MCU', '100k'), ('R539', 'GCB_OP_MCU', '100k'), ('R540', 'MCB_CL_MCU', '100k'), ('R541', 'MCB_OP_MCU', '100k'), ('R542', 'AUX1_MCU', '100k'), ('R543', 'AUX2_MCU', '100k'), ('R544', 'AUX4_MCU', '100k'), ('R545', 'AUX5_MCU', '100k'), ('R546', 'AUX6_MCU', '100k'), ('R547', 'AUX7_MCU', '100k'), ('R548', 'AUX8_MCU', '100k'), ('R549', 'AUX9_MCU', '10k'), ('R550', 'AUX10_MCU', '10k')]:
+    ou.R(_v,_n,'GND',ref=_r,lcsc={'100k': 'C25803', '10k': 'C25804', '4.7k': 'C23162'}[_v],note='enable pull-down (fixes_firmware.md s2)')
+
 
 # =====================================================================
 es=S('estop','E-stop trip and sense',
