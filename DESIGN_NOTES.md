@@ -35,22 +35,22 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 
 ## Power (power.kicad_sch)
 **Input protection**
-- J0 → 10 A ATO blade fuse in Keystone 3557-2 clips → VBAT_F.
-- SMDJ36CA (bidirectional, Littelfuse C224075) TVS on VBAT_F (s3c6f; was SMDJ58CA). Suppressed transients only.
+- J0 → BAT_IN (N4/m7-sch 3c: no on-board fuse; battery net BAT_IN; installer fits an external fuse <=10 A fast-acting, >=58 V DC in the battery lead; F1 10 A ATO / Keystone 3557-2 clips removed from the schematic in 9af66ad).
+- SMDJ36CA (bidirectional, Littelfuse C224075) TVS on BAT_IN (s3c6f; was SMDJ58CA). Suppressed transients only.
 
 **Ideal diode (LM74800-Q1)**
 - Two BSC070N10NS5 back-to-back, common drain (VBAT_DD).
-- A and VSNS on VBAT_F; **VS on VBAT_DD** (common-drain midpoint). Wiring fix 2026-10-27 (s3c6d) per TI SNOSD95C p3 and review/hv/lm74800_pins.md: VS abs max is -1 V to GND, so it must sit behind Q1. Before this, VS was on VBAT_F.
-- CVS: C1 100 nF 0805 100 V from VS (VBAT_DD) to GND (moved from VBAT_F with VS).
+- A and VSNS on BAT_IN; **VS on VBAT_DD** (common-drain midpoint). Wiring fix 2026-10-27 (s3c6d) per TI SNOSD95C p3 and review/hv/lm74800_pins.md: VS abs max is -1 V to GND, so it must sit behind Q1. Before this, VS was on BAT_IN.
+- CVS: C1 100 nF 0805 100 V from VS (VBAT_DD) to GND (moved from BAT_IN with VS).
 - CAP: C2 100 nF from CAP to VS (now VBAT_DD; *assumed*, typical application).
-- Ladder top R1.1 on **VBAT_F** (2026-10-27 s3c6e, review/s3c6c/divider_check.md: EN/UVLO was fed only from SW, so the EN-gated VSNS–SW switch latched off, TI SNOSD95C p13/p16). SW (U1.4) strapped to VSNS (U1.3), both VBAT_F; OVUV_TOP net removed. Trip points unchanged (R(SW) ≤ 46 Ω); always-on divider drain 44.5 µA at 12 V, 115 µA at 31 V [I]. Was: SW → ladder.
+- Ladder top R1.1 on **BAT_IN** (2026-10-27 s3c6e, review/s3c6c/divider_check.md: EN/UVLO was fed only from SW, so the EN-gated VSNS–SW switch latched off, TI SNOSD95C p13/p16). SW (U1.4) strapped to VSNS (U1.3), both BAT_IN; OVUV_TOP net removed. Trip points unchanged (R(SW) ≤ 46 Ω); always-on divider drain 44.5 µA at 12 V, 115 µA at 31 V [I]. Was: SW → ladder.
 - 210k / 49.9k / **9.76k** ladder to EN/UVLO and OV (s3c6f 2026-10-27: R3 10k→9.76k; was 191k/45.3k/10k then 210k/49.9k/10k). Max operating battery **31 V**.
   - DS (SNOSD95C p5-6): V(OVR) 1.231 V typ (1.195-1.267), V(OVF) 1.13 V; V(UVLOR) 1.231 V, V(UVLOF) 1.132 V.
   - OV trip (rising) **32.39 / 34.01 / 35.74 V** min/typ/max (1 % R + Vref spread; max incl. 200 nA pin leakage) [I].
   - OV release (falling) **29.57 / 31.22 / 32.70 V** [I]. OV-min margin vs 31 V = 1.39 V; 0.1 % resistors are an option.
   - UV rising **5.32 / 5.56 / 5.86 V** [I].
   - Ladder drain 44.5 µA at 12 V, 115 µA at 31 V [I]. R1 210k = C22952 (extended), R2 49.9k = C23184 (basic), R3 9.76k = 0603WAF9761T5E C23128.
-- CIN: **C297 220 nF 0805 100 V X7R (YAGEO CC0805KKX7R0BB224, LCSC C513710) VBAT_F→GND** (s3c6i: changed from 100 nF CL21B104KCFNNNE C28233 because X7R 0805 DC-bias loss at 13–31 V may take 100 nF below the 0.1 µF minimum; the C-V curve was not opened, INFERRED; s3c6h; TI SNOSD95C p23 §10.2.3.3 "A minimum input capacitance CIN of 0.1 µF … is recommended", read this pass). F.Cu at (249.6, 137.0), GND pad on the existing C1/U1.7 GND trace and via (249.8,139.5); about 9 mm from U1.2/U1.3.
+- CIN: **C297 220 nF 0805 100 V X7R (YAGEO CC0805KKX7R0BB224, LCSC C513710) BAT_IN→GND** (s3c6i: changed from 100 nF CL21B104KCFNNNE C28233 because X7R 0805 DC-bias loss at 13–31 V may take 100 nF below the 0.1 µF minimum; the C-V curve was not opened, INFERRED; s3c6h; TI SNOSD95C p23 §10.2.3.3 "A minimum input capacitance CIN of 0.1 µF … is recommended", read this pass). F.Cu at (249.6, 137.0), GND pad on the existing C1/U1.7 GND trace and via (249.8,139.5); about 9 mm from U1.2/U1.3.
 - Check the 5.5 V UV against cold-crank requirements.
 
 **+12V (LM5176)**
@@ -394,7 +394,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - All 18 SMBJ28CA -> SMBJ33CA, Brightking C78420 (JLC extended, 132,283 stock, $0.0575). That covers VBAT_P, VBAT_ESTOP and the 16 output TVS, which also see raw battery when on. Vbr min 36.7 V > 33.2 V OVP (now > 35.74 V OV max, s3c6f); Vc 53.3 V @ 11.3 A < TPS1HTC30 64 V / FETs 100 V. Same package (DO-214AA), footprint Diode_SMD:D_SMB unchanged.
 - power_bom aligned to the schematic: post-cutoff TVS is SMBJ33CA (SMB), not SMDJ33CA. SMB 600 W is enough because the input TVS (now SMDJ36CA, s3c6f) absorbs suppressed transients and the LM74800 opens on OV (no longer true for an unsuppressed load dump, which is out of scope: see docs/INSTALL_SAFETY.md and the s3c6f section), so the downstream TVS only takes cutoff overshoot and local inductive transients (mJ level).
 - U24-U26 LM2904DR -> LM2904BIDR (TI) C1849422 (extended, 4,110 stock, $0.1046), 3-36 V supply (datasheets/lm2904b.pdf, Family Comparison table: LM2904 = 26 V). SOIC-8 pinout identical (1 OUT1, 2 IN1-, 3 IN1+, 4 V-, 5 IN2+, 6 IN2-, 7 OUT2, 8 V+).
-- All 0805 100 nF (22 pcs, incl. VBAT_F/VBAT_P/VBAT_ESTOP/DPX_VI) -> Samsung CL21B104KCFNNNE 100 V X7R C28233 (basic, 1.5M stock), via gen.CLCSC.
+- All 0805 100 nF (22 pcs, incl. BAT_IN/VBAT_P/VBAT_ESTOP/DPX_VI) -> Samsung CL21B104KCFNNNE 100 V X7R C28233 (basic, 1.5M stock), via gen.CLCSC.
 - Cost total $755.07 (was $755.36): outputs and power TVS cheaper, inputs op-amp +$0.12.
 
 ## Rev 2026-10-24 (e) - modem removed, router power, CM5 reflash/control, 5V hold-up, no USB hub, 10 aux outputs
@@ -526,7 +526,7 @@ Sources read this session: SN65DSI83 SLLSEC1I; PCA9306 SCPS113O; SN74LVC1T45 SCE
 - After an OV trip the load may stay off until the battery falls below OV falling (as low as **29.57 V** min) [INFERRED, divider_check.md §7].
 - **OPEN RISK (needs surge test):** D1 clamp (old SMDJ58CA 93.6 V; new SMDJ36CA 58.1 V per product page, PDF not opened) can still reach VBAT_P during the 4-5.4 µs OV turn-off (DS p7). LM2904B on VBAT_P is 40 V abs max (Compliance citation, not opened) and D2 SMBJ33CA clamps at 53.3 V. NOT VERIFIED.
 - **Supply assumption:** a 3 kW SMC TVS will not survive an unsuppressed 24 V alternator load dump. The board assumes a battery-backed, suppressed 35 V-class supply; it is NOT designed for an unsuppressed load dump (Ethan's decision 2026-10-27). See docs/INSTALL_SAFETY.md.
-- F1 is **10 A** (Ethan's requirement). Any 5 A F1 figure in reviewer files (review/cur/final_power_spec.md) is not adopted.
+- SUPERSEDED (N4/m7-sch 3c): no on-board fuse; battery net BAT_IN; installer fits an external fuse <=10 A fast-acting, >=58 V DC in the battery lead. Historical: F1 is **10 A** (Ethan's requirement). Any 5 A F1 figure in reviewer files (review/cur/final_power_spec.md) is not adopted.
 
 ### Future work: inline surge module (short faithful summary of review/hv/load_dump_external.md §(b); see that file for SM8S datasheet figures)
 **Where it goes.** Fit it on the battery positive feed downstream of the external 30 A battery fuse, at the point that feeds *both* J0 (BAT_IN) and the E-stop/VBAT_ESTOP branch. If the TVS fails short, the 30 A fuse clears it.

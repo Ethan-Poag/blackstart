@@ -37,7 +37,7 @@ SEEDS = {
     "U7":  (165.0, 80.0, 0),     # STM32H743: centre of the LV area (outputs above, inputs below, CM5/comms right, front-panel left)
     "U21": (160.0, 128.0, 0),    # SN65DSI83 between CM5 conn B and J14 (LVDS FPC, F side at 128,142)
     "U2":  (225.0, 160.0, 0),    # LM5176 buck-boost next to the battery input chain
-    "U1":  (250.0, 165.0, 0),    # LM74800 ideal diode right behind J1 / F1
+    "U1":  (250.0, 165.0, 0),    # LM74800 ideal diode right behind J1 (F1 removed from schematic, N4; board still has it)
     "U71": (40.0, 62.0, 0),      # ADE9000 GEN next to U69 (SPI isolator)
     "U72": (40.0, 98.0, 0),      # ADE9000 BUS next to U70
     # AC1005 CTs (32 x 12 incl. wire loop) stacked at the barrier edge next to J30, entirely in the hot zone (v3 rule kept)

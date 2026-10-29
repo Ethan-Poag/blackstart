@@ -14,7 +14,7 @@ Status: 2026-10-24 (display: RVT121HVLNWCA0-B; previous version design_spec_rvt1
 - TPS3431 window watchdog on the MCU. On a trip (WDO) it forces all outputs off, except the hardware E-stop trip (section 6).
 
 ## 3. Power (power_bom.csv)
-- Battery enters on J0 (Phoenix PC 5/SPC 5, 7.62 mm), then a 10 A blade fuse (F1), SMDJ36CA, LM74800-Q1 ideal diode + OV cutoff (BSC070N10NS5 back-to-back), SMDJ33CA, and an LM5176 4-switch buck-boost to a 12 V bus. A buck then supplies 5 V for the CM5. Rev B: +3V3 is a second TPS56637 (6 A part, >=3 A rail) from the 12 V bus (replaces the 1 A TPS629210 + MBR0540 diode-OR).
+- Battery enters on J0 (Phoenix PC 5/SPC 5, 7.62 mm), (BAT_IN; no on-board fuse; battery net BAT_IN; installer fits an external fuse <=10 A fast-acting, >=58 V DC in the battery lead), SMDJ36CA, LM74800-Q1 ideal diode + OV cutoff (BSC070N10NS5 back-to-back), SMDJ33CA, and an LM5176 4-switch buck-boost to a 12 V bus. A buck then supplies 5 V for the CM5. Rev B: +3V3 is a second TPS56637 (6 A part, >=3 A rail) from the 12 V bus (replaces the 1 A TPS629210 + MBR0540 diode-OR).
 - Max operating battery voltage: **31 V**. OV trip (R3 9.76k): OV trip (rising) 32.39 / 34.01 / 35.74 V (min/typ/max, 1 % R + Vref spread + 200 nA pin leakage), release (falling) 29.57 / 31.22 / 32.70 V, UV rising 5.32 / 5.56 / 5.86 V. OV-min margin vs 31 V = 1.39 V (4.5 %, INFERRED; TCR not included; 0.1 % resistors are an option). (Was: "OV cutoff <= 30.5 V"; superseded.)
 - Supply assumption: the board assumes a battery-backed, suppressed 35 V-class supply. A 3 kW SMC TVS (D1) will NOT survive an unsuppressed 24 V alternator load dump; it is not designed for one (see docs/INSTALL_SAFETY.md).
 

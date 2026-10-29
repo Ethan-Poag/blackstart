@@ -88,3 +88,5 @@ Board is 61.9 % routed, 1119 unconnected, "NOT fab-ready". M6 moved only R/C pas
 | SW18 | BTN10 | CTS_228E_RGB | 159.94 | 188.71 | 0.0 | F | [153.74, 185.05, 165.54, 192.37] |
 | SW19 | BTN11 | CTS_228E_RGB | 203.46 | 188.71 | 0.0 | F | [197.26, 185.05, 209.06, 192.37] |
 | SW20 | BTN12 | CTS_228E_RGB | 246.98 | 188.71 | 0.0 | F | [240.78, 185.05, 252.58, 192.37] |
+
+> SUPERSEDED (N4, m7-sch 3c): F1 above is extracted from the unchanged .kicad_pcb. The schematic has no on-board fuse; battery net BAT_IN; installer fits an external fuse <=10 A fast-acting, >=58 V DC in the battery lead; F1/clips go when the board is updated.

@@ -1,5 +1,8 @@
 # ROUTING_PLAN — genctl_v4_handrouted (m7-wip)
 
+> **SUPERSEDED (N4, m7-sch 3c, 2026-10-28):** the schematic has no on-board fuse; battery net BAT_IN; installer fits an external fuse <=10 A fast-acting, >=58 V DC in the battery lead. Every F1 / VBAT_F / "fuse F1 10 A" / "10 A ATO" mention in this file describes the as-built .kicad_pcb (which still carries F1 clips and net VBAT_F until the board update) and is historical; the VBAT_F copper becomes BAT_IN when the board is updated. The 10 A copper figures remain a copper-capacity record only.
+
+
 **PLAN ONLY. NO ROUTING STARTED.** This commit changes no board, schematic, copper, or rules.
 
 - Board: `mechanical/pcb_v4/genctl_v4_handrouted.kicad_pcb` at 8ccfa7c.
