@@ -601,3 +601,10 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 - Netlist diff vs previous HEAD: only U1.3 and U1.4 moved from BAT_IN (11 -> 9 nodes) to VBAT_DD (6 -> 8 nodes).
 - Datasheet SNOSD95C p3: "If the internal disconnect switch between VSNS and SW is not used then short them together and connect to VS pin." $0.
 - PCB: U1 pads 3/4 net change pending at layout (PCB untouched).
+
+### 5-3: +3V3 inductor note 2.2uH -> 3.3uH (item 3)
+- power.kicad_sch POWER note (l.5368): "TPS56637 -> +3V3 from +12V (FB 45.3k/10k, 2.2uH, 3x22u)" -> "(FB 45.3k/10k, 3.3uH L3, 3x22u)". L2 and L3 are both 3.3u MWSA1004S-3R3MT C408483 (netlist).
+- Other L2/L3 text checked, left unchanged and reported:
+  - L3 hidden "Note" property: "2.2uH per DS Table 4 (3.3V)". This is a datasheet-recommendation statement, not the fitted value; the 3.3uH choice vs DS Table 4 is for Safety/Power to confirm.
+  - bom/power_bom.csv:11 note: "Check TPS56637 recommended L (likely 1.5-2.2u…)".
+  - tools/design.py:51: same "2.2uH" note text. The generator is not regenerated; deferred.
