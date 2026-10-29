@@ -623,3 +623,7 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
     - INSTALL_SAFETY l.32-33 FUEL/CRANK "Rating 15 A" (§21.1 says 2.8 A applies to FUEL/CRANK too);
     - l.36 ESTOP_TRIP;
     - fixes_firmware §21.3's proposed INSTALL_SAFETY sentence (not inserted; awaiting the lead).
+
+### 5-8: correction to 4-3 (reviewer L1): U26-U28 Value on every unit
+- 6733aac set Value LM2904B on only one unit instance of each 3-unit symbol (U26/U27/U28 each have units A, B and power). The netlist export takes the value from another unit, so it still read "LM2904". This was found in the final netlist diff vs 37327c2.
+- Fixed: Value "LM2904B" on all units of U26, U27 and U28 (6 unit blocks). The netlist now shows LM2904B. The lib_symbols cache entry is unchanged. MPN LM2904BIDR / C1849422 unchanged. bom_from_sch: 0 mismatches.
