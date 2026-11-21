@@ -140,7 +140,7 @@ PB12 note: in DS12110 Table 11 (p.90) the AF9 cell reads "FDCAN2_" and its secon
 
 
 ## Added 2026-10-28 (fixes_firmware.md)
-- U76 (TCA9555 @0x25) **P15 (pin 18) = WD_OK input via R559 4.7k** (watchdog latch U84 Q; 0 = latched, power cycle required). P16/P17 remain spare.
+- U76 (TCA9555 @0x25) **P15 (pin 18) = WD_OK input via R559 4.7k** (watchdog latch U84 Q; 0 = latched, power cycle required). **P16 (pin 19) = BL_ALLOW** (Rev 8d): output, default HIGH (enabled). ANDed with CM5 GPIO12 through a 74LVC1G08 into TPS61500 EN (Layout adding; R121 stays 100 kΩ). MCU drives it LOW on CM5_LOST (1 s, ARCHITECTURE §5) or over-temp. P17 remains spare.
 - PB4 AUX3_MCU: external 4.7k pull-down (R536). Other enables: 100k (R534–R548, R551); AUX9/10 10k (R549/R550).
 - PA9 → R56 and PE3 → R57 change from 1k to 10k. PA9/PE3/PE5 are Hi-Z until the CM5 heartbeat (PC2_C).
 - PB2 OUT_FAULT_N: the INA238 (U86 @0x40) ALERT is added to the wired-OR.- PC13 EXP_12V_EN: R551 100k pull-down; **not watchdog-gated** (Ethan ruling 2026-10-28).
@@ -160,6 +160,7 @@ VREF+ = +3V3_SAFE [M]; 16-bit. Source: fixes_firmware.md §18.2.
 
 ## Rev 4 (2026-10-28 HST)
 - U76 pin 18 = P15 = WD_OK (via R559 4.7k). Pin 16 = P13 = USB0_EN (unchanged).
+- **Rev 8d:** U76 pin 19 = P16 = **BL_ALLOW** (see ARCHITECTURE §13.11 / fixes_firmware §23.5a).
 - PA12 (pin 71) = WDI: add R560 100k to GND (static when the MCU pin is Hi-Z/bootloader).
 - BOOT0 (pin 94): R42 10k to GND, SW2 to +3V3_SAFE, R62 1k from CM5 GPIO27.
 - Bootloader-shared pins (AN4938 Table 3 [I]; AN2606 Table 135 [U]): PC9 GCB_CL, PC10/11/12 GCB_OP/MCB_CL/MCB_OP, PA15 MPU_SPEED, PA8 DIAG_EN, PB5 AUX4, PB6 AUX5, PD12 RS485_DE, PD13 AUX8, PA9/PA10 UART, PA12 WDI.
@@ -170,3 +171,6 @@ VREF+ = +3V3_SAFE [M]; 16-bit. Source: fixes_firmware.md §18.2.
 - Readback saturates at 3.60 A (0.916 V/A). At current limit, SNS goes to VSNSFH 3.0–3.82 V, clamped by the BAT54C to ≈3.3 V+Vf.
 - Linear range ≤ 2.7 V (≈2.95 A).
 - Software FAULT 3.0 A reading for 100 ms; declared ≤ 2.8 A; SNS ≥ 2.9 V for 1 ms = limit/fault. See fixes_firmware §20.
+
+### Rev 8d (2026-11-21 ~1:22 AM HST): BL_ALLOW
+- U76 P16 (pin 19) = **BL_ALLOW**, MCU output, default HIGH. 74LVC1G08 ANDs it with CM5 GPIO12 into U24 EN. R121 stays 100 kΩ. Details: ARCHITECTURE §13.11, fixes_firmware §23.5a.
