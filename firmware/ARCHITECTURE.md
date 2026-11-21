@@ -630,7 +630,7 @@ Run by the MCU, because the CM5 is still booting.
 - Crank: no pre-shed. Dips are ignored except below 6.5 V (abort if > 500 ms).
 - CM5 commands that would exceed the total-current fault limit are refused (NACK BUDGET). The state machine pre-empts low-priority AUX outputs; stop/open actions always proceed.
 - PSU_MAIN_OK fault: shed within 1 ms, abort a crank, finish open pulses, abort close pulses, back off 2–32 s, lock out the 12 V loads only after 5 faults in 10 min.
-- ESTOP_TRIP (K4, Finder 38.51, J24.6, breaker shunt-trip): a real emergency adds ≤ 1 ms of shedding before MCU_TRIP. **Rev 8g:** firmware must **never hold K4 on continuously**. Command pulse **0.48 s** nominal (TLC555-Q1 U66 one-shot, load_shedding_spec C229 2.2 µF **0.48 s, 0.37–0.53 s**; **design_spec now the same, 0.37–0.53 s**. The present RC parts do not guarantee 0.37 s worst case. C229 C0G range is still pending (Enginerd). Safety Round 7 “~0.48 s pulse”). Hard cut and fault `ESTOP_TRIP_STUCK` if MCU_TRIP or the sensed output remains asserted beyond **0.53 s** (unchanged). The earlier 500 ms cap is superseded. Retries are ≥ 15 s apart, at most 3. WDO_N still gates the AND.
+- ESTOP_TRIP (K4, Finder 38.51, J24.6, breaker shunt-trip): a real emergency adds ≤ 1 ms of shedding before MCU_TRIP. **Rev 8g:** firmware must **never hold K4 on continuously**. Firmware MCU_TRIP drive pulse **0.48 s** then LOW (unchanged). Hardware one-shot (TLC555-Q1 U66, **R404 2.0 MΩ**, **C229 220 nF C0G**) is **0.30–1.00 s**, nominal 0.48 s (Rev 8k, §13.18; replaces the pending C0G / 0.37–0.53 s note). Expected-pulse checks are **0.30–1.00 s**. Hard cut and fault `ESTOP_TRIP_STUCK` if MCU_TRIP or the sensed output remains asserted beyond **1.20 s** (was 0.53 s). The earlier 500 ms cap is superseded. Retries are ≥ 15 s apart, at most 3. WDO_N still gates the AND.
 - Hardware gaps: no on-board VBAT_P ADC (the approved INA238 adds VBUS and total current, spec §12), no converter current sense, LM5176 PGOOD/PG_5V/PG_3V3 not routed to the MCU (P15 = WD_OK, P16 = BL_ALLOW, P17 = DI_BIAS_FLT_N; no spare expander bit), ESTOP_TRIP dead on VBAT_P loss.
 
 
@@ -764,11 +764,11 @@ There is **no** “glow skipped, high battery V” path (withdrawn 1:38 AM). 24 
 
 **GLOW on-time cap.** Use the configured glow time with a **hard ceiling of 60 s per cycle**. After that, GLOW is forced off and a cooldown must elapse before glow can re-arm: **60 s minimum (ASSUMED)**. **If a start asks for glow during cooldown (proposed, flag for Enginerd):** skip glow, raise `GLOW_COOLDOWN` (“glow skipped, cooldown”), and continue the start at CRANK. Alternative, not adopted here: wait out the remaining cooldown (delays a standby start).
 
-**K4 / ESTOP_TRIP pulse.** K4 is the E-stop / breaker shunt-trip (Finder 38.51, J24.6, TPS1HTC30 U68), ORed from the TLC555 one-shot (U66) and MCU_TRIP (PD7). Nominal **0.48 s** comes from the hardware one-shot (load_shedding_spec: C229 2.2 µF, **0.48 s, 0.37–0.53 s**; **design_spec now the same, 0.37–0.53 s**. The present RC parts do not guarantee 0.37 s worst case. C229 C0G range is still pending (Enginerd). Safety Round 7 table “~0.48 s pulse”). Firmware must **never hold K4 on continuously**. Pulse MCU_TRIP for 0.48 s then drive it LOW (the §3 ESTOP row that held MCU_TRIP=1 is withdrawn). Hard-cut and raise `ESTOP_TRIP_STUCK` if it remains asserted beyond **0.53 s** (unchanged). Retries ≥ 15 s, at most 3. K4 is still not in the kit-voltage inhibit; do not rely on it at 36 V (UVR).
+**K4 / ESTOP_TRIP pulse.** K4 is the E-stop / breaker shunt-trip (Finder 38.51, J24.6, TPS1HTC30 U68), ORed from the TLC555 one-shot (U66) and MCU_TRIP (PD7). Hardware one-shot (U66, **R404 2.0 MΩ**, **C229 220 nF C0G**) is **0.30–1.00 s**, nominal 0.48 s (Rev 8k, §13.18; replaces the pending C0G / 0.37–0.53 s note). Firmware must **never hold K4 on continuously**. Pulse MCU_TRIP for **0.48 s** then drive it LOW (firmware drive width unchanged; the §3 ESTOP row that held MCU_TRIP=1 is withdrawn). Expected-pulse checks are **0.30–1.00 s**. Hard-cut and raise `ESTOP_TRIP_STUCK` if it remains asserted beyond **1.20 s** (was 0.53 s). Retries ≥ 15 s, at most 3. K4 is still not in the kit-voltage inhibit; do not rely on it at 36 V (UVR).
 
 **Alarms:** `RELAY_KIT_UNSET`, `RELAY_KIT_MISMATCH`, `RELAY_KIT_GAP`, `RELAY_KIT_FLAT`, `RELAY_KIT_OV` (latched; mid-run does not stop the engine), `INA_VBUS_FAULT` (blocks all starts), `GLOW_COOLDOWN`, `ESTOP_TRIP_STUCK`. UI banner, FRAM log, Modbus/CAN bits. None of these is MCU_TRIP except the intentional K4 pulse.
 
-**Bench:** 12 V / 24 V ramps at 16.0 and 30.0 V inhibit CRANK/FUEL/GLOW for a *new* start, 100 ms / 2 s; mid-run 24 V kit > 30 V leaves FUEL on and latches the alarm; INA NACK / bad MANUFACTURER_ID / stale / read-back mismatch → ADC fallback and start blocked; glow 60 s cap and 60 s cooldown skip; MCU_TRIP pulse 0.48 s, stuck-high fault at 0.53 s; R630 fitted, GPIO12 Hi-Z backlight off (reset-pull bench item stays); E-stop hardware path still drops fuel at 36 V.
+**Bench:** 12 V / 24 V ramps at 16.0 and 30.0 V inhibit CRANK/FUEL/GLOW for a *new* start, 100 ms / 2 s; mid-run 24 V kit > 30 V leaves FUEL on and latches the alarm; INA NACK / bad MANUFACTURER_ID / stale / read-back mismatch → ADC fallback and start blocked; glow 60 s cap and 60 s cooldown skip; MCU_TRIP pulse 0.48 s, stuck-high fault at 1.20 s; expected hardware pulse 0.30–1.00 s; R630 fitted, GPIO12 Hi-Z backlight off (reset-pull bench item stays); E-stop hardware path still drops fuel at 36 V.
 
 ### 13.15 Rev 8h (2026-11-21 ~1:51 AM HST): DI_BIAS rail fault, one-shot 0.37–0.53 s, LVC1G08 MPN
 Source: Enginerd 1:51 AM; Layout news 1:41–1:51; Safety requirement for a lost or current-limited DI bias rail.
@@ -803,14 +803,14 @@ E-stop is **not** on either DI_BIAS rail (ESTOP_DIG, ESTOP2_DIG, VESTOP_SNS, EST
 
 **Bench:** short each rail (eFuse/PTC current-limits; all six DIs go FAULTED); open each rail at the terminal (same); P17 fault-pin test: pull DI_BIAS_FLT_N low and latch on the first assertion (no 50 ms debounce; §13.17), use inference to name the rail, or FAULT both if it cannot. Confirm E-stop still works with a bias rail faulted. Confirm a legitimate all-open bank (already open ≥ 1 s) does not latch. An unconnected P17 reads high (not a fault) — residual; see the §13.17 self-test. Additional bench (sustained short through retries, start-up pulse width) is in §13.17.
 
-**One-shot (B).** The ESTOP pulse range is **0.37–0.53 s** (design_spec now matches load_shedding_spec). The present RC parts do not guarantee 0.37 s worst case. **C229 C0G range is still pending** (Enginerd). `ESTOP_TRIP_STUCK` stays at **0.53 s**.
+**One-shot (B).** Superseded by §13.18 (Rev 8k): C229 **220 nF C0G**, R404 **2.0 MΩ**, hardware range **0.30–1.00 s** (nominal 0.48 s); `ESTOP_TRIP_STUCK` at **1.20 s**; expected-pulse checks **0.30–1.00 s**. Firmware MCU_TRIP drive stays **0.48 s**. The 8h pending-Enginerd C0G / 0.37–0.53 s / 0.53 s STUCK note is withdrawn.
 
 **MPN (C).** All 74LVC1G08 gates, **U88 included**, are Diodes **74LVC1G08W5-7**, same pinout (U38/U39/U40/U67/U88).
 
 ### 13.16 Rev 8i (2026-11-21 ~2:01 AM HST): re-audit 8, P17 wired-OR
 - TPS48100 hardware trip with 20 mΩ shunts is **3.86/4.97/6.14 A** (min/typ/max). The 90 A / 1 mΩ figure is withdrawn.
 - Load dump is **not supported**. Declared supply is 9–32 V continuous, 36 V for at most 60 s.
-- U76 **P17 = DI_BIAS_FLT_N**: both eFuse fault lines wired-OR, active-low open-drain with a pull-up. **Rev 8j (§13.17) confirms the part as TPS26621DRCR and drops the 50 ms debounce.** On a P17 fault, inference names the rail; if it cannot, **both** rails are FAULTED. C229 C0G range is still pending Batch 18. `ESTOP_TRIP_STUCK` stays at 0.53 s.
+- U76 **P17 = DI_BIAS_FLT_N**: both eFuse fault lines wired-OR, active-low open-drain with a pull-up. **Rev 8j (§13.17) confirms the part as TPS26621DRCR and drops the 50 ms debounce.** On a P17 fault, inference names the rail; if it cannot, **both** rails are FAULTED. **Rev 8k (§13.18):** C229 is 220 nF C0G / R404 2.0 MΩ, one-shot **0.30–1.00 s**, `ESTOP_TRIP_STUCK` at **1.20 s**.
 
 ### 13.17 Rev 8j (2026-11-21 ~2:09 AM HST): TPS26621 DI_BIAS fault handling
 Source: Enginerd 2:08–2:09 AM HST; Layout MEASURED from m7-sch `eaa89df` netlist; TI TPS2662x **SLVSDT4F** (Rev F, Dec 2021); TI TCA9555 **SCPS200E** (Apr 2019). Both PENDING LAYOUT marks (bank-enable path and INT wiring) are **cleared**.
@@ -821,7 +821,7 @@ Source: Enginerd 2:08–2:09 AM HST; Layout MEASURED from m7-sch `eaa89df` netli
 - During start-up in dVdT mode, FLT stays low until the FET is fully enhanced, then releases after the rising deglitch tPGOOD(degl) = max{(750 + 573×C(dVdT)) µs, tPGOODR} (§9.3.7 p.23). With C(dVdT) open: tdVdT typ **0.664 ms**, tPGOODR typ **1.4 ms** → start-up FLT typ about **2.1 ms** (INFERRED). With C(dVdT) = 22 nF, tdVdT typ **11 ms**.
 - Falling deglitch tPGOODF typ **875 µs** (p.8).
 - Overload: current-limit duration tCL(dly) typ **512 ms** (plus a CdVdT term, p.21). TPS26621 then auto-retries after typ **512 ms** and turns the FETs back on in dVdT mode (FLT goes low again). Thermal retry typ 512 ms after TJ < T(TSD) − 13.5 °C (p.8, §9.3.9).
-- Layout’s start-up width **~6.5 ms is UNVERIFIED** (not a datasheet limit). C(dVdT) is not in `eaa89df` because the part is not placed yet. **A ~10 ms blank after enable is enough if C(dVdT) is open** (INFERRED from typ ~2.1 ms, with margin). If Layout fits a large dVdT cap (22 nF typ 11 ms ramp), widen the blank; do not invent the cap. Pulse width is **ASSUMED** until bench-measured.
+- **Rev 8k (§13.18) supersedes the ~10 ms / ~6.5 ms window:** C(dVdT) **stays at 10 nF**. The blank/capture window is **exactly 25 ms**. Expected start-up FLT low (INFERRED): about **8.3 ms at 9 V**, **11.4 ms at 24 V**, **13.9 ms at 36 V**. Rising deglitch at 10 nF is tPGOOD(degl) = 750 + 573×10 = **6.48 ms** (SLVSDT4F §9.3.7 p.23 / p.8). Pulse width remains **ASSUMED** until bench-measured. The earlier “~10 ms if CdVdT is open” / Layout ~6.5 ms UNVERIFIED wording is withdrawn.
 
 **Enable path (MEASURED, m7-sch `eaa89df`).** MCU → I2C1 (400 kHz) → U31 (TCA9555 @**0x22**) → FETs:
 - Bank A: U31 **P14 (pin 17)** → DI_PU_A → Q37 → Q36.
@@ -834,7 +834,7 @@ Start the blank / self-test window timer at the **U31 enable write** so the typ 
 
 **Approved self-test** (Enginerd; sequential so the wired-OR pulse is attributable). Enable banks **one at a time**. After each enable:
 1. Start a timer at the U31 enable write.
-2. On the EXTI7 falling edge, read U76 P17 immediately. **P17 LOW inside the ~6.5 ms window (Layout, UNVERIFIED) is the strongest proof.**
+2. On the EXTI7 falling edge, read U76 P17 immediately. **P17 LOW inside the 25 ms window (Rev 8k, §13.18) is the strongest proof.**
 3. If the read lands after the pulse, accept **EXTI7 falling (INT asserted) plus P17 already HIGH** as proof (**INFERRED**), but only if no other expander shows a changed input in the same INT event. Otherwise retry the self-test once.
 4. Neither seen: the pulse is missing; **that bank faults** and starts are inhibited. **P17 still LOW after the window: stuck low; that bank faults.**
 
@@ -842,9 +842,9 @@ Capture the EXTI7 falling edge in the MCU. The expander INT pin may already have
 
 Run this at every bank enable, and on a **periodic re-cycle while the engine is stopped: every 60 s (ASSUMED), IDLE only**. Never re-cycle in PREHEAT, CRANK, RUN, COOLDOWN, or during a start. Off-time **50 ms (ASSUMED)** then re-enable and run the window. While a bank is off, its six inputs have no wetting current and are **invalid** (not a legitimate all-open, and do not latch inference). After a pass, inputs are valid again.
 
-**I2C budget (I2C1 400 kHz).** Bit time 2.5 µs. One TCA9555 output write or input-port read is about 100–150 µs electrical (existing ≈100 µs/read figure, §11). A 6.5 ms window holds on the order of **40–65** such transactions. A scan of all six INT-sharing expanders is about 0.6–0.9 ms and fits.
+**I2C budget (I2C1 400 kHz).** Bit time 2.5 µs. One TCA9555 output write or input-port read is about 100–150 µs electrical (existing ≈100 µs/read figure, §11). A **25 ms** window (Rev 8k) holds on the order of **160–250** such transactions. A scan of all six INT-sharing expanders is about 0.6–0.9 ms and fits.
 
-**Self-test viability: yes.** Datasheet p.23 confirms a start-up FLT low, INT is wired to PE7 EXTI7, and the bus can complete the immediate P17 read (and an attribution scan if needed). Caveat: a late read can miss the live LOW; use step 3. Pulse width is ASSUMED; the 6.5 ms window is UNVERIFIED.
+**Self-test viability: yes.** Datasheet p.23 confirms a start-up FLT low, INT is wired to PE7 EXTI7, and the bus can complete the immediate P17 read (and an attribution scan if needed). Caveat: a late read can miss the live LOW; use step 3. Pulse width is ASSUMED; the capture window is **25 ms** (§13.18).
 
 **Known gap (unchanged).** An open FLT wire, an unpowered eFuse, or a bank that is off all read HIGH (OK). The approved self-test is the mitigation.
 
@@ -852,6 +852,17 @@ Run this at every bank enable, and on a **periodic re-cycle while the engine is 
 
 **Recovery.** Latch. Auto-clear a rail only if P17 has been high for **2 s (ASSUMED)** — longer than one typ 512 ms retry high period — and, if the rail was identified only by inference or both were faulted together, after at least one input on that rail has been observed closed for **1 s**, or by operator reset. Polarity is confirmed.
 
-**C229.** C0G range is still pending Batch 18. The ESTOP pulse remains **0.37–0.53 s**; `ESTOP_TRIP_STUCK` stays at **0.53 s**.
+**C229.** Superseded by §13.18 (Rev 8k): **220 nF C0G**, R404 **2.0 MΩ**, hardware range **0.30–1.00 s**, `ESTOP_TRIP_STUCK` at **1.20 s**. The pending-Enginerd / Batch 18 note is withdrawn.
 
-**Bench.** Measure the start-up FLT pulse width at P17 (and versus the U31 write). Confirm the ~10 ms blank covers it. Apply a sustained short and confirm the latch holds through auto-retries (typ 512 ms). Walk the four self-test outcomes, including a late read (INFERRED) and a colliding expander INT (retry once). Confirm no re-cycle while running or during a start. Confirm E-stop still works with a rail FAULTED. Confirm a legitimate all-open bank (≥ 1 s) does not latch.
+**Bench.** Measure the start-up FLT pulse width at P17 (and versus the U31 write) at 9 / 24 / 36 V; confirm it finishes inside the **25 ms** window. Apply a sustained short and confirm the latch holds through auto-retries (typ 512 ms). Walk the four self-test outcomes, including a late read (INFERRED) and a colliding expander INT (retry once). Confirm no re-cycle while running or during a start. Confirm E-stop still works with a rail FAULTED. Confirm a legitimate all-open bank (≥ 1 s) does not latch.
+
+### 13.18 Rev 8k (2026-11-21 ~2:19 AM HST): 10 nF dVdT, 25 ms FLT window, one-shot 0.30–1.00 s
+Source: Enginerd 2:19 AM HST. Supersedes the §13.17 ~10 ms blank, the Layout ~6.5 ms UNVERIFIED window, the “C(dVdT) not yet known” wording, and the pending Enginerd / Batch 18 C229 C0G / 0.37–0.53 s / `ESTOP_TRIP_STUCK` 0.53 s notes.
+
+**(a) dVdT and self-test window.** C(dVdT) **stays at 10 nF**. The FLT self-test blank/capture window is **exactly 25 ms** after each bank enable (timer still starts at the U31 write). Expected start-up FLT low (**INFERRED**): about **8.3 ms at 9 V**, **11.4 ms at 24 V**, **13.9 ms at 36 V**. At 10 nF the datasheet rising deglitch is tPGOOD(degl) = 750 + 573×10 = **6.48 ms** (SLVSDT4F §9.3.7 p.23 / §7.6 p.8, C(dVdT) > 4.7 nF). A 25 ms window covers the 13.9 ms / 36 V figure (INFERRED). Pulse width remains **ASSUMED** until bench-measured.
+
+I2C budget at 400 kHz: a 25 ms window holds on the order of **160–250** expander transactions. A six-expander scan (~0.6–0.9 ms) still fits. The self-test remains viable. In the approved self-test, “inside the window” means **25 ms**.
+
+**Bench (added).** Measure the start-up FLT low time at P17 versus the U31 write at **9 V, 24 V and 36 V**; confirm it finishes inside 25 ms. Record the widths as MEASURED.
+
+**(b) One-shot.** C229 is **220 nF C0G**, R404 is **2.0 MΩ**. The hardware one-shot spec range widens to **0.30–1.00 s** (nominal 0.48 s). Expected-pulse checks are **0.30–1.00 s**. `ESTOP_TRIP_STUCK` moves from 0.53 s to **1.20 s**. Firmware’s own MCU_TRIP drive pulse **stays at 0.48 s**, then LOW — no document in firmware/ or the live review specs assigns that drive a different width.

@@ -184,13 +184,13 @@ VREF+ = +3V3_SAFE [M]; 16-bit. Source: fixes_firmware.md §18.2.
 - **U83** TMP1075 I2C1 0x4A, **C306**, ALERT NC — firmware polls. **F101 / F102** are the present PTCs on DI_BIAS_A / DI_BIAS_B (Batch 17: TI **TPS26621DRCR**, §13.17).
 
 ### Rev 8g (2026-11-21 ~1:37–1:38 AM HST)
-- Mid-run kit OV does not stop the engine (FUEL / K2 stays on; latched `RELAY_KIT_OV`). 12 V kit inhibit 16/15 V; 24 V kit GLOW, CRANK and FUEL all **30.0 / 28.5 V**. INA237 VBUS primary; ADC fallback blocks all starts. Glow on-time capped at 60 s + 60 s cooldown (ASSUMED). MCU_TRIP / K4 pulse **0.48 s**, fault if held past 0.53 s. See ARCHITECTURE §13.14.
+- Mid-run kit OV does not stop the engine (FUEL / K2 stays on; latched `RELAY_KIT_OV`). 12 V kit inhibit 16/15 V; 24 V kit GLOW, CRANK and FUEL all **30.0 / 28.5 V**. INA237 VBUS primary; ADC fallback blocks all starts. Glow on-time capped at 60 s + 60 s cooldown (ASSUMED). MCU_TRIP / K4 firmware drive pulse **0.48 s**; `ESTOP_TRIP_STUCK` at **1.20 s** (Rev 8k, was 0.53 s); hardware one-shot **0.30–1.00 s**. See ARCHITECTURE §13.14 / §13.18.
 - **R630 CONFIRMED** 100 kΩ BL_PWM to GND. Closes part of the GPIO12 reset-pull bench item; the bench item stays.
 - **FUEL is K2** (Hella 4RA 003 437-191 on the 24 V kit, 16–30 V).
 
 ### Rev 8h (2026-11-21 ~1:51 AM HST): DI_BIAS rails, one-shot, LVC MPN
 - **DI_BIAS_A** (J21.6, F101): **DI1–DI6**. **DI_BIAS_B** (J22.1, F102): **DI7–DI12**. MEASURED from m7-sch `inputs.kicad_sch` wetting resistors. E-stop is not on these rails. Rail-fault firmware: ARCHITECTURE §13.15–§13.17 / fixes_firmware §25.
-- ESTOP one-shot range **0.37–0.53 s** (design_spec now matches). `ESTOP_TRIP_STUCK` stays at 0.53 s. **C229 C0G range is still pending.**
+- ESTOP one-shot: **Rev 8k (§13.18) supersedes 0.37–0.53 s / pending C0G.** C229 **220 nF C0G**, R404 **2.0 MΩ**, hardware range **0.30–1.00 s**; `ESTOP_TRIP_STUCK` at **1.20 s**. Firmware MCU_TRIP drive stays 0.48 s.
 - All 74LVC1G08 gates (U38, U39, U40, U67, U88) are Diodes **74LVC1G08W5-7**, same pinout.
 
 ### Rev 8i (2026-11-21 ~2:01 AM HST)
@@ -201,4 +201,8 @@ VREF+ = +3V3_SAFE [M]; 16-bit. Source: fixes_firmware.md §18.2.
 - DI_BIAS eFuse is TI **TPS26621DRCR**. U76 **P17 (pin 20) = DI_BIAS_FLT_N**, 10 kΩ to +3V3_SAFE, polarity confirmed. Latch on the first FLT outside the enable blank; the 50 ms debounce is withdrawn.
 - Bank enables (MEASURED, m7-sch `eaa89df`): U31 (TCA9555 @0x22) **P14 → DI_PU_A → Q37 → Q36** (bank A); **P15 → DI_PU_B → Q40 → Q39** (bank B). Start the self-test / blank timer at the U31 I2C write.
 - U76 ~INT is on shared **I2C_INT_N** (U31, U62, U73, U74, U75, U76, R45 10 kΩ) into **PE7 (EXTI7)** — MEASURED, pending mark cleared. INT may release when the pin returns to its original level (SCPS200E p.16); the Input Port register is live only (p.24). Clear INT by reading the expander and port that raised it (P17 is port 1).
-- Approved sequential self-test and 60 s IDLE re-cycle: ARCHITECTURE §13.17. C229 C0G range is still pending Batch 18.
+- Approved sequential self-test and 60 s IDLE re-cycle: ARCHITECTURE §13.17. **Rev 8k:** 25 ms window, C(dVdT) 10 nF; one-shot 0.30–1.00 s (§13.18).
+
+### Rev 8k (2026-11-21 ~2:19 AM HST): 10 nF dVdT, 25 ms window, one-shot 0.30–1.00 s
+- C(dVdT) **stays at 10 nF**. FLT self-test blank/capture window is **exactly 25 ms** after each bank enable (timer at the U31 write). Expected FLT low (INFERRED): **8.3 ms at 9 V**, **11.4 ms at 24 V**, **13.9 ms at 36 V**. Pulse width ASSUMED; bench-measure at 9/24/36 V. tPGOOD(degl) at 10 nF is 6.48 ms (SLVSDT4F p.23/p.8). I2C budget: on the order of 160–250 expander transactions in 25 ms; self-test remains viable.
+- One-shot: C229 **220 nF C0G**, R404 **2.0 MΩ**, range **0.30–1.00 s** (nominal 0.48 s). Expected-pulse checks **0.30–1.00 s**. `ESTOP_TRIP_STUCK` is **1.20 s**. Firmware MCU_TRIP drive stays **0.48 s**. The pending Enginerd / Batch 18 C0G note is withdrawn.
