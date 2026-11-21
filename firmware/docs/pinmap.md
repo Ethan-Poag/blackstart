@@ -208,4 +208,8 @@ VREF+ = +3V3_SAFE [M]; 16-bit. Source: fixes_firmware.md §18.2.
 - One-shot: C229 **220 nF C0G**, R404 **2.0 MΩ**, range **0.30–1.00 s** (nominal 0.48 s). Expected-pulse checks **0.30–1.00 s**. `ESTOP_TRIP_STUCK` is **1.20 s**. Firmware MCU_TRIP drive stays **0.48 s**. The pending Enginerd / Batch 18 C0G note is withdrawn.
 
 ### Rev 8l (2026-11-21 ~2:24 AM HST): DI_BIAS 3-in-10 s lockout
-- If a bank sees **3 FLT events in a rolling 10 s**, deassert its enable (A: U31 P14; B: U31 P15) and latch `DI_BIAS_A_LOCKOUT` / `DI_BIAS_B_LOCKOUT`. Self-test pulses inside the 25 ms blank do not count. Ambiguous wired-OR attribution locks out both banks. Mid-run: alarm only, do not stop the engine. Operator ack re-runs the bank self-test before clearing. Lockout persists across reset and power cycle (FRAM, ASSUMED). Details: ARCHITECTURE §13.19.
+- If a bank sees **3 FLT events in a rolling 10 s**, deassert its enable (A: U31 P14; B: U31 P15) and latch `DI_BIAS_A_LOCKOUT` / `DI_BIAS_B_LOCKOUT`. Self-test pulses inside the 25 ms blank do not count. Ambiguous wired-OR attribution locks out both banks. Mid-run: alarm only, do not stop the engine. **Rev 8m:** P17 held low > 2 s outside the blank also locks out that bank (or both, if ambiguous). Ack is accepted only while stopped and re-runs the self-test before clearing (**RULED**). Lockout is FRAM-persistent until an ack passes (**RULED**). Details: ARCHITECTURE §13.19–§13.20.
+
+### Rev 8m (2026-11-21 ~2:26 AM HST): stuck-low lockout, ack and FRAM RULED
+- A continuous P17 low is still one 3-in-10 s event. P17 held low **> 2 s** outside the 25 ms blank also locks out that bank directly (ambiguous attribution → both). Mid-run: alarm only, FUEL stays on.
+- **RULED (Enginerd 2:26):** ack is accepted only while stopped, and re-runs the bank self-test before clearing. Lockout is FRAM-persistent until an ack passes.
