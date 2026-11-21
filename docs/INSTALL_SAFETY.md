@@ -16,7 +16,7 @@
 
 ## Power box fuse positions (Ethan ruling 2026-11-21)
 Genctl is two modules: the controller (this board, including the 600 V sensing) and a separate power box that holds every fuse and the power relays (draft BOM: review/bom_final/BOM_powerbox.csv). Rules:
-- No fuses on the controller board. The only exception is a PTC resettable fuse on a small signal or sensor supply output where it is useful (fitted: F101/F102 1210L020/72 on DI_BIAS_A/B as backup behind the U89/U90 TPS26621 active current limit, 0.20 A, m7-sch Batch 18).
+- No fuses on the controller board. The only exception is a PTC resettable fuse on a small signal or sensor supply output where it is useful (fitted: F101/F102 1210L020/72 on DI_BIAS_A/B as backup behind the U89/U90 TPS26621 active current limit, 0.20 A, m7-sch Batch 18). U89/U90 must stay on the protected VBAT_P rail behind the LM74800 (U1) and must never be moved to the raw battery input BAT_IN: their 62 V absolute maximum is below the ~64.5 V clamp of the battery-input TVS (Safety R7-N13).
 - Battery and low-voltage fuses are ATO/ATC blades from the 32–58 V DC family; this design must use the 58 V DC members only (F1–F25 and the main battery-cable fuse F0; see the battery input bullet).
 - The 600 V metering fuses must state a 600 V rating (power box F26–F31): SIBA 6003305.1 1 A 600 V AC 10x38 ceramic aR, 200 kA at 600 V AC, in Eaton CHM3DU (or equal) 600 V IP20 finger-safe holders; or Littelfuse KLKD001 600 V AC/DC.
 - Do not plug or unplug the 600 V voltage-sense plugs J7/J8 (board J28/J29, Phoenix PC 5/4 1720819) live. Open the metering fuses (power box F26–F31) or isolate the generator/bus source first; the plugs are not rated for making or breaking a live 600 V circuit (Safety R7-N12).

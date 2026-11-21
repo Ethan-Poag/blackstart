@@ -422,7 +422,7 @@ tca(inp,2,ex)
 # DI bank bias
 for b in 'AB':
     # m7-sch Batch 18 (Enginerd 2026-11-21 02:08): Q36/Q39 drain -> DIB_x_EFIN -> U89/U90 TPS26621DRCR eFuse (ILIM 33.2k = 0.20 A, auto-retry,
-    # UVLO 1M to IN, OVP/dVdT 10n/ILIM/EP to local DIB_x_RTN, SHDN open, FLT -> DI_BIAS_FLT_N + R635 10k to +3V3_SAFE -> U76 P17)
+    # UVLO 1M to IN, OVP/dVdT 10n/ILIM/EP/RTN to GND (Batch 21, Safety R7-N13; was local DIB_x_RTN; never move U89/U90 to BAT_IN), SHDN open, FLT -> DI_BIAS_FLT_N + R635 10k to +3V3_SAFE -> U76 P17)
     # -> DIB_x_PTC (C309/C312 100n) -> F101/F102 1210L020/72WR (C27568256) -> DI_BIAS_x. Text mirror only.
     # Mirrors the committed inputs.kicad_sch for reference only; DO NOT REGENERATE (refs F101/F102 are hand-placed).
     fet(inp,'Transistor_FET:AO3401A','SI2309CDS','DIB_%s_PG'%b,'VBAT_P','DIB_%s_EFIN'%b,mpn='SI2309CDS-T1-GE3')
