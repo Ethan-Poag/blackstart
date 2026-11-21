@@ -57,6 +57,14 @@ Solder mask and conformal coating: solder mask is **not** counted as insulation 
 ## 5a. Pollution degree ruling (Enginerd, 2026-11-21, m7-sch Batch 14)
 Stay at **PD2 plus conformal coat**; no PD3 re-layout. The sealed fanless enclosure supports PD2; the conformal coat (HEAT_PATH.md: acrylic, HV section, not IEC 60664-3 qualified) is extra protection and takes no creepage credit. No distance or rule in this file changes. A site with condensation or conductive dust is outside the PD2 basis (see review/bom_final/BOM_notes.md "PD3 creepage").
 
+## 5b. J28/J29 (J7/J8) constraints, Safety R7-N12 (m7-sch Batch 16, 2026-11-21)
+J28/J29 stay Phoenix PC 5/4-GF-7,62 1720819. No isolation number in this file is relaxed.
+1. Milled slot between every adjacent pin pair (L1-L2, L2-L3, L3-N), not only L-N; >=8 mm surface path pad-to-pad is the design target. As built (MEASURED): 3 slots per header, 2.0 mm wide, x 1.98-13.53; J28 y 26.17-28.22 / 33.79-35.84 / 41.41-43.46, J29 y 75.99-78.04 / 83.61-85.66 / 91.23-93.28; pads 2.0 mm round on a 7.62 mm pitch. Path INFERRED ~8.97 mm (high-x end) / ~7.15 mm (low-x end). Safety ruling 2026-11-21: 6.3 mm required (table row above), 7.15 mm clears it, slots acceptable as built; extend low-x ends to x <= 1.3 mm at the next revision (NICE TO HAVE, D-m7-22).
+2. Header >=13 mm from SELV: MEASURED read-only (pcbnew on the frozen board, nets classified by connectivity with U69/U70 as the only barrier parts): J28 nearest SELV copper 23.64 mm (GEN_N pad 4 to the GND / VBAT_P / +3V3_SAFE inner-layer zones), J29 59.47 mm (slot to GND zone). PASS.
+3. No creepage credit for conformal coat (§5a).
+4. JLC minimum slot width >=1.0 mm: still to verify (drawn slots are 2.0 mm).
+5. "Do not plug or unplug live" at J28/J29: schematic text (ac_metering sheet), INSTALL_SAFETY, README; silkscreen is deferred (D-m7-22).
+
 ## 6. To do at layout
 1. Draw the barrier: >=13 mm copper keep-out on every layer between the GND_AC zone and everything else (or 9 mm with CTI>=400 laminate called out in fab notes).
 2. Isolator slot comes with the footprint; join it to a board barrier slot if the two isolators sit next to each other (one long slot is fine).

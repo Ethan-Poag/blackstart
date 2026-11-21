@@ -110,4 +110,10 @@ Source: hv_layout_rules_600V.md (compliance sheet, /workspace/compliance/hv_layo
 - Hot copper >=8.0 mm from the board edge and >=12.6 mm from H1-H4. Solder mask never counts.
 - Exempt: same-chain adjacent divider nodes (>=1.5 mm) and tap nodes (>=0.2 mm). J30 (CT inputs) is treated as HOT.
 - J28/J29: >=2.0 mm slots between pins (done in M7: 2.0 x 10.5 mm, x 2.0-12.5).
+- J28/J29 (Phoenix 1720819 stays; Safety R7-N12, m7-sch Batch 16) carry all four constraints:
+  1. A milled (non-plated) slot between EVERY adjacent pin pair (L1-L2, L2-L3, L3-N), not only L-N, giving a >=8 mm surface path pad-to-pad (design target, R7-N12 / D4). As built: 3 slots per header, 2.0 mm wide, x 2.0-13.5 (MEASURED by Enginerd and re-measured read-only in Batch 16: x 1.98-13.53). INFERRED path ~8.97 mm around the high-x end but only ~7.15 mm around the low-x end. Safety (2026-11-21) rules the as-built slots acceptable against the 6.3 mm required (basic, phase-phase, FR-4 IIIa); extending every slot low-x end to x <= 1.3 mm (board edge x -3.72) is NICE TO HAVE for the next board revision (D-m7-22).
+  2. Header (pads and slots) >=13 mm from any SELV copper. MEASURED read-only on the frozen board (Batch 16): J28 23.64 mm, J29 59.47 mm. PASS.
+  3. No creepage credit for conformal coat (coat is not IEC 60664-3 qualified; see ISOLATION_CHECK §5a).
+  4. Slot width >=1.0 mm at JLC (JLC NPTH slot minimum quoted as 1.0 mm +/-0.2): still to verify with JLC before release; the drawn 2.0 mm slots exceed it.
+  Silkscreen "DO NOT PLUG OR UNPLUG LIVE" at J28/J29 (D-m7-22).
 - Checker: hvrules.py (node-voltage aware, credits creepage around slots). DRU carries the sheet rules at severity warning; no existing error rule was relaxed.

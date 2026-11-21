@@ -844,3 +844,56 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 5. **BOM.** Category BOMs: outputs_bom C7666 qty 4 -> 5; comms_bom C25803 101 -> 102; ac_metering_bom C14663 112 -> 114; new rows comms_bom R629 C25804 (LCSC 100+ $0.0017, stock 823,400) and power_bom U83 C2870250 (LCSC 1+ $0.4175, stock 541; JLC Extended 541), read 2026-11-21 01:30 HST. tools/bom_from_sch.py: 204 = 204 groups, 0 mismatches. tools/bom_retotal.py: on-board total $852.43 -> $857.11. $4.11 of the +$4.68 is 2 x the C14663 row's unit price of $2.0555, which is the open R7-N5 price error (LCSC is about $0.002 each); the row was not repriced here.
    - Part check: C7666 matches the existing LVC1G08 group. C25804 does **not** match the existing 0603 10k group, which is C98220 YAGEO RC0603FR-0710KL (79 refs); C25804 was used as Enginerd asked, so it is a new BOM group. C14663 is the existing 0603 100n group.
 - ERC (git-archive extract of this commit, kicad-cli 9.0.2, /workspace/kicad-libs): see the commit report; PCB file untouched (md5 49a6a6a78d3982dc24093687e5e54c0c).
+
+## Batch 16 (Layout; Enginerd/Safety rulings 2026-11-21 ~1:34-1:42 AM HST; schematic properties + text, BOM, docs; NO net change, no layout)
+1. **R630 kept** (Enginerd ruling; BL_PWM 100k pull-down, Batch 15). Nothing changed.
+2. **R629 -> C98220** YAGEO RC0603FR-0710KL (Manufacturer YAGEO), so it joins the existing 0603 10k group (79 -> 80 in other_bom.csv); the Batch 15 comms_bom C25804 row is removed.
+3. **F101/F102 step-up to ~0.20 A: NOT applied** (Safety ruling (c): do not commit anything that hides the problem).
+   - Eaton PTS1206 has no 60 V part above 0.10 A (TD 4397 Nov 2021: 60 V parts are V005/V010 only; 0.20 A is PTS120624V020, 24 V).
+   - Best reputable 1210 >=60 V ~0.20 A: Littelfuse 1210L020/72 (LCSC C27568256, 72 V, Ihold 0.20 A / Itrip 0.40 A at 20 C, Imax 10 A, 8 A trips in <=0.5 s, Rmin 0.8 ohm, R1max 5 ohm; LCSC stock 925 at 2026-11-21 01:38 HST, $0.8378). Derated hold at 85 C = **0.091 A MEASURED** (datasheet re-rating TABLE value, exact, not a curve read; Littelfuse 1210L datasheet "Temperature Rerating"): misses the >=0.092 A (2 x 46 mA) bar by 1 mA. Imax 10 A is below the INFERRED hard-short current (next item).
+   - Q36/Q39 check (SI2309CDS-T1-GE3, Vishay doc 68980 Rev A): MEASURED Rds(on) 0.345 ohm max at Vgs -10 V; ID(on) >= 6 A; IDM 8 A (10 us); PD 1.0 W (TA 25 C, t <= 5 s) / 0.67 W (70 C); RthJA 92 typ / 120 max C/W (t <= 5 s), 166 C/W steady state; SOA (TA 25 C, single pulse) at Vds ~6-36 V: about 1 A for 1 ms, 0.3 A for 10 ms, 0.1 A for 100 ms (graph read, about +/-30 %). The gate is driven to about -15 V at 32-36 V (D147 BZT52C15 clamp), so the FET is fully on.
+   - 0.4 A overload (Safety's case), INFERRED: FET drop 0.4 x 0.35 = 0.14 V, about 56 mW, fine against the 0.67 W rating. A 0.20 A PTC at 85 C (~0.09 A hold, ~0.18 A trip) would trip; trip time at 0.4 A is not specified on either datasheet.
+   - Dead short on DI_BIAS at 36 V, INFERRED: nothing upstream limits current. VBAT_P sits behind the LM74800 ideal diode (no current limit) and the external 10 A standard fuse J1, which will not open within the PTC trip time.
+     - Current is set only by Rds(on) and the PTC: ~36/(0.35+0.8) ≈ 31 A with the 1210L020/72, or ~36/(0.35+1.6) ≈ 18 A with today's PTS120660V010. That is far above IDM 8 A and outside the SOA by more than 10x.
+     - Using the datasheet trip points as I²t estimates (32 A²s for the 1210L020/72 at 8 A/0.5 s; 0.25 A²s for the PTS120660V010 at 0.5 A/1.0 s), the FET carries roughly 0.7 ms (today) to 30 ms (1210L020/72) of 100-300 W. **Q36/Q39 are not protected against a hard short by any PTC**; that includes the part fitted now.
+     - Fix options for Enginerd/Safety: a current-limited high-side switch / eFuse with thermal shutdown on each bias rail, or an active current limit (sense R + BJT) sized with Q36/Q39 SOA. Bench short tests at 32 and 36 V are still open.
+   - F101/F102 stay PTS120660V010 / C2441287 / Fuse_1206 for now; the "no external loads on DI bias" install note stays.
+4. **Wetting resistors 1/2 W** (Enginerd/Safety). R210, R213, R216, R219, R222, R225 (bank A), R228, R231, R234, R237, R240, R243 (bank B) = the 12 DI wetting resistors (DI_BIAS_x -> J19/J20), plus **R246** (ESTOP_SENSE NC2 4.7k pull-down to GND).
+   - R246 is not a DI wetting resistor, but it sits in the same BOM group, Enginerd listed it, and it sees the E-stop loop voltage continuously (NC contact), so it has the same ~0.28 W at 36 V. Including it was deliberate.
+   - No other 1206 4.7k exists. The other 4.7k parts are 0603 (C23162) and were not touched.
+   - New part: **HKR FPF064K7FE1/2W** (JLC/LCSC code C49308172). HKR datasheet "High Power Chip Resistors - FPF Series" Rev R2, 28-Apr-2025: FPF06 = 1206, 1/2 W at 70 C (P70), linear derating to 0 at 155 C, so ~0.41 W at 85 C (185 F) INFERRED from the curve, about +/-0.02 W; tolerance F = +/-1 %; TCR E = +/-100 ppm/C; RCWV 200 V.
+   - Stock: JLC 1751 at 2026-11-21 01:39 HST, $0.0137. The lcsc.com detail API returns no product for C49308172, so there is no lcsc.com stock figure.
+   - Margin at 36 V: 0.276 W INFERRED dissipation vs 0.50 W MEASURED rating = 1.81x at <=70 C (158 F), ~1.49x at 85 C.
+   - Backup: YAGEO SR1206FR-7W4K7L C873960 (SR series 1206 7W = 1/2 W P70, 1 %, AEC-Q200; LCSC stock 9860 at 01:38 HST).
+5. **2.49k swap C870626 -> C5122072** (Viking ARG06BTC2491, Manufacturer "Viking Tech").
+   - Enginerd's uncommitted inputs.kicad_sch diff was **not present** in this worktree: the tree was clean apart from the routed_tracks_v4.png deletion, and C5122072 was in no commit or stash. The swap was applied fresh.
+   - Grep of every C870626 ref: R130, R141, R152, R163, R174, R185 (inputs.kicad_sch only) plus bom/inputs_bom.csv row 6. Exactly Enginerd's list.
+   - LIVE LCSC 2026-11-21 01:38 HST: 2.49 kohm, +/-0.1 %, +/-25 ppm/C, 250 mW, 200 V, 1206 thin film, stock 2360, 20+ @$0.0365.
+6. **74LVC1G08: C7666 -> C176929 for all 5 refs** (U38, U39, U40 watchdog gates; U67 E-stop gate; U88 backlight).
+   - C7666 (TI SN74LVC1G08DBVR): JLC stock 2 / LCSC 0 at 01:39 HST, so every ref was affected, not only U88.
+   - New part: Diodes Incorporated 74LVC1G08W5-7 (datasheet DS32199 Rev.10-2). SOT25 pins 1 A, 2 B, 3 GND, 4 Y, 5 VCC, identical to TI DBV; VCC 1.65-5.5 V; -40 to +125 C.
+   - LCSC stock 1475, 5+ @$0.0872 (JLC 1476) at 01:39 HST. Footprint unchanged (SOT-23-5).
+7. **R7-N5 closed:** /workspace/review/bom_final/work/r7_category_bom_fix.patch applied cleanly (git apply --check OK). C14663 is now $0.0057; TPS1HTC30A is now $4.385 (consigned from DigiKey).
+8. **ESTOP one-shot text 0.44-0.53 s -> 0.37-0.53 s** in design_spec, DESIGN_NOTES, INSTALL_SAFETY, ROUTING_PLAN, outputs_bom row 24, design.py and the C229 Note (estop sheet). load_shedding_spec l.35 does say "0.48 s; 0.37–0.53 s".
+   - Parts: R404 200k 1 % (C25811) and C229 2.2 µF ±10 % 25 V 0805 **X5R** (FOJAN FCC0805X225K250FT, C5137595). TLC555 tw = 1.1RC.
+   - INFERRED results:
+     - Nominal 0.484 s.
+     - ±1 % R and ±10 % C only: 0.431-0.538 s, which is where the old "0.44" came from.
+     - Adding X5R ±15 % over temperature: min 0.367 s ≈ 0.37 s.
+     - Adding an assumed -10 % DC bias at the 3.33 V threshold: ~0.33 s. The TLC555 timing error is not included.
+   - **Mismatch:** 0.37 s is the tolerance + temperature minimum, not a guaranteed worst case. The text now says so; measure on the board cold and hot, or move C229 to C0G/film if 0.37 s must be guaranteed.
+   - The upper bound 0.538 s also slightly exceeds 0.53.
+   - firmware/ARCHITECTURE.md (Firmware-owned, cherry-picked) still quotes "design_spec 0.44–0.53 s" twice; left for Firmware.
+9. **Mechanical/isolation docs** (no .kicad_pcb edit):
+   - (A) board_interface.json J30: fp -> PhoenixContact_PC5_8-GF-7.62_1720851, plus new keys mpn 1720851, board_fp KF2EDGRM-5.08-8P, and a note (77.06 mm body overruns LEFT_HV y 164 by 10.8 mm). Coordinates unchanged.
+     - Schematic J30 (MPN 1720851, footprint genctl:PLACEHOLDER_PhoenixContact_PC5_8-GF-7.62_1720851) and BOM (1720851) already matched.
+     - enclosure_v3.py keys on "Phoenix" in fp (18 vs 16 mm envelope), so a re-run will model J30 2 mm taller.
+     - D-m7-20.
+   - (B) C74/C75 horizontal footprint + clip holes: D-m7-21, with a read-only room check (INFERRED: no room in either direction for either cap on the frozen board).
+   - (C) J28/J29 Safety R7-N12: four constraints added to LAYOUT_RULES.md and ISOLATION_CHECK.md §5b, and D-m7-22. Before this, only the "slots between pins" and the coat-takes-no-credit (§5a) items were present.
+     - The >=13 mm to SELV distance was MEASURED read-only: J28 23.64 mm, J29 59.47 mm (PASS).
+     - Slot extension to x <= 1.3 mm logged as NICE TO HAVE per Safety's ruling.
+     - "Do not plug or unplug live": schematic text at J28 and J29, INSTALL_SAFETY bullet, README sentence, silkscreen in D-m7-22.
+   - D-m7-23: spread the 13 x 1/2 W resistors.
+10. **BOM:** bom_from_sch 203 = 203 groups, 0 mismatches; bom_retotal on-board total **$464.55**. That is $465.11 after the R7-N5 patch, then -$0.30 inputs (wetting + 2.49k), -$0.28 outputs (LVC1G08), +$0.02 other (R629). Category BOMs updated: inputs (rows 6, 23), outputs (LVC1G08 row), other (C98220 qty 80), comms (C25804 row removed).
+- tools/design.py: only the one-shot note mirrored. MPN swaps live in the schematic and BOM (design.py is DO NOT REGENERATE).

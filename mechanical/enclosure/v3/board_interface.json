@@ -316,7 +316,9 @@
   },
   "J30": {
    "val": "J9 CT secondaries (5A)",
-   "fp": "KF2EDGRM-5.08-8P",
+   "fp": "PhoenixContact_PC5_8-GF-7.62_1720851",
+   "mpn": "1720851",
+   "board_fp": "KF2EDGRM-5.08-8P",
    "x": 7.79,
    "y": 136.3,
    "rot": 90.0,
@@ -326,7 +328,8 @@
     110.64,
     9.24,
     162.0
-   ]
+   ],
+   "note": "m7-sch Batch 16 (2026-11-21): part identity updated to Phoenix PC 5/8-GF-7,62 1720851 (schematic J30 MPN 1720851, footprint genctl:PLACEHOLDER_PhoenixContact_PC5_8-GF-7.62_1720851; BOM ac_metering_bom row 6). The frozen board footprint is STILL KF2EDGRM-5.08-8P (board_fp); x/y/rot/bbox below are MEASURED from that old footprint and are unchanged, not new coordinates. 1720851 body is 77.06 mm (Mechanical, J30_PHOENIX_DATA.md) and overruns the LEFT_HV window (y 9-164) by 10.8 mm; layout change pending (deferred_layout D-m7-20). Note for enclosure_v3.py: line 159/160 now model J30 as a Phoenix part (18 mm envelope instead of 16 mm) on the old bbox."
   },
   "J6": {
    "val": "CAN1 (PC 5/4)",

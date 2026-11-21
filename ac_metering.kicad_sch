@@ -5352,6 +5352,8 @@
 (junction (at 275.59 213.36) (diameter 0) (color 0 0 0 0) (uuid "5873663d-341f-45e3-bf8e-0ace85d1caf3"))
 (junction (at 355.6 208.28) (diameter 0) (color 0 0 0 0) (uuid "4597c8c4-3591-4295-8c06-873ccf27ab99"))
 (rectangle (start 20.32 46.99) (end 134.62 106.68) (stroke (width 0.25) (type dash) (color 72 72 160 1)) (fill (type none)) (uuid "63127a35-2cef-4054-b887-512a0ccd4d02"))
+(text "DO NOT PLUG OR UNPLUG LIVE\n(J28 / J7 GEN voltage: isolate the 600 V source first)" (exclude_from_sim no) (at 58.42 331.47 0) (effects (font (size 1.5 1.5) (thickness 0.3) bold (color 200 0 0 1)) (justify left bottom)) (uuid "58ff19af-1726-494f-b978-2af2827d2e61"))
+(text "DO NOT PLUG OR UNPLUG LIVE\n(J29 / J8 BUS voltage: isolate the 600 V source first)" (exclude_from_sim no) (at 138.43 331.47 0) (effects (font (size 1.5 1.5) (thickness 0.3) bold (color 200 0 0 1)) (justify left bottom)) (uuid "f1c2340b-86fc-4005-a80f-3acaa8718653"))
 (text "U69 ISOW7841DWER" (exclude_from_sim no) (at 21.59 46.355 0) (effects (font (size 2 2) (thickness 0.3) bold (color 72 72 160 1)) (justify left bottom)) (uuid "94041b0f-4832-4bf3-92f4-53d573ca55fb"))
 (rectangle (start 144.78 46.99) (end 281.94 109.22) (stroke (width 0.25) (type dash) (color 72 72 160 1)) (fill (type none)) (uuid "5fa5e305-6272-4816-a508-ae2446a24a07"))
 (text "U70 ISO7741DWR" (exclude_from_sim no) (at 146.05 46.355 0) (effects (font (size 2 2) (thickness 0.3) bold (color 72 72 160 1)) (justify left bottom)) (uuid "a064c29d-6c47-4169-a04c-8f542b8a017d"))

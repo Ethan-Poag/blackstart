@@ -282,7 +282,7 @@ Assumptions: 18 °F rise, 1 oz outer / 0.5 oz inner ASSUMED, no stackup defined.
 | +12V trunk | — | ≥1.9 mm | outer | — | OPEN — power batch |
 | +5V L2 → every +5V load | — | ≥1.4 mm (2.6 mm for 4.7 A) | outer | — | OPEN — power batch |
 | 15 small outputs (GLOW, GCB/MCB, AUX1–10; U47–U61) | 2 A external fuse (driver limit 2.49 A) | ≥1.0 mm (no 0.15 mm necks, no In2-only hops) | outer | — | OPEN — with the power batch |
-| ESTOP_TRIP_OUT (U68) | relay drive: limit 1.70/2.13/2.55 A (R407 47k), pulse 0.48 s nom (0.44–0.53 s; measure cold/hot); 2 A external fuse (was 7.5 A) | ≥2 mm (target kept at ≥2 mm; relay drive, 2 A fuse); 1.2 mm In2 feed now | outer | — | OPEN — with the power batch |
+| ESTOP_TRIP_OUT (U68) | relay drive: limit 1.70/2.13/2.55 A (R407 47k), pulse 0.48 s nom (0.37–0.53 s; measure cold/hot); 2 A external fuse (was 7.5 A) | ≥2 mm (target kept at ≥2 mm; relay drive, 2 A fuse); 1.2 mm In2 feed now | outer | — | OPEN — with the power batch |
 | FUEL (Net-(D68-A1)), CRANK_OUT, VBAT_ESTOP | 10 A (was 15 A) | the 10 A pours above (≥3.6 mm F+B, or 2.4 mm at 36 °F) | F + B | per pour | OPEN — with the power batch |
 
 ### 7.3 RV3 — documented exception (bodge wire)
