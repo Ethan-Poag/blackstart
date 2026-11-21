@@ -54,6 +54,9 @@ Values from **IEC 60664-1** (the basis IEC 61010-1 and IEC 62368-1 build on). I 
 
 Solder mask and conformal coating: solder mask is **not** counted as insulation by 60664-1. A coating qualified per IEC 60664-3 (type 1/2) would let PD1 values apply under the coating (much smaller), but needs process control and test; not recommended as the primary means here. A slot/groove is cheaper and robust.
 
+## 5a. Pollution degree ruling (Enginerd, 2026-11-21, m7-sch Batch 14)
+Stay at **PD2 plus conformal coat**; no PD3 re-layout. The sealed fanless enclosure supports PD2; the conformal coat (HEAT_PATH.md: acrylic, HV section, not IEC 60664-3 qualified) is extra protection and takes no creepage credit. No distance or rule in this file changes. A site with condensation or conductive dust is outside the PD2 basis (see review/bom_final/BOM_notes.md "PD3 creepage").
+
 ## 6. To do at layout
 1. Draw the barrier: >=13 mm copper keep-out on every layer between the GND_AC zone and everything else (or 9 mm with CTI>=400 laminate called out in fab notes).
 2. Isolator slot comes with the footprint; join it to a board barrier slot if the two isolators sit next to each other (one long slot is fine).

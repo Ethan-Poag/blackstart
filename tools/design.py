@@ -417,7 +417,10 @@ ex.update({'P06':'AI_SH_EN1','P07':'AI_SH_EN2','P10':'AI_SH_EN3','P11':'AI_SH_EN
 tca(inp,2,ex)
 # DI bank bias
 for b in 'AB':
-    fet(inp,'Transistor_FET:AO3401A','SI2309CDS','DIB_%s_PG'%b,'VBAT_P','DI_BIAS_'+b,mpn='SI2309CDS-T1-GE3')
+    # m7-sch Batch 14 (Enginerd 2026-11-21): Q36/Q39 drain -> DIB_x_PTC -> F101/F102 PTS120660V010 (C2441287) -> DI_BIAS_x.
+    # Mirrors the committed inputs.kicad_sch for reference only; DO NOT REGENERATE (refs F101/F102 are hand-placed).
+    fet(inp,'Transistor_FET:AO3401A','SI2309CDS','DIB_%s_PG'%b,'VBAT_P','DIB_%s_PTC'%b,mpn='SI2309CDS-T1-GE3')
+    inp.p('Device:Polyfuse','PTS120660V010',{'1':'DI_BIAS_'+b,'2':'DIB_%s_PTC'%b},prefix='F',mpn='PTS120660V010',lcsc='C2441287')
     inp.R('100k','VBAT_P','DIB_%s_PG'%b); inp.R('100k','DIB_%s_PG'%b,'DIB_%s_PGC'%b); npn(inp,'DIB_%s_NB'%b,'GND','DIB_%s_PGC'%b)
     inp.R('10k','DI_PU_'+b,'DIB_%s_NB'%b); inp.R('100k','DIB_%s_NB'%b,'GND')
     fet(inp,'Transistor_FET:DMN6075S','DMN6075S','DI_PD_'+b,'GND','DI_BIAS_'+b); inp.R('100k','DI_PD_'+b,'GND')

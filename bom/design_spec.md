@@ -23,7 +23,7 @@ Status: 2026-10-24 (display: RVT121HVLNWCA0-B; previous version design_spec_rvt1
 
 ## 5. Outputs (outputs_bom.csv, outputs_survey.md)
 - 17 outputs, all with current sensing, using TPS1HTC30-Q1 for the small outputs (glow, GCB/MCB close/open coil drivers for external DIN relays, AUX1-10, E-stop trip). Rev e: AUX1-10.
-- Fuel and crank are 15 A: TPS48100-Q1 + MOSFETs, a 1 mOhm shunt + INA281. They drive solenoids or external DIN relays and are supplied **only** from VBAT_ESTOP.
+- Fuel and crank: path and copper rated 10 A (power box F2 10 A on the J23 feed; Enginerd 2026-11-21, was 15 A); each channel is limited to 2.8 A electronically and big loads go through a relay. TPS48100-Q1 + MOSFETs, a 1 mOhm shunt + INA281. They drive solenoids or external DIN relays and are supplied **only** from VBAT_ESTOP.
 - The board has no on-board 250 VAC relays (unlike DSE). Breakers are driven through external DIN relays.
 - A TPS3431 watchdog trip kills all outputs (the hardware E-stop trip path is exempt).
 

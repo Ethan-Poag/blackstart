@@ -12,7 +12,7 @@ Scope: the batch-4 HEAD (from 1074b13 onward), KiCad 9 kicad-cli. The per-commit
 - Hazard: a PWR_FLAG makes ERC accept a rail that has no real source. Each flagged rail still needs a source in the design review. This audit did not re-prove each one.
 
 ## 3. Checks KiCad ignores by default: scratch run with every rule set to "error"
-Run on a scratch copy (/tmp/ercx) with all 45 rule keys forced to error: **73 violations** at b47aea0 (75 before batch 6; re-run 2026-10-28 on a git-archive extract with all 47 rule keys forced, out/m7sch_b47aea0_erc_forced.json), all from two rules that are off by default.
+Run on a scratch copy (/tmp/ercx) with all 45 rule keys forced to error: **73 violations** at b47aea0 (75 before batch 6; re-run 2026-10-28 on a git-archive extract with all 47 rule keys forced, out/m7sch_b47aea0_erc_forced.json), all from two rules that are off by default. Batch 14 (F101/F102 PTCs): **75** = 17 four_way_junction + 58 footprint_link_issues; the 2 new items are the Device:Polyfuse filter (*polyfuse* *PTC*) not matching Fuse:Fuse_1206_3216Metric (benign; no polyfuse-named 1206 footprint in KiCad 9).
 - **four_way_junction (17):** Q1-Q6 and Q45-Q48 (stacked or hidden FET pins on one node), U7, J11, #PWR0157 and #PWR0339, plus a few very short wire stubs (0.025-0.37 mm). These are benign drawing-style items with no connectivity effect. The short stubs could be cleaned up cosmetically.
 - **footprint filter mismatch (56 at b47aea0; 58 before D3/D4 moved to genctl:BAS70 in batch 6, reported as type footprint_link_issues):** the assigned footprint does not match the symbol's generic filter. Groups:
   - J1/J23/J28/J29 Phoenix 1720819 on generic Conn_01x04;

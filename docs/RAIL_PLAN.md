@@ -48,10 +48,10 @@ Labels: HAND-BUILT = placed by a person in the GUI. SCRIPTED-HAND = our own scri
 | CM5_3V3 (17) | ≤0.6 A [RP, A] | none | — | 0 | 17 | UNROUTED | Open |
 | +1V8_DSI (26) U20→U21 etc. | ≤0.3 A [RP, A] | 0.25 mm B 3 mm | — | 1 | 24 | Y4 stub only (da8bdeb, cca514f) | Open |
 | +3V3_AC (16) U69 ISOW7841→ADE9000s/ISO7741 | ~40 mA load of 75 mA available [DN:300, 367] | PWR zone HV_+3V3_AC_PWR 8075.7 mm²; 0.25–0.3 mm B 22 mm | plane | 18 (0.2/0.4); 2 near U69 | **5: the source U69.16 is isolated**, plus C255, C256, U71.27 | SCRIPTED fanout (cca514f 28) + stitch (34fa5b6 8) | **Connection fault (source cut off)**, not a capacity issue |
-| VBAT_ESTOP (22) J23→U43/U45 | 15 A behind the external 30 A fuse [RP §7.2, FPS] | none | — | 0 → need 20 per transition at 15 A | 22 | UNROUTED | **Open** |
-| CRANK_OUT (15) Q47/Q48→J23.4 | 15 A [RP §7.2] | none | — | 0 → 20 | 15 | UNROUTED | **Open** |
-| FUEL = Net-(D68-A1) (15) Q45/Q46→J23.3 | 15 A [RP §7.2] | 0.15 mm F 2 / B 64 / In2 8 mm | **0.15 mm (0.60 A)** | 4 (0.2/0.4) → 27 at 0.57 A/0.2 mm via | **3** [REV3: 5 counted J23.3's 3 pad objects separately; by unique pin: Q46+U43.13+R349/R350, Q45+D68/D71/C198, J23.3] | AUTO-ROUTED (f03c57a 53, f16d8de 26) | **Fails (0.6 vs 15 A)** |
-| CRANK_DRN / FUEL_DRN (5/5) | 15 A path (shunt/FET drain) [RP §7.2] | pours F 133.9/176.3, B 117.6/150.1 mm²; 0.15 mm F/In2 tracks | pour necks NOT MEASURED in this job | 18 / 30 | 1 / 1 | pours SCRIPTED-HAND (8d6659f); tracks AUTO (f03c57a) | UNKNOWN, measure the necks |
+| VBAT_ESTOP (22) J23→U43/U45 | 10 A, power box F2 10 A fuse on the J23 feed (Batch 14; was 15 A behind the 30 A fuse) [RP §7.2, FPS] | none | — | 0 → need 20 per transition (sized at 15 A; 10 A target now) | 22 | UNROUTED | **Open** |
+| CRANK_OUT (15) Q47/Q48→J23.4 | 10 A (Enginerd 2026-11-21; was 15 A) [RP §7.2] | none | — | 0 → 20 | 15 | UNROUTED | **Open** |
+| FUEL = Net-(D68-A1) (15) Q45/Q46→J23.3 | 10 A (Enginerd 2026-11-21; was 15 A) [RP §7.2] | 0.15 mm F 2 / B 64 / In2 8 mm | **0.15 mm (0.60 A)** | 4 (0.2/0.4) → 27 at 0.57 A/0.2 mm via | **3** [REV3: 5 counted J23.3's 3 pad objects separately; by unique pin: Q46+U43.13+R349/R350, Q45+D68/D71/C198, J23.3] | AUTO-ROUTED (f03c57a 53, f16d8de 26) | **Fails (0.6 vs 10 A)** |
+| CRANK_DRN / FUEL_DRN (5/5) | 10 A path (shunt/FET drain; was 15 A) [RP §7.2] | pours F 133.9/176.3, B 117.6/150.1 mm²; 0.15 mm F/In2 tracks | pour necks NOT MEASURED in this job | 18 / 30 | 1 / 1 | pours SCRIPTED-HAND (8d6659f); tracks AUTO (f03c57a) | UNKNOWN, measure the necks |
 | 15 outputs GLOW, GCB_OP/CL, MCB_OP/CL, AUX1–10 (8 each) | 2 A external fuse; driver limit 1.99/2.49/2.99 A [FPS §3, RP §7.2] | 0.15–0.8 mm; 14 of 15 nets have 0.15 mm segments (0.60 A outer, 0.18 A inner), most with In2 0.15 mm hops; **GLOW_OUT min is 0.25 mm (0.88 A)** [REV3 re-measured] | **0.15 mm (0.60 A outer, 0.18 A on In2)**, e.g. AUX1 0.15 mm at B (177.76,29.81–33.61) | 0–5 each (0.2/0.4) → need 4 at 2.99 A | 2–3 each; **the connector J pin is open on each** (e.g. J26.1) | AUTO-ROUTED (f03c57a + f16d8de on every *_OUT) | **Fail** |
 | ESTOP_TRIP_OUT (7) U68→J24.6 | limit 1.70/2.13/2.55 A, ≤0.5 A coil, pulse 0.48 s [FPS §1] | 0.15 mm B 19 / In2 5 mm | 0.15 mm (0.60 A; In2 0.18 A); J24.6 open | 3 → need 4 at 2.55 A | 2 | AUTO-ROUTED (f03c57a 30, f16d8de 10) | **Fails at the limit current** (OK for a 0.5 A coil on outer layers only) |
 | EXP_12V (4) U15→J7 | ≤1.5 A (U15 CL) [PLAN_12V:9] | 0.15 mm B/In2 | J7.1 and D14 open | 1 | 3 | AUTO-ROUTED (f03c57a) | Open / fails |
@@ -62,20 +62,20 @@ Labels: HAND-BUILT = placed by a person in the GUI. SCRIPTED-HAND = our own scri
 | GND_CAN1/2, GND_485 (8 each) | signal-level isolated grounds | 0.15 mm | — | 5–6 | 2 / 2 / 3 | AUTO-ROUTED (f03c57a) | Opens |
 | CHASSIS (14) | ESD/shield only [RP] | 0.15 mm | — | 5 | 11 | AUTO-ROUTED | Open |
 
-- Note (m7-sch batch 8, R5-N4; superseded 2026-11-21, D-m7-14 closed): FUEL/CRANK and VBAT_ESTOP copper target is now **10 A**, the power box F2 fuse on the J23 feed (Ethan: board stays 10 A; outputs rated 10 A with a relay for big starters). 15 A figures in this file are historical. 10 A needs about 7.2 mm on one outer layer at 18 °F rise, or about 3.2 mm F+B (IPC-2221, 1 oz assumed, INFERRED). Each channel is still limited to 2.8 A electronically.
+- Note (m7-sch batch 8, R5-N4; superseded 2026-11-21, D-m7-14 closed): FUEL/CRANK and VBAT_ESTOP copper target is now **10 A**, the power box F2 fuse on the J23 feed (Ethan: board stays 10 A; outputs rated 10 A with a relay for big starters). 15 A figures in this file are historical. 10 A needs about 7.2 mm on one outer layer at 18 °F rise, or F+B pours of ≥3.6 mm each (half-width convention used for the old 15 A figures; 2.8 mm each if the current splits evenly), or 4.7 mm single / ≥2.4 mm each at 36 °F rise (IPC-2221, 1 oz assumed, INFERRED; Batch 14 corrected the earlier "3.2 mm F+B"). Each channel is still limited to 2.8 A electronically.
 
 Small "power-like" nets, all AUTO-ROUTED by f03c57a/f16d8de, no rating, at most mA (INFERRED): Net-(U11-EN), Net-(C74-Pad2), Net-(U17-VISO), Net-(U7-VDDA), MUXA/B_OUT, VBAT_SENSE, VBAT_CELL, VBAT_SNS (UNROUTED), HSE_OUT. Full numbers are in stats.json and islands.json.
 
 ## Flags (auto-routed or under spec)
-1. **Unrouted rails (no copper):** +3V3 (≥3 A copper target, REV3), +5V_CM5 (3.76 A limit), VBAT_ESTOP (15 A), CRANK_OUT (15 A), CM5_3V3, +3V3_BK, +3V3_PANEL, +3V3_TOUCH, ROUTER_12V Net-(D15-K), VBAT_SNS. +1V8_DSI is effectively unrouted (24 islands).
-2. **Auto-routed and short:** +5V (source L2 cut off, 0.5 mm / In2 0.44 A vs 4.7 A); FUEL (0.15 mm, 0.6 A vs 15 A); all 15 *_OUT (0.15 mm, 0.6 A vs 2–2.99 A, connector pin open); ESTOP_TRIP_OUT (0.6 A vs 2.55 A); +12V (trunk 3.21 A vs 3.7 A ASSUMED, U3 branch 2.39 A, U16 branch 1.45 A vs 2.0 A, U3 has 1 via); +5V_HU (1.45 vs ~1.5 A).
+1. **Unrouted rails (no copper):** +3V3 (≥3 A copper target, REV3), +5V_CM5 (3.76 A limit), VBAT_ESTOP (10 A), CRANK_OUT (10 A), CM5_3V3, +3V3_BK, +3V3_PANEL, +3V3_TOUCH, ROUTER_12V Net-(D15-K), VBAT_SNS. +1V8_DSI is effectively unrouted (24 islands).
+2. **Auto-routed and short:** +5V (source L2 cut off, 0.5 mm / In2 0.44 A vs 4.7 A); FUEL (0.15 mm, 0.6 A vs 10 A); all 15 *_OUT (0.15 mm, 0.6 A vs 2–2.99 A, connector pin open); ESTOP_TRIP_OUT (0.6 A vs 2.55 A); +12V (trunk 3.21 A vs 3.7 A ASSUMED, U3 branch 2.39 A, U16 branch 1.45 A vs 2.0 A, U3 has 1 via); +5V_HU (1.45 vs ~1.5 A).
 3. **Battery path:** it meets 10 A only through layer sharing. VBAT_P Q2→Q3 B is 7.16 A, so it needs F; the Q3 end has 14 vias, exactly the requirement. VBAT_F has B 10.82 A alone with only 3 vias at Q1. VBAT_P does not reach the LM5176 input pins or any output switch (61 islands).
 4. **Connection faults on planes:** the +3V3_AC source U69.16 is isolated; there are 4 GND opens, 7 GND_AC opens and 1 +3V3_SAFE open (R47.2).
 
 ## Proposed hand-placement order (plan only)
 1. **VBAT_P distribution** (Q3 → U2 VIN and the VS pins of U47–U61 and U68) as a planned F+B pour tree with ≥4 vias per output switch (2.99 A / 0.76 A), and ≥5 at U2.2/U2.3 (3.56 A). This comes first because every downstream rail and output depends on it. Sources: FPS §3, RP §7.2.
-2. **VBAT_ESTOP → shunts → Q45/Q46 (FUEL) and Q47/Q48 (CRANK_OUT) → J23**, 15 A: F+B pours ≥6.3 mm each (RP target; IPC 12.6 mm on one outer layer), ≥20 vias at each FET/shunt transition. Remove the auto-routed 0.15 mm FUEL tracks.
-   Note (m7-sch batch 8, R5-N4; superseded 2026-11-21, D-m7-14 closed): FUEL/CRANK and VBAT_ESTOP copper target is now **10 A**, the power box F2 fuse on the J23 feed (Ethan: board stays 10 A; outputs rated 10 A with a relay for big starters). 15 A figures in this file are historical. 10 A needs about 7.2 mm on one outer layer at 18 °F rise, or about 3.2 mm F+B (IPC-2221, 1 oz assumed, INFERRED). Each channel is still limited to 2.8 A electronically.
+2. **VBAT_ESTOP → shunts → Q45/Q46 (FUEL) and Q47/Q48 (CRANK_OUT) → J23**, 10 A (Batch 14; was 15 A): F+B pours ≥3.6 mm each (RP half-width convention; IPC 7.2 mm on one outer layer), ≥20 vias at each FET/shunt transition. Remove the auto-routed 0.15 mm FUEL tracks.
+   Note (m7-sch batch 8, R5-N4; superseded 2026-11-21, D-m7-14 closed): FUEL/CRANK and VBAT_ESTOP copper target is now **10 A**, the power box F2 fuse on the J23 feed (Ethan: board stays 10 A; outputs rated 10 A with a relay for big starters). 15 A figures in this file are historical. 10 A needs about 7.2 mm on one outer layer at 18 °F rise, or F+B pours of ≥3.6 mm each (half-width convention used for the old 15 A figures; 2.8 mm each if the current splits evenly), or 4.7 mm single / ≥2.4 mm each at 36 °F rise (IPC-2221, 1 oz assumed, INFERRED; Batch 14 corrected the earlier "3.2 mm F+B"). Each channel is still limited to 2.8 A electronically.
 3. **+12V trunk Q6 → U3** at ≥1.83 mm (3.7 A) on both outer layers, or a pour. Add 4 vias at U3.8 (about 226.3–226.7, 63.3–64.3; the area west/south of the pad, DRC-check first) to reach 5. Widen the U16 branch to ≥0.78 mm (2 A) and add 3 vias near U16.8 (257.4,160.2) if it changes layer.
 4. **+5V L2 → U12/U13/U14/U18/U19/J3/J4/J5**: one planned pour or ≥2.54 mm outer trunk (4.7 A). No In2 hops (0.5 mm In2 carries 0.44 A). 7 vias per transition, starting at L2.2 (222.5,76.1), which has 0 today.
 5. **+3V3 (≥3 A copper target, REV3) from U4/L3** and **+5V_CM5 (3.76 A limit)**: +3V3 trunk ≥1.37 mm outer, 4×0.3 mm or 6×0.2 mm vias per transition; +5V_CM5 ≥1.87 mm outer, 5 vias per transition. The +3V3 conflict is resolved in 'Derived currents'.
@@ -154,9 +154,9 @@ Labels: **DERIVED** means datasheet, BOM or design note plus arithmetic, with th
 - Button backlight through Q68: 0.306 A [DN:327] (DERIVED: 36 × 8.5 mA).
 - 2× CA-IS3062W: 2 × 29 mA max = 0.06 A [ca-is3062w l.385–391].
 - Supercap charge through D11/50R: ≤0.092 A [DN:425].
-- J4 fan: **UNKNOWN** (FW-Q3).
+- J4 fan: **0 A, J4 is DNP** (fanless design, Batch 13/14; FW-Q3 closed).
 - J3.8 and J5.2 header pins: **UNKNOWN** external loads (FW-Q5).
-- **Sum of limits: 5.64 A + fan + headers** (DERIVED part). That is under the U3 6 A rating, with 0.36 A left for the fan and headers.
+- **Sum of limits: 5.64 A + headers** (DERIVED part; no fan, J4 DNP). That is under the U3 6 A rating, with 0.36 A left for the headers.
   - Realistic: 0.9 + 0.3 + 0.06 + USB ≈ 1.5–3 A.
   - Copper: the L2 node and trunk need ≥5.64 A → 3.27 mm outer (or F+B pour). The U12 branch needs 3.76 A → 1.87 mm. Each TPS2553 branch needs 0.71 A → 0.25 mm OK.
 - +5V_CM5: 3.76 A limit → 1.87 mm outer, and ≥5 vias at any layer change. The CM5 has 6 pins (U9.77–87).
@@ -218,7 +218,7 @@ None of these is required in order to lay the copper. Items 1–2 change the cop
 ## Firmware questions (exact wording)
 - FW-Q1: "What is the worst-case total current sourced by STM32 GPIOs (sum over all pins driving loads high), and what core clock and VOS will the firmware run (400 MHz VOS1, or 480 MHz VOS0)?"
 - FW-Q2: "What is the CM5 peak 5 V current under your heaviest workload (all cores, USB loads, Wi-Fi TX), and is the TPS2121 3.5–3.76 A limit acceptable as the cap?"
-- FW-Q3: "Is the J4 fan fitted, which fan model, and what is its rated current at 5 V?"
+- FW-Q3: "Is the J4 fan fitted, which fan model, and what is its rated current at 5 V?" CLOSED 2026-11-21: no fan, J4 DNP (fanless, HEAT_PATH phase 24). FAN_PWM/FAN_TACH stay wired to the CM5 but firmware must leave fan control disabled.
 - FW-Q4 (Ethan): "Is the system 12 V or 24 V battery (or both)? Can fuel and crank be energized at the same time?"
 - FW-Q5: "What, if anything, is connected to Header A pin 1 (CM5_3V3) and pin 2 (+5V), and to Header B pin 8 (+5V), and at what current?"
 - FW-Q6: "What maximum backlight brightness and duty will the firmware command for the TPS61500 (100 % = 360 mA)?"

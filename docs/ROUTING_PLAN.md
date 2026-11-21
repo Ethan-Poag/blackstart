@@ -97,7 +97,7 @@ Ethan's rules govern this plan:
 | GND (28) | return only | Stitch to the GND1/GND2 planes with a via at the pad | 0.3/0.15 or 0.4/0.2 via, short neck ≥ 0.3 mm | **1st** |
 | VBAT_P (62) | 10 A system rating [A] | F.Cu pour + In2 plane, stitching vias | pours, not tracks | **1st** (safety/power) |
 | power rails: +3V3 / +1V8_DSI / CM5_3V3 / +5V / +5V_CM5 / +3V3_* (≈110) | +3V3 copper target ≥ 3 A (derived loads ≤ 1.47 A [DERIVED, docs/RAIL_PLAN.md Rev 4]; U4 TPS56637 capability is the earlier '≥ 3 A'), +1V8_DSI ≤ 0.3 A, CM5_3V3 ≤ 0.6 A, +5V 4.7 A, +5V_CM5 3.76 A (TPS2121 current limit; CM5 design figure 2.5 A, FW 3.2 A from the CM5) [A] | outer tracks; In2 only for short hops; existing pours where present | 0.3–0.5 mm low-current rails; +5V ≥ 2.7 mm, +5V_CM5 ≥ 1.4 mm [I] | 2nd |
-| VBAT_ESTOP (21), CRANK_OUT (14), *_OUT loads, CHASSIS (10) | outputs 2 A each, CRANK/FUEL 15 A [A]; CHASSIS: ESD/shield only | outer layers; pours for CRANK | outputs 0.8 mm; CRANK pour; CHASSIS 0.5 mm | 2nd |
+| VBAT_ESTOP (21), CRANK_OUT (14), *_OUT loads, CHASSIS (10) | outputs 2 A each, CRANK/FUEL 10 A (Batch 14, was 15 A; 2.8 A per channel electronic limit) [A]; CHASSIS: ESD/shield only | outer layers; pours for CRANK | outputs 0.8 mm; CRANK pour; CHASSIS 0.5 mm | 2nd |
 | HV/hot (88) | signal level except the line nets (mA) | B/F on the hot side only; respect 3 mm outer / 1.5 mm inner, the barrier slots and J28/J29 conditions | 0.25 mm (ADE analog), lines per HV rule file | **3rd, after power**; each batch is a creepage check |
 | signal (254) | < 50 mA | F.Cu/B.Cu + SIG_In2 | 0.15–0.2 mm | 4th |
 | nameless (21) | local (diode/FET/EN nodes) | local single-layer | 0.2–0.3 mm | with their owner block |
@@ -140,14 +140,14 @@ Ethan's rules govern this plan:
 | diff 18 | Yes for connectivity [I]; skew-with-vias is already NOT met [M-prev] | Last segments only |
 | signal 254 | **Mostly, with rip-up**; not all [E] | Ceiling of 58 opens for the autorouter; WDI infeasible as placed; U7 escape: 31 open MCU signal nets with far ends 22–113 mm [M]. Estimate: 10–30 opens will need a passive nudge or a pin remap [E] |
 | power rails 188 | Connectivity yes [I]; **current targets no** for +5V (0.50 mm neck ≈ 1.8 A vs 4.7 A) and the outputs (0.15 mm necks ≈ 0.5 A vs 2 A) [M-prev] | Pinch points need rerouting; see §5 |
-| CRANK/FUEL drains | **No at 15 A in this area** [M-prev/I] | 12.6 mm is needed at the 2512 shunt pad at 1 oz; branches measure 6.6–9.4 A each |
+| CRANK/FUEL drains | **Marginal at 10 A** (was "No at 15 A") [M-prev/I] | 7.2 mm is needed at the 2512 shunt pad at 1 oz for 10 A (12.6 mm for the old 15 A); branches measure 6.6–9.4 A each, so two FETs in parallel carry ~5 A each at 10 A (INFERRED even split) |
 | +12V trunk | **No at 3.7 A ASSUMED** [R] | 3.2 A capacity vs 3.7 A assumed load (brief; not re-measured here) |
 | VBAT_P 62 | Connectivity yes [I]; **10 A yes at 18 °F (S3c/c6b, see §8)** [I] | VBAT_P Q2→Q3 F 8.76 / B 4.54 mm (11.5 / 7.2 A; F+B 18.7 A per the reviewer's tight-pad neck method, review/s3c6c/review.md, same on base and c6c; the earlier B 5.22 mm / 7.9 A / F+B 19.5 A was a method artefact, B alone < 10 A, so F+B sharing through the VBAT_P transfer vias is required: VBAT_P vias at the Q2 / Q3 ends, MEASURED with review/s3c6b/via_count.py (all 0.3/0.6 mm vias): primary method via-edge-to-pad-edge (any part of the via pad within r of any edge of the FET pads used: Q2 pads 1-3, Q3 pad 5) 25 / 25 within 5 mm and 40 / 35 within 8 mm; reviewer method via-centre-to-point (via centre within r of Q2 point (254.6, 151.0) / Q3 point (228.02, 140.07)) 17 / 14 within 5 mm and 34 / 25 within 8 mm; identical at 950b8a1 and S3c/c6c; 14 is met at both ends within 5 mm, exactly at the Q3 end), VBAT_DD Q1→Q2 F 7.54 / B 7.51 mm (10.3 / 10.3 A; F+B 20.7 A), VBAT_F F1→Q1 B 8.02 mm (10.8 A, reviewer tight-pad method; B only at Q1; F 8.95 mm before c6c, 1.92 mm after c6c, not counted) [M widths, tneck erosion on gate/s3c6b; amps I by IPC-2221 outer k 0.048 at 18 °F (10 °C) rise, 1 oz ASSUMED]. Superseded: the old In2 hop (≈ 1.8 A) no longer carries VBAT_P |
 | HV/hot 88 | **No for at least 7 HV_LINE opens (hvopen2 A = 7)** [M-prev + decision] | RV3 has no legal 600 V path (GEN_L3/GEN_N would cross BUS HV copper; growth declined, HV_ACCEPTED_DEVIATIONS.md); the GEN_L1 divider chain walls J28.1 off. The other ~81 hot-side LV opens (ADE, CT, LDO, XO) are routable inside the hot region [E, unverified] |
 
 **Cannot be completed in the current area, with today's placement and stackup:**
 1. **HV:** at least 7 HV_LINE opens (hvopen2 A), including the RV3 pads.
-2. **VBAT_P and CRANK/FUEL:** current capacity, not connectivity. VBAT_P now ≥ 10 A at 18 °F with F+B sharing (S3c/c6b, §8); CRANK/FUEL 6.6–9.4 A per branch vs 15 A.
+2. **VBAT_P and CRANK/FUEL:** current capacity, not connectivity. VBAT_P now ≥ 10 A at 18 °F with F+B sharing (S3c/c6b, §8); CRANK/FUEL 6.6–9.4 A per branch vs ~5 A per branch at the 10 A target (was 15 A; INFERRED even split, not re-measured).
 3. **+12V trunk:** 3.2 A vs 3.7 A [R].
 4. **Signals:** an estimated 10–30 opens need moves or a pin remap [E].
 
@@ -278,12 +278,12 @@ Assumptions: 18 °F rise, 1 oz outer / 0.5 oz inner ASSUMED, no stackup defined.
 |---|---|---|---|---|---|
 | VBAT_F / VBAT_DD copper (S3c/c6b) | 10 A cont. | VBAT_F B 8.09 mm ≈ 10.9 A [M/I]; VBAT_DD F 7.54 / B 7.51 mm, F+B ≈ 20.7 A [M/I] | per §8 | per §8 | Copper OK for 10 A at 18 °F [I]; continuous load limited by F1 (10 A ATO ≈ 8 A max at 149 °F (65 °C)) and installer wiring/connector |
 | VBAT_P Q2 (260,165) → Q3 (227,140), ~41 mm | ≤5 A per layer | ≥2.9 mm each | F.Cu + B.Cu pours (+ In2) | ≥8 vias each end | see 7.3 |
-| Crank/fuel branches, VBAT_ESTOP → shunts/FETs → J23 | 15 A real | ≥6.3 mm each, or 4.2 mm at 36 °F | F + B pours | per pour | OPEN — power batch |
+| Crank/fuel branches, VBAT_ESTOP → shunts/FETs → J23 | 10 A (Batch 14; was 15 A) | ≥3.6 mm each, or 2.4 mm at 36 °F (was 6.3 / 4.2 mm for 15 A) | F + B pours | per pour | OPEN — power batch |
 | +12V trunk | — | ≥1.9 mm | outer | — | OPEN — power batch |
 | +5V L2 → every +5V load | — | ≥1.4 mm (2.6 mm for 4.7 A) | outer | — | OPEN — power batch |
 | 15 small outputs (GLOW, GCB/MCB, AUX1–10; U47–U61) | 2 A external fuse (driver limit 2.49 A) | ≥1.0 mm (no 0.15 mm necks, no In2-only hops) | outer | — | OPEN — with the power batch |
 | ESTOP_TRIP_OUT (U68) | relay drive: limit 1.70/2.13/2.55 A (R407 47k), pulse 0.48 s nom (0.44–0.53 s; measure cold/hot); 2 A external fuse (was 7.5 A) | ≥2 mm (target kept at ≥2 mm; relay drive, 2 A fuse); 1.2 mm In2 feed now | outer | — | OPEN — with the power batch |
-| FUEL (Net-(D68-A1)), CRANK_OUT, VBAT_ESTOP | 15 A | the 15 A pours above (≥6.3 mm F+B, or 4.2 mm at 36 °F) | F + B | per pour | OPEN — with the power batch |
+| FUEL (Net-(D68-A1)), CRANK_OUT, VBAT_ESTOP | 10 A (was 15 A) | the 10 A pours above (≥3.6 mm F+B, or 2.4 mm at 36 °F) | F + B | per pour | OPEN — with the power batch |
 
 ### 7.3 RV3 — documented exception (bodge wire)
 - Do NOT route the 124 mm inner-layer GEN_L3 run (J28.3→RV3.1) or the 125 mm GEN_N run at +1.0 mm margin on a 1.5 mm rule.

@@ -148,7 +148,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 **Other connections**
 - VBAT: CR2032 through a BAT54C and 1k.
 - Buttons: nRPIBOOT and PWR_Button.
-- Fan header on Fan_PWM/Fan_Tacho.
+- Fan header J4 on Fan_PWM/Fan_Tacho: **DNP** (fanless design, 2026-11-21, HEAT_PATH phase 24). Firmware leaves fan control disabled.
 - ACT and PWR LEDs.
 
 **Unused pins**
@@ -301,6 +301,8 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - ADuM5020, ADP150 and both ADuM141E are removed.
 - **Layout:** keep a >=8 mm creepage and clearance keep-out across the barrier on every layer, with a milled slot under the isolators. Keep the HV dividers' 1206 chains along the hot side. Reinforced CAT III 300 V needs ≥5.5 mm clearance / ≥6 mm creepage (PD2, material group III). 600 V-class (347/600 V) systems need more and must be re-checked.
 - **JLC stock of the ISOW7841 is only 38.** Order or consign early.
+- **Ruling (Enginerd, 2026-11-21, Batch 14):** keep the ISOW7841 (U69) and ISO7741 (U70) digital isolators. The proposed switch to opto-couplers is cancelled; no opto-coupler replaces either part.
+- **Ruling (Enginerd, 2026-11-21, Batch 14):** insulation basis stays at **pollution degree 2** (sealed fanless enclosure) **plus conformal coat** over the HV section. No PD3 re-layout. The coat is a contamination/humidity mitigation; no creepage or clearance credit is taken for it, and the isolation numbers are unchanged (3 mm outer / 1.5 mm inner HV rules, barrier slots, 8 mm isolator package creepage, 12.6 mm reinforced per ISOLATION_CHECK.md).
 
 **ADE9000 ×2 (GEN and BUS)**
 - Shared SPI bus. Clock: 24.576 MHz crystal on the GEN ADE; its CLKOUT feeds the BUS ADE's CLKIN.
