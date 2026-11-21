@@ -287,7 +287,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - Supply: TPS7B6950 (SOT-23 pin 4 assumed NC) fed from VBAT_P through SS110 and a 10 µF/50 V hold-up cap.
 - Detection and timing:
   - VBAT_ESTOP → 47k/10k → NPN holds the 555 RESET low.
-  - TRIG RC is 100k/100 nF. One-shot (Batch 18: R404 2.0M 1 %, C229 220 nF C0G 5 %) = nominal 0.48 s (1.1 x 2.0M x 220n C0G); 0.45-0.52 s from R 1 % / C0G 5 % with an ideal 2/3 VDD threshold; TLC555-Q1 datasheet limits (VIT 2.7-3.9 V at VDD 5 V, DIS off-state leakage up to 275 nA at 125 °C) widen this to 0.32-0.71 s, up to ~0.99 s hot (INFERRED, Batch 18); measure on a built board, cold and hot.
+  - TRIG RC is 100k/100 nF. One-shot (Batch 18: R404 2.0M 1 %, C229 220 nF C0G 5 %) = 0.30-1.00 s, 0.48 s nominal (1.1 x 2.0M x 220n C0G; Enginerd Batch 19 spec; it only has to outlast the K4 Finder pickup, coil continuous-rated; ESTOP_TRIP_STUCK 1.20 s). Basis (INFERRED): R/C tolerance 0.45-0.52 s; TLC555-Q1 VIT 2.7-3.9 V and DIS leakage <= 275 nA give 0.32-0.99 s. No trim pot; measure on a built board, cold and hot.
 - Output:
   - BAT54C OR of the 555 and the gated MCU_TRIP → TPS1HTC30 (ILIM 47k: 1.70/2.13/2.55 A relay-drive limit; was 13.3k).
   - The trip current-sense line goes to MUXB S6.
