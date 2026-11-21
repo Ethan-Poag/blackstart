@@ -352,8 +352,11 @@ di.R('47k','DSI83_EN_1V8','GND',ref='R533',note='EN held low while translator Hi
 di.p('Logic_LevelTranslator:SN74LVC1T45DBV','SN74LVC1T45DBVR',{'1':'+1V8_DSI','2':'GND','3':'DSI83_IRQ_1V8','4':'DSI83_IRQ','5':'+1V8_DSI','6':'CM5_3V3'},ref='U79',mpn='SN74LVC1T45DBVR',lcsc='C7843',note='DSI83 IRQ 1.8V->3.3V (review C1)')
 di.C('100n','+1V8_DSI','GND',ref='C291'); di.C('100n','CM5_3V3','GND',ref='C292')
 # REFCLK: stock Linux sn65dsi83 driver always sets HS_CLK_SRC=1 (DSI clock) -> Y4/R531/C286 stay a DNP footprint option only; R113 10k REFCLK->GND fitted (SLLSEC1I p.5). No buffer.
-di.p('genctl:TPS61500PWPR','TPS61500PWPR',{'VIN':'+12V','EN':'BL_PWM','DIMC':'BL_DIMC','SS':'BL_SS','FREQ':'BL_FREQ','COMP':'BL_COMP','AGND':'GND','EP':'GND','SW':'BL_SW','OVP':'BL_OVP','FB':'BL_FB','PGND':'GND'},mpn='TPS61500PWPR')
-di.R('100k','BL_PWM','GND'); di.C('1u','BL_DIMC','GND'); di.C('47n','BL_SS','GND'); di.R('180k','BL_FREQ','GND',note='DS FREQ eq. -> ~540kHz'); di.C('470n','BL_COMP','GND',note='DS recommended for PWM dimming')
+di.p('genctl:TPS61500PWPR','TPS61500PWPR',{'VIN':'+12V','EN':'BL_EN','DIMC':'BL_DIMC','SS':'BL_SS','FREQ':'BL_FREQ','COMP':'BL_COMP','AGND':'GND','EP':'GND','SW':'BL_SW','OVP':'BL_OVP','FB':'BL_FB','PGND':'GND'},mpn='TPS61500PWPR')
+# m7-sch Batch 15 (text mirror only, DO NOT REGENERATE): U24 EN is BL_EN = U88 74LVC1G08 (C7666) of BL_PWM and BL_ALLOW (U76 P16);
+# R629 10k C25804 BL_ALLOW->+3V3_SAFE, R630 100k BL_PWM->GND, C307 100n; R121 100k stays on BL_EN.
+# U83 TMP1075DSGR (C2870250) on I2C1 @0x4A (A2=GND A1=+3V3_SAFE A0=GND, ALERT open, EP GND) + C306 100n, power sheet.
+di.R('100k','BL_EN','GND'); di.C('1u','BL_DIMC','GND'); di.C('47n','BL_SS','GND'); di.R('180k','BL_FREQ','GND',note='DS FREQ eq. -> ~540kHz'); di.C('470n','BL_COMP','GND',note='DS recommended for PWM dimming')
 di.p('Device:L','10u',{'1':'+12V','2':'BL_SW'},prefix='L',mpn='SWPA6045S100MT',lcsc='C79272',fp='genctl:L_SWPA6045S',note='10uH per DS range (4.7-22uH)'); schottky(di,'SS36','BL_SW','VLED',mpn='SS36'); di.parts[-1].lcsc='C16015'; di.parts[-1].fp='Diode_SMD:D_SMA'
 for _ in range(2): di.C('10u','+12V','GND',pkg='0805')
 for _ in range(2): di.C('4.7u','VLED','GND',pkg='1206',note='50V')

@@ -32,7 +32,7 @@ Run on a scratch copy (/tmp/ercx) with all 45 rule keys forced to error: **73 vi
 - Fix options: a 3-pin BAS70 symbol, or pad remapping after the C77297 datasheet is opened. This needs a decision from the lead.
 
 ## 5. Conclusion
-ERC 0/0 is genuine for the default rule set. Nothing is excluded or downgraded. The 73 default-ignored items at b47aea0 (17 four_way_junction + 56 footprint_link_issues) are benign drawing/filter items; D3/D4, the two extra items in the earlier 75, were fixed in batch 6.
+ERC 0/0 is genuine for the default rule set. Nothing is excluded or downgraded. The 73 default-ignored items at b47aea0 (17 four_way_junction + 56 footprint_link_issues) are benign drawing/filter items; (m7-sch Batch 15, MEASURED on the git-archive extract of the Batch 15 commit: forced count **75** = 17 four_way_junction + 58 footprint_link_issues; the +2 over 73 are F101/F102 from Batch 14; U83/U88/R629/R630/C306/C307 add none; default rules 0.) D3/D4, the two extra items in the earlier 75, were fixed in batch 6.
 
 ## D23 LM4040A25 polarity check (m7-sch Batch 7, 2026-10-28 ~5:35 PM HST)
 - Datasheet: TI LM4040, SLOS456Q (rev. April 2026), ti.com/lit/ds/symlink/lm4040.pdf, opened this session. **Table 5-1 Pin Functions, p4:** DBZ (SOT-23) pin 1 = CATHODE ("Shunt Current/Voltage input"), pin 2 = ANODE ("Common pin, normally connected to ground"), pin 3 = "*" ("Must float or connect to anode"; TI recommends tying it to the anode in high-EMI / high-switching-noise applications). IZ max 15 mA (abs max table, p4-5). §8.2.2.2 "Cathode and Load Currents" p27.

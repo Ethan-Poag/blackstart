@@ -1,6 +1,6 @@
 > Working plan, not certified; copper weights ASSUMED. Revision 4, 2026-10-27 HST (copied from review/cur/rail_plan.md).
 
-> **SUPERSEDED (N4, m7-sch 3c, 2026-10-28):** the schematic has no on-board fuse; battery net BAT_IN; installer fits an external fuse <=10 A fast-acting, >=58 V DC in the battery lead. Every F1 / VBAT_F / "fuse F1 10 A" / "10 A ATO" mention in this file describes the as-built .kicad_pcb (which still carries F1 clips and net VBAT_F until the board update) and is historical; the VBAT_F copper becomes BAT_IN when the board is updated. The 10 A copper figures remain a copper-capacity record only.
+> **SUPERSEDED (N4, m7-sch 3c, 2026-10-28):** the schematic has no on-board fuse; battery net BAT_IN; the battery lead is fused in the power box (F1) at <=10 A standard (non-time-delay), >=58 V DC. Every F1 / VBAT_F / "fuse F1 10 A" / "10 A ATO" mention in this file describes the as-built .kicad_pcb (which still carries F1 clips and net VBAT_F until the board update) and is historical; the VBAT_F copper becomes BAT_IN when the board is updated. The 10 A copper figures remain a copper-capacity record only.
 
 
 # Rail plan and audit: Project Blackstart pcb_v4 (analysis only, no copper changed)

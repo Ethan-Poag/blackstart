@@ -35,7 +35,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 
 ## Power (power.kicad_sch)
 **Input protection**
-- J0 → BAT_IN (N4/m7-sch 3c: no on-board fuse; battery net BAT_IN; installer fits an external fuse <=10 A fast-acting, >=58 V DC in the battery lead; F1 10 A ATO / Keystone 3557-2 clips removed from the schematic in 9af66ad).
+- J0 → BAT_IN (N4/m7-sch 3c: no on-board fuse; battery net BAT_IN; the battery lead is fused in the power box (F1) at <=10 A standard (non-time-delay), >=58 V DC; F1 10 A ATO / Keystone 3557-2 clips removed from the schematic in 9af66ad).
 - SMDJ36CA (bidirectional, Littelfuse C224075) TVS on BAT_IN (s3c6f; was SMDJ58CA). Suppressed transients only.
 
 **Ideal diode (LM74800-Q1)**
@@ -214,7 +214,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - The touch FPC is used in I2C mode: USB pins NC, RST/INT pulled up to +3V3_TOUCH.
 
 **Backlight (TPS61500)**
-- VIN = +12V. EN = BL_PWM.
+- VIN = +12V. EN = BL_EN = BL_PWM (CM5 GPIO12) AND BL_ALLOW (U76 P16, MCU) via U88 74LVC1G08 (m7-sch Batch 15). R629 10k pulls BL_ALLOW high (default enabled), R630 100k holds BL_PWM low when the CM5 is off, R121 100k keeps EN low.
 - RFREQ 160k → about 600 kHz (*interpolated*: 80k = 1.2 MHz, 480k = 0.2 MHz).
 - OVP 232k/10k → 29.7 V.
 - Sense 2 × 1.1R in parallel → about 360 mA at 200 mV FB.
@@ -528,7 +528,7 @@ Sources read this session: SN65DSI83 SLLSEC1I; PCA9306 SCPS113O; SN74LVC1T45 SCE
 - After an OV trip the load may stay off until the battery falls below OV falling (as low as **29.57 V** min) [INFERRED, divider_check.md §7].
 - **OPEN RISK (needs surge test):** D1 clamp (old SMDJ58CA 93.6 V; new SMDJ36CA 58.1 V per product page, PDF not opened) can still reach VBAT_P during the 4-5.4 µs OV turn-off (DS p7). LM2904B on VBAT_P is 40 V abs max (Compliance citation, not opened) and D2 SMBJ33CA clamps at 53.3 V. NOT VERIFIED.
 - **Supply assumption:** a 3 kW SMC TVS will not survive an unsuppressed 24 V alternator load dump. The board assumes a battery-backed, suppressed 35 V-class supply; it is NOT designed for an unsuppressed load dump (Ethan's decision 2026-10-27). See docs/INSTALL_SAFETY.md.
-- SUPERSEDED (N4/m7-sch 3c): no on-board fuse; battery net BAT_IN; installer fits an external fuse <=10 A fast-acting, >=58 V DC in the battery lead. Historical: F1 is **10 A** (Ethan's requirement). Any 5 A F1 figure in reviewer files (review/cur/final_power_spec.md) is not adopted.
+- SUPERSEDED (N4/m7-sch 3c): no on-board fuse; battery net BAT_IN; the battery lead is fused in the power box (F1) at <=10 A standard (non-time-delay), >=58 V DC. Historical: F1 is **10 A** (Ethan's requirement). Any 5 A F1 figure in reviewer files (review/cur/final_power_spec.md) is not adopted.
 
 ### Future work: inline surge module (short faithful summary of review/hv/load_dump_external.md §(b); see that file for SM8S datasheet figures)
 **Where it goes.** Fit it on the battery positive feed downstream of the external 30 A battery fuse, at the point that feeds *both* J0 (BAT_IN) and the E-stop/VBAT_ESTOP branch. If the TVS fails short, the 30 A fuse clears it.
