@@ -64,7 +64,7 @@ Power pins are omitted here; see the CSV. VDD/VREF+ = +3V3_SAFE, VDDA through FB
 | 34 | PB0 | ADE_IRQ_N | R419[1k]->ADE_IRQ_N_I: U70.6(OUTD)[ISO7741DWR] / R48[10k]->+3V3_SAFE: (rail) | ADE_IRQ_N GPIO/EXTI0 in (10k pu) | in | GPIO | FT_a |  |
 | 35 | PB1 | CRANK_ISNS | U46.1(OUT)[INA281A2] | CRANK_ISNS analog (INA281) | analog | GPIO | TT_u | ADC12_INP5 |
 | 36 | PB2 | OUT_FAULT_N | R44.1[10k] U15.3(FAULT)[TPS1H200AQDGNRQ1] U16.3(FAULT)[TPS1H200AQDGNRQ1] U18.4(FAULT)[TPS2553DBVR] U19.4(FAULT | OUT_FAULT_N wired-OR in (10k pu) | in | GPIO | FT_ha |  |
-| 37 | PE7 | I2C_INT_N | R45.1[10k] U31.1(~{INT})[TCA9555PWR @0x22] U62.1(~{INT})[TCA9555PWR @0x23] U73.1(~{INT})[TCA9555PWR @0x20] U74 | I2C_INT_N in, expanders wired-OR | in | GPIO | TT_ha |  |
+| 37 | PE7 | I2C_INT_N | R45.1[10k] U31.1(~{INT})[TCA9555PWR @0x22] U62.1(~{INT})[TCA9555PWR @0x23] U73.1(~{INT})[TCA9555PWR @0x20] U74 | I2C_INT_N in, expanders wired-OR, EXTI7 (Rev 8j) | in | GPIO | TT_ha |  |
 | 38 | PE8 | MCU_LED | R50[1k]->LED_HB_A: D6.2(A)[green] | MCU_LED heartbeat out | out | GPIO | TT_ha |  |
 | 39 | PE9 | DI1_N | U32.2[74HC14] | DI1_N in (74HC14) | in | GPIO | TT_ha |  |
 | 40 | PE10 | DI2_N | U32.4[74HC14] | DI2_N in | in | GPIO | FT_ha |  |
@@ -140,7 +140,7 @@ PB12 note: in DS12110 Table 11 (p.90) the AF9 cell reads "FDCAN2_" and its secon
 
 
 ## Added 2026-10-28 (fixes_firmware.md)
-- U76 (TCA9555 @0x25) **P15 (pin 18) = WD_OK input via R559 4.7k** (watchdog latch U84 Q; 0 = latched, power cycle required). **P16 (pin 19) = BL_ALLOW** (Rev 8d/8f): output, default HIGH (enabled). **U88** (Diodes **74LVC1G08W5-7**, C307; all board 74LVC1G08s are this MPN) ANDs BL_PWM (CM5 GPIO12) with P16 to **BL_EN**, which drives U24 EN. **R121 100 kΩ is on BL_EN. R629** 10 kΩ pull-up P16 to +3V3_SAFE. **R630** is a **CONFIRMED** 100 kΩ BL_PWM to GND (Enginerd 1:37 AM). It closes part of the GPIO12 reset-pull bench item; the bench item stays. MCU drives P16 LOW on CM5_LOST (1 s, ARCHITECTURE §5) or over-temp. **P17 (pin 20) = DI_BIAS_FLT_N** (Rev 8i): both DI_BIAS eFuse fault lines wired-OR, active-low open-drain with a pull-up (part and polarity pending Layout). (P16 is not FAN2_TACH; §11 withdrawn.)
+- U76 (TCA9555 @0x25) **P15 (pin 18) = WD_OK input via R559 4.7k** (watchdog latch U84 Q; 0 = latched, power cycle required). **P16 (pin 19) = BL_ALLOW** (Rev 8d/8f): output, default HIGH (enabled). **U88** (Diodes **74LVC1G08W5-7**, C307; all board 74LVC1G08s are this MPN) ANDs BL_PWM (CM5 GPIO12) with P16 to **BL_EN**, which drives U24 EN. **R121 100 kΩ is on BL_EN. R629** 10 kΩ pull-up P16 to +3V3_SAFE. **R630** is a **CONFIRMED** 100 kΩ BL_PWM to GND (Enginerd 1:37 AM). It closes part of the GPIO12 reset-pull bench item; the bench item stays. MCU drives P16 LOW on CM5_LOST (1 s, ARCHITECTURE §5) or over-temp. **P17 (pin 20) = DI_BIAS_FLT_N** (Rev 8i/8j): both TPS26621 FLT lines wired-OR, active-low open-drain, 10 kΩ pull-up to +3V3_SAFE (part and polarity confirmed). Use PE7 EXTI7 to catch the pulse (ARCHITECTURE §13.17). (P16 is not FAN2_TACH; §11 withdrawn.)
 - PB4 AUX3_MCU: external 4.7k pull-down (R536). Other enables: 100k (R534–R548, R551); AUX9/10 10k (R549/R550).
 - PA9 → R56 and PE3 → R57 change from 1k to 10k. PA9/PE3/PE5 are Hi-Z until the CM5 heartbeat (PC2_C).
 - PB2 OUT_FAULT_N: the INA238 (U86 @0x40) ALERT is added to the wired-OR.- PC13 EXP_12V_EN: R551 100k pull-down; **not watchdog-gated** (Ethan ruling 2026-10-28).
@@ -181,7 +181,7 @@ VREF+ = +3V3_SAFE [M]; 16-bit. Source: fixes_firmware.md §18.2.
 ### Rev 8f (2026-11-21): RELAY_KIT_V, Layout backlight refdes, P16 cleanup
 - `RELAY_KIT_V` and the GLOW/CRANK/FUEL kit inhibit: ARCHITECTURE §13.13 / fixes_firmware §24 (Rev 8g updates mid-run and thresholds).
 - Layout final: **U88** Diodes **74LVC1G08W5-7** + **C307**; net **BL_EN** = BL_PWM AND BL_ALLOW; R121 on BL_EN; **R629** 10 kΩ P16 pull-up. U76 P16 is **BL_ALLOW**, not FAN2_TACH.
-- **U83** TMP1075 I2C1 0x4A, **C306**, ALERT NC — firmware polls. **F101 / F102** PTCs on DI_BIAS_A / DI_BIAS_B (Batch 17 eFuse TBD).
+- **U83** TMP1075 I2C1 0x4A, **C306**, ALERT NC — firmware polls. **F101 / F102** are the present PTCs on DI_BIAS_A / DI_BIAS_B (Batch 17: TI **TPS26621DRCR**, §13.17).
 
 ### Rev 8g (2026-11-21 ~1:37–1:38 AM HST)
 - Mid-run kit OV does not stop the engine (FUEL / K2 stays on; latched `RELAY_KIT_OV`). 12 V kit inhibit 16/15 V; 24 V kit GLOW, CRANK and FUEL all **30.0 / 28.5 V**. INA237 VBUS primary; ADC fallback blocks all starts. Glow on-time capped at 60 s + 60 s cooldown (ASSUMED). MCU_TRIP / K4 pulse **0.48 s**, fault if held past 0.53 s. See ARCHITECTURE §13.14.
@@ -189,10 +189,16 @@ VREF+ = +3V3_SAFE [M]; 16-bit. Source: fixes_firmware.md §18.2.
 - **FUEL is K2** (Hella 4RA 003 437-191 on the 24 V kit, 16–30 V).
 
 ### Rev 8h (2026-11-21 ~1:51 AM HST): DI_BIAS rails, one-shot, LVC MPN
-- **DI_BIAS_A** (J21.6, F101): **DI1–DI6**. **DI_BIAS_B** (J22.1, F102): **DI7–DI12**. MEASURED from m7-sch `inputs.kicad_sch` wetting resistors. E-stop is not on these rails. Rail-fault firmware: ARCHITECTURE §13.15–§13.16 / fixes_firmware §25.
+- **DI_BIAS_A** (J21.6, F101): **DI1–DI6**. **DI_BIAS_B** (J22.1, F102): **DI7–DI12**. MEASURED from m7-sch `inputs.kicad_sch` wetting resistors. E-stop is not on these rails. Rail-fault firmware: ARCHITECTURE §13.15–§13.17 / fixes_firmware §25.
 - ESTOP one-shot range **0.37–0.53 s** (design_spec now matches). `ESTOP_TRIP_STUCK` stays at 0.53 s. **C229 C0G range is still pending.**
 - All 74LVC1G08 gates (U38, U39, U40, U67, U88) are Diodes **74LVC1G08W5-7**, same pinout.
 
 ### Rev 8i (2026-11-21 ~2:01 AM HST)
-- U76 **P17 = DI_BIAS_FLT_N**: both eFuse fault lines wired-OR, active-low open-drain with a pull-up. Part number and polarity pending Layout. On a P17 fault, inference names the rail; if it cannot, both rails are FAULTED.
+- U76 **P17 = DI_BIAS_FLT_N**: both eFuse fault lines wired-OR, active-low open-drain with a pull-up. Part and polarity confirmed in Rev 8j (§13.17). On a P17 fault, inference names the rail; if it cannot, both rails are FAULTED.
 - TPS48100 trip with 20 mΩ shunts is 3.86/4.97/6.14 A (the 90 A figure is withdrawn). Load dump is not supported (9–32 V continuous, 36 V ≤ 60 s).
+
+### Rev 8j (2026-11-21 ~2:09 AM HST): TPS26621, U31 enables, PE7 EXTI7
+- DI_BIAS eFuse is TI **TPS26621DRCR**. U76 **P17 (pin 20) = DI_BIAS_FLT_N**, 10 kΩ to +3V3_SAFE, polarity confirmed. Latch on the first FLT outside the enable blank; the 50 ms debounce is withdrawn.
+- Bank enables (MEASURED, m7-sch `eaa89df`): U31 (TCA9555 @0x22) **P14 → DI_PU_A → Q37 → Q36** (bank A); **P15 → DI_PU_B → Q40 → Q39** (bank B). Start the self-test / blank timer at the U31 I2C write.
+- U76 ~INT is on shared **I2C_INT_N** (U31, U62, U73, U74, U75, U76, R45 10 kΩ) into **PE7 (EXTI7)** — MEASURED, pending mark cleared. INT may release when the pin returns to its original level (SCPS200E p.16); the Input Port register is live only (p.24). Clear INT by reading the expander and port that raised it (P17 is port 1).
+- Approved sequential self-test and 60 s IDLE re-cycle: ARCHITECTURE §13.17. C229 C0G range is still pending Batch 18.

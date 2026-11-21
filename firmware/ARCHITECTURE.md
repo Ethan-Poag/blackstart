@@ -493,7 +493,7 @@ Labels:
 - **Freeing a DI pin is not proposed:** DIs are field inputs.
 
 **Free resources found [S]:**
-- TCA9555 **U76 (@0x25):** **P15 = WD_OK** (fixes_firmware.md §1). **P16 = BL_ALLOW** (Rev 8d/8f, §13.11). **P17 = DI_BIAS_FLT_N** (Rev 8i, §13.15): both eFuse fault lines wired-OR, active-low open-drain with a pull-up (part and polarity pending Layout). The historical “P16/P17 for fans” assignment is withdrawn.
+- TCA9555 **U76 (@0x25):** **P15 = WD_OK** (fixes_firmware.md §1). **P16 = BL_ALLOW** (Rev 8d/8f, §13.11). **P17 = DI_BIAS_FLT_N** (Rev 8i/8j, §13.15–§13.17): both TPS26621 FLT lines wired-OR, active-low open-drain, 10 kΩ pull-up to +3V3_SAFE (part and polarity confirmed, Rev 8j). The historical “P16/P17 for fans” assignment is withdrawn.
 - CM5 Fan_PWM/Fan_Tacho (J4) are already wired.
 
 **Proposed mapping [I], needs a schematic change by the layout/hardware owner:**
@@ -725,7 +725,7 @@ All items are [I] until the hardware respin. Labels follow fixes_firmware.md.
 - Over-temp: SoC 158 / 167 / 176 °F (60 s) or 185 °F. **Heat never trips the engine**; no MCU_TRIP. One AUX may be a configurable over-temp contact (`aux_overtemp_ch` default 0 = unassigned; default polarity energize-on-alarm; triggers on ALARM or UI_SHUTDOWN). See fanless_thermal_spec.md.
 - **Rev 8c — boot brightness (still applies).** U24 VIN is hard on +12 V. R121 100 kΩ on BL_PWM stays. With GPIO12 Hi-Z the boost is off (Ren typ 800 kΩ, SLVS893F p.5 and §7.3.3 p.10). Boot: do not `gpio=12=op,dh`; start PWM at **50 %**. A hang can hold the last duty, including 100 %.
 - **Rev 8d / 8f — BL_ALLOW (Layout final refdes).** **U88** is a Diodes **74LVC1G08W5-7** (same pinout; Layout: every 74LVC1G08 on the board, U88 included, is this MPN), decoupler **C307**. It ANDs **BL_PWM** (CM5 GPIO12) with **BL_ALLOW** (U76 P16) to produce **BL_EN**, which drives U24 EN. **R121 100 kΩ stays on BL_EN.** **R629** is a 10 kΩ pull-up from P16 to +3V3_SAFE (the pull flagged in Rev 8d). **R630** is a **CONFIRMED** 100 kΩ from BL_PWM to GND (Enginerd, 1:37 AM HST). It holds the backlight off while GPIO12 is Hi-Z and closes part of the GPIO12 reset-pull bench item; the bench item itself **stays**. Firmware: P16 is an output, **default HIGH** (backlight enabled). Drive it **LOW** on `CM5_LOST` (**1 s** with no valid SPI frame or no heartbeat edge, §5) or on over-temp. Over-temp cut (consistent with this section; hold times ASSUMED where noted): SoC (CM5 report) ≥ **176 °F for 60 s** or ≥ **185 °F** immediate; U83 ≥ **131 °F for 60 s**; also a backstop at the alarm level — SoC ≥ **167 °F for 60 s** or U83 ≥ **122 °F for 60 s** (ASSUMED, in case the CM5 is up but not dimming). Re-enable when the trip source has cleared for **2 s** and, for temperature, after **9 °F** hysteresis (SoC < 158 °F, U83 < 113 °F). Log `BL_ALLOW_OFF` and the reason to FRAM. Init: write the Output Port bit **1** first, then set the Configuration bit to output (Output Port defaults to 0, TCA9555 Table 7/5, SCPS200E p.24). TCA9555 I/Os power up as inputs with an internal pull-up to default HIGH (p.1, p.3, p.4; I/O diagram 100 kΩ typ p.17; IIL −100 µA max p.6). WD_OK (P15) does not gate BL_ALLOW. `CM5_OFF` stays the 30 s escalation (§5) and is not used just to kill the backlight. Bench: GPIO12 reset pull (R630 is fitted and confirmed; the item stays); BL_ALLOW AND (GPIO12 high, P16 low → BL_EN / U24 EN low); 1 s CM5_LOST; re-enable and over-temp trip/release. Details in fixes_firmware §23.5a.
-- **U83 (Layout final):** TMP1075 at I2C1 **0x4A**, decoupler **C306**. **ALERT is not connected**; firmware must poll. **F101 / F102** are the present PTCs on **DI_BIAS_A / DI_BIAS_B**. Layout Batch 17 will replace them with active current-limit eFuses (part and MCU pin **TBD**). Rail-fault firmware is §13.15.
+- **U83 (Layout final):** TMP1075 at I2C1 **0x4A**, decoupler **C306**. **ALERT is not connected**; firmware must poll. **F101 / F102** are the present PTCs on **DI_BIAS_A / DI_BIAS_B**. Layout Batch 17 replaces them with TI **TPS26621DRCR** eFuses; both FLT pins wired-OR to U76 **P17 (DI_BIAS_FLT_N)**. Rail-fault firmware is §13.15–§13.17.
 
 ### 13.12 Rev 8e (2026-11-21 ~1:27 AM HST, Re-audit 7 R7-N4)
 - Confirmed supply 9–32 V continuous, 36 V ≤ 60 s. OV trip **36.35/38.18/40.06 V**, release **33.19/35.04/36.65 V** (fixed the inverted “cut-off ≤ 36.35 V”). Battery-side fuses are 58 V blades; J23 is F2 10 A. D66 is SMAJ40CA (m7-sch MEASURED). VBAT_SNS FS 36.3 V and load-shed 7.28 A @ 32 V are unchanged; headroom at 32 V is 4.35 V. Do not treat ADC saturation as OV.
@@ -776,19 +776,18 @@ Source: Enginerd 1:51 AM; Layout news 1:41–1:51; Safety requirement for a lost
 **Mapping (MEASURED, m7-sch `inputs.kicad_sch`, wetting 4.7 kΩ R210–R243):**
 | Rail | Terminal / present limiter | Inputs |
 |---|---|---|
-| **DI_BIAS_A** | J21.6, F101 (PTC; Batch 17 eFuse TBD) | **DI1–DI6** (R210, R213, R216, R219, R222, R225) |
-| **DI_BIAS_B** | J22.1, F102 (PTC; Batch 17 eFuse TBD) | **DI7–DI12** (R228, R231, R234, R237, R240, R243) |
+| **DI_BIAS_A** | J21.6, F101 (present PTC; Batch 17: TI TPS26621DRCR, §13.17) | **DI1–DI6** (R210, R213, R216, R219, R222, R225) |
+| **DI_BIAS_B** | J22.1, F102 (present PTC; Batch 17: TI TPS26621DRCR, §13.17) | **DI7–DI12** (R228, R231, R234, R237, R240, R243) |
 
 E-stop is **not** on either DI_BIAS rail (ESTOP_DIG, ESTOP2_DIG, VESTOP_SNS, ESTOP_SENSE / R246 to GND, VBAT_ESTOP). The hardware E-stop path stays independent of a bias-rail fault. D+ uses its own excitation, not DI_BIAS.
 
-**eFuse (Layout Batch 17; Rev 8i ruling).** Each rail gets an active current-limit eFuse. Both fault lines are **wired-OR into U76 P17**, net **DI_BIAS_FLT_N**: active-low open-drain with a pull-up. **Part number and polarity are still pending Layout confirmation.** Do not invent a part.
+**eFuse (Layout Batch 17; Rev 8i ruling, part confirmed in §13.17).** Each rail gets an active current-limit eFuse. Both fault lines are **wired-OR into U76 P17**, net **DI_BIAS_FLT_N**: active-low open-drain with a pull-up. **Rev 8j:** the part is TI **TPS26621DRCR**; polarity is confirmed. The 8h/8i “part and polarity pending” hold is lifted — see §13.17.
 
 **Effect.** A lost or limited bias rail is a **fault**. Every input on that rail is **FAULTED**: it raises an alarm and is never a healthy run permissive and never a valid open or closed state.
 
-**Detection 1 — P17 DI_BIAS_FLT_N** (Rev 8i):
-- Intended wiring: both eFuse fault outputs wired-OR, **active-low open-drain, pull-up**. Debounce **50 ms** (ASSUMED). A low on P17, after debounce, is a rail-fault event.
-- **Part and polarity pending Layout.** Until they are confirmed, treat this wiring as the working assumption but do not hard-code a part.
-- **Flag:** a pull-up on an active-low line means a broken wire to P17 reads high (healthy). Residual vs the 8h “open = fault” preference; Layout to confirm.
+**Detection 1 — P17 DI_BIAS_FLT_N** (Rev 8i; **Rev 8j supersedes the 50 ms debounce and the pending-part hold** — see §13.17):
+- Wiring (confirmed, Rev 8j): both TPS26621 FLT outputs wired-OR, **active-low open-drain, 10 kΩ pull-up to +3V3_SAFE**. Outside the enable blank, **latch on the first assertion** (no 50 ms debounce).
+- **Flag:** a pull-up on an active-low line means a broken wire to P17, an unpowered eFuse, or a bank that is off all read high (healthy). The approved self-test in §13.17 is the mitigation.
 - On a P17 fault, run the inference rule to name the rail (A or B). **If firmware cannot tell which rail, mark BOTH rails FAULTED** (fail-safe).
 
 **Detection 2 — inference** (works with today’s PTCs and with the eFuse):
@@ -798,11 +797,11 @@ E-stop is **not** on either DI_BIAS rail (ESTOP_DIG, ESTOP2_DIG, VESTOP_SNS, EST
 
 **State machine.** Start is inhibited if any FAULTED input is configured as a start permissive or as a protection that must be healthy to start (`DI_BIAS_x_FAULT` itself also inhibits start). Running: there is no older standalone “DI-fault” state beyond oil/temp DIs as protections in RUN. **Proposed, consistent with fail-safe protection DIs (ASSUMED where the prior policy was unspecified):** a FAULTED input assigned as a protection (oil, temp, etc.) is treated as that protection asserted → FAULT / STOPPING. A FAULTED status-only input is alarmed and is not used as a valid open/closed, and does not by itself trip the engine. Hardware E-stop is unchanged.
 
-**Recovery.** The rail fault latches. Auto-clear a rail only if P17 has been high (healthy, assumed polarity) for **2 s** (ASSUMED) and, if that rail was identified only by inference or both rails were faulted together, after at least one input on that rail has been observed **closed** for **1 s**, or by operator reset. Polarity pending Layout — do not auto-clear if P17 polarity is still unconfirmed.
+**Recovery.** The rail fault latches. Auto-clear a rail only if P17 has been high (healthy; polarity confirmed in §13.17) for **2 s** (ASSUMED) and, if that rail was identified only by inference or both rails were faulted together, after at least one input on that rail has been observed **closed** for **1 s**, or by operator reset. The 8h “do not auto-clear until polarity is confirmed” hold is lifted.
 
 **Alarms:** `DI_BIAS_A_FAULT`, `DI_BIAS_B_FAULT` (latched; reason EFUSE or INFER). UI banner, FRAM log, Modbus/CAN bits. These are not MCU_TRIP.
 
-**Bench:** short each rail (eFuse/PTC current-limits; all six DIs go FAULTED); open each rail at the terminal (same); P17 fault-pin test: pull DI_BIAS_FLT_N low, 50 ms debounce, use inference to name the rail, or FAULT both if it cannot. Confirm E-stop still works with a bias rail faulted. Confirm a legitimate all-open bank (already open ≥ 1 s) does not latch. Note: with the assumed pull-up, an unconnected P17 reads high (not a fault) — residual, polarity pending.
+**Bench:** short each rail (eFuse/PTC current-limits; all six DIs go FAULTED); open each rail at the terminal (same); P17 fault-pin test: pull DI_BIAS_FLT_N low and latch on the first assertion (no 50 ms debounce; §13.17), use inference to name the rail, or FAULT both if it cannot. Confirm E-stop still works with a bias rail faulted. Confirm a legitimate all-open bank (already open ≥ 1 s) does not latch. An unconnected P17 reads high (not a fault) — residual; see the §13.17 self-test. Additional bench (sustained short through retries, start-up pulse width) is in §13.17.
 
 **One-shot (B).** The ESTOP pulse range is **0.37–0.53 s** (design_spec now matches load_shedding_spec). The present RC parts do not guarantee 0.37 s worst case. **C229 C0G range is still pending** (Enginerd). `ESTOP_TRIP_STUCK` stays at **0.53 s**.
 
@@ -811,4 +810,48 @@ E-stop is **not** on either DI_BIAS rail (ESTOP_DIG, ESTOP2_DIG, VESTOP_SNS, EST
 ### 13.16 Rev 8i (2026-11-21 ~2:01 AM HST): re-audit 8, P17 wired-OR
 - TPS48100 hardware trip with 20 mΩ shunts is **3.86/4.97/6.14 A** (min/typ/max). The 90 A / 1 mΩ figure is withdrawn.
 - Load dump is **not supported**. Declared supply is 9–32 V continuous, 36 V for at most 60 s.
-- U76 **P17 = DI_BIAS_FLT_N**: both eFuse fault lines wired-OR, active-low open-drain with a pull-up. Part and polarity pending Layout. On a P17 fault, inference names the rail; if it cannot, **both** rails are FAULTED. C229 C0G range is still pending. `ESTOP_TRIP_STUCK` stays at 0.53 s.
+- U76 **P17 = DI_BIAS_FLT_N**: both eFuse fault lines wired-OR, active-low open-drain with a pull-up. **Rev 8j (§13.17) confirms the part as TPS26621DRCR and drops the 50 ms debounce.** On a P17 fault, inference names the rail; if it cannot, **both** rails are FAULTED. C229 C0G range is still pending Batch 18. `ESTOP_TRIP_STUCK` stays at 0.53 s.
+
+### 13.17 Rev 8j (2026-11-21 ~2:09 AM HST): TPS26621 DI_BIAS fault handling
+Source: Enginerd 2:08–2:09 AM HST; Layout MEASURED from m7-sch `eaa89df` netlist; TI TPS2662x **SLVSDT4F** (Rev F, Dec 2021); TI TCA9555 **SCPS200E** (Apr 2019). Both PENDING LAYOUT marks (bank-enable path and INT wiring) are **cleared**.
+
+**Part (confirmed).** Each DI_BIAS rail eFuse is TI **TPS26621DRCR** (auto-retry). The board at `eaa89df` still shows F101/F102 PTCs; the eFuse is a Batch 17 swap and is not yet in that netlist. Both FLT pins (open-drain, active-low) are wired-OR onto **DI_BIAS_FLT_N** at U76 **P17 (pin 20)**, pulled up by **10 kΩ to +3V3_SAFE** (Enginerd; polarity confirmed). FLT low means UVLO, overvoltage, overload, reverse current, thermal shutdown, SHDN pulled low, or start-up while the internal FET GATE is not fully enhanced (SLVSDT4F §9.3.7 p.23).
+
+**Datasheet timing** (SLVSDT4F §7.6 p.8, §9.3.5.1 p.20–21, §9.3.7 p.23; typ unless noted):
+- During start-up in dVdT mode, FLT stays low until the FET is fully enhanced, then releases after the rising deglitch tPGOOD(degl) = max{(750 + 573×C(dVdT)) µs, tPGOODR} (§9.3.7 p.23). With C(dVdT) open: tdVdT typ **0.664 ms**, tPGOODR typ **1.4 ms** → start-up FLT typ about **2.1 ms** (INFERRED). With C(dVdT) = 22 nF, tdVdT typ **11 ms**.
+- Falling deglitch tPGOODF typ **875 µs** (p.8).
+- Overload: current-limit duration tCL(dly) typ **512 ms** (plus a CdVdT term, p.21). TPS26621 then auto-retries after typ **512 ms** and turns the FETs back on in dVdT mode (FLT goes low again). Thermal retry typ 512 ms after TJ < T(TSD) − 13.5 °C (p.8, §9.3.9).
+- Layout’s start-up width **~6.5 ms is UNVERIFIED** (not a datasheet limit). C(dVdT) is not in `eaa89df` because the part is not placed yet. **A ~10 ms blank after enable is enough if C(dVdT) is open** (INFERRED from typ ~2.1 ms, with margin). If Layout fits a large dVdT cap (22 nF typ 11 ms ramp), widen the blank; do not invent the cap. Pulse width is **ASSUMED** until bench-measured.
+
+**Enable path (MEASURED, m7-sch `eaa89df`).** MCU → I2C1 (400 kHz) → U31 (TCA9555 @**0x22**) → FETs:
+- Bank A: U31 **P14 (pin 17)** → DI_PU_A → Q37 → Q36.
+- Bank B: U31 **P15 (pin 18)** → DI_PU_B → Q40 → Q39.
+Start the blank / self-test window timer at the **U31 enable write** so the typ ~100 µs I2C write latency is inside the window, not after it.
+
+**INT line (MEASURED, same netlist).** U76 ~INT sits on the shared **I2C_INT_N** wired-OR of **U31, U62, U73, U74, U75 and U76**, pulled up by **R45 10 kΩ** to +3V3_SAFE, into MCU **PE7 (EXTI7)**. A TCA9555 INT asserts on an input edge (SCPS200E §9.3 p.16). **INT may de-assert when the pin returns to its original level, or when that port is read** (same page) — do not assume the INT pin stays low until a read. The Input Port register shows only the **live** level (SCPS200E p.24). Clearing a still-asserted INT requires reading the expander **and the 8-bit port** that raised it (port 0 and port 1 are independent; P17 is port 1). Because the line is shared, avoid other planned expander I/O changes during the self-test window.
+
+**Latch (supersedes the 50 ms debounce).** Outside the enable blank / self-test window, **latch a rail fault on the first FLT assertion**. Do not debounce with a window a retry or start-up pulse could slip through. Use PE7 EXTI7 plus an immediate U76 P17 read; a periodic I2C poll of the input register can miss a short low (live register, no history). A 1 ms poll is a fallback only, not the primary path. During a sustained short, FLT can stay low for up to tCL(dly) typ 512 ms, then high for the typ 512 ms retry delay, then low again on the dVdT retry — latch on the first assertion and hold through retries.
+
+**Approved self-test** (Enginerd; sequential so the wired-OR pulse is attributable). Enable banks **one at a time**. After each enable:
+1. Start a timer at the U31 enable write.
+2. On the EXTI7 falling edge, read U76 P17 immediately. **P17 LOW inside the ~6.5 ms window (Layout, UNVERIFIED) is the strongest proof.**
+3. If the read lands after the pulse, accept **EXTI7 falling (INT asserted) plus P17 already HIGH** as proof (**INFERRED**), but only if no other expander shows a changed input in the same INT event. Otherwise retry the self-test once.
+4. Neither seen: the pulse is missing; **that bank faults** and starts are inhibited. **P17 still LOW after the window: stuck low; that bank faults.**
+
+Capture the EXTI7 falling edge in the MCU. The expander INT pin may already have released when P17 returns high (SCPS200E p.16).
+
+Run this at every bank enable, and on a **periodic re-cycle while the engine is stopped: every 60 s (ASSUMED), IDLE only**. Never re-cycle in PREHEAT, CRANK, RUN, COOLDOWN, or during a start. Off-time **50 ms (ASSUMED)** then re-enable and run the window. While a bank is off, its six inputs have no wetting current and are **invalid** (not a legitimate all-open, and do not latch inference). After a pass, inputs are valid again.
+
+**I2C budget (I2C1 400 kHz).** Bit time 2.5 µs. One TCA9555 output write or input-port read is about 100–150 µs electrical (existing ≈100 µs/read figure, §11). A 6.5 ms window holds on the order of **40–65** such transactions. A scan of all six INT-sharing expanders is about 0.6–0.9 ms and fits.
+
+**Self-test viability: yes.** Datasheet p.23 confirms a start-up FLT low, INT is wired to PE7 EXTI7, and the bus can complete the immediate P17 read (and an attribution scan if needed). Caveat: a late read can miss the live LOW; use step 3. Pulse width is ASSUMED; the 6.5 ms window is UNVERIFIED.
+
+**Known gap (unchanged).** An open FLT wire, an unpowered eFuse, or a bank that is off all read HIGH (OK). The approved self-test is the mitigation.
+
+**Inference** is unchanged (§13.15). If P17 faults and inference cannot name the rail, **both** rails are FAULTED.
+
+**Recovery.** Latch. Auto-clear a rail only if P17 has been high for **2 s (ASSUMED)** — longer than one typ 512 ms retry high period — and, if the rail was identified only by inference or both were faulted together, after at least one input on that rail has been observed closed for **1 s**, or by operator reset. Polarity is confirmed.
+
+**C229.** C0G range is still pending Batch 18. The ESTOP pulse remains **0.37–0.53 s**; `ESTOP_TRIP_STUCK` stays at **0.53 s**.
+
+**Bench.** Measure the start-up FLT pulse width at P17 (and versus the U31 write). Confirm the ~10 ms blank covers it. Apply a sustained short and confirm the latch holds through auto-retries (typ 512 ms). Walk the four self-test outcomes, including a late read (INFERRED) and a colliding expander INT (retry once). Confirm no re-cycle while running or during a start. Confirm E-stop still works with a rail FAULTED. Confirm a legitimate all-open bank (≥ 1 s) does not latch.
