@@ -539,3 +539,6 @@ Sources read this session: SN65DSI83 SLLSEC1I; PCA9306 SCPS113O; SN74LVC1T45 SCE
 
 **Limits.** A 48 V jump start on a 24 V system (TI SNOSD95C p34) would destroy any 33-36 V TVS. So would the 24 V 58-65 V suppressed level. For 24 V systems the active surge stopper is required, not a TVS (INFERRED).
 (ISO levels are SECONDARY sources, not read from the standard; separate project, not part of this board.)
+
+## m7-sch Batch 17 (2026-11-21)
+- C74/C75 hold-up supercaps: Vishay MAL223051003E3 (230 EDLC-HV, doc 28450 rev 19-Jun-2024): 20 F -20/+50 %, UR 3.0 V (65 °C) / 2.6 V (85 °C, 185 °F), ESRdc 38 mOhm, ESRac 22 mOhm, case 16x20 (Dmax 16.5, Lmax 22), F 7.5 ±0.5 mm, Ød 0.8, IL 75 µA after 72 h. Mounted upright (22 mm max fits where the 33.5 mm 12.5x30 part was 3.1 mm too tall; flat mount D-m7-21 dropped). 2.45 V/cell at 4.9 V nominal. Balance R78/R79 10k: worst-case leakage mismatch 75 µA could shift a cell by up to ~0.37 V (INFERRED, spec max, same as previous part) - above 2.6 V at 85 °C in that corner; bench-check leakage. Footprint CP_Radial_D16.0mm_P7.50mm; board still has D12.5/P5.0 until layout (D-m7-24).

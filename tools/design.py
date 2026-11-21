@@ -227,8 +227,9 @@ npn(cm,'HU_QB2','GND','PWR_FAIL_MCU'); cm.R('10k','HU_ST','HU_QB2'); cm.R('100k'
 # CM5 5V hold-up: 2x20F 3.0V 85C supercap JIERONG JRCD3R0206N120030E (10F, ~4.9V = 2.45V/cell; was 2x HV1030 10F 65C) -> TPS61023 boost 4.85V -> TPS2121 IN2; IN1 = +5V priority
 schottky(cm,'SS34','+5V','SC_CHG',mpn='SS34')
 for _ in range(3): cm.R('150R','SC_CHG','SC_TOP',pkg='1206',note='3x150R = 50R charge limit (<=92mA, 0.14W each)')
-cm.C('20F 3.0V','SC_TOP','SC_MID',pol=True,pkg='Capacitor_THT:CP_Radial_D12.5mm_P5.00mm',mpn='JRCD3R0206N120030E',lcsc='C7471020')
-cm.C('20F 3.0V','SC_MID','GND',pol=True,pkg='Capacitor_THT:CP_Radial_D12.5mm_P5.00mm',mpn='JRCD3R0206N120030E',lcsc='C7471020')
+# m7-sch Batch 17: C74/C75 = Vishay MAL223051003E3 20 F 3.0 V 16x20 mm, 7.5 mm pitch, upright; hand-solder, supplied by us (no LCSC)
+cm.C('20F 3.0V','SC_TOP','SC_MID',pol=True,pkg='Capacitor_THT:CP_Radial_D16.0mm_P7.50mm',mpn='MAL223051003E3',lcsc='')
+cm.C('20F 3.0V','SC_MID','GND',pol=True,pkg='Capacitor_THT:CP_Radial_D16.0mm_P7.50mm',mpn='MAL223051003E3',lcsc='')
 cm.R('10k','SC_TOP','SC_MID',note='passive balance'); cm.R('10k','SC_MID','GND',note='passive balance')
 cm.C('22u','SC_TOP','GND',pkg='1206')
 cm.p('genctl:TPS61023DRLR','TPS61023DRLR',{'VIN':'SC_TOP','EN':'SC_TOP','FB':'HU_FB','GND':'GND','VOUT':'+5V_HU','SW':'HU_SW'},mpn='TPS61023DRLR',lcsc='C919459',note='hold-up boost 4.85V')

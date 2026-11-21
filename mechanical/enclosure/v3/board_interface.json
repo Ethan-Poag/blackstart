@@ -102,6 +102,12 @@
     -13.82,
     6.58,
     -4.67
+   ],
+   "crtyd": [
+    -2.6,
+    -13.85,
+    6.59,
+    -4.65
    ]
   },
   "H2": {
@@ -116,6 +122,12 @@
     -13.82,
     279.13,
     -4.67
+   ],
+   "crtyd": [
+    269.96,
+    -13.85,
+    279.15,
+    -4.65
    ]
   },
   "H3": {
@@ -130,6 +142,12 @@
     184.13,
     6.58,
     193.28
+   ],
+   "crtyd": [
+    -2.6,
+    184.11,
+    6.59,
+    193.31
    ]
   },
   "H4": {
@@ -144,6 +162,12 @@
     180.75,
     276.75,
     190.25
+   ],
+   "crtyd": [
+    267.4,
+    180.9,
+    276.59,
+    190.1
    ]
   },
   "J10": {
@@ -158,6 +182,12 @@
     42.95,
     222.22,
     63.05
+   ],
+   "crtyd": [
+    205.85,
+    44.45,
+    222.15,
+    61.05
    ]
   },
   "J11": {
@@ -186,6 +216,12 @@
     2.05,
     241.93,
     5.95
+   ],
+   "crtyd": [
+    219.16,
+    2.52,
+    241.84,
+    5.49
    ]
   },
   "U10": {
@@ -200,6 +236,12 @@
     36.05,
     241.93,
     39.95
+   ],
+   "crtyd": [
+    219.16,
+    36.52,
+    241.84,
+    39.48
    ]
   },
   "J14": {
@@ -214,6 +256,12 @@
     138.5,
     140.82,
     145.38
+   ],
+   "crtyd": [
+    116.12,
+    139.75,
+    140.63,
+    145.09
    ]
   },
   "J15": {
@@ -228,6 +276,12 @@
     170.71,
     236.19,
     176.22
+   ],
+   "crtyd": [
+    225.45,
+    171.71,
+    236.11,
+    176.15
    ]
   },
   "J16": {
@@ -242,6 +296,12 @@
     14.12,
     87.41,
     21.88
+   ],
+   "crtyd": [
+    76.75,
+    14.21,
+    87.34,
+    21.8
    ]
   },
   "J12": {
@@ -256,6 +316,12 @@
     170.16,
     214.71,
     176.76
+   ],
+   "crtyd": [
+    206.84,
+    170.13,
+    214.72,
+    176.78
    ]
   },
   "J1": {
@@ -270,6 +336,12 @@
     132.37,
     279.88,
     180.0
+   ],
+   "crtyd": [
+    264.18,
+    132.35,
+    279.9,
+    180.02
    ]
   },
   "J23": {
@@ -284,6 +356,12 @@
     82.61,
     279.88,
     130.24
+   ],
+   "crtyd": [
+    264.18,
+    82.59,
+    279.9,
+    130.26
    ]
   },
   "J28": {
@@ -298,6 +376,12 @@
     11.0,
     12.36,
     58.63
+   ],
+   "crtyd": [
+    -3.34,
+    10.98,
+    12.38,
+    58.65
    ]
   },
   "J29": {
@@ -312,6 +396,12 @@
     60.82,
     12.36,
     108.45
+   ],
+   "crtyd": [
+    -3.34,
+    60.8,
+    12.38,
+    108.47
    ]
   },
   "J30": {
@@ -329,7 +419,13 @@
     9.24,
     162.0
    ],
-   "note": "m7-sch Batch 16 (2026-11-21): part identity updated to Phoenix PC 5/8-GF-7,62 1720851 (schematic J30 MPN 1720851, footprint genctl:PLACEHOLDER_PhoenixContact_PC5_8-GF-7.62_1720851; BOM ac_metering_bom row 6). The frozen board footprint is STILL KF2EDGRM-5.08-8P (board_fp); x/y/rot/bbox below are MEASURED from that old footprint and are unchanged, not new coordinates. 1720851 body is 77.06 mm (Mechanical, J30_PHOENIX_DATA.md) and overruns the LEFT_HV window (y 9-164) by 10.8 mm; layout change pending (deferred_layout D-m7-20). Note for enclosure_v3.py: line 159/160 now model J30 as a Phoenix part (18 mm envelope instead of 16 mm) on the old bbox."
+   "note": "m7-sch Batch 16 (2026-11-21): part identity updated to Phoenix PC 5/8-GF-7,62 1720851 (schematic J30 MPN 1720851, footprint genctl:PLACEHOLDER_PhoenixContact_PC5_8-GF-7.62_1720851; BOM ac_metering_bom row 6). The frozen board footprint is STILL KF2EDGRM-5.08-8P (board_fp); x/y/rot/bbox below are MEASURED from that old footprint and are unchanged, not new coordinates. 1720851 body is 77.06 mm (Mechanical, J30_PHOENIX_DATA.md) and overruns the LEFT_HV window (y 9-164) by 10.8 mm; layout change pending (deferred_layout D-m7-20). Note for enclosure_v3.py: line 159/160 now model J30 as a Phoenix part (18 mm envelope instead of 16 mm) on the old bbox.",
+   "crtyd": [
+    -3.31,
+    110.61,
+    9.27,
+    161.99
+   ]
   },
   "J6": {
    "val": "CAN1 (PC 5/4)",
@@ -343,6 +439,12 @@
     38.0,
     279.88,
     54.37
+   ],
+   "crtyd": [
+    270.56,
+    38.08,
+    279.8,
+    54.29
    ]
   },
   "J7": {
@@ -357,6 +459,12 @@
     56.5,
     279.88,
     80.49
+   ],
+   "crtyd": [
+    270.56,
+    56.58,
+    279.8,
+    80.41
    ]
   },
   "J8": {
@@ -371,6 +479,12 @@
     185.58,
     264.29,
     194.33
+   ],
+   "crtyd": [
+    254.97,
+    185.66,
+    264.21,
+    194.25
    ]
   },
   "J9": {
@@ -385,6 +499,12 @@
     184.93,
     20.95,
     194.33
+   ],
+   "crtyd": [
+    8.48,
+    185.01,
+    20.89,
+    194.25
    ]
   },
   "J17": {
@@ -399,6 +519,12 @@
     181.76,
     71.44,
     194.33
+   ],
+   "crtyd": [
+    30.22,
+    181.75,
+    71.43,
+    194.31
    ]
   },
   "J18": {
@@ -413,6 +539,12 @@
     181.76,
     114.96,
     194.33
+   ],
+   "crtyd": [
+    73.74,
+    181.75,
+    114.95,
+    194.31
    ]
   },
   "J19": {
@@ -427,6 +559,12 @@
     181.76,
     158.48,
     194.33
+   ],
+   "crtyd": [
+    117.26,
+    181.75,
+    158.47,
+    194.31
    ]
   },
   "J20": {
@@ -441,6 +579,12 @@
     181.76,
     202.0,
     194.33
+   ],
+   "crtyd": [
+    160.78,
+    181.75,
+    201.99,
+    194.31
    ]
   },
   "J21": {
@@ -455,6 +599,12 @@
     -14.87,
     245.52,
     -2.3
+   ],
+   "crtyd": [
+    204.33,
+    -14.85,
+    245.54,
+    -2.28
    ]
   },
   "J22": {
@@ -469,6 +619,12 @@
     181.76,
     245.52,
     194.33
+   ],
+   "crtyd": [
+    204.3,
+    181.75,
+    245.51,
+    194.31
    ]
   },
   "J24": {
@@ -483,6 +639,12 @@
     -14.87,
     71.44,
     -2.3
+   ],
+   "crtyd": [
+    30.25,
+    -14.85,
+    71.46,
+    -2.28
    ]
   },
   "J25": {
@@ -497,6 +659,12 @@
     -14.87,
     114.96,
     -2.3
+   ],
+   "crtyd": [
+    73.77,
+    -14.85,
+    114.98,
+    -2.28
    ]
   },
   "J26": {
@@ -511,6 +679,12 @@
     -14.87,
     158.48,
     -2.3
+   ],
+   "crtyd": [
+    117.29,
+    -14.85,
+    158.5,
+    -2.28
    ]
   },
   "J27": {
@@ -525,6 +699,12 @@
     -14.87,
     202.0,
     -2.3
+   ],
+   "crtyd": [
+    160.81,
+    -14.85,
+    202.02,
+    -2.28
    ]
   },
   "J4": {
@@ -539,6 +719,12 @@
     10.92,
     274.26,
     17.53
+   ],
+   "crtyd": [
+    266.39,
+    10.9,
+    274.28,
+    17.55
    ]
   },
   "J2": {
@@ -553,6 +739,12 @@
     66.27,
     200.72,
     73.14
+   ],
+   "crtyd": [
+    193.89,
+    65.98,
+    200.83,
+    73.44
    ]
   },
   "J3": {
@@ -567,6 +759,12 @@
     88.84,
     134.69,
     97.34
+   ],
+   "crtyd": [
+    121.58,
+    90.55,
+    134.37,
+    95.64
    ]
   },
   "J5": {
@@ -581,6 +779,12 @@
     14.66,
     197.78,
     23.16
+   ],
+   "crtyd": [
+    184.67,
+    16.37,
+    197.46,
+    21.46
    ]
   },
   "JP1": {
@@ -595,6 +799,12 @@
     74.07,
     202.39,
     85.28
+   ],
+   "crtyd": [
+    196.23,
+    74.05,
+    202.41,
+    85.3
    ]
   },
   "SW1": {
@@ -609,6 +819,12 @@
     50.74,
     200.48,
     56.39
+   ],
+   "crtyd": [
+    192.91,
+    50.72,
+    200.5,
+    56.41
    ]
   },
   "SW2": {
@@ -623,6 +839,12 @@
     16.16,
     167.61,
     21.81
+   ],
+   "crtyd": [
+    160.04,
+    16.14,
+    167.63,
+    21.83
    ]
   },
   "SW3": {
@@ -637,6 +859,12 @@
     37.91,
     254.37,
     43.56
+   ],
+   "crtyd": [
+    246.8,
+    37.89,
+    254.39,
+    43.58
    ]
   },
   "SW4": {
@@ -651,6 +879,12 @@
     5.52,
     189.45,
     11.17
+   ],
+   "crtyd": [
+    181.88,
+    5.5,
+    189.47,
+    11.19
    ]
   },
   "F1": {
@@ -665,6 +899,12 @@
     124.7,
     260.39,
     131.69
+   ],
+   "crtyd": [
+    240.4,
+    124.79,
+    260.3,
+    131.6
    ]
   },
   "BT1": {
@@ -679,6 +919,12 @@
     52.02,
     134.21,
     67.98
+   ],
+   "crtyd": [
+    107.04,
+    52.11,
+    131.39,
+    67.9
    ]
   },
   "T1": {
@@ -693,6 +939,12 @@
     112.83,
     57.59,
     124.2
+   ],
+   "crtyd": [
+    29.65,
+    112.91,
+    53.54,
+    124.12
    ]
   },
   "T2": {
@@ -707,6 +959,12 @@
     132.37,
     56.28,
     143.74
+   ],
+   "crtyd": [
+    28.33,
+    132.45,
+    52.22,
+    143.66
    ]
   },
   "T3": {
@@ -721,6 +979,12 @@
     73.42,
     55.37,
     84.79
+   ],
+   "crtyd": [
+    27.43,
+    73.5,
+    51.32,
+    84.71
    ]
   },
   "T4": {
@@ -735,6 +999,12 @@
     38.01,
     52.5,
     49.38
+   ],
+   "crtyd": [
+    24.56,
+    38.09,
+    48.45,
+    49.3
    ]
   },
   "SW9": {
@@ -940,5 +1210,6 @@
    "src": "INFERRED"
   }
  },
- "volatility": "PROGRESS.md M6: board 61.9% routed, 1119 unconnected, NOT fab-ready. M6 moved only R/C passives; outline, holes, connectors, ICs locked. Likely to move: C1 parts near U21, passives; possibly J10/J11 if DSI/LVDS escape re-placement needed (INFERRED)."
+ "volatility": "PROGRESS.md M6: board 61.9% routed, 1119 unconnected, NOT fab-ready. M6 moved only R/C passives; outline, holes, connectors, ICs locked. Likely to move: C1 parts near U21, passives; possibly J10/J11 if DSI/LVDS escape re-placement needed (INFERRED).",
+ "crtyd_note": "m7-sch Batch 17 (2026-11-21), MEASURED read-only with KiCad 9.0.2 pcbnew on the frozen board (md5 49a6a6a7...): 'crtyd' = bbox of footprint.GetCourtyard(F/B.CrtYd) in board coordinates (this file's frame equals board coordinates: H1 (2.0, -9.25) and every pad position match pcbnew). 'bbox' (unchanged) = footprint.GetBoundingBox(False, False), i.e. pads + graphics without text, which is why it is slightly larger than crtyd (up to 4.06 mm on T1-T4). Mechanical's 2026-11-21 report that B.Cu rot +-90 parts (J28, J29, J1, J23, J6, J7, J8, J30) have X mirrored about the footprint origin was checked and is NOT confirmed: pcbnew pad.GetPosition() for J29 pin 1 gives x 4.215/6.755/10.005 at y 96.062 (as hv_pads.json has), and the J29 courtyard is x -3.34..12.38, y 60.80..108.47. No X values in bbox or hv_pads.json were changed."
 }

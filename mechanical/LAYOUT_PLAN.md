@@ -39,7 +39,7 @@ Scripts: `geometry.py` (source of truth), `place.py` (placer), `render_placement
 | Front | 86.5,52 … 135,95 | key LED drivers / expanders |
 | Display | 135,100 … 200,135 | SN65DSI83 + panel power, close to J14 (F, x 128, y 142) |
 | Inputs | 74,135 … 190,180 | AI/DI/MPU → J17-J20, J22 in the bottom key gaps |
-| Power | 190,135 … 262,180 | LM74800, **LM5176**, TPS56637 x2, LMR36506, supercaps (F1 removed in schematic, N4: no on-board fuse; battery net BAT_IN; installer fits an external fuse <=10 A fast-acting, >=58 V DC in the battery lead); next to J1 battery (right edge, bottom) |
+| Power | 190,135 … 262,180 | LM74800, **LM5176**, TPS56637 x2, LMR36506, supercaps (F1 removed in schematic, N4: no on-board fuse; battery net BAT_IN; installer fits an external fuse <=10 A standard (non-time-delay), >=58 V DC in the battery lead); next to J1 battery (right edge, bottom) |
 | Spill | 74,95 … 135,135 | overflow (45 input parts) |
 | Edge: right | x 262…280, y 38…180 | J6 CAN, J7 expansion, J23 fuel/crank (Phoenix), J1 battery (Phoenix). J10/J11 moved to rear-facing positions at (214,53) / (240,50) (v4) |
 | Edge: end slots | bottom-left x 7…23: J9 RS-485; bottom-right x 253…266: J8 router 12 V | |

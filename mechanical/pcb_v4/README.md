@@ -1,6 +1,6 @@
 # Blackstart PCB v4: connectivity-driven placement and route pipeline
 
-> **SUPERSEDED (N4, m7-sch 3c, 2026-10-28):** the schematic has no on-board fuse; battery net BAT_IN; installer fits an external fuse <=10 A fast-acting, >=58 V DC in the battery lead. Every F1 / VBAT_F / "fuse F1 10 A" / "10 A ATO" mention in this file describes the as-built .kicad_pcb (which still carries F1 clips and net VBAT_F until the board update) and is historical; the VBAT_F copper becomes BAT_IN when the board is updated. The 10 A copper figures remain a copper-capacity record only.
+> **SUPERSEDED (N4, m7-sch 3c, 2026-10-28):** the schematic has no on-board fuse; battery net BAT_IN; installer fits an external fuse <=10 A standard (non-time-delay), >=58 V DC in the battery lead. Every F1 / VBAT_F / "fuse F1 10 A" / "10 A ATO" mention in this file describes the as-built .kicad_pcb (which still carries F1 clips and net VBAT_F until the board update) and is historical; the VBAT_F copper becomes BAT_IN when the board is updated. The 10 A copper figures remain a copper-capacity record only.
 
 
 The board opens in KiCad 9/10 with `genctl_v4_routed.kicad_pcb` and `genctl_v4.kicad_pro`. The footprints are embedded and no plugins are needed.
