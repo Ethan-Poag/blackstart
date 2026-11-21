@@ -230,7 +230,7 @@ for _ in range(3): cm.R('150R','SC_CHG','SC_TOP',pkg='1206',note='3x150R = 50R c
 # m7-sch Batch 17: C74/C75 = Vishay MAL223051003E3 20 F 3.0 V 16x20 mm, 7.5 mm pitch, upright; hand-solder, supplied by us (no LCSC)
 cm.C('20F 3.0V','SC_TOP','SC_MID',pol=True,pkg='Capacitor_THT:CP_Radial_D16.0mm_P7.50mm',mpn='MAL223051003E3',lcsc='')
 cm.C('20F 3.0V','SC_MID','GND',pol=True,pkg='Capacitor_THT:CP_Radial_D16.0mm_P7.50mm',mpn='MAL223051003E3',lcsc='')
-cm.R('10k','SC_TOP','SC_MID',note='passive balance'); cm.R('10k','SC_MID','GND',note='passive balance')
+cm.R('4.7k','SC_TOP','SC_MID',note='passive balance 4.7k (Batch 22, R9-N8)'); cm.R('4.7k','SC_MID','GND',note='passive balance 4.7k (Batch 22, R9-N8)')
 cm.C('22u','SC_TOP','GND',pkg='1206')
 cm.p('genctl:TPS61023DRLR','TPS61023DRLR',{'VIN':'SC_TOP','EN':'SC_TOP','FB':'HU_FB','GND':'GND','VOUT':'+5V_HU','SW':'HU_SW'},mpn='TPS61023DRLR',lcsc='C919459',note='hold-up boost 4.85V')
 cm.p('Device:L','1u',{'1':'SC_TOP','2':'HU_SW'},prefix='L',mpn='FNR5020S1R0MT',lcsc='C167920',fp='genctl:L_FNR5020S',note='1uH 5A')
@@ -422,7 +422,7 @@ tca(inp,2,ex)
 # DI bank bias
 for b in 'AB':
     # m7-sch Batch 18 (Enginerd 2026-11-21 02:08): Q36/Q39 drain -> DIB_x_EFIN -> U89/U90 TPS26621DRCR eFuse (ILIM 33.2k = 0.20 A, auto-retry,
-    # UVLO 1M to IN, OVP/dVdT 10n/ILIM/EP/RTN to GND (Batch 21, Safety R7-N13; was local DIB_x_RTN; never move U89/U90 to BAT_IN), SHDN open, FLT -> DI_BIAS_FLT_N + R635 10k to +3V3_SAFE -> U76 P17)
+    # UVLO 1M to IN, OVP/dVdT 10n/ILIM/EP/RTN to GND (Batch 21, Safety S7-N13; was local DIB_x_RTN; never move U89/U90 to BAT_IN), SHDN open, FLT -> DI_BIAS_FLT_N + R635 10k to +3V3_SAFE -> U76 P17)
     # -> DIB_x_PTC (C309/C312 100n) -> F101/F102 1210L020/72WR (C27568256) -> DI_BIAS_x. Text mirror only.
     # Mirrors the committed inputs.kicad_sch for reference only; DO NOT REGENERATE (refs F101/F102 are hand-placed).
     fet(inp,'Transistor_FET:AO3401A','SI2309CDS','DIB_%s_PG'%b,'VBAT_P','DIB_%s_EFIN'%b,mpn='SI2309CDS-T1-GE3')
