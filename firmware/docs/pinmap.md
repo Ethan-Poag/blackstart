@@ -140,7 +140,7 @@ PB12 note: in DS12110 Table 11 (p.90) the AF9 cell reads "FDCAN2_" and its secon
 
 
 ## Added 2026-10-28 (fixes_firmware.md)
-- U76 (TCA9555 @0x25) **P15 (pin 18) = WD_OK input via R559 4.7k** (watchdog latch U84 Q; 0 = latched, power cycle required). **P16 (pin 19) = BL_ALLOW** (Rev 8d/8f): output, default HIGH (enabled). **U88** (Diodes **74LVC1G08W5-7**, C307; all board 74LVC1G08s are this MPN) ANDs BL_PWM (CM5 GPIO12) with P16 to **BL_EN**, which drives U24 EN. **R121 100 kΩ is on BL_EN. R629** 10 kΩ pull-up P16 to +3V3_SAFE. **R630** is a **CONFIRMED** 100 kΩ BL_PWM to GND (Enginerd 1:37 AM). It closes part of the GPIO12 reset-pull bench item; the bench item stays. MCU drives P16 LOW on CM5_LOST (1 s, ARCHITECTURE §5) or over-temp. P17 remains spare. (P16 is not FAN2_TACH; §11 withdrawn.)
+- U76 (TCA9555 @0x25) **P15 (pin 18) = WD_OK input via R559 4.7k** (watchdog latch U84 Q; 0 = latched, power cycle required). **P16 (pin 19) = BL_ALLOW** (Rev 8d/8f): output, default HIGH (enabled). **U88** (Diodes **74LVC1G08W5-7**, C307; all board 74LVC1G08s are this MPN) ANDs BL_PWM (CM5 GPIO12) with P16 to **BL_EN**, which drives U24 EN. **R121 100 kΩ is on BL_EN. R629** 10 kΩ pull-up P16 to +3V3_SAFE. **R630** is a **CONFIRMED** 100 kΩ BL_PWM to GND (Enginerd 1:37 AM). It closes part of the GPIO12 reset-pull bench item; the bench item stays. MCU drives P16 LOW on CM5_LOST (1 s, ARCHITECTURE §5) or over-temp. **P17 (pin 20) = DI_BIAS_FLT_N** (Rev 8i): both DI_BIAS eFuse fault lines wired-OR, active-low open-drain with a pull-up (part and polarity pending Layout). (P16 is not FAN2_TACH; §11 withdrawn.)
 - PB4 AUX3_MCU: external 4.7k pull-down (R536). Other enables: 100k (R534–R548, R551); AUX9/10 10k (R549/R550).
 - PA9 → R56 and PE3 → R57 change from 1k to 10k. PA9/PE3/PE5 are Hi-Z until the CM5 heartbeat (PC2_C).
 - PB2 OUT_FAULT_N: the INA238 (U86 @0x40) ALERT is added to the wired-OR.- PC13 EXP_12V_EN: R551 100k pull-down; **not watchdog-gated** (Ethan ruling 2026-10-28).
@@ -189,6 +189,10 @@ VREF+ = +3V3_SAFE [M]; 16-bit. Source: fixes_firmware.md §18.2.
 - **FUEL is K2** (Hella 4RA 003 437-191 on the 24 V kit, 16–30 V).
 
 ### Rev 8h (2026-11-21 ~1:51 AM HST): DI_BIAS rails, one-shot, LVC MPN
-- **DI_BIAS_A** (J21.6, F101): **DI1–DI6**. **DI_BIAS_B** (J22.1, F102): **DI7–DI12**. MEASURED from m7-sch `inputs.kicad_sch` wetting resistors. E-stop is not on these rails. Layout Batch 17 eFuse part/pin **TBD**. Rail-fault firmware: ARCHITECTURE §13.15 / fixes_firmware §25.
-- ESTOP one-shot range **0.37–0.53 s** (design_spec now matches). `ESTOP_TRIP_STUCK` stays at 0.53 s. C229 may change to C0G (range TBD).
+- **DI_BIAS_A** (J21.6, F101): **DI1–DI6**. **DI_BIAS_B** (J22.1, F102): **DI7–DI12**. MEASURED from m7-sch `inputs.kicad_sch` wetting resistors. E-stop is not on these rails. Rail-fault firmware: ARCHITECTURE §13.15–§13.16 / fixes_firmware §25.
+- ESTOP one-shot range **0.37–0.53 s** (design_spec now matches). `ESTOP_TRIP_STUCK` stays at 0.53 s. **C229 C0G range is still pending.**
 - All 74LVC1G08 gates (U38, U39, U40, U67, U88) are Diodes **74LVC1G08W5-7**, same pinout.
+
+### Rev 8i (2026-11-21 ~2:01 AM HST)
+- U76 **P17 = DI_BIAS_FLT_N**: both eFuse fault lines wired-OR, active-low open-drain with a pull-up. Part number and polarity pending Layout. On a P17 fault, inference names the rail; if it cannot, both rails are FAULTED.
+- TPS48100 trip with 20 mΩ shunts is 3.86/4.97/6.14 A (the 90 A figure is withdrawn). Load dump is not supported (9–32 V continuous, 36 V ≤ 60 s).

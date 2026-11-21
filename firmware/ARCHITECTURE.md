@@ -493,7 +493,7 @@ Labels:
 - **Freeing a DI pin is not proposed:** DIs are field inputs.
 
 **Free resources found [S]:**
-- TCA9555 **U76 (@0x25):** **P15 = WD_OK** (fixes_firmware.md §1). **P16 = BL_ALLOW** (Rev 8d/8f, §13.11). **P17 is the remaining spare.** The historical “P16/P17 for fans” assignment is withdrawn.
+- TCA9555 **U76 (@0x25):** **P15 = WD_OK** (fixes_firmware.md §1). **P16 = BL_ALLOW** (Rev 8d/8f, §13.11). **P17 = DI_BIAS_FLT_N** (Rev 8i, §13.15): both eFuse fault lines wired-OR, active-low open-drain with a pull-up (part and polarity pending Layout). The historical “P16/P17 for fans” assignment is withdrawn.
 - CM5 Fan_PWM/Fan_Tacho (J4) are already wired.
 
 **Proposed mapping [I], needs a schematic change by the layout/hardware owner:**
@@ -505,7 +505,7 @@ Labels:
 | FAN_PWM (both fans) | CM5 **Fan_PWM** (U9.19), through an open-drain buffer (e.g. 74LVC1G07 or a 2N7002 per fan [I]) | open-drain, so the fan's internal 5 V pull-up never back-drives the CM5 pin |
 | FAN1_TACH | CM5 **Fan_Tacho** (U9.16) | via 10k pull-up to CM5_3V3 + 1k series + BAT54S clamp to 3.3 V/GND, in case a fan has an internal 5 V tach pull-up |
 | FAN2_TACH | ~~**U76 P16**~~ **WITHDRAWN (Rev 8f): P16 = BL_ALLOW.** No FAN2 tach. | Historical. Do not implement. |
-| FAN_FORCE_FULL | **U76 P17** → open-drain buffer OE/gate | **MCU override**: forces the PWM line Hi-Z, so the fan pull-ups give 100 % |
+| FAN_FORCE_FULL | ~~**U76 P17**~~ **WITHDRAWN (Rev 8i): P17 = DI_BIAS_FLT_N.** | Historical. Do not implement. |
 | Default state | TCA9555 pins are Hi-Z inputs at reset [N l.405] | a 100k pull to the "force-full" state makes **fans run 100 % at power-up and whenever the MCU or CM5 is not commanding** |
 | FAN_PWR_EN (optional) | ~~U76 P15~~ **DROPPED 2026-10-28: P15 = WD_OK.** No free expander bit; fan power-cycle not available | — |
 
@@ -613,7 +613,7 @@ Run by the MCU, because the CM5 is still booting.
 - Policy (Ethan, 2026-10-27): there is no shedding in normal conditions, and the copper is being redesigned for the full 10 A chain. Shedding happens only on an abnormal condition: VBAT < 9.5 V sustained (L3/L4), a faulted converter, or an over-current fault. The normal-operation "≤ 2 outputs on" cap is removed. The only remaining limit is total-current supervision, which treats Σ output current above the copper rating as a fault [D].
 - Total-current supervision (spec §8). Battery: 12 V and 24 V both integrated (target), with 12 V-only plus an external 24 V step-down as the fallback (Ethan final, Oct 27). The class is detected from VBAT_SNS (< 16 V → 12 V, > 18 V → 24 V; ×11 divider, full scale 36.3 V). The 24 V thresholds are 2× (spec §10, ASSUMED). The current limits are unchanged, and 12 V is the worst case. Chain F1/copper is 10 A at an 18 °F rise [REVIEWER]. I_r = 10 A at room, 8 A at 149 °F (Littelfuse ATO table). Firmware picks I_r from U83 (TMP1075 @0x4A, MCU I2C1, PROPOSED) + 18 °F [A], falling back to 8 A if U83 is missing. Tiers: WARN 0.9·I_r/5 s (9.0/7.2 A); FAULT 1.0·I_r/5 s (10/8 A); FAST 1.25·I_r/100 ms (12.5/10 A); plus an I²t budget of 50 % of the fuse's 115 A²s. I_Σ is estimated today (Σ ISNS + P12_est/(0.85·V_bat) + 0.64 A, +12V PLACEHOLDER). F1 chain = VBAT_P: LM5176, U5, U65 and all 16 TPS1HTC30. FUEL/CRANK (U43/U45) are on VBAT_ESTOP and excluded [SCHEMATIC]. Base load 4.95 A at 12 V / 6.46 A at 9 V; worst normal 10.95 A (B1 PLACEHOLDER), over both ratings. Levers for Ethan are in spec §8.2a. Chain-level current sense is a RECOMMENDATION only (spec §8.5a), with no schematic/BOM change.
 - AUX caps (spec §9, Ethan approved Oct 27): `aux_out_limit_A` 2.0 A; `aux_total_cap_room_A` 5.0 / `aux_total_cap_hot_A` 3.0 (U83 F1 state, HOT if U83 is missing). These are MCU-validated against SAFE_MAX; the CM5 may request ≤ SAFE_MAX. Coil pulses: one at a time, 5 A / ≤ 100 ms, FIFO depth 2 (OPEN ahead of CLOSE, CLOSE times out at 2 s). FAST is re-based to 1.5·I_r for ≤ 120 ms per admitted pulse, and non-essential AUX pause if I_Σ + 5 A > 1.5·I_r. ESTOP_TRIP is never queued, aborts a CLOSE, and may overlap an OPEN pulse. Totals with caps exceed the limits (hot 9 V 9.66 A > 8 A; B1 PLACEHOLDER). The low-V derate option (< 10.0 V / > 10.5 V: hot 1.34 A, room 3.34 A at 9 V) is pending Ethan. TPS1HTC30 ILIM 2.99 A < the 5 A pulse is flagged to Enginerd.
-- FUEL/CRANK coil class (spec §11.1, DECIDED Oct 27, values ASSUMED): relay-only, on VBAT_ESTOP (outside the main chain). Limits are 2.8 A declared per output (Rev 6; FAULT 3.0 A vs 3.6 A trip conflict flagged) and 6.0 A at the node. Tiers: FAULT 3.0 A/100 ms → off, latch, ≤ 3 retries; FAST 3.75 A/10 ms; node 6 A/100 ms; WARN 1.5 × the expected coil current. Open-load detection is disabled at the 1 mΩ shunt (unresolvable; INA281 offset unverified). Readback FUEL_RBB/CRANK_RBB checks stuck-on. HW flag: the TPS48100 trip is 90 A and needs re-scaling (R297/R303, R294/R300, C197/C201). External relays must be de-energise-to-stop, with a TVS/diode at each relay.
+- FUEL/CRANK coil class (spec §11.1, DECIDED Oct 27, values ASSUMED): relay-only, on VBAT_ESTOP (outside the main chain). Limits are 2.8 A declared per output (Rev 6; FAULT 3.0 A vs 3.6 A trip conflict flagged) and 6.0 A at the node. Tiers: FAULT 3.0 A/100 ms → off, latch, ≤ 3 retries; FAST 3.75 A/10 ms; node 6 A/100 ms; WARN 1.5 × the expected coil current. Open-load detection is disabled at the 1 mΩ shunt (unresolvable; historical). Readback FUEL_RBB/CRANK_RBB checks stuck-on. Hardware TPS48100 trip is **3.86/4.97/6.14 A** (min/typ/max) with the 20 mΩ shunts (R297/R303); the old 90 A / 1 mΩ figure is withdrawn. External relays must be de-energise-to-stop, with a TVS/diode at each relay.
 - Two-layer protection (spec §11.2, PROPOSAL pending the no-onboard-fuse decision):
   - Layer 1 is the fixed board-protect `I_bmax` 10/8 A, MCU-enforced.
   - Layer 2 is the user-fuse coordination (`fuse_rating_A`, `fuse_type`, FRAM + CRC), which can only lower the thresholds. NONE means layer 1 only.
@@ -630,8 +630,8 @@ Run by the MCU, because the CM5 is still booting.
 - Crank: no pre-shed. Dips are ignored except below 6.5 V (abort if > 500 ms).
 - CM5 commands that would exceed the total-current fault limit are refused (NACK BUDGET). The state machine pre-empts low-priority AUX outputs; stop/open actions always proceed.
 - PSU_MAIN_OK fault: shed within 1 ms, abort a crank, finish open pulses, abort close pulses, back off 2–32 s, lock out the 12 V loads only after 5 faults in 10 min.
-- ESTOP_TRIP (K4, Finder 38.51, J24.6, breaker shunt-trip): a real emergency adds ≤ 1 ms of shedding before MCU_TRIP. **Rev 8g:** firmware must **never hold K4 on continuously**. Command pulse **0.48 s** nominal (TLC555-Q1 U66 one-shot, load_shedding_spec C229 2.2 µF **0.48 s, 0.37–0.53 s**; **design_spec now the same, 0.37–0.53 s**. The present RC parts do not guarantee 0.37 s worst case. C229 may change to C0G (new range TBD from Enginerd). Safety Round 7 “~0.48 s pulse”). Hard cut and fault `ESTOP_TRIP_STUCK` if MCU_TRIP or the sensed output remains asserted beyond **0.53 s** (unchanged). The earlier 500 ms cap is superseded. Retries are ≥ 15 s apart, at most 3. WDO_N still gates the AND.
-- Hardware gaps: no on-board VBAT_P ADC (the approved INA238 adds VBUS and total current, spec §12), no converter current sense, LM5176 PGOOD/PG_5V/PG_3V3 not routed to the MCU (P15 = WD_OK, P16 = BL_ALLOW; only P17 is still spare), ESTOP_TRIP dead on VBAT_P loss.
+- ESTOP_TRIP (K4, Finder 38.51, J24.6, breaker shunt-trip): a real emergency adds ≤ 1 ms of shedding before MCU_TRIP. **Rev 8g:** firmware must **never hold K4 on continuously**. Command pulse **0.48 s** nominal (TLC555-Q1 U66 one-shot, load_shedding_spec C229 2.2 µF **0.48 s, 0.37–0.53 s**; **design_spec now the same, 0.37–0.53 s**. The present RC parts do not guarantee 0.37 s worst case. C229 C0G range is still pending (Enginerd). Safety Round 7 “~0.48 s pulse”). Hard cut and fault `ESTOP_TRIP_STUCK` if MCU_TRIP or the sensed output remains asserted beyond **0.53 s** (unchanged). The earlier 500 ms cap is superseded. Retries are ≥ 15 s apart, at most 3. WDO_N still gates the AND.
+- Hardware gaps: no on-board VBAT_P ADC (the approved INA238 adds VBUS and total current, spec §12), no converter current sense, LM5176 PGOOD/PG_5V/PG_3V3 not routed to the MCU (P15 = WD_OK, P16 = BL_ALLOW, P17 = DI_BIAS_FLT_N; no spare expander bit), ESTOP_TRIP dead on VBAT_P loss.
 
 
 ## 13. Fix-spec firmware changes (2026-10-28, source: /workspace/review/schematic_audit/fixes_firmware.md)
@@ -764,7 +764,7 @@ There is **no** “glow skipped, high battery V” path (withdrawn 1:38 AM). 24 
 
 **GLOW on-time cap.** Use the configured glow time with a **hard ceiling of 60 s per cycle**. After that, GLOW is forced off and a cooldown must elapse before glow can re-arm: **60 s minimum (ASSUMED)**. **If a start asks for glow during cooldown (proposed, flag for Enginerd):** skip glow, raise `GLOW_COOLDOWN` (“glow skipped, cooldown”), and continue the start at CRANK. Alternative, not adopted here: wait out the remaining cooldown (delays a standby start).
 
-**K4 / ESTOP_TRIP pulse.** K4 is the E-stop / breaker shunt-trip (Finder 38.51, J24.6, TPS1HTC30 U68), ORed from the TLC555 one-shot (U66) and MCU_TRIP (PD7). Nominal **0.48 s** comes from the hardware one-shot (load_shedding_spec: C229 2.2 µF, **0.48 s, 0.37–0.53 s**; **design_spec now the same, 0.37–0.53 s**. The present RC parts do not guarantee 0.37 s worst case. C229 may change to C0G (new range TBD from Enginerd). Safety Round 7 table “~0.48 s pulse”). Firmware must **never hold K4 on continuously**. Pulse MCU_TRIP for 0.48 s then drive it LOW (the §3 ESTOP row that held MCU_TRIP=1 is withdrawn). Hard-cut and raise `ESTOP_TRIP_STUCK` if it remains asserted beyond **0.53 s** (unchanged). Retries ≥ 15 s, at most 3. K4 is still not in the kit-voltage inhibit; do not rely on it at 36 V (UVR).
+**K4 / ESTOP_TRIP pulse.** K4 is the E-stop / breaker shunt-trip (Finder 38.51, J24.6, TPS1HTC30 U68), ORed from the TLC555 one-shot (U66) and MCU_TRIP (PD7). Nominal **0.48 s** comes from the hardware one-shot (load_shedding_spec: C229 2.2 µF, **0.48 s, 0.37–0.53 s**; **design_spec now the same, 0.37–0.53 s**. The present RC parts do not guarantee 0.37 s worst case. C229 C0G range is still pending (Enginerd). Safety Round 7 table “~0.48 s pulse”). Firmware must **never hold K4 on continuously**. Pulse MCU_TRIP for 0.48 s then drive it LOW (the §3 ESTOP row that held MCU_TRIP=1 is withdrawn). Hard-cut and raise `ESTOP_TRIP_STUCK` if it remains asserted beyond **0.53 s** (unchanged). Retries ≥ 15 s, at most 3. K4 is still not in the kit-voltage inhibit; do not rely on it at 36 V (UVR).
 
 **Alarms:** `RELAY_KIT_UNSET`, `RELAY_KIT_MISMATCH`, `RELAY_KIT_GAP`, `RELAY_KIT_FLAT`, `RELAY_KIT_OV` (latched; mid-run does not stop the engine), `INA_VBUS_FAULT` (blocks all starts), `GLOW_COOLDOWN`, `ESTOP_TRIP_STUCK`. UI banner, FRAM log, Modbus/CAN bits. None of these is MCU_TRIP except the intentional K4 pulse.
 
@@ -781,29 +781,34 @@ Source: Enginerd 1:51 AM; Layout news 1:41–1:51; Safety requirement for a lost
 
 E-stop is **not** on either DI_BIAS rail (ESTOP_DIG, ESTOP2_DIG, VESTOP_SNS, ESTOP_SENSE / R246 to GND, VBAT_ESTOP). The hardware E-stop path stays independent of a bias-rail fault. D+ uses its own excitation, not DI_BIAS.
 
-**eFuse (Layout Batch 17).** Each rail gets an active current-limit eFuse, probably with a fault/PG signal to the MCU. **Part, refdes, and MCU/expander pin are TBD — do not invent them.** STM32 I/O is full; U76 **P17 is the only spare**, and two rails need two signals (or a defined wire-OR). Flag the pin budget to Layout.
+**eFuse (Layout Batch 17; Rev 8i ruling).** Each rail gets an active current-limit eFuse. Both fault lines are **wired-OR into U76 P17**, net **DI_BIAS_FLT_N**: active-low open-drain with a pull-up. **Part number and polarity are still pending Layout confirmation.** Do not invent a part.
 
 **Effect.** A lost or limited bias rail is a **fault**. Every input on that rail is **FAULTED**: it raises an alarm and is never a healthy run permissive and never a valid open or closed state.
 
-**Detection 1 — eFuse fault/PG pin** (when Layout wires one):
-- Polarity **TBD**. Firmware treats a missing “healthy” level as fault.
-- **Pull (requirement, not a guessed part):** the open/unconnected/broken-wire state of the MCU pin must read as **fault**. Preferred: active-high power-good with a pull-down. If the part is open-drain active-low FAULT it normally wants a pull-up, which would make a broken wire look healthy — Layout must not do that; flag it.
-- Debounce **50 ms** (ASSUMED), longer than the 10 ms DI debounce, to ride out a brief current-limit hiccup.
-- Until a pin is assigned, this path is unused and detection is inference-only.
+**Detection 1 — P17 DI_BIAS_FLT_N** (Rev 8i):
+- Intended wiring: both eFuse fault outputs wired-OR, **active-low open-drain, pull-up**. Debounce **50 ms** (ASSUMED). A low on P17, after debounce, is a rail-fault event.
+- **Part and polarity pending Layout.** Until they are confirmed, treat this wiring as the working assumption but do not hard-code a part.
+- **Flag:** a pull-up on an active-low line means a broken wire to P17 reads high (healthy). Residual vs the 8h “open = fault” preference; Layout to confirm.
+- On a P17 fault, run the inference rule to name the rail (A or B). **If firmware cannot tell which rail, mark BOTH rails FAULTED** (fail-safe).
 
 **Detection 2 — inference** (works with today’s PTCs and with the eFuse):
 - If **≥ 2** inputs on a rail were closed (after the 10 ms debounce) and **all six** inputs on that rail read open in the **same 10 ms scan**, and that all-open state holds for **100 ms** (ASSUMED), latch a suspected rail loss.
 - A bank that has been all-open for ≥ 1 s is a **legitimate all-open** and does not latch. Sequential openings more than 100 ms apart do not latch. A single contact opening does not latch.
-- **Limitation (flag):** if fewer than two contacts are closed, inference cannot tell rail loss from those contacts opening. The eFuse fault/PG pin is then the only reliable detector.
+- **Limitation (flag):** if fewer than two contacts are closed, inference cannot tell rail loss from those contacts opening. A P17 fault in that case faults **both** rails.
 
 **State machine.** Start is inhibited if any FAULTED input is configured as a start permissive or as a protection that must be healthy to start (`DI_BIAS_x_FAULT` itself also inhibits start). Running: there is no older standalone “DI-fault” state beyond oil/temp DIs as protections in RUN. **Proposed, consistent with fail-safe protection DIs (ASSUMED where the prior policy was unspecified):** a FAULTED input assigned as a protection (oil, temp, etc.) is treated as that protection asserted → FAULT / STOPPING. A FAULTED status-only input is alarmed and is not used as a valid open/closed, and does not by itself trip the engine. Hardware E-stop is unchanged.
 
-**Recovery.** The rail fault latches. Auto-clear only if the eFuse PG reads healthy for **2 s** (ASSUMED), when that pin exists. With no pin (inference-only): no auto-clear on continued all-open; require an operator reset after at least one input on that rail has been observed **closed** for **1 s** (proves bias is back). Hysteresis is that 2 s / 1 s window.
+**Recovery.** The rail fault latches. Auto-clear a rail only if P17 has been high (healthy, assumed polarity) for **2 s** (ASSUMED) and, if that rail was identified only by inference or both rails were faulted together, after at least one input on that rail has been observed **closed** for **1 s**, or by operator reset. Polarity pending Layout — do not auto-clear if P17 polarity is still unconfirmed.
 
 **Alarms:** `DI_BIAS_A_FAULT`, `DI_BIAS_B_FAULT` (latched; reason EFUSE or INFER). UI banner, FRAM log, Modbus/CAN bits. These are not MCU_TRIP.
 
-**Bench:** short each rail (eFuse/PTC current-limits; all six DIs go FAULTED); open each rail at the terminal (same); eFuse fault-pin test once the pin exists (force the pin to the fault level, 50 ms debounce, unconnected pin reads fault). Confirm E-stop still works with a bias rail faulted. Confirm a legitimate all-open bank (already open ≥ 1 s) does not latch.
+**Bench:** short each rail (eFuse/PTC current-limits; all six DIs go FAULTED); open each rail at the terminal (same); P17 fault-pin test: pull DI_BIAS_FLT_N low, 50 ms debounce, use inference to name the rail, or FAULT both if it cannot. Confirm E-stop still works with a bias rail faulted. Confirm a legitimate all-open bank (already open ≥ 1 s) does not latch. Note: with the assumed pull-up, an unconnected P17 reads high (not a fault) — residual, polarity pending.
 
-**One-shot (B).** The ESTOP pulse range is **0.37–0.53 s** (design_spec now matches load_shedding_spec). The present RC parts do not guarantee 0.37 s worst case. C229 may change to C0G (new range TBD from Enginerd). `ESTOP_TRIP_STUCK` stays at **0.53 s**.
+**One-shot (B).** The ESTOP pulse range is **0.37–0.53 s** (design_spec now matches load_shedding_spec). The present RC parts do not guarantee 0.37 s worst case. **C229 C0G range is still pending** (Enginerd). `ESTOP_TRIP_STUCK` stays at **0.53 s**.
 
 **MPN (C).** All 74LVC1G08 gates, **U88 included**, are Diodes **74LVC1G08W5-7**, same pinout (U38/U39/U40/U67/U88).
+
+### 13.16 Rev 8i (2026-11-21 ~2:01 AM HST): re-audit 8, P17 wired-OR
+- TPS48100 hardware trip with 20 mΩ shunts is **3.86/4.97/6.14 A** (min/typ/max). The 90 A / 1 mΩ figure is withdrawn.
+- Load dump is **not supported**. Declared supply is 9–32 V continuous, 36 V for at most 60 s.
+- U76 **P17 = DI_BIAS_FLT_N**: both eFuse fault lines wired-OR, active-low open-drain with a pull-up. Part and polarity pending Layout. On a P17 fault, inference names the rail; if it cannot, **both** rails are FAULTED. C229 C0G range is still pending. `ESTOP_TRIP_STUCK` stays at 0.53 s.
