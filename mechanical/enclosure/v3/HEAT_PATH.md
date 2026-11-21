@@ -381,3 +381,7 @@ Chosen build: **30 mm slatted rear fin plate (Design D) + G10/nylon thermal brea
 - Thermal break: the G10 break lowers bezel and glass a few °F and moves the CM5 heat to the rear fins; it costs the SoC about 3-4 °F. Kept for touch temperature.
 - Removed for fanless: both 40 mm fans, fan filters/guards, the V6 fan plate (P9 rows in PARTS_COSTED), and the board fan header J4 (DNP in cm5.kicad_sch).
 - Direct sun is not modelled; fit a sun hood if the panel faces the sun.
+
+### Phase 24 addendum (2026-11-21 ~1:20 AM HST, Ethan ruling): glass limit 118 °F
+- Firmware dims the backlight so the touched glass stays at or under **118 °F**. From the phase 24 rows (chosen build, CM5 4 W, 104 °F ambient): glass 114 °F at 32.5 % backlight, 127 °F at 100 %. A straight-line fit (INFERRED) puts 118 °F at about **50 % backlight at 104 °F ambient**; higher ambient needs less.
+- Control input: an ambient sensor (proposed U83 TMP102 on I2C1 @0x4A, ECO for Layout; no such part exists in the schematic today). Until it is fitted, firmware can only use the STM32/CM5 die sensors, which read board heat, not ambient.

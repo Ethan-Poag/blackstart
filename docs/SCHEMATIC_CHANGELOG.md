@@ -806,3 +806,12 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 - RAIL_PLAN: FUEL/CRANK/VBAT_ESTOP 15 A copper target withdrawn, now 10 A (D-m7-14 closed). Per-channel 2.8 A electronic limit unchanged.
 - ECO proposed, NOT applied (Layout owns schematic wiring): PTC Eaton PTS120660V010 (C2441287, 100 mA hold, 60 V) in series with Q36 and Q39 outputs (DI_BIAS_A J21.6, DI_BIAS_B J22.1), which today feed field wiring from VBAT_P with no current limit.
 - TVS: Option B (D-m7-15) not adopted; D126 stays SMDJ40CA. TPS1HTC30A kept (consigned).
+
+## Batch 14 (sourcing gaps + Safety FINAL Round 6, 2026-11-21 ~1:25 AM HST; part fields + docs, no net change by this batch)
+- C74/C75: delisted JIERONG 20 F C7471020 -> **Vishay MAL223051016E3** 15 F 3.0 V (2.6 V at 85 °C), 12.5x30 mm, 5 mm pitch, AEC-Q200; same CP_Radial_D12.5mm_P5.00mm footprint and height. Value "15F 3.0V". LCSC field cleared (consigned THT). Stock: DigiKey 247 ($4.73, $3.389@10), Mouser ~2,005, Newark 1,000. Hold-up 7.5 F series at 4.9 -> 2.7 V: ~55 J usable, ~13.8 s at 4 W, ~11 s at -20 % C (target 10 s).
+- U69: ISOW7841DWER (no authorized stock; DigiKey 0 until 2027-02-09) -> **ISOW7841AQDWERQ1** (C5216434), AEC-Q100 version, same DWE package and pin table (TI ISOW7841A-Q1 datasheet checked), default-high outputs, >=75 mA at 3.3->3.3 V, reinforced. Value and MPN changed.
+- F101/F102 PTS120660V010 (C2441287) on DI_BIAS_A/B were wired by Layout in inputs.kicad_sch (uncommitted Layout work in the worktree at the time; not part of this commit). Netlist check: the only connectivity change versus 1676f11 is F101/F102 between Q36/Q39 and DI_BIAS_A/B (new nets DIB_A_PTC, DIB_B_PTC). ERC 0.
+- Category BOMs: other_bom.csv U69 row, power_bom.csv supercap row updated; bom_from_sch 0 mismatches (with Layout's inputs_bom.csv PTC row).
+- INSTALL_SAFETY (Safety FINAL Round 6, verbatim where given): battery input bullet (58 V DC for F0–F25, 36 V jump-start reason; stale load-dump reason removed); "fused at its source" application text; 30 A battery-cable paragraph; blades described as "standard (non-time-delay)", F3/F4 OptiFuse ANR58-UL-5A; wire table 5 A -> 18 AWG / 0.82 mm²; metering fuse SIBA 200 kA + KLKD001 second source.
+- Not changed: the schematic text note beside J1 still reads "EXT FUSE <=10 A FAST, >=58 V DC" (text item, pending board/silkscreen change).
+- U83 (ambient sensor): no U83 exists in the schematic or git history; proposed TMP102AIDRLR (C99269) on I2C1 at 0x4A as an ECO for Layout. Priced in review/bom_final as a pending line.
