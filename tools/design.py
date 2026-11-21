@@ -247,7 +247,7 @@ cm.R('10k','CM5_OFF','GND',ref='R552',lcsc='C98220',note='CM5_OFF pull-down vs T
 
 # =====================================================================
 co=S('comms','Comms: CAN x2, RS-485, Ethernet, USB hub/ports, router 12V',
- 'COMMS. CAN1/CAN2 CA-IS3062W (VCC=+5V, 4.5-5.5V). Bus: CMC -> NUP2105L. CAN1: split termination (62R+62R, 4.7nF mid) via solder jumpers JP2/JP3, open by default. CAN2 (expansion bus J7): NO on-board termination (SW6/R92/R93/C92 deleted m7-step12; decision (Ethan): CAN2 is terminated by loose terminator plugs in the daughter-board sockets).\n'
+ 'COMMS. CAN1/CAN2 CA-IS3062W (VCC=+5V, 4.5-5.5V). Bus: CMC -> NUP3105L (Batch 23; was NUP2105L). CAN1: split termination (62R+62R, 4.7nF mid) via solder jumpers JP2/JP3, open by default. CAN2 (expansion bus J7): NO on-board termination (SW6/R92/R93/C92 deleted m7-step12; decision (Ethan): CAN2 is terminated by loose terminator plugs in the daughter-board sockets).\n'
  'RS-485 CA-IS2092W, SEL=GND_485 (3.3V VISO bus; DS: SEL=VISO only valid with VCC=5V), 120R term via solder jumper JP4 (open by default); no on-board bias. Shields -> CHASSIS via 1M||4.7nF.\n'
  'USB: CM5 USB2 OTG -> USB-C service/rpiboot (only external USB). CM5 USB3-0 HS -> internal header (display touch), USB3-1 HS -> internal spare header. No hub, no USB-A. No on-board modem: external router on RJ45, powered from ROUTER_12V.\n'
  'ROUTER_12V: TPS1H200A from +12V, ILIM 1.0k = 2.0A, default ON (100k pull-up), STM32 power-cycles via TCA9555 @0x25 P04.\n'
@@ -258,7 +258,7 @@ for i,(tx,rx,iso) in enumerate((('CAN1_TX','CAN1_RX','GND_CAN1'),('CAN2_TX','CAN
     co.p('genctl:CA-IS3062W','CA-IS3062W',{'VCC':'+5V','TXD':tx+'_T','RXD':rx+'_T','GND1':'GND','NC':None,'VISO':'VISO_%s'%n,'CANH':n+'_H','CANL':n+'_L','GND2':iso},mpn='CA-IS3062W')
     co.C('100n','+5V','GND'); co.C('10u','+5V','GND',pkg='0805'); co.C('100n','VISO_'+n,iso); co.C('47u','VISO_'+n,iso,pkg='1210',mpn='CL32A476KOJNNNE',lcsc='C2932477',mfr='Samsung',note='VISO 47uF per CA-IS3062W p15 (m7-sch FW-008, fixes_firmware.md s6)')
     co.p('genctl:ACT45B-510-2P','ACT45B-510-2P',{'1':n+'_H','4':n+'_HB','2':n+'_L','3':n+'_LB'},mpn='ACT45B-510-2P-TL003')
-    co.p('Power_Protection:NUP2105L','NUP2105L',{'1':n+'_HB','2':n+'_LB','3':iso},prefix='D',mpn='NUP2105LT1G')
+    co.p('Power_Protection:NUP2105L','NUP3105L',{'1':n+'_HB','2':n+'_LB','3':iso},prefix='D',mpn='NUP3105LT1G')  # Batch 23: NUP3105LT1G C133092, NUP2105L symbol/pinout
     if i==1:
         REFC['SW']+=1  # SW5 DIP deleted (m7-sch): replaced by open solder jumpers JP2 (H) / JP3 (L) per failsafe_latch.md L4
         co.p('Jumper:SolderJumper_2_Open','TERM_CAN1_H',{'1':n+'_HB','2':n+'_TH'},prefix='JP',ref='JP2',fp='genctl:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm',note='CAN1_HB to CAN1_TH (R87). Open by default (failsafe_latch.md L4)')
@@ -371,10 +371,10 @@ inp=S('inputs','Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense',
  '100k/18k divider to VMID(1.65V) -> ADS1115 x2 (0x48/0x49). DI: 68k/33k + 100nF -> 74HC14; bank bias via SI2309 (pull-up) / DMN6075S (pull-down).\n'
  'MPU: 10k series, 1M bias to VMID, LM393 w/ hysteresis -> TIM2_CH1. D+: LM317 125mA source (10R) + SS110, sense 100k/10k.')
 conn(inp,6,['AI1','AI2','AI3','AI4','AI5','AI6'],'J1A analog in (PC 5/6)',mpn='Phoenix PC 5/6-GF')
-conn(inp,6,['COM_A','COM_B','MPU_P','MPU_N','GND',None],'J1B COM/MPU (PC 5/6)',note='MPU screen (pin5) -> 0V assumed')
-conn(inp,6,['DI1','DI2','DI3','DI4','DI5','DI6'],'J2A DI1-6'); conn(inp,6,['DI7','DI8','DI9','DI10','DI11','DI12'],'J2B DI7-12')
+conn(inp,6,['COM_A','COM_B','MPU_P','MPU_N','GND',None],'COM_A/COM_B/MPU (6P 5.08, p6 NC)',note='MPU screen (pin5) -> 0V assumed')
+conn(inp,6,['DI1','DI2','DI3','DI4','DI5','DI6'],'DI1-6 (6P 5.08)'); conn(inp,6,['DI7','DI8','DI9','DI10','DI11','DI12'],'DI7-12 (6P 5.08)')
 conn(inp,6,['ESTOP_SENSE','GND','DPLUS','VBAT_SENSE','GND','DI_BIAS_A'],'J3A E-stop/D+/VBAT/bias',note='ESTOP_RTN & VBAT_SENSE- tied to 0V (assumed); BIAS_A = DI bank A bias out')
-conn(inp,6,['DI_BIAS_B',None,None,None,None,None],'J3B')
+conn(inp,6,['DI_BIAS_B',None,None,None,None,None],'DI_BIAS_B (6P 5.08, p2-6 NC)')
 # VMID
 inp.R('10k','+3V3','VMID_REF'); inp.R('10k','VMID_REF','GND'); inp.C('100n','VMID_REF','GND')
 inp.p('Amplifier_Operational:TLV9062','TLV9062',{'3':'VMID_REF','2':'VMID','1':'VMID','5':'GND','6':'VMID_SP','7':'VMID_SP','8':'+3V3','4':'GND'},prefix='U',mpn='TLV9062IDR',note='unit B spare as follower to GND')
@@ -686,7 +686,7 @@ FPMAP={  # libid -> (fp, lcsc, mpn)
  'Mechanical:MountingHole':('MountingHole:MountingHole_4.3mm_M4','',None),
 }
 MPNLCSC={'BSS84':'C8492','DMN6075S':'C155242','SI2309CDS-T1-GE3':'C10493','AO3401A':'C347476','BAV99':'C2500','BAT54S':'C8592','BAT54C':'C2135',
- '1N4148W':'C81598','SM712':'C12067','NUP2105LT1G':'C14486','USBLC6-2SC6':'C7519','SRV05-4':'C85364','TPS2051CDBVR':'C129581',
+ '1N4148W':'C81598','SM712':'C12067','NUP2105LT1G':'C14486','NUP3105LT1G':'C133092','USBLC6-2SC6':'C7519','SRV05-4':'C85364','TPS2051CDBVR':'C129581',
  'USB2514B-AEZC-TR':'C51062','TLV9062IDR':'C398355','LM2904BIDR':'C1849422','LM393DR':'C7955','ADS1115IDGSR':'C37593','LM317MDT-TR':'C3015165',
  'SN74LVC1G08DBVR':'C7666','INA281A2QDBVRQ1':'C2908677','INA281A1QDBVRQ1':'C2862615','STM32H743VIT6':'C114409','FM24CL64B-GTR':'C9829',
  'SMDJ36CA':'C224075','SMBJ33CA':'C78420','SMDJ40CA':'C224077','SMBJ40CA':'C114004','SMBJ5.0A':'C78423','SMAJ36CA':'C10757','SMAJ40CA':'C113970','SMBJ58CA':'C114007','SMBJ36CA':'C78421','SMDJ24A':'C362107',
@@ -706,7 +706,7 @@ RCX={  # (value, fp) -> lcsc for passives not in gen.RLCSC/CLCSC (all checked on
  ('470n',_c6):'C1623',('47n',_c6):'C1622',('68n',_c6):'C5137586',
 }
 PREC={('100k',_r6):'C122538',('18k',_r6):'C309650'}  # 0.1% thin film where the note asks for 0.1%
-MATES={'1720851': ('SPC 5/8-STF-7,62 (1996184)', 'UNVERIFIED', '1'), '1720819': ('SPC 5/4-STF-7,62 (1996142)', 'C5481482', '1'), 'KF2EDGRM-5.08-6P': ('KF2EDGKNM-5.08-6P', 'C2974985', '1'), 'WJ15EDGRC-3.81-04P': ('WJ15EDGK-3.81-04P', 'C7244', '1'), 'WJ15EDGRC-3.81-06P': ('WJ15EDGK-3.81-06P', 'C7247', '1'), 'WJ15EDGRC-3.81-02P': ('WJ15EDGK-3.81-02P', 'C8466', '1'), 'WJ15EDGRC-3.81-03P': ('WJ15EDGK-3.81-03P', 'C8413', '1')}
+MATES={'KF2EDGRM-5.08-8P': ('KF2EDGKNM-5.08-8P', 'C2974987', '1'), '1720851': ('SPC 5/8-STF-7,62 (1996184)', 'UNVERIFIED', '1'), '1720819': ('SPC 5/4-STF-7,62 (1996142)', 'C5481482', '1'), 'KF2EDGRM-5.08-6P': ('KF2EDGKNM-5.08-6P', 'C2974985', '1'), 'WJ15EDGRC-3.81-04P': ('WJ15EDGK-3.81-04P', 'C7244', '1'), 'WJ15EDGRC-3.81-06P': ('WJ15EDGK-3.81-06P', 'C7247', '1'), 'WJ15EDGRC-3.81-02P': ('WJ15EDGK-3.81-02P', 'C8466', '1'), 'WJ15EDGRC-3.81-03P': ('WJ15EDGK-3.81-03P', 'C8413', '1')}
 CONNFP={  # value prefix -> (fp, lcsc, mpn)
  'PC 5/4-GF-7,62':('genctl:PhoenixContact_PC5_4-GF-7.62_1720819','C3579760','1720819'),
  'J4 E-stop':('genctl:PhoenixContact_PC5_4-GF-7.62_1720819','C3579760','1720819'),
@@ -717,7 +717,7 @@ CONNFP={  # value prefix -> (fp, lcsc, mpn)
  'Backlight':('genctl:SM02B-BHSS-1-TB','C485339','SM02B-BHSS-1-TB'),
  'CAN1':('genctl:WJ15EDGRC-3.81-4P','C7245','WJ15EDGRC-3.81-04P'),'Expansion':('genctl:WJ15EDGRC-3.81-6P','C7246','WJ15EDGRC-3.81-06P'),
  'RS-485':('genctl:WJ15EDGRC-3.81-3P','C8406','WJ15EDGRC-3.81-03P'),'Router':('genctl:WJ15EDGRC-3.81-2P','C8387','WJ15EDGRC-3.81-02P'),
- 'J9 CT':('genctl:PLACEHOLDER_PhoenixContact_PC5_8-GF-7.62_1720851','C6651769','1720851'),  # m7-sch 3c: J30 Phoenix 1720851, footprint placeholder
+ 'J9 CT':('genctl:KF2EDGRM-5.08-8P','C441294','KF2EDGRM-5.08-8P'),  # Batch 23: J30 reverted to Kefa (Safety Round 4); was Phoenix 1720851 placeholder
 }
 def _fill(pt):
     lid=pt.libid

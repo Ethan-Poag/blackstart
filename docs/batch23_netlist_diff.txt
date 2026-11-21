@@ -1,0 +1,31 @@
+nets before/after 1126 1126
+connectivity identical: True
+ renamed: Net-(D42-A1) -> /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/COM_A
+ renamed: Net-(D44-A1) -> /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/COM_B
+ renamed: Net-(D46-A1) -> /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/DI1
+ renamed: Net-(D47-A1) -> /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/DI2
+ renamed: Net-(D52-A1) -> /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/DI7
+ renamed: Net-(D53-A1) -> /Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/DI8
+components 1330 1330 set()
+ D12.Datasheet: 'https://www.onsemi.com/pub_link/Collateral/NUP2105L-D.PDF' -> 'https://www.onsemi.com/pdf/datasheet/nup3105l-d.pdf'
+ D12.Description: 'Dual Line CAN Bus Protector, 24Vrwm' -> 'Dual Line CAN Bus Protector, 32Vrwm (NUP3105L; same SOT-23 pinout as NUP2105L, symbol kept)'
+ D12.LCSC: 'C14486' -> 'C133092'
+ D12.MPN: 'NUP2105LT1G' -> 'NUP3105LT1G'
+ D12.value: 'NUP2105L' -> 'NUP3105L'
+ D13.Datasheet: 'https://www.onsemi.com/pub_link/Collateral/NUP2105L-D.PDF' -> 'https://www.onsemi.com/pdf/datasheet/nup3105l-d.pdf'
+ D13.Description: 'Dual Line CAN Bus Protector, 24Vrwm' -> 'Dual Line CAN Bus Protector, 32Vrwm (NUP3105L; same SOT-23 pinout as NUP2105L, symbol kept)'
+ D13.LCSC: 'C14486' -> 'C133092'
+ D13.MPN: 'NUP2105LT1G' -> 'NUP3105LT1G'
+ D13.value: 'NUP2105L' -> 'NUP3105L'
+ J18.value: 'J1B COM/MPU (PC 5/6)' -> 'COM_A/COM_B/MPU (6P 5.08, p6 NC)'
+ J19.value: 'J2A DI1-6' -> 'DI1-6 (6P 5.08)'
+ J20.value: 'J2B DI7-12' -> 'DI7-12 (6P 5.08)'
+ J22.value: 'J3B' -> 'DI_BIAS_B (6P 5.08, p2-6 NC)'
+ J30.Footprint: 'genctl:PLACEHOLDER_PhoenixContact_PC5_8-GF-7.62_1720851' -> 'genctl:KF2EDGRM-5.08-8P'
+ J30.LCSC: 'C6651769' -> 'C441294'
+ J30.MPN: '1720851' -> 'KF2EDGRM-5.08-8P'
+ J30.Manufacturer: 'Phoenix Contact' -> 'Cixi Kefa Elec'
+ J30.Mate_LCSC: 'UNVERIFIED' -> 'C2974987'
+ J30.Mate_MPN: 'SPC 5/8-STF-7,62 (1996184)' -> 'KF2EDGKNM-5.08-8P'
+ J30.Note: 'external 5A CT loops pass through AC1005 cores. Phoenix PC 5/8-GF-7,62 1720851 (Ethan-approved, fixes_mechanical s1). FOOTPRINT IS A PLACEHOLDER NAME: no footprint exists yet (deferred_layout D-m7-9). LCSC C6651769 stock 0 at 2026-10-28 16:33 HST: 
+ J30.footprint: 'genctl:PLACEHOLDER_PhoenixContact_PC5_8-GF-7.62_1720851' -> 'genctl:KF2EDGRM-5.08-8P'

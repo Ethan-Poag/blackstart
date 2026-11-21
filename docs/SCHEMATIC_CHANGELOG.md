@@ -961,3 +961,20 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 4. **Logged in deferred_layout.md (no schematic change):** R9-N7 optional OUT-to-GND Schottky (decide after B-m7-21); D-m7-24 update with Mechanical's C74/C75 windows and a pcbnew read-only check of the best points; J30 keep 1720851 and move inboard (pending Ethan).
 5. **Checks:** ERC 0 default / 75 forced; bom_from_sch 0 mismatches; bom_retotal other_bom 119.10 -> 119.07, total $468.97; netlist vs a2bf2a1: only R78/R79 value/fields change.
 
+
+## Batch 23 (Grok Bot for Ethan, approved 2026-11-21 10:44 AM HST; parts + labels, no connectivity change)
+1. **J30 reverted to Kefa KF2EDGRM-5.08-8P, LCSC C441294** (from the Phoenix 1720851 C6651769 placeholder). This matches the frozen PCB footprint `KF2EDGRM-5.08-8P`. Mate KF2EDGKNM-5.08-8P C2974987. Basis: Safety Round 4 (CONNECTOR_SAFETY_MINIMUMS.md, 10:20 AM HST). J30 is HV-group wiring, CT S2 is earthed at the external shorting block, and every board gets a 1000 V DC megger test.
+2. **D12/D13 CAN TVS NUP2105LT1G C14486 -> NUP3105LT1G C133092** (onsemi, SOT-23 case 318, same pinout: pins 1/2 lines, pin 3 common). The KiCad NUP2105L symbol is kept. VRWM is 32 V, so a CAN_H/L short to a 24 V battery up to 32 V does not conduct. The trade-off is a higher surge clamp, above the CA-IS3062W ±40 V abs max in large surges (OPEN_ITEMS item 5). Fitted on every board, since both kits use one board.
+3. **Inputs labels restored:** local labels COM_A, COM_B (J18.1/.2), DI1, DI2 (J19.1/.2) and DI7, DI8 (J20.1/.2). These nets were `Net-(D42-A1)`, `Net-(D44-A1)`, `Net-(D46-A1)`, `Net-(D47-A1)`, `Net-(D52-A1)` and `Net-(D53-A1)` since the 97964fc redraw.
+4. **Connector values and sheet titles** no longer use the old panel names J1B/J2A/J2B/J3B (J1B clashed with refdes J1):
+   - J18 is now "COM_A/COM_B/MPU (6P 5.08, p6 NC)"
+   - J19 is now "DI1-6 (6P 5.08)"
+   - J20 is now "DI7-12 (6P 5.08)"
+   - J22 is now "DI_BIAS_B (6P 5.08, p2-6 NC)"
+   - J18.6 and J22.2-6 already carry no-connect flags (checked, unchanged).
+5. Mirrors updated: bom/comms_bom.csv, bom/ac_metering_bom.csv, docs/genctl_bom.csv, tools/design.py (text and fields only), and the comms sheet note.
+6. **Checks:**
+   - ERC: 0 violations, both default and --severity-all.
+   - Netlist vs 5a4736a: 1126 = 1126 nets, connectivity identical. The only changes are the 6 net renames above plus the D12/D13, J18/J19/J20/J22 and J30 value and field changes (docs/batch23_netlist_diff.txt).
+   - bom_from_sch: 0 mismatches.
+   - PCB file untouched.
