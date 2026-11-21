@@ -384,4 +384,4 @@ Chosen build: **30 mm slatted rear fin plate (Design D) + G10/nylon thermal brea
 
 ### Phase 24 addendum (2026-11-21 ~1:20 AM HST, Ethan ruling): glass limit 118 °F
 - Firmware dims the backlight so the touched glass stays at or under **118 °F**. From the phase 24 rows (chosen build, CM5 4 W, 104 °F ambient): glass 114 °F at 32.5 % backlight, 127 °F at 100 %. A straight-line fit (INFERRED) puts 118 °F at about **53 % backlight at 104 °F ambient**; higher ambient needs less.
-- Control input: an ambient sensor (proposed U83 TMP102 on I2C1 @0x4A, ECO for Layout; no such part exists in the schematic today). Until it is fitted, firmware can only use the STM32/CM5 die sensors, which read board heat, not ambient.
+- Control input: an ambient sensor (U83 TMP1075DSGR on I2C1, being added by Layout). Until it is fitted, firmware can only use the STM32/CM5 die sensors, which read board heat, not ambient.
