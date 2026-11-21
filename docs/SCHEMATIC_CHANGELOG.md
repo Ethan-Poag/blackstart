@@ -978,3 +978,16 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
    - Netlist vs 5a4736a: 1126 = 1126 nets, connectivity identical. The only changes are the 6 net renames above plus the D12/D13, J18/J19/J20/J22 and J30 value and field changes (docs/batch23_netlist_diff.txt).
    - bom_from_sch: 0 mismatches.
    - PCB file untouched.
+
+## Batch 24 (Grok Bot for Ethan, footprint audit; Ethan 10:44/10:47 AM HST: fix footprint mismatches, PCB not touched)
+1. **Q72 BCP56-16: footprint `SOT-223-3_TabPin2` -> `Package_TO_SOT_SMD:SOT-223`.** The BCP56 symbol pin 4 (collector tab, VBAT_P) had no pad. SOT-223 has pads 1-4 with tab = 4, matching LCSC/EasyEDA C426787 pad-for-pad. Q72 is not on the frozen PCB yet. tools/design.py, docs/genctl_bom.csv and mechanical/bom.csv were mirrored.
+2. **genctl.pretty/TMOV20RP_P7.5mm_inline (RV1-RV4):**
+   - The body/courtyard was 23 x 8 mm (8 mm ASSUMED) and is now 23 x 11 mm, per the Littelfuse TMOV datasheet (E max 11.0 mm for 300-460 V).
+   - The drill goes from 1.2 to 1.3 mm (lead 0.95-1.05 mm).
+   - The PCB was NOT refreshed. RV1/RV2 at 9.5 mm spacing would overlap and need re-spacing at the next layout.
+3. Full audit: /workspace/review/bom_final/FOOTPRINT_AUDIT_2026-11-21.md (208 groups: OK 204, FIXED 2, MPN-text mismatch 1 (D17/D18 RClamp0524P vs PA), UNVERIFIED 1 (1720819 flange holes)).
+4. **Checks:**
+   - ERC: 0 (--severity-all).
+   - Netlist vs Batch 23: connectivity identical; the only change is the Q72 footprint field.
+   - bom_from_sch: 0 mismatches.
+   - PCB file untouched.

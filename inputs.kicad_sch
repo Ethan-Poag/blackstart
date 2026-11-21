@@ -10605,7 +10605,7 @@
 (symbol (lib_id "Transistor_BJT:BCP56") (at 949.96 259.08 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "4af6ed38-348d-4ef3-9c11-c9dce79d448f")
 (property "Reference" "Q72" (at 955.04 256.54 0) (effects (font (size 1.27 1.27))))
 (property "Value" "BCP56-16" (at 955.04 261.62 0) (effects (font (size 1.27 1.27))))
-(property "Footprint" "Package_TO_SOT_SMD:SOT-223-3_TabPin2" (at 949.96 259.08 0) (effects (font (size 1.27 1.27)) hide))
+(property "Footprint" "Package_TO_SOT_SMD:SOT-223" (at 949.96 259.08 0) (effects (font (size 1.27 1.27)) hide))
 (property "Datasheet" "~" (at 949.96 259.08 0) (effects (font (size 1.27 1.27)) hide))
 (property "Description" "NPN 80V 1A SOT-223" (at 949.96 259.08 0) (effects (font (size 1.27 1.27)) hide))
 (property "LCSC" "C426787" (at 949.96 259.08 0) (effects (font (size 1.27 1.27)) hide))

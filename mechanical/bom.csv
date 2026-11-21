@@ -102,7 +102,7 @@
 "Q36,Q39,Q42","SI2309CDS","Package_TO_SOT_SMD:SOT-23","3"
 "Q68","AO3401A","Package_TO_SOT_SMD:SOT-23","1"
 "Q70,Q71","SQD40P10-40L","Package_TO_SOT_SMD:TO-252-2","2"
-"Q72","BCP56-16","Package_TO_SOT_SMD:SOT-223-3_TabPin2","1"
+"Q72","BCP56-16","Package_TO_SOT_SMD:SOT-223","1"
 "R1","210k","Resistor_SMD:R_0603_1608Metric","1"
 "R2,R109,R111","49.9k","Resistor_SMD:R_0603_1608Metric","3"
 "R3","8.66k","Resistor_SMD:R_0603_1608Metric","1"
