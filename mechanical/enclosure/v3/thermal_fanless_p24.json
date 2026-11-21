@@ -1,0 +1,294 @@
+{
+ "note": "Phase 24 (Nov 21 2026, Enginerd/Ethan: keep CM5 touchscreen, design FANLESS). Reuses thermal_v3.solve_p23 unchanged.\nFanless = fan conductances of the phase-23 'both fans failed' case (sealed interior, natural convection only), then:\n  - fins: rear fin plate to cabinet air G_FTc 0.45 (V6 flat plate, no fan) -> 0.85 (Design D 30 mm slats, phase 4) -> 1.2 (Design E bigger plate)\n  - thermal break: heat bar to bezel boss 2.75 K/W (as CAD, pad) -> 50 K/W (G10 spacers + nylon M4)\n  - CM5 power cap 4.0 W typ / 3.5 W cap (firmware: arm_freq cap + governor); 8.5 W stress shown for reference only\nAll conductances ESTIMATED (phase 4-23 values); results MODELLED, about +-5 F surfaces, +-15 F throttle ambient. No sun.",
+ "ta_F": 104,
+ "rows": [
+  {
+   "fins": "V6 flat plate (as CAD)",
+   "brk": "as CAD pad to boss",
+   "cm5_W": 3.5,
+   "idle25": {
+    "bezel_F": 113,
+    "glass_F": 116,
+    "soc_F": 133
+   },
+   "alarm100": {
+    "bezel_F": 120,
+    "glass_F": 129,
+    "soc_F": 138
+   },
+   "throttle_ambient_F_idle25": 147
+  },
+  {
+   "fins": "V6 flat plate (as CAD)",
+   "brk": "as CAD pad to boss",
+   "cm5_W": 4.0,
+   "idle25": {
+    "bezel_F": 114,
+    "glass_F": 116,
+    "soc_F": 136
+   },
+   "alarm100": {
+    "bezel_F": 121,
+    "glass_F": 129,
+    "soc_F": 141
+   },
+   "throttle_ambient_F_idle25": 144
+  },
+  {
+   "fins": "V6 flat plate (as CAD)",
+   "brk": "as CAD pad to boss",
+   "cm5_W": 8.5,
+   "idle25": {
+    "bezel_F": 120,
+    "glass_F": 119,
+    "soc_F": 168
+   },
+   "alarm100": {
+    "bezel_F": 127,
+    "glass_F": 132,
+    "soc_F": 173
+   },
+   "throttle_ambient_F_idle25": 112
+  },
+  {
+   "fins": "V6 flat plate (as CAD)",
+   "brk": "G10 + nylon thermal break",
+   "cm5_W": 3.5,
+   "idle25": {
+    "bezel_F": 111,
+    "glass_F": 115,
+    "soc_F": 137
+   },
+   "alarm100": {
+    "bezel_F": 119,
+    "glass_F": 128,
+    "soc_F": 140
+   },
+   "throttle_ambient_F_idle25": 143
+  },
+  {
+   "fins": "V6 flat plate (as CAD)",
+   "brk": "G10 + nylon thermal break",
+   "cm5_W": 4.0,
+   "idle25": {
+    "bezel_F": 112,
+    "glass_F": 115,
+    "soc_F": 141
+   },
+   "alarm100": {
+    "bezel_F": 119,
+    "glass_F": 128,
+    "soc_F": 145
+   },
+   "throttle_ambient_F_idle25": 139
+  },
+  {
+   "fins": "V6 flat plate (as CAD)",
+   "brk": "G10 + nylon thermal break",
+   "cm5_W": 8.5,
+   "idle25": {
+    "bezel_F": 114,
+    "glass_F": 118,
+    "soc_F": 180
+   },
+   "alarm100": {
+    "bezel_F": 121,
+    "glass_F": 131,
+    "soc_F": 183
+   },
+   "throttle_ambient_F_idle25": 100
+  },
+  {
+   "fins": "30 mm slats, D plate",
+   "brk": "as CAD pad to boss",
+   "cm5_W": 3.5,
+   "idle25": {
+    "bezel_F": 112,
+    "glass_F": 115,
+    "soc_F": 130
+   },
+   "alarm100": {
+    "bezel_F": 118,
+    "glass_F": 127,
+    "soc_F": 134
+   },
+   "throttle_ambient_F_idle25": 150
+  },
+  {
+   "fins": "30 mm slats, D plate",
+   "brk": "as CAD pad to boss",
+   "cm5_W": 4.0,
+   "idle25": {
+    "bezel_F": 113,
+    "glass_F": 115,
+    "soc_F": 133
+   },
+   "alarm100": {
+    "bezel_F": 119,
+    "glass_F": 128,
+    "soc_F": 137
+   },
+   "throttle_ambient_F_idle25": 147
+  },
+  {
+   "fins": "30 mm slats, D plate",
+   "brk": "as CAD pad to boss",
+   "cm5_W": 8.5,
+   "idle25": {
+    "bezel_F": 117,
+    "glass_F": 118,
+    "soc_F": 163
+   },
+   "alarm100": {
+    "bezel_F": 124,
+    "glass_F": 130,
+    "soc_F": 166
+   },
+   "throttle_ambient_F_idle25": 117
+  },
+  {
+   "fins": "30 mm slats, D plate",
+   "brk": "G10 + nylon thermal break",
+   "cm5_W": 3.5,
+   "idle25": {
+    "bezel_F": 111,
+    "glass_F": 114,
+    "soc_F": 132
+   },
+   "alarm100": {
+    "bezel_F": 118,
+    "glass_F": 127,
+    "soc_F": 134
+   },
+   "throttle_ambient_F_idle25": 148
+  },
+  {
+   "fins": "30 mm slats, D plate",
+   "brk": "G10 + nylon thermal break",
+   "cm5_W": 4.0,
+   "idle25": {
+    "bezel_F": 111,
+    "glass_F": 114,
+    "soc_F": 136
+   },
+   "alarm100": {
+    "bezel_F": 118,
+    "glass_F": 127,
+    "soc_F": 138
+   },
+   "throttle_ambient_F_idle25": 144
+  },
+  {
+   "fins": "30 mm slats, D plate",
+   "brk": "G10 + nylon thermal break",
+   "cm5_W": 8.5,
+   "idle25": {
+    "bezel_F": 112,
+    "glass_F": 116,
+    "soc_F": 170
+   },
+   "alarm100": {
+    "bezel_F": 120,
+    "glass_F": 129,
+    "soc_F": 172
+   },
+   "throttle_ambient_F_idle25": 110
+  },
+  {
+   "fins": "bigger plate + slats (E)",
+   "brk": "as CAD pad to boss",
+   "cm5_W": 3.5,
+   "idle25": {
+    "bezel_F": 112,
+    "glass_F": 114,
+    "soc_F": 129
+   },
+   "alarm100": {
+    "bezel_F": 118,
+    "glass_F": 127,
+    "soc_F": 132
+   },
+   "throttle_ambient_F_idle25": 151
+  },
+  {
+   "fins": "bigger plate + slats (E)",
+   "brk": "as CAD pad to boss",
+   "cm5_W": 4.0,
+   "idle25": {
+    "bezel_F": 112,
+    "glass_F": 115,
+    "soc_F": 132
+   },
+   "alarm100": {
+    "bezel_F": 118,
+    "glass_F": 127,
+    "soc_F": 135
+   },
+   "throttle_ambient_F_idle25": 148
+  },
+  {
+   "fins": "bigger plate + slats (E)",
+   "brk": "as CAD pad to boss",
+   "cm5_W": 8.5,
+   "idle25": {
+    "bezel_F": 116,
+    "glass_F": 117,
+    "soc_F": 160
+   },
+   "alarm100": {
+    "bezel_F": 122,
+    "glass_F": 129,
+    "soc_F": 164
+   },
+   "throttle_ambient_F_idle25": 120
+  },
+  {
+   "fins": "bigger plate + slats (E)",
+   "brk": "G10 + nylon thermal break",
+   "cm5_W": 3.5,
+   "idle25": {
+    "bezel_F": 110,
+    "glass_F": 114,
+    "soc_F": 130
+   },
+   "alarm100": {
+    "bezel_F": 118,
+    "glass_F": 127,
+    "soc_F": 132
+   },
+   "throttle_ambient_F_idle25": 150
+  },
+  {
+   "fins": "bigger plate + slats (E)",
+   "brk": "G10 + nylon thermal break",
+   "cm5_W": 4.0,
+   "idle25": {
+    "bezel_F": 110,
+    "glass_F": 114,
+    "soc_F": 134
+   },
+   "alarm100": {
+    "bezel_F": 118,
+    "glass_F": 127,
+    "soc_F": 136
+   },
+   "throttle_ambient_F_idle25": 146
+  },
+  {
+   "fins": "bigger plate + slats (E)",
+   "brk": "G10 + nylon thermal break",
+   "cm5_W": 8.5,
+   "idle25": {
+    "bezel_F": 112,
+    "glass_F": 115,
+    "soc_F": 166
+   },
+   "alarm100": {
+    "bezel_F": 119,
+    "glass_F": 128,
+    "soc_F": 168
+   },
+   "throttle_ambient_F_idle25": 114
+  }
+ ]
+}

@@ -362,3 +362,22 @@ Model: `thermal_v3.py` `solve_p23` with nodes SoC, heat bar, glass, bezel, inter
 - Cost: throttle ambient 145 F (−4 F); both failed at alarm: 119 F (48.4 C).
 - Cost about +$2 / +$1 (ESTIMATED).
 - Not needed for the fans-running cases.
+
+## Phase 24: fanless design (2026-11-21, Ethan: keep the CM5 touchscreen, no fans)
+Model: `thermal_fanless_p24.py` (reuses `thermal_v3.solve_p23` unchanged), results in `thermal_fanless_p24.json`. Sealed interior, natural convection only, 104 °F cabinet air, no sun. All conductances ESTIMATED; results MODELLED (about ±5 °F surfaces, ±15 °F throttle ambient).
+
+Chosen build: **30 mm slatted rear fin plate (Design D) + G10/nylon thermal break between the heat bar and the bezel boss + CM5 capped at 4 W typical.**
+
+| Case (CM5 4 W) | Bezel idle/alarm | Glass idle/alarm | CM5 SoC idle | Ambient where CM5 throttles |
+|---|---|---|---|---|
+| V6 flat plate, as CAD | 114/121 °F | 116/129 °F | 136 °F | 144 °F |
+| 30 mm slats + G10 break (chosen) | 111/118 °F | 114/127 °F | 136 °F | 144 °F |
+| Bigger plate + slats + break | 110/118 °F | 114/127 °F | 134 °F | 146 °F |
+| Chosen build, CM5 uncapped 8.5 W | 112/120 °F | 116/129 °F | 170 °F | 110 °F |
+
+- Fanless works at 104 °F ambient only with the CM5 power cap. Uncapped (8.5 W) the CM5 throttles at about 110 °F ambient.
+- Firmware: cap arm_freq and use a conservative governor so the CM5 stays at or under 4 W typical; dim the backlight above 104 °F ambient (the backlight, not the CM5, sets the glass temperature).
+- Glass at full backlight is about 127 °F (53 °C): under the IEC 61010-1 65 °C touched-glass limit, above the ISO 13732-1 48 °C 10-minute-contact value. Fine for touch-and-release; flag if operators rest a hand on it.
+- Thermal break: the G10 break lowers bezel and glass a few °F and moves the CM5 heat to the rear fins; it costs the SoC about 3-4 °F. Kept for touch temperature.
+- Removed for fanless: both 40 mm fans, fan filters/guards, the V6 fan plate (P9 rows in PARTS_COSTED), and the board fan header J4 (DNP in cm5.kicad_sch).
+- Direct sun is not modelled; fit a sun hood if the panel faces the sun.

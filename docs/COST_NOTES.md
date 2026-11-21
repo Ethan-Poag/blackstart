@@ -30,3 +30,9 @@ Not MEASURED, so not listed with a figure: the J30 mate plug 1996184 (no LCSC li
 - Stock **206** on LCSC/JLCPCB is Safety-reported, not re-verified by us: jlcpcb.com/partdetail/C141570 (opened 2026-10-28) confirms the part identity (Vishay SQD40P10-40L_GE3, P-ch -100 V 38 A, TO-252) but showed no stock figure. The board uses 2.
 - Action: buy a buffer (order extra beyond the build qty) before stock runs out.
 
+
+## 2026-11-21 BOM finalization (review/bom_final)
+- TPS1HTC30AQPWPRQ1 (U47-U61, U68; 16 per board): LCSC 0, JLC 12. DigiKey (via Octopart) 3,000 at $4.385 (10+) / $3.677 (100+). Consigned, this is cheaper than the earlier $7.01 basis, so the "+$116" cost call is gone. KEEP.
+- SQD40P10-40L_GE3 (Q70/Q71): LCSC/JLC 0. Newark 2,781 at $3.71, Arrow 1,834. Consign the Vishay part; buy at least 50 now as a buffer. Clone C49237801 (DOINGTER) not approved for the E-stop path.
+- TVS Option B (D-m7-15): about +$1.4 per board; not adopted (declared range 9-32 V does not need it).
+- Totals: see review/bom_final/BOM_notes.md.

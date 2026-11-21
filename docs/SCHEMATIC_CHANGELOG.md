@@ -793,3 +793,16 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 | R411 (estop.kicad_sch, 100k, C122538) | MPN "", Manufacturer "" | RT0603BRD07100KL, YAGEO | jlcpcb.com/partdetail/C122538 (opened 2026-10-28): RT0603BRD07100KL, YAGEO, 100k 0.1 % 75 V thin film; bom/inputs_bom.csv row already carries this MPN |
 - Other refs sharing those LCSC codes still have empty MPN in the schematic (R407, R533 on C25819; R139, R150, R161, R172, R183, R194, R268 on C122538); not in scope, left as-is. docs/genctl_bom.csv (generated export) not regenerated, same as 7-5.
 
+
+## Batch 13 (BOM finalization, Ethan "go with your best instinct", 2026-11-21 ~1 AM HST; properties + docs, no net change)
+- Netlist before/after: 1112 nets, connectivity identical; ERC 0 errors before and after (review/bom_final/work/erc_*.json).
+- Empty MPN/Manufacturer fields filled from LCSC product data (447 MPN, 1053 Manufacturer property edits), incl. R407/R533 (C25819 0603WAF4702T5E UNI-ROYAL) and R139/R150/R161/R172/R183/R194/R268 (C122538 RT0603BRD07100KL YAGEO). Closes the Batch 12 leftover.
+- R130/R141/R152/R163/R174/R185 2.49k 0.1 %: C319805 AR06BTCV2491 (stock 0-2) -> C870626 RT1206BRD072K49L YAGEO (1206, 0.1 %, 25 ppm, 200 V, stock 166). Footprint is already R_1206_3216Metric, so no board change. (AR06 was the 1206 Viking part.)
+- U7 STM32H743VIT6: C114409 (stock 0) -> C5271084 STM32H743VIT6TR (tape and reel of the same part).
+- BT1 MPN BS-CR2032-8; U9/U10 MPN DF40C-100DS-0.4V(51) HIROSE.
+- J4 fan header set DNP (fanless, mechanical HEAT_PATH phase 24).
+- INA238 not available (LCSC stock 0, $23.36); INA237 kept (C2864837).
+- Fuse rule (Ethan, 2026-11-21): all fuses in the power box; no board fuses except PTCs on small signal/sensor outputs. INSTALL_SAFETY, README and the off-board BOM reworded: "installer-supplied" fuses become power box positions F1-F22; J23 10 A fuse is F2; 600 V metering fuses F26-F31 must list 600 V, ceramic.
+- RAIL_PLAN: FUEL/CRANK/VBAT_ESTOP 15 A copper target withdrawn, now 10 A (D-m7-14 closed). Per-channel 2.8 A electronic limit unchanged.
+- ECO proposed, NOT applied (Layout owns schematic wiring): PTC Eaton PTS120660V010 (C2441287, 100 mA hold, 60 V) in series with Q36 and Q39 outputs (DI_BIAS_A J21.6, DI_BIAS_B J22.1), which today feed field wiring from VBAT_P with no current limit.
+- TVS: Option B (D-m7-15) not adopted; D126 stays SMDJ40CA. TPS1HTC30A kept (consigned).
