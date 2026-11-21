@@ -189,7 +189,7 @@ VREF+ = +3V3_SAFE [M]; 16-bit. Source: fixes_firmware.md §18.2.
 - **FUEL is K2** (Hella 4RA 003 437-191 on the 24 V kit, 16–30 V).
 
 ### Rev 8h (2026-11-21 ~1:51 AM HST): DI_BIAS rails, one-shot, LVC MPN
-- **DI_BIAS_A** (J21.6, F101): **DI1–DI6**. **DI_BIAS_B** (J22.1, F102): **DI7–DI12**. MEASURED from m7-sch `inputs.kicad_sch` wetting resistors. E-stop is not on these rails. Rail-fault firmware: ARCHITECTURE §13.15–§13.17 / fixes_firmware §25.
+- **DI_BIAS_A** (J21.6, F101): **DI1–DI6**. **DI_BIAS_B** (J22.1, F102): **DI7–DI12**. MEASURED from m7-sch `inputs.kicad_sch` wetting resistors. E-stop is not on these rails. Rail-fault firmware: ARCHITECTURE §13.15–§13.19 / fixes_firmware §25.
 - ESTOP one-shot: **Rev 8k (§13.18) supersedes 0.37–0.53 s / pending C0G.** C229 **220 nF C0G**, R404 **2.0 MΩ**, hardware range **0.30–1.00 s**; `ESTOP_TRIP_STUCK` at **1.20 s**. Firmware MCU_TRIP drive stays 0.48 s.
 - All 74LVC1G08 gates (U38, U39, U40, U67, U88) are Diodes **74LVC1G08W5-7**, same pinout.
 
@@ -206,3 +206,6 @@ VREF+ = +3V3_SAFE [M]; 16-bit. Source: fixes_firmware.md §18.2.
 ### Rev 8k (2026-11-21 ~2:19 AM HST): 10 nF dVdT, 25 ms window, one-shot 0.30–1.00 s
 - C(dVdT) **stays at 10 nF**. FLT self-test blank/capture window is **exactly 25 ms** after each bank enable (timer at the U31 write). Expected FLT low (INFERRED): **8.3 ms at 9 V**, **11.4 ms at 24 V**, **13.9 ms at 36 V**. Pulse width ASSUMED; bench-measure at 9/24/36 V. tPGOOD(degl) at 10 nF is 6.48 ms (SLVSDT4F p.23/p.8). I2C budget: on the order of 160–250 expander transactions in 25 ms; self-test remains viable.
 - One-shot: C229 **220 nF C0G**, R404 **2.0 MΩ**, range **0.30–1.00 s** (nominal 0.48 s). Expected-pulse checks **0.30–1.00 s**. `ESTOP_TRIP_STUCK` is **1.20 s**. Firmware MCU_TRIP drive stays **0.48 s**. The pending Enginerd / Batch 18 C0G note is withdrawn.
+
+### Rev 8l (2026-11-21 ~2:24 AM HST): DI_BIAS 3-in-10 s lockout
+- If a bank sees **3 FLT events in a rolling 10 s**, deassert its enable (A: U31 P14; B: U31 P15) and latch `DI_BIAS_A_LOCKOUT` / `DI_BIAS_B_LOCKOUT`. Self-test pulses inside the 25 ms blank do not count. Ambiguous wired-OR attribution locks out both banks. Mid-run: alarm only, do not stop the engine. Operator ack re-runs the bank self-test before clearing. Lockout persists across reset and power cycle (FRAM, ASSUMED). Details: ARCHITECTURE §13.19.
