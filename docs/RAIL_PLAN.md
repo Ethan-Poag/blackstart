@@ -53,7 +53,7 @@ Labels: HAND-BUILT = placed by a person in the GUI. SCRIPTED-HAND = our own scri
 | FUEL = Net-(D68-A1) (15) Q45/Q46→J23.3 | 10 A (Enginerd 2026-11-21; was 15 A) [RP §7.2] | 0.15 mm F 2 / B 64 / In2 8 mm | **0.15 mm (0.60 A)** | 4 (0.2/0.4) → 27 at 0.57 A/0.2 mm via | **3** [REV3: 5 counted J23.3's 3 pad objects separately; by unique pin: Q46+U43.13+R349/R350, Q45+D68/D71/C198, J23.3] | AUTO-ROUTED (f03c57a 53, f16d8de 26) | **Fails (0.6 vs 10 A)** |
 | CRANK_DRN / FUEL_DRN (5/5) | 10 A path (shunt/FET drain; was 15 A) [RP §7.2] | pours F 133.9/176.3, B 117.6/150.1 mm²; 0.15 mm F/In2 tracks | pour necks NOT MEASURED in this job | 18 / 30 | 1 / 1 | pours SCRIPTED-HAND (8d6659f); tracks AUTO (f03c57a) | UNKNOWN, measure the necks |
 | 15 outputs GLOW, GCB_OP/CL, MCB_OP/CL, AUX1–10 (8 each) | 2 A external fuse; driver limit 1.99/2.49/2.99 A [FPS §3, RP §7.2] | 0.15–0.8 mm; 14 of 15 nets have 0.15 mm segments (0.60 A outer, 0.18 A inner), most with In2 0.15 mm hops; **GLOW_OUT min is 0.25 mm (0.88 A)** [REV3 re-measured] | **0.15 mm (0.60 A outer, 0.18 A on In2)**, e.g. AUX1 0.15 mm at B (177.76,29.81–33.61) | 0–5 each (0.2/0.4) → need 4 at 2.99 A | 2–3 each; **the connector J pin is open on each** (e.g. J26.1) | AUTO-ROUTED (f03c57a + f16d8de on every *_OUT) | **Fail** |
-| ESTOP_TRIP_OUT (7) U68→J24.6 | limit 1.70/2.13/2.55 A, ≤0.5 A coil, pulse 0.48 s [FPS §1] | 0.15 mm B 19 / In2 5 mm | 0.15 mm (0.60 A; In2 0.18 A); J24.6 open | 3 → need 4 at 2.55 A | 2 | AUTO-ROUTED (f03c57a 30, f16d8de 10) | **Fails at the limit current** (OK for a 0.5 A coil on outer layers only) |
+| ESTOP_TRIP_OUT (7) U68→J24.6 | limit 1.70/2.13/2.55 A, ≤0.5 A coil, pulse 0.30–1.00 s, 0.48 s nominal [FPS §1; Batch 19 spec] | 0.15 mm B 19 / In2 5 mm | 0.15 mm (0.60 A; In2 0.18 A); J24.6 open | 3 → need 4 at 2.55 A | 2 | AUTO-ROUTED (f03c57a 30, f16d8de 10) | **Fails at the limit current** (OK for a 0.5 A coil on outer layers only) |
 | EXP_12V (4) U15→J7 | ≤1.5 A (U15 CL) [PLAN_12V:9] | 0.15 mm B/In2 | J7.1 and D14 open | 1 | 3 | AUTO-ROUTED (f03c57a) | Open / fails |
 | ROUTER 12V = Net-(D15-K) (4) U16→J8 | 2.0 A limit [DN:406] | none | — | 0 | 4 | UNROUTED | Open |
 | VLED (5) D22→J16 | UNKNOWN | 0.15 mm | 0.15 mm (0.60 A) | 2 | 3 | AUTO-ROUTED | UNKNOWN load |
@@ -162,7 +162,7 @@ Labels: **DERIVED** means datasheet, BOM or design note plus arithmetic, with th
 - +5V_CM5: 3.76 A limit → 1.87 mm outer, and ≥5 vias at any layer change. The CM5 has 6 pins (U9.77–87).
 - +5V_HU: ~1.5 A out [DN:429] → 0.52 mm.
   - The supercap side, Net-(U11-EN)/HU_SW, carries up to the switch valley limit of 3.7 A typ plus ripple (DERIVED) → ≥1.9 mm outer.
-- +5V_TRIP: TLC555 plus R402 10k / R404 200k gives ASSUMED ≤5 mA.
+- +5V_TRIP: TLC555 plus R402 10k / R404 2.0M (Batch 18) gives ASSUMED ≤5 mA.
   - Dissipation at the 35.74 V OV max: (35.74 − 5) V × 5 mA = 0.154 W.
   - Rise at 210.4 °C/W: 32 °C, i.e. 58 °F. OK against the 150 mA rating.
   - Copper 0.15 mm is fine.
