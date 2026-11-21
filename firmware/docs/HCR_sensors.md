@@ -1,6 +1,6 @@
 # HCR-SENS-01: Ambient light sensor + board temperature sensors (supersedes HCR-ALS-01)
 
-From: Ethan Poag (owner) / firmware. To: Layout Engineer (via Enginerd). 2026-10-25. Status: proposed, not yet in the schematic. **Rev 8b (2026-11-21):** U81/U82/U80 still not in m7-sch 1676f11 (MEASURED). **U83 is being added to the BOM** (TMP1075DSGR C2870250, I2C1 0x4A) as the ambient sensor for fanless dimming (fixes_firmware §23). It is not yet in that netlist.
+From: Ethan Poag (owner) / firmware. To: Layout Engineer (via Enginerd). 2026-10-25. Status: proposed, not yet in the schematic. **Rev 8b (2026-11-21):** U81/U82/U80 still not in m7-sch 1676f11 (MEASURED). **Rev 8f:** U83 is fitted (TMP1075DSGR C2870250, I2C1 0x4A, decoupler **C306**) as the ambient sensor for fanless dimming (fixes_firmware §23). **ALERT is not connected**; firmware must poll it.
 
 Labels:
 - [S] netlist / schematic
@@ -65,7 +65,7 @@ JLCPCB assembly stock and Basic/Extended class are not confirmed for any of thes
 |---|---|---|---|---|
 | U81 | CM5_3V3, C294 | DISP_SDA / DISP_SCL | GND / GND / GND | NC (polled; open-drain output [D]) |
 | U82 | CM5_3V3, C295 | DISP_SDA / DISP_SCL | GND / GND / V+ | NC |
-| U83 | +3V3_SAFE, C296 | I2C1_SDA / I2C1_SCL (PB9/PB8; use the existing net names) | GND / V+ / GND | NC |
+| U83 | +3V3_SAFE, **C306** (Layout final; was C296 in the HCR proposal) | I2C1_SDA / I2C1_SCL (PB9/PB8; use the existing net names) | GND / V+ / GND | **NC** (firmware polls; no ALERT interrupt) |
 
 Exposed pad: per TI DSG land pattern [U]. U83 is placed on the MCU bus so the safety MCU sees cabinet temperature even if the CM5 is down.
 

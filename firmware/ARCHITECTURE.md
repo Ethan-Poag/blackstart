@@ -47,7 +47,7 @@ States: `BOOT → SELFTEST → IDLE → PREHEAT → CRANK → RUN_WARMUP → RUN
 |---|---|---|
 | BOOT | clocks (HSE 25 MHz → PLL), outputs LOW, IWDG start, load config/latched faults from FRAM (I2C1 0x50) | → SELFTEST |
 | SELFTEST | ADC rails (VBAT PA0), PSU_MAIN_OK, expander presence on I2C, INA238 DEVICE_ID and SHUNT_CAL read-back, ADE9000 ID over SPI1, TPS3431 kick, OUT_FAULT_N high, E-stop inputs sane (PD14/PC6/PA1 consistent) | pass → IDLE; fail → FAULT |
-| IDLE | all outputs LOW, poll front panel and CM5 | START cmd (panel or CM5) and permissives OK → PREHEAT |
+| IDLE | all outputs LOW, poll front panel and CM5 | START cmd (panel or CM5) and permissives OK, including Rev 8f `RELAY_KIT_V` match (§13.13) → PREHEAT |
 | PREHEAT | GLOW_EN=1 for configured time | timeout → CRANK; stop/E-stop → STOPPING/ESTOP |
 | CRANK | FUEL_EN=1, CRANK_EN=1; monitor MPU_SPEED (TIM2_CH1 capture on PA15), D+ (PD15/PA2), CRANK_ISNS (PB1) | speed > crank-disconnect → RUN_WARMUP; crank timeout → rest, retry N times → FAULT(fail-to-start) |
 | RUN_WARMUP | CRANK_EN=0, D+ excitation PC8 as needed | timer → RUN |
@@ -57,6 +57,8 @@ States: `BOOT → SELFTEST → IDLE → PREHEAT → CRANK → RUN_WARMUP → RUN
 | STOPPING | FUEL_EN=0, verify speed→0 | speed 0 → IDLE; fail-to-stop → FAULT + MCU_TRIP |
 | FAULT (latched) | outputs per fault class (shutdown = FUEL_EN=0, GCB open), log to FRAM, buzzer, notify CM5 | operator reset (panel/CM5) when the cause clears → IDLE |
 | ESTOP (latched) | entered from any state when ESTOP_DIG/ESTOP2_DIG asserts or VESTOP_SNS drops; all outputs LOW, MCU_TRIP=1 [I] | E-stop released **and** operator reset → IDLE |
+
+- **Rev 8f kit permissive:** IDLE→PREHEAT is refused if `RELAY_KIT_V` is `UNSET` or the measured VBAT does not match the kit (§13.13). Mid-run `RELAY_KIT_OV` drops GLOW, CRANK and FUEL and enters STOPPING / FAULT. The hardware E-stop is independent.
 
 - **Main loop [I]:**
   - Fixed 1 ms tick.
@@ -287,7 +289,7 @@ None in the control loop. Optional: the MCU reports its die temperature and the 
 
 ### 9.7 Board temperature sensors (Ethan approved; HCR in `docs/HCR_sensors.md`)
 
-**Rev 8 / 8b (2026-11-21):** U81/U82 and U80 were never fitted (m7-sch 1676f11 netlist, MEASURED). **U83 is being added to the BOM** as the cabinet ambient sensor (TMP1075DSGR C2870250, MCU I2C1 address **0x4A**; no conflict with INA237 0x40 / TCA9555 0x20–0x25 / ADS1115 0x48–0x49 / FRAM 0x50). It is not yet in that netlist. Fanless derating is `/workspace/review/fw/fanless_thermal_spec.md` and fixes_firmware §23: dimming follows the U83 reading (SoC estimate is fallback on `U83_FAULT`). The U81/U82 rules below remain historical.
+**Rev 8 / 8b (2026-11-21):** U81/U82 and U80 were never fitted (m7-sch 1676f11 netlist, MEASURED). **U83 is fitted** as the cabinet ambient sensor (TMP1075DSGR C2870250, MCU I2C1 address **0x4A**, decoupler **C306**; no conflict with INA237 0x40 / TCA9555 0x20–0x25 / ADS1115 0x48–0x49 / FRAM 0x50). **ALERT is not connected**, so firmware must **poll** it (no interrupt). Fanless derating is `/workspace/review/fw/fanless_thermal_spec.md` and fixes_firmware §23: dimming follows the U83 reading (SoC estimate is fallback on `U83_FAULT`). The U81/U82 rules below remain historical.
 Three TI TMP1075DSGR parts (LCSC C2870250), polled every 2 s. Accuracy is ±1 °C max over −40…+75 °C (±1.8 °F, −40…167 °F) for the DSG package [D SBOS854F Table 4-1].
 
 | Ref | Spot | Bus / address | Read by |
@@ -463,6 +465,7 @@ Results are logged in FRAM with a timestamp; protections are enabled only after 
 ## 11. Cooling fans: two 5 V fans, redundant (Ethan decided; proposal [I] unless labelled)
 
 **Rev 8: SUPERSEDED.** The design is FANLESS (HEAT_PATH Phase 24; J4 DNP in BOM_final / m7-sch 1676f11). Do not implement this section. Thermal policy is fixes_firmware §23 / fanless_thermal_spec.md.
+**Rev 8f:** U76 **P16 is BL_ALLOW**, not FAN2_TACH. The FAN2_TACH assignment in §11.1 / §11.3 is historical and must not be implemented.
 
 
 Labels:
@@ -490,7 +493,7 @@ Labels:
 - **Freeing a DI pin is not proposed:** DIs are field inputs.
 
 **Free resources found [S]:**
-- TCA9555 **U76 (@0x25) P15, P16, P17** are unconnected today (MCU I2C1, INT on the shared I2C_INT_N). **P15 is now reserved for WD_OK readback (fixes_firmware.md §1, 2026-10-28)**, so only P16/P17 remain for the fans.
+- TCA9555 **U76 (@0x25):** **P15 = WD_OK** (fixes_firmware.md §1). **P16 = BL_ALLOW** (Rev 8d/8f, §13.11). **P17 is the remaining spare.** The historical “P16/P17 for fans” assignment is withdrawn.
 - CM5 Fan_PWM/Fan_Tacho (J4) are already wired.
 
 **Proposed mapping [I], needs a schematic change by the layout/hardware owner:**
@@ -501,7 +504,7 @@ Labels:
 | FAN2 header | **new J-next** (SM04B, same pinout), placed per Mechanical | |
 | FAN_PWM (both fans) | CM5 **Fan_PWM** (U9.19), through an open-drain buffer (e.g. 74LVC1G07 or a 2N7002 per fan [I]) | open-drain, so the fan's internal 5 V pull-up never back-drives the CM5 pin |
 | FAN1_TACH | CM5 **Fan_Tacho** (U9.16) | via 10k pull-up to CM5_3V3 + 1k series + BAT54S clamp to 3.3 V/GND, in case a fan has an internal 5 V tach pull-up |
-| FAN2_TACH | **U76 P16** (TCA9555, 6 V abs-max I/O [N l.323]) | 10k pull-up to +3V3_SAFE. Counted by the MCU from I2C_INT_N edges (see 11.3) |
+| FAN2_TACH | ~~**U76 P16**~~ **WITHDRAWN (Rev 8f): P16 = BL_ALLOW.** No FAN2 tach. | Historical. Do not implement. |
 | FAN_FORCE_FULL | **U76 P17** → open-drain buffer OE/gate | **MCU override**: forces the PWM line Hi-Z, so the fan pull-ups give 100 % |
 | Default state | TCA9555 pins are Hi-Z inputs at reset [N l.405] | a 100k pull to the "force-full" state makes **fans run 100 % at power-up and whenever the MCU or CM5 is not commanding** |
 | FAN_PWR_EN (optional) | ~~U76 P15~~ **DROPPED 2026-10-28: P15 = WD_OK.** No free expander bit; fan power-cycle not available | — |
@@ -548,7 +551,7 @@ Temperature curves (all °F, proposed [U]):
 ### 11.3 Tach measurement and fault detection
 **Measurement:**
 - **FAN1:** CM5 Fan_Tacho through the `pwm-fan` or `hwmon` tach input [U: confirm the CM5 kernel exposes it]. RPM = pulses/s × 60 / 2 [A].
-- **FAN2:** the MCU counts TCA9555 U76 P16 transitions on I2C_INT_N. On each INT it reads input port 1 and counts rising edges. RPM is computed over a 2 s window.
+- **FAN2:** ~~the MCU counts TCA9555 U76 P16 transitions on I2C_INT_N~~ **WITHDRAWN (Rev 8f): P16 is BL_ALLOW, not a tach input.** There is no FAN2 tach.
   - Debounce: ignore edges < 1 ms apart (> 30 000 rpm equivalent).
   - The result goes to the CM5 in the link status frame.
 
@@ -628,7 +631,7 @@ Run by the MCU, because the CM5 is still booting.
 - CM5 commands that would exceed the total-current fault limit are refused (NACK BUDGET). The state machine pre-empts low-priority AUX outputs; stop/open actions always proceed.
 - PSU_MAIN_OK fault: shed within 1 ms, abort a crank, finish open pulses, abort close pulses, back off 2–32 s, lock out the 12 V loads only after 5 faults in 10 min.
 - ESTOP_TRIP: a real emergency adds ≤ 1 ms of shedding before MCU_TRIP. The pulse is capped at 500 ms by a hardware timer, a main-loop check and WDO_N. Retries are ≥ 15 s apart, at most 3.
-- Hardware gaps: no on-board VBAT_P ADC (the approved INA238 adds VBUS and total current, spec §12), no converter current sense, LM5176 PGOOD/PG_5V/PG_3V3 not routed to the MCU (spare U76 P16–P17; P15 = WD_OK since 2026-10-28), ESTOP_TRIP dead on VBAT_P loss.
+- Hardware gaps: no on-board VBAT_P ADC (the approved INA238 adds VBUS and total current, spec §12), no converter current sense, LM5176 PGOOD/PG_5V/PG_3V3 not routed to the MCU (P15 = WD_OK, P16 = BL_ALLOW; only P17 is still spare), ESTOP_TRIP dead on VBAT_P loss.
 
 
 ## 13. Fix-spec firmware changes (2026-10-28, source: /workspace/review/schematic_audit/fixes_firmware.md)
@@ -721,7 +724,20 @@ All items are [I] until the hardware respin. Labels follow fixes_firmware.md.
 - **U83** TMP1075DSGR C2870250 on MCU I2C1 at **0x4A** (MCU reads, forwards to the CM5). Dimming uses that reading; SoC-ΔT estimate is fallback on `U83_FAULT`. Optional glass NTC (NCP18XH103F03RB C13564) has **no free ADC**.
 - Over-temp: SoC 158 / 167 / 176 °F (60 s) or 185 °F. **Heat never trips the engine**; no MCU_TRIP. One AUX may be a configurable over-temp contact (`aux_overtemp_ch` default 0 = unassigned; default polarity energize-on-alarm; triggers on ALARM or UI_SHUTDOWN). See fanless_thermal_spec.md.
 - **Rev 8c — boot brightness (still applies).** U24 VIN is hard on +12 V. R121 100 kΩ on BL_PWM stays. With GPIO12 Hi-Z the boost is off (Ren typ 800 kΩ, SLVS893F p.5 and §7.3.3 p.10). Boot: do not `gpio=12=op,dh`; start PWM at **50 %**. A hang can hold the last duty, including 100 %.
-- **Rev 8d — BL_ALLOW (approved).** Layout is adding a 74LVC1G08 that ANDs **U76 P16 (BL_ALLOW)** with CM5 GPIO12 into U24 EN. R121 stays 100 kΩ. Firmware: P16 is an output, **default HIGH** (backlight enabled). Drive it **LOW** on `CM5_LOST` (**1 s** with no valid SPI frame or no heartbeat edge, §5) or on over-temp. Over-temp cut (consistent with this section; hold times ASSUMED where noted): SoC (CM5 report) ≥ **176 °F for 60 s** or ≥ **185 °F** immediate; U83 ≥ **131 °F for 60 s**; also a backstop at the alarm level — SoC ≥ **167 °F for 60 s** or U83 ≥ **122 °F for 60 s** (ASSUMED, in case the CM5 is up but not dimming). Re-enable when the trip source has cleared for **2 s** and, for temperature, after **9 °F** hysteresis (SoC < 158 °F, U83 < 113 °F). Log `BL_ALLOW_OFF` and the reason to FRAM. Init: write the Output Port bit **1** first, then set the Configuration bit to output (Output Port defaults to 0, TCA9555 Table 7/5, SCPS200E p.24). TCA9555 I/Os power up as inputs with an internal pull-up to default HIGH (p.1, p.3, p.4; I/O diagram 100 kΩ typ p.17; IIL −100 µA max p.6). Flag for Layout: the SN74LVC1G08 must not see a floating input (SCES, p.10); add a **10 kΩ pull-up to +3V3_SAFE** on BL_ALLOW (INFERRED typical; keeps default HIGH if U76 is unpowered). WD_OK (P15) does not gate BL_ALLOW. `CM5_OFF` stays the 30 s escalation (§5) and is not used just to kill the backlight. Bench: GPIO12 reset pull; BL_ALLOW AND (GPIO12 high, P16 low → EN low); 1 s CM5_LOST; re-enable and over-temp trip/release. Details in fixes_firmware §23.5a.
+- **Rev 8d / 8f — BL_ALLOW (Layout final refdes).** **U88** is the 74LVC1G08 (decoupler **C307**). It ANDs **BL_PWM** (CM5 GPIO12) with **BL_ALLOW** (U76 P16) to produce **BL_EN**, which drives U24 EN. **R121 100 kΩ stays on BL_EN.** **R629** is a 10 kΩ pull-up from P16 to +3V3_SAFE (the pull flagged in Rev 8d). **R630** is a proposed 100 kΩ from BL_PWM to GND, **PENDING Enginerd's OK** — it would hold the backlight off while GPIO12 is Hi-Z and partly addresses the GPIO12 reset-pull bench item; do not treat it as approved. Firmware: P16 is an output, **default HIGH** (backlight enabled). Drive it **LOW** on `CM5_LOST` (**1 s** with no valid SPI frame or no heartbeat edge, §5) or on over-temp. Over-temp cut (consistent with this section; hold times ASSUMED where noted): SoC (CM5 report) ≥ **176 °F for 60 s** or ≥ **185 °F** immediate; U83 ≥ **131 °F for 60 s**; also a backstop at the alarm level — SoC ≥ **167 °F for 60 s** or U83 ≥ **122 °F for 60 s** (ASSUMED, in case the CM5 is up but not dimming). Re-enable when the trip source has cleared for **2 s** and, for temperature, after **9 °F** hysteresis (SoC < 158 °F, U83 < 113 °F). Log `BL_ALLOW_OFF` and the reason to FRAM. Init: write the Output Port bit **1** first, then set the Configuration bit to output (Output Port defaults to 0, TCA9555 Table 7/5, SCPS200E p.24). TCA9555 I/Os power up as inputs with an internal pull-up to default HIGH (p.1, p.3, p.4; I/O diagram 100 kΩ typ p.17; IIL −100 µA max p.6). WD_OK (P15) does not gate BL_ALLOW. `CM5_OFF` stays the 30 s escalation (§5) and is not used just to kill the backlight. Bench: GPIO12 reset pull (and R630 if fitted); BL_ALLOW AND (GPIO12 high, P16 low → BL_EN / U24 EN low); 1 s CM5_LOST; re-enable and over-temp trip/release. Details in fixes_firmware §23.5a.
+- **U83 (Layout final):** TMP1075 at I2C1 **0x4A**, decoupler **C306**. **ALERT is not connected**; firmware must poll. **F101 / F102** are PTCs on **DI_BIAS_A / DI_BIAS_B**.
 
 ### 13.12 Rev 8e (2026-11-21 ~1:27 AM HST, Re-audit 7 R7-N4)
 - Confirmed supply 9–32 V continuous, 36 V ≤ 60 s. OV trip **36.35/38.18/40.06 V**, release **33.19/35.04/36.65 V** (fixed the inverted “cut-off ≤ 36.35 V”). Battery-side fuses are 58 V blades; J23 is F2 10 A. D66 is SMAJ40CA (m7-sch MEASURED). VBAT_SNS FS 36.3 V and load-shed 7.28 A @ 32 V are unchanged; headroom at 32 V is 4.35 V. Do not treat ADC saturation as OV.
+
+### 13.13 Rev 8f (2026-11-21 ~1:31 AM HST, Safety Round 7): RELAY_KIT_V
+Source: `fixes_safety.md` Round 7, followed verbatim: do not energise GLOW, CRANK or FUEL (K2) while VBAT > 16 V (12 V kit) or > 30 V (24 V kit). Hardware E-stop stays independent. Do not rely on K4 at 36 V. Do not PWM 12 V coils from 24 V.
+
+- **`RELAY_KIT_V`** ∈ {`UNSET` (factory default), `12`, `24`}. Stored in MCU FRAM (FM24CL64B 0x50), versioned record with CRC and A/B copies, same pattern as `ac_system_type` (§10.6). The MCU owns it. Set only from the CM5 UI or service mode, with an operator confirmation token, and only when the engine is stopped (IDLE or FAULT, engine stopped). **It never changes while running** (in-run writes are rejected). Distinct from `vbat_class` (load-shed UV only).
+- **Measurement.** Trip if **either** INA238/237 VBUS (VBAT_P, ±0.1 % gain) **or** VESTOP_SNS (the FUEL/CRANK rail, ignore while < 3 V / E-stop open) is above the limit. VBAT_SNS (J21.4) is advisory; a 1 % VREF+ error is ~0.30 V at 30 V and can false-trip a 24 V kit at ~29.6 V charging, so do not trip from it alone.
+- **Inhibit (Safety limits; timings ASSUMED):** 12 V kit trip **> 16.0 V** / release **< 15.0 V**; 24 V kit trip **> 30.0 V** / release **< 28.5 V**. Dwell 100 ms trip, 2 s release. Latch `RELAY_KIT_OV` (UI, FRAM log, Modbus/CAN). Auto-release after the dwell, or operator reset once V is back in the match window. ESTOP_TRIP / AUX / breakers are not in this inhibit. Firmware permissive only.
+- **Mid-run:** drop GLOW, CRANK and FUEL after the 100 ms dwell and enter STOPPING / FAULT(`RELAY_KIT_OV`). A FUEL drop **is an engine stop**. **Ambiguity for Enginerd:** Safety says “do not energise … while” but does not explicitly say to stop a running engine versus holding FUEL through a ≤ 60 s jump-start. The hazard text supports a drop; confirm.
+- **Boot check (windows ASSUMED).** 1 s mean of INA VBUS, not cranking. 12 V kit match **9.0–16.0 V**; 24 V kit **18.0–30.0 V** (no overlap). `UNSET` → refuse start, `RELAY_KIT_UNSET`. Mismatch (12 V kit with V > 16 V; 24 V kit with 9 ≤ V ≤ 16 V) → `RELAY_KIT_MISMATCH` (24 V kit in that band may also be a flat battery; message: charge or check the kit). Gap **16.0 < V < 18.0 V** → `RELAY_KIT_GAP`, do not infer or auto-write the kit. V < 9.0 V → `RELAY_KIT_FLAT`, distinct from mismatch; pass once V is in the window for 2 s. 24 V kit with V > 30 V is `RELAY_KIT_OV` (jump-start), not a mismatch.
+- **24 V charging margin.** Charge up to ~29.6 V vs 30.0 V trip is **0.4 V** (typ 1.2 V at 28.8 V). INA ±0.03 V still fits; the ADC divider does not. **ALEV100-C (K3) max continuous is 28 V** (Safety table), so 28.8–29.6 V charging already exceeds K3 while below the 30 V inhibit (Hella K1/K2 is 16–30 V). Firmware keeps Safety's 30 V; flag the 28–30 V gap. Release at 28.5 V may sit below a 28.8 V typ float — allow operator reset once V ≤ 30.0 V and in-window.
+- **12 V kit flag (Safety):** ALEV100-B pick-up is 9.6 V at 185 °F; pre-heat during a 9 V crank sag in a hot box may fail (UNVERIFIED). Hella 12 V crank should still pick up (< 8 V). Charge ~14.8 V, margin to 16.0 V is 1.2 V.
+- See fixes_firmware §24 for alarms, load-shed/OV interaction, and the bench list.
