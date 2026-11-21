@@ -421,10 +421,12 @@ ex.update({'P06':'AI_SH_EN1','P07':'AI_SH_EN2','P10':'AI_SH_EN3','P11':'AI_SH_EN
 tca(inp,2,ex)
 # DI bank bias
 for b in 'AB':
-    # m7-sch Batch 14 (Enginerd 2026-11-21): Q36/Q39 drain -> DIB_x_PTC -> F101/F102 PTS120660V010 (C2441287) -> DI_BIAS_x.
+    # m7-sch Batch 18 (Enginerd 2026-11-21 02:08): Q36/Q39 drain -> DIB_x_EFIN -> U89/U90 TPS26621DRCR eFuse (ILIM 33.2k = 0.20 A, auto-retry,
+    # UVLO 1M to IN, OVP/dVdT 10n/ILIM/EP to local DIB_x_RTN, SHDN open, FLT -> DI_BIAS_FLT_N + R635 10k to +3V3_SAFE -> U76 P17)
+    # -> DIB_x_PTC (C309/C312 100n) -> F101/F102 1210L020/72WR (C27568256) -> DI_BIAS_x. Text mirror only.
     # Mirrors the committed inputs.kicad_sch for reference only; DO NOT REGENERATE (refs F101/F102 are hand-placed).
-    fet(inp,'Transistor_FET:AO3401A','SI2309CDS','DIB_%s_PG'%b,'VBAT_P','DIB_%s_PTC'%b,mpn='SI2309CDS-T1-GE3')
-    inp.p('Device:Polyfuse','PTS120660V010',{'1':'DI_BIAS_'+b,'2':'DIB_%s_PTC'%b},prefix='F',mpn='PTS120660V010',lcsc='C2441287')
+    fet(inp,'Transistor_FET:AO3401A','SI2309CDS','DIB_%s_PG'%b,'VBAT_P','DIB_%s_EFIN'%b,mpn='SI2309CDS-T1-GE3')
+    inp.p('Device:Polyfuse','1210L020/72WR',{'1':'DI_BIAS_'+b,'2':'DIB_%s_PTC'%b},prefix='F',mpn='1210L020/72WR',lcsc='C27568256')
     inp.R('100k','VBAT_P','DIB_%s_PG'%b); inp.R('100k','DIB_%s_PG'%b,'DIB_%s_PGC'%b); npn(inp,'DIB_%s_NB'%b,'GND','DIB_%s_PGC'%b)
     inp.R('10k','DI_PU_'+b,'DIB_%s_NB'%b); inp.R('100k','DIB_%s_NB'%b,'GND')
     fet(inp,'Transistor_FET:DMN6075S','DMN6075S','DI_PD_'+b,'GND','DI_BIAS_'+b); inp.R('100k','DI_PD_'+b,'GND')
@@ -536,7 +538,7 @@ for _r,_n,_v in [('R534', 'FUEL_EN_MCU', '100k'), ('R535', 'CRANK_EN_MCU', '100k
 
 # =====================================================================
 es=S('estop','E-stop trip and sense',
- 'E-STOP (estop_notes v5). VBAT_ESTOP open -> Q 47k/10k releases 555 RESET; TRIG RC (100k/100n) fires one-shot 1.1*200k*2.2u = 0.48s.\n'
+ 'E-STOP (estop_notes v5). VBAT_ESTOP open -> Q 47k/10k releases 555 RESET; TRIG RC (100k/100n) fires one-shot 1.1*2.0M*220n(C0G) = 0.48s (R/C tol 0.45-0.52s; TLC555 VIT/leakage limits 0.32-0.99s).\n'
  '555 powered from +5V_TRIP (TPS7B6950 from VBAT_P via SS110 + hold-up). BAT54C OR of 555 Q and (MCU_TRIP AND WDO) -> TPS1HTC30 ESTOP_TRIP.\n'
  'ADDED: 4th LVC1G08 gates MCU_TRIP with WDO. Hold-up cap changed to 50V (BOM 25V part < 30V OV threshold).')
 schottky(es,'SS110','VBAT_P','TRIP_LDO_IN',mpn='SS110')
@@ -546,7 +548,7 @@ es.C('2.2u','+5V_TRIP','GND',pkg='0805'); es.C('100n','+5V_TRIP','GND')
 es.R('47k','VBAT_ESTOP','TRIP_QB'); es.R('10k','TRIP_QB','GND'); npn(es,'TRIP_QB','GND','TRIP_RST')
 es.R('10k','+5V_TRIP','TRIP_RST'); es.R('100k','TRIP_RST','TRIP_TRIG'); es.C('100n','TRIP_TRIG','GND')
 es.p('Timer:TLC555xD','TLC555CDR',{'VCC':'+5V_TRIP','GND':'GND','TR':'TRIP_TRIG','CV':'TRIP_CV','R':'TRIP_RST','Q':'TRIP_555_Q','DIS':'TRIP_TIM','THR':'TRIP_TIM'},prefix='U',mpn='TLC555CDR')
-es.R('200k','+5V_TRIP','TRIP_TIM'); es.C('2.2u','TRIP_TIM','GND',pkg='0805',note='tw 1.1*200k*2.2u = 0.48s (0.37-0.53s tol+temp); measure cold/hot'); es.C('100n','TRIP_CV','GND'); es.C('100n','+5V_TRIP','GND')
+es.R('2M','+5V_TRIP','TRIP_TIM'); es.C('220n','TRIP_TIM','GND',pkg='1206',note='C0G 50 V +-5 %. tw 1.1*2.0M*220n = 0.48 s; R/C tol 0.45-0.52 s; TLC555-Q1 VIT/leakage datasheet limits 0.32-0.99 s (Batch 18); measure cold/hot'); es.C('100n','TRIP_CV','GND'); es.C('100n','+5V_TRIP','GND')
 es.p('74xGxx:74LVC1G08','74LVC1G08',{'1':'MCU_TRIP','2':'WD_OK','4':'MCU_TRIP_G','5':'+3V3_SAFE','3':'GND'},prefix='U',mpn='SN74LVC1G08DBVR',note='ADDED 4th gate'); es.C('100n','+3V3_SAFE','GND')  # +3V3_SAFE explicit (POST-PASS 1 maps estop +3V3 -> +3V3_SAFE anyway; matches board U67.5)
 es.R('100k','MCU_TRIP','GND')
 es.p('Diode:BAT54C','BAT54C',{'1':'TRIP_555_Q','2':'MCU_TRIP_G','3':'ESTOP_TRIP_EN'},prefix='D',mpn='BAT54C'); es.R('100k','ESTOP_TRIP_EN','GND')
