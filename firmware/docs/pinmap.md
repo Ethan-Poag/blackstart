@@ -51,7 +51,7 @@ Power pins are omitted here; see the CSV. VDD/VREF+ = +3V3_SAFE, VDDA through FB
 | 16 | PC1 | MUXB_OUT | C224.1[10n] U64.8(D)[TMUX1208PWR] | MUXB_OUT analog (U64 D) | analog | GPIO | FT_ha | ADC123_INP11 |
 | 17 | PC2_C | MCU_CM5_HB | R43[100k]->GND: (rail) / R61[1k]->Net-(U9-GPIO26): U9.24(GPIO26)[CM5 (conn A)] | CM5 heartbeat in (GPIO26, 100k pd) - needs analog switch closed | in | GPIO | ANA TT_a (note 6) | ADC3_INP0 |
 | 18 | PC3_C | PSU_MAIN_OK | R32[100k]->+3V3_SAFE: (rail) | PSU_MAIN_OK in (TPS2116 ST, 100k pu) | in | GPIO | ANA TT_a (note 6) | ADC3_INP1 |
-| 22 | PA0 | VBAT_SNS | R268[100k]->VBAT_SENSE: D66.1(A1)[SMAJ36CA] J21.4(Pin_4)[J3A E-stop/D+/VBAT/bias] / R269[10k]->GND: (rail) | VBAT_SNS analog 100k/10k | analog | GPIO | FT_a | ADC1_INP16 |
+| 22 | PA0 | VBAT_SNS | R268[100k]->VBAT_SENSE: D66.1(A1)[SMAJ40CA] J21.4(Pin_4)[J3A E-stop/D+/VBAT/bias] / R269[10k]->GND: (rail) | VBAT_SNS analog 100k/10k | analog | GPIO | FT_a | ADC1_INP16 |
 | 23 | PA1 | VESTOP_SNS | R411[100k]->VBAT_ESTOP: C199.1[100n] C203.1[100n] D126.1(A1)[SMBJ33CA] / R412[10k]->GND: (rail) | VESTOP_SNS analog 100k/10k | analog | GPIO | FT_ha | ADC1_INP17 |
 | 24 | PA2 | DPLUS_SNS | R266[100k]->DPLUS: C187.1[100n] D63.1(A1)[SMBJ36CA] D64.1(K)[SS110] / R267[10k]->GND: (rail) | DPLUS_SNS analog 100k/10k | analog | GPIO | FT_a | ADC12_INP14 |
 | 25 | PA3 | FUEL_ISNS | U44.1(OUT)[INA281A2] | FUEL_ISNS analog (INA281) | analog | GPIO | FT_ha | ADC12_INP15 |
@@ -154,7 +154,7 @@ VREF+ = +3V3_SAFE [M]; 16-bit. Source: fixes_firmware.md §18.2.
 | FUEL_ISNS (U44 INA281A1, 20 mΩ) | PA3 | 0.40 V/A | 8.25 A (linear only to 7.87 A, swing) | **7944 counts/A** | 0.126 mA | INA281 output ≤ VS = ADC rail, no clamp needed [I] |
 | CRANK_ISNS (U46) | PB1 | same | same | **7944 counts/A** | 0.126 mA | same |
 | MUXA_OUT / MUXB_OUT (TPS1HTC30 SNS → 1.1 kΩ → TMUX1208 U63/U64 D) | PC0 / PC1 | I/KSNS × 1.1 kΩ. KSNS from table **≈1200** (0.833 mA @1 A, 1.66 mA @2 A, 3.3 mA @4 A; nominal 1300 A/A) → **0.916 V/A** | **3.60 A** | **18 197 counts/A** | 55 µA | KSNS accuracy ±3–4 % (2–4 A), ±6 % @6 A, SLVSGL4A p.8–9 [M]. D128–D135 BAT54C clamps (§5). **Fault-high SNS saturates (≥ FS)** |
-| VBAT_SNS (R268 100k / R269 10k, ×11) | PA0 | V/11 | **36.3 V** | 1805.4 counts/V | 0.554 mV | D67 BAT54S, C190 100 nF. **≥ 36.3 V reads saturated**: 36 V scope is at FS; OV (40 V) is not measurable here, so use INA238 VBUS (BOVL 40 V) for OV |
+| VBAT_SNS (R268 100k / R269 10k, ×11) | PA0 | V/11 | **36.3 V** | 1805.4 counts/V | 0.554 mV | D67 BAT54S, C190 100 nF. **≥ 36.3 V reads saturated**: 36 V jump-start (≤ 60 s) is at FS; hardware OV trip 36.35/38.18/40.06 V is at or above FS, so use INA VBUS (BOVL 40 V) for OV. Do not treat saturation as a firmware OV shutdown |
 | VESTOP_SNS (R411/R412, ×11) | PA1 | V/11 | 36.3 V | 1805.4 counts/V | 0.554 mV | D125 BAT54S, C234 |
 | DPLUS_SNS (R266/R267, ×11) | PA2 | V/11 | 36.3 V | 1805.4 counts/V | 0.554 mV | D65 BAT54S, C189 |
 
@@ -174,3 +174,6 @@ VREF+ = +3V3_SAFE [M]; 16-bit. Source: fixes_firmware.md §18.2.
 
 ### Rev 8d (2026-11-21 ~1:22 AM HST): BL_ALLOW
 - U76 P16 (pin 19) = **BL_ALLOW**, MCU output, default HIGH. 74LVC1G08 ANDs it with CM5 GPIO12 into U24 EN. R121 stays 100 kΩ. Details: ARCHITECTURE §13.11, fixes_firmware §23.5a.
+
+### Rev 8e (2026-11-21): D66 and OV wording
+- D66 on VBAT_SNS is **SMAJ40CA** (m7-sch MEASURED, was documented as SMAJ36CA). Hardware OV trip 36.35/38.18/40.06 V, release 33.19/35.04/36.65 V. See ARCHITECTURE §13.12.
