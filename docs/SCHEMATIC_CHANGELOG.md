@@ -991,3 +991,9 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
    - Netlist vs Batch 23: connectivity identical; the only change is the Q72 footprint field.
    - bom_from_sch: 0 mismatches.
    - PCB file untouched.
+
+## Batch 25 (Grok Bot for Ethan, lead decisions 11:03 AM HST; PCB not touched)
+1. **D17/D18: MPN RCLAMP0524P.TCT -> RCLAMP0524PATCT, value RClamp0524PA.** LCSC C40960 is the PA, and the P is NRND at Semtech. Checked against the Semtech RClamp0522PA/0524PA datasheet: same SLP2510P8 package, pinout (1/2/4/5 in, 6/7/9/10 flow-through, 3/8 GND) and land pattern. Ratings are equal (5 V VRWM, 15 V VC @ 1 A, 0.3 pF, 150 W, 5 A); ESD is better (+/-12 kV contact vs +/-8 kV). Symbol and footprint unchanged. tools/design.py, docs/genctl_bom.csv and mechanical/bom.csv mirrored.
+2. **genctl.pretty/PhoenixContact_PC5_4-GF-7.62_1720819 (J1, J23, J28, J29): pin rows fixed.** Phoenix's 1720819 drilling diagram (catalog PDF, measured from the vector data) puts the 3 solder pins per potential at row 1, +5.08 and +7.62 mm. The footprint had +3.25 and +5.79, so the header would not fit. Rows 2/3 moved; flange NPTHs (3.2 mm, 8.06 outboard, 10.42 behind row 1) were already correct and are unchanged.
+   - **PCB NOT refreshed.** The frozen board still has the old rows on J1/J23/J28/J29. Refresh and re-route at the next layout; blocking for fab.
+3. **Checks:** ERC 0 (--severity-all). Netlist vs Batch 24: connectivity identical; only D17/D18 value/MPN/description changed. bom_from_sch: 0 mismatches.

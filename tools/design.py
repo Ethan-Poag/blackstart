@@ -292,8 +292,8 @@ co.p('genctl:HR963380AE','HR963380AE',{'TRD0+':'ETH0_P','TRD0-':'ETH0_N','TRD1+'
     note='1000BASE-T magjack, vertical top-entry (opening faces the rear shell window); pair order P1/2,P3/4,P7/8,P9/10 = MDI A-D; polarity auto-corrected by PHY')
 co.C('100n','ETH_CT','GND',note='voltage-mode PHY: centre taps AC-decoupled only'); co.C('10n','ETH_CT','GND')
 co.R('330R','CM5_3V3','ETH_LEDG_A'); co.R('330R','CM5_3V3','ETH_LEDY_A')
-co.p('genctl:RClamp0524P','RClamp0524P',{'IO1':'ETH0_P','IO2':'ETH0_N','IO3':'ETH1_P','IO4':'ETH1_N','GND':'GND'},mpn='RCLAMP0524P.TCT')
-co.p('genctl:RClamp0524P','RClamp0524P',{'IO1':'ETH2_P','IO2':'ETH2_N','IO3':'ETH3_P','IO4':'ETH3_N','GND':'GND'},mpn='RCLAMP0524P.TCT')
+co.p('genctl:RClamp0524P','RClamp0524PA',{'IO1':'ETH0_P','IO2':'ETH0_N','IO3':'ETH1_P','IO4':'ETH1_N','GND':'GND'},mpn='RCLAMP0524PATCT')  # Batch 25: PA variant = LCSC C40960
+co.p('genctl:RClamp0524P','RClamp0524PA',{'IO1':'ETH2_P','IO2':'ETH2_N','IO3':'ETH3_P','IO4':'ETH3_N','GND':'GND'},mpn='RCLAMP0524PATCT')  # Batch 25: PA variant = LCSC C40960
 # USB-C service
 co.p('Connector:USB_C_Receptacle_USB2.0_16P','USB-C service',{'VBUS':'USBC_VBUS','CC1':'USBC_CC1','CC2':'USBC_CC2','D+':'USB_SVC_P','D-':'USB_SVC_N','GND':'GND','SHIELD':'CHASSIS','SBU1':None,'SBU2':None},prefix='J',mpn='TYPE-C-31-D-06B')
 co.R('5.1k','USBC_CC1','GND'); co.R('5.1k','USBC_CC2','GND')
