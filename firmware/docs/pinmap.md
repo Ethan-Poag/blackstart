@@ -104,9 +104,9 @@ Power pins are omitted here; see the CSV. VDD/VREF+ = +3V3_SAFE, VDDA through FB
 | 80 | PC12 | MCB_OP_MCU | U41.5(A4)[SN74LVC541APWR] | MCB open enable | out | GPIO | FT_h |  |
 | 81 | PD0 | CAN1_RX | R86[1k]->CAN1_RX_T: U13.5(RXD)[CA-IS3062W] | FDCAN1_RX <- U13 | in | AF9 ✔ | FT_h |  |
 | 82 | PD1 | CAN1_TX | R85[1k]->Net-(U13-TXD): U13.3(TXD)[CA-IS3062W] | FDCAN1_TX -> U13 | out | AF9 ✔ | FT_h |  |
-| 83 | PD2 | FUEL_EN_MCU | U38.1[74LVC1G08] | FUEL_EN (AND WDO_N) | out | GPIO | FT_h |  |
-| 84 | PD3 | CRANK_EN_MCU | U39.1[74LVC1G08] | CRANK_EN (AND WDO_N) | out | GPIO | FT_h |  |
-| 85 | PD4 | GLOW_EN_MCU | U40.1[74LVC1G08] | GLOW_EN (AND WDO_N) | out | GPIO | FT_h |  |
+| 83 | PD2 | FUEL_EN_MCU | U38.1[74LVC1G08W5-7] | FUEL_EN (AND WDO_N) | out | GPIO | FT_h |  |
+| 84 | PD3 | CRANK_EN_MCU | U39.1[74LVC1G08W5-7] | CRANK_EN (AND WDO_N) | out | GPIO | FT_h |  |
+| 85 | PD4 | GLOW_EN_MCU | U40.1[74LVC1G08W5-7] | GLOW_EN (AND WDO_N) | out | GPIO | FT_h |  |
 | 86 | PD5 | MUX_A0 | U63.1(A0)[TMUX1208PWR] U64.1(A0)[TMUX1208PWR] | MUX_A0 out | out | GPIO | FT_h |  |
 | 87 | PD6 | MUX_A1 | U63.16(A1)[TMUX1208PWR] U64.16(A1)[TMUX1208PWR] | MUX_A1 out | out | GPIO | FT_h |  |
 | 88 | PD7 | MCU_TRIP | R405[100k]->GND: (rail) | MCU_TRIP out (100k pd, AND WDO_N) | out | GPIO | FT_h |  |
@@ -140,7 +140,7 @@ PB12 note: in DS12110 Table 11 (p.90) the AF9 cell reads "FDCAN2_" and its secon
 
 
 ## Added 2026-10-28 (fixes_firmware.md)
-- U76 (TCA9555 @0x25) **P15 (pin 18) = WD_OK input via R559 4.7k** (watchdog latch U84 Q; 0 = latched, power cycle required). **P16 (pin 19) = BL_ALLOW** (Rev 8d/8f): output, default HIGH (enabled). **U88** (74LVC1G08, C307) ANDs BL_PWM (CM5 GPIO12) with P16 to **BL_EN**, which drives U24 EN. **R121 100 kΩ is on BL_EN. R629** 10 kΩ pull-up P16 to +3V3_SAFE. **R630** is a **CONFIRMED** 100 kΩ BL_PWM to GND (Enginerd 1:37 AM). It closes part of the GPIO12 reset-pull bench item; the bench item stays. MCU drives P16 LOW on CM5_LOST (1 s, ARCHITECTURE §5) or over-temp. P17 remains spare. (P16 is not FAN2_TACH; §11 withdrawn.)
+- U76 (TCA9555 @0x25) **P15 (pin 18) = WD_OK input via R559 4.7k** (watchdog latch U84 Q; 0 = latched, power cycle required). **P16 (pin 19) = BL_ALLOW** (Rev 8d/8f): output, default HIGH (enabled). **U88** (Diodes **74LVC1G08W5-7**, C307; all board 74LVC1G08s are this MPN) ANDs BL_PWM (CM5 GPIO12) with P16 to **BL_EN**, which drives U24 EN. **R121 100 kΩ is on BL_EN. R629** 10 kΩ pull-up P16 to +3V3_SAFE. **R630** is a **CONFIRMED** 100 kΩ BL_PWM to GND (Enginerd 1:37 AM). It closes part of the GPIO12 reset-pull bench item; the bench item stays. MCU drives P16 LOW on CM5_LOST (1 s, ARCHITECTURE §5) or over-temp. P17 remains spare. (P16 is not FAN2_TACH; §11 withdrawn.)
 - PB4 AUX3_MCU: external 4.7k pull-down (R536). Other enables: 100k (R534–R548, R551); AUX9/10 10k (R549/R550).
 - PA9 → R56 and PE3 → R57 change from 1k to 10k. PA9/PE3/PE5 are Hi-Z until the CM5 heartbeat (PC2_C).
 - PB2 OUT_FAULT_N: the INA238 (U86 @0x40) ALERT is added to the wired-OR.- PC13 EXP_12V_EN: R551 100k pull-down; **not watchdog-gated** (Ethan ruling 2026-10-28).
@@ -173,17 +173,22 @@ VREF+ = +3V3_SAFE [M]; 16-bit. Source: fixes_firmware.md §18.2.
 - Software FAULT 3.0 A reading for 100 ms; declared ≤ 2.8 A; SNS ≥ 2.9 V for 1 ms = limit/fault. See fixes_firmware §20.
 
 ### Rev 8d (2026-11-21 ~1:22 AM HST): BL_ALLOW
-- U76 P16 (pin 19) = **BL_ALLOW**, MCU output, default HIGH. **U88** (74LVC1G08, C307) ANDs BL_PWM with P16 into **BL_EN** → U24 EN. R121 on BL_EN; R629 10 kΩ pull-up; **R630 CONFIRMED** 100 kΩ to GND. Details: ARCHITECTURE §13.11, fixes_firmware §23.5a.
+- U76 P16 (pin 19) = **BL_ALLOW**, MCU output, default HIGH. **U88** (Diodes **74LVC1G08W5-7**, C307) ANDs BL_PWM with P16 into **BL_EN** → U24 EN. R121 on BL_EN; R629 10 kΩ pull-up; **R630 CONFIRMED** 100 kΩ to GND. Details: ARCHITECTURE §13.11, fixes_firmware §23.5a.
 
 ### Rev 8e (2026-11-21): D66 and OV wording
 - D66 on VBAT_SNS is **SMAJ40CA** (m7-sch MEASURED, was documented as SMAJ36CA). Hardware OV trip 36.35/38.18/40.06 V, release 33.19/35.04/36.65 V. See ARCHITECTURE §13.12.
 
 ### Rev 8f (2026-11-21): RELAY_KIT_V, Layout backlight refdes, P16 cleanup
 - `RELAY_KIT_V` and the GLOW/CRANK/FUEL kit inhibit: ARCHITECTURE §13.13 / fixes_firmware §24 (Rev 8g updates mid-run and thresholds).
-- Layout final: **U88** 74LVC1G08 + **C307**; net **BL_EN** = BL_PWM AND BL_ALLOW; R121 on BL_EN; **R629** 10 kΩ P16 pull-up. U76 P16 is **BL_ALLOW**, not FAN2_TACH.
-- **U83** TMP1075 I2C1 0x4A, **C306**, ALERT NC — firmware polls. **F101 / F102** PTCs on DI_BIAS_A / DI_BIAS_B.
+- Layout final: **U88** Diodes **74LVC1G08W5-7** + **C307**; net **BL_EN** = BL_PWM AND BL_ALLOW; R121 on BL_EN; **R629** 10 kΩ P16 pull-up. U76 P16 is **BL_ALLOW**, not FAN2_TACH.
+- **U83** TMP1075 I2C1 0x4A, **C306**, ALERT NC — firmware polls. **F101 / F102** PTCs on DI_BIAS_A / DI_BIAS_B (Batch 17 eFuse TBD).
 
 ### Rev 8g (2026-11-21 ~1:37–1:38 AM HST)
 - Mid-run kit OV does not stop the engine (FUEL / K2 stays on; latched `RELAY_KIT_OV`). 12 V kit inhibit 16/15 V; 24 V kit GLOW, CRANK and FUEL all **30.0 / 28.5 V**. INA237 VBUS primary; ADC fallback blocks all starts. Glow on-time capped at 60 s + 60 s cooldown (ASSUMED). MCU_TRIP / K4 pulse **0.48 s**, fault if held past 0.53 s. See ARCHITECTURE §13.14.
 - **R630 CONFIRMED** 100 kΩ BL_PWM to GND. Closes part of the GPIO12 reset-pull bench item; the bench item stays.
 - **FUEL is K2** (Hella 4RA 003 437-191 on the 24 V kit, 16–30 V).
+
+### Rev 8h (2026-11-21 ~1:51 AM HST): DI_BIAS rails, one-shot, LVC MPN
+- **DI_BIAS_A** (J21.6, F101): **DI1–DI6**. **DI_BIAS_B** (J22.1, F102): **DI7–DI12**. MEASURED from m7-sch `inputs.kicad_sch` wetting resistors. E-stop is not on these rails. Layout Batch 17 eFuse part/pin **TBD**. Rail-fault firmware: ARCHITECTURE §13.15 / fixes_firmware §25.
+- ESTOP one-shot range **0.37–0.53 s** (design_spec now matches). `ESTOP_TRIP_STUCK` stays at 0.53 s. C229 may change to C0G (range TBD).
+- All 74LVC1G08 gates (U38, U39, U40, U67, U88) are Diodes **74LVC1G08W5-7**, same pinout.
