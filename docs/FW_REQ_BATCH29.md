@@ -19,6 +19,7 @@ Requirements only. No firmware exists on this branch. Source: pass-3 review (/wo
   2. If the terminal voltage exceeds **2.6 V** (≈ 25.9 mA; normal 4–20 mA reads ≤ 2.04 V, NAMUR fault high ≥ 21 mA reads ≤ 2.2 V) on **two consecutive samples**, write the U31 shunt-enable bit low immediately. Total latency from fault to shunt off: **≤ 50 ms**.
   3. Report AI_OVERRANGE for that channel. Re-enable automatically after 5 s. After **3 trips in 60 s**, latch the shunt off until operator reset (CM5 command or power cycle). The trip stays active in every engine state, including the CRANK/VBUS blanking windows of §13.10 (blanking hides readings, not this protection).
   4. Boot: the U31 outputs must be written low before the configuration register makes them outputs (ARCHITECTURE.md §13.1 step 4 already requires this). U31 keeps its output state through an MCU reset (no reset pin), so this write must be one of the first I2C actions after every reset, including watchdog resets.
+  5. **Dependency (Batch 30):** this trip only works while firmware runs. IWDG is a hard dependency, and the MCU-held-in-reset case is covered by docs/FW_REQ_BATCH30.md FW-WDG-1 and FW-AI-3.
 - **Bench:** apply 24 V through a 1 Ω sense resistor to AI1 with the shunt enabled; measure the time to shunt-off (≤ 50 ms), the retry pattern and the latch after 3 trips. Check R137 for discoloration after 10 trip cycles.
 
 ## FW-I2C-1: I2C1 at 100 kHz (pass-3 NOTE 5)

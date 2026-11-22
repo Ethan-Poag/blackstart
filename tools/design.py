@@ -1,3 +1,10 @@
+# RETIRED (Batch 30, 2026-11-22 HST): pre-split single-board generator. It predates the two-board split
+# (genctl + genctl_meter, 09b60d3) and Batch 27-29 (it would recreate AC1005 CTs, the on-board J9/J30 CT header,
+# the old category BOMs and one 'genctl' project). It refuses to run unless BLACKSTART_LEGACY_REGEN=1 is set, and even
+# then it must never write into the repo. Edit the committed .kicad_sch files; BOMs come from tools/bom_from_sch.py.
+import os as _os, sys as _sys
+if _os.environ.get('BLACKSTART_LEGACY_REGEN')!='1':
+    _sys.exit('RETIRED: tools/%s is the pre-split generator (see header). Edit the .kicad_sch files; BOMs: tools/bom_from_sch.py' % _os.path.basename(__file__))
 # =====================================================================================
 # DO NOT REGENERATE: the committed .kicad_sch files are the source of truth; regen drifts.
 #   Known drift (scratch regen vs committed schematic, 187984d and m7-sch HEAD):
@@ -562,8 +569,8 @@ tvs(es,'SMDJ40CA','VBAT_ESTOP')  # D126 Rev 3 H5
 # =====================================================================
 ac=S('ac_metering','AC metering: 2x ADE9000 (gen + bus), isolated',
  'AC METERING. Hot side GND_AC isolated by ISOW7841 (data+power) + ISO7741, both 5kVrms reinforced, SOIC-16W 8mm. Barrier keep-out >=8mm + slot.\n'
- 'Voltage: fully differential. Each line 4x1M -> tap (1k to GND_AC); each neutral (GEN_N, BUS_N separately) 4x1M -> N_TAP (1k to GND_AC); VxN <- 1k <- N_TAP.\n'
- 'No 0R neutral link: GND_AC floats at the divider mid-point, common-mode attenuated 4001:1. Current: AC1005 CTs, burden 2x24.9R.')
+ 'Voltage: fully differential. Each line 12x330k -> tap (1k to GND_AC); each neutral (GEN_N, BUS_N separately) 12x330k -> N_TAP (1k to GND_AC); VxN <- 1k <- N_TAP.\n'
+ 'No 0R neutral link: GND_AC floats at the divider mid-point, common-mode attenuated 3961:1. Current: ZMCT103C window CTs (Batch 29), burden 2x24.9R.')
 for n in ('ADE_SCK','ADE_MOSI','ADE_CS1_N','ADE_MISO','ADE_CS2_N','ADE_RST_N','ADE_IRQ_N'): ac.R('1k',n,n+'_I',note='domain-boundary R (SAFE MCU <-> +3V3 isolator)')
 ac.p('genctl:ISOW7841DWE','ISOW7841DWER',{'VCC':'+3V3','GND1':'GND','INA':'ADE_SCK_I','INB':'ADE_MOSI_I','INC':'ADE_CS1_N_I','OUTD':'ADE_MISO_I','NC':None,
    'VISO':'+3V3_AC','GND2':'GND_AC','OUTA':'AC_SCK','OUTB':'AC_MOSI','OUTC':'AC_CS1_N','IND':'AC_MISO','SEL':'GND_AC'},mpn='ISOW7841DWER',fp='genctl:SOIC-16W_7.5x10.3mm_P1.27mm_HV_Slot',note='5kVrms reinforced; SEL=GND2 -> VISO 3.3V')
@@ -604,6 +611,8 @@ for _ti,(tag,J) in enumerate((('GEN','J7'),('BUS','J8'))):
         b=('%s_N_C%d'%(tag,j+1)) if j<8 else (('%s_N_HV%d'%(tag,j-7)) if j<11 else tag+'_VN_TAP')
         ac.R('330k',a,b,pkg='1206',mpn='1206W4F3303T5E',lcsc='C17929',mfr='UNI-ROYAL',note='HV 1206 neutral divider (own reference per system), Rev 3 H6',ref=('R%d'%(559+(_ti*4+3)*8+j) if j<8 else None)); a=b
     ac.R('1k',tag+'_VN_TAP','GND_AC',note='neutral divider tap - no direct N-GND_AC link')
+# STALE (Batch 29/30): the committed meter schematic uses ZMCT103C T1-T4 (no loop pins) and has no CT header (J30 is off-board).
+# The AC1005 + J9/J30 lines below are historic and are one reason this generator is retired (see header).
 cts=[]
 for i,ph in enumerate('ABCN',1):
     ac.p('genctl:AC1005','AC1005',{'P1':'CT%d_S1'%i,'P2':'CT%d_S2'%i,'S1':'GEN_CT%s_1'%ph,'S2':'GEN_CT%s_2'%ph,'NC':None},mpn='AC1005',lcsc='C6117861')

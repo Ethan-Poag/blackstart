@@ -4686,6 +4686,7 @@
 (property "LCSC" "C5199898" (at 378.46 133.35 0) (effects (font (size 1.27 1.27)) hide))
 (property "MPN" "FTSH-105-01-L-DV" (at 378.46 133.35 0) (effects (font (size 1.27 1.27)) hide))
 (property "Manufacturer" "Samtec" (at 378.46 133.35 0) (effects (font (size 1.27 1.27)) hide))
+(property "Sourcing" "ALT (Batch 30): JLC live 2026-11-22 ~12:08 HST: C5199898 JLC 93 / LCSC 87 (was 1 on 2026-11-21). Drop-in alternate, same Samtec footprint and pinout: FTSH-105-01-F-DV C6620841 (gold-flash contacts, JLC 187 / LCSC 180). If neither is in stock on order day: CONSIGN FTSH-105-01-L-DV from Samtec direct or Digi-Key and ship to JLC, or hand-fit J2 before first flash (SWD is needed for bring-up)" (at 378.46 133.35 0) (effects (font (size 1.27 1.27)) hide))
 (pin "7" (uuid "9111b544-9504-4d0d-837b-a6163a82dda4"))
 (pin "9" (uuid "2661ef8f-62cc-4e20-8060-44f999388117"))
 (pin "1" (uuid "2b54d477-43f6-412d-9d89-154224f1cdc1"))

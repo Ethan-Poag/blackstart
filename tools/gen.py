@@ -1,3 +1,7 @@
+# RETIRED (Batch 30, 2026-11-22 HST): pre-split single-board generator. It predates the two-board split
+# (genctl + genctl_meter, 09b60d3) and Batch 27-29 (it would recreate AC1005 CTs, the on-board J9/J30 CT header,
+# the old category BOMs and one 'genctl' project). Imported by design.py/layout.py/symbols.py; importing it is harmless.
+# The LCSC lookup below used the deleted per-category BOMs (/workspace/genctl/*_bom.csv); it now skips missing files. Edit the committed .kicad_sch files; BOMs come from tools/bom_from_sch.py.
 # =====================================================================================
 # DO NOT REGENERATE: the committed .kicad_sch files are the source of truth; regen drifts.
 #   Known drift (scratch regen vs committed schematic, 187984d and m7-sch HEAD):
@@ -26,7 +30,8 @@ def U(): return str(uuid.uuid4())
 # ---------------- LCSC lookup from the BOMs ----------------
 LCSC={}
 for f in ['power_bom','outputs_bom','inputs_bom','comms_bom','other_bom','ac_metering_bom_jlc']:
-    p='/workspace/genctl/%s.csv'%f
+    p='/workspace/genctl/%s.csv'%f   # deleted/legacy category BOMs (another checkout); skipped when absent
+    if not os.path.exists(p): continue
     for r in csv.DictReader(open(p,encoding='utf-8',errors='replace')):
         pn=(r.get('part number') or '').strip(); l=(r.get('LCSC part') or '').strip()
         if pn and re.match(r'^C\d+$',l): LCSC.setdefault(pn.upper(),l)

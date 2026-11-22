@@ -1,0 +1,11 @@
+parts 220 -> 220
+PROP RV1 Sourcing None -> 'STOCK RISK (Batch 30): JLC/LCSC 25 live 2026-11-22 ~12:08 HST = 4 boards at 6/b
+PROP RV2 Sourcing None -> 'STOCK RISK (Batch 30): JLC/LCSC 25 live 2026-11-22 ~12:08 HST = 4 boards at 6/b
+PROP RV3 Sourcing None -> 'STOCK RISK (Batch 30): JLC/LCSC 25 live 2026-11-22 ~12:08 HST = 4 boards at 6/b
+PROP RV4 Sourcing None -> 'STOCK RISK (Batch 30): JLC/LCSC 25 live 2026-11-22 ~12:08 HST = 4 boards at 6/b
+PROP RV5 Sourcing None -> 'STOCK RISK (Batch 30): JLC/LCSC 25 live 2026-11-22 ~12:08 HST = 4 boards at 6/b
+PROP RV6 Sourcing None -> 'STOCK RISK (Batch 30): JLC/LCSC 25 live 2026-11-22 ~12:08 HST = 4 boards at 6/b
+PROP T1 Note 'Batch 29 (pass-3 B1): replaces AC1005 C6117861. The field CT loop is a 600 V in -> 'Batch 29 (pass-3 B1): replaces AC1005 C6117861. Only the factory pigtail of the
+PROP T2 Note 'Batch 29 (pass-3 B1): replaces AC1005 C6117861. The field CT loop is a 600 V in -> 'Batch 29 (pass-3 B1): replaces AC1005 C6117861. Only the factory pigtail of the
+PROP T3 Note 'Batch 29 (pass-3 B1): replaces AC1005 C6117861. The field CT loop is a 600 V in -> 'Batch 29 (pass-3 B1): replaces AC1005 C6117861. Only the factory pigtail of the
+PROP T4 Note 'Batch 29 (pass-3 B1): replaces AC1005 C6117861. The field CT loop is a 600 V in -> 'Batch 29 (pass-3 B1): replaces AC1005 C6117861. Only the factory pigtail of the

@@ -20,7 +20,7 @@ Frame: mm, origin = cover-glass top-left, front view, x right, y down (same as g
 | J11 USB-C HRO TYPE-C-31-D-06B vertical | 10.0 | INFERRED (rev D comment) |
 | KF2EDGRM-5.08 + plug | 16.0 | INFERRED |
 | Phoenix PC5/4-GF-7.62 + plug | 18.0 | INFERRED |
-| AC1005 CTs T1-T4 | 12.0 | INFERRED |
+| ZMCT103C CTs T1-T4 (meter board, Batch 29) | **19.2** | DATASHEET (Zeming C94571: 18.2 × 19.2 H × 10.2 mm; window Ø5 mm, centre ≈ 10 mm above the board). Add room for the pigtails: ≥ 10 mm straight each side of the window, tie-downs, and the CT gland (ISOLATION_CHECK §5c). **Height correction (Batch 30, Mechanical review ZMCT103C_fit.md):** the old "AC1005 12.0 INFERRED" was a misread of the AC1005's 11.12 mm thickness; Talema's drawing gives a **23.80 mm** installed height. So the ZMCT103C is about **4.6 mm shorter** than the part it replaced, not taller. |
 | PCB thickness | 1.6 | INFERRED |
 | PCB F face Z (behind bezel face) | 16.0 | INFERRED design value (geometry.py Z_BOARD_FRONT) |
 
@@ -28,6 +28,9 @@ Frame: mm, origin = cover-glass top-left, front view, x right, y down (same as g
 Board is 61.9 % routed, 1119 unconnected, "NOT fab-ready". M6 moved only R/C passives; outline, holes, ICs, connectors, keys were not moved (MEASURED statement in PROGRESS.md). Likely to move (INFERRED): C1 parts near U21; possibly J10/J11 or U21 if the LVDS/DSI escape needs re-placement; J4 fan header (no fan per Ethan); heights of unmodelled parts.
 
 ## Mechanically relevant footprints (MEASURED)
+> **STALE pending the two new board outlines (genctl + genctl_meter); do not use for clearance checks until re-extracted.** Missing from this extraction: J31/J32 Molex 43045-1600 2×8 RA (courtyard ≈ 29.2 × 13.7 mm), C74/C75 upright supercaps (22 mm, main board) and the heat-strap boss (main board).
+>
+> **Batch 30 note (2026-11-22 HST):** this table is the pre-split v4 single board. Since the split (09b60d3) and Batch 29, T1-T4 are **ZMCT103C** window CTs on the separate **genctl_meter** board (19.2 mm tall), and **J30 is off-board** (a shorting-type CT block in the genset panel). The J30 and AC1005 T1-T4 rows below are historic; the CT pigtails leave the enclosure through one gland instead of J30. The enclosure CAD (enclosure_v3.py J30 envelope, left window) still models the old J30/AC1005 and needs Mechanical's re-check for the two-board layout. The CT pigtails leave through **one M25 cable gland** near the old J30 left-edge spot, away from the J32/SELV side.
 | Ref | Value | Footprint | x | y | rot | side | bbox x0,y0,x1,y1 |
 |---|---|---|---|---|---|---|---|
 | H1 | M4 bezel boss | MountingHole_4.3mm_M4_Pad | 2.0 | -9.25 | 0.0 | F | [-2.58, -13.82, 6.58, -4.67] |

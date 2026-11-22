@@ -1,0 +1,8 @@
+bom/genctl_main_bom.csv      refs checked  1132  mismatches 0
+docs/genctl_bom.csv          refs checked  1132  mismatches 0
+mechanical/bom.csv           refs checked  1132  mismatches 0
+bom/genctl_meter_bom.csv     refs checked   218  mismatches 0
+docs/genctl_meter_bom.csv    refs checked   218  mismatches 0
+mechanical/bom_meter.csv     refs checked   218  mismatches 0
+TOTALS (USD, qty1 / qty10 per board): {'main': (265.95, 225.54), 'meter': (63.89, 53.42), 'harness': (2.91, 1.87)}
+SUMMARY mismatches 0

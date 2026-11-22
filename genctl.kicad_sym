@@ -10328,7 +10328,7 @@
 		(property "Value" "ZMCT103C" (at -5.08 -6.35 0) (effects (font (size 1.27 1.27))))
 		(property "Footprint" "genctl:Transformer_Zeming_ZMCT103C" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
 		(property "Datasheet" "https://datasheet.lcsc.com/datasheet/pdf/fadce25fa7c9b6a55b2a8de064d6384d.pdf?productCode=C94571" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
-		(property "Description" "Window current transformer 5 A : 5 mA (1000:1), rated burden 50 R, linear 0-15 A, 4500 V isolation withstand, -40..+85 C. Primary = insulated wire through the 5 mm window (no primary pins). S1 = pin 1* (dot), S2 = pin 2" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+		(property "Description" "Window current transformer 5 A : 5 mA (1000:1), rated burden 50 R, linear 0-15 A, 4500 V isolation withstand, -40..+85 C. Primary = the external 5 A CT loop pigtail through the 5 mm window, never a phase or neutral cable (no primary pins). S1 = pin 1* (dot), S2 = pin 2" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
 		(symbol "ZMCT103C_0_1"
 			(rectangle (start -5.08 5.08) (end 5.08 -5.08) (stroke (width 0.254) (type default)) (fill (type background)))
 			(circle (center -1.27 0) (radius 1.905) (stroke (width 0.254) (type default)) (fill (type none)))

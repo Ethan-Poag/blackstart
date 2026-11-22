@@ -1,0 +1,76 @@
+BOM_main.csv PCB refs 1119 fitted 1119
+BOM_daughter.csv PCB refs 218 fitted 218
+crosscheck mismatches 0
+{
+ "main_pcb_parts": [
+  265.94,
+  225.5
+ ],
+ "main_offboard": [
+  1356.36,
+  950.76
+ ],
+ "harness": [
+  2.91,
+  1.88
+ ],
+ "main_total": [
+  1625.21,
+  1178.14
+ ],
+ "daughter_pcb_parts": [
+  63.89,
+  53.42
+ ],
+ "daughter_offboard": [
+  74.88,
+  26.76
+ ],
+ "daughter_total": [
+  138.77,
+  80.18
+ ],
+ "controller_total": [
+  1763.98,
+  1258.32
+ ],
+ "rev4c_csv_sum": [
+  1697.55,
+  1251.27
+ ],
+ "pcb_refs": [
+  1119,
+  218,
+  1337
+ ],
+ "batch30_delta": {
+  "main_pcb_parts": [
+   3.6,
+   3.21
+  ],
+  "main_offboard": [
+   0.0,
+   0.0
+  ],
+  "main_total": [
+   3.6,
+   3.21
+  ],
+  "daughter_pcb_parts": [
+   0.0,
+   0.0
+  ],
+  "daughter_offboard": [
+   3.0,
+   3.0
+  ],
+  "daughter_total": [
+   3.0,
+   3.0
+  ],
+  "controller_total": [
+   6.6,
+   6.21
+  ]
+ }
+}

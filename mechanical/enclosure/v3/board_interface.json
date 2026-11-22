@@ -1,4 +1,5 @@
 {
+ "stale": "Batch 30 (2026-11-22 HST): STALE pending the two new board outlines (genctl + genctl_meter). Footprint rows are the pre-split v4 board; J30/AC1005 rows are historic; J31/J32 (43045-1600, ~29.2 x 13.7 mm), C74/C75 (22 mm upright, main) and the heat-strap boss (main) are missing.",
  "source": "mechanical/pcb_v4/genctl_v4_handrouted.kicad_pcb (mtime 2026-10-25 13:17 HST, git HEAD f03c57a), parsed read-only with KiCad 9.0.2 pcbnew python; all values MEASURED unless field 'inferred' present",
  "frame": "mm, origin = display cover-glass top-left, front view, x right, y down (same as geometry.py). side F = toward display/front, B = rear",
  "edge_cuts_bbox": [
@@ -1205,9 +1206,9 @@
    "h": 4.8,
    "src": "INFERRED: 1.5 mated height (place_v4.py comment) + ~1.2 PCB + ~2.1 SoC/RAM; check cm5-datasheet.pdf mech drawing"
   },
-  "T1-T4 AC1005 CT": {
-   "h": 12.0,
-   "src": "INFERRED"
+  "T1-T4 ZMCT103C window CT (meter board, Batch 29; replaced AC1005 = 23.80 mm tall per Talema drawing, the old 12.0 was its 11.12 mm thickness)": {
+   "h": 19.2,
+   "src": "DATASHEET Zeming ZMCT103C (LCSC C94571): body 18.2 x 19.2 (H) x 10.2 mm, window centre ~10 mm above the board; plus pigtail bend/tie-down space (ISOLATION_CHECK 5c rule 4, >=10 mm straight each side)"
   }
  },
  "volatility": "PROGRESS.md M6: board 61.9% routed, 1119 unconnected, NOT fab-ready. M6 moved only R/C passives; outline, holes, connectors, ICs locked. Likely to move: C1 parts near U21, passives; possibly J10/J11 if DSI/LVDS escape re-placement needed (INFERRED).",

@@ -1,0 +1,6 @@
+parts 1139 -> 1139
+PROP J2 Sourcing None -> 'ALT (Batch 30): JLC live 2026-11-22 ~12:08 HST: C5199898 JLC 93 / LCSC 87 (was 
+PROP U15 Sourcing None -> 'CONSIGN (Batch 30): JLC/LCSC stock 0 live 2026-11-22 ~12:08 HST (was 12). Buy T
+PROP U16 Sourcing None -> 'CONSIGN (Batch 30): JLC/LCSC stock 0 live 2026-11-22 ~12:08 HST (was 12). Buy T
+PROP U21 Sourcing None -> 'STOCK RISK (Batch 30): JLC 81 / LCSC 51 live 2026-11-22 ~12:08 HST; JLC price n
+PROP U5 Sourcing None -> 'STOCK RISK (Batch 30): JLC/LCSC 16 live 2026-11-22 ~12:08 HST (enough for ~16 b

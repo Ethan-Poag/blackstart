@@ -4596,6 +4596,7 @@
 (property "LCSC" "C2870127" (at 491.49 224.79 0) (effects (font (size 1.27 1.27)) hide))
 (property "MPN" "LMR36506RRPER" (at 491.49 224.79 0) (effects (font (size 1.27 1.27)) hide))
 (property "Manufacturer" "Texas Instruments" (at 491.49 224.79 0) (effects (font (size 1.27 1.27)) hide))
+(property "Sourcing" "STOCK RISK (Batch 30): JLC/LCSC 16 live 2026-11-22 ~12:08 HST (enough for ~16 boards). Second source TI store LMR36506RRPER (live 5,999) or Digi-Key/Mouser, consign. Pin-compatible fallback LMR36506RFRPER (same RT/FB circuit, FPWM at light load = higher battery drain; DS Device Comparison table); JLC 0, TI store 10,100" (at 491.49 224.79 0) (effects (font (size 1.27 1.27)) hide))
 (property "Note" "always-on 3.3V from battery, 65V abs max" (at 491.49 224.79 0) (effects (font (size 1.27 1.27)) hide))
 (pin "4" (uuid "7e50f9f7-4bc8-4892-93fd-f12118142bed"))
 (pin "3" (uuid "be8e5d47-8e3d-4deb-b662-d11e20051121"))

@@ -70,6 +70,17 @@ Why: pass-3 review m1/m2 (SCH_REVIEW_2026-11-22_pass3.md). All loop numbers are 
 - **If it rings (PM low):** check that the feed-forward parts R18/C24 (+5V) and R25/C32 (+3V3) are fitted; then refit C30/C37 one at a time (more C lowers fc) and re-measure.
 - Record the results in docs/split_evidence/ when measured.
 
+## B30: meter board CT insulation and temperature (Batch 30, Safety review ZMCT103C_isolation.md)
+**B30-1 Megger, every built meter board (production test, not just the prototype).** Pigtails fitted, board not powered, J31/J32 harness unplugged.
+- **A:** all four CT pigtails shorted together (both ends) vs **GND_AC** (test pad; until the next layout adds one, use the GND_AC side of a burden resistor, e.g. R474/R475 common node, with a probe clip, not a solder blob). **1000 V DC, 60 s, ≥ 100 MΩ.**
+- **B:** the same shorted pigtails vs **SELV GND** (J32 GND pin). **1000 V DC, 60 s, ≥ 100 MΩ.**
+- Record both readings per board serial (docs/split_evidence/ or the build log). **Below 100 MΩ: the board must not be installed live.** Inspect the pigtail jacket in and near the window, then retest.
+- 1000 V DC is well under the ZMCT103C's 4500 V datasheet withstand. Do not use an AC hi-pot on production boards.
+
+**B30-2 Prototype temperature near T1-T4.** ZMCT103C limit **85 °C (185 °F)** (datasheet), lower than the wire's 105 °C (221 °F).
+- In the closed enclosure at the worst ambient case of HEAT_PATH.md (104–122 °F), generator metering live (or 5 A injected on all four CT loops), CM5 at full load: log the board temperature next to each of T1-T4 (thermocouple taped to the board within 5 mm of the CT body) until stable (≥ 1 h).
+- **Pass:** ≤ 158 °F (70 °C) at the CTs, which leaves 27 °F (15 °C) margin to the 185 °F limit. Above that, move the CTs away from the dividers/MOVs or improve the enclosure airflow before release.
+
 ## Sources
 - Texas Instruments SNVSAI1D: LM5176 55-V wide-VIN synchronous 4-switch buck-boost controller datasheet.
 - Infineon BSC070N10NS5 datasheet: OptiMOS 5 100 V N-channel power MOSFET (Q3–Q6).

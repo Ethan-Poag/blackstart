@@ -3855,6 +3855,7 @@
 (property "LCSC" "C2871688" (at 179.07 91.44 0) (effects (font (size 1.27 1.27)) hide))
 (property "MPN" "SN65DSI83ZXHR" (at 179.07 91.44 0) (effects (font (size 1.27 1.27)) hide))
 (property "Manufacturer" "Texas Instruments" (at 179.07 91.44 0) (effects (font (size 1.27 1.27)) hide))
+(property "Sourcing" "STOCK RISK (Batch 30): JLC 81 / LCSC 51 live 2026-11-22 ~12:08 HST; JLC price now 6.46 USD (TI store 2.13 at 1ku). Second source TI store SN65DSI83ZXHR (live 2,123) or Digi-Key/Mouser, consign. No verified drop-in in another package" (at 179.07 91.44 0) (effects (font (size 1.27 1.27)) hide))
 (pin "H3" (uuid "f2f9915f-6a5f-4061-a8df-2f1ccb1c35ca"))
 (pin "J3" (uuid "9c0ccafe-2592-4310-872e-78a93a5d9bc4"))
 (pin "H4" (uuid "8669aa15-b0d5-48a9-b495-fe4d4971329f"))

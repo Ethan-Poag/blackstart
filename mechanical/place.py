@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """Blackstart / genctl scripted placement, v3 (enclosure rev C). KiCad 9 pcbnew API.
 
+RETIRED / HISTORIC (Batch 30, 2026-11-22 HST): this is the pre-split single-board placer. Since the split (09b60d3)
+the HV metering (J28/J29, T1-T4 ZMCT103C, 19.2 mm tall) lives on genctl_meter, and J30 is OFF-BOARD (shorting-type CT
+block in the genset panel). J30 was removed from LEFT below; the CT_AT_BARRIER zone and the left-edge HV rows are
+historic. Do not use for the next layout without rewriting it for two boards (mechanical/LAYOUT_PLAN.md 4a).
+
 Builds a .kicad_pcb from a KiCad netlist (kicad-cli sch export netlist), then
   * outline 284 x 210 (geometry.py), 6 layers + JLC rules
   * FIXED parts: 12 x CTS 228E keys (F), H1-H3 M4 (D4.3, 9 mm pad), H4 D9.5 PE-boss clearance (NPTH),
@@ -60,7 +65,7 @@ TOP_GAPS = ["J24", "J25", "J26", "J27", "J21"]    # outputs + E-stop/D+ (outputs
 BOT_GAPS = ["J17", "J18", "J19", "J20", "J22"]    # analog / MPU / DI (inputs block is the bottom band)
 END_SLOTS = {"J9": ("B", (X0 + 9.5 + 1.0 + (g.BTN_X[0] - g.SW_KO_W / 2)) / 2),     # RS-485, bottom-left end slot
              "J8": ("B", (g.BTN_X[-1] + g.SW_KO_W / 2 + 266.0) / 2)}              # router 12 V, bottom-right end slot
-LEFT = (["J28", "J29", "J30"], HV[1], HV[3])     # 600 V GEN V, BUS V, CT secondaries (treated hot, see notes)
+LEFT = (["J28", "J29"], HV[1], HV[3])     # 600 V GEN V, BUS V (J30 CT header removed Batch 29/30: off-board CT shorting block)
 RIGHT = (["J10", "J11", "J6", "J7", "J23", "J1"], STRAP_KO[3] + 0.4, 179.5 - 0.3)
 
 ZONES = [  # name, bbox, side, explicit ref regexes (first match wins)

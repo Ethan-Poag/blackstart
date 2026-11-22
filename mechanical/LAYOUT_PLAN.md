@@ -60,6 +60,16 @@ The packer is a shelf packer (parts binned by sheet, big parts first), not a rea
 - Shell rib: rev C rib at x = 12.28 with a cross rib at y ≈ 124.7 does **not** match v3: the Phoenix bodies occupy x −3.3…12.8 and J30 runs to y 161.
   Move `BARRIER_X` to ~BOARD_X0 + 18 and the cross rib to y ≈ 163 in `enclosure.py` (not changed here).
 
+## 4a. Next-layout requirements (two boards, collected through Batch 30; layout frozen until the new method is set up)
+- genctl_meter: ZMCT103C footprints (T1-T4, **19.2 mm tall**, window centre 10 mm above the board), no J30 and no CT-loop copper, ISOLATION_CHECK §5c rules. **CT nets (GEN_CTA_1/2 … GEN_CTD_1/2, burden, anti-alias, BAV99s) are hot-island (GND_AC) nets:** ≥ 13 mm to SELV, ≥ 5.5 mm clearance / ≥ 6.3 mm creepage to other 600 V copper.
+- genctl_meter: **GND_AC test pad** (bare pad or a test loop, inside the hot zone, ≥ 13 mm from SELV) for the per-board megger test (BENCH_12V_TEST §B30-1).
+- genctl_meter CT placement (Mechanical ZMCT103C_fit.md): **do not reuse the old T1-T4 positions.** Give each CT a straight corridor of **≈ 30.2 mm** along its window axis (10.2 mm body + 10 mm free wire each side), with **non-plated tie-down points on both sides** (no copper within 1 mm). Allow a pigtail bend radius of **≥ 21.5 mm** (6 × OD 3.58 mm; **35.8 mm** = 10 × OD if the leads will be flexed) after the straight run. Keep the wire off solder joints, pin tips and board edges.
+- genctl_meter: pigtails exit through **one M25 cable gland** near the old J30 left-edge spot, away from the J32/SELV side.
+- Both boards: J31/J32 Molex 43045-1600 2×8 RA, courtyard ≈ 29.2 × 13.7 mm (installed height: take from the Molex drawing). **C74/C75** (upright supercaps, 22 mm) and the **heat-strap boss** stay on the **main** board.
+- genctl_meter: RV1-RV6 spacing; vertical J28/J29; Phoenix 1720819 pad refresh.
+- genctl: R649, the 2010 shunt pads (R137/R148/R159/R170/R181/R192), and every Batch 27-29 part; footprint attribute fix: genctl:FTSH-105-01_SWD (J2) and genctl:ADE9000_LFCSP-40_6x6 (U71/U72, meter) carry `(attr through_hole)` although every pad is SMD. Set `(attr smd)` before the next position/CPL export, or they can drop out of an SMD-only placement file.
+- Optional (if Ethan approves, docs/FW_REQ_BATCH30.md): gate AI_SH_EN1-6 with WD_OK.
+
 ## 5. CM5 thermal strap
 - CM5 at the **top-right, next to H2** (274.56, −9.25). Why H2: H1 is in the 600 V corner, H3 is bottom-left beside the barrier and 70 mm+ from any
   free LV area, H4 is the PE boss (not a heat path through the PCB stack). H2 is in the LV corner nearest the right-edge Ethernet/USB (short MDI/USB runs),

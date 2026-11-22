@@ -1163,3 +1163,29 @@ Checks (kicad-cli 9.0.2):
 - **Netlist diff vs ade499e:** genctl 1138 → 1139 parts (+R649); value/LCSC/MPN/footprint/DNP/Sourcing changes only on the refs above; one net split (VBAT_CELL → VBAT_CELL_R + VBAT_CELL). genctl_meter 221 → 220 (−J30); T1–T4 keep S1/S2 on GEN_CTx_1/2; CTx_S1/S2 and T-NC nets removed.
 - **BOM vs netlist:** 0 mismatches; bom_split crosscheck 0 mismatches (PCB refs 1119 + 218 fitted).
 - **BOARD (out of scope, NOT done):** no meter PCB in the split; frozen mechanical/pcb_v3, pcb_v4 unchanged. Next layout: ZMCT103C footprints, no J30, §5c creepage rules, R649, 2010 shunt pads. mechanical/place.py still lists J30 (legacy).
+
+## Batch 30: pass-4 minor fixes + Safety/Mechanical CT doc inputs (Grok Bot for Ethan, approved 2026-11-22 HST "fix the 4 items and loop in Mechanical and Safety"; PCB not touched; no circuit change)
+Source: SCH_REVIEW_2026-11-22_pass4.md m1-m4; /workspace/review/safety/ZMCT103C_isolation.md (a-h); /workspace/review/mech/ZMCT103C_fit.md (1-3). Evidence: docs/split_evidence/batch30/.
+
+Schematic (metadata/text only; netlist connectivity identical to fa8aced):
+- **Sourcing** field added: J2 (mcu), U15/U16 (comms), U5 (power), U21 (display), RV1-RV6 (ac_metering). Text in docs/split_evidence/batch30/src30.py.
+- ac_metering T1-T4 Description "4.5 kV isolation" → "4500 V isolation withstand (DS bare figure, no conditions)"; T1-T4 Note: only the external 5 A CT loop pigtail passes the window, never a phase/neutral; OD ≈ 3.5-3.65 mm. Sheet text: 4500 V, UL1015 is the rated layer, nothing on the board earthed. genctl.kicad_sym ZMCT103C description likewise.
+
+Docs:
+- FW_REQ_METERING_PRESENCE.md: Ethan's bus-side ruling in FW-MTR-3; open question 1 answered.
+- New FW_REQ_BATCH30.md (FW-WDG-1, FW-AI-3, residual risk, proposed WD_OK gating of AI_SH_EN1-6 - not done). FW_REQ_BATCH29 FW-AI-2 item 5; DESIGN_NOTES Batch 29 m4 sentence corrected (TPS3431 does not reset the MCU); ARCHITECTURE §4 clarification.
+- INSTALL_SAFETY "CT circuits and J30" rewritten; ISOLATION_CHECK §1 row and §5c (4500 V, hot-island CT nets, megger, 185 °F, one-point earth); DESIGN_NOTES Batch 29 B1 wording; BENCH_12V_TEST §B30-1 megger (1000 V DC, 60 s, ≥ 100 MΩ, pigtails vs GND_AC and vs SELV GND, every board) and §B30-2 CT temperature; LAYOUT_PLAN §4a next-layout requirements (GND_AC test pad, 30.2 mm CT corridors, 21.5/35.8 mm bend radius, M25 gland, J31/J32 courtyard, footprint attr fixes).
+- FOOTPRINT_CHECK ZMCT103C row (AC1005 row marked superseded); BOARD_INTERFACE.md/board_interface.json: ZMCT103C 19.2 mm, AC1005 was 23.80 mm (old 12.0 = its 11.12 mm thickness), marked STALE pending the two new outlines.
+- tools/design.py, tools/run.py: retired (exit unless BLACKSTART_LEGACY_REGEN=1); design.py sheet text 12x330k / 3961:1 / ZMCT103C; gen.py retired header, LCSC lookup skips the deleted BOMs; mechanical/place.py retired header, J30 removed from LEFT.
+
+BOMs:
+- bom/lcsc_prices.csv: live re-check 2026-11-22 ~12:08 HST for C5199898 (JLC 93, 1.7294/1.4349), C2653785 (JLC 0), C2870127 (16), C2871688 (JLC 81, **6.4593/5.7607**, was 3.1446/2.7683), C3260792 (25).
+- off_board_external_bom.csv (excluded from totals): V divider/AC1005 rows marked historic; new rows CT pigtail set (ESTIMATE 6.00), M25 CT gland (ESTIMATE 4.00), tie-downs (ESTIMATE), J30 shorting block (site-supplied, not priced).
+- Totals (parts only, USD per board, qty1 / qty10): main **265.95 / 225.54** (was 262.36 / 222.32: **+3.59 / +3.22**, SN65DSI83 JLC price +3.31 and J2 +0.27); meter 63.89 / 53.42 unchanged; harness 2.91 / 1.87.
+- Priced controller BOM /workspace/review/bom_split (bom_b30.py, *.pre_b30.*): controller **$1,763.98 / $1,258.32** per unit (was 1,757.38 / 1,252.11: **+6.60 / +6.21**): +3.60 main parts, +3.00 off-board (the $7 pigtail estimate split into pigtails $6 + M25 gland $4).
+
+Checks (kicad-cli 9.0.2):
+- ERC --severity-all: genctl **0**, genctl_meter **0**.
+- Netlist diff vs fa8aced: 1139 / 220 parts unchanged; only Sourcing (11 refs) and T1-T4 Note properties changed; no net changed.
+- BOM vs netlist: 0 mismatches (tools/bom_from_sch.py); bom_split crosscheck 0 (1119 + 218 fitted refs).
+

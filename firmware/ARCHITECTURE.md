@@ -76,6 +76,7 @@ States: `BOOT → SELFTEST → IDLE → PREHEAT → CRANK → RUN_WARMUP → RUN
 3. **External TPS3431 [S]:**
    - Kicked on PA12 from the same checked-in point, at a different rate than IWDG.
    - Cuts outputs in hardware even if the MCU is held in reset or wedged with its clocks stopped.
+   - It does **not** gate the six 4–20 mA shunt enables (AI_SH_EN1–6 on U31 P06/P07/P10–P13) and does not reset the MCU. See docs/FW_REQ_BATCH30.md FW-WDG-1 / FW-AI-3 (Batch 30).
    - **Test it on the bench** (see the bring-up plan) because the timeout is [U].
 4. **Reset cause:** read RCC_RSR at boot and log it to FRAM. Three watchdog resets within N minutes → stay in FAULT with outputs LOW [I].
 5. **Watchdog latch (2026-10-28, fixes_firmware.md §1; hardware pending):**

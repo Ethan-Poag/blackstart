@@ -101,13 +101,34 @@ cathode to the + (output) side, so the on-board driver is protected from the ind
 switch-off. The small-output drivers have an internal inductive clamp (TPS1HTC30-Q1 datasheet only; TPS48100 inferred), but an external diode
 at the coil keeps that energy off the board and the cable.
 
-## CT circuits and J30 (Batch 29)
-> **WARNING: NEVER OPEN A CT LOOP OR DISCONNECT J30 WITH THE GENERATOR LIVE.** An open 5 A CT secondary under load develops a lethal voltage (kilovolts peak) and can destroy the CT. Before touching the CT wiring, the meter board or the controller: short every CT at the J30 shorting block first (or stop the generator and open the breaker).
+## CT circuits and J30 (Batch 29, install rules Batch 30)
+> **WARNING: NEVER OPEN A CT LOOP OR DISCONNECT J30 WITH THE GENERATOR LIVE.** An open 5 A CT secondary under load develops a lethal voltage (kilovolts peak) and can destroy the CT. Before touching the CT wiring, the meter board or the controller: close the J30 shorting links first (or stop the generator and open the breaker).
 
-- J30 is the CT shorting/test terminal block in the genset panel (site-supplied, as is normal switchgear practice). It is **not** on the controller board any more.
-- Each CT circuit runs as a factory-fitted 600 V pigtail (UL1015, 14 AWG max) through a window CT on the meter board. Land the pigtail ends on J30 so that the external CT's **S1** feeds the pigtail end marked **P1** (the P1* face of T1-T4). Wrong polarity shows as negative power at commissioning (firmware wiring check).
-- Earth the CT secondaries at J30 (S2 side), per local code. Use the shorting links when removing the controller or the meter board.
-- Do not re-thread, cut or extend the pigtails inside the enclosure. Keep them tied down; damaged insulation is the only barrier between the earthed CT loop and the 600 V metering circuit.
+**External CTs are mandatory. Never pass a generator phase or neutral cable through T1-T4.** T1-T4 (ZMCT103C, Ø5 mm window, 15 A linear, no rated primary voltage) accept only the factory-fitted pigtail of an external 5 A CT loop. A phase or neutral conductor through the window would be wrong on size, current and insulation.
+
+**What goes where**
+- A site-supplied external CT (N:5 A) sits on each generator phase and on the neutral. Its 5 A secondary is wired (site wiring, 600 V rated, sized for the CT's VA) to **J30**.
+- **J30 must be a shorting-type CT terminal block** (switchgear CT shorting/test block), site-supplied, in the genset panel. Its links must short the external CT S1-S2 on the **CT side** of the pigtail terminals. J30 is **not** on the controller or meter board.
+- From J30, one factory-fitted pigtail per CT runs into the enclosure, once through its ZMCT103C window on the meter board, and back out to J30. Land the ends so that the external CT's **S1** feeds the pigtail end marked **P1** (the P1* face of T1-T4). Wrong polarity shows as negative power at commissioning (firmware wiring check).
+
+**Pigtail wire rule** (the wire insulation is the rated barrier; the ZMCT103C body adds an unrated layer with a bare 4500 V datasheet withstand figure)
+1. **UL1015, 600 V, 105 °C (221 °F), stranded, 14 AWG max** (OD ≈ 3.5-3.65 mm; fits the Ø5 mm window). Do not substitute thicker-insulated wire without checking the fit.
+2. **One continuous run per CT: J30 → through the window → back to J30.** No splice, lug, crimp, solder joint, heat-shrink joint or nick through the window or within **10 mm** of it. **No bare copper anywhere inside the enclosure.**
+3. Straight pass through the window, no forcing; ≥ 10 mm free length on each side.
+4. **Tie it down on both sides of the window** (non-plated anchors), so a pull on the cable loads neither the CT pins nor the insulation in the bore.
+5. **Keep it off solder joints, pin tips, slot edges and board edges**, and ≥ 3 mm from warm parts (divider chains, MOVs).
+6. **Ferrules on the J30 ends.** A loose strand is an open-CT risk.
+7. Leave the enclosure through the one CT gland/grommet (away from the SELV side), with strain relief.
+8. Do not re-thread, cut or extend the pigtails. If the jacket is damaged anywhere inside the enclosure, replace the pigtail.
+
+**Earthing: one point only**
+- Earth the **external CT secondary S2 at J30, and nowhere else** (not also at the CT itself, not in the enclosure), per local code.
+- **Nothing on the meter board is ever earthed.** The ZMCT103C pins, the burden resistors and everything on GND_AC sit at 600 V-island potential. "CT secondary" in these instructions always means the **external** CT's secondary (S1/S2 at J30), never the ZMCT103C pins.
+
+**Procedure**
+- **Disconnect:** close the J30 shorting links (short every external CT) **before** undoing anything: a pigtail end, the meter board, the controller.
+- **Reconnect:** land and tighten **both** pigtail ends at J30 first, check them, **then** remove the short.
+- Every meter board must have passed the bench megger test (docs/BENCH_12V_TEST.md §B30-1) before it is installed live.
 
 ## Open for installer / Ethan (does not block this document)
 1. Fuel solenoid pull-in current and duration: must be <= 2.8 A (5 A standard (non-time-delay) ATO/ATC, 58 V DC, OptiFuse ANR58-UL-5A or equal); the starter is switched via an interposing relay only.
