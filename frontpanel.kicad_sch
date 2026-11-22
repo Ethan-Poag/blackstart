@@ -2588,7 +2588,7 @@
 (wire (pts (xy 77.47 153.67) (xy 80.01 153.67)) (stroke (width 0) (type default)) (uuid "6e59f7b5-431c-4767-a30c-0398bfdb4f50"))
 (label "BTN12" (at 80.01 153.67 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "fe63234d-45cf-44be-93c4-38c61bb52d06"))
 (global_label "MTR_DET_N" (shape passive) (at 77.47 156.21 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "6c454ca6-044a-4e75-9f99-273fb34cd122") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 77.47 156.21 0) (effects (font (size 1.27 1.27)) hide)))
-(no_connect (at 77.47 158.75) (uuid "29e713ed-61ea-4db8-b802-57c98a6212f8"))
+
 (no_connect (at 77.47 161.29) (uuid "74b8826b-a41b-4b65-8290-ae4ef8cc10a3"))
 (no_connect (at 77.47 163.83) (uuid "9318f9d9-753b-4e20-8445-48b8dd5aaf25"))
 (wire (pts (xy 59.69 69.85) (xy 59.69 67.31)) (stroke (width 0) (type default)) (uuid "b8fe3504-3412-4c3d-85dc-44b54f6a4275"))
@@ -3187,4 +3187,5 @@
 )
 (global_label "WD_OK" (shape passive) (at 60.96 412.75 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "380e7808-5b9f-47d6-8b43-791b0963d090") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 60.96 412.75 0) (effects (font (size 1.27 1.27)) hide)))
 (global_label "WD_OK_MCU" (shape passive) (at 60.96 420.37 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "92cf15eb-f787-49e5-91f3-a4f89724bd3b") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 60.96 420.37 0) (effects (font (size 1.27 1.27)) hide)))
+(global_label "CM5_EEPROM_LOCK_N" (shape passive) (at 77.47 158.75 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "b4126fcc-3811-460a-965e-36da32e2f215") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 77.47 158.75 0) (effects (font (size 1.27 1.27)) hide)))
 )

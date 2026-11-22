@@ -24,7 +24,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 2. **Output readback.** Each readback uses a 100k/10k divider into an MMBT3904, which pulls the expander pin low (inverted logic).
    A plain 100k/10k divider gives only about 1.1 V at 12 V, which is below the expander's VIH, and up to 3.3 V at 36 V.
 3. **Output status LEDs.** The series resistor is now **10k 1206**, not 1k. With 1k the resistor dissipates about 0.5 W at 24 V.
-4. **E-stop hold-up cap.** Changed to **10 µF 50 V 1210**. The BOM part (CL31B106KAHNNNE) is rated 25 V, but VBAT_P can reach the OV trip (now 32.39-35.74 V with R3 9.76k, s3c6f; was 30.3 V at the time of this note).
+4. **E-stop hold-up cap.** Changed to **10 µF 50 V 1210**. The BOM part (CL31B106KAHNNNE) is rated 25 V, but VBAT_P can reach the OV trip (now 36.36-40.11 V with R3 8.66k, Safety H3 / changelog B3-2; was 32.39-35.74 V with 9.76k, and 30.3 V at the time of this note). 50 V is still above 40.11 V.
 5. **4th SN74LVC1G08** gates MCU_TRIP with the watchdog (WDO), so a hung MCU cannot fire the trip.
    - The 555 hardware path still goes straight to the BAT54C OR, as in estop_notes v5.
 6. **Watchdog inverter.** An MMBT3904 drives the LVC541 /OE from WDO. A watchdog fault puts all small-output enables into Hi-Z, and 100k pull-downs turn the outputs off.
@@ -44,12 +44,12 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - CVS: C1 100 nF 0805 100 V from VS (VBAT_DD) to GND (moved from BAT_IN with VS).
 - CAP: C2 100 nF from CAP to VS (now VBAT_DD; *assumed*, typical application).
 - Ladder top R1.1 on **BAT_IN** (2026-10-27 s3c6e, review/s3c6c/divider_check.md: EN/UVLO was fed only from SW, so the EN-gated VSNS–SW switch latched off, TI SNOSD95C p13/p16). SW (U1.4) strapped to VSNS (U1.3), both BAT_IN; OVUV_TOP net removed. Trip points unchanged (R(SW) ≤ 46 Ω); always-on divider drain 44.5 µA at 12 V, 115 µA at 31 V [I]. Was: SW → ladder.
-- 210k / 49.9k / **9.76k** ladder to EN/UVLO and OV (s3c6f 2026-10-27: R3 10k→9.76k; was 191k/45.3k/10k then 210k/49.9k/10k). Max operating battery **31 V**.
+- 210k / 49.9k / **8.66k** ladder to EN/UVLO and OV (Safety H3, commit 4ccfbcf, changelog B3-2: R3 9.76k→8.66k so the board keeps running at 36 V for ≤60 s; earlier 10k→9.76k s3c6f, 191k/45.3k/10k before that). Continuous battery 9-32 V, 36 V for ≤60 s. Re-checked Batch 27 against the schematic (R3 = 8.66k 0603WAF8661T5E C23114).
   - DS (SNOSD95C p5-6): V(OVR) 1.231 V typ (1.195-1.267), V(OVF) 1.13 V; V(UVLOR) 1.231 V, V(UVLOF) 1.132 V.
-  - OV trip (rising) **32.39 / 34.01 / 35.74 V** min/typ/max (1 % R + Vref spread; max incl. 200 nA pin leakage) [I].
-  - OV release (falling) **29.57 / 31.22 / 32.70 V** [I]. OV-min margin vs 31 V = 1.39 V; 0.1 % resistors are an option.
-  - UV rising **5.32 / 5.56 / 5.86 V** [I].
-  - Ladder drain 44.5 µA at 12 V, 115 µA at 31 V [I]. R1 210k = C22952 (extended), R2 49.9k = C23184 (basic), R3 9.76k = 0603WAF9761T5E C23128.
+  - OV trip (rising) **36.35 / 38.18 / 40.10 V** min/typ/max (1 % R + Vref spread; max incl. 200 nA pin leakage) [I, recomputed Batch 27; B3-2 quotes 36.36 / 38.17 / 40.11].
+  - OV release (falling) **33.19 / 35.04 / 36.69 V** [I] (V(OVF) 1.091/1.13/1.159 V). OV-min margin vs the 36 V / 60 s requirement = 0.35 V; 0.1 % resistors are an option.
+  - UV rising **5.40 / 5.65 / 5.90 V** [I].
+  - Ladder drain 44.5 µA at 12 V, 115 µA at 31 V [I]. R1 210k = C22952 (extended), R2 49.9k = C23184 (basic), R3 8.66k = 0603WAF8661T5E C23114.
 - CIN: **C297 220 nF 0805 100 V X7R (YAGEO CC0805KKX7R0BB224, LCSC C513710) BAT_IN→GND** (s3c6i: changed from 100 nF CL21B104KCFNNNE C28233 because X7R 0805 DC-bias loss at 13–31 V may take 100 nF below the 0.1 µF minimum; the C-V curve was not opened, INFERRED; s3c6h; TI SNOSD95C p23 §10.2.3.3 "A minimum input capacitance CIN of 0.1 µF … is recommended", read this pass). F.Cu at (249.6, 137.0), GND pad on the existing C1/U1.7 GND trace and via (249.8,139.5); about 9 mm from U1.2/U1.3.
 - Check the 5.5 V UV against cold-crank requirements.
 
@@ -66,7 +66,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 **+5V (TPS56637)**
 - FB 75k/10k → 5.1 V. EN 100k/27k.
 - MODE resistor 100k is TBD per the datasheet table.
-- SMBJ5.0A on the rail.
+- SMBJ6.0A on the rail (Batch 27; was SMBJ5.0A, whose 5.0 V VRWM sat below the 5.10-5.18 V rail). MDD C113976.
 
 **+3V3 (TPS56637, Rev B)**
 - Second TPS56637RPAR (6 A part) from +12V. Per DS Table 4 for 3.3 V: FB 45.3k/10k (3.32 V), L 2.2 µH (Sunlord MWSA0503S-2R2MT, Isat 7 A) [SUPERSEDED: L3 is now 3.3 µH MWSA1004S-3R3MT C408483, a deviation from TI Table 4 (p19, 2.2 µH); bench load-step 0.5-3 A at 9/12/32 V in required; fallback 2.2 µH same footprint], 3x22 µF out, 2x10 µF in, feed-forward 150 pF + 20k (check the topology against the DS figure). EN 100k/27k, MODE 100k (placeholder, same as the 5V rail).
@@ -154,7 +154,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 **Unused pins**
 - SD, HDMI, PCIe and MIPI1 are NC.
 - CC1/CC2 are NC.
-- Also NC: SCL0/SDA0, PMIC_Enable, WL/BT_nDisable, CAM_GPIO, EEPROM_nWP.
+- Also NC: SCL0/SDA0, WL/BT_nDisable, CAM_GPIO. (Stale: PMIC_Enable is driven, see the CM5 table. EEPROM_nWP: Batch 27, Q74 open-collector controlled by U73 P15; R558 0R to GND is DNP.)
 
 **Open questions**
 - Is VBUS sensing needed on the USB-C service port for rpiboot? USB_OTG_ID is left NC.
@@ -168,7 +168,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - Shield → CHASSIS through 1M ∥ 4.7 nF (2 kV).
 
 **RS-485**
-- CA-IS2092W powered from +3V3. SEL tied to VISO (5 V bus side, *assumed*). RE# tied to GND (always receiving). DE has a 10k pull-down.
+- CA-IS2092W powered from +3V3. SEL tied to GNDB, so VISO = 3.3 V (netlist; with VCC = 3.3 V the DS allows only SEL low/floating). VISO: C100 100n + C101 47u 1210 (Batch 27; was 10u 0805, DS v1.07 p4 asks for >=10 uF after DC bias). RE# tied to GND (always receiving). DE has a 10k pull-down.
 - SM712 protection.
 
 **Expansion 12V**
@@ -249,10 +249,13 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 
 **MPU (magnetic pickup)**
 - SMBJ58CA, 10k series, 1M bias to VMID, 1 nF differential, BAV99 clamps.
-- LM393 A has 10k/1M hysteresis → MPU_SPEED. LM393 B compares against VMID → MPU_GATE.
+- U35 **TLV1812DR** (Batch 27; was LM393, whose common-mode range at 3.3 V ends at 1.3-1.8 V, below the 1.65 V bias; LM393DR2G was also only 0-70 C). Rail-to-rail input, push-pull, 2.4-40 V, -40-125 C, same SOIC-8 pinout. A has 10k/1M hysteresis → MPU_SPEED. B compares against VMID → MPU_GATE. R259/R260 2.2k pull-ups DNP (footprints kept for an open-drain TLV1822).
+- VMID buffer U25A: R638 100R in series with C129 1u (Batch 27). TLV906x drives 100 pF directly; the resistive loads stay on the feedback node, so no DC offset.
 
 **D+ excitation and sense**
-- Excitation: SI2309 switch → LM317M current source (10R, 125 mA) → SS110 → D+.
+- Excitation: SI2309 switch → R639||R640 (2x 100R 1 W 2512 = 50R, Batch 27) → LM317M current source (10R, 125 mA) → SS110 → D+.
+  - Loss if the alternator never excites: about (VBAT − 2.5 V) × 0.125 A. The 50R takes 0.78 W of it: U36 sees 0.66 W at 14 V, 2.4 W at 28 V, 2.9 W at 32 V (was 1.44 / 3.19 / 3.69 W; load side taken as 2.5 V = 1.25 V field+SS110 + 1.25 V across R265). Full 125 mA down to about 10.8 V battery.
+  - U36 still relies on its internal thermal limit at 24 V. Firmware must drop excitation (and raise charge-fail) if D+ is not up within 30 s of crank.
 - Sense: 100k/10k → PA2.
 
 **VBAT sense**
@@ -416,7 +419,7 @@ plug WJ15EDGK-3.81-02P (C8466), same 3.81 family as CAN/RS-485/expansion (polari
 | BOOT0 | GPIO27 CM5_BOOT0 | BOOT0 | 1k series; existing 10k pull-down -> 3.0 V when CM5 drives high, 0 V when CM5 off/Hi-Z |
 | NRST | GPIO22 CM5_NRST | NRST | 10k -> MMBT3904 base (100k pull-down), collector on NRST (open-drain; cannot back-power) |
 | Heartbeat | GPIO26 CM5_HB | PC2_C (was MCU_SPARE1; Header B pin 3 now NC) | 1k series, 100k pull-down at MCU |
-| Power-fail warning | GPIO17 CM5_PWR_FAIL (in) | TCA9555 @0x25 P07 PWR_FAIL_MCU (INT) | TPS2121 ST -> two NPN inverters, pull-ups to CM5_3V3 / +3V3_SAFE; high = on hold-up |
+| Power-fail warning | GPIO17 CM5_PWR_FAIL (in) | TCA9555 @0x25 P07 PWR_FAIL_MCU (INT) | TPS2121 ST (open-drain; Batch 27 adds R637 10k pull-up to +5V_CM5) -> two NPN inverters, pull-ups to CM5_3V3 / +3V3_SAFE; high = on hold-up |
 | Hard power-off | PMIC_Enable (pin 99, int. 100k to 5V) | TCA9555 @0x25 P05 CM5_OFF | 10k -> NPN o/c; Hi-Z = CM5 on |
 | Power button | PWR_Button (pin 92) | TCA9555 @0x25 P06 CM5_PWRBTN_MCU | 10k -> NPN o/c (in parallel with SW) |
 SWD header kept; JP1 reduced to CM5 SWD (pins 5-8 NC). Touch power TPS22918 now shares PANEL_VDD_EN (frees GPIO17).
@@ -463,7 +466,7 @@ J6B = AUX7-10 + 2 GND, J5B = 6 GND (was 4 + 2 NC): output pins 16 (+ fuel/crank 
 - Hold-up: 2x HV1030 10F/2.7V (65 C, not JLC) -> 2x JIERONG JRCD3R0206N120030E 20F/3.0V, 85 C 1000 h, LCSC C7471020 (JLC stock 4176). Series = 10 F at 4.9 V (2.45 V/cell, under 3.0 V rating; check 85 C derating). Usable energy 0.5*10*(4.9^2-2.7^2) = 83.6 J, x0.88 boost eff = 73.6 J -> ~16 s at 4.5 W, ~13 s at -20% C. Charge via 50R: tau = 500 s (~25 min to full; first-boot shutdown time is shorter). Footprint CP_Radial_D12.5mm_P5.00mm - verify lead pitch.
 - BOOT0: DI3-6 (PE11-14 = SPI4 bootloader) and DI8-11 (PB10/11 USART3, PB14/15 USART1-alt; bootloader v9.1 echoes TX on PB14) now go through 1k series R (nets DIx_N_M) so a pin the bootloader drives can only fight the 74HC14 at <=3.3 mA. Firmware/CM5: send 0x7F straight after reset-into-bootloader, check ACK, retry with NRST. No free pins to move the DIs.
 - STM32 hold-up: not added. SAFE rail runs to ~5.1 V input (LM74800 UV) so it rides cranking; below that the outputs drop and fuel de-energizes (fail-safe). Use BOR + FRAM state save. Option if wanted later: feed the SAFE LDO from the held-up rail.
-- Internal USB headers: each fed from its own TPS2553DBVR (C55266), ILIM 40.2k = ~0.68 A nominal, EN from TCA9555 @0x25 P13/P14 with 100k pull-up to +3V3_SAFE (on by default), FAULT wired to OUT_FAULT_N, 1u in / 10u out. USBLC6 VBUS pin moved to the switched rail.
+- Internal USB headers: each fed from its own TPS2553DBVR (C55266), ILIM 49.9k = ~0.52 A nominal (B3-5; DS eq. 23950/R^0.977), EN from TCA9555 @0x25 P13/P14 with 100k pull-up to +3V3_SAFE (on by default), FAULT wired to OUT_FAULT_N, 1u in / 10u out. USBLC6 VBUS pin moved to the switched rail.
 - Netlist changes are intentional; tools/netcompare_sig.py (refdes-independent) shows only these parts changed.
 
 ## Rev 2026-10-25 (i) - SN65DSI83 REFCLK oscillator fitted (SUPERSEDED by Rev (j): Y4 back to DNP, R113 restored)

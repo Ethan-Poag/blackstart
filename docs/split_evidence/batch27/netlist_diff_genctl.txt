@@ -1,0 +1,48 @@
+parts 1118 -> 1127
+ADDED Q73 MMBT3904 Package_TO_SOT_SMD:SOT-23 C20526
+ADDED Q74 MMBT3904 Package_TO_SOT_SMD:SOT-23 C20526
+ADDED R637 10k Resistor_SMD:R_0603_1608Metric C98220
+ADDED R638 100R Resistor_SMD:R_0603_1608Metric C22775
+ADDED R639 100R Resistor_SMD:R_2512_6332Metric C35218
+ADDED R640 100R Resistor_SMD:R_2512_6332Metric C35218
+ADDED R641 10k Resistor_SMD:R_0603_1608Metric C98220
+ADDED R642 100k Resistor_SMD:R_0603_1608Metric C25803
+ADDED R643 100k Resistor_SMD:R_0603_1608Metric C25803
+CHG C101 value 10u -> 47u
+CHG C101 fp Capacitor_SMD:C_0805_2012Metric -> Capacitor_SMD:C_1210_3225Metric
+PROP C101 LCSC 'C15850' -> 'C2932477'
+PROP C101 MPN 'CL21A106KAYNNNE' -> 'CL32A476KOJNNNE'
+PROP C101 Note None -> 'Batch 27: 10u -> 47u (CA-IS2092W VISO recommendation, same part as C85/C91)'
+CHG D5 value SMBJ5.0A -> SMBJ6.0A
+PROP D5 LCSC 'C78423' -> 'C113976'
+PROP D5 MPN 'SMBJ5.0A' -> 'SMBJ6.0A'
+PROP D5 Manufacturer 'Brightking' -> 'MDD(Microdiode Semiconductor)'
+PROP D5 Note 'unidirectional TVS' -> 'unidirectional TVS; Batch 27: was SMBJ5.0A (VRWM 5.0 V < 5.10-5.18 V rail). VRW
+PROP R259 Note None -> 'DNP (Batch 27): U35 TLV1812 is push-pull; footprint kept for an open-drain TLV1
+PROP R260 Note None -> 'DNP (Batch 27): U35 TLV1812 is push-pull; footprint kept for an open-drain TLV1
+PROP R558 Note 'FITTED: CM5 EEPROM_nWP to GND = write-protected in service; lift for bench boot -> 'DNP (Batch 27): fit only for a permanently write-protected build. Default: nWP 
+CHG U35 value LM393 -> TLV1812
+PROP U35 LCSC 'C7955' -> 'C6333176'
+PROP U35 MPN 'LM393DR2G' -> 'TLV1812DR'
+PROP U35 Manufacturer 'onsemi' -> 'Texas Instruments'
+PROP U35 Note None -> 'Batch 27: was LM393 (VICR VCC-1.5/-2.0 V < 1.65 V VMID bias at 3.3 V; 0-70 C pa
+NET A +3V3_SAFE not identical in B -> B nets ['+3V3_SAFE']
+NET A +5V_CM5 not identical in B -> B nets ['+5V_CM5']
+NET A DPX_VI not identical in B -> B nets ['DPX_LDO_IN', 'DPX_VI']
+NET A VMID not identical in B -> B nets ['VMID', 'VMID_C']
+NET A CM5_EEPROM_NWP not identical in B -> B nets ['CM5_EEPROM_NWP']
+NET A GND not identical in B -> B nets ['GND']
+NET A Net-(U12-ST) not identical in B -> B nets ['HU_ST']
+NET A unconnected-(U73-P15-Pad18) not identical in B -> B nets ['CM5_EEPROM_LOCK_N']
+NET B +3V3_SAFE 145 nodes from A nets ['+3V3_SAFE', '<new>'] | B nodes: 145
+NET B +5V_CM5 13 nodes from A nets ['+5V_CM5', '<new>'] | B nodes: 13
+NET B DPX_LDO_IN 4 nodes from A nets ['DPX_VI', '<new>'] | B nodes: [('C188', '1'), ('R639', '2'), ('R640', '2'), ('U36', '3')]
+NET B DPX_VI 3 nodes from A nets ['DPX_VI', '<new>'] | B nodes: [('Q42', '3'), ('R639', '1'), ('R640', '1')]
+NET B VMID 14 nodes from A nets ['VMID', '<new>'] | B nodes: 14
+NET B VMID_C 2 nodes from A nets ['VMID', '<new>'] | B nodes: [('C129', '1'), ('R638', '2')]
+NET B CM5_EEPROM_NWP 3 nodes from A nets ['CM5_EEPROM_NWP', '<new>'] | B nodes: [('Q74', '3'), ('R558', '1'), ('U9', '20')]
+NET B HU_ST 4 nodes from A nets ['<new>', 'Net-(U12-ST)'] | B nodes: [('R637', '2'), ('R70', '1'), ('R72', '1'), ('U12', '9')]
+NET B WP_QB1 3 nodes from A nets ['<new>'] | B nodes: [('Q73', '1'), ('R641', '2'), ('R642', '1')]
+NET B WP_QB2 3 nodes from A nets ['<new>'] | B nodes: [('Q73', '3'), ('Q74', '1'), ('R643', '2')]
+NET B CM5_EEPROM_LOCK_N 2 nodes from A nets ['<new>', 'unconnected-(U73-P15-Pad18)'] | B nodes: [('R641', '1'), ('U73', '18')]
+NET B GND 898 nodes from A nets ['<new>', 'GND'] | B nodes: 898

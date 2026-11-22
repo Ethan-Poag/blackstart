@@ -21,7 +21,7 @@ Generated 2026-10-25 from the KiCad schematic. No schematic or PCB file was edit
 | FDCAN1 | PD0 RX, PD1 TX (AF9) | CA-IS3062W U13 | ✔ |
 | FDCAN2 | PB12 RX, PB13 TX (AF9) | CA-IS3062W U14 | TX ✔; RX partial (PDF cell is split across a page) |
 | I2C1 | PB8 SCL, PB9 SDA (AF4), 2.2k pull-ups. PE7 I2C_INT_N | 6× TCA9555 (0x20–0x25), 2× ADS1115, FM24CL64B FRAM, header J3 | ✔ |
-| Timers | PA15 MPU_SPEED = TIM2_CH1 (AF1). PB3 BUZZER = TIM2_CH2 (AF1). PC7 MPU_GATE can be TIM3_CH2 (AF2) or GPIO | LM393 U35, buzzer NPN Q69 | ✔. TIM2 CH1 capture and CH2 PWM share one timer, so TIM2 needs a common timebase [I] |
+| Timers | PA15 MPU_SPEED = TIM2_CH1 (AF1). PB3 BUZZER = TIM2_CH2 (AF1). PC7 MPU_GATE can be TIM3_CH2 (AF2) or GPIO | TLV1812 U35 (push-pull, Batch 27; was LM393), buzzer NPN Q69 | ✔. TIM2 CH1 capture and CH2 PWM share one timer, so TIM2 needs a common timebase [I] |
 | ADC | PA0 VBAT, PA1 VESTOP, PA2 D+, PA3 FUEL_ISNS, PB1 CRANK_ISNS, PC0 MUXA, PC1 MUXB | dividers (100k/10k), INA281, TMUX1208 | channels per Table 9 ✔ |
 | SWD | PA13 SWDIO, PA14 SWCLK (AF0), NRST | J2 10-pin SWD, JP1 (CM5 SWD, optional) | ✔ |
 | Clocks | PH0/PH1 HSE 25 MHz (Y1, 18p). PC14/PC15 LSE 32.768k (Y2, 18p) | — | HSE 4–48 MHz range per DS p.1 ✔ |
@@ -88,7 +88,7 @@ Power pins are omitted here; see the CSV. VDD/VREF+ = +3V3_SAFE, VDDA through FB
 | 61 | PD14 | ESTOP_DIG | U34.6[74HC14] | ESTOP_DIG in (VBAT_ESTOP via HC14) | in | GPIO | FT_h |  |
 | 62 | PD15 | DPLUS_DIG | U34.4[74HC14] | DPLUS_DIG in | in | GPIO | FT_h |  |
 | 63 | PC6 | ESTOP2_DIG | U34.2[74HC14] | ESTOP2_DIG in (NC2 sense) | in | GPIO | FT_h |  |
-| 64 | PC7 | MPU_GATE | R260[2.2k]->+3V3_SAFE: (rail) | MPU_GATE in (LM393 B) | in | AF2 ✔ | FT_h |  |
+| 64 | PC7 | MPU_GATE | R260[2.2k, DNP Batch 27]->+3V3_SAFE: (rail) | MPU_GATE in (TLV1812 B, push-pull) | in | AF2 ✔ | FT_h |  |
 | 65 | PC8 | DPLUS_EXC_EN | R263[10k]->DPX_NB: Q43.1(B)[MMBT3904] R264.1[100k] | DPLUS_EXC_EN out (NPN) | out | GPIO | FT_h |  |
 | 66 | PC9 | GCB_CL_MCU | U41.2(A1)[SN74LVC541APWR] | GCB close enable -> U41 | out | GPIO | FT_fh |  |
 | 67 | PA8 | DIAG_EN | U47.3(DIAG_EN)[TPS1HTC30QPWPRQ1] U48.3(DIAG_EN)[TPS1HTC30QPWPRQ1] U49.3(DIAG_EN)[TPS1HTC30QPWPRQ1] U50.3(DIAG_ | DIAG_EN out to 13x TPS1HTC30 | out | GPIO | FT_h? |  |
@@ -98,7 +98,7 @@ Power pins are omitted here; see the CSV. VDD/VREF+ = +3V3_SAFE, VDDA through FB
 | 71 | PA12 | WDI | U37.6(WDI)[TPS3431SQDRBRQ1] | WDI kick -> TPS3431 | out | GPIO | FT_u |  |
 | 72 | PA13 | SWDIO | J2.2(SWDIO/TMS)[SWD] JP1.2(Pin_2)[JP1 CM5->MCU SWD (opt)] | SWDIO | bidir | AF0 ✔ | FT? (not parsed) |  |
 | 76 | PA14 | SWCLK | J2.4(SWCLK/TCK)[SWD] JP1.4(Pin_4)[JP1 CM5->MCU SWD (opt)] | SWCLK | in | AF0 ✔ | FT? (not parsed) |  |
-| 77 | PA15 | MPU_SPEED | R258[1M]->MPU_PH: R257.2[10k] U35.3(+)[LM393] / R259[2.2k]->+3V3_SAFE: (rail) | MPU_SPEED in (TIM2_CH1 capture) | in | AF1 ✔ | FT? (not parsed) |  |
+| 77 | PA15 | MPU_SPEED | R258[1M]->MPU_PH: R257.2[10k] U35.3(+)[TLV1812] / R259[2.2k, DNP Batch 27]->+3V3_SAFE: (rail) | MPU_SPEED in (TIM2_CH1 capture) | in | AF1 ✔ | FT? (not parsed) |  |
 | 78 | PC10 | GCB_OP_MCU | U41.3(A2)[SN74LVC541APWR] | GCB open enable -> U41 | out | GPIO | FT_ha |  |
 | 79 | PC11 | MCB_CL_MCU | U41.4(A3)[SN74LVC541APWR] | MCB close enable | out | GPIO | FT_h |  |
 | 80 | PC12 | MCB_OP_MCU | U41.5(A4)[SN74LVC541APWR] | MCB open enable | out | GPIO | FT_h |  |

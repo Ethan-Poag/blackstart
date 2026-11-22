@@ -1031,3 +1031,44 @@ Checks (kicad-cli 9.0.2):
   - New net: spare pin 16 (J31.16/J32.16, NC). Script: /workspace/review/split/exec/eq.py.
 - BOARD (out of scope): the frozen .kicad_pcb is unchanged and is still the one-board layout. Layout must be reopened as two boards (main with notch, daughter ~82x167 mm 4-layer). J28/J29 still carry the horizontal 1720819 footprint (vertical rear-entry footprints still to be made, as before).
 - Not updated on this branch: the per-category bom/*.csv and docs/genctl_bom.csv. The split BOM is in /workspace/review/bom_split. tools/ scripts still assume the single genctl project.
+
+## Batch 27: schematic review fixes (SCH_REVIEW_2026-11-21), main board genctl only (Grok Bot for Ethan, approved 2026-11-22 6:44 AM HST; PCB not touched)
+Source: /workspace/review/sch_review/SCH_REVIEW_2026-11-21.md. Edit script and evidence: docs/split_evidence/batch27/. The daughter (genctl_meter) is unchanged.
+
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| R637 (cm5) | — | 10k 0603 RC0603FR-0710KL C98220, U12 ST (net HU_ST, was Net-(U12-ST)) to +5V_CM5 | ST is open-drain with no pull-up, so Q10/Q11 never turned on and CM5_PWR_FAIL / PWR_FAIL_MCU read "on hold-up" all the time (CM5 shutdown/reboot loop per DESIGN_NOTES hold-up). Pull-up goes to +5V_CM5 (U12 OUT, ≤5.18 V < V_ST 5.5 V rec / 6 V abs). CM5_3V3 was rejected: it is off while the MCU holds the CM5 off, which would fake a power-fail on PWR_FAIL_MCU. Base drive with 10k: ~0.14 mA per NPN | TI SLVSEA3F Fig 9-2 (p12, NMOS open drain), §8.3 RST 6-20 kΩ, §9.4 "ST is pulled high when the output is Hi-Z or IN1" |
+| U35 (inputs) | LM393 LM393DR2G onsemi C7955 (Basic) | **TLV1812** TLV1812DR TI C6333176 (Extended), same SOIC-8 footprint and pinout | LM393 VICR is 0 to VCC−1.5 V (25 °C) / VCC−2.0 V (full temp), i.e. 1.8 / 1.3 V at 3.3 V, but both comparators are biased at VMID 1.65 V. LM393DR2G is also a 0-70 °C part. TLV1812: VCM (V−)−0.2 to (V+)+0.2 V, 2.4-40 V, −40-125 °C, 420 ns, push-pull. Chosen over 5 V supply (keeps U35 on the SAFE rail, and the MCU inputs are never driven above 3.3 V), over the open-drain TLV1822DR (C6881371, 0 stock), and over TLV7032 (no SOIC-8) | onsemi LM393 DS VICR notes; TI SNOSDC8E §5.1, §5.7, p4 pin table |
+| R259, R260 (inputs) | 2.2k fitted, MPU_SPEED / MPU_GATE pull-ups to +3V3_SAFE | **DNP**, footprints kept | push-pull output; the footprints allow an open-drain TLV1822 alternate | — |
+| R638 (inputs) | — | 100R 0603 0603WAF1000T5E C22775 (Basic), VMID to VMID_C; C129 1u moved to VMID_C | U25A TLV9062 output drove 1 µF directly (rated 100 pF cap load). The resistor sits only in series with the cap, so the DC loads (8× 18k, 2× 1M) stay on the feedback node and VMID has no offset | TI SBOS839N p1 "capacitive load drive ... 100 pF", Fig 6-33 |
+| R639, R640 (inputs) | — | 2× 100R 1 W 2512 25121WF1000T4E C35218 (Extended) in parallel (50R), Q42 drain (DPX_VI) to U36 VI + C188 (new net DPX_LDO_IN); PWR_FLAG #FLG0018 moved to DPX_LDO_IN | U36 LM317M D+ source (125 mA) dissipated (VBAT−2.5 V)×0.125 A if the alternator never excites: 3.19 W at 28 V, 3.69 W at 32 V. The 50R takes 0.78 W (0.39 W per 1 W resistor): U36 is now 2.41 / 2.91 W. Full 125 mA holds down to about 10.8 V battery (12 V systems). The residual at 24 V still needs the firmware time limit (docs/FW_REQ_BATCH27.md §2) and the LM317's internal thermal limit | INFERRED arithmetic; LM317M DS thermal limit |
+| C101 (comms) | 10u 0805 CL21A106KAYNNNE C15850 | **47u 1210 16 V X5R CL32A476KOJNNNE C2932477** (same part as C85/C91); footprint C_0805 → C_1210 | U17 CA-IS2092W VISO bulk. DS v1.07 p4 asks for 0.1 µF + "at least 10 µF". A 10 µF 0805 X5R falls below 10 µF under DC bias, and the 2020 objective DS (Fig 10-9) uses 47 µF. Correction to the review: the "47 µF recommended" wording overstated it; the requirement is ≥10 µF effective | Chipanalog CA-IS2092W DS v1.07 p4 pin table; objective DS p15 Fig 10-9 |
+| D5 (power) | SMBJ5.0A Brightking C78423 | **SMBJ6.0A MDD C113976** (Extended, same D_SMB footprint) | +5V is 5.10 V nominal / 5.18 V max, above the 5.0 V VRWM, so leakage rises. SMBJ6.0A: VRWM 6.0 V, VBR 6.67 V min, VC 10.3 V @ 58.3 A | JLC/LCSC listing C113976 |
+| R558 (cm5) | 0R fitted, EEPROM_nWP to GND (permanently write-protected) | **DNP** (kept for a permanently locked build) | Ethan: the boot EEPROM must be updatable. CM5 DS: EEPROM_nWP "Leave floating, internally pulled up to CM5_3.3V through 100 kΩ ... can be grounded to prevent writing"; "must be low before power-up" to protect | RPi CM5 datasheet pin table (pin 20), §2.12.2, §3.1 |
+| Q73, Q74 MMBT3904 C20526; R641 10k C98220; R642, R643 100k C25803 (cm5) | — | U73 P15 (CM5_EEPROM_LOCK_N, global) → R641 → Q73 base (R642 to GND); Q73 collector = Q74 base (R643 100k to +3V3_SAFE); Q74 collector on CM5_EEPROM_NWP | Software-switchable lock. The TCA9555 powers up as an input with its 100k pull-up, which turns Q73 on and Q74 off, so the default is writable. P15 output low locks the EEPROM. Q74 is open-collector: it never drives the CM5 pin high or back-powers it | TI TCA9555 DS §5 (internal I/O pull-up), 100 kΩ |
+| U73 P15 pin 18 (frontpanel) | no-connect | global label CM5_EEPROM_LOCK_N | last-but-two spare pin on U73 (P16/P17 still spare) | — |
+| Sheet texts | INPUTS note "LM393 ... LM317 125mA source" | TLV1812 / 50R pre-drop; Batch 27 notes added on CM5 and INPUTS sheets | — | — |
+
+Docs:
+- **DESIGN_NOTES.md:**
+  - R3 corrected to 8.66k with recomputed OV figures: 36.35 / 38.18 / 40.10 V rise and 33.19 / 35.04 / 36.69 V fall, UV 5.40 / 5.65 / 5.90 V. **8.66k is the right value**: it is the deliberate Safety H3 change (commit 4ccfbcf, B3-2) so the board runs at 36 V for 60 s. The schematic, BOM (bom/power_bom.csv) and tools/design.py all say 8.66k; only DESIGN_NOTES l.27/47/49/52 still said 9.76k.
+  - Also updated: TVS, MPU, VMID, D+, RS-485 SEL (was "SEL tied to VISO, assumed"; the netlist has SEL to GNDB, so 3.3 V), TPS2553 limit (0.68 A → 0.52 A at 49.9k), power-fail row, CM5 NC list.
+- **docs/RAIL_PLAN.md:** +5V_TRIP dissipation at the 40.11 V OV max; TPS2553 figure noted as conservative.
+- **firmware/docs/pinmap.md:** U35 is now TLV1812; R259/R260 are DNP.
+- **New docs/FW_REQ_BATCH27.md:** EEPROM lock sequence, D+ 30 s limit, PWR_FAIL polarity and debounce, push-pull MPU inputs.
+
+Checks (kicad-cli 9.0.2):
+- **ERC --severity-all:** genctl **0**, genctl_meter **0**. The first pass had 1 error (U36 VI power pin not driven after the split) and was fixed by moving #FLG0018.
+- **Netlist diff vs 09b60d3** (docs/split_evidence/batch27/netlist_diff_*.txt):
+  - Parts: 1118 → 1127 (+R637-R643, Q73, Q74). Daughter is identical (221).
+  - Changed parts: U35, C101 (value and footprint), D5 (values/MPN/LCSC); R558, R259, R260 DNP.
+  - Changed nets, and only these:
+    - +3V3_SAFE +R643.1; +5V_CM5 +R637.1; GND +Q73.2/Q74.2/R642.2.
+    - Net-(U12-ST) → HU_ST (+R637.2).
+    - DPX_VI split into DPX_VI (Q42.3, R639/R640.1) and DPX_LDO_IN (U36.3, C188.1, R639/R640.2).
+    - VMID loses C129.1 → VMID_C (C129.1, R638.2), and gains R638.1.
+    - CM5_EEPROM_NWP +Q74.3; unconnected-(U73-P15) → CM5_EEPROM_LOCK_N (+R641.1).
+    - New nets WP_QB1 and WP_QB2.
+  - No other net changed.
+- **BOM:** /workspace/review/bom_split/BOM_main.csv rebuilt by bom_b27.py (pre-batch copies *.pre_b27.*). The BOM ref set equals the netlist ref set (DNP excluded). totals.json main board +$7.48 qty1 / +$1.62 per board at qty10 (parts +$1.34 / +$1.01; +2 unique extended parts × $3.07 loading fee = +$6.14 / +$0.61).
+- **BOARD (out of scope, NOT done):** the frozen .kicad_pcb (md5 49a6a6a78d3982dc24093687e5e54c0c, unchanged) lacks R637-R643, Q73, Q74. C101 needs a 1210 pad; C129 and U36 VI connectivity changed. Layout must be refreshed at the next board spin, which is already required for the split.

@@ -150,7 +150,7 @@ Labels: **DERIVED** means datasheet, BOM or design note plus arithmetic, with th
 
 **+5V (U3).** Each item is the protected limit of its branch.
 - U12 → CM5: ≤3.76 A, the DERIVED ILM. The CM5 itself draws 0.9 A typical operating and 0.4 A idle [cm5 Table 9, l.1508]. It is specified up to 5 A at 5 V [cm5 l.253]. Peak is FW-Q2.
-- U18/U19 TPS2553 USB headers: 2 × 0.71 A = 1.42 A (DERIVED, 40.2k) [current_budget, tps2553 p15].
+- U18/U19 TPS2553 USB headers: 2 × 0.71 A = 1.42 A (DERIVED at the old 40.2k; kept as a conservative copper figure. Since B3-5 RILIM is 49.9k, about 0.52 A nominal each) [current_budget, tps2553 p15].
 - Button backlight through Q68: 0.306 A [DN:327] (DERIVED: 36 × 8.5 mA).
 - 2× CA-IS3062W: 2 × 29 mA max = 0.06 A [ca-is3062w l.385–391].
 - Supercap charge through D11/50R: ≤0.092 A [DN:425].
@@ -163,8 +163,8 @@ Labels: **DERIVED** means datasheet, BOM or design note plus arithmetic, with th
 - +5V_HU: ~1.5 A out [DN:429] → 0.52 mm.
   - The supercap side, Net-(U11-EN)/HU_SW, carries up to the switch valley limit of 3.7 A typ plus ripple (DERIVED) → ≥1.9 mm outer.
 - +5V_TRIP: TLC555 plus R402 10k / R404 2.0M (Batch 18) gives ASSUMED ≤5 mA.
-  - Dissipation at the 35.74 V OV max: (35.74 − 5) V × 5 mA = 0.154 W.
-  - Rise at 210.4 °C/W: 32 °C, i.e. 58 °F. OK against the 150 mA rating.
+  - Dissipation at the 40.11 V OV max (R3 8.66k, B3-2; Batch 27 doc fix, was 35.74 V): (40.11 − 5) V × 5 mA = 0.176 W.
+  - Rise at 210.4 °C/W: 37 °C, i.e. a 67 °F rise. OK against the 150 mA rating.
   - Copper 0.15 mm is fine.
 - +1V8_DSI: 0.12 A (above) → 0.15 mm outer OK. The current 24-island state is a connection fault, not a capacity issue.
 
