@@ -175,9 +175,11 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - TPS1H200A, CL = 1.33k (about 1.5 A). DELAY is NC (assumed auto-retry). FAULT goes to OUT_FAULT_N.
 
 **Ethernet (gigabit, Rev B)**
-- HanRun **HR911131A** (LCSC C5184934). The datasheet states "Meets or Exceeds IEEE802.3ab standards for 1000Base-T", 4x 1CT:1CT, 1500 Vrms.
-- Pin map from the DS schematic: P1/P2 = MDI0 (J1/J2), P3/P4 = MDI1 (J3/J6), P7/P8 = MDI2 (J4/J5), P9/P10 = MDI3 (J7/J8). Centre taps are common on P5/P6. Green LED 11(A)/12(K), yellow LED 14(A)/13(K). P/N polarity within a pair was read from the drawing; the BCM54210PE corrects polarity automatically anyway.
-- Centre taps: AC-decoupled only (100 nF + 10 nF to GND; voltage-mode PHY, no CT bias). LEDs: 330R from CM5_3V3 to the anode, cathode to Ethernet_nLED2/3.
+- HanRun **HR963380AE** (LCSC C19724763), J10: RJ45 with integrated magnetics and LEDs. (Earlier revisions used the HR911131A; these notes previously described that part.)
+- Pin map: P1/P2 = MDI0, P3/P4 = MDI1, P7/P8 = MDI2, P9/P10 = MDI3. Centre taps are common on P5/P6. P/N polarity within a pair was read from the drawing, and the PHY corrects pair polarity automatically anyway.
+- LEDs, from the HR963380AE DS p1 schematic: orange LED anode 12 / cathode 11; green LED anode 14 / cathode 13. The pin numbers were reversed before Batch 27a (11/13 were taken as anodes), so both LEDs were reverse-biased.
+- Centre taps: AC-decoupled only (100 nF + 10 nF to GND). This is a voltage-mode PHY, so there is no CT bias.
+- LED drive: each anode (12, 14) goes through a 330R (R106, R105) to CM5_3V3. Each cathode goes to an active-low CM5 LED output: 11 to ETH_LED_ACT_N (nLED3), 13 to ETH_LED_LINK_N (nLED2).
 - 2x RClamp0524P cover all 4 pairs. Shield → CHASSIS. The shield tab pin numbers depend on the footprint.
 
 **USB**

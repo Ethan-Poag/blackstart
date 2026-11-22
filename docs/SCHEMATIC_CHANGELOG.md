@@ -1072,3 +1072,18 @@ Checks (kicad-cli 9.0.2):
   - No other net changed.
 - **BOM:** /workspace/review/bom_split/BOM_main.csv rebuilt by bom_b27.py (pre-batch copies *.pre_b27.*). The BOM ref set equals the netlist ref set (DNP excluded). totals.json main board +$7.48 qty1 / +$1.62 per board at qty10 (parts +$1.34 / +$1.01; +2 unique extended parts × $3.07 loading fee = +$6.14 / +$0.61).
 - **BOARD (out of scope, NOT done):** the frozen .kicad_pcb (md5 49a6a6a78d3982dc24093687e5e54c0c, unchanged) lacks R637-R643, Q73, Q74. C101 needs a 1210 pad; C129 and U36 VI connectivity changed. Layout must be refreshed at the next board spin, which is already required for the split.
+
+## Batch 27a: J10 Ethernet LED polarity fix (Grok Bot for Ethan, approved 2026-11-22 7:34 AM HST; PCB not touched)
+
+| Item | Change |
+|---|---|
+| J10 HR963380AE LEDs (review addendum N1) | Swapped the pin numbers in the symbol so the LED pin names match the HanRun DS p1 schematic: LED_O_A = 12, LED_O_K = 11, LED_G_A = 14, LED_G_K = 13. Changed in both genctl.kicad_sym and the copy embedded in comms.kicad_sch. Wires and labels are untouched. Result: pad 12 → R106 330R → CM5_3V3 and pad 11 → ETH_LED_ACT_N (U9.15). Pad 14 → R105 330R → CM5_3V3 and pad 13 → ETH_LED_LINK_N (U9.17). The active-low CM5 LED outputs now sink the LED cathodes, so both LEDs are forward-biased. Before this fix, both LEDs were reverse-biased and never lit. |
+| DESIGN_NOTES.md Ethernet section | Corrected the part name (HR911131A → HR963380AE) and the LED pinout (orange 12A/11K, green 14A/13K). Added the drive description. |
+
+**Checks** (evidence in docs/split_evidence/batch27a/)
+- ERC 0 violations on genctl and 0 on genctl_meter.
+- Netlist diff vs 1872049:
+  - genctl: part count 1127 → 1127. Only these four J10 pin moves: 11 and 12 swap between ETH_LED_ACT_N and Net-(J10-LED_O_A); 13 and 14 swap between ETH_LED_LINK_N and Net-(J10-LED_G_A).
+  - genctl_meter: no change.
+- BOM: no change.
+- Board note: on the next PCB refresh, J10 pads 11–14 pick up the swapped nets.

@@ -1,0 +1,9 @@
+parts 1127 -> 1127
+NET A ETH_LED_ACT_N not identical in B -> B nets ['ETH_LED_ACT_N', 'Net-(J10-LED_O_A)']
+NET A ETH_LED_LINK_N not identical in B -> B nets ['ETH_LED_LINK_N', 'Net-(J10-LED_G_A)']
+NET A Net-(J10-LED_G_A) not identical in B -> B nets ['ETH_LED_LINK_N', 'Net-(J10-LED_G_A)']
+NET A Net-(J10-LED_O_A) not identical in B -> B nets ['ETH_LED_ACT_N', 'Net-(J10-LED_O_A)']
+NET B ETH_LED_ACT_N 2 nodes from A nets ['ETH_LED_ACT_N', 'Net-(J10-LED_O_A)'] | B nodes: [('J10', '11'), ('U9', '15')]
+NET B ETH_LED_LINK_N 2 nodes from A nets ['ETH_LED_LINK_N', 'Net-(J10-LED_G_A)'] | B nodes: [('J10', '13'), ('U9', '17')]
+NET B Net-(J10-LED_G_A) 2 nodes from A nets ['ETH_LED_LINK_N', 'Net-(J10-LED_G_A)'] | B nodes: [('J10', '14'), ('R105', '2')]
+NET B Net-(J10-LED_O_A) 2 nodes from A nets ['ETH_LED_ACT_N', 'Net-(J10-LED_O_A)'] | B nodes: [('J10', '12'), ('R106', '2')]
