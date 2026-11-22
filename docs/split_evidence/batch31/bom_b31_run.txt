@@ -1,0 +1,4 @@
+BOM_main.csv PCB refs 1127 fitted 1127
+BOM_daughter.csv PCB refs 218 fitted 218
+crosscheck mismatches 0
+{"main_pcb_parts": [266.34, 225.91], "main_offboard": [1359.43, 951.07], "harness": [2.91, 1.88], "main_total": [1628.68, 1178.86], "daughter_pcb_parts": [63.89, 53.42], "daughter_offboard": [74.88, 26.76], "daughter_total": [138.77, 80.18], "controller_total": [1767.45, 1259.04], "rev4c_csv_sum": [1697.55, 1251.27], "pcb_refs": [1127, 218, 1345], "batch31_delta": {"main_pcb_parts": [0.4, 0.41], "main_offboard": [3.07, 0.31], "main_total": [3.47, 0.72], "daughter_pcb_parts": [0.0, 0.0], "daughter_offboard": [0.0, 0.0], "daughter_total": [0.0, 0.0], "controller_total": [3.47, 0.72]}}

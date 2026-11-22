@@ -76,14 +76,14 @@ States: `BOOT → SELFTEST → IDLE → PREHEAT → CRANK → RUN_WARMUP → RUN
 3. **External TPS3431 [S]:**
    - Kicked on PA12 from the same checked-in point, at a different rate than IWDG.
    - Cuts outputs in hardware even if the MCU is held in reset or wedged with its clocks stopped.
-   - It does **not** gate the six 4–20 mA shunt enables (AI_SH_EN1–6 on U31 P06/P07/P10–P13) and does not reset the MCU. See docs/FW_REQ_BATCH30.md FW-WDG-1 / FW-AI-3 (Batch 30).
+   - It does not reset the MCU. **From Batch 31 it also gates the six 4–20 mA shunts in hardware:** the FET gates AI_SH_G1–6 = AI_SH_EN1–6 (U31 P06/P07/P10–P13) AND SH_ALLOW, SH_ALLOW = WD_OK AND NRST (U91/U92 74LVC08; NRST through the U93 Schmitt buffer). Shunts are off while the MCU is in reset, after a watchdog trip (until power cycle) and for the first 0.70–1.06 s after power-on. While WD_OK is low, all 4–20 mA channels are INVALID. See docs/FW_REQ_BATCH30.md FW-WDG-1, FW-AI-3, FW-AI-4.
    - **Test it on the bench** (see the bring-up plan) because the timeout is [U].
 4. **Reset cause:** read RCC_RSR at boot and log it to FRAM. Three watchdog resets within N minutes → stay in FAULT with outputs LOW [I].
 5. **Watchdog latch (2026-10-28, fixes_firmware.md §1; hardware pending):**
    - U84 74LVC1G74 latches the TPS3431 trip. **WD_OK** (U84 Q) replaces WDO_N at the four LVC1G08 gates and at Q44/WD_OE_N.
    - Re-arm is by **power cycle only**.
    - Firmware reads WD_OK on **U76 P15** (input port 1, bit 5) every 100 ms. After power-on it is LOW for 0.70–1.06 s (POR-RC re-arm: R554 220k / C293 4.7 µF / U85 Schmitt; D136 discharge). LATCHED is declared only if it is still LOW at 1.5 s, or if it falls after having been HIGH.
-   - If WD_OK = 0: state LATCHED; stop all output writes; log RCC_RSR + timestamp to FRAM; show **"WATCHDOG LATCHED: power cycle required"** on the CM5 UI (status frame flag + text).
+   - If WD_OK = 0: state LATCHED; stop all output writes; mark all six AI 4–20 mA channels INVALID (shunts are hardware-off, FW-AI-4); log RCC_RSR + timestamp to FRAM; show **"WATCHDOG LATCHED: power cycle required"** on the CM5 UI (status frame flag + text).
    - There is no software clear.
 
 ## 5. MCU ↔ CM5 link

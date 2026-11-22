@@ -1,0 +1,41 @@
+parts 1139 -> 1147
+ADDED C320 100n Capacitor_SMD:C_0603_1608Metric C14663
+ADDED C321 100n Capacitor_SMD:C_0603_1608Metric C14663
+ADDED C322 100n Capacitor_SMD:C_0603_1608Metric C14663
+ADDED RN1 10k x4 Resistor_SMD:R_Array_Convex_4x0603 C29718
+ADDED RN2 10k x4 Resistor_SMD:R_Array_Convex_4x0603 C29718
+ADDED U91 74LVC08APW Package_SO:TSSOP-14_4.4x5mm_P0.65mm C6053
+ADDED U92 74LVC08APW Package_SO:TSSOP-14_4.4x5mm_P0.65mm C6053
+ADDED U93 SN74LVC1G17DBVR Package_TO_SOT_SMD:SOT-23-5 C7836
+PROP R531 MPN '' -> '0603WAF220JT5E'
+PROP R531 Manufacturer '' -> 'UNI-ROYAL'
+NET A +3V3_SAFE not identical in B -> B nets ['+3V3_SAFE']
+NET A AI_SH_EN1 not identical in B -> B nets ['AI_SH_EN1', 'AI_SH_G1']
+NET A AI_SH_EN2 not identical in B -> B nets ['AI_SH_EN2', 'AI_SH_G2']
+NET A AI_SH_EN3 not identical in B -> B nets ['AI_SH_EN3', 'AI_SH_G3']
+NET A AI_SH_EN4 not identical in B -> B nets ['AI_SH_EN4', 'AI_SH_G4']
+NET A AI_SH_EN5 not identical in B -> B nets ['AI_SH_EN5', 'AI_SH_G5']
+NET A AI_SH_EN6 not identical in B -> B nets ['AI_SH_EN6', 'AI_SH_G6']
+NET A GND not identical in B -> B nets ['GND']
+NET A NRST not identical in B -> B nets ['NRST']
+NET A WD_OK not identical in B -> B nets ['WD_OK']
+NET B +3V3_SAFE 150 nodes from A nets ['+3V3_SAFE', '<new>'] | B nodes: 150
+NET B AI_SH_EN1 3 nodes from A nets ['AI_SH_EN1', '<new>'] | B nodes: [('R138', '1'), ('U31', '10'), ('U91', '1')]
+NET B AI_SH_EN2 3 nodes from A nets ['AI_SH_EN2', '<new>'] | B nodes: [('R149', '1'), ('U31', '11'), ('U91', '4')]
+NET B AI_SH_EN3 3 nodes from A nets ['AI_SH_EN3', '<new>'] | B nodes: [('R160', '1'), ('U31', '13'), ('U91', '9')]
+NET B AI_SH_EN4 3 nodes from A nets ['AI_SH_EN4', '<new>'] | B nodes: [('R171', '1'), ('U31', '14'), ('U91', '12')]
+NET B AI_SH_EN5 3 nodes from A nets ['AI_SH_EN5', '<new>'] | B nodes: [('R182', '1'), ('U31', '15'), ('U92', '1')]
+NET B AI_SH_EN6 3 nodes from A nets ['AI_SH_EN6', '<new>'] | B nodes: [('R193', '1'), ('U31', '16'), ('U92', '4')]
+NET B AI_SH_G1 3 nodes from A nets ['AI_SH_EN1', '<new>'] | B nodes: [('Q15', '1'), ('RN1', '8'), ('U91', '3')]
+NET B AI_SH_G2 3 nodes from A nets ['AI_SH_EN2', '<new>'] | B nodes: [('Q19', '1'), ('RN1', '7'), ('U91', '6')]
+NET B AI_SH_G3 3 nodes from A nets ['AI_SH_EN3', '<new>'] | B nodes: [('Q23', '1'), ('RN1', '6'), ('U91', '8')]
+NET B AI_SH_G4 3 nodes from A nets ['AI_SH_EN4', '<new>'] | B nodes: [('Q27', '1'), ('RN1', '5'), ('U91', '11')]
+NET B AI_SH_G5 3 nodes from A nets ['AI_SH_EN5', '<new>'] | B nodes: [('Q31', '1'), ('RN2', '8'), ('U92', '3')]
+NET B AI_SH_G6 3 nodes from A nets ['AI_SH_EN6', '<new>'] | B nodes: [('Q35', '1'), ('RN2', '7'), ('U92', '6')]
+NET B NRST_S 2 nodes from A nets ['<new>'] | B nodes: [('U92', '10'), ('U93', '4')]
+NET B SH_ALLOW 7 nodes from A nets ['<new>'] | B nodes: [('U91', '10'), ('U91', '13'), ('U91', '2'), ('U91', '5'), ('U92', '2'), ('U92', '5'), ('U92', '8')]
+NET B GND 924 nodes from A nets ['<new>', 'GND'] | B nodes: 924
+NET B NRST 6 nodes from A nets ['<new>', 'NRST'] | B nodes: [('C65', '1'), ('J2', '10'), ('Q7', '3'), ('SW1', '1'), ('U7', '14'), ('U93', '2')]
+NET B WD_OK 8 nodes from A nets ['<new>', 'WD_OK'] | B nodes: 8
+NET B unconnected-(U92-Pad11) 1 nodes from A nets ['<new>'] | B nodes: [('U92', '11')]
+NET B unconnected-(U93-NC-Pad1) 1 nodes from A nets ['<new>'] | B nodes: [('U93', '1')]

@@ -76,6 +76,7 @@ ic('ADE9000ACPZ', P((7,'IAP'),(8,'IAN'),(9,'IBP'),(10,'IBN'),(11,'ICP'),(12,'ICN
    P((27,'VDD'),(1,'PULL_HIGH'),(25,'AVDDOUT'),(3,'DVDDOUT'),(16,'REF'),(37,'SCLK'),(39,'MOSI'),(38,'MISO'),(40,'~{SS}'),(6,'~{RESET}'),(31,'~{IRQ0}'),(32,'~{IRQ1}'),(33,'CF1'),(34,'CF2'),(35,'CF3/ZX'),(36,'CF4/EVENT'),(4,'PM0'),(5,'PM1')),
    bottom=P((2,'DGND'),(15,'REFGND'),(17,'NC1'),(18,'NC2'),(26,'AGND'),(28,'GND'),(41,'EP')),
    desc='High-performance polyphase energy metering IC, LFCSP-40', mfr='Analog Devices', mpn='ADE9000ACPZ-RL', fp='genctl:ADE9000_LFCSP-40_6x6', lcsc='C654559')
+# HISTORIC: AC1005 was replaced by the ZMCT103C in Batch 29; the AC1005 symbol stays in genctl.kicad_sym unused.
 ic('AC1005', P((4,'P1'),(5,'P2')), P((1,'S1'),(2,'S2'),(3,'NC')), ref='T', desc='Current transformer 5A:5mA 1000:1, pass-through primary. S1/S2 = CT pins 1/2, pin 3 mechanical. P1/P2 = footprint wire-loop pads 4/5 (primary wire passes through the core window)', mfr='Talema', mpn='AC1005', fp='genctl:AC1005_CT', lcsc='C6117861')
 ic('HR963380AE', P((1,'TRD0+'),(2,'TRD0-'),(3,'TRD1+'),(4,'TRD1-'),(7,'TRD2+'),(8,'TRD2-'),(9,'TRD3+'),(10,'TRD3-'),(5,'CT'),(6,'CT')), P((13,'LED_G_A'),(14,'LED_G_K'),(11,'LED_O_A'),(12,'LED_O_K'),(15,'SHIELD')),
    ref='J', desc='RJ45 magjack, VERTICAL (tab-up, top entry) SMD, 10/100/1000BASE-T (IEEE802.3ab), 4x 1CT:1CT, centre taps P5/P6, orange LED 11(A)-12(K), green LED 13(A)-14(K) per HanRun DS schematic, shield pad 15, 2x NPTH locating holes. 16.85 mm tall', mfr='HanRun', mpn='HR963380AE', fp='genctl:HR963380AE_RJ45', lcsc='C19724763')

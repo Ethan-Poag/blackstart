@@ -147,4 +147,4 @@ Rows still unpriced inside the BOMs: power (display 12 V load switch, 3V3 LDO ba
 
 ### Open items
 - STALE (superseded 2026-10-27 s3c6f): "OVP 30.3 V vs 32 V max operating battery". Now max operating battery 31 V, OV trip min 32.39 V.
-- EasyEDA footprints unverified (esp. CTS 228E holes, AC1005 pads, M.2 pinout); 1720819 low stock (50); USB3-A C3032863 no stock; V20E385P stock 2 (M7: RV1-RV6 now TMOV20RP460E C3260792).
+- EasyEDA footprints unverified (esp. CTS 228E holes, AC1005 pads (historic: AC1005 removed in Batch 29), M.2 pinout); 1720819 low stock (50); USB3-A C3032863 no stock; V20E385P stock 2 (M7: RV1-RV6 now TMOV20RP460E C3260792).

@@ -28,7 +28,7 @@ Scripts: `geometry.py` (source of truth), `place.py` (placer), `render_placement
 ## 3. Floorplan (B side unless noted)
 | Block | Box (x0,y0 … x1,y1) | Contents / notes |
 |---|---|---|
-| 600 V metering (hot) | −3.7,11 … 60,162 (top-left) | J28 GEN V, J29 BUS V (Phoenix 1720819), J30 CT 8P on the left edge (wire entry outward/rear); ADE9000 x2, dividers, MOVs; T1-T4 AC1005 in `CT_AT_BARRIER` (26.5,112 … 60,162), at the barrier edge next to J30 |
+| 600 V metering (hot) | −3.7,11 … 60,162 (top-left) | J28 GEN V, J29 BUS V (Phoenix 1720819); ADE9000 x2, dividers, MOVs; T1-T4 ZMCT103C window CTs (Batch 29; new positions per §4a, the old `CT_AT_BARRIER` area 26.5,112 … 60,162 is historic). CT pigtails exit one M25 gland at the old J30 left-edge spot; J30 itself is off-board (historic: pre-split v3 had a J30 CT 8P header here) |
 | Barrier | U-shape round the hot box: top band y −1.25…11, vertical x 60…73, bottom band y 162…175 | **13 mm copper-free on all layers** (rule areas `BARRIER_*`, no tracks/vias/pads/pours/footprints) |
 | Isolators | U69 ISOW7841 (66.5, 62), U70 ISO7741 (66.5, 98) | straddle the vertical band, HV pins (9-16) toward the hot side, 8.10 mm pad gap + 21 mm footprint slot; barrier opens ±11 mm round each |
 | ISO_LV | 74,52 … 86,95 | SELV decoupling of the isolators (C235/C236/C239) |
@@ -53,22 +53,22 @@ The packer is a shelf packer (parts binned by sheet, big parts first), not a rea
 - **1.5 mm milled slots between the potentials of J28 and J29** (3 per header, Edge.Cuts) fix the 0.7 mm creepage shortfall L-L.
 - LV copper ≥13 mm from hot copper also toward the top-left key band, H1 and the J24 terminal (checked by script).
 - **Batch 29 (supersedes the next bullet):** T1-T4 are ZMCT103C window CTs (C94571, footprint genctl:Transformer_Zeming_ZMCT103C) and J30 is off-board (CT shorting block in the genset panel). The CT loops are 600 V pigtails through the windows; no CT-loop copper on the board. Placement/layout rules: docs/ISOLATION_CHECK.md §5c. The rows below that place J30 on the left edge are historic (pre-split v3); keep the pigtail grommet at that position.
-- **AC1005 CTs (open)**: loop pads 4/5 are 4.6 mm from the hot secondary pins and the part has no insulation rating, so the CTs cannot straddle a barrier.
+- *Historic, closed by Batch 29 (AC1005 replaced by ZMCT103C, J30 off-board):* **AC1005 CTs**: loop pads 4/5 are 4.6 mm from the hot secondary pins and the part has no insulation rating, so the CTs cannot straddle a barrier.
   They are placed **entirely inside the hot zone at the barrier edge** with J30 also in the hot zone, i.e. the external CT loop is treated as hot
   (finger-safe plug, CT secondaries not earthed). If the CT loops must stay earthed/SELV, the AC1005 must be replaced by a CT with a reinforced
   rating and J30 moved to the LV side — **Ethan's decision**.
-- Shell rib: rev C rib at x = 12.28 with a cross rib at y ≈ 124.7 does **not** match v3: the Phoenix bodies occupy x −3.3…12.8 and J30 runs to y 161.
+- Shell rib: rev C rib at x = 12.28 with a cross rib at y ≈ 124.7 does **not** match v3: the Phoenix bodies occupy x −3.3…12.8 and (historic, pre-Batch 29) J30 ran to y 161; J30 is off-board now, the Phoenix bodies still set the rib.
   Move `BARRIER_X` to ~BOARD_X0 + 18 and the cross rib to y ≈ 163 in `enclosure.py` (not changed here).
 
-## 4a. Next-layout requirements (two boards, collected through Batch 30; layout frozen until the new method is set up)
+## 4a. Next-layout requirements (two boards, collected through Batch 31; layout frozen until the new method is set up)
 - genctl_meter: ZMCT103C footprints (T1-T4, **19.2 mm tall**, window centre 10 mm above the board), no J30 and no CT-loop copper, ISOLATION_CHECK §5c rules. **CT nets (GEN_CTA_1/2 … GEN_CTD_1/2, burden, anti-alias, BAV99s) are hot-island (GND_AC) nets:** ≥ 13 mm to SELV, ≥ 5.5 mm clearance / ≥ 6.3 mm creepage to other 600 V copper.
 - genctl_meter: **GND_AC test pad** (bare pad or a test loop, inside the hot zone, ≥ 13 mm from SELV) for the per-board megger test (BENCH_12V_TEST §B30-1).
 - genctl_meter CT placement (Mechanical ZMCT103C_fit.md): **do not reuse the old T1-T4 positions.** Give each CT a straight corridor of **≈ 30.2 mm** along its window axis (10.2 mm body + 10 mm free wire each side), with **non-plated tie-down points on both sides** (no copper within 1 mm). Allow a pigtail bend radius of **≥ 21.5 mm** (6 × OD 3.58 mm; **35.8 mm** = 10 × OD if the leads will be flexed) after the straight run. Keep the wire off solder joints, pin tips and board edges.
 - genctl_meter: pigtails exit through **one M25 cable gland** near the old J30 left-edge spot, away from the J32/SELV side.
 - Both boards: J31/J32 Molex 43045-1600 2×8 RA, courtyard ≈ 29.2 × 13.7 mm (installed height: take from the Molex drawing). **C74/C75** (upright supercaps, 22 mm) and the **heat-strap boss** stay on the **main** board.
 - genctl_meter: RV1-RV6 spacing; vertical J28/J29; Phoenix 1720819 pad refresh.
-- genctl: R649, the 2010 shunt pads (R137/R148/R159/R170/R181/R192), and every Batch 27-29 part; footprint attribute fix: genctl:FTSH-105-01_SWD (J2) and genctl:ADE9000_LFCSP-40_6x6 (U71/U72, meter) carry `(attr through_hole)` although every pad is SMD. Set `(attr smd)` before the next position/CPL export, or they can drop out of an SMD-only placement file.
-- Optional (if Ethan approves, docs/FW_REQ_BATCH30.md): gate AI_SH_EN1-6 with WD_OK.
+- genctl: R649, the 2010 shunt pads (R137/R148/R159/R170/R181/R192), and every Batch 27-29 part; footprint attribute fix: genctl:FTSH-105-01_SWD (J2) and genctl:ADE9000_LFCSP-40_6x6 (U71/U72, meter) carried `(attr through_hole)` although every pad is SMD. **Library fixed in Batch 31** (`(attr smd)` in genctl.pretty); the next layout must load these footprints fresh from the library (Update PCB from Schematic with footprint refresh), because a board file keeps its own copy, and then check that J2/U71/U72 appear in the SMD position/CPL file.
+- genctl (Batch 31, approved): hardware shunt-off gating U91/U92 74LVC08APW TSSOP-14 (C6053), C320/C321 100 nF at their pin 14, RN1/RN2 10k × 4 0603 convex arrays (C29718), U93 SN74LVC1G17DBVR (SOT-23-5) + C322 on NRST → NRST_S. Place U91/U92 between U31 and the shunt FETs Q15/Q19/Q23/Q27/Q31/Q35, RN1/RN2 close to the FET gates (AI_SH_G1-6). SH_ALLOW is a slow logic net (WD_OK/NRST); keep NRST short and away from the AI analog nodes. docs/FW_REQ_BATCH30.md.
 
 ## 5. CM5 thermal strap
 - CM5 at the **top-right, next to H2** (274.56, −9.25). Why H2: H1 is in the 600 V corner, H3 is bottom-left beside the barrier and 70 mm+ from any
@@ -131,7 +131,7 @@ Custom DRC rule sketch (`.kicad_dru`):
 | unconnected (ratsnest) | 2917 | expected, unrouted (the JSON report lists the first 499) |
 
 ## 9. Open items for Ethan
-1. AC1005 / J30 hot vs earthed CT loop (§4).
+1. ~~AC1005 / J30 hot vs earthed CT loop (§4).~~ Closed by Batch 29: ZMCT103C window CTs, J30 off-board, CT loop earthed at the external CT S2 (ISOLATION_CHECK §5c).
 2. Shell changes for v3: barrier rib x / cross-rib y (§4); rear windows: top/bottom window x 38…243 should become ~28…248 (KF flanges reach x 30.4 and 245.4)
    and the end-slot terminals J9 (x 7…23) / J8 (x 253…266) need their own openings; the right window y 20…175 should start at ~4 (J10 RJ45).
 3. DONE (rev D): J10 is now the vertical HR963380AE RJ45 and J11 the vertical TYPE-C-31-D-06B. Both mate through **rear-wall** wells (see ENCLOSURE_DFM §3); no side-wall opening. The right edge keeps only J6, J7, J23 and J1.

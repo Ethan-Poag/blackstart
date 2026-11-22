@@ -17,7 +17,7 @@ Run on a scratch copy (/tmp/ercx) with all 45 rule keys forced to error: **73 vi
 - **footprint filter mismatch (56 at b47aea0; 58 before D3/D4 moved to genctl:BAS70 in batch 6, reported as type footprint_link_issues):** the assigned footprint does not match the symbol's generic filter. Groups:
   - J1/J23/J28/J29 Phoenix 1720819 on generic Conn_01x04;
   - J2, J3/J5, J4/J12/J13, J6-J9, J14/J15/J16, J17-J22, J24-J27 (vendor connector footprints on generic connector symbols);
-  - J30 (DO-NOT-FAB placeholder, deferred D-m7-9);
+  - J30 (DO-NOT-FAB placeholder, deferred D-m7-9; historic: J30 removed from the board in Batch 29);
   - RV1-RV6 (varistors);
   - U32-U34 74HC14 SOIC-14;
   - U84 74LVC1G74DP (TSSOP-8; the DP package is TSSOP-8, so this matches);

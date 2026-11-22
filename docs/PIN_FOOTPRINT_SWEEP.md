@@ -37,7 +37,7 @@ pin-name mapping vs its LCSC datasheet (fetched live 2026-10-28 HST).
 2. J14 FPC 40p pads 41/42, J15 FPC 10p pads 11/12: numbered anchor pads, unconnected. Tie to GND is a design choice; not changed.
 3. J16 SM02B-BHSS pads 3/4: mechanical anchors, unconnected; not changed.
 4. J4/J12/J13 JST SH: MP pad unconnected; KiCad stock, benign.
-5. J30: placeholder, no pads (known D-m7-9).
+5. ~~J30: placeholder, no pads (known D-m7-9).~~ Historic: J30 was removed from the board in Batch 29 (off-board CT shorting block).
 6. Q72 BCP56: symbol pin 4 has no pad (stock pairing); pin 4 and pad 2 = VBAT_P; benign.
 7. U87 74LVC1GU04 SOT-23-5 pad 1 has no symbol pin (NC on part); benign.
 8. H1-H4: schematic M3 pad fp vs PCB M4 fp; RV1-RV6: schematic TMOV20RP_P7.5mm_inline vs PCB RV_Disc_D21.5mm. PCB-sync item (PCB untouched).

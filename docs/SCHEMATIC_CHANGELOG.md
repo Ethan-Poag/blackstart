@@ -1189,3 +1189,27 @@ Checks (kicad-cli 9.0.2):
 - Netlist diff vs fa8aced: 1139 / 220 parts unchanged; only Sourcing (11 refs) and T1-T4 Note properties changed; no net changed.
 - BOM vs netlist: 0 mismatches (tools/bom_from_sch.py); bom_split crosscheck 0 (1119 + 218 fitted refs).
 
+
+## Batch 31: power-dip rule, bus-side breaker ruling, hardware shunt-off gating, footprint attr, pass-5 notes (Grok Bot for Ethan, approved 2026-11-22 HST "Ethan approved all three"; PCB not touched)
+Source: SCH_REVIEW_2026-11-22_pass5.md (m1, m2, notes); Ethan's approval relayed by Enginerd 12:33 PM HST. Evidence: docs/split_evidence/batch31/.
+
+Schematic:
+- **inputs (main): hardware shunt-off gating.** New U91, U92 = Nexperia 74LVC08APW,118 (TSSOP-14, C6053, extended), C320/C321 100 nF (C14663), RN1/RN2 UNI-ROYAL 4D03WGJ0103T5E 10k × 4 convex (C29718, basic), U93 SN74LVC1G17DBVR Schmitt buffer (C7836, same as U85) + C322 100 nF. SH_ALLOW = WD_OK AND NRST_S (U92 gate 3; NRST_S = NRST through U93, because NRST's C65 RC edge is too slow for an LVC input); AI_SH_Gx = AI_SH_ENx AND SH_ALLOW (U91 gates 1-4, U92 gates 1-2); U92 gate 4 spare (inputs GND, output NC). The FET-gate-side labels of Q15/Q19/Q23/Q27/Q31/Q35 renamed AI_SH_EN1-6 → AI_SH_G1-6; RN1/RN2 pull the G nets down; R138/R149/R160/R171/R182/R193 stay on the U31-side EN nets. Sheet text added. Script: batch31.py.
+- display: R531 MPN 0603WAF220JT5E, Manufacturer UNI-ROYAL (C23345; DNP part).
+- Footprints: genctl:FTSH-105-01_SWD (J2) and genctl:ADE9000_LFCSP-40_6x6 (U71/U72) `(attr through_hole)` → `(attr smd)` (pass-5 m2).
+
+Docs:
+- FW_REQ_METERING_PRESENCE: new **FW-MTR-9** (main 3.3 V dip = `SUPPLY_3V3_DIP`, not meter missing; 100 ms settle, ADE re-init, 2.0 s recheck window, latch only if still failing; running cap 5 s blind → GEN shutdown; stopped engine: start blocked only while the recheck is pending, held start request runs after; > 5 events in 10 min → latch) + FW-MTR-8 dip test; FW-MTR-3 "closed breaker stays closed" confirmed by Ethan.
+- FW_REQ_BATCH30: Batch 31 gating section, FW-AI-4 (AI channels INVALID while WD_OK low; power-on; latched after a trip), residual risk after Batch 31, bench test; pointer to FW-MTR-9. DESIGN_NOTES Batch 29 m4 residual sentence and new Batch 31 section; firmware/ARCHITECTURE.md §4 items 3 and 5.
+- ISOLATION_CHECK §5c: 14 AWG UL1015 OD 3.5-3.65 mm (3.58 nominal), rule 5 names the one M25 gland.
+- Stale AC1005/J30 wording marked historic: LAYOUT_PLAN §3 table, §4 bullets, shell-rib line, §9 item 1; PIN_FOOTPRINT_SWEEP item 5; ERC_AUDIT; design_spec; fp-lib-table descr; tools/symbols.py comment; J30 PLACEHOLDER footprint descr. (AC1005 symbol/footprint files kept, unused.) LAYOUT_PLAN §4a: gating placement, footprint refresh note.
+
+BOMs:
+- bom/lcsc_prices.csv: C6053 (Extended, JLC 12,517, 0.1164) and C29718 (Basic, JLC 1,271,372, 0.0071), live 2026-11-22 ~12:37 PM HST. bom/*.csv, docs/*.csv, mechanical/*.csv regenerated.
+- Totals (parts only, USD per board, qty1 / qty10): main **266.36 / 225.95** (was 265.95 / 225.54: **+0.41 / +0.41**); meter 63.89 / 53.42 unchanged; harness 2.91 / 1.87.
+- Priced controller BOM /workspace/review/bom_split (bom_b31.py, *.pre_b31.*): controller **$1,767.45 / $1,259.04** (was 1,763.98 / 1,258.32: **+3.47 / +0.72** = +0.40 parts + $3.07 JLC extended-part loading fee for C6053, spread over 10 boards in the qty10 column).
+
+Checks (kicad-cli 9.0.2):
+- ERC --severity-all: genctl **0**, genctl_meter **0**.
+- Netlist diff vs 956a998: main 1139 → 1147 parts (+U91, U92, U93, C320, C321, C322, RN1, RN2), R531 MPN/Manufacturer; nets: AI_SH_EN1-6 split into AI_SH_ENx (U31, R1xx, U9x input) and AI_SH_Gx (Q gate, RNx, U9x output); new SH_ALLOW and NRST_S (U93.4 → U92.10); +U92.9 on WD_OK, +U93.2 on NRST; +3V3_SAFE/GND gain the new supply/pull-down pins. Meter: no change.
+- BOM vs netlist: 0 mismatches (tools/bom_from_sch.py); bom_split crosscheck 0 (1127 + 218 fitted refs).

@@ -1,11 +1,11 @@
 # Firmware requirements from schematic Batch 30 (2026-11-22 HST)
 
-Requirements only. No firmware exists on this branch and no firmware file was changed. The held overvoltage engine-shutdown change is not touched. Source: pass-4 review (/workspace/review/sch_review/SCH_REVIEW_2026-11-22_pass4.md, m3).
+Requirements only. Updated in Batch 31 (2026-11-22 HST) for the new hardware shunt-off gating. No firmware exists on this branch and no firmware file was changed. The held overvoltage engine-shutdown change is not touched. Source: pass-4 review (/workspace/review/sch_review/SCH_REVIEW_2026-11-22_pass4.md, m3).
 
 ## Facts (netlist at Batch 30, unchanged since Batch 29)
 - **NRST** = U7.14, C65, J2.10 (SWD), SW1 (reset button), Q7 collector (CM5 GPIO22 CM5_NRST → R63 → Q7). Nothing else drives NRST.
-- **WDO_N** (U37 TPS3431 pin 7) = R271 pull-up and U84.6 (~CLR) only. A TPS3431 timeout latches **WD_OK** (U84 Q) low. WD_OK gates U38/U39/U40/U67 (outputs) and is read on U76 P15. **The TPS3431 never resets the MCU.**
-- **Shunt enables:** AI_SH_EN1–6 = U31 TCA9555 (@0x22, TSSOP-24) **P06, P07** (pins 10, 11, port 0) and **P10–P13** (pins 13–16, port 1) → gates of Q15/Q19/Q23/Q27/Q31/Q35, each with a 10k pull-down (R138/R149/R160/R171/R182/R193). They are **not** gated by WD_OK.
+- **WDO_N** (U37 TPS3431 pin 7) = R271 pull-up and U84.6 (~CLR) only. A TPS3431 timeout latches **WD_OK** (U84 Q) low. WD_OK gates U38/U39/U40/U67 (outputs) and, from Batch 31, U92 gate 3 (SH_ALLOW, the AI shunts) and is read on U76 P15. **The TPS3431 never resets the MCU.**
+- **Shunt enables:** AI_SH_EN1–6 = U31 TCA9555 (@0x22, TSSOP-24) **P06, P07** (pins 10, 11, port 0) and **P10–P13** (pins 13–16, port 1) → gates of Q15/Q19/Q23/Q27/Q31/Q35, each with a 10k pull-down (R138/R149/R160/R171/R182/R193). At Batch 30 they were **not** gated by WD_OK. **Batch 31 adds hardware gating** (see the Batch 31 section below): the FET gates are now the new nets AI_SH_G1–6 = AI_SH_ENx AND SH_ALLOW.
 - **U31 has no reset pin.** It keeps its output latches through an MCU reset. At power-on its pins are inputs, so the pull-downs hold every shunt **off**.
 
 ## FW-WDG-1: IWDG is mandatory (hard dependency of FW-AI-2)
@@ -19,10 +19,40 @@ Requirements only. No firmware exists on this branch and no firmware file was ch
 3. **CM5 rule (CM5 software requirement):** before the CM5 asserts CM5_NRST or BOOT0 for a reflash, it must command the MCU to disable all shunts and wait for the acknowledgement. If the MCU does not answer, the CM5 may still reset it, but must hold NRST for **≤ 50 ms** per attempt and must not leave the MCU in the ROM bootloader longer than needed. Log every forced reset.
 4. **SWD/bench rule (BRINGUP_CHECKLIST):** do not connect a 24 V sensor supply to any AI terminal while a debugger can halt or hold the MCU.
 
-## Residual risk (accepted for now, documented)
-- While the MCU is **held in reset** (CM5 via Q7, SWD, SW1), **halted by a debugger**, or **sitting in the ROM bootloader**, U31 keeps any enabled shunt on. Nothing in hardware turns it off. If that AI terminal is also miswired to a 24 V supply, the 100 Ω 0.5 W shunt (RT2010BKD07100RL) dissipates 5.8 W (8.4 W at 29 V) until it fails open (thin film; seconds, INFERRED). The board near it may discolour. It needs two faults at once (a miswire plus a stuck/held MCU), so it is minor.
-- The TPS3431 does time out in this case (≈ 170–230 ms with no kicks on PA12) and latches WD_OK low, but WD_OK does not reach the shunt gates.
+## Residual risk (Batch 30 text, superseded by Batch 31)
+- Batch 30: while the MCU was **held in reset** (CM5 via Q7, SWD, SW1), **halted by a debugger**, or **sitting in the ROM bootloader**, U31 kept any enabled shunt on and nothing in hardware turned it off. With a miswired 24 V supply on that AI terminal the 100 Ω 0.5 W shunt (RT2010BKD07100RL) would dissipate 5.8 W (8.4 W at 29 V) until it failed open. **Batch 31 closes this in hardware** (below). What remains is listed under "Residual risk after Batch 31".
 
-## Hardware option (proposed only, not done in Batch 30)
-- Gate the six AI_SH_EN lines with **WD_OK**, so a TPS3431 timeout (MCU stuck, held in reset, or in the bootloader) also drops every shunt within ≈ 230 ms. Cheapest clean form: two 74LVC08 quad AND gates (or six 74LVC1G08, the part already used at U38–U40/U67) between U31 P06/P07/P10–P13 and the FET gates; keep the 10k pull-downs on the gate side. About 8 parts, a few cents each, plus layout.
-- Not done now: it is not a two-part change, it touches the AI front end that passed three reviews, and the layout is frozen anyway. Recommend it for the next layout if Ethan wants the extra margin.
+## Batch 31: hardware shunt-off gating (done, Ethan approved Nov 22, 2026 HST)
+**Circuit (inputs sheet, main board, all on +3V3_SAFE):**
+- **SH_ALLOW = WD_OK AND NRST** (U92 gate 3: pin 9 = WD_OK, pin 10 = NRST_S, pin 8 = SH_ALLOW). NRST reaches the gate through **U93**, a SN74LVC1G17 Schmitt buffer (NRST → NRST_S): NRST rises slowly (C65 100 nF with the MCU's ≈ 40k pull-up, a few ms), and an LVC08 input needs edges faster than 10 ns/V or its output can oscillate during the transition.
+- **AI_SH_Gx = AI_SH_ENx AND SH_ALLOW** for x = 1–6: U91 gates 1–4 (AI_SH_EN1–4 → AI_SH_G1–4), U92 gates 1–2 (AI_SH_EN5–6 → AI_SH_G5–6). AI_SH_Gx drives the gate of Q15/Q19/Q23/Q27/Q31/Q35 (unchanged FETs).
+- U92 gate 4 spare: inputs to GND, output not connected.
+- Pull-downs both sides: R138/R149/R160/R171/R182/R193 (10k, unchanged) keep the U31-side AI_SH_ENx low while U31 pins are inputs; **RN1/RN2** (10k × 4 arrays, 6 elements used, 2 spare with both ends on GND) hold every FET gate low if U91/U92 are unpowered or an output floats. Default = shunt **off**.
+- Parts: U91, U92 = Nexperia **74LVC08APW,118** (TSSOP-14, LCSC **C6053**, JLC extended, 12,517 in stock 2026-11-22 ~12:37 PM HST); C320, C321 = 100 nF 0603 YAGEO CC0603KRX7R9BB104 (**C14663**, basic); RN1, RN2 = UNI-ROYAL **4D03WGJ0103T5E** 10k × 4 0603 convex (**C29718**, basic, 1.27 M in stock); U93 = TI **SN74LVC1G17DBVR** (SOT-23-5, **C7836**, extended but already on the order as U85, JLC 2,322) with C322 100 nF (C14663). 8 parts, ≈ $0.41 per board + one JLC extended-part loading fee for C6053 ($3.07 per order).
+
+**Behaviour:**
+- **MCU held in reset** (CM5 via Q7, SWD, SW1, or the STM32's own internal reset pulse on NRST): NRST low → NRST_S low → SH_ALLOW low → all six shunts off within two gate delays (< 20 ns), regardless of what U31 still latches.
+- **Watchdog trip** (TPS3431 timeout, ≈ 170–230 ms without PA12 kicks: firmware stuck, core halted by a debugger, MCU sitting in the ROM bootloader): WD_OK latches low → all six shunts off **until a power cycle**, the same latch that already disables the outputs.
+- **Power-on:** WD_OK is low for the first 0.70–1.06 s, so the shunts cannot turn on in that window even if firmware writes AI_SH_ENx = 1.
+- **+3V3_SAFE down:** U31, U91, U92 unpowered, RN1/RN2 hold the gates low → off.
+
+## Metering power-dip rule (Batch 31)
+- The main 3.3 V dip / brownout rule for the meter board (supply fault, not "meter missing"; recheck, then latch only if it still fails) is **FW-MTR-9** in docs/FW_REQ_METERING_PRESENCE.md.
+
+## FW-AI-4: firmware rules for the gated shunts (new, Batch 31)
+1. While running, SH_ALLOW equals WD_OK (NRST is high whenever code runs). Read WD_OK on U76 P15. **While WD_OK is low, flag all six AI 4–20 mA channels INVALID** (not "open loop", not "0 mA"): show "AI shunts disabled by watchdog" on the CM5/UI, suppress 4–20 mA open-loop / under-range alarms, and never use those readings for protection or control. Resistive/voltage-mode AI channels are unaffected.
+2. **Power-on:** do not judge any 4–20 mA channel until WD_OK has gone high (≤ 1.06 s after power-on) plus one settle period (≥ 50 ms). Writing AI_SH_ENx earlier is harmless but has no effect.
+3. **After a TPS3431 trip** WD_OK stays low until power cycle: log `AI_SHUNTS_WD_LATCHED` once to FRAM, keep the channels INVALID, and tell the operator a power cycle is needed to restore 4–20 mA inputs (same message path as the outputs' WD_OK latch).
+4. FW-AI-3 items 1–2 (clear all AI_SH_EN bits first after every reset) **still apply**: they stop a shunt coming back on by itself when SH_ALLOW returns, and they are the only protection while a debugger holds the core with the watchdog not yet expired.
+5. FW-AI-2 over-range trip (> 25 mA → shunt off within 50 ms) is unchanged.
+
+## Residual risk after Batch 31
+- **First ≈ 170–230 ms of a hang or debugger halt**, before the TPS3431 times out: a shunt that was on stays on. With a 24 V miswire that is ≤ 0.23 s × 8.4 W ≈ 1.9 J in the 2010 resistor (≈ 4.5 × the 0.42 J of the FW-AI-2 50 ms case). Survival is not verified; the worst case is that the thin-film resistor fails open (two faults needed: a miswire plus a hang).
+- **Stuck-high gate or shorted FET** (U91/U92 output stuck, Q15-type FET short): not covered, same as any single-part failure; FW-AI-2 over-range detection still flags it.
+- **Bench DEBUG builds** with the IWDG frozen are still covered by the TPS3431 (it does not see the debugger), so a halted core loses the shunts after ≈ 230 ms. This is wanted.
+- After a watchdog trip the 4–20 mA inputs stay off until power cycle (FW-AI-4 item 3). This is a deliberate fail-safe choice matching the outputs.
+
+## Bench test (BRINGUP_CHECKLIST)
+- With a shunt enabled and 10 mA flowing: hold SW1 → Q-gate (AI_SH_Gx) drops low immediately; release → stays off until firmware re-enables it.
+- Stop PA12 kicks (debug halt) → AI_SH_Gx low within ≈ 230 ms and stays low after resume until power cycle.
+- Power-on: scope WD_OK and AI_SH_G1; G1 must stay low until WD_OK rises.

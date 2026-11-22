@@ -4365,6 +4365,1483 @@
 				(effects
 					(font
 						(size 1.27 1.27)))))))
+(symbol "74xx:74LS08"
+		(pin_names
+			(offset 1.016)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "U"
+			(at 0 1.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "74LS08"
+			(at 0 -1.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/gpn/sn74LS08"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Quad And2"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_locked" ""
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "TTL and2"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_fp_filters" "DIP*W7.62mm*"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "74LS08_1_1"
+			(arc
+				(start 0 3.81)
+				(mid 3.7934 0)
+				(end 0 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0 3.81) (xy -3.81 3.81) (xy -3.81 -3.81) (xy 0 -3.81)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(pin input line
+				(at -7.62 2.54 0)
+				(length 3.81)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -7.62 -2.54 0)
+				(length 3.81)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin output line
+				(at 7.62 0 180)
+				(length 3.81)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "74LS08_1_2"
+			(arc
+				(start -3.81 3.81)
+				(mid -2.589 0)
+				(end -3.81 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy -3.81 3.81) (xy -0.635 3.81)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(polyline
+				(pts
+					(xy -3.81 -3.81) (xy -0.635 -3.81)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(arc
+				(start 3.81 0)
+				(mid 2.1855 -2.584)
+				(end -0.6096 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(arc
+				(start -0.6096 3.81)
+				(mid 2.1928 2.5924)
+				(end 3.81 0)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(polyline
+				(pts
+					(xy -0.635 3.81) (xy -3.81 3.81) (xy -3.81 3.81) (xy -3.556 3.4036) (xy -3.0226 2.2606) (xy -2.6924 1.0414)
+					(xy -2.6162 -0.254) (xy -2.7686 -1.4986) (xy -3.175 -2.7178) (xy -3.81 -3.81) (xy -3.81 -3.81)
+					(xy -0.635 -3.81)
+				)
+				(stroke
+					(width -25.4)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(pin input inverted
+				(at -7.62 2.54 0)
+				(length 4.318)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input inverted
+				(at -7.62 -2.54 0)
+				(length 4.318)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin output inverted
+				(at 7.62 0 180)
+				(length 3.81)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "74LS08_2_1"
+			(arc
+				(start 0 3.81)
+				(mid 3.7934 0)
+				(end 0 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0 3.81) (xy -3.81 3.81) (xy -3.81 -3.81) (xy 0 -3.81)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(pin input line
+				(at -7.62 2.54 0)
+				(length 3.81)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -7.62 -2.54 0)
+				(length 3.81)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin output line
+				(at 7.62 0 180)
+				(length 3.81)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "74LS08_2_2"
+			(arc
+				(start -3.81 3.81)
+				(mid -2.589 0)
+				(end -3.81 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy -3.81 3.81) (xy -0.635 3.81)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(polyline
+				(pts
+					(xy -3.81 -3.81) (xy -0.635 -3.81)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(arc
+				(start 3.81 0)
+				(mid 2.1855 -2.584)
+				(end -0.6096 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(arc
+				(start -0.6096 3.81)
+				(mid 2.1928 2.5924)
+				(end 3.81 0)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(polyline
+				(pts
+					(xy -0.635 3.81) (xy -3.81 3.81) (xy -3.81 3.81) (xy -3.556 3.4036) (xy -3.0226 2.2606) (xy -2.6924 1.0414)
+					(xy -2.6162 -0.254) (xy -2.7686 -1.4986) (xy -3.175 -2.7178) (xy -3.81 -3.81) (xy -3.81 -3.81)
+					(xy -0.635 -3.81)
+				)
+				(stroke
+					(width -25.4)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(pin input inverted
+				(at -7.62 2.54 0)
+				(length 4.318)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input inverted
+				(at -7.62 -2.54 0)
+				(length 4.318)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin output inverted
+				(at 7.62 0 180)
+				(length 3.81)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "74LS08_3_1"
+			(arc
+				(start 0 3.81)
+				(mid 3.7934 0)
+				(end 0 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0 3.81) (xy -3.81 3.81) (xy -3.81 -3.81) (xy 0 -3.81)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(pin input line
+				(at -7.62 2.54 0)
+				(length 3.81)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "9"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -7.62 -2.54 0)
+				(length 3.81)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "10"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin output line
+				(at 7.62 0 180)
+				(length 3.81)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "8"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "74LS08_3_2"
+			(arc
+				(start -3.81 3.81)
+				(mid -2.589 0)
+				(end -3.81 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy -3.81 3.81) (xy -0.635 3.81)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(polyline
+				(pts
+					(xy -3.81 -3.81) (xy -0.635 -3.81)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(arc
+				(start 3.81 0)
+				(mid 2.1855 -2.584)
+				(end -0.6096 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(arc
+				(start -0.6096 3.81)
+				(mid 2.1928 2.5924)
+				(end 3.81 0)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(polyline
+				(pts
+					(xy -0.635 3.81) (xy -3.81 3.81) (xy -3.81 3.81) (xy -3.556 3.4036) (xy -3.0226 2.2606) (xy -2.6924 1.0414)
+					(xy -2.6162 -0.254) (xy -2.7686 -1.4986) (xy -3.175 -2.7178) (xy -3.81 -3.81) (xy -3.81 -3.81)
+					(xy -0.635 -3.81)
+				)
+				(stroke
+					(width -25.4)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(pin input inverted
+				(at -7.62 2.54 0)
+				(length 4.318)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "9"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input inverted
+				(at -7.62 -2.54 0)
+				(length 4.318)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "10"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin output inverted
+				(at 7.62 0 180)
+				(length 3.81)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "8"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "74LS08_4_1"
+			(arc
+				(start 0 3.81)
+				(mid 3.7934 0)
+				(end 0 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0 3.81) (xy -3.81 3.81) (xy -3.81 -3.81) (xy 0 -3.81)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(pin input line
+				(at -7.62 2.54 0)
+				(length 3.81)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "12"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input line
+				(at -7.62 -2.54 0)
+				(length 3.81)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "13"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin output line
+				(at 7.62 0 180)
+				(length 3.81)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "11"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "74LS08_4_2"
+			(arc
+				(start -3.81 3.81)
+				(mid -2.589 0)
+				(end -3.81 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy -3.81 3.81) (xy -0.635 3.81)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(polyline
+				(pts
+					(xy -3.81 -3.81) (xy -0.635 -3.81)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(arc
+				(start 3.81 0)
+				(mid 2.1855 -2.584)
+				(end -0.6096 -3.81)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(arc
+				(start -0.6096 3.81)
+				(mid 2.1928 2.5924)
+				(end 3.81 0)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(polyline
+				(pts
+					(xy -0.635 3.81) (xy -3.81 3.81) (xy -3.81 3.81) (xy -3.556 3.4036) (xy -3.0226 2.2606) (xy -2.6924 1.0414)
+					(xy -2.6162 -0.254) (xy -2.7686 -1.4986) (xy -3.175 -2.7178) (xy -3.81 -3.81) (xy -3.81 -3.81)
+					(xy -0.635 -3.81)
+				)
+				(stroke
+					(width -25.4)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(pin input inverted
+				(at -7.62 2.54 0)
+				(length 4.318)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "12"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin input inverted
+				(at -7.62 -2.54 0)
+				(length 4.318)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "13"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin output inverted
+				(at 7.62 0 180)
+				(length 3.81)
+				(name "~"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "11"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "74LS08_5_0"
+			(pin power_in line
+				(at 0 12.7 270)
+				(length 5.08)
+				(name "VCC"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "14"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin power_in line
+				(at 0 -12.7 90)
+				(length 5.08)
+				(name "GND"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "7"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "74LS08_5_1"
+			(rectangle
+				(start -5.08 7.62)
+				(end 5.08 -7.62)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+(symbol "Device:R_Pack04"
+		(pin_names
+			(offset 0)
+			(hide yes)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "RN"
+			(at -7.62 0 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "R_Pack04"
+			(at 5.08 0 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 6.985 0 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "4 resistor network, parallel topology"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_keywords" "R network parallel topology isolated"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "ki_fp_filters" "DIP* SOIC* R*Array*Concave* R*Array*Convex* MSOP*"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(symbol "R_Pack04_0_1"
+			(rectangle
+				(start -6.35 -2.413)
+				(end 3.81 2.413)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(rectangle
+				(start -5.715 1.905)
+				(end -4.445 -1.905)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy -5.08 1.905) (xy -5.08 2.54)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy -5.08 -2.54) (xy -5.08 -1.905)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -3.175 1.905)
+				(end -1.905 -1.905)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy -2.54 1.905) (xy -2.54 2.54)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy -2.54 -2.54) (xy -2.54 -1.905)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start -0.635 1.905)
+				(end 0.635 -1.905)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0 1.905) (xy 0 2.54)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 0 -2.54) (xy 0 -1.905)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(rectangle
+				(start 1.905 1.905)
+				(end 3.175 -1.905)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 2.54 1.905) (xy 2.54 2.54)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(polyline
+				(pts
+					(xy 2.54 -2.54) (xy 2.54 -1.905)
+				)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "R_Pack04_1_1"
+			(pin passive line
+				(at -5.08 5.08 270)
+				(length 2.54)
+				(name "R1.2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "8"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -5.08 90)
+				(length 2.54)
+				(name "R1.1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -2.54 5.08 270)
+				(length 2.54)
+				(name "R2.2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "7"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -2.54 -5.08 90)
+				(length 2.54)
+				(name "R2.1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 5.08 270)
+				(length 2.54)
+				(name "R3.2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 0 -5.08 90)
+				(length 2.54)
+				(name "R3.1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 2.54 5.08 270)
+				(length 2.54)
+				(name "R4.2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 2.54 -5.08 90)
+				(length 2.54)
+				(name "R4.1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+(symbol "74xGxx:74LVC1G17"
+	(exclude_from_sim no)
+	(in_bom yes)
+	(on_board yes)
+	(property "Reference" "U"
+		(at 0 3.81 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(justify left)))
+	(property "Value" "74LVC1G17"
+		(at 0 -3.81 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(justify left)))
+	(property "Footprint" ""
+		(at -2.54 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "Datasheet" "https://www.ti.com/lit/ds/symlink/sn74lvc1g17.pdf"
+		(at 0 -6.35 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(justify left)
+			(hide yes)))
+	(property "Description" "Single Schmitt Buffer Gate, Low-Voltage CMOS"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "ki_keywords" "Single Gate Buff Schmitt LVC CMOS"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(property "ki_fp_filters" "SOT?23* SOT?553* Texas?R-PDSO-G5?DCK* Texas?R-PDSO-N5?DRL* Texas?X2SON*0.8x0.8mm*P0.48mm*"
+		(at 0 0 0)
+		(effects
+			(font
+				(size 1.27 1.27))
+			(hide yes)))
+	(symbol "74LVC1G17_0_1"
+		(polyline
+			(pts
+				(xy -7.62 6.35)
+				(xy -7.62 -6.35)
+				(xy 5.08 0)
+				(xy -7.62 6.35))
+			(stroke
+				(width 0.254)
+				(type default))
+			(fill
+				(type background)))
+		(polyline
+			(pts
+				(xy -3.81 -1.27)
+				(xy -2.54 -1.27)
+				(xy -2.54 1.27)
+				(xy -1.27 1.27))
+			(stroke
+				(width 0.254)
+				(type default))
+			(fill
+				(type background)))
+		(polyline
+			(pts
+				(xy -2.54 -1.27)
+				(xy -1.27 -1.27)
+				(xy -1.27 1.27)
+				(xy 0 1.27))
+			(stroke
+				(width 0.254)
+				(type default))
+			(fill
+				(type background))))
+	(symbol "74LVC1G17_1_1"
+		(pin input line
+			(at -12.7 0 0)
+			(length 5.08)
+			(name "~"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "2"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin no_connect line
+			(at -7.62 5.08 180)
+			(length 5.08)
+			(hide yes)
+			(name "NC"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "1"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin power_in line
+			(at -5.08 10.16 270)
+			(length 5.08)
+			(name "VCC"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "5"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin power_in line
+			(at -5.08 -10.16 90)
+			(length 5.08)
+			(name "GND"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "3"
+				(effects
+					(font
+						(size 1.27 1.27)))))
+		(pin output line
+			(at 10.16 0 180)
+			(length 5.08)
+			(name "~"
+				(effects
+					(font
+						(size 1.27 1.27))))
+			(number "4"
+				(effects
+					(font
+						(size 1.27 1.27)))))))
 )
 (symbol (lib_id "Connector_Generic:Conn_01x06") (at 924.56 86.36 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "fb490de9-b94a-4986-a714-8abee38ef18d")
 (property "Reference" "J17" (at 924.56 78.74 0) (effects (font (size 1.27 1.27))))
@@ -9069,7 +10546,7 @@
 (wire (pts (xy 770.89 83.82) (xy 770.89 86.36)) (stroke (width 0) (type default)) (uuid "456f72ba-0bee-4662-acab-2096d6308b46"))
 (label "AI1_SH" (at 770.89 86.36 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "3c5226ec-4294-4942-841c-ce7f7d28e8c9"))
 (wire (pts (xy 429.26 457.2) (xy 426.72 457.2)) (stroke (width 0) (type default)) (uuid "a6950992-2f26-42bf-88b0-01d6dfc9cc20"))
-(label "AI_SH_EN1" (at 426.72 457.2 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "0082acda-3b36-4267-8dc3-f3116d1ab01c"))
+(label "AI_SH_G1" (at 426.72 457.2 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "0082acda-3b36-4267-8dc3-f3116d1ab01c"))
 (wire (pts (xy 436.88 452.12) (xy 436.88 449.58)) (stroke (width 0) (type default)) (uuid "2fb59155-a1bd-4130-90dc-2f324249c6c3"))
 (label "AI1_SH" (at 436.88 449.58 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "81daafd7-8d2f-4609-ad9e-551755fc4f44"))
 (wire (pts (xy 436.88 462.28) (xy 436.88 464.82)) (stroke (width 0) (type default)) (uuid "a26aa905-751d-4dfb-8e57-cd42d6e7a54b"))
@@ -9155,7 +10632,7 @@
 (wire (pts (xy 638.81 86.36) (xy 638.81 88.9)) (stroke (width 0) (type default)) (uuid "ac62e897-6d72-4595-b6ec-3100aa3e6b9a"))
 (label "AI2_SH" (at 638.81 88.9 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "b8516d2d-59b7-4ebb-8101-5a5094ebdee7"))
 (wire (pts (xy 480.06 459.74) (xy 477.52 459.74)) (stroke (width 0) (type default)) (uuid "1f8dda0f-3f26-4790-ac40-b6b803c1a169"))
-(label "AI_SH_EN2" (at 477.52 459.74 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "4b8941a6-ded5-407c-a90d-76836c558a80"))
+(label "AI_SH_G2" (at 477.52 459.74 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "4b8941a6-ded5-407c-a90d-76836c558a80"))
 (wire (pts (xy 487.68 454.66) (xy 487.68 452.12)) (stroke (width 0) (type default)) (uuid "69c21380-2647-4fa4-a091-1c850a58accf"))
 (label "AI2_SH" (at 487.68 452.12 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "a478441f-fbdb-4767-adc7-375cabb6d6af"))
 (wire (pts (xy 487.68 464.82) (xy 487.68 467.36)) (stroke (width 0) (type default)) (uuid "0715272d-b3a5-4072-9479-35e99268bcc4"))
@@ -9241,7 +10718,7 @@
 (wire (pts (xy 506.73 88.9) (xy 506.73 91.44)) (stroke (width 0) (type default)) (uuid "4cc6de08-1ee0-4c1a-b388-b5b6668bca77"))
 (label "AI3_SH" (at 506.73 91.44 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "645ce0a0-7e4f-4206-9f83-c69e5b0bae53"))
 (wire (pts (xy 510.54 490.22) (xy 508 490.22)) (stroke (width 0) (type default)) (uuid "83b4866c-01a8-41df-83e1-4977872e162b"))
-(label "AI_SH_EN3" (at 508 490.22 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "9506ed95-d135-4475-b87f-88d1d9b0ff93"))
+(label "AI_SH_G3" (at 508 490.22 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "9506ed95-d135-4475-b87f-88d1d9b0ff93"))
 (wire (pts (xy 518.16 485.14) (xy 518.16 482.6)) (stroke (width 0) (type default)) (uuid "3fc7885f-15bd-4da8-89e7-250d731dd349"))
 (label "AI3_SH" (at 518.16 482.6 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "1a16f32e-6912-4d27-a46b-8d9d7a56e29b"))
 (wire (pts (xy 518.16 495.3) (xy 518.16 497.84)) (stroke (width 0) (type default)) (uuid "dea41207-7c88-4b2e-9e81-63538bc65a35"))
@@ -9327,7 +10804,7 @@
 (wire (pts (xy 374.65 91.44) (xy 374.65 93.98)) (stroke (width 0) (type default)) (uuid "50920804-aade-4e16-a1a5-cce5e232663a"))
 (label "AI4_SH" (at 374.65 93.98 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "824a3a82-fd94-4949-997e-49190be7696b"))
 (wire (pts (xy 530.86 447.04) (xy 528.32 447.04)) (stroke (width 0) (type default)) (uuid "9bab2639-c5f1-4faa-b884-b0dd288a9b28"))
-(label "AI_SH_EN4" (at 528.32 447.04 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "5695e00e-0ee3-4985-91c4-e1668fad98f8"))
+(label "AI_SH_G4" (at 528.32 447.04 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "5695e00e-0ee3-4985-91c4-e1668fad98f8"))
 (wire (pts (xy 538.48 441.96) (xy 538.48 439.42)) (stroke (width 0) (type default)) (uuid "eabca4b1-a9e4-4914-8a86-306c6719b759"))
 (label "AI4_SH" (at 538.48 439.42 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "949db530-4f59-4605-a15f-eee700a34210"))
 (wire (pts (xy 538.48 452.12) (xy 538.48 454.66)) (stroke (width 0) (type default)) (uuid "7f366b44-7d03-4db1-8fb2-02468c0046cf"))
@@ -9413,7 +10890,7 @@
 (wire (pts (xy 242.57 93.98) (xy 242.57 96.52)) (stroke (width 0) (type default)) (uuid "d6d61561-6603-4f71-9ea8-aa30d1cde4b0"))
 (label "AI5_SH" (at 242.57 96.52 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "8577396f-6c81-408c-8234-bd9af97f9091"))
 (wire (pts (xy 551.18 495.3) (xy 548.64 495.3)) (stroke (width 0) (type default)) (uuid "8f0607e6-379c-4edc-bdfd-80a4c0a015a0"))
-(label "AI_SH_EN5" (at 548.64 495.3 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "5301069b-a845-4b7d-876f-1bcb3bfd9b67"))
+(label "AI_SH_G5" (at 548.64 495.3 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "5301069b-a845-4b7d-876f-1bcb3bfd9b67"))
 (wire (pts (xy 558.8 490.22) (xy 558.8 487.68)) (stroke (width 0) (type default)) (uuid "31c69260-f796-493b-a0a1-48ec0d0f5ecb"))
 (label "AI5_SH" (at 558.8 487.68 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "75ff0a20-2068-41c0-9f93-2c8124e3b21d"))
 (wire (pts (xy 558.8 500.38) (xy 558.8 502.92)) (stroke (width 0) (type default)) (uuid "e9e2eda6-93bd-4c11-8362-fe6335bed4ef"))
@@ -9499,7 +10976,7 @@
 (wire (pts (xy 130.81 96.52) (xy 130.81 99.06)) (stroke (width 0) (type default)) (uuid "c18062c1-efa6-493d-922b-c17aac25a57a"))
 (label "AI6_SH" (at 130.81 99.06 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "99f397bd-b7ce-4c99-9956-37d683b7c119"))
 (wire (pts (xy 429.26 497.84) (xy 426.72 497.84)) (stroke (width 0) (type default)) (uuid "367f083e-247b-411a-9141-a32e91f1066c"))
-(label "AI_SH_EN6" (at 426.72 497.84 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "dc9a82ac-acbc-44e8-a3f8-c224227d58c4"))
+(label "AI_SH_G6" (at 426.72 497.84 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "dc9a82ac-acbc-44e8-a3f8-c224227d58c4"))
 (wire (pts (xy 436.88 492.76) (xy 436.88 490.22)) (stroke (width 0) (type default)) (uuid "bbbf21b9-bde7-460b-a851-85e8d39c9796"))
 (label "AI6_SH" (at 436.88 490.22 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "94c0b964-4d22-4dc9-a9af-ddb349b00273"))
 (wire (pts (xy 436.88 502.92) (xy 436.88 505.46)) (stroke (width 0) (type default)) (uuid "4a489a6a-ddc1-4136-9f8a-47ba38c9c56f"))
@@ -10989,4 +12466,129 @@
 (label "DI_BIAS_B" (at 172.72 125.73 270) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "859be213-1a87-4b88-abf3-0b2589251870"))
 (wire (pts (xy 172.72 115.57) (xy 172.72 113.03)) (stroke (width 0) (type default)) (uuid "650bdc02-5aae-4453-81cc-d492b0653b0d"))
 (symbol (lib_id "power:GND") (at 172.72 113.03 180) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "86b0168e-be6f-4437-b694-c487228420ce")(property "Reference" "#PWR3101" (at 175.26 111.76 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 175.26 114.30 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 172.72 113.03 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 172.72 113.03 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "660c4f01-71ff-45c1-8a3c-1cc85ed240b5"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "#PWR3101") (unit 1)))))
+(symbol (lib_id "74xx:74LS08") (at 838.20 307.34 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "9c0757c2-c758-4de4-b605-57a3b44f68dd")(property "Reference" "U91" (at 838.20 300.99 0) (effects (font (size 1.27 1.27))))(property "Value" "74LVC08APW" (at 838.20 313.69 0) (effects (font (size 1.27 1.27))))(property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm" (at 838.20 307.34 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 838.20 307.34 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C6053" (at 838.20 307.34 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "74LVC08APW,118" (at 838.20 307.34 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "Nexperia" (at 838.20 307.34 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "Quad 2-input AND, LVC, 5 V tolerant inputs" (at 838.20 307.34 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 31: hardware shunt-off gate. AI_SH_Gx = AI_SH_ENx AND SH_ALLOW; SH_ALLOW = WD_OK AND NRST. All six 4-20 mA shunt FETs off while MCU in reset or watchdog tripped." (at 838.20 307.34 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "9ffb0cd0-33ca-441c-8dd5-a60e07dbc0d5"))(pin "2" (uuid "1e41b816-1e71-45bf-be09-505e7cebc8be"))(pin "3" (uuid "1419e5c0-b8e9-41bc-a181-ac2631125497"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "U91") (unit 1)))))
+(wire (pts (xy 830.58 304.80) (xy 828.04 304.80)) (stroke (width 0) (type default)) (uuid "c001c1ec-5619-4395-bb36-a3efeea50679"))
+(label "AI_SH_EN1" (at 828.04 304.80 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "ae32c964-d445-4d8a-bfc1-cc3f5bc5e2fa"))
+(wire (pts (xy 830.58 309.88) (xy 828.04 309.88)) (stroke (width 0) (type default)) (uuid "5cc8ecae-c667-4acc-af54-22b568d6ddf2"))
+(label "SH_ALLOW" (at 828.04 309.88 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "f26e3f79-cd7e-4055-b78f-21510c6557b4"))
+(wire (pts (xy 845.82 307.34) (xy 848.36 307.34)) (stroke (width 0) (type default)) (uuid "c1e6ad9f-a56d-4b3e-9bfb-e6ec6d60f587"))
+(label "AI_SH_G1" (at 848.36 307.34 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "b40a8fdd-ee6e-43f8-8e11-f66af0f39979"))
+(symbol (lib_id "74xx:74LS08") (at 838.20 325.12 0) (unit 2) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "362a274c-2cb8-419c-a9e6-49736bf3908a")(property "Reference" "U91" (at 838.20 318.77 0) (effects (font (size 1.27 1.27))))(property "Value" "74LVC08APW" (at 838.20 331.47 0) (effects (font (size 1.27 1.27))))(property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm" (at 838.20 325.12 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 838.20 325.12 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C6053" (at 838.20 325.12 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "74LVC08APW,118" (at 838.20 325.12 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "Nexperia" (at 838.20 325.12 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "Quad 2-input AND, LVC, 5 V tolerant inputs" (at 838.20 325.12 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 31: hardware shunt-off gate. AI_SH_Gx = AI_SH_ENx AND SH_ALLOW; SH_ALLOW = WD_OK AND NRST. All six 4-20 mA shunt FETs off while MCU in reset or watchdog tripped." (at 838.20 325.12 0) (effects (font (size 1.27 1.27)) hide))(pin "4" (uuid "1f74258c-c731-457a-84d9-b0318e4e6d3d"))(pin "5" (uuid "732e4ca5-15c8-4b08-8099-3614d4923719"))(pin "6" (uuid "7362fa4b-7a4e-4db4-b019-2ca52737afa0"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "U91") (unit 2)))))
+(wire (pts (xy 830.58 322.58) (xy 828.04 322.58)) (stroke (width 0) (type default)) (uuid "0b12167b-6c0a-4cbe-914f-7fdaffc9fd21"))
+(label "AI_SH_EN2" (at 828.04 322.58 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "ff8b0125-4381-41ea-8bf8-508877a1a865"))
+(wire (pts (xy 830.58 327.66) (xy 828.04 327.66)) (stroke (width 0) (type default)) (uuid "bbfaa101-a8c7-4451-a43c-b1102970126b"))
+(label "SH_ALLOW" (at 828.04 327.66 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "ab7190a9-bb1e-4fba-bbf4-69d660248eb7"))
+(wire (pts (xy 845.82 325.12) (xy 848.36 325.12)) (stroke (width 0) (type default)) (uuid "7bc17380-5d21-41d6-ad0b-27fe68f10a01"))
+(label "AI_SH_G2" (at 848.36 325.12 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "db855829-5a95-436d-9a13-75439d359445"))
+(symbol (lib_id "74xx:74LS08") (at 838.20 342.90 0) (unit 3) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "90754164-afee-49ff-8273-39c7b42883f8")(property "Reference" "U91" (at 838.20 336.55 0) (effects (font (size 1.27 1.27))))(property "Value" "74LVC08APW" (at 838.20 349.25 0) (effects (font (size 1.27 1.27))))(property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm" (at 838.20 342.90 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 838.20 342.90 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C6053" (at 838.20 342.90 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "74LVC08APW,118" (at 838.20 342.90 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "Nexperia" (at 838.20 342.90 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "Quad 2-input AND, LVC, 5 V tolerant inputs" (at 838.20 342.90 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 31: hardware shunt-off gate. AI_SH_Gx = AI_SH_ENx AND SH_ALLOW; SH_ALLOW = WD_OK AND NRST. All six 4-20 mA shunt FETs off while MCU in reset or watchdog tripped." (at 838.20 342.90 0) (effects (font (size 1.27 1.27)) hide))(pin "9" (uuid "26058538-e77e-4370-9bdd-97badc194c4b"))(pin "10" (uuid "e43e8257-c474-41cd-b17e-00168f0cb786"))(pin "8" (uuid "fbb7da85-e325-4b97-84e0-8a1ce137360e"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "U91") (unit 3)))))
+(wire (pts (xy 830.58 340.36) (xy 828.04 340.36)) (stroke (width 0) (type default)) (uuid "9ff56fd2-d4d1-40a5-b3e0-21e5ddda8247"))
+(label "AI_SH_EN3" (at 828.04 340.36 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "4857d20f-b79f-4ac0-9a26-49e240fcd32a"))
+(wire (pts (xy 830.58 345.44) (xy 828.04 345.44)) (stroke (width 0) (type default)) (uuid "0a00d19f-cf84-42f9-9d4b-889ca17dfd4c"))
+(label "SH_ALLOW" (at 828.04 345.44 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "15eea5d5-e23d-48d2-9be5-1b94c01155dc"))
+(wire (pts (xy 845.82 342.90) (xy 848.36 342.90)) (stroke (width 0) (type default)) (uuid "2c53034d-468f-42e4-87d0-73e3eb8cb8ad"))
+(label "AI_SH_G3" (at 848.36 342.90 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "4a645e9b-9b45-49f9-be83-8dd1b4e52844"))
+(symbol (lib_id "74xx:74LS08") (at 838.20 360.68 0) (unit 4) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "03ff1fcf-1f0a-4960-882d-0bc0b43e2321")(property "Reference" "U91" (at 838.20 354.33 0) (effects (font (size 1.27 1.27))))(property "Value" "74LVC08APW" (at 838.20 367.03 0) (effects (font (size 1.27 1.27))))(property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm" (at 838.20 360.68 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 838.20 360.68 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C6053" (at 838.20 360.68 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "74LVC08APW,118" (at 838.20 360.68 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "Nexperia" (at 838.20 360.68 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "Quad 2-input AND, LVC, 5 V tolerant inputs" (at 838.20 360.68 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 31: hardware shunt-off gate. AI_SH_Gx = AI_SH_ENx AND SH_ALLOW; SH_ALLOW = WD_OK AND NRST. All six 4-20 mA shunt FETs off while MCU in reset or watchdog tripped." (at 838.20 360.68 0) (effects (font (size 1.27 1.27)) hide))(pin "12" (uuid "49420d69-4079-426b-a9ad-b3d78efde4a7"))(pin "13" (uuid "8e9690bc-507f-42e5-aef8-98529a865b91"))(pin "11" (uuid "4ec5da74-8ec3-4bf0-b510-5f2e1a6b2bd9"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "U91") (unit 4)))))
+(wire (pts (xy 830.58 358.14) (xy 828.04 358.14)) (stroke (width 0) (type default)) (uuid "6dad4b20-f69b-4630-b48c-4c389021c1b1"))
+(label "AI_SH_EN4" (at 828.04 358.14 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "e9515be1-63db-4c6b-ad5e-93b62146ba12"))
+(wire (pts (xy 830.58 363.22) (xy 828.04 363.22)) (stroke (width 0) (type default)) (uuid "4e84881a-5262-48f2-a762-165878ed96fb"))
+(label "SH_ALLOW" (at 828.04 363.22 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "806544a4-1e00-40a9-9e3a-24763414dc2a"))
+(wire (pts (xy 845.82 360.68) (xy 848.36 360.68)) (stroke (width 0) (type default)) (uuid "848f5875-d6cf-47a4-bb01-75f7eea1779c"))
+(label "AI_SH_G4" (at 848.36 360.68 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "24cdc04c-7256-4770-b1d9-27291a8b4b4b"))
+(symbol (lib_id "74xx:74LS08") (at 878.84 307.34 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "36c46721-625e-4fb0-bd83-9f36c80c5e7a")(property "Reference" "U92" (at 878.84 300.99 0) (effects (font (size 1.27 1.27))))(property "Value" "74LVC08APW" (at 878.84 313.69 0) (effects (font (size 1.27 1.27))))(property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm" (at 878.84 307.34 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 878.84 307.34 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C6053" (at 878.84 307.34 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "74LVC08APW,118" (at 878.84 307.34 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "Nexperia" (at 878.84 307.34 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "Quad 2-input AND, LVC, 5 V tolerant inputs" (at 878.84 307.34 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 31: hardware shunt-off gate. AI_SH_Gx = AI_SH_ENx AND SH_ALLOW; SH_ALLOW = WD_OK AND NRST. All six 4-20 mA shunt FETs off while MCU in reset or watchdog tripped." (at 878.84 307.34 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "05dbda29-5143-469a-987a-0b402b61e098"))(pin "2" (uuid "23fa55a0-7000-4566-bac3-0a3a8032d886"))(pin "3" (uuid "83820c06-10e5-4c0c-b94a-d35aea286a47"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "U92") (unit 1)))))
+(wire (pts (xy 871.22 304.80) (xy 868.68 304.80)) (stroke (width 0) (type default)) (uuid "ca346c5c-4ce7-45f1-9bc0-a982a5efb660"))
+(label "AI_SH_EN5" (at 868.68 304.80 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "57fa9a68-d827-47b3-a6ea-e1d2ad758544"))
+(wire (pts (xy 871.22 309.88) (xy 868.68 309.88)) (stroke (width 0) (type default)) (uuid "4b789edb-c55c-46fc-96db-bc978173567b"))
+(label "SH_ALLOW" (at 868.68 309.88 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "e97d2001-317c-4abc-927c-85efdc7243b3"))
+(wire (pts (xy 886.46 307.34) (xy 889.00 307.34)) (stroke (width 0) (type default)) (uuid "09f7537c-5fc0-431a-bd0a-9cf82265a7b1"))
+(label "AI_SH_G5" (at 889.00 307.34 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "8c3f100c-1f22-4dc9-b59d-1034bde7d26c"))
+(symbol (lib_id "74xx:74LS08") (at 878.84 325.12 0) (unit 2) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "03fe4e7f-3f44-427f-900c-17bf20050008")(property "Reference" "U92" (at 878.84 318.77 0) (effects (font (size 1.27 1.27))))(property "Value" "74LVC08APW" (at 878.84 331.47 0) (effects (font (size 1.27 1.27))))(property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm" (at 878.84 325.12 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 878.84 325.12 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C6053" (at 878.84 325.12 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "74LVC08APW,118" (at 878.84 325.12 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "Nexperia" (at 878.84 325.12 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "Quad 2-input AND, LVC, 5 V tolerant inputs" (at 878.84 325.12 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 31: hardware shunt-off gate. AI_SH_Gx = AI_SH_ENx AND SH_ALLOW; SH_ALLOW = WD_OK AND NRST. All six 4-20 mA shunt FETs off while MCU in reset or watchdog tripped." (at 878.84 325.12 0) (effects (font (size 1.27 1.27)) hide))(pin "4" (uuid "0d1c6880-49f9-49db-a7bf-7d8c29bb37ff"))(pin "5" (uuid "02f8964e-cf6c-45df-b048-99a286636036"))(pin "6" (uuid "a07eae94-9a0d-44f9-b65e-29d75ccc40bc"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "U92") (unit 2)))))
+(wire (pts (xy 871.22 322.58) (xy 868.68 322.58)) (stroke (width 0) (type default)) (uuid "05de8330-675e-4bf3-a10e-e3c3999d4bbd"))
+(label "AI_SH_EN6" (at 868.68 322.58 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "8f4966a7-06a9-4d02-a899-aba849c5d3ee"))
+(wire (pts (xy 871.22 327.66) (xy 868.68 327.66)) (stroke (width 0) (type default)) (uuid "faf6ddcf-67e2-47af-8738-506ef9133163"))
+(label "SH_ALLOW" (at 868.68 327.66 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "c82be657-fd7d-411d-ab8c-50573af69988"))
+(wire (pts (xy 886.46 325.12) (xy 889.00 325.12)) (stroke (width 0) (type default)) (uuid "39ed457c-8d03-4f7b-818b-882ed051442d"))
+(label "AI_SH_G6" (at 889.00 325.12 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "169a5c20-9384-45a2-b7a7-73fc139020e4"))
+(symbol (lib_id "74xx:74LS08") (at 878.84 342.90 0) (unit 3) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "dde6320a-5435-4efb-bc22-52e5fd583fd8")(property "Reference" "U92" (at 878.84 336.55 0) (effects (font (size 1.27 1.27))))(property "Value" "74LVC08APW" (at 878.84 349.25 0) (effects (font (size 1.27 1.27))))(property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm" (at 878.84 342.90 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 878.84 342.90 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C6053" (at 878.84 342.90 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "74LVC08APW,118" (at 878.84 342.90 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "Nexperia" (at 878.84 342.90 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "Quad 2-input AND, LVC, 5 V tolerant inputs" (at 878.84 342.90 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 31: hardware shunt-off gate. AI_SH_Gx = AI_SH_ENx AND SH_ALLOW; SH_ALLOW = WD_OK AND NRST. All six 4-20 mA shunt FETs off while MCU in reset or watchdog tripped." (at 878.84 342.90 0) (effects (font (size 1.27 1.27)) hide))(pin "9" (uuid "af34affb-c9b4-48af-bb19-0792d3243143"))(pin "10" (uuid "64bc0f65-cbd8-437c-8f19-859ddbb93dc4"))(pin "8" (uuid "83ed1b4a-12fd-407b-8268-0df7cc466304"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "U92") (unit 3)))))
+(wire (pts (xy 871.22 340.36) (xy 868.68 340.36)) (stroke (width 0) (type default)) (uuid "dd802b8a-1b2c-490d-9f38-eaf38a0f64c2"))
+(global_label "WD_OK" (shape passive) (at 868.68 340.36 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "e2d4dcce-5df1-4a39-b6d4-906f21945ed0") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 868.68 340.36 0) (effects (font (size 1.27 1.27)) hide)))
+(wire (pts (xy 871.22 345.44) (xy 868.68 345.44)) (stroke (width 0) (type default)) (uuid "88a4212d-0010-42ba-b56f-b1d41ead58e9"))
+(label "NRST_S" (at 868.68 345.44 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "b6a2f6e9-1531-43f8-8464-b7b8b22516bf"))
+(wire (pts (xy 886.46 342.90) (xy 889.00 342.90)) (stroke (width 0) (type default)) (uuid "9004bc88-500f-4506-b0fe-c8debd687996"))
+(label "SH_ALLOW" (at 889.00 342.90 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "46ccf00c-d56b-48fb-af16-433691f1f645"))
+(symbol (lib_id "74xx:74LS08") (at 878.84 360.68 0) (unit 4) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "099c7e6a-9a85-4d0d-8a14-f5be5a133b98")(property "Reference" "U92" (at 878.84 354.33 0) (effects (font (size 1.27 1.27))))(property "Value" "74LVC08APW" (at 878.84 367.03 0) (effects (font (size 1.27 1.27))))(property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm" (at 878.84 360.68 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 878.84 360.68 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C6053" (at 878.84 360.68 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "74LVC08APW,118" (at 878.84 360.68 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "Nexperia" (at 878.84 360.68 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "Quad 2-input AND, LVC, 5 V tolerant inputs" (at 878.84 360.68 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 31: hardware shunt-off gate. AI_SH_Gx = AI_SH_ENx AND SH_ALLOW; SH_ALLOW = WD_OK AND NRST. All six 4-20 mA shunt FETs off while MCU in reset or watchdog tripped." (at 878.84 360.68 0) (effects (font (size 1.27 1.27)) hide))(pin "12" (uuid "8f93e6ca-5c0c-493a-a20b-8eb1437e8f9b"))(pin "13" (uuid "a9c446c3-f68a-4b7f-b57c-0597823854a4"))(pin "11" (uuid "377672c2-eb68-4b25-a2b5-10c41b041389"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "U92") (unit 4)))))
+(wire (pts (xy 871.22 358.14) (xy 868.68 358.14)) (stroke (width 0) (type default)) (uuid "26b41b31-1128-4a8e-ada6-aa059074f200"))
+(symbol (lib_id "power:GND") (at 868.68 358.14 270) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "854f9378-d1d0-4760-b650-35b9fd095c00")(property "Reference" "#PWR3108" (at 871.22 356.87 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 871.22 359.41 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 868.68 358.14 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 868.68 358.14 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "3f001d3c-30dd-4a5e-b2ca-04ac39952461"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "#PWR3108") (unit 1)))))
+(wire (pts (xy 871.22 363.22) (xy 868.68 363.22)) (stroke (width 0) (type default)) (uuid "f59aaaf3-6920-4862-887d-de88dade65f0"))
+(symbol (lib_id "power:GND") (at 868.68 363.22 270) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "04b942c4-feb4-4b6d-a905-5de1e63bb61e")(property "Reference" "#PWR3109" (at 871.22 361.95 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 871.22 364.49 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 868.68 363.22 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 868.68 363.22 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "04df86eb-7995-4122-8770-80264563cc73"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "#PWR3109") (unit 1)))))
+(no_connect (at 886.46 360.68) (uuid "8f93fcc7-d946-42bc-93a7-313f5e1f5678"))
+(symbol (lib_id "74xx:74LS08") (at 911.86 320.04 0) (unit 5) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "49c96b44-37bf-4e43-8b55-f0ca4741f015")(property "Reference" "U91" (at 911.86 313.69 0) (effects (font (size 1.27 1.27))))(property "Value" "74LVC08APW" (at 911.86 326.39 0) (effects (font (size 1.27 1.27))))(property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm" (at 911.86 320.04 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 911.86 320.04 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C6053" (at 911.86 320.04 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "74LVC08APW,118" (at 911.86 320.04 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "Nexperia" (at 911.86 320.04 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "Quad 2-input AND, LVC, 5 V tolerant inputs" (at 911.86 320.04 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 31: hardware shunt-off gate. AI_SH_Gx = AI_SH_ENx AND SH_ALLOW; SH_ALLOW = WD_OK AND NRST. All six 4-20 mA shunt FETs off while MCU in reset or watchdog tripped." (at 911.86 320.04 0) (effects (font (size 1.27 1.27)) hide))(pin "14" (uuid "813dafa4-a23d-4a07-a4d2-b06b13aad101"))(pin "7" (uuid "15465179-96dc-497c-a9ac-4a03f261b604"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "U91") (unit 5)))))
+(wire (pts (xy 911.86 307.34) (xy 911.86 304.80)) (stroke (width 0) (type default)) (uuid "0f746185-e3f2-49c6-b8cd-73767d084810"))
+(global_label "+3V3_SAFE" (shape passive) (at 911.86 304.80 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "7db5cc67-4dec-4899-91c5-bebbe10ffb36") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 911.86 304.80 0) (effects (font (size 1.27 1.27)) hide)))
+(wire (pts (xy 911.86 332.74) (xy 911.86 335.28)) (stroke (width 0) (type default)) (uuid "516e236b-8162-42be-95d8-b233ec16748e"))
+(symbol (lib_id "power:GND") (at 911.86 335.28 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "9c05361f-6724-4481-a845-c20bc4d91d2b")(property "Reference" "#PWR3110" (at 914.40 334.01 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 914.40 336.55 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 911.86 335.28 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 911.86 335.28 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "a6a72610-92ad-4c18-b8a0-1464c7568a9a"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "#PWR3110") (unit 1)))))
+(symbol (lib_id "74xx:74LS08") (at 924.56 320.04 0) (unit 5) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "659fc8b5-f250-4f70-953e-6f8b7f7f8163")(property "Reference" "U92" (at 924.56 313.69 0) (effects (font (size 1.27 1.27))))(property "Value" "74LVC08APW" (at 924.56 326.39 0) (effects (font (size 1.27 1.27))))(property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm" (at 924.56 320.04 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 924.56 320.04 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C6053" (at 924.56 320.04 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "74LVC08APW,118" (at 924.56 320.04 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "Nexperia" (at 924.56 320.04 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "Quad 2-input AND, LVC, 5 V tolerant inputs" (at 924.56 320.04 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 31: hardware shunt-off gate. AI_SH_Gx = AI_SH_ENx AND SH_ALLOW; SH_ALLOW = WD_OK AND NRST. All six 4-20 mA shunt FETs off while MCU in reset or watchdog tripped." (at 924.56 320.04 0) (effects (font (size 1.27 1.27)) hide))(pin "14" (uuid "a9e26b88-ae39-483d-9c76-feab1a1b14c7"))(pin "7" (uuid "c0fc7dd1-7917-417c-a7ff-5c9767511313"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "U92") (unit 5)))))
+(wire (pts (xy 924.56 307.34) (xy 924.56 304.80)) (stroke (width 0) (type default)) (uuid "5d894f85-f30c-46a2-a8b8-340e02808a26"))
+(global_label "+3V3_SAFE" (shape passive) (at 924.56 304.80 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "70cbac53-44b7-4f04-9c94-bd4b3a91ca6d") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 924.56 304.80 0) (effects (font (size 1.27 1.27)) hide)))
+(wire (pts (xy 924.56 332.74) (xy 924.56 335.28)) (stroke (width 0) (type default)) (uuid "7d49135c-e4ab-4908-bc02-f691d571e73c"))
+(symbol (lib_id "power:GND") (at 924.56 335.28 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "c70c92c2-476b-4321-bf23-9fd5e1b7d9d9")(property "Reference" "#PWR3111" (at 927.10 334.01 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 927.10 336.55 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 924.56 335.28 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 924.56 335.28 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "29325321-2bc0-4351-994f-0c96aab284a4"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "#PWR3111") (unit 1)))))
+(symbol (lib_id "74xGxx:74LVC1G17") (at 838.20 393.70 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "ab5f81ef-e53c-4c43-a88d-e165fc5e2224")(property "Reference" "U93" (at 838.20 387.35 0) (effects (font (size 1.27 1.27))))(property "Value" "SN74LVC1G17DBVR" (at 838.20 400.05 0) (effects (font (size 1.27 1.27))))(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5" (at 838.20 393.70 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 838.20 393.70 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C7836" (at 838.20 393.70 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "SN74LVC1G17DBVR" (at 838.20 393.70 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "Texas Instruments" (at 838.20 393.70 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "Single Schmitt buffer" (at 838.20 393.70 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 31: Schmitt buffer NRST -> NRST_S for U92 gate 3. NRST rises slowly (C65 100n + MCU pull-up); LVC08 inputs need fast edges." (at 838.20 393.70 0) (effects (font (size 1.27 1.27)) hide))(pin "2" (uuid "3d38b0b2-34e3-480e-b57b-f871c139c4df"))(pin "1" (uuid "283c5638-cae9-41c9-8c4d-a1ce3ff02c40"))(pin "5" (uuid "7a8d16b2-c214-4019-a34d-d91aa2b5e610"))(pin "3" (uuid "f3fa2587-f7e0-4910-bbe6-543f013dbdec"))(pin "4" (uuid "1cffefa0-d3b8-499d-a8a5-c69f7c912530"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "U93") (unit 1)))))
+(no_connect (at 830.58 388.62) (uuid "4d9e6c71-271c-4818-adcc-f09e2488ae31"))
+(wire (pts (xy 825.50 393.70) (xy 822.96 393.70)) (stroke (width 0) (type default)) (uuid "68072112-c89f-4c42-9c46-9aec365fc490"))
+(global_label "NRST" (shape passive) (at 822.96 393.70 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "9ed94af0-fdd4-4f0f-9d2b-99bf53a9e35d") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 822.96 393.70 0) (effects (font (size 1.27 1.27)) hide)))
+(wire (pts (xy 848.36 393.70) (xy 850.90 393.70)) (stroke (width 0) (type default)) (uuid "2b9baaf0-de3b-497d-98fe-f5d099d54918"))
+(label "NRST_S" (at 850.90 393.70 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "ef108dde-8377-43aa-92ba-c46428b544a3"))
+(wire (pts (xy 833.12 383.54) (xy 833.12 381.00)) (stroke (width 0) (type default)) (uuid "eb82b039-a398-41f5-be94-ec7ee4c8c0bb"))
+(global_label "+3V3_SAFE" (shape passive) (at 833.12 381.00 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "870bd15d-0252-4f68-8ba4-d5769fff068c") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 833.12 381.00 0) (effects (font (size 1.27 1.27)) hide)))
+(wire (pts (xy 833.12 403.86) (xy 833.12 406.40)) (stroke (width 0) (type default)) (uuid "9a454744-871f-4594-a701-8afd59b10670"))
+(symbol (lib_id "power:GND") (at 833.12 406.40 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "8c12cd82-40b0-46ec-b619-01a40391bd9d")(property "Reference" "#PWR3112" (at 835.66 405.13 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 835.66 407.67 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 833.12 406.40 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 833.12 406.40 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "719a7f19-06a3-4a11-be51-fc624bbc9ca1"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "#PWR3112") (unit 1)))))
+(symbol (lib_id "Device:C") (at 911.86 368.30 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "8e2f96c7-ca99-45ca-94f9-2e25a771d08f")(property "Reference" "C320" (at 911.86 361.95 0) (effects (font (size 1.27 1.27))))(property "Value" "100n" (at 911.86 374.65 0) (effects (font (size 1.27 1.27))))(property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 911.86 368.30 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 911.86 368.30 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C14663" (at 911.86 368.30 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "CC0603KRX7R9BB104" (at 911.86 368.30 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "YAGEO" (at 911.86 368.30 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "Unpolarized capacitor" (at 911.86 368.30 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 31: U91 VCC decoupling, place at its VCC pin" (at 911.86 368.30 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "11d48601-2eec-442c-b59c-b79a3daaf7c1"))(pin "2" (uuid "b40b1314-8dad-43f5-94af-61895661819f"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "C320") (unit 1)))))
+(wire (pts (xy 911.86 364.49) (xy 911.86 361.95)) (stroke (width 0) (type default)) (uuid "ba0e6031-7d84-4361-bd2a-2aac3c417cf7"))
+(global_label "+3V3_SAFE" (shape passive) (at 911.86 361.95 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "fcd04bf4-df57-4ec5-9761-12d7866fb9f4") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 911.86 361.95 0) (effects (font (size 1.27 1.27)) hide)))
+(wire (pts (xy 911.86 372.11) (xy 911.86 374.65)) (stroke (width 0) (type default)) (uuid "9041f4b9-21cb-4c9a-bf4c-59b1c342e1ad"))
+(symbol (lib_id "power:GND") (at 911.86 374.65 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "f162ffe2-3e12-489c-8c03-0aff219410fc")(property "Reference" "#PWR3113" (at 914.40 373.38 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 914.40 375.92 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 911.86 374.65 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 911.86 374.65 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "cc1f1e45-506a-4434-be17-2edc84207183"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "#PWR3113") (unit 1)))))
+(symbol (lib_id "Device:C") (at 924.56 368.30 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "bfb8ddd7-1ba1-408b-bc1d-b35545807606")(property "Reference" "C321" (at 924.56 361.95 0) (effects (font (size 1.27 1.27))))(property "Value" "100n" (at 924.56 374.65 0) (effects (font (size 1.27 1.27))))(property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 924.56 368.30 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 924.56 368.30 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C14663" (at 924.56 368.30 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "CC0603KRX7R9BB104" (at 924.56 368.30 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "YAGEO" (at 924.56 368.30 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "Unpolarized capacitor" (at 924.56 368.30 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 31: U92 VCC decoupling, place at its VCC pin" (at 924.56 368.30 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "0c89b332-212f-4461-b255-e29760fbd907"))(pin "2" (uuid "5a99cb2c-1bc8-431b-9462-7bb98fe24967"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "C321") (unit 1)))))
+(wire (pts (xy 924.56 364.49) (xy 924.56 361.95)) (stroke (width 0) (type default)) (uuid "7e9b3b87-4b0e-480d-a021-48e6a22d4010"))
+(global_label "+3V3_SAFE" (shape passive) (at 924.56 361.95 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "3914a339-be78-41ac-99b7-fb7ab17db03b") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 924.56 361.95 0) (effects (font (size 1.27 1.27)) hide)))
+(wire (pts (xy 924.56 372.11) (xy 924.56 374.65)) (stroke (width 0) (type default)) (uuid "1e5fd4a5-27ff-478c-b069-8f1927c9a1ea"))
+(symbol (lib_id "power:GND") (at 924.56 374.65 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "e7f1688b-4e79-44f5-919f-b4eb32ecf37a")(property "Reference" "#PWR3114" (at 927.10 373.38 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 927.10 375.92 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 924.56 374.65 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 924.56 374.65 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "03e3ad9d-831d-46a1-b618-684e2d7e65f1"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "#PWR3114") (unit 1)))))
+(symbol (lib_id "Device:C") (at 863.60 393.70 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0e99cc72-ff35-437b-acd9-3a964f8e88d7")(property "Reference" "C322" (at 863.60 387.35 0) (effects (font (size 1.27 1.27))))(property "Value" "100n" (at 863.60 400.05 0) (effects (font (size 1.27 1.27))))(property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 863.60 393.70 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 863.60 393.70 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C14663" (at 863.60 393.70 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "CC0603KRX7R9BB104" (at 863.60 393.70 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "YAGEO" (at 863.60 393.70 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "Unpolarized capacitor" (at 863.60 393.70 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 31: U93 VCC decoupling, place at its VCC pin" (at 863.60 393.70 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "9d7fd357-0b99-4d1d-a657-e12a9f0ab9eb"))(pin "2" (uuid "30b4ba06-69a9-4fb6-a8a1-17c585dd7843"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "C322") (unit 1)))))
+(wire (pts (xy 863.60 389.89) (xy 863.60 387.35)) (stroke (width 0) (type default)) (uuid "68f5af73-ab74-4586-b59b-cca5d8c51d75"))
+(global_label "+3V3_SAFE" (shape passive) (at 863.60 387.35 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "7e48f13a-d2eb-4790-b2f3-a6785ac90001") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 863.60 387.35 0) (effects (font (size 1.27 1.27)) hide)))
+(wire (pts (xy 863.60 397.51) (xy 863.60 400.05)) (stroke (width 0) (type default)) (uuid "7b8d968c-06ab-4476-8f38-54c876e2292d"))
+(symbol (lib_id "power:GND") (at 863.60 400.05 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "1c441019-bc4f-4592-a8dd-b013b2a3e813")(property "Reference" "#PWR3115" (at 866.14 398.78 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 866.14 401.32 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 863.60 400.05 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 863.60 400.05 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "15d51831-a2d1-4219-b16d-b5793cb7d4cd"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "#PWR3115") (unit 1)))))
+(symbol (lib_id "Device:R_Pack04") (at 947.42 320.04 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "b067c96c-965d-48c6-9e1c-6f7aae24f613")(property "Reference" "RN1" (at 947.42 313.69 0) (effects (font (size 1.27 1.27))))(property "Value" "10k x4" (at 947.42 326.39 0) (effects (font (size 1.27 1.27))))(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603" (at 947.42 320.04 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 947.42 320.04 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C29718" (at 947.42 320.04 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "4D03WGJ0103T5E" (at 947.42 320.04 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "UNI-ROYAL" (at 947.42 320.04 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "4 resistor network, isolated, 0603x4 convex" (at 947.42 320.04 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 31: gate-side pull-downs AI_SH_G1-4 (shunt FET off if U91 unpowered / output floating)" (at 947.42 320.04 0) (effects (font (size 1.27 1.27)) hide))(pin "8" (uuid "cbba0536-152f-46fd-8523-f0fb76956eac"))(pin "1" (uuid "d8466cc2-feb0-4b4f-ba44-bcdfc423467c"))(pin "7" (uuid "74c831d7-1ecb-4276-b6e5-da7d9288c654"))(pin "2" (uuid "57422728-73c6-4911-b981-92c41ed26e11"))(pin "6" (uuid "63c43332-9750-4c58-9d75-776a89231775"))(pin "3" (uuid "0ea9647b-c99b-4026-9b28-369e7f7b2531"))(pin "5" (uuid "3b9999bc-e901-492b-aee3-e47c76e4f08a"))(pin "4" (uuid "6c1c9d66-25a2-4298-b410-8e69e03fb770"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "RN1") (unit 1)))))
+(wire (pts (xy 942.34 314.96) (xy 942.34 312.42)) (stroke (width 0) (type default)) (uuid "18a26c3e-e2b4-43ad-911c-34452d673c57"))
+(label "AI_SH_G1" (at 942.34 312.42 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "256ed5a3-a397-4d92-9397-4ebdca609d3e"))
+(wire (pts (xy 944.88 314.96) (xy 944.88 312.42)) (stroke (width 0) (type default)) (uuid "15dcb198-f2f8-4477-9398-ca3a19d5079b"))
+(label "AI_SH_G2" (at 944.88 312.42 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "49f2cd83-541f-4b90-a16e-4c1c04a7f982"))
+(wire (pts (xy 947.42 314.96) (xy 947.42 312.42)) (stroke (width 0) (type default)) (uuid "59a2a366-e679-4587-a9f5-79f9e3615ffa"))
+(label "AI_SH_G3" (at 947.42 312.42 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "e5c064d4-395e-4219-89fd-71201871b3a1"))
+(wire (pts (xy 949.96 314.96) (xy 949.96 312.42)) (stroke (width 0) (type default)) (uuid "71e4b5b0-459f-4430-b8a5-1fda345d1ca4"))
+(label "AI_SH_G4" (at 949.96 312.42 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "40236c02-37d9-48bc-94b0-49c3ae6ef51f"))
+(wire (pts (xy 942.34 325.12) (xy 942.34 327.66)) (stroke (width 0) (type default)) (uuid "677d2a53-fe91-4971-b7db-885bd10634b9"))
+(symbol (lib_id "power:GND") (at 942.34 327.66 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "5de7fed7-9310-4b6b-8f70-933de263f2f0")(property "Reference" "#PWR3116" (at 944.88 326.39 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 944.88 328.93 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 942.34 327.66 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 942.34 327.66 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "8a145d9f-71b6-40cf-96c1-277713d8e173"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "#PWR3116") (unit 1)))))
+(wire (pts (xy 944.88 325.12) (xy 944.88 327.66)) (stroke (width 0) (type default)) (uuid "006780ae-b4b8-4cf1-a6b6-f7297ba515b4"))
+(symbol (lib_id "power:GND") (at 944.88 327.66 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "97729daf-1495-4a83-8f61-a6ac5301c132")(property "Reference" "#PWR3117" (at 947.42 326.39 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 947.42 328.93 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 944.88 327.66 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 944.88 327.66 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "9ef8d06f-2da2-4baf-bc7a-98f1efeea31b"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "#PWR3117") (unit 1)))))
+(wire (pts (xy 947.42 325.12) (xy 947.42 327.66)) (stroke (width 0) (type default)) (uuid "a256ec38-6996-4896-9825-d5dc4253ac3f"))
+(symbol (lib_id "power:GND") (at 947.42 327.66 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "a2d68ce8-fd40-4277-adb1-67b8b63e45b9")(property "Reference" "#PWR3118" (at 949.96 326.39 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 949.96 328.93 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 947.42 327.66 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 947.42 327.66 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "22cf7563-efa0-4b64-a1a3-3fb1cf1e52bb"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "#PWR3118") (unit 1)))))
+(wire (pts (xy 949.96 325.12) (xy 949.96 327.66)) (stroke (width 0) (type default)) (uuid "f16e3ab9-a5f8-4b29-9ab4-f19631b093b4"))
+(symbol (lib_id "power:GND") (at 949.96 327.66 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "15f3fcea-d069-4be0-b4f1-36b9a33c8759")(property "Reference" "#PWR3119" (at 952.50 326.39 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 952.50 328.93 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 949.96 327.66 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 949.96 327.66 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "5000e9ef-9af8-4bb3-aab1-19abaac3c955"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "#PWR3119") (unit 1)))))
+(symbol (lib_id "Device:R_Pack04") (at 947.42 368.30 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "a8b4c09f-ca8e-4445-b086-761786bf2b67")(property "Reference" "RN2" (at 947.42 361.95 0) (effects (font (size 1.27 1.27))))(property "Value" "10k x4" (at 947.42 374.65 0) (effects (font (size 1.27 1.27))))(property "Footprint" "Resistor_SMD:R_Array_Convex_4x0603" (at 947.42 368.30 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 947.42 368.30 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C29718" (at 947.42 368.30 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "4D03WGJ0103T5E" (at 947.42 368.30 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "UNI-ROYAL" (at 947.42 368.30 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "4 resistor network, isolated, 0603x4 convex" (at 947.42 368.30 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 31: gate-side pull-downs AI_SH_G5-6; elements 3/4 spare, both ends GND" (at 947.42 368.30 0) (effects (font (size 1.27 1.27)) hide))(pin "8" (uuid "318874c8-5968-4e6d-8058-91d59e84cc34"))(pin "1" (uuid "cb185300-c418-4db2-b5e0-fe97971d991b"))(pin "7" (uuid "8f601386-d3b1-4dd0-a31f-d847b485f989"))(pin "2" (uuid "3b8de06a-e96e-4690-b1d0-7bbe8cb4df9e"))(pin "6" (uuid "5bbb2f94-045e-4195-aefe-ad643e021f05"))(pin "3" (uuid "9130f005-2e85-459a-8979-5dbf656eee30"))(pin "5" (uuid "75e28023-3278-4c57-8c05-f3bf9bf84acc"))(pin "4" (uuid "130daa0b-7bb0-4a1b-9f09-675e753c1d1f"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "RN2") (unit 1)))))
+(wire (pts (xy 942.34 363.22) (xy 942.34 360.68)) (stroke (width 0) (type default)) (uuid "397b4e61-d3e8-4ac8-88c4-48e72bbe7eab"))
+(label "AI_SH_G5" (at 942.34 360.68 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "54541b38-0d5a-461d-83cc-3a89bb7d1f05"))
+(wire (pts (xy 944.88 363.22) (xy 944.88 360.68)) (stroke (width 0) (type default)) (uuid "889f8ae8-2705-4240-b4f7-f13c8eff7b52"))
+(label "AI_SH_G6" (at 944.88 360.68 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "fdbb8e7f-27fd-429b-92fe-3ba751553f04"))
+(wire (pts (xy 947.42 363.22) (xy 947.42 360.68)) (stroke (width 0) (type default)) (uuid "0a195372-1928-4da2-901b-78d4bdcf870c"))
+(symbol (lib_id "power:GND") (at 947.42 360.68 180) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "6fe3f215-b99b-443d-985d-2bc30fadf0e6")(property "Reference" "#PWR3120" (at 949.96 359.41 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 949.96 361.95 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 947.42 360.68 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 947.42 360.68 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "1cd3029e-51ef-4610-9e49-9d648e3addd8"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "#PWR3120") (unit 1)))))
+(wire (pts (xy 949.96 363.22) (xy 949.96 360.68)) (stroke (width 0) (type default)) (uuid "07f19dd1-7f40-4480-b05e-3ac6d7c4b31f"))
+(symbol (lib_id "power:GND") (at 949.96 360.68 180) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "41a2a7d1-6b55-4a80-a0fb-69361d7bb189")(property "Reference" "#PWR3121" (at 952.50 359.41 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 952.50 361.95 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 949.96 360.68 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 949.96 360.68 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "23ac0e41-b0aa-40ef-bb4f-b589576b3b55"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "#PWR3121") (unit 1)))))
+(wire (pts (xy 942.34 373.38) (xy 942.34 375.92)) (stroke (width 0) (type default)) (uuid "d4ca341e-8ebe-41fa-8cb1-b441b9672e6d"))
+(symbol (lib_id "power:GND") (at 942.34 375.92 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "722035c8-1515-4761-8432-29c3ac33d820")(property "Reference" "#PWR3122" (at 944.88 374.65 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 944.88 377.19 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 942.34 375.92 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 942.34 375.92 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "383b0794-15f9-49f0-9127-daec7aac13ab"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "#PWR3122") (unit 1)))))
+(wire (pts (xy 944.88 373.38) (xy 944.88 375.92)) (stroke (width 0) (type default)) (uuid "90bddd68-8ec5-4efd-8bc3-7e9025588e09"))
+(symbol (lib_id "power:GND") (at 944.88 375.92 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "4e068bdb-aa58-4e5a-9615-fb00daaa753b")(property "Reference" "#PWR3123" (at 947.42 374.65 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 947.42 377.19 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 944.88 375.92 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 944.88 375.92 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "dd513f85-ee97-47dd-be36-6ce60ee22980"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "#PWR3123") (unit 1)))))
+(wire (pts (xy 947.42 373.38) (xy 947.42 375.92)) (stroke (width 0) (type default)) (uuid "cea935cb-810f-4233-a5c3-15d8a0dde17d"))
+(symbol (lib_id "power:GND") (at 947.42 375.92 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "ed3664a8-4716-48ec-8d42-7561841de173")(property "Reference" "#PWR3124" (at 949.96 374.65 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 949.96 377.19 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 947.42 375.92 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 947.42 375.92 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "de45a7c7-b812-482a-9582-ac65e03eba62"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "#PWR3124") (unit 1)))))
+(wire (pts (xy 949.96 373.38) (xy 949.96 375.92)) (stroke (width 0) (type default)) (uuid "89d1fbed-0c84-4c41-af4b-c805d69f951e"))
+(symbol (lib_id "power:GND") (at 949.96 375.92 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "759af9c8-2a2e-4b25-be91-a516f525997e")(property "Reference" "#PWR3125" (at 952.50 374.65 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 952.50 377.19 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 949.96 375.92 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 949.96 375.92 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "9c9797a2-e4d2-49d8-85d1-f9e2b76bb962"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d" (reference "#PWR3125") (unit 1)))))
+(text "Batch 31 hardware shunt-off gating (Ethan approved Nov 22, 2026 HST). Each 4-20\nmA shunt FET gate AI_SH_Gx = AI_SH_ENx (U31 TCA9555) AND SH_ALLOW. SH_ALLOW =\nWD_OK (U84, latched low on TPS3431 timeout until power cycle) AND NRST (MCU\nreset, through U93 Schmitt buffer as NRST_S). Shunts are therefore off while the\nMCU is in reset, after a watchdog trip, and for the first 0.70-1.06 s after\npower-on. R138/R149/R160/R171/R182/R193 keep the U31-side enables low while U31\npins are inputs; RN1/RN2 hold the FET gates low if U91/U92 are unpowered.\nFirmware: treat AI 4-20 mA channels as invalid while SH_ALLOW (WD_OK) is low.\nSee docs/FW_REQ_BATCH30.md." (exclude_from_sim no) (at 822.96 289.56 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "707edf7f-c1cf-4046-911e-54b783b4d0f1"))
 )
