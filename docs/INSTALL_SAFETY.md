@@ -130,6 +130,11 @@ at the coil keeps that energy off the board and the cable.
 - **Reconnect:** land and tighten **both** pigtail ends at J30 first, check them, **then** remove the short.
 - Every meter board must have passed the bench megger test (docs/BENCH_12V_TEST.md §B30-1) before it is installed live.
 
+## Battle short (Batch 33, firmware spec docs/FW_REQ_BATTLESHORT.md)
+> **WARNING – BATTLE SHORT.** Battle short turns OFF the controller's engine and breaker protections: low oil pressure, high temperature, over/undervoltage, over/underfrequency, overcurrent, metering-fault and breaker trips. Only the emergency stop and engine overspeed stay active. Running in battle short can destroy the engine, the generator or the connected equipment, and an overload or short circuit can overheat cables and start a fire. Use it only when losing power is more dangerous than losing the generator. Fit an external generator circuit breaker sized for the generator and the cable; the controller does not protect them in battle short. A controller fault (firmware hang) still stops the engine, and the controller must then be power-cycled to restart. Every use of battle short and every fault overridden is permanently recorded in the controller. Battle short is off unless enabled in the configuration suite by an administrator.
+
+- Installer: fit the external generator breaker (thermal-magnetic or MCCB) sized for the generator and cable; assign a "battle short active" beacon/common-alarm output (`BS_ALARM_AUX`) if battle short will be made available.
+
 ## Open for installer / Ethan (does not block this document)
 1. Fuel solenoid pull-in current and duration: must be <= 2.8 A (5 A standard (non-time-delay) ATO/ATC, 58 V DC, OptiFuse ANR58-UL-5A or equal); the starter is switched via an interposing relay only.
 2. GLOW: relay coil (2 A max fuse) or glow plugs driven directly (not supported: electronic limit 3.18 A minimum, see the table above; use an external relay).

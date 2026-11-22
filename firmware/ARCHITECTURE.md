@@ -43,6 +43,12 @@ Labels used throughout:
 ## 3. State machine [I]
 States: `BOOT → SELFTEST → IDLE → PREHEAT → CRANK → RUN_WARMUP → RUN → (TRANSFER sub-states) → COOLDOWN → STOPPING → IDLE`, plus the latched `FAULT` and `ESTOP`.
 
+**Battle short overlay (Batch 33, spec only: docs/FW_REQ_BATTLESHORT.md).** `BATTLE_SHORT` is a mode flag (FRAM, CRC, A/B), not a state. While it is set:
+- every protection transition to FAULT, every protection breaker-open and every start inhibit in the table below becomes alarm + log only (BS-3);
+- **E-stop (→ ESTOP) and overspeed (→ FAULT) still act**, the local STOP key still stops, and breaker close permissives (sync-check, dead bus) are not relaxed;
+- the TPS3431/U84 watchdog latch still stops the engine on a firmware hang. Firmware cannot reach it (BS-8);
+- after a non-POR reset with the engine turning, re-assert FUEL_EN ≤ 50 ms and go to RUN (BS-11).
+
 | State | Entry actions | Exit / transitions |
 |---|---|---|
 | BOOT | clocks (HSE 25 MHz → PLL), outputs LOW, IWDG start, load config/latched faults from FRAM (I2C1 0x50), including `DI_BIAS_x_LOCKOUT` (§13.19); do not enable a locked-out bank | → SELFTEST |
@@ -76,6 +82,7 @@ States: `BOOT → SELFTEST → IDLE → PREHEAT → CRANK → RUN_WARMUP → RUN
 3. **External TPS3431 [S]:**
    - Kicked on PA12 from the same checked-in point, at a different rate than IWDG.
    - Cuts outputs in hardware even if the MCU is held in reset or wedged with its clocks stopped.
+   - **Battle short does not bypass it** (Ethan's requirement; docs/FW_REQ_BATTLESHORT.md §2–3): a hang still stops the engine until a power cycle.
    - It does not reset the MCU. **From Batch 31 it also gates the six 4–20 mA shunts in hardware:** the FET gates AI_SH_G1–6 = AI_SH_EN1–6 (U31 P06/P07/P10–P13) AND SH_ALLOW, SH_ALLOW = WD_OK AND NRST (U91/U92 74LVC08; NRST through the U93 Schmitt buffer). Shunts are off while the MCU is in reset, after a watchdog trip (until power cycle) and for the first 0.70–1.06 s after power-on. While WD_OK is low, all 4–20 mA channels are INVALID. See docs/FW_REQ_BATCH30.md FW-WDG-1, FW-AI-3, FW-AI-4.
    - **Test it on the bench** (see the bring-up plan) because the timeout is [U].
 4. **Reset cause:** read RCC_RSR at boot and log it to FRAM. Three watchdog resets within N minutes → stay in FAULT with outputs LOW [I].

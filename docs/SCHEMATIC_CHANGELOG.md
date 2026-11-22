@@ -1235,3 +1235,22 @@ Checks (kicad-cli 9.0.2):
 - ERC --severity-all: genctl **0**, genctl_meter **0**.
 - Netlist diff vs d08d49f: 1147 / 220 parts, **no part, property or net change** (both projects).
 - BOM vs netlist: 0 mismatches (tools/bom_from_sch.py; regenerated BOMs byte-identical). Totals unchanged: main 266.36 / 225.95, meter 63.89 / 53.42, harness 2.91 / 1.87; priced controller BOM unchanged ($1,767.45 / $1,259.04).
+
+## Batch 33: battle short mode spec (Grok Bot for Ethan, feature and rulings relayed by Enginerd 1:28 PM HST 2026-11-22; docs only; no schematic, BOM or firmware change; PCB not touched)
+- New **docs/FW_REQ_BATTLESHORT.md**:
+  - **Rulings:** only E-stop and overspeed stay active. Every other protection trip, metering/power-dip latch, breaker trip and start inhibit is alarm + log only. Breaker close permissives (sync-check, dead bus) are not relaxed, and the local STOP key always works.
+  - **Enable:** configuration-suite pre-authorisation `BS_AVAILABLE` (admin, off by default), then a local two-hand 5 s hold on the opposite-corner keys, then a confirm on the display, or a 3 s centre-top key hold without a display. Remote enable only with `BS_REMOTE_ENABLE`.
+  - **Disable:** corner keys 3 s, the display, or a remote command; protections return after a 5 s grace.
+  - **Persistence:** survives an MCU reset (FRAM); cleared by a power cycle by default.
+  - **Warnings:** persistent banner, LED, buzzer, alarm AUX and remote status.
+  - **Logging:** every overridden fault is logged; lifetime counters are never cleared.
+  - Also covers ATS/paralleling/bus rules, the overcurrent fire/cable warning, manual warning text, config table, requirements BS-1 to BS-12 and decisions D1–D7.
+  - **Hardware audit (§2):** battle short cannot bypass the TPS3431/U84 watchdog latch (incl. the U39/U67 gates and LVC541 /OE; power-cycle re-arm), the E-stop chain (VBAT_ESTOP + TLC555/K4), controller supply loss or the driver short-circuit limits. The keep-alive/3-mismatch drop is not on m7-split hardware. The D+ 30 s cap (firmware) and the AI shunt gating cannot stop the engine. **No blocker, no schematic change.**
+  - **Limitation:** a firmware hang still stops the engine until a power cycle.
+- Links:
+  - firmware/ARCHITECTURE.md: §3 battle-short overlay, §4 TPS3431 note.
+  - FW_REQ_METERING_PRESENCE: battle-short section.
+  - FW_REQ_BATCH30 FW-AI-3 item 3: the CM5 never resets the MCU in battle short.
+  - INSTALL_SAFETY: warning text and installer items.
+  - DESIGN_NOTES: Batch 33 summary.
+- Checks (kicad-cli 9.0.2): ERC --severity-all genctl **0**, genctl_meter **0**; netlist diff vs 2c7a495: 1147 / 220 parts, no part, property or net change; BOM vs netlist 0 mismatches; schematic, library and BOM files byte-identical to 2c7a495.
