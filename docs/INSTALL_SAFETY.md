@@ -118,7 +118,7 @@ at the coil keeps that energy off the board and the cable.
 4. **Tie it down on both sides of the window** (non-plated anchors), so a pull on the cable loads neither the CT pins nor the insulation in the bore.
 5. **Keep it off solder joints, pin tips, slot edges and board edges**, and ≥ 3 mm from warm parts (divider chains, MOVs).
 6. **Ferrules on the J30 ends.** A loose strand is an open-CT risk.
-7. Leave the enclosure through the one CT gland/grommet (away from the SELV side), with strain relief.
+7. Leave the enclosure through the one M25 CT cable gland (away from the SELV side), with strain relief.
 8. Do not re-thread, cut or extend the pigtails. If the jacket is damaged anywhere inside the enclosure, replace the pigtail.
 
 **Earthing: one point only**

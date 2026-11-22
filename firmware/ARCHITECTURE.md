@@ -46,13 +46,13 @@ States: `BOOT → SELFTEST → IDLE → PREHEAT → CRANK → RUN_WARMUP → RUN
 | State | Entry actions | Exit / transitions |
 |---|---|---|
 | BOOT | clocks (HSE 25 MHz → PLL), outputs LOW, IWDG start, load config/latched faults from FRAM (I2C1 0x50), including `DI_BIAS_x_LOCKOUT` (§13.19); do not enable a locked-out bank | → SELFTEST |
-| SELFTEST | ADC rails (VBAT PA0), PSU_MAIN_OK, expander presence on I2C, INA238 DEVICE_ID and SHUNT_CAL read-back, ADE9000 ID over SPI1, TPS3431 kick, OUT_FAULT_N high, E-stop inputs sane (PD14/PC6/PA1 consistent) | pass → IDLE; fail → FAULT |
+| SELFTEST | ADC rails (VBAT PA0), PSU_MAIN_OK, expander presence on I2C, INA238 DEVICE_ID and SHUNT_CAL read-back, ADE9000 IDs over SPI1 (GEN U71, BUS U72), TPS3431 kick, OUT_FAULT_N high, E-stop inputs sane (PD14/PC6/PA1 consistent). **ADE checks (Batch 32):** if PSU_MAIN_OK is low or was low in the last 2 s (e.g. boot on the battery buck before main +3V3), the ADE checks are a FW-MTR-9 supply event, not a failure: log `SUPPLY_3V3_DIP`, block starts until the FW-MTR-9 recheck passes. With power good: GEN ADE fail (or MTR_DET_N high) → FAULT; **BUS ADE fail only → `METERING_SILENT` BUS** (alarm, block new breaker closes, starts allowed; FW-MTR-3) | pass → IDLE; supply event → IDLE with starts blocked by FW-MTR-9 (latch only if the recheck fails); BUS-ADE-only fail → IDLE with `METERING_SILENT` BUS; any other fail → FAULT |
 | IDLE | all outputs LOW, poll front panel and CM5; keep a locked-out DI_BIAS bank enable off (§13.19) | START cmd (panel or CM5) and permissives OK, including Rev 8f `RELAY_KIT_V` match (§13.13) and no latched `DI_BIAS_x_FAULT` / `DI_BIAS_x_LOCKOUT` (§13.15, §13.19) → PREHEAT |
 | PREHEAT | GLOW_EN=1 for the configured glow time, hard-capped at **60 s** (Rev 8g). If glow is in cooldown, skip glow (alarm `GLOW_COOLDOWN`) and go to CRANK | timeout or skip → CRANK; stop/E-stop → STOPPING/ESTOP |
 | CRANK | FUEL_EN=1, CRANK_EN=1; monitor MPU_SPEED (TIM2_CH1 capture on PA15), D+ (PD15/PA2), CRANK_ISNS (PB1) | speed > crank-disconnect → RUN_WARMUP; crank timeout → rest, retry N times → FAULT(fail-to-start) |
 | RUN_WARMUP | CRANK_EN=0, D+ excitation PC8 as needed | timer → RUN |
 | RUN | protections active (over/under speed, V/f from ADE9000 GEN, oil/temp DIs, overcurrent). A DI_BIAS lockout is **alarm only** and does not leave RUN (§13.19) | stop → COOLDOWN; protection → FAULT (not for `DI_BIAS_x_LOCKOUT`) |
-| TRANSFER | sync-check GEN vs BUS ADE9000 (V, f, phase); pulse GCB/MCB close/open (PC9–12), confirm via readback expanders | success → RUN; fail → FAULT(breaker) |
+| TRANSFER | sync-check GEN vs BUS ADE9000 (V, f, phase); pulse GCB/MCB close/open (PC9–12), confirm via readback expanders | success → RUN; **BUS ADE silent (Batch 32, FW-MTR-3):** abort any close pulse, raise `METERING_SILENT` BUS (alarm, new closes blocked), return to RUN; never open a breaker that is already closed and never shut down for it; **GEN ADE silent** → FAULT (shutdown class, FW-MTR-3); other failures (no readback confirm, sync timeout) → FAULT(breaker) |
 | COOLDOWN | open GCB, run unloaded for configured time | timer → STOPPING |
 | STOPPING | FUEL_EN=0, verify speed→0 | speed 0 → IDLE; fail-to-stop → FAULT + MCU_TRIP |
 | FAULT (latched) | outputs per fault class (shutdown = FUEL_EN=0, GCB open), log to FRAM, buzzer, notify CM5 | operator reset (panel/CM5) when the cause clears → IDLE |
@@ -82,7 +82,7 @@ States: `BOOT → SELFTEST → IDLE → PREHEAT → CRANK → RUN_WARMUP → RUN
 5. **Watchdog latch (2026-10-28, fixes_firmware.md §1; hardware pending):**
    - U84 74LVC1G74 latches the TPS3431 trip. **WD_OK** (U84 Q) replaces WDO_N at the four LVC1G08 gates and at Q44/WD_OE_N.
    - Re-arm is by **power cycle only**.
-   - Firmware reads WD_OK on **U76 P15** (input port 1, bit 5) every 100 ms. After power-on it is LOW for 0.70–1.06 s (POR-RC re-arm: R554 220k / C293 4.7 µF / U85 Schmitt; D136 discharge). LATCHED is declared only if it is still LOW at 1.5 s, or if it falls after having been HIGH.
+   - Firmware reads WD_OK on **U76 P15** (input port 1, bit 5) every 100 ms. After power-on it is LOW for **0.70–1.06 s typical, 0.40–1.35 s worst case** (§13.7; POR-RC re-arm: R554 220k / **C298** 4.7 µF X7R 1206 (spec name C293) / U85 Schmitt; D136 discharge). LATCHED is declared only if it is still LOW at 1.5 s, or if it falls after having been HIGH.
    - If WD_OK = 0: state LATCHED; stop all output writes; mark all six AI 4–20 mA channels INVALID (shunts are hardware-off, FW-AI-4); log RCC_RSR + timestamp to FRAM; show **"WATCHDOG LATCHED: power cycle required"** on the CM5 UI (status frame flag + text).
    - There is no software clear.
 
@@ -631,7 +631,7 @@ Run by the MCU, because the CM5 is still booting.
 - Levels on VBAT_SNS (×11, J21.4 external sense [S]): L1 11.8 V/2 s and L2 11.0 V/0.5 s are advisory only (log, no shedding); L3 9.5 V/0.2 s, L4 8.0 V/50 ms, each with ≥ 0.6 V and ≥ 10 s restore hysteresis. Restore is staggered (≥ 250 ms for 12 V loads, ≥ 100 ms for outputs) [I].
 - Crank: no pre-shed. Dips are ignored except below 6.5 V (abort if > 500 ms).
 - CM5 commands that would exceed the total-current fault limit are refused (NACK BUDGET). The state machine pre-empts low-priority AUX outputs; stop/open actions always proceed.
-- PSU_MAIN_OK fault: shed within 1 ms, abort a crank, finish open pulses, abort close pulses, back off 2–32 s, lock out the 12 V loads only after 5 faults in 10 min.
+- PSU_MAIN_OK fault: shed within 1 ms, abort a crank, finish open pulses, abort close pulses, back off 2–32 s, lock out the 12 V loads only after 5 faults in 10 min. **Starts (Batch 32):** a start held by FW-MTR-9 runs only when its metering recheck has passed (≈ 2.1 s after power good) **and** this back-off has expired, i.e. after the longer of the two. The back-off does not latch any metering fault; FW-MTR-9 does not shorten the back-off.
 - ESTOP_TRIP (K4, Finder 38.51, J24.6, breaker shunt-trip): a real emergency adds ≤ 1 ms of shedding before MCU_TRIP. **Rev 8g:** firmware must **never hold K4 on continuously**. Firmware MCU_TRIP drive pulse **0.48 s** then LOW (unchanged). Hardware one-shot (TLC555-Q1 U66, **R404 2.0 MΩ**, **C229 220 nF C0G**) is **0.30–1.00 s**, nominal 0.48 s (Rev 8k, §13.18; replaces the pending C0G / 0.37–0.53 s note). Expected-pulse checks are **0.30–1.00 s**. Hard cut and fault `ESTOP_TRIP_STUCK` if MCU_TRIP or the sensed output remains asserted beyond **1.20 s** (was 0.53 s). The earlier 500 ms cap is superseded. Retries are ≥ 15 s apart, at most 3. WDO_N still gates the AND.
 - Hardware gaps: no on-board VBAT_P ADC (the approved INA238 adds VBUS and total current, spec §12), no converter current sense, LM5176 PGOOD/PG_5V/PG_3V3 not routed to the MCU (P15 = WD_OK, P16 = BL_ALLOW, P17 = DI_BIAS_FLT_N; no spare expander bit), ESTOP_TRIP dead on VBAT_P loss.
 
@@ -641,16 +641,17 @@ All items are [I] until the hardware respin. Labels follow fixes_firmware.md.
 
 ### 13.1 Boot order
 1. Reset vector / SystemInit: drive PB4 LOW (output), disable NJTRST (keep SWD). Every enable pin is already LOW via the external pull-downs (R534–R551).
+1a. **Shunt clear first (Batch 32, FW-AI-3):** on HSI, before HSE/LSE setup, init I2C1 and write U31 (0x22) Output port 0 bits 6–7 and port 1 bits 0–3 (AI_SH_EN1–6) to 0, then read them back. This must not wait for the LSE start (up to 5 s), so FW-WDG-1 item 3 (≤ 300 ms reset-to-first-U31-write) holds in every case.
 2. Clocks: HSE, then LSE with **LSEDRV = 11 (high)**, kept high. LSERDY timeout 5 s → fall back to LSI and log "RTC crystal fault" (§9 there).
 3. Set PA9 (UART TX), PE3 (MCU_IRQ) and PE5 (SPI4 MISO) to **analog/Hi-Z**. Enable them only after the CM5 heartbeat on PC2_C or NSS activity. Return them to Hi-Z on CM5_OFF, or when the heartbeat is lost for more than 2 s (FW-019).
 4. I2C1: for every TCA9555, write the Output registers (all 0 for enables; P05/P06 = 0) **before** the Configuration registers. U76 P15 is an input (WD_OK).
-5. Read WD_OK (U76 P15, pin 18, via R559 4.7k). After a POR it is expected LOW until about 1.35 s worst case (§13.7). If it is still 0 at 1.5 s → LATCHED (§4 item 5). After a non-POR reset (RCC_RSR) it should already be 1.
+5. Read WD_OK (U76 P15, pin 18, via R559 4.7k). After a POR it is expected LOW for 0.70–1.06 s typical, up to 1.35 s worst case (§13.7). If it is still 0 at 1.5 s → LATCHED (§4 item 5). After a non-POR reset (RCC_RSR) it should already be 1.
 6. INA238/INA237 init: probe 0x40; MANUFACTURER_ID 0x5449; 3Fh = 0x2381 → INA238, otherwise INA237 (no DEVICE_ID). Write CONFIG 0x0010, ADC_CONFIG 0xFB6B, SHUNT_CAL 0x1000, SOVL 0x3B60, BOVL 0x3200, BUVL 0x0BE0, DIAG_ALRT (ALATCH, SLOWALERT); read every register back. Failure → INA_FAULT (shed AUX, use the estimate).
-7. Read U72 (BUS ADE9000) through the buffered clock ADE_CLK_BUF. No response → "ADE BUS clock fault".
+7. Read U72 (BUS ADE9000) through the buffered clock ADE_CLK_BUF. No response with PSU_MAIN_OK good → `METERING_SILENT` BUS with cause "ADE BUS clock fault": alarm and block new breaker closes, starts allowed, a closed breaker stays closed (FW-MTR-3). With PSU_MAIN_OK low or low in the last 2 s → FW-MTR-9 supply event (recheck), not a fault.
 8. SELFTEST, then IDLE.
 
 ### 13.2 Fail-safe states (after the fix)
-- Power-up, MCU reset and bootloader: every engine/breaker/AUX enable is held LOW by the pull-downs (AUX3 4.7k; AUX9/10 and CM5_OFF/PWRBTN 10k). WD_OK is LOW for the first ~200 ms.
+- Power-up, MCU reset and bootloader: every engine/breaker/AUX enable is held LOW by the pull-downs (AUX3 4.7k; AUX9/10 and CM5_OFF/PWRBTN 10k). WD_OK is LOW for the first 0.70–1.06 s typical (0.40–1.35 s worst case, §13.7).
 - Watchdog trip: WD_OK latches LOW, so the gates and U41/U42 OE are blocked until a power cycle.
 - The CM5 boots by default (R552/R553 keep Q8/Q9 off at TCA POR).
 - Full table: fixes_firmware.md §3.5.

@@ -1213,3 +1213,25 @@ Checks (kicad-cli 9.0.2):
 - ERC --severity-all: genctl **0**, genctl_meter **0**.
 - Netlist diff vs 956a998: main 1139 → 1147 parts (+U91, U92, U93, C320, C321, C322, RN1, RN2), R531 MPN/Manufacturer; nets: AI_SH_EN1-6 split into AI_SH_ENx (U31, R1xx, U9x input) and AI_SH_Gx (Q gate, RNx, U9x output); new SH_ALLOW and NRST_S (U93.4 → U92.10); +U92.9 on WD_OK, +U93.2 on NRST; +3V3_SAFE/GND gain the new supply/pull-down pins. Meter: no change.
 - BOM vs netlist: 0 mismatches (tools/bom_from_sch.py); bom_split crosscheck 0 (1127 + 218 fitted refs).
+
+## Batch 32: pass-6 minors + Ethan's ≈ 2 s running blind cap (Grok Bot for Ethan, approved 2026-11-22 HST, relayed by Enginerd 1:20 PM HST; docs + drafting only; no electrical change; PCB not touched)
+Source: SCH_REVIEW_2026-11-22_pass6.md m1-m3, NOTEs 1-3, 5-8; Ethan's ruling on NOTE 6. Evidence: docs/split_evidence/batch32/.
+
+Docs:
+- **m1** firmware/ARCHITECTURE.md §3: SELFTEST splits the ADE checks (GEN fail → FAULT; BUS-only fail → `METERING_SILENT` BUS, alarm + new-close block, starts allowed); TRANSFER: BUS ADE silent → abort close pulse, alarm, back to RUN, never open a closed breaker, never shut down; GEN ADE silent → FAULT. §13.1 item 7 "ADE BUS clock fault" = `METERING_SILENT` BUS per FW-MTR-3.
+- **m2** SELFTEST and §13.1 item 7: PSU_MAIN_OK low (or low in the last 2 s) at boot = FW-MTR-9 supply event (recheck, no FAULT). FW-MTR-9 new "Boot" bullet. Held start runs after the recheck passes **and** the §12 PSU_MAIN_OK back-off (2–32 s) expires (the longer of the two), stated in FW-MTR-9 and §12.
+- **m3** FW_REQ_BATCH30 bench test: release of SW1 now expects AI_SH_Gx high again until the first U31 write; measure NRST release → AI_SH_Gx low, ≤ 300 ms (FW-WDG-1 item 3), also for IWDG and CM5_NRST resets. "Reset release" added to Behaviour, reset-release pulse added to residual risk.
+- **NOTE 6 (Ethan):** FW-MTR-9 running-engine blind window capped at ≈ 2 s (2.0 s, from the first moment GEN metering is unavailable), was 5 s; test text updated. FW-MTR-5 cross-references the FW-MTR-9 automatic-recovery exception.
+- NOTE 1: ARCHITECTURE §13.1 new item 1a, U31 shunt clear on HSI before HSE/LSE setup.
+- NOTE 2: WD_OK power-on low time = 0.70–1.06 s typical, 0.40–1.35 s worst case in ARCHITECTURE §4/§13.1/§13.2 (was "~200 ms"), FW_REQ_BATCH30, DESIGN_NOTES, inputs sheet text; C293 → C298 (4.7 µF X7R 1206).
+- NOTE 3: "STM32 internal reset pulse turns the shunts off" softened to INFERRED / bench check; nothing relies on it.
+- NOTE 5: FW-MTR-9 names the ISOW7841 VCC1 ≥ 3.0 V (3.3 V VISO) limit instead of the ADE9000 2.97 V; PSU_MAIN_OK 10 ms poll is the primary detector, PC3_C EXTI optional (UNVERIFIED).
+- NOTE 7: FW_REQ_BATCH30 Facts heading; "grommet" → M25 cable gland in ISOLATION_CHECK §5c rule 6, LAYOUT_PLAN §4, INSTALL_SAFETY CT rule 7; DESIGN_NOTES 228EMVARGBFR stock line (JLC 93, consigned from Mouser).
+- NOTE 4 not taken (RN1/RN2 and R138-type 10k unchanged, per Ethan).
+
+Schematic (drafting only, inputs sheet, tidy32.py): C320-C322, RN1/RN2, U93 Reference/Value text moved clear of the power flags; U91E/U92E Value and the RN1/RN2 GND-symbol value text hidden; sheet note WD_OK timing.
+
+Checks (kicad-cli 9.0.2):
+- ERC --severity-all: genctl **0**, genctl_meter **0**.
+- Netlist diff vs d08d49f: 1147 / 220 parts, **no part, property or net change** (both projects).
+- BOM vs netlist: 0 mismatches (tools/bom_from_sch.py; regenerated BOMs byte-identical). Totals unchanged: main 266.36 / 225.95, meter 63.89 / 53.42, harness 2.91 / 1.87; priced controller BOM unchanged ($1,767.45 / $1,259.04).
