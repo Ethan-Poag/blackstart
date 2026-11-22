@@ -2587,7 +2587,7 @@
 (label "BTN11" (at 80.01 151.13 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "312368b5-89f9-4479-9d1c-91deea561ec0"))
 (wire (pts (xy 77.47 153.67) (xy 80.01 153.67)) (stroke (width 0) (type default)) (uuid "6e59f7b5-431c-4767-a30c-0398bfdb4f50"))
 (label "BTN12" (at 80.01 153.67 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "fe63234d-45cf-44be-93c4-38c61bb52d06"))
-(no_connect (at 77.47 156.21) (uuid "6e436b4c-69c8-47b5-87b2-56675bee23ab"))
+(global_label "MTR_DET_N" (shape passive) (at 77.47 156.21 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "6c454ca6-044a-4e75-9f99-273fb34cd122") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 77.47 156.21 0) (effects (font (size 1.27 1.27)) hide)))
 (no_connect (at 77.47 158.75) (uuid "29e713ed-61ea-4db8-b802-57c98a6212f8"))
 (no_connect (at 77.47 161.29) (uuid "74b8826b-a41b-4b65-8290-ae4ef8cc10a3"))
 (no_connect (at 77.47 163.83) (uuid "9318f9d9-753b-4e20-8445-48b8dd5aaf25"))

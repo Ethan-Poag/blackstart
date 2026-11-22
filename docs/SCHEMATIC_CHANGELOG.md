@@ -997,3 +997,37 @@ Regen proof (INFERRED from scratch netlist compare, kicadxml, ref-based): all di
 2. **genctl.pretty/PhoenixContact_PC5_4-GF-7.62_1720819 (J1, J23, J28, J29): pin rows fixed.** Phoenix's 1720819 drilling diagram (catalog PDF, measured from the vector data) puts the 3 solder pins per potential at row 1, +5.08 and +7.62 mm. The footprint had +3.25 and +5.79, so the header would not fit. Rows 2/3 moved; flange NPTHs (3.2 mm, 8.06 outboard, 10.42 behind row 1) were already correct and are unchanged.
    - **PCB NOT refreshed.** The frozen board still has the old rows on J1/J23/J28/J29. Refresh and re-route at the next layout; blocking for fab.
 3. **Checks:** ERC 0 (--severity-all). Netlist vs Batch 24: connectivity identical; only D17/D18 value/MPN/description changed. bom_from_sch: 0 mismatches.
+
+## Batch 26 — two-board split (branch m7-split from m7-sch 94bcc2f; Grok Bot for Ethan, Ethan chose side-by-side + Micro-Fit 2x8 harness; PCB not touched)
+Plan: /workspace/review/split/SPLIT_SCOPE.md §8. Two KiCad projects in the same folder, sharing genctl.kicad_sym / genctl.pretty / lib tables:
+- **genctl** (main controller): genctl.kicad_pro / genctl.kicad_sch, 1,118 parts.
+- **genctl_meter** (HV metering daughter): genctl_meter.kicad_pro / genctl_meter.kicad_sch, 221 parts. Its only sub-sheet is ac_metering.kicad_sch (same sheet UUID 85a0e338…).
+
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| genctl.kicad_sch sheet "AC metering…" (ac_metering.kicad_sch) | sub-sheet of genctl | removed from genctl; replaced by sheet "Metering interface J31" (mtr_if.kicad_sch, uuid 5d1b3a52…, page 10) | split | SPLIT_SCOPE §8 |
+| ac_metering.kicad_sch symbol instances (330) | project "genctl", path /2f7a4bb8…/85a0e338… | project "genctl_meter", path /9e6f0d2c…/85a0e338…; **all 216 references unchanged** | daughter project | — |
+| J31 (mtr_if) | — | Conn_02x08_Top_Bottom, Molex 43045-1600 Micro-Fit 3.0 2x8 RA, LCSC C277731, fp Connector_Molex:Molex_Micro-Fit_3.0_43045-1600_2x08_P3.00mm_Horizontal | main side of the interface | SPLIT_SCOPE §1.1, §2.1 |
+| J32 (genctl_meter root) | — | same part as J31 | daughter side | — |
+| Pin map J31 = J32 | — | 1,2 +3V3; 3,5,7,9,12 GND; 4 ADE_SCK; 6 ADE_MOSI; 8 ADE_MISO; 10 ADE_CS1_N; 11 ADE_CS2_N; 13 ADE_RST_N; 14 ADE_IRQ_N; 15 MTR_DET_N (main) / GND strap (daughter); 16 spare, no-connect both ends. Harness straight, pin n to pin n | SELV-only interface | SPLIT_SCOPE §1.1 |
+| C314 10u 0805 C15850, C315 100n 0603 C14663 (mtr_if) | — | +3V3/GND decoupling at J31 | — | SPLIT_SCOPE §3 |
+| C316 10u C15850, C317 100n C14663 (genctl_meter root) | — | +3V3/GND decoupling at J32 | — | SPLIT_SCOPE §3 |
+| R636 10k 0603 C98220 (mtr_if) | — | MTR_DET_N pull-up to +3V3_SAFE (same rail as U73) | board detect | — |
+| U73 (TCA9555 @0x20) P14 pin 17 (frontpanel.kicad_sch 77.47,156.21) | no-connect flag | global label MTR_DET_N | board detect input. U76 @0x25 has no spare pins at this head, so U73's spare P14 is used | netlist 94bcc2f: U73 P14–P17 were the only unconnected TCA9555 pins |
+| TP1 "GND_AC" (genctl_meter root) | — | Connector:TestPoint, fp TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm, in_bom no; on GND_AC | megger Test A point (Safety Round 4), replaces probing R475 pad 2 | SPLIT_SCOPE §4 |
+| TP2 "LV_GND" (genctl_meter root) | — | same footprint; on GND (SELV) | megger Test B point, daughter testable on its own | SPLIT_SCOPE §4 |
+| #FLG0100/#FLG0101 (genctl_meter root) | — | PWR_FLAG on +3V3 and GND | +3V3/GND arrive only through J32 on the daughter | ERC |
+| genctl_meter.kicad_pro | — | copy of genctl.kicad_pro (same ERC settings), meta filename changed | — | — |
+| docs/FW_REQ_METERING_PRESENCE.md | — | new: missing or silent metering board = latched shutdown-class fault (requirement only) | Ethan / SPLIT_SCOPE R5 | — |
+
+Checks (kicad-cli 9.0.2):
+- **ERC --severity-all:** genctl **0**, genctl_meter **0** (reports in docs/split_evidence/).
+- **Footprints:** all 1,118 + 221 footprints resolve to a file (genctl.pretty or the KiCad 9.0.2 library). None are empty.
+- **Netlist equivalence vs 94bcc2f** (union-find over both netlists, harness J31.n↔J32.n):
+  - Every original net keeps exactly its original nodes (4,320 nodes, none lost, none split).
+  - All 1,330 original parts are present once, with unchanged value and footprint.
+  - Only interface nodes are added (J31/J32 pins, C314–C317, R636, TP1, TP2).
+  - The one merge is the designed board-detect strap: MTR_DET_N (formerly unconnected-(U73-P14-Pad17)) joins GND through J32.15 when the daughter is plugged in. With pin 15 excluded there are 0 merges.
+  - New net: spare pin 16 (J31.16/J32.16, NC). Script: /workspace/review/split/exec/eq.py.
+- BOARD (out of scope): the frozen .kicad_pcb is unchanged and is still the one-board layout. Layout must be reopened as two boards (main with notch, daughter ~82x167 mm 4-layer). J28/J29 still carry the horizontal 1720819 footprint (vertical rear-entry footprints still to be made, as before).
+- Not updated on this branch: the per-category bom/*.csv and docs/genctl_bom.csv. The split BOM is in /workspace/review/bom_split. tools/ scripts still assume the single genctl project.

@@ -1,0 +1,19 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-11-21T23:30:55-1000",
+    "kicad_version": "9.0.2",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21",
+            "violations": []
+        },
+        {
+            "path": "/AC metering: 2x ADE9000 (gen + bus), isolated/",
+            "uuid_path": "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84",
+            "violations": []
+        }
+    ],
+    "source": "genctl_meter.kicad_sch"
+}
