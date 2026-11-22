@@ -9,7 +9,8 @@ Two KiCad projects since the split: genctl (main board) and genctl_meter (HV met
   options: --kicad-cli PATH, --net-main F.xml, --net-meter F.xml (use existing kicadxml netlists)
 
 Files written (all from the netlist; nothing hand-edited):
-  bom/genctl_main_bom.csv, bom/genctl_meter_bom.csv   priced per-board BOMs (fitted groups, then DNP groups, then TOTAL)
+  bom/genctl_main_bom.csv, bom/genctl_meter_bom.csv   priced per-board BOMs (fitted groups, then DNP groups, then TOTAL);
+                                                       'Sourcing' = the symbol's Sourcing field (e.g. CONSIGN plan, Batch 29)
   bom/harness_bom.csv                                  J31-J32 harness (off-board, from HARNESS below)
   docs/genctl_bom.csv, docs/genctl_meter_bom.csv       Refs,Value,Footprint,MPN,LCSC,Qty,DNP (refs compressed to ranges)
   mechanical/bom.csv, mechanical/bom_meter.csv         Reference,Value,Footprint,QUANTITY (all on-board parts incl. DNP)
@@ -62,7 +63,7 @@ def load(project,cli,net=None):
         f={x.get('name'):(x.text or '').strip() for x in c.iter('field')}
         props={p.get('name'):p.get('value') for p in c.iter('property')}
         comps[ref]=dict(value=c.findtext('value') or '',fp=c.findtext('footprint') or '',lcsc=f.get('LCSC','') if lcsc_ok(f.get('LCSC','')) else '',
-                        mpn=f.get('MPN',''),man=f.get('Manufacturer',''),dnp='dnp' in props,inbom='exclude_from_bom' not in props)
+                        mpn=f.get('MPN',''),man=f.get('Manufacturer',''),src=f.get('Sourcing',''),dnp='dnp' in props,inbom='exclude_from_bom' not in props)
     return comps
 def groups(comps):
     g=collections.OrderedDict()
@@ -94,11 +95,11 @@ def build(comps,P,board):
             if u1 is None or u10 is None: unpriced.append(','.join(refs))
             else: e1=f'{u1*n:.2f}'; e10=f'{u10*n:.2f}'; t1+=u1*n; t10+=u10*n
         bom.append([compress(refs),str(n),val,fp,mpn,man,lcsc or pr.get('lcsc_note',''),pr.get("class",""),pr.get('unit_qty1',''),pr.get('unit_qty10',''),
-                    '' if dnp else e1,'' if dnp else e10,pr.get('source',''),'DNP' if dnp else ''])
+                    '' if dnp else e1,'' if dnp else e10,pr.get('source',''),'DNP' if dnp else '',comps[refs[0]]['src']])
         docs.append([compress(refs),val,fp,mpn,lcsc,str(n),'DNP' if dnp else ''])
         mech.append([compress(refs),val,fp,str(n)])
-    bom.append([f'TOTAL {board} board parts (fitted rows only; unpriced: {len(unpriced)})','','','','','','','','','',f'{t1:.2f}',f'{t10:.2f}','sum(qty x unit) over priced fitted rows; qty10 = per-board cost at 10 boards',''])
-    H=['Refs','Qty','Value','Footprint','MPN','Manufacturer','LCSC','JLC class','Unit USD qty1','Unit USD qty10','Ext USD qty1','Ext USD qty10','Price source','DNP']
+    bom.append([f'TOTAL {board} board parts (fitted rows only; unpriced: {len(unpriced)})','','','','','','','','','',f'{t1:.2f}',f'{t10:.2f}','sum(qty x unit) over priced fitted rows; qty10 = per-board cost at 10 boards','',''])
+    H=['Refs','Qty','Value','Footprint','MPN','Manufacturer','LCSC','JLC class','Unit USD qty1','Unit USD qty10','Ext USD qty1','Ext USD qty10','Price source','DNP','Sourcing']
     return {OUT[board]['bom']:csvtext(H,bom),OUT[board]['docs']:csvtext(['Refs','Value','Footprint','MPN','LCSC','Qty','DNP'],docs),
             OUT[board]['mech']:csvtext(['Reference','Value','Footprint','QUANTITY'],mech)},(round(t1,2),round(t10,2)),unpriced
 def harness():

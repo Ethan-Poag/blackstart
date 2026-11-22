@@ -57,7 +57,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - FB 140k/10k with 0.8 V reference → 12.0 V.
 - RT 27k gives about 290 kHz (*interpolated*: 40k = 200 kHz, 20k = 390 kHz).
 - EN 100k/33k (about 5 V turn-on).
-- SS 47 nF. COMP 10k + 22 nF ∥ 220 pF (*assumed*, needs a loop design). SLOPE 100 pF (*assumed*).
+- SS 47 nF. COMP (historic: 10k + 22 nF ∥ 220 pF). **Batch 29:** Rc1 R8 = **2.7k** (C13167), Cc1 C11 = 33 nF, Cc2 C12 = **1 nF** (C1588); see the Batch 29 section. SLOPE 100 pF (*assumed*).
 - MODE strap 93.1k is TBD from the datasheet table. DITH tied to GND.
 - ISNS+/ISNS− tied to VOUT: the average current loop is not used.
 - Four BSC070N10NS5, 4.7 µH inductor.
@@ -112,7 +112,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - HSE: Y1 X322525MOB4SI 25 MHz, CL 12 pF (LCSC C9006 data), C61/C62 18 pF: about −30 ppm of pulling, inside the CAN/USB budget (pass-2 review NOTE, kept). LSE: Y2 SC-32S 32.768 kHz, CL 7 pF, C63/C64 6.8 pF.
 - VCAP1/VCAP2: separate 2.2 µF caps.
 - VDDA through a ferrite bead (FB1) onto net VDDA_F. **Batch 28:** VREF+ (pin 20) is on VDDA_F too (was +3V3_SAFE, unfiltered), with C318 1 µF X7R + C319 100 nF at the pin (DS12110 §6.1.6). VREF+ = VDDA, so VREF+ ≤ VDDA holds at all times.
-- VBAT: BAT54C OR of +3V3 and the CR2032.
+- VBAT: BAT54C (D7) OR of +3V3_SAFE and the CR2032. **Batch 29:** R649 1k in series with BT1 (net VBAT_CELL_R → VBAT_CELL), so a shorted diode cannot charge the cell at more than ~1.3 mA.
 - JP1 (2x4 header) lets the CM5 drive SWD, NRST and BOOT0 for in-field reflash. It is open by default.
 - FM24CL64B FRAM at 0x50 sits on this sheet. It uses the KiCad FM24C64B symbol, which has the same pinout.
 
@@ -146,7 +146,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - **Spec deviation:** BL_EN is not needed. TPS61500 PWM dimming goes through its EN pin.
 
 **Other connections**
-- VBAT: CR2032 through a BAT54C and 1k.
+- VBAT: CR2032 through R649 1k (Batch 29) and a BAT54C.
 - Buttons: nRPIBOOT and PWR_Button.
 - Fan header J4 on Fan_PWM/Fan_Tacho: **DNP** (fanless design, 2026-11-21, HEAT_PATH phase 24). Firmware leaves fan control disabled.
 - ACT and PWR LEDs.
@@ -306,7 +306,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - Power budget: 2x ADE9000 at 17 mA max + ISO7741 side 2 + pull-ups ≈ 40 mA, against ~75 mA available (3.3 V→3.3 V). Check this against the DS curves.
 - ADuM5020, ADP150 and both ADuM141E are removed.
 - **Layout:** keep a >=8 mm creepage and clearance keep-out across the barrier on every layer, with a milled slot under the isolators. Keep the HV dividers' 1206 chains along the hot side. Reinforced CAT III 300 V needs ≥5.5 mm clearance / ≥6 mm creepage (PD2, material group III). 600 V-class (347/600 V) systems need more and must be re-checked.
-- **JLC stock of the ISOW7841 is only 38.** Order or consign early.
+- **JLC stock of the ISOW7841 is only 38.** Order or consign early. **Batch 29:** U69 is ISOW7841AQDWERQ1, JLC/LCSC 1 → consign from the TI store (2,026 live 2026-11-22) or Digi-Key (Sourcing field).
 - **Ruling (Enginerd, 2026-11-21, Batch 14):** keep the ISOW7841 (U69) and ISO7741 (U70) digital isolators. The proposed switch to opto-couplers is cancelled; no opto-coupler replaces either part.
 - **Ruling (Enginerd, 2026-11-21, Batch 14):** insulation basis stays at **pollution degree 2** (sealed fanless enclosure) **plus conformal coat** over the HV section. No PD3 re-layout. The coat is a contamination/humidity mitigation; no creepage or clearance credit is taken for it, and the isolation numbers are unchanged (3 mm outer / 1.5 mm inner HV rules, barrier slots, 8 mm isolator package creepage, 12.6 mm reinforced per ISOLATION_CHECK.md).
 
@@ -318,15 +318,15 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - AVDDOUT, DVDDOUT and REF each get 4.7 µF + 100 nF.
 
 **Voltage inputs**
-- Per phase: 4 × 1M (1206 HV) to a 1k low-side resistor → 4001:1. MOV L–N: TMOV20RP460E C3260792 (M7; was V20E385P).
-- **Separate neutrals (Rev B):** GEN_N and BUS_N each have their own 4 × 1M / 1k divider (GEN_VN_TAP, BUS_VN_TAP). Each VxN input is fed from its own system's neutral tap through 1k/33 nF, and each VxP from the line tap through 1k/33 nF. Gen phases are therefore measured against N-gen and bus phases against N-bus, fully differentially.
-- The 0R neutral → GND_AC links are removed. GND_AC is defined by the dividers' 1k low sides and floats at about the mean of the 8 conductors / 4001. The ADE9000 needs all inputs within ±0.6 V of AGND and ±1 V differential. The full-scale tap is about 0.1 Vrms, and even 1 kV of neutral-to-neutral difference gives only ~0.25 V of common mode. The CT inputs are referenced to GND_AC through their burden.
+- Per phase: 12 × 330k (1206 HV, B3-6 / Safety H6) to a 1k low-side resistor → **1:3961** (3.961 MΩ / 1 kΩ + 1). (Was 4 × 1M → 4001:1; corrected Batch 29.) MOV L–N: TMOV20RP460E C3260792 (M7; was V20E385P).
+- **Separate neutrals (Rev B):** GEN_N and BUS_N each have their own 12 × 330k / 1k divider (GEN_VN_TAP, BUS_VN_TAP). Each VxN input is fed from its own system's neutral tap through 1k/33 nF, and each VxP from the line tap through 1k/33 nF. Gen phases are therefore measured against N-gen and bus phases against N-bus, fully differentially.
+- The 0R neutral → GND_AC links are removed. GND_AC is defined by the dividers' 1k low sides and floats at about the mean of the 8 conductors / 3961. The ADE9000 needs all inputs within ±0.6 V of AGND and ±1 V differential. The full-scale tap is about 0.1 Vrms, and even 1 kV of neutral-to-neutral difference gives only ~0.25 V of common mode. The CT inputs are referenced to GND_AC through their burden.
 - The 1k/33 nF networks on P and N see slightly different source impedances (tap ∥ 1k each), but both legs match within a system.
 - Fuses are external, on fused DIN terminals per the spec. No on-board fuse.
 
 **Current inputs**
-- AC1005 CTs on the PCB. Each external 5 A CT secondary (J9) loops through the core: symbol pins P1/P2 = the wire bridge.
-- Burden 2 × 24.9R, centre-tapped to AGND. 1k/33 nF anti-alias.
+- **Batch 29:** ZMCT103C window CTs (T1–T4, C94571; was Talema AC1005). Each external 5 A CT circuit is a 600 V UL1015 pigtail (14 AWG max) threaded once through the Ø5 mm window; J30 is the off-board CT shorting/test block. No CT-loop copper on the board. See docs/ISOLATION_CHECK.md §5c.
+- Burden 2 × 24.9R 1 % (C22916, 100 ppm/K; the old "0.1 %" note was wrong), centre-tapped to GND_AC = 49.8 Ω = the ZMCT103C rated 50 Ω burden. 1k/33 nF anti-alias. Gain is set by per-channel xIGAIN calibration.
 - The BUS ADE current inputs are grounded (voltage-only measurement).
 
 ## Front panel (frontpanel.kicad_sch) — Rev B backlit buttons
@@ -465,7 +465,7 @@ J6B = AUX7-10 + 2 GND, J5B = 6 GND (was 4 + 2 NC): output pins 16 (+ fuel/crank 
 
 ## Rev 2026-10-24 (g) - isolation footprint (see docs/ISOLATION_CHECK.md)
 - ISOW7841 / ISO7741 now use genctl:SOIC-16W_7.5x10.3mm_P1.27mm_HV_Slot: TI DW0016B "HV/isolation option" pads (1.65 x 0.6 at 9.75 mm) -> 8.1 mm copper gap (was 7.25 mm), plus a 2.0 x 21.0 mm routed slot and an all-layer copper keep-out between the rows. Netlist identical, ERC 0/0.
-- Barrier: plan >=13 mm (FR-4 IIIa, 600 V working, reinforced) instead of 12 mm, or call out CTI>=400 laminate. J7/J8 inter-phase slot. AC1005 CT insulation unproven (open).
+- Barrier: plan >=13 mm (FR-4 IIIa, 600 V working, reinforced) instead of 12 mm, or call out CTI>=400 laminate. J7/J8 inter-phase slot. AC1005 CT insulation unproven (open). **Closed Batch 29:** AC1005 replaced by ZMCT103C window CTs with the CT loop as 600 V wire (ISOLATION_CHECK §5c).
 
 ## Rev 2026-10-24 (h)
 - Hold-up: 2x HV1030 10F/2.7V (65 C, not JLC) -> 2x JIERONG JRCD3R0206N120030E 20F/3.0V, 85 C 1000 h, LCSC C7471020 (JLC stock 4176). Series = 10 F at 4.9 V (2.45 V/cell, under 3.0 V rating; check 85 C derating). Usable energy 0.5*10*(4.9^2-2.7^2) = 83.6 J, x0.88 boost eff = 73.6 J -> ~16 s at 4.5 W, ~13 s at -20% C. Charge via 50R: tau = 500 s (~25 min to full; first-boot shutdown time is shorter). Footprint CP_Radial_D12.5mm_P5.00mm - verify lead pitch.
@@ -556,3 +556,40 @@ Sources read this session: SN65DSI83 SLLSEC1I; PCA9306 SCPS113O; SN74LVC1T45 SCE
 - **U89/U90 must stay on VBAT_P behind U1 LM74800 (J1 -> BAT_IN -> Q1 -> VBAT_DD -> Q2 -> VBAT_PS -> R555 -> VBAT_P) and must never be moved to BAT_IN:** the TPS26621 abs max is 62 V (IN to RTN), below the ~64.5 V clamp of the 40 V TVS class on BAT_IN.
 - Batch 21: RTN (pin 5), PowerPAD (pin 11) and OVP (pin 3) are tied to GND. TI SLVSDT4F §9.3.8 says this disables the eFuse's own input reverse-polarity protection (and the part is damaged by a reverse input in that configuration); reverse polarity is blocked upstream by U1/Q1. OVP tied to RTN = OVP not used (§9.3.2, pin table). The PowerPAD must go to the GND plane with thermal vias (D-m7-27, required before fab). Bench B-m7-21: 36 V chassis short on each rail for several minutes, case temperature in °F.
 
+## m7-split Batch 29 (2026-11-22): pass-3 review fixes
+Source: /workspace/review/sch_review/SCH_REVIEW_2026-11-22_pass3.md + pass3/OPTIONS.md. Evidence: docs/split_evidence/batch29/.
+
+**B1 CT isolation (meter board).**
+- T1–T4 = **ZMCT103C** (Zeming, LCSC C94571, JLC 20,301 live): 1000:1, 5 A/5 mA, rated burden 50 Ω, ratio error ±0.2 % and phase ≤ 15′ at 5 A/50 Ω (class A), linear 0–15 A at 50 Ω, 4.5 kV isolation withstand, −40…+85 °C. Footprint genctl:Transformer_Zeming_ZMCT103C (KiCad 9 stock footprint, checked against the datasheet: 2 × Ø0.9 mm pins at 11.8 mm, body 18.2 × 10.2 mm, drill 1.2 mm).
+- **Burden:** 2 × 24.9 Ω = 49.8 Ω (unchanged) = the rated 50 Ω. 5 A → 5 mA → 249 mV rms (352 mV pk, 35 % of the ADE9000 ±1 V pk at PGA gain 1). Clip at 0.707 V rms ↔ 14.2 mA ↔ **14.2 A** secondary-side primary current (2.84 × nominal), just inside the CT's 15 A linear range, so the ADE clips before the CT saturates. Burden power 1.25 mW per half at 5 A.
+- **Architecture:** no CT-loop copper on the PCB and no J30 header. Each external 5 A CT circuit is a 600 V UL1015 pigtail (14 AWG max, OD ≤ 3.5 mm for the Ø5 mm window) threaded once through its window, P1* face toward the external CT S1; J30 = the off-board CT shorting/test terminal block (CT S2 earthed there). Barrier between the earthed loop and GND_AC = wire insulation (600 V) + CT body (4.5 kV). Layout rules: docs/ISOLATION_CHECK.md §5c. Install warning: docs/INSTALL_SAFETY.md (never open a CT loop / disconnect J30 with the generator live).
+
+**m1 LM5176 compensation (U2).** R8 4.7k → **2.7k** (0603WAF2701T5E C13167, Basic, JLC 902,712); C12 220p → **1 nF** (CL10B102KB8NNNC C1588, Basic, already on the BOM); C11 33 nF kept.
+- DS eq. 44: fbw = Rc1·gm·(1−D)/(2π·(Vout/Vref)·ACS·RSENSE·COUT), gm 1.31 mS, Vout/Vref 15, ACS 5, RSENSE 8 mΩ, COUT(eff) ≈ 70 µF (estimate: 7 × 22 µF 1206 + 6 × 10 µF 0805 at 12 V DC bias).
+- Boost, Vin 6 V (crank), 4 A: fbw **6.7 kHz** < fRHP/3 = 8.5 kHz (was 11.7 kHz with 4.7k). Vin 9 V: 10.1 kHz < fsw/20 = 15 kHz (was 17.5). Buck: 13.4 kHz < 15 kHz (was 23). At COUT(eff) 55 µF the 6 V case is at the limit (8.5 kHz).
+- fz = 1/(2π·2.7k·33n) = 1.79 kHz ≈ 1.2 × the boost output pole (DS: 1.5 ×). fpc2 = 1/(2π·2.7k·1n) = 59 kHz = 5.8–8.8 × fbw (DS: 7–10 ×; 820 pF would be 72 kHz but is a new extended part).
+- Bench load-step and Bode: docs/BENCH_12V_TEST.md §B29.
+
+**m2 TPS56637 output capacitance (U3 +5V, U4 +3V3).** DS Table 4: 20–100 µF **effective**. DNP **C29, C30** (+5V) and **C36, C37** (+3V3); pads kept.
+- +5V after: C27/C28 2 × 22 µF (≈ 2 × 12 µF at 5 V) + C83/C89/C284 3 × 10 µF (≈ 3 × 4.5) + 3 × 1 µF ≈ 39 µF local, + C67/C68 on +5V_CM5 via TPS2121 ≈ 24 µF → ≈ 63 µF + the CM5 module's own input caps (unknown). Was ≈ 87 µF + CM5.
+- +3V3 after: C35 22 µF (≈ 15 µF at 3.3 V) + C99/C285/C314 3 × 10 µF (≈ 3 × 6) + 2 × 1 µF ≈ 35 µF local, + +3V3_SAFE via TPS2116 (C46/C47, C55, ~35 × 100 nF) ≈ 35 µF, + meter board via J31 ≈ 20 µF → ≈ 90 µF (was ≈ 120 µF). DC-bias figures are estimates (no C-V curves opened).
+- +3V3 still uses 3.3 µH (Table 4: 2.2 µH), known deviation. Feed-forward R18/C24 (+5V) and R25/C32 (+3V3) unchanged. Bench test: docs/BENCH_12V_TEST.md §B29.
+
+**m3 IRLML0100 shunt FETs.** No hardware change. Per-channel 4–20 mA gain/offset calibration is a firmware requirement: docs/FW_REQ_BATCH29.md FW-AI-1.
+
+**m4 4–20 mA shunt overload.** R137/R148/R159/R170/R181/R192: AR06BTCV1000 1206 0.25 W → **YAGEO RT2010BKD07100RL** (C876535, 100 Ω 0.1 % 25 ppm/K 0.5 W 2010, JLC 8,564) + firmware over-range trip (FW_REQ_BATCH29 FW-AI-2: > 25 mA → shunt off within 50 ms, retry limits).
+- Why not a PTC: the ADC measures the AI terminal node (AI1 → R139 100k divider), not the shunt alone. A PTC in the shunt leg would add its 3.5–50 Ω, temperature- and trip-history-dependent resistance to every 4–20 mA reading; a PTC in the input line would add it to every resistive-sender reading. Calibration cannot remove a resistance that changes after each trip.
+- Fault energy: 24 V miswire = 5.8 W, 29 V (24 V system charging) = 8.4 W, for ≤ 50 ms = 0.42 J in a 2010 (≈ 2.5 × the 1206 thermal mass). Same accuracy class as before. Residual: if firmware stops while a shunt is on and the terminal is miswired, the resistor overheats (thin film fails open). The watchdog resets the MCU in ≤ 230 ms and FW-AI-2 requires shunts off first thing at boot; U31 keeps its outputs through an MCU reset.
+
+**m5 docs.** Divider 12 × 330k / 1k = 1:3961 (DESIGN_NOTES, design_spec, ISOLATION_CHECK, firmware/ARCHITECTURE.md, ac_metering sheet text); burden note 1 %; pass-2 report TPS2121 PR1 4.32 V → 4.58 V rising / 4.49 V falling (report annotated, outside the repo).
+
+**Cheap notes taken.**
+- R649 1k (0603WAF1001T5E C21190, Basic) in series with BT1 CR2032: with the BAT54C this is two protections against charging a primary lithium cell (UL 1642 / IEC 62368-1 Annex M style). A shorted diode gives ≤ (3.3 − 2.0) V / 1k = 1.3 mA. VBAT load is µA, drop < 10 mV.
+- COM_A/COM_B dividers R196/R198 100k → RT0603BRD07100KL **C122538**, R197/R199 18k → RT0603BRD0718KL **C309650** (0.1 %, same 0603 footprint, same parts as the AI dividers).
+- I2C1 at **100 kHz** (2.2k pull-ups, ~150–200 pF): firmware/ARCHITECTURE.md and FW_REQ_BATCH29 FW-I2C-1.
+
+**Stock plan (Sourcing field on the symbols, shown in the BOMs).**
+- U37: TPS3431SQDRBRQ1 C2878091 (0 everywhere) → **TPS3431SDRBR** (C702145; same die, DRB pinout and timing, −40…+125 °C, not AEC-Q100). Consign from the TI store (700 live) or Mouser.
+- U47–U61, U68 TPS1HTC30AQPWPRQ1 (16/board; JLC 12): consign from the TI store (3,000 live) or Digi-Key.
+- U69 ISOW7841AQDWERQ1 (JLC 1): consign from the TI store (2,026 live) or Digi-Key.
+- Q70/Q71 SQD40P10-40L_GE3: consign the Vishay part from Mouser (781-SQD40P10-40L_GE3). The DOINGTER clone C49237801 is not used in the E-stop path.

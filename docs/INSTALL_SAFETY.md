@@ -101,6 +101,14 @@ cathode to the + (output) side, so the on-board driver is protected from the ind
 switch-off. The small-output drivers have an internal inductive clamp (TPS1HTC30-Q1 datasheet only; TPS48100 inferred), but an external diode
 at the coil keeps that energy off the board and the cable.
 
+## CT circuits and J30 (Batch 29)
+> **WARNING: NEVER OPEN A CT LOOP OR DISCONNECT J30 WITH THE GENERATOR LIVE.** An open 5 A CT secondary under load develops a lethal voltage (kilovolts peak) and can destroy the CT. Before touching the CT wiring, the meter board or the controller: short every CT at the J30 shorting block first (or stop the generator and open the breaker).
+
+- J30 is the CT shorting/test terminal block in the genset panel (site-supplied, as is normal switchgear practice). It is **not** on the controller board any more.
+- Each CT circuit runs as a factory-fitted 600 V pigtail (UL1015, 14 AWG max) through a window CT on the meter board. Land the pigtail ends on J30 so that the external CT's **S1** feeds the pigtail end marked **P1** (the P1* face of T1-T4). Wrong polarity shows as negative power at commissioning (firmware wiring check).
+- Earth the CT secondaries at J30 (S2 side), per local code. Use the shorting links when removing the controller or the meter board.
+- Do not re-thread, cut or extend the pigtails inside the enclosure. Keep them tied down; damaged insulation is the only barrier between the earthed CT loop and the 600 V metering circuit.
+
 ## Open for installer / Ethan (does not block this document)
 1. Fuel solenoid pull-in current and duration: must be <= 2.8 A (5 A standard (non-time-delay) ATO/ATC, 58 V DC, OptiFuse ANR58-UL-5A or equal); the starter is switched via an interposing relay only.
 2. GLOW: relay coil (2 A max fuse) or glow plugs driven directly (not supported: electronic limit 3.18 A minimum, see the table above; use an external relay).

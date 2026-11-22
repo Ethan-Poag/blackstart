@@ -1,15 +1,15 @@
-# Isolation / creepage check: 600 V metering barrier (2026-10-24)
+# Isolation / creepage check: 600 V metering barrier (2026-10-24; Batch 29 update 2026-11-22: CT circuits §5c)
 
 ## 1. Which parts sit on which barrier
 | Ref | Part | Barrier | Rating (datasheet) | Package creepage/clearance | Mold CTI / material group |
 |---|---|---|---|---|---|
 | ISOW7841DWER | data + DC-DC isolator | **600 V metering (GND_AC hot) <-> SELV** | 5 kVrms reinforced, VIORM 1414 Vpk, VIOWM 1000 Vrms (TDDB) | CLR >8 mm, CPG >8 mm | CTI >600 V, group I |
 | ISO7741DWR | 4-ch isolator | **600 V metering <-> SELV** | 5 kVrms reinforced, VIORM 2121 Vpk, VIOWM 1500 Vrms | CLR >8, CPG >8 mm (DW-16) | CTI >600 V, group I |
-| AC1005 x8 | current transformers | 600 V side (secondary on GND_AC) <-> external CT loop (J9) | **no insulation rating in datasheets/ac1005.txt** | - | - |
+| ZMCT103C x4 (T1-T4, Batch 29; was AC1005) | window current transformers | 600 V side (secondary on GND_AC) <-> earthed external CT loop (600 V wire through the window, J30 off-board) | 4500 V isolation withstand (Zeming datasheet C94571); 600 V UL1015 wire insulation in series | no primary copper on the PCB (window type) | epoxy body |
 | CA-IS3062W x2 | isolated CAN | SELV <-> CAN field bus (SELV) - functional only | VIORM 849 Vpk | 8 / 8 mm | CTI >400, group I |
 | CA-IS2092W | isolated RS-485 | SELV <-> RS-485 field bus (SELV) - functional only | VIORM 560 Vpk (objective DS) | 8 / 8 mm | CTI >400, group II |
 | HR963380AE (was HR911131A) | magjack | SELV <-> Ethernet, 2250 VDC/60 s (≈1500 Vrms) functional | - | - | - |
-Only ISOW7841 and ISO7741 (and the AC1005 CTs) bridge the 600 V barrier. The CAN/RS-485 isolators are SELV-to-SELV and do not need reinforced spacing; they keep the stock footprint.
+Only ISOW7841 and ISO7741 (and the T1-T4 CTs, see §5c) bridge the 600 V barrier. (Correction, Batch 29: the old "no insulation rating" statement for the AC1005 was wrong; Talema states 4 kVrms hi-pot. The real problem was the 4.6 mm loop-pad layout, now removed.) The CAN/RS-485 isolators are SELV-to-SELV and do not need reinforced spacing; they keep the stock footprint.
 
 ## 2. Why "8 mm" on a package whose footprint gap is 7.25 mm
 - The datasheet CLR/CPG (TI Table 5.6 / 7.6, Chipanalog 隔离特性) is **terminal-to-terminal of the bare package**: shortest path through air / over the moulded body between a lead on side 1 and a lead on side 2. Body width is 7.4-7.6 mm; the leads leave the body side, bend down, and the solder feet sit 0.4-1.27 mm long at a lead span of 9.97-10.63 mm (TI DW0016B). Over the body plus the lead shoulders the path is >8 mm.
@@ -48,8 +48,8 @@ Values from **IEC 60664-1** (the basis IEC 61010-1 and IEC 62368-1 build on). I 
 | Planned layout barrier 12 mm | 12 mm | 12.6 mm | **Slightly short** on plain FR-4. Use **>=13 mm copper-free barrier** on all layers, or specify **CTI>=400 laminate** (then 9 mm), or extend the slot along the whole barrier |
 | J7/J8 Phoenix 1720819 L-L | 5.62 mm copper gap | functional/basic between phases at 600 V: clr 5.5 mm, cpg 6.3 mm (IIIa) | clearance OK, creepage **short by 0.7 mm** on FR-4 -> add a 1.5 mm slot between potentials under the header, or CTI>=400 laminate (4.5 mm). Header itself rated 630 V III/2. Header to any SELV copper: >=13 mm |
 | MOVs TMOV20RP460E (M7; was V20E385P at 10 mm) | 7.5 mm lead pitch (genctl:TMOV20RP_P7.5mm_inline), L-N; pad edge gap 5.6 mm (reviewer measurement, not re-measured here) | basic 6.3 mm | Clearance: 5.6 mm vs 5.5 mm rule. Creepage across the MOV pads (5.6 mm vs 6.3 mm) is UNVERIFIED: it may be short unless treated as the component's own functional gap. Safety-engineer item. Keep MOV bodies/leads >=13 mm from SELV; add a fuse/thermal protection upstream (external fused terminals per spec) |
-| HV dividers 4 x 1M 1206 | ~87-150 V per resistor | 1206 rated 200 V working | OK if laid out as straight chains; keep whole chain in the hot zone |
-| **AC1005 CTs / J9** | CT loop pads 4/5 are 4.6 mm from the AC1005 secondary pins (GND_AC = hot); J9 is a 5.08 mm header on the board | external 5 A CT circuits are normally earthed -> at least **basic** (5.5 mm clr / 6.3 mm cpg); if not earthed, **reinforced** | **Not adequate as drawn.** The AC1005 datasheet gives no insulation rating, so the primary-wire/secondary barrier is unproven. Options: (a) move loop pads >=8 mm (or 13 mm) from the secondary pins and use 600 V+ rated insulated wire with sleeve through the window; (b) better: replace AC1005 with a PCB CT that has a stated reinforced rating, or bring the external CT secondaries in on the hot side and treat J9 as hot (finger-safe plug, hot-zone placement) |
+| HV dividers 12 x 330k 1206 per leg (1:3961; was 4 x 1M) | ~29-50 V per resistor | 1206 rated 200 V working | OK if laid out as straight chains; keep whole chain in the hot zone |
+| **AC1005 CTs / J9 (superseded Batch 29, see §5c)** | CT loop pads 4/5 are 4.6 mm from the AC1005 secondary pins (GND_AC = hot); J9 is a 5.08 mm header on the board | external 5 A CT circuits are normally earthed -> at least **basic** (5.5 mm clr / 6.3 mm cpg); if not earthed, **reinforced** | **Not adequate as drawn.** The AC1005 datasheet gives no insulation rating, so the primary-wire/secondary barrier is unproven. Options: (a) move loop pads >=8 mm (or 13 mm) from the secondary pins and use 600 V+ rated insulated wire with sleeve through the window; (b) better: replace AC1005 with a PCB CT that has a stated reinforced rating, or bring the external CT secondaries in on the hot side and treat J9 as hot (finger-safe plug, hot-zone placement) |
 | Ethernet/USB/CM5 etc. | SELV | - | Must all be on the SELV side of the barrier |
 
 Solder mask and conformal coating: solder mask is **not** counted as insulation by 60664-1. A coating qualified per IEC 60664-3 (type 1/2) would let PD1 values apply under the coating (much smaller), but needs process control and test; not recommended as the primary means here. A slot/groove is cheaper and robust.
@@ -65,9 +65,24 @@ J28/J29 stay Phoenix PC 5/4-GF-7,62 1720819. No isolation number in this file is
 4. JLC minimum slot width >=1.0 mm: still to verify (drawn slots are 2.0 mm).
 5. "Do not plug or unplug live" at J28/J29: schematic text (ac_metering sheet), INSTALL_SAFETY, README; silkscreen is deferred (D-m7-22).
 
+## 5c. CT circuits after Batch 29 (pass-3 B1): window CTs, loop as 600 V wire, J30 off-board
+**Architecture.** T1-T4 are ZMCT103C (C94571) window CTs. Their two secondary pins (S1 = pin 1*, S2 = pin 2) sit on the burden, centre-tapped to GND_AC, so the CT pins are **hot-zone copper**. The earthed external 5 A CT circuit never touches the PCB: each loop is a 600 V UL1015 pigtail (14 AWG max; the window is Ø5 mm, OD of 14 AWG UL1015 ≈ 3.4 mm) passing once through the window, both ends leaving the enclosure to **J30 = the off-board CT shorting/test terminal block** in the genset panel (CT S2 earthed there). J30 and its KF2EDGRM header are gone from the board. The barrier between the earthed loop and GND_AC is the wire insulation (600 V rated) plus the CT body (4.5 kV withstand), in series: two independent layers, not reliant on board spacing.
+
+**Layout rules (meter board; numbers from §4: OVC III, PD2, 600 V working, FR-4 group IIIa):**
+1. Place T1-T4 and their burden resistors (R474/R475, R478/R479, R482/R483, R486/R487) and anti-alias parts entirely inside the hot zone. CT pins to any SELV copper: **≥ 13 mm** on every layer (the same barrier as §6.1; 9 mm only with CTI ≥ 400 laminate called out).
+2. CT pin pads to any 600 V conductor copper of a different potential (J28/J29 L/N, divider chains, MOVs): **≥ 5.5 mm clearance / ≥ 6.3 mm creepage** (basic, line-to-GND_AC).
+3. No CT-circuit copper anywhere: no pads, no test points, no connector for the loop. Do not add plated tie-down holes; cable-tie anchors must be **non-plated** slots or holes with **no copper within 1 mm**, so they stay potential-free.
+4. Wire path: the window axis is parallel to the board (along the footprint Y axis, P1* face = +Y, silkscreen "P1*"). Run each pigtail straight through its window with ≥ 10 mm free length on both sides. Tie it down on both sides (non-plated anchors, rule 3) so that pulling the cable cannot load the CT pins. Keep the wire ≥ 3 mm from the divider chains, MOVs and other parts that run warm, and off sharp edges (board edge, slots): abrasion of the insulation is the failure mode.
+5. The pigtails leave the enclosure through one grommet/gland near the old J30 position on the left edge (wire entry outward/rear), never across the SELV zone (J32 side). They need no spacing to SELV copper as insulated wire, but routing them through the SELV area makes the installation harder to inspect.
+6. Silkscreen next to T1-T4 and at the grommet: "CT CIRCUIT - NEVER OPEN WITH THE GENERATOR LIVE - SHORT AT J30 FIRST". Silkscreen per CT: CT1..CT4 = GEN L1/L2/L3/N and the P1* arrow.
+7. Conformal coat may cover the CT pins and burden; mask the windows (no coat build-up on the wire path). No creepage credit for the coat (§5a).
+8. Hi-pot (type test, value from the end-product standard; not computed here): loop wire (all 4 pigtails shorted) to GND_AC (all hot copper shorted). The CT's 4.5 kV (1 min) withstand is the component limit.
+
+**What this closes:** pass-3 B1 (4.6 mm loop pads, J30 header next to GND_AC). **What it does not close:** the board-level §6 barrier items and J28/J29 rules are unchanged.
+
 ## 6. To do at layout
 1. Draw the barrier: >=13 mm copper keep-out on every layer between the GND_AC zone and everything else (or 9 mm with CTI>=400 laminate called out in fab notes).
 2. Isolator slot comes with the footprint; join it to a board barrier slot if the two isolators sit next to each other (one long slot is fine).
 3. Slot of >=1.5 mm between the three potentials of J7/J8 (L1/L2/L3/N), or CTI>=400 laminate.
-4. Resolve the AC1005 insulation question before the board goes out.
+4. ~~Resolve the AC1005 insulation question before the board goes out.~~ Closed in Batch 29: ZMCT103C window CTs, CT loop as 600 V wire, J30 off-board. Apply the §5c layout rules.
 5. Hi-pot test values come from the end-product standard (IEC 61010-1 Table for reinforced, CAT III 600 V); not computed here. The isolators are vendor-tested at 5 kVrms (UL 1577).

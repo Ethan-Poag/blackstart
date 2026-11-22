@@ -1,0 +1,153 @@
+BOM_main.csv PCB refs 1119 fitted in netlist 1119
+BOM_daughter.csv PCB refs 218 fitted in netlist 218
+crosscheck mismatches 0
+{
+ "main_pcb_parts": [
+  262.34,
+  222.29
+ ],
+ "main_offboard": [
+  1356.36,
+  950.76
+ ],
+ "harness": [
+  2.91,
+  1.88
+ ],
+ "main_total": [
+  1621.61,
+  1174.93
+ ],
+ "daughter_pcb_parts": [
+  63.89,
+  53.42
+ ],
+ "daughter_offboard": [
+  71.88,
+  23.76
+ ],
+ "daughter_total": [
+  135.77,
+  77.18
+ ],
+ "controller_total": [
+  1757.38,
+  1252.11
+ ],
+ "rev4c_csv_sum": [
+  1697.55,
+  1251.27
+ ],
+ "pcb_refs": [
+  1119,
+  218,
+  1337
+ ],
+ "batch29_delta": {
+  "main_pcb_parts": [
+   1.23,
+   1.12
+  ],
+  "main_offboard": [
+   0.0,
+   0.0
+  ],
+  "main_total": [
+   1.23,
+   1.12
+  ],
+  "daughter_pcb_parts": [
+   -23.84,
+   -21.93
+  ],
+  "daughter_total": [
+   -18.08,
+   -16.14
+  ],
+  "controller_total": [
+   -16.85,
+   -15.02
+  ]
+ }
+}
+{
+ "main": {
+  "added": [
+   "C13167",
+   "C876535",
+   "C702145"
+  ],
+  "removed": [
+   [
+    "C319961",
+    "R137,R148,R159,R170,R181,R192"
+   ],
+   [
+    "C25810",
+    "R197,R199"
+   ],
+   [
+    "C2878091",
+    "U37"
+   ]
+  ],
+  "changed": [
+   [
+    "C1603",
+    2,
+    1
+   ],
+   [
+    "C1588",
+    3,
+    4
+   ],
+   [
+    "C12891",
+    21,
+    17
+   ],
+   [
+    "C25803",
+    96,
+    94
+   ],
+   [
+    "C21190",
+    51,
+    52
+   ],
+   [
+    "C23162",
+    5,
+    4
+   ],
+   [
+    "C122538",
+    8,
+    10
+   ],
+   [
+    "C309650",
+    6,
+    8
+   ]
+  ]
+ },
+ "meter": {
+  "added": [
+   "C94571"
+  ],
+  "removed": [
+   [
+    "C441294",
+    "J30"
+   ],
+   [
+    "C6117861",
+    "T1,T2,T3,T4"
+   ]
+  ],
+  "changed": []
+ }
+}

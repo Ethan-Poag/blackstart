@@ -1,0 +1,89 @@
+parts 1138 -> 1139
+ADDED R649 1k Resistor_SMD:R_0603_1608Metric C21190
+CHG C12 value 220p -> 1n
+PROP C12 LCSC 'C1603' -> 'C1588'
+PROP C12 MPN 'CL10B221KB8NNNC' -> 'CL10B102KB8NNNC'
+PROP C12 Note 'Cc2' -> 'Cc2. Batch 29: 220p -> 1n so fpc2 = 1/(2pi*2.7k*1n) = 59 kHz = 5.8-8.8 x fbw (D
+DNP C29 False -> True
+PROP C29 Note None -> 'Batch 29 (pass-3 m2): DNP. TPS56637 DS Table 4 allows 20-100 uF EFFECTIVE Cout.
+DNP C30 False -> True
+PROP C30 Note None -> 'Batch 29 (pass-3 m2): DNP. TPS56637 DS Table 4 allows 20-100 uF EFFECTIVE Cout.
+DNP C36 False -> True
+PROP C36 Note None -> 'Batch 29 (pass-3 m2): DNP. TPS56637 DS Table 4 allows 20-100 uF EFFECTIVE Cout.
+DNP C37 False -> True
+PROP C37 Note None -> 'Batch 29 (pass-3 m2): DNP. TPS56637 DS Table 4 allows 20-100 uF EFFECTIVE Cout.
+PROP Q70 Sourcing None -> 'CONSIGN (Batch 29): Vishay SQD40P10-40L_GE3 from Mouser 781-SQD40P10-40L_GE3 (A
+PROP Q71 Sourcing None -> 'CONSIGN (Batch 29): Vishay SQD40P10-40L_GE3 from Mouser 781-SQD40P10-40L_GE3 (A
+CHG R137 fp Resistor_SMD:R_1206_3216Metric -> Resistor_SMD:R_2010_5025Metric
+PROP R137 LCSC 'C319961' -> 'C876535'
+PROP R137 MPN 'AR06BTCV1000' -> 'RT2010BKD07100RL'
+PROP R137 Manufacturer 'Viking Tech' -> 'YAGEO'
+PROP R137 Note '4-20mA shunt 0.1%' -> '4-20mA shunt 0.1%. Batch 29 (pass-3 m4): 1206 0.25 W AR06BTCV1000 -> 2010 0.5 W
+CHG R148 fp Resistor_SMD:R_1206_3216Metric -> Resistor_SMD:R_2010_5025Metric
+PROP R148 LCSC 'C319961' -> 'C876535'
+PROP R148 MPN 'AR06BTCV1000' -> 'RT2010BKD07100RL'
+PROP R148 Manufacturer 'Viking Tech' -> 'YAGEO'
+PROP R148 Note '4-20mA shunt 0.1%' -> '4-20mA shunt 0.1%. Batch 29 (pass-3 m4): 1206 0.25 W AR06BTCV1000 -> 2010 0.5 W
+CHG R159 fp Resistor_SMD:R_1206_3216Metric -> Resistor_SMD:R_2010_5025Metric
+PROP R159 LCSC 'C319961' -> 'C876535'
+PROP R159 MPN 'AR06BTCV1000' -> 'RT2010BKD07100RL'
+PROP R159 Manufacturer 'Viking Tech' -> 'YAGEO'
+PROP R159 Note '4-20mA shunt 0.1%' -> '4-20mA shunt 0.1%. Batch 29 (pass-3 m4): 1206 0.25 W AR06BTCV1000 -> 2010 0.5 W
+CHG R170 fp Resistor_SMD:R_1206_3216Metric -> Resistor_SMD:R_2010_5025Metric
+PROP R170 LCSC 'C319961' -> 'C876535'
+PROP R170 MPN 'AR06BTCV1000' -> 'RT2010BKD07100RL'
+PROP R170 Manufacturer 'Viking Tech' -> 'YAGEO'
+PROP R170 Note '4-20mA shunt 0.1%' -> '4-20mA shunt 0.1%. Batch 29 (pass-3 m4): 1206 0.25 W AR06BTCV1000 -> 2010 0.5 W
+CHG R181 fp Resistor_SMD:R_1206_3216Metric -> Resistor_SMD:R_2010_5025Metric
+PROP R181 LCSC 'C319961' -> 'C876535'
+PROP R181 MPN 'AR06BTCV1000' -> 'RT2010BKD07100RL'
+PROP R181 Manufacturer 'Viking Tech' -> 'YAGEO'
+PROP R181 Note '4-20mA shunt 0.1%' -> '4-20mA shunt 0.1%. Batch 29 (pass-3 m4): 1206 0.25 W AR06BTCV1000 -> 2010 0.5 W
+CHG R192 fp Resistor_SMD:R_1206_3216Metric -> Resistor_SMD:R_2010_5025Metric
+PROP R192 LCSC 'C319961' -> 'C876535'
+PROP R192 MPN 'AR06BTCV1000' -> 'RT2010BKD07100RL'
+PROP R192 Manufacturer 'Viking Tech' -> 'YAGEO'
+PROP R192 Note '4-20mA shunt 0.1%' -> '4-20mA shunt 0.1%. Batch 29 (pass-3 m4): 1206 0.25 W AR06BTCV1000 -> 2010 0.5 W
+PROP R196 LCSC 'C25803' -> 'C122538'
+PROP R196 MPN '0603WAF1003T5E' -> 'RT0603BRD07100KL'
+PROP R196 Manufacturer 'UNI-ROYAL' -> 'YAGEO'
+PROP R196 Note None -> 'Batch 29 (pass-3 NOTE 6): 1 % -> 0.1 %, same parts as the AI channel dividers, 
+PROP R197 LCSC 'C25810' -> 'C309650'
+PROP R197 MPN '0603WAF1802T5E' -> 'RT0603BRD0718KL'
+PROP R197 Manufacturer 'UNI-ROYAL' -> 'YAGEO'
+PROP R197 Note None -> 'Batch 29 (pass-3 NOTE 6): 1 % -> 0.1 %, same parts as the AI channel dividers, 
+PROP R198 LCSC 'C25803' -> 'C122538'
+PROP R198 MPN '0603WAF1003T5E' -> 'RT0603BRD07100KL'
+PROP R198 Manufacturer 'UNI-ROYAL' -> 'YAGEO'
+PROP R198 Note None -> 'Batch 29 (pass-3 NOTE 6): 1 % -> 0.1 %, same parts as the AI channel dividers, 
+PROP R199 LCSC 'C25810' -> 'C309650'
+PROP R199 MPN '0603WAF1802T5E' -> 'RT0603BRD0718KL'
+PROP R199 Manufacturer 'UNI-ROYAL' -> 'YAGEO'
+PROP R199 Note None -> 'Batch 29 (pass-3 NOTE 6): 1 % -> 0.1 %, same parts as the AI channel dividers, 
+CHG R8 value 4.7k -> 2.7k
+PROP R8 LCSC 'C23162' -> 'C13167'
+PROP R8 MPN '0603WAF4701T5E' -> '0603WAF2701T5E'
+PROP R8 Note 'Rc (review c65: 22.1k->4.7k)' -> 'Rc1. Batch 29 (pass-3 m1): 4.7k -> 2.7k. LM5176 DS eq.44: fbw = Rc1*gm*(1-D)/(2
+CHG U37 value TPS3431SQDRBRQ1 -> TPS3431SDRBR
+PROP U37 LCSC 'C2878091' -> 'C702145'
+PROP U37 MPN 'TPS3431SQDRBRQ1' -> 'TPS3431SDRBR'
+PROP U37 Sourcing None -> 'CONSIGN (Batch 29): TI store TPS3431SDRBR (live 700 on 2026-11-22) or Mouser 59
+PROP U47 Sourcing None -> 'CONSIGN (Batch 29): buy TPS1HTC30AQPWPRQ1 from the TI store (live 3,000 on 2026
+PROP U48 Sourcing None -> 'CONSIGN (Batch 29): buy TPS1HTC30AQPWPRQ1 from the TI store (live 3,000 on 2026
+PROP U49 Sourcing None -> 'CONSIGN (Batch 29): buy TPS1HTC30AQPWPRQ1 from the TI store (live 3,000 on 2026
+PROP U50 Sourcing None -> 'CONSIGN (Batch 29): buy TPS1HTC30AQPWPRQ1 from the TI store (live 3,000 on 2026
+PROP U51 Sourcing None -> 'CONSIGN (Batch 29): buy TPS1HTC30AQPWPRQ1 from the TI store (live 3,000 on 2026
+PROP U52 Sourcing None -> 'CONSIGN (Batch 29): buy TPS1HTC30AQPWPRQ1 from the TI store (live 3,000 on 2026
+PROP U53 Sourcing None -> 'CONSIGN (Batch 29): buy TPS1HTC30AQPWPRQ1 from the TI store (live 3,000 on 2026
+PROP U54 Sourcing None -> 'CONSIGN (Batch 29): buy TPS1HTC30AQPWPRQ1 from the TI store (live 3,000 on 2026
+PROP U55 Sourcing None -> 'CONSIGN (Batch 29): buy TPS1HTC30AQPWPRQ1 from the TI store (live 3,000 on 2026
+PROP U56 Sourcing None -> 'CONSIGN (Batch 29): buy TPS1HTC30AQPWPRQ1 from the TI store (live 3,000 on 2026
+PROP U57 Sourcing None -> 'CONSIGN (Batch 29): buy TPS1HTC30AQPWPRQ1 from the TI store (live 3,000 on 2026
+PROP U58 Sourcing None -> 'CONSIGN (Batch 29): buy TPS1HTC30AQPWPRQ1 from the TI store (live 3,000 on 2026
+PROP U59 Sourcing None -> 'CONSIGN (Batch 29): buy TPS1HTC30AQPWPRQ1 from the TI store (live 3,000 on 2026
+PROP U60 Sourcing None -> 'CONSIGN (Batch 29): buy TPS1HTC30AQPWPRQ1 from the TI store (live 3,000 on 2026
+PROP U61 Sourcing None -> 'CONSIGN (Batch 29): buy TPS1HTC30AQPWPRQ1 from the TI store (live 3,000 on 2026
+PROP U68 Sourcing None -> 'CONSIGN (Batch 29): buy TPS1HTC30AQPWPRQ1 from the TI store (live 3,000 on 2026
+NET A VBAT_CELL not identical in B -> B nets ['VBAT_CELL_R', 'VBAT_CELL']
+NET B VBAT_CELL_R 2 nodes from A nets ['<new>', 'VBAT_CELL'] | B nodes: [('BT1', '1'), ('R649', '1')]
+NET B VBAT_CELL 3 nodes from A nets ['<new>', 'VBAT_CELL'] | B nodes: [('D7', '2'), ('D8', '1'), ('R649', '2')]

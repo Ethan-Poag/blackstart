@@ -2263,7 +2263,7 @@
 (property "LCSC" "C22414694" (at 87.63 236.22 0) (effects (font (size 1.27 1.27)) hide))
 (property "MPN" "TPS1HTC30AQPWPRQ1" (at 87.63 236.22 0) (effects (font (size 1.27 1.27)) hide))
 (property "Manufacturer" "Texas Instruments" (at 87.63 236.22 0) (effects (font (size 1.27 1.27)) hide))
-(pin "12" (uuid "fcb28ec0-b6c0-43c9-a477-791d9afe6217"))
+(property "Sourcing" "CONSIGN (Batch 29): buy TPS1HTC30AQPWPRQ1 from the TI store (live 3,000 on 2026-11-22) or Digi-Key 296-TPS1HTC30AQPWPRQ1CT-ND and ship 16/board to JLC; JLC/LCSC stock 12" (at 87.63 236.22 0) (effects (font (size 1.27 1.27)) hide))(pin "12" (uuid "fcb28ec0-b6c0-43c9-a477-791d9afe6217"))
 (pin "13" (uuid "1482a912-2647-49a3-9c9e-716b47653a90"))
 (pin "14" (uuid "e26bec4d-119e-4d36-a36f-b7ccec4ea142"))
 (pin "2" (uuid "699e7beb-5bbf-4798-8942-7619f005e697"))

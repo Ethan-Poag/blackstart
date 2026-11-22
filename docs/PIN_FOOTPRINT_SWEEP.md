@@ -12,6 +12,9 @@ pin-name mapping vs its LCSC datasheet (fetched live 2026-10-28 HST).
 ## Datasheet-verified mappings (all MATCH symbol)
 | Parts | LCSC | Datasheet pinout | Symbol |
 |---|---|---|---|
+| ZMCT103C x4 (meter T1-T4, Batch 29; was AC1005) | C94571 Zeming | bottom view: pins 1* and 2, Ø0.9 mm, pitch 11.8 ±0.2 mm; body 18.2 x 10.2 mm; window Ø5 mm, primary P1*→P2 | genctl:ZMCT103C pin 1 S1 (dot) / 2 S2; footprint genctl:Transformer_Zeming_ZMCT103C (KiCad 9 stock geometry): pads 1/2 at 0 / 11.8 mm, drill 1.2 mm |
+| RT2010BKD07100RL x6 (R137-R192, Batch 29) | C876535 YAGEO | 2010 chip resistor | Resistor_SMD:R_2010_5025Metric |
+| TPS3431SDRBR (U37, Batch 29) | C702145 TI | DRB VSON-8: same pinout as TPS3431SQDRBRQ1 (TI DS SNVSA80 / -Q1 SNVSB36 pin tables) | unchanged genctl:TPS3431SDRBR symbol, genctl:TPS3431_VSON-8_DRB |
 | MMBT3904 x35 | C20526 JSCJ | 1 B, 2 E, 3 C | 1 B 2 E 3 C |
 | MMBT3906 x6 | C2143 JSCJ | 1 B, 2 E, 3 C | same |
 | BSS84 x6 | C8492 LRC LBSS84LT1G | 1 G, 2 S, 3 D | 1 G 2 S 3 D |

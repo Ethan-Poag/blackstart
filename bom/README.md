@@ -1,11 +1,11 @@
-# Bills of materials (m7-split, Batch 28 onward)
+# Bills of materials (m7-split, Batch 28 onward; Batch 29: Sourcing column)
 
 Two KiCad projects since the split: **genctl** (main board) and **genctl_meter** (HV metering daughter board).
 All on-board BOMs are generated from the committed schematics. Do not hand-edit them.
 
 | File | Content | Written by |
 |---|---|---|
-| `genctl_main_bom.csv` | Main board, priced: refs, qty, value, footprint, MPN, manufacturer, LCSC, JLC class, unit/ext price at qty 1 and qty 10, DNP groups, TOTAL | `tools/bom_from_sch.py --write` |
+| `genctl_main_bom.csv` | Main board, priced: refs, qty, value, footprint, MPN, manufacturer, LCSC, JLC class, unit/ext price at qty 1 and qty 10, DNP flag, **Sourcing** (symbol field; CONSIGN plan for short-stock parts, Batch 29), DNP groups, TOTAL | `tools/bom_from_sch.py --write` |
 | `genctl_meter_bom.csv` | Metering daughter board, same columns | same |
 | `harness_bom.csv` | J31–J32 Micro-Fit harness (2× 43025-1600, 32× 43030-0001, wire), off-board | same (table in the script) |
 | `lcsc_prices.csv` | Price/stock table the generator reads (board, LCSC or MPN key) | hand-maintained; Batch 28 rows from the JLC parts API |

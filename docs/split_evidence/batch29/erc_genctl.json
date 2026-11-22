@@ -1,0 +1,64 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-11-22T09:58:01-1000",
+    "kicad_version": "9.0.2",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6",
+            "violations": []
+        },
+        {
+            "path": "/Power: input protection, ideal diode, 12V buck-boost, 5V, 3V3/",
+            "uuid_path": "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb",
+            "violations": []
+        },
+        {
+            "path": "/STM32H743 safety MCU/",
+            "uuid_path": "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/c2700331-201a-4cfa-a277-c8f7379e4af6",
+            "violations": []
+        },
+        {
+            "path": "/Raspberry Pi CM5/",
+            "uuid_path": "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d811a5f3-3ea5-4969-ac51-150b5151ab82",
+            "violations": []
+        },
+        {
+            "path": "/Comms: CAN x2, RS-485, Ethernet, USB hub/ports, router 12V/",
+            "uuid_path": "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/7172d8aa-4982-46d4-80f3-9c3b7e936f89",
+            "violations": []
+        },
+        {
+            "path": "/Display: DSI->LVDS bridge, panel power, backlight, touch/",
+            "uuid_path": "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/fcebac73-5e7d-409a-9893-556fac7ba7b9",
+            "violations": []
+        },
+        {
+            "path": "/Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/",
+            "uuid_path": "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d1fa021c-09ac-459b-89dd-dc752467a43d",
+            "violations": []
+        },
+        {
+            "path": "/Outputs: fuel/crank (TPS48100), 15x TPS1HTC30, watchdog gating, readback/",
+            "uuid_path": "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/42741ea8-f23c-4776-9550-62d999326d40",
+            "violations": []
+        },
+        {
+            "path": "/E-stop trip and sense/",
+            "uuid_path": "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/bf2b4d33-db1c-4f32-83fb-5781585769ff",
+            "violations": []
+        },
+        {
+            "path": "/Metering interface J31 (HV metering is a separate board: genctl_meter)/",
+            "uuid_path": "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/5d1b3a52-6c1e-4f0a-9a31-3b0c2a6e7f10",
+            "violations": []
+        },
+        {
+            "path": "/Front panel: backlit buttons, buzzer/",
+            "uuid_path": "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/bd3092dd-3b47-4d13-9646-0a27ee0e3b04",
+            "violations": []
+        }
+    ],
+    "source": "genctl.kicad_sch"
+}

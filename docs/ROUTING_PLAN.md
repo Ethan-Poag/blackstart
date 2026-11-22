@@ -210,7 +210,7 @@ Everything else is estimated completable with rip-up. That estimate is not yet b
 - **Compliance:**
   - hot-side rules for the ADE/CT LV nets inside the hot region;
   - the RV3 decision (stay unrouted, or move it with a growth or placement study);
-  - J30 and T1–T4 creepage status;
+  - J30 and T1–T4 creepage status (Batch 29: J30 off-board, ZMCT103C window CTs, rules in ISOLATION_CHECK.md §5c);
   - acceptance of RV1–RV6 placement;
   - review of the c41fce7 HV reroute;
   - the copper weight decision (2 oz/1 oz) for VBAT_P, CRANK and +12V.

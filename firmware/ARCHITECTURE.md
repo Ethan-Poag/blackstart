@@ -152,7 +152,7 @@ States: `BOOT → SELFTEST → IDLE → PREHEAT → CRANK → RUN_WARMUP → RUN
 - RGB cathodes are on @0x21, @0x24 and @0x25. The interrupt lines are wire-ORed onto **PE7 I2C_INT_N**, which also carries expanders @0x22/@0x23 [S].
 
 **Plan [I].**
-- I2C1 at 400 kHz (PB8/PB9, AF4).
+- I2C1 at **100 kHz** (PB8/PB9, AF4). **Batch 29 (FW_REQ_BATCH29 FW-I2C-1):** was 400 kHz; 2.2k pull-ups with ~150–200 pF give 280–370 ns rise time, above the Fast-mode 300 ns limit.
 - On a falling edge of PE7 (EXTI), read input registers 0x00/0x01 of the expanders whose INT is wired. The read clears INT.
 - Also poll every 20 ms as a fallback, in case an edge is missed.
 - Debounce in software: 3 consecutive samples, or 20 ms.
@@ -388,8 +388,8 @@ Register ACCMODE 0x492 [D p.65–66]:
 ### 10.2 Neutral input on 3-wire, checked against the schematic [S]
 - Each ADE9000 channel is differential: VAP/VAN, VBP/VBN, VCP/VCN (U71 GEN pins 19–24, U72 BUS) [S].
 - All three VxN of a system come from its own neutral tap: GEN_VN_TAP feeds R428/R435/R442, from the N divider (R443…R446 to GEN_N J28.4, with R447 1k to GND_AC) [S].
-- With N open, no current flows in the 4 × 1M chain, so **GEN_VN_TAP = GND_AC through R447 (1k)**. It is defined, not floating.
-- **This works without a hardware change** [I from S]. Each VxP − VxN reads (Lx − floating star)/4001. VCONSEL 100 differences cancel the star offset.
+- With N open, no current flows in the 12 × 330k chain (Batch 29 doc fix; was "4 × 1M"), so **GEN_VN_TAP = GND_AC through R447 (1k)**. It is defined, not floating.
+- **This works without a hardware change** [I from S]. Each VxP − VxN reads (Lx − floating star)/3961. VCONSEL 100 differences cancel the star offset.
 - GND_AC is the resistor-weighted mean of all connected conductors of GEN + BUS (DESIGN_NOTES l.310). The resulting common mode is ≈ 0.15 V for a 600 V star offset (Compliance [I]), inside the ADE9000 ±2 V abs-max input-to-GND [D, quoted by Compliance; page not re-checked [U]].
 - **Hardware caveats (flag only, no change):**
   1. The RV1–RV3 MOVs are L-N to GEN_N [S]. With N open they form a floating star at ≈ L-L/√3 (OK). If an installer bonds N to PE on a corner-earthed or faulted IT system, they see full L-L. This needs the J28/J29 silkscreen "N: leave open on 3-wire, never to PE" (Compliance D3).
@@ -458,7 +458,7 @@ Results are logged in FRAM with a timestamp; protections are enabled only after 
 ### 10.8 ADE9000 input scaling (full-scale correction, 2026-10-25)
 - **Full scale [D]:** ±1 V peak differential at PGA gain 1, which is 707 mV rms with VREF 1.25 V. Gain 2 halves this to ±0.5 V, gain 4 to ±0.25 V. Sources: ADE9000 Rev A p.1 and the p.6 spec table ("−1/Gain … +1/Gain V, 707 mV rms"). PGA_GAIN is reg 0x4B9 (p.71). A grep of firmware/ found no use of a 0.5 V full scale, so nothing needed correcting. Any 0.5 V figure seen elsewhere is the gain-2 value.
 - **Codes [D]:** full-scale xRMS = 52,702,092 (p.28/p.33), and waveform (x_PCF) full scale = ±74,532,013 (p.31). Conversion: V_in,rms = xRMS / 52,702,092 × 0.7071 / Gain. Apply calibration gains (xIGAIN/xVGAIN) on top of this.
-- **CT channel [S, netlist]:** a Talema AC1005 on the PCB (T1–T4). The burden is R474 + R475 = 2 × 24.9 Ω (49.8 Ω differential), centre-tapped to GND_AC. 1 k/33 nF anti-alias (R476/R477, C271/C272).
+- **CT channel [S, netlist]:** **Batch 29: ZMCT103C window CTs (T1–T4, C94571)**, previously a Talema AC1005. Rated 50 Ω burden, ±0.2 %, phase ≤ 15′, linear 0–15 A; see FW_REQ_BATCH29 FW-ADE-1. The AC1005 notes below are historic. The burden is R474 + R475 = 2 × 24.9 Ω (49.8 Ω differential), centre-tapped to GND_AC. 1 k/33 nF anti-alias (R476/R477, C271/C272).
 - **AC1005 [D, Talema AC1005 datasheet, single page, read via the talema.com PDF text]:** 1000:1 nominal; 5 A nominal, 60 A max primary; rated burden 100 Ω; DCR 41.8 Ω; RCF 1.010. With 49.8 Ω we are below the rated burden, which is good for accuracy [I]. The CT ratio is no longer [U].
 - **Burden check [I, arithmetic]:** 5 A → 5 mA × 49.8 Ω = 0.249 V rms = 0.352 V peak, which is 35 % of the gain-1 full scale. Clipping at 1 V peak = 0.707 V rms corresponds to 14.2 A secondary-referred (2.84× nominal). **Use gain 1.** Gain 2 clips at 7.1 A (1.42×), which is too little for overcurrent/short-circuit capture.
 - **Flag to Enginerd [I]:** the AC1005 is rated to 60 A primary. At 60 A, 60 mA × 49.8 Ω ≈ 3.0 V rms (4.2 V pk). That is above the ±1 V linear range and also above the ADE ±2 V abs max (page unverified, §10.2). The 1 k series resistors limit the current to about 2 mA at the pins, but the clamp path and abs-max need checking. Fault currents (e.g. 20× on a 5 A CT secondary) are not measurable above ≈14 A. If fault-level metering is required, consider a smaller burden.
@@ -514,7 +514,7 @@ Labels:
 1. Only one fan header exists (J4). The second fan needs a new header and nets.
 2. The CM5 has a single Fan_Tacho input, so fan 2 cannot be measured on the CM5.
 3. There is no MCU timer pin for tach or PWM. TCA9555 edge counting is a compromise:
-   - I2C1 load: each tach edge costs one TCA9555 read, ≈ 100 µs at 400 kHz [I]. With 2 edges/rev, 5000 rpm gives ≈ 167 edges/s, ≈ 2 % bus duty [A/I].
+   - I2C1 load: each tach edge costs one TCA9555 read, ≈ 0.4–0.6 ms at 100 kHz (Batch 29; was ≈ 100 µs at 400 kHz) [I]. With 2 edges/rev, 5000 rpm gives ≈ 167 edges/s, ≈ 7–10 % bus duty [A/I].
    - Edges are lost if the interrupt is serviced late. It is good enough for stall/low-RPM detection, not precise RPM.
    - The proper fix needs a freed STM32 timer pin.
 4. J4 has no level protection [S]. The voltage tolerance and pull-up of CM5 Fan_PWM/Fan_Tacho are not verified [U]. A 4-pin fan pulls its PWM input up internally, often to 5 V [A].
@@ -824,7 +824,7 @@ Source: Enginerd 2:08–2:09 AM HST; Layout MEASURED from m7-sch `eaa89df` netli
 - Overload: current-limit duration tCL(dly) typ **512 ms** (plus a CdVdT term, p.21). TPS26621 then auto-retries after typ **512 ms** and turns the FETs back on in dVdT mode (FLT goes low again). Thermal retry typ 512 ms after TJ < T(TSD) − 13.5 °C (p.8, §9.3.9).
 - **Rev 8k (§13.18) supersedes the ~10 ms / ~6.5 ms window:** C(dVdT) **stays at 10 nF**. The blank/capture window is **exactly 25 ms**. Expected start-up FLT low (INFERRED): about **8.3 ms at 9 V**, **11.4 ms at 24 V**, **13.9 ms at 36 V**. Rising deglitch at 10 nF is tPGOOD(degl) = 750 + 573×10 = **6.48 ms** (SLVSDT4F §9.3.7 p.23 / p.8). Pulse width remains **ASSUMED** until bench-measured. The earlier “~10 ms if CdVdT is open” / Layout ~6.5 ms UNVERIFIED wording is withdrawn.
 
-**Enable path (MEASURED, m7-sch `eaa89df`).** MCU → I2C1 (400 kHz) → U31 (TCA9555 @**0x22**) → FETs:
+**Enable path (MEASURED, m7-sch `eaa89df`).** MCU → I2C1 (100 kHz since Batch 29) → U31 (TCA9555 @**0x22**) → FETs:
 - Bank A: U31 **P14 (pin 17)** → DI_PU_A → Q37 → Q36.
 - Bank B: U31 **P15 (pin 18)** → DI_PU_B → Q40 → Q39.
 Start the blank / self-test window timer at the **U31 enable write** so the typ ~100 µs I2C write latency is inside the window, not after it.
@@ -843,7 +843,7 @@ Capture the EXTI7 falling edge in the MCU. The expander INT pin may already have
 
 Run this at every bank enable, and on a **periodic re-cycle while the engine is stopped: every 60 s (ASSUMED), IDLE only**. Never re-cycle in PREHEAT, CRANK, RUN, COOLDOWN, or during a start. Off-time **50 ms (ASSUMED)** then re-enable and run the window. While a bank is off, its six inputs have no wetting current and are **invalid** (not a legitimate all-open, and do not latch inference). After a pass, inputs are valid again.
 
-**I2C budget (I2C1 400 kHz).** Bit time 2.5 µs. One TCA9555 output write or input-port read is about 100–150 µs electrical (existing ≈100 µs/read figure, §11). A **25 ms** window (Rev 8k) holds on the order of **160–250** such transactions. A scan of all six INT-sharing expanders is about 0.6–0.9 ms and fits.
+**I2C budget (I2C1, 100 kHz since Batch 29).** Bit time 10 µs. One TCA9555 output write or input-port read is about 0.4–0.6 ms. A **25 ms** window (Rev 8k) holds on the order of **40–60** such transactions. A scan of all six INT-sharing expanders is about 2.4–3.6 ms and fits. (At the old 400 kHz: 100–150 µs per transaction, 160–250 per window.)
 
 **Self-test viability: yes.** Datasheet p.23 confirms a start-up FLT low, INT is wired to PE7 EXTI7, and the bus can complete the immediate P17 read (and an attribution scan if needed). Caveat: a late read can miss the live LOW; use step 3. Pulse width is ASSUMED; the capture window is **25 ms** (§13.18).
 
@@ -862,7 +862,7 @@ Source: Enginerd 2:19 AM HST. Supersedes the §13.17 ~10 ms blank, the Layout ~6
 
 **(a) dVdT and self-test window.** C(dVdT) **stays at 10 nF**. The FLT self-test blank/capture window is **exactly 25 ms** after each bank enable (timer still starts at the U31 write). Expected start-up FLT low (**INFERRED**): about **8.3 ms at 9 V**, **11.4 ms at 24 V**, **13.9 ms at 36 V**. At 10 nF the datasheet rising deglitch is tPGOOD(degl) = 750 + 573×10 = **6.48 ms** (SLVSDT4F §9.3.7 p.23 / §7.6 p.8, C(dVdT) > 4.7 nF). A 25 ms window covers the 13.9 ms / 36 V figure (INFERRED). Pulse width remains **ASSUMED** until bench-measured.
 
-I2C budget at 400 kHz: a 25 ms window holds on the order of **160–250** expander transactions. A six-expander scan (~0.6–0.9 ms) still fits. The self-test remains viable. In the approved self-test, “inside the window” means **25 ms**.
+I2C budget at 100 kHz (Batch 29): a 25 ms window holds on the order of **40–60** expander transactions. A six-expander scan (~2.4–3.6 ms) still fits. The self-test remains viable. In the approved self-test, “inside the window” means **25 ms**.
 
 **Bench (added).** Measure the start-up FLT low time at P17 versus the U31 write at **9 V, 24 V and 36 V**; confirm it finishes inside 25 ms. Record the widths as MEASURED.
 

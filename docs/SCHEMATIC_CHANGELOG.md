@@ -1121,3 +1121,45 @@ Checks (kicad-cli 9.0.2):
 - **Netlist diff vs 91ccb62** (netlist_diff_*.txt): genctl 1127 → 1138 parts (+C318, C319, D150–D153, R644–R648); value/LCSC/MPN changes only on the 8 FETs and 8 resistors above; R294/R300 note text. Nets changed: VDDA_F (was Net-(U7-VDDA), gains U7.21 VREF+, C318, C319); +3V3_SAFE loses U7.21; ADE_SCK/MOSI/CS1_N/CS2_N/RST_N split at R644–R648 into *_J; ADE_MISO, ADE_IRQ_N, MTR_DET_N, DI_BIAS_A/B and GND gain the new protection parts. genctl_meter: C257/C258 value/LCSC/MPN/note only, no net change.
 - **BOM vs netlist:** 0 mismatches (main 1131 refs incl. 9 DNP, meter 219); bom_split PCB rows 1122 + 219 = netlist fitted set, 0 mismatches.
 - **BOARD (out of scope, NOT done):** frozen PCBs in mechanical/pcb_v4 unchanged. Next layout refresh must add C318, C319, D150–D153, R644–R648 and pick up the VREF+/SPI net changes.
+
+## Batch 29: pass-3 review fixes (SCH_REVIEW_2026-11-22_pass3) + stock plan (Grok Bot for Ethan, "do what you think is best", 2026-11-22 HST; PCB not touched)
+Source: /workspace/review/sch_review/SCH_REVIEW_2026-11-22_pass3.md and pass3/OPTIONS.md. Edit script and evidence: docs/split_evidence/batch29/ (batch29.py reruns cleanly from ade499e schematics). Prices/stock: JLC/LCSC APIs and TI store, 2026-11-22 HST (fetch/*.json in the evidence folder).
+
+| ref | old | new | reason |
+|---|---|---|---|
+| T1–T4 (ac_metering, meter board) | Talema AC1005 C6117861, genctl:AC1005_CT (5-pin, on-board primary via J30) | **ZMCT103C C94571** (Qingxian Zeming), new symbol genctl:ZMCT103C (S1/S2) and footprint **genctl:Transformer_Zeming_ZMCT103C** (pads 0 / 11.8 mm, drill 1.2, body 18.2 × 10.2 mm, checked against the datasheet) | pass-3 B1: AC1005 is rated for a 1–2 Ω-class burden and the field CT loop ran in board copper next to SELV. The field CT loop is now **600 V-insulated wire (UL1015) passing through the CT window**; no CT-loop copper on the board. Burden stays 49.8 Ω (2 × 24.9 Ω, = ZMCT103C rated 50 Ω): 5 A → 249 mV rms; ADE9000 ±1 V pk clips at **14.2 A** (ZMCT103C linear to 15 A) |
+| J30 (ac_metering) | 8-pin on-board CT-loop connector (Conn_01x08) | **removed from the board**: J30 becomes an off-board CT shorting/test block in the genset panel, with factory pigtails through the CT windows | keeps the hot CT loop off the PCB; red sheet warning "NEVER OPEN A CT LOOP OR DISCONNECT J30 WITH THE GENERATOR LIVE" |
+| R474, R475, R478, R479, R482, R483, R486, R487 (burden) | Note "0.1% burden" | Note: 24.9 Ω **1 %** 100 ppm (C22916, part unchanged) | m5: stale tolerance note |
+| U69 | — | Sourcing: consign ISOW7841AQDWERQ1 from TI/Digi-Key | stock plan |
+| R8 (power) | 4.7k C23162 | **2.7k 0603WAF2701T5E C13167** | m1: LM5176 DS eq. 44: fbw at 6 V boost ≈ 6.7 kHz (< fRHP/3 ≈ 8.5 kHz), 9 V ≈ 10.1 kHz (< fsw/20 = 15 kHz), buck ≈ 13.4 kHz |
+| C12 (power) | 220p C1603 | **1n CL10B102KB8NNNC C1588** (Basic) | m1: fpc2 = 59 kHz = 5.8–8.8 × fbw |
+| C29, C30, C36, C37 (power, 22 µF 1206 C12891) | fitted | **DNP** (pads kept) | m2: TPS56637 DS Table 4 allows 20–100 µF effective Cout; estimate with them fitted 100–120 µF; now +5V ≈ 63 µF + CM5 input, +3V3 ≈ 90 µF |
+| R137, R148, R159, R170, R181, R192 (inputs, 100 Ω shunts) | AR06BTCV1000 1206 0.25 W C319961 | **YAGEO RT2010BKD07100RL 2010 0.5 W 0.1 % C876535**, fp Resistor_SMD:R_2010_5025Metric | m4: miswired 24 V → 5.8 W; 2010 survives the ≤ 50 ms firmware trip (FW_REQ_BATCH29 FW-AI-2). PTC rejected: it sits in the measured path and drifts |
+| R196, R198 (inputs, COM_A/COM_B) | 100k 1 % C25803 | **RT0603BRD07100KL C122538** (0.1 %) | NOTE 6: VMID offset cancels in AINx − AIN3 |
+| R197, R199 | 18k 1 % C25810 | **RT0603BRD0718KL C309650** (0.1 %) | same |
+| R649 (new, mcu) | BT1+ directly on VBAT_CELL | **1k 0603WAF1001T5E C21190** BT1+ → VBAT_CELL_R → R649 → VBAT_CELL | coin-cell reverse-charge limit (UL 1642), ≤ 1.3 mA |
+| U37 (outputs) | TPS3431SQDRBRQ1 C2878091 | **TPS3431SDRBR C702145** (same DRB pinout) | stock: Q1 part not stocked; Sourcing note: TI store / Mouser consign if JLC is short |
+| U47–U61, U68 | — | Sourcing: consign TPS1HTC30AQPWPRQ1 from the TI store (3,000 live) | stock plan |
+| Q70, Q71 | — | Sourcing: Vishay SQD40P10-40L_GE3 from Mouser | stock plan |
+
+Docs:
+- **DESIGN_NOTES.md:** new "m7-split Batch 29" section (B1 maths, m1–m5, coin cell, stock plan); divider 12 × 330k, 1:3961 (was 4 × 1M / 4001); current inputs ZMCT103C, burden 1 %; LM5176 COMP; VBAT/R649.
+- **docs/ISOLATION_CHECK.md:** AC1005 rows superseded; **§5c layout creepage rules for the CT wiring** (≥ 13 mm to SELV, 5.5 mm clearance / 6.3 mm creepage to other 600 V copper, no CT copper, non-plated tie-downs, wire path, grommet, silk, conformal-coat masking, hi-pot); §6.4 closed.
+- **docs/INSTALL_SAFETY.md:** "CT circuits and J30 (Batch 29)": never open a CT loop or unplug J30 with the generator live.
+- **docs/FW_REQ_BATCH29.md (new):** FW-AI-1 per-channel 4–20 mA calibration (m3), FW-AI-2 shunt over-range trip (m4), FW-I2C-1 I2C1 100 kHz, FW-ADE-1 ZMCT103C scaling/calibration/polarity.
+- **firmware/ARCHITECTURE.md:** I2C1 400 → 100 kHz with new budgets; CT section → ZMCT103C; divider 12 × 330k / 3961.
+- **docs/BENCH_12V_TEST.md:** header R8/C12; new §B29 LM5176 load-step (Vin 6–30 V) and TPS56637 load-step tests with pass criteria and fallbacks.
+- **bom/design_spec.md**, **mechanical/LAYOUT_PLAN.md**, **docs/ROUTING_PLAN.md**, **docs/PIN_FOOTPRINT_SWEEP.md**, **bom/README.md** updated.
+- m5 report fix: pass-2 report line "TPS2121 PR1 4.32 V" annotated outside the repo (correct: 4.58 V rising / 4.49 V falling).
+
+BOMs:
+- **tools/bom_from_sch.py:** new **Sourcing** column in the priced BOMs.
+- **bom/lcsc_prices.csv:** new rows C13167, C876535, C702145 (Mouser-indexed 2.07; TI 1ku 0.836), C94571; stock/source text refreshed for C22414694 (TPS1HTC30), C5216434 (ISOW7841), C141570 (SQD40P10).
+- Totals (parts only, USD per board, qty1 / qty10): main **262.36 / 222.32** (was 261.13 / 221.21: **+1.23 / +1.11**); meter **63.89 / 53.42** (was 87.74 / 75.35: **−23.85 / −21.93**); harness 2.91 / 1.87.
+- Priced controller BOM /workspace/review/bom_split (bom_b29.py, pre-batch copies *.pre_b29.*): controller **$1,757.38 / $1,252.11** per unit (was 1,774.23 / 1,267.13: **−16.85 / −15.02**). Includes a J30 CT pigtail set ESTIMATE $7.00 replacing the J30 mate C2974987 ($1.24). Extended-part fee net 0 (C876535 added, C319961 removed).
+
+Checks (kicad-cli 9.0.2):
+- **ERC --severity-all:** genctl **0**, genctl_meter **0**.
+- **Netlist diff vs ade499e:** genctl 1138 → 1139 parts (+R649); value/LCSC/MPN/footprint/DNP/Sourcing changes only on the refs above; one net split (VBAT_CELL → VBAT_CELL_R + VBAT_CELL). genctl_meter 221 → 220 (−J30); T1–T4 keep S1/S2 on GEN_CTx_1/2; CTx_S1/S2 and T-NC nets removed.
+- **BOM vs netlist:** 0 mismatches; bom_split crosscheck 0 mismatches (PCB refs 1119 + 218 fitted).
+- **BOARD (out of scope, NOT done):** no meter PCB in the split; frozen mechanical/pcb_v3, pcb_v4 unchanged. Next layout: ZMCT103C footprints, no J30, §5c creepage rules, R649, 2010 shunt pads. mechanical/place.py still lists J30 (legacy).

@@ -1,7 +1,7 @@
 # Bench test plan: 12 V LM5176 buck-boost (U2)
 
 Source: the reviewer's analysis /workspace/review/c65/lm5176_compensation_analysis.md, lightly tidied.
-Current compensation: R8 = 4.7k (changed from 22.1k), C11 = 33n, C12 = 220p.
+Current compensation (**Batch 29**): R8 = **2.7k** (was 4.7k, before that 22.1k), C11 = 33n, C12 = **1n** (was 220p). Sections 1–12 below were written for 4.7k/220p; run them with the new values and use §B29 for the pass criteria and the TPS56637 tests.
 
 Assumptions (not measured):
 - The 12 V load is about 3.7 A (ASSUMED).
@@ -51,6 +51,24 @@ Assumptions (not measured):
     - low PM or ringing near fc: R8 is already 4.7k; reduce it further only per the analysis, and raise C11 if you see low-frequency overshoot;
     - ringing well above fc: add local ceramics near Q6 or connect bulk;
     - re-test after each change.
+
+## B29: Batch 29 bench tests (LM5176 compensation, TPS56637 output capacitance)
+Why: pass-3 review m1/m2 (SCH_REVIEW_2026-11-22_pass3.md). All loop numbers are model estimates (LM5176 DS eq. 44, COUT(eff) ≈ 70 µF assumed); the bench is the proof.
+
+**B29-1 LM5176 (U2, +12V), compensation 2.7k / 33n / 1n.**
+- Expected (DS eq. 44, COUT(eff) 70 µF): boost Vin 6 V, 4 A: fc ≈ 6.7 kHz (limit fRHP/3 ≈ 8.5 kHz); Vin 9 V: ≈ 10 kHz (limit fsw/20 = 15 kHz); buck (12–30 V): ≈ 13 kHz. The c65 model figures above scale by about 2.7/4.7 = 0.57.
+- Load step 0.37 ↔ 3.7 A at 1–2 A/µs (as step 5, full 12 V load) at **Vin 6, 9, 12, 24 and 30 V**. 6 V is the crank case (VBAT_P UV ≈ 5.5 V); keep the 6 V step short (thermal).
+- Bode (if an FRA is available) at the same Vin, full load and 10 % load, injection as in step 2.
+- **Pass:** deviation ≤ 5 % (600 mV); recovery < 1 ms; ≤ 2 ringing cycles; PM ≥ 45°, GM ≥ 10 dB at every Vin; measured fc at 6 V ≤ 8.5 kHz.
+- **If it fails:** PM low at 6 V → R8 2.2k (0603WAF2201T5E C4190, already in the BOM), or fit C17/C18 bulk (step 10) and re-measure; slow recovery with good PM → R8 back toward 3.3k only if the 6 V case still passes. Record the effective COUT you infer from the ripple.
+
+**B29-2 TPS56637 U3 (+5V) and U4 (+3V3), C29/C30/C36/C37 DNP.**
+- Load steps: +5V 0.3 ↔ 2.5 A (CM5 + USB + fan class), +3V3 0.3 ↔ 2.5 A, 1 A/µs, at Vin (+12V) = 12 V. Measure at the far end too: +5V_CM5 (after TPS2121) and +3V3_SAFE (after TPS2116).
+- Bode if possible (inject at the top of R16 / R23).
+- **Pass:** deviation ≤ 3 % (150 mV on +5V, 100 mV on +3V3), no sustained ringing, PM ≥ 45°.
+- **If undershoot is too large but PM is fine:** fit C29 (+5V) or C36 (+3V3) (22 µF 1206 C12891) one at a time and repeat; never refit both caps of a rail without a Bode plot (Table 4 maximum is 100 µF effective, our estimate with all fitted is 100–120 µF).
+- **If it rings (PM low):** check that the feed-forward parts R18/C24 (+5V) and R25/C32 (+3V3) are fitted; then refit C30/C37 one at a time (more C lowers fc) and re-measure.
+- Record the results in docs/split_evidence/ when measured.
 
 ## Sources
 - Texas Instruments SNVSAI1D: LM5176 55-V wide-VIN synchronous 4-switch buck-boost controller datasheet.

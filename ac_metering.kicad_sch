@@ -1595,329 +1595,8 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))))
-(symbol "genctl:AC1005"
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(property "Reference" "T"
-			(at -5.08 6.35 0)
-			(effects
-				(font
-					(size 1.27 1.27))))
-		(property "Value" "AC1005"
-			(at -5.08 -6.35 0)
-			(effects
-				(font
-					(size 1.27 1.27))))
-		(property "Footprint" "genctl:AC1005_CT"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "Datasheet" ""
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "Description" "Current transformer 5A:5mA 1000:1, pass-through primary. S1/S2 = CT pins 1/2, pin 3 mechanical. P1/P2 = footprint wire-loop pads 4/5 (primary wire passes through the core window)"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "LCSC" "C6117861"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "MPN" "AC1005"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "Manufacturer" "Talema"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(symbol "AC1005_0_1"
-			(rectangle
-				(start -5.08 5.08)
-				(end 5.08 -5.08)
-				(stroke
-					(width 0.254)
-					(type default))
-				(fill
-					(type background))))
-		(symbol "AC1005_1_1"
-			(pin passive line
-				(at -7.62 0 0)
-				(length 2.54)
-				(name "P1"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "4"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -7.62 -2.54 0)
-				(length 2.54)
-				(name "P2"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "5"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 7.62 2.54 180)
-				(length 2.54)
-				(name "S1"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "1"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at 7.62 0 180)
-				(length 2.54)
-				(name "S2"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "2"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin no_connect line
-				(at 7.62 -2.54 180)
-				(length 2.54)
-				(name "NC"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "3"
-					(effects
-						(font
-							(size 1.27 1.27)))))))
-(symbol "Connector_Generic:Conn_01x08"
-		(pin_names
-			(offset 1.016)
-			hide)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(property "Reference" "J"
-			(at 0 10.16 0)
-			(effects
-				(font
-					(size 1.27 1.27))))
-		(property "Value" "Conn_01x08"
-			(at 0 -12.7 0)
-			(effects
-				(font
-					(size 1.27 1.27))))
-		(property "Footprint" ""
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "Datasheet" "~"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "Description" "Generic connector, single row, 01x08, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "ki_keywords" "connector"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(property "ki_fp_filters" "Connector*:*_1x??_*"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27))
-				hide))
-		(symbol "Conn_01x08_1_1"
-			(rectangle
-				(start -1.27 8.89)
-				(end 1.27 -11.43)
-				(stroke
-					(width 0.254)
-					(type default))
-				(fill
-					(type background)))
-			(rectangle
-				(start -1.27 7.747)
-				(end 0 7.493)
-				(stroke
-					(width 0.1524)
-					(type default))
-				(fill
-					(type none)))
-			(rectangle
-				(start -1.27 5.207)
-				(end 0 4.953)
-				(stroke
-					(width 0.1524)
-					(type default))
-				(fill
-					(type none)))
-			(rectangle
-				(start -1.27 2.667)
-				(end 0 2.413)
-				(stroke
-					(width 0.1524)
-					(type default))
-				(fill
-					(type none)))
-			(rectangle
-				(start -1.27 0.127)
-				(end 0 -0.127)
-				(stroke
-					(width 0.1524)
-					(type default))
-				(fill
-					(type none)))
-			(rectangle
-				(start -1.27 -2.413)
-				(end 0 -2.667)
-				(stroke
-					(width 0.1524)
-					(type default))
-				(fill
-					(type none)))
-			(rectangle
-				(start -1.27 -4.953)
-				(end 0 -5.207)
-				(stroke
-					(width 0.1524)
-					(type default))
-				(fill
-					(type none)))
-			(rectangle
-				(start -1.27 -7.493)
-				(end 0 -7.747)
-				(stroke
-					(width 0.1524)
-					(type default))
-				(fill
-					(type none)))
-			(rectangle
-				(start -1.27 -10.033)
-				(end 0 -10.287)
-				(stroke
-					(width 0.1524)
-					(type default))
-				(fill
-					(type none)))
-			(pin passive line
-				(at -5.08 7.62 0)
-				(length 3.81)
-				(name "Pin_1"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "1"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -5.08 5.08 0)
-				(length 3.81)
-				(name "Pin_2"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "2"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -5.08 2.54 0)
-				(length 3.81)
-				(name "Pin_3"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "3"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -5.08 0 0)
-				(length 3.81)
-				(name "Pin_4"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "4"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -5.08 -2.54 0)
-				(length 3.81)
-				(name "Pin_5"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "5"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -5.08 -5.08 0)
-				(length 3.81)
-				(name "Pin_6"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "6"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -5.08 -7.62 0)
-				(length 3.81)
-				(name "Pin_7"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "7"
-					(effects
-						(font
-							(size 1.27 1.27)))))
-			(pin passive line
-				(at -5.08 -10.16 0)
-				(length 3.81)
-				(name "Pin_8"
-					(effects
-						(font
-							(size 1.27 1.27))))
-				(number "8"
-					(effects
-						(font
-							(size 1.27 1.27)))))))
+
+
 (symbol "power:PWR_FLAG"
 		(power)
 		(pin_numbers
@@ -2486,6 +2165,22 @@
 				(effects
 					(font
 						(size 1.27 1.27)))))))
+(symbol "genctl:ZMCT103C"
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "T" (at -5.08 6.35 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "ZMCT103C" (at -5.08 -6.35 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "genctl:Transformer_Zeming_ZMCT103C" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+		(property "Datasheet" "https://datasheet.lcsc.com/datasheet/pdf/fadce25fa7c9b6a55b2a8de064d6384d.pdf?productCode=C94571" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+		(property "Description" "Window current transformer 5 A : 5 mA (1000:1), rated burden 50 R, linear 0-15 A, 4500 V isolation withstand, -40..+85 C. Primary = insulated wire through the 5 mm window (no primary pins). S1 = pin 1* (dot), S2 = pin 2" (at 0 0 0) (effects (font (size 1.27 1.27)) hide))
+		(symbol "ZMCT103C_0_1"
+			(rectangle (start -5.08 5.08) (end 5.08 -5.08) (stroke (width 0.254) (type default)) (fill (type background)))
+			(circle (center -1.27 0) (radius 1.905) (stroke (width 0.254) (type default)) (fill (type none)))
+			(polyline (pts (xy -1.27 4.445) (xy -1.27 -4.445)) (stroke (width 0.254) (type dash)) (fill (type none))))
+		(symbol "ZMCT103C_1_1"
+			(pin passive line (at 7.62 2.54 180) (length 2.54) (name "S1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+			(pin passive line (at 7.62 0 180) (length 2.54) (name "S2" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))))
 )
 (symbol (lib_id "Device:R") (at 29.21 328.93 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "a55f92c9-d318-4699-94a4-38f6657424bf")
 (property "Reference" "R413" (at 29.21 341.63 0) (effects (font (size 1.27 1.27))))
@@ -2595,7 +2290,7 @@
 (property "MPN" "ISOW7841AQDWERQ1" (at 86.36 80.01 0) (effects (font (size 1.27 1.27)) hide))
 (property "Manufacturer" "Texas Instruments" (at 86.36 80.01 0) (effects (font (size 1.27 1.27)) hide))
 (property "Note" "5kVrms reinforced; SEL=GND2 -> VISO 3.3V" (at 86.36 80.01 0) (effects (font (size 1.27 1.27)) hide))
-(pin "1" (uuid "fc0574ff-5c91-4133-8a06-a7cac0cfee98"))
+(property "Sourcing" "CONSIGN (Batch 29): buy ISOW7841AQDWERQ1 from the TI store (live 2,026 on 2026-11-22) or Digi-Key 296-ISOW7841AQDWERQ1CT-ND and ship to JLC; LCSC/JLC stock 1. Fallback ISOW7841DWER (same pinout, commercial temp)" (at 86.36 80.01 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "fc0574ff-5c91-4133-8a06-a7cac0cfee98"))
 (pin "3" (uuid "5d922090-279b-4baf-8dc8-f8974eda5cde"))
 (pin "4" (uuid "dced4ba0-48ac-4218-93c4-182fec58576d"))
 (pin "5" (uuid "57b98ee6-36fc-4256-bd93-b27d6d4b1149"))
@@ -4080,20 +3775,17 @@
 (pin "2" (uuid "94993ab1-3e96-4b7d-8513-348c727d9e99"))
 (instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "R473") (unit 1))))
 )
-(symbol (lib_id "genctl:AC1005") (at 408.94 215.9 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "dcdfa14d-979a-4d18-a528-967a8eb2631a")
+(symbol (lib_id "genctl:ZMCT103C") (at 408.94 215.9 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "dcdfa14d-979a-4d18-a528-967a8eb2631a")
 (property "Reference" "T1" (at 403.86 209.55 0) (effects (font (size 1.27 1.27))))
-(property "Value" "AC1005" (at 403.86 222.25 0) (effects (font (size 1.27 1.27))))
-(property "Footprint" "genctl:AC1005_CT" (at 408.94 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(property "Datasheet" "" (at 408.94 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(property "Description" "Current transformer 5A:5mA 1000:1, pass-through primary. S1/S2 = CT pins 1/2, pin 3 mechanical. P1/P2 = footprint wire-loop pads 4/5 (primary wire passes through the core window)" (at 408.94 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(property "LCSC" "C6117861" (at 408.94 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(property "MPN" "AC1005" (at 408.94 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(property "Manufacturer" "Talema Group LLC" (at 408.94 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(pin "4" (uuid "f012e740-52fd-4547-8fb9-4dc5616ce679"))
-(pin "5" (uuid "e58d70d7-683e-4d69-8b91-552bd77697b2"))
-(pin "1" (uuid "2dcc4804-88e2-451d-90ae-372677825fc5"))
+(property "Value" "ZMCT103C" (at 403.86 222.25 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "genctl:Transformer_Zeming_ZMCT103C" (at 408.94 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "https://datasheet.lcsc.com/datasheet/pdf/fadce25fa7c9b6a55b2a8de064d6384d.pdf?productCode=C94571" (at 408.94 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Window CT 5 A:5 mA 1000:1, rated 50 R burden, +/-0.2 % ratio, <=15 min phase (class A), linear 0-15 A, 4.5 kV isolation, -40..+85 C" (at 408.94 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C94571" (at 408.94 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "ZMCT103C" (at 408.94 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Qingxian Zeming Langxi Electronic" (at 408.94 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "Batch 29 (pass-3 B1): replaces AC1005 C6117861. The field CT loop is a 600 V insulated wire (UL1015 14 AWG max, OD <=3.5 mm) through the 5 mm window; no CT-loop copper on this board. Wire from the external CT S1 enters the P1* face. Burden R474..R489 2 x 24.9R = 49.8R (rated 50R)." (at 408.94 215.9 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "2dcc4804-88e2-451d-90ae-372677825fc5"))
 (pin "2" (uuid "10cf397e-15be-4ab5-9763-56ae6bff3811"))
-(pin "3" (uuid "904cf607-68b0-42e1-aced-d8e6dc94c576"))
 (instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "T1") (unit 1))))
 )
 (symbol (lib_id "Device:R") (at 439.42 214.63 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "9d31d9f8-487f-44ce-9bbf-64c3a18fb2e8")
@@ -4105,7 +3797,7 @@
 (property "LCSC" "C22916" (at 439.42 214.63 0) (effects (font (size 1.27 1.27)) hide))
 (property "MPN" "0603WAF249JT5E" (at 439.42 214.63 0) (effects (font (size 1.27 1.27)) hide))
 (property "Manufacturer" "UNI-ROYAL" (at 439.42 214.63 0) (effects (font (size 1.27 1.27)) hide))
-(property "Note" "0.1% burden" (at 439.42 214.63 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "CT burden half: 24.9R 1 % 100 ppm/K (C22916). 2 x 24.9R = 49.8R = ZMCT103C rated 50R. Absolute gain set by per-channel calibration (xIGAIN); was mislabelled 0.1 % (pass-1 N4 / pass-3 m5)" (at 439.42 214.63 0) (effects (font (size 1.27 1.27)) hide))
 (pin "1" (uuid "a5aa9785-c4f6-4e0d-9d2a-21fa6fddfb78"))
 (pin "2" (uuid "72059046-7960-45df-8475-6b62c9647bc3"))
 (instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "R474") (unit 1))))
@@ -4119,7 +3811,7 @@
 (property "LCSC" "C22916" (at 449.58 217.17 0) (effects (font (size 1.27 1.27)) hide))
 (property "MPN" "0603WAF249JT5E" (at 449.58 217.17 0) (effects (font (size 1.27 1.27)) hide))
 (property "Manufacturer" "UNI-ROYAL" (at 449.58 217.17 0) (effects (font (size 1.27 1.27)) hide))
-(property "Note" "0.1% burden" (at 449.58 217.17 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "CT burden half: 24.9R 1 % 100 ppm/K (C22916). 2 x 24.9R = 49.8R = ZMCT103C rated 50R. Absolute gain set by per-channel calibration (xIGAIN); was mislabelled 0.1 % (pass-1 N4 / pass-3 m5)" (at 449.58 217.17 0) (effects (font (size 1.27 1.27)) hide))
 (pin "1" (uuid "e5712922-5b9e-4c4c-b24d-097046075a93"))
 (pin "2" (uuid "aafe400b-7d3d-4f91-89b1-18148638c275"))
 (instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "R475") (unit 1))))
@@ -4176,20 +3868,17 @@
 (pin "2" (uuid "14fc5702-e47a-4c9a-aa50-252fadb51429"))
 (instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "C272") (unit 1))))
 )
-(symbol (lib_id "genctl:AC1005") (at 495.3 215.9 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "b22c90bc-0f3f-4e22-b369-1c0dcba1e48d")
+(symbol (lib_id "genctl:ZMCT103C") (at 495.3 215.9 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "b22c90bc-0f3f-4e22-b369-1c0dcba1e48d")
 (property "Reference" "T2" (at 490.22 209.55 0) (effects (font (size 1.27 1.27))))
-(property "Value" "AC1005" (at 490.22 222.25 0) (effects (font (size 1.27 1.27))))
-(property "Footprint" "genctl:AC1005_CT" (at 495.3 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(property "Datasheet" "" (at 495.3 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(property "Description" "Current transformer 5A:5mA 1000:1, pass-through primary. S1/S2 = CT pins 1/2, pin 3 mechanical. P1/P2 = footprint wire-loop pads 4/5 (primary wire passes through the core window)" (at 495.3 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(property "LCSC" "C6117861" (at 495.3 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(property "MPN" "AC1005" (at 495.3 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(property "Manufacturer" "Talema Group LLC" (at 495.3 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(pin "4" (uuid "2cb6e36b-a58d-4d01-99cb-01ff6140deff"))
-(pin "5" (uuid "dd6d03ce-e1cf-4422-a848-c4236902030a"))
-(pin "1" (uuid "f8aa5bf5-706a-4430-bb2d-da17745da382"))
+(property "Value" "ZMCT103C" (at 490.22 222.25 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "genctl:Transformer_Zeming_ZMCT103C" (at 495.3 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "https://datasheet.lcsc.com/datasheet/pdf/fadce25fa7c9b6a55b2a8de064d6384d.pdf?productCode=C94571" (at 495.3 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Window CT 5 A:5 mA 1000:1, rated 50 R burden, +/-0.2 % ratio, <=15 min phase (class A), linear 0-15 A, 4.5 kV isolation, -40..+85 C" (at 495.3 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C94571" (at 495.3 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "ZMCT103C" (at 495.3 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Qingxian Zeming Langxi Electronic" (at 495.3 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "Batch 29 (pass-3 B1): replaces AC1005 C6117861. The field CT loop is a 600 V insulated wire (UL1015 14 AWG max, OD <=3.5 mm) through the 5 mm window; no CT-loop copper on this board. Wire from the external CT S1 enters the P1* face. Burden R474..R489 2 x 24.9R = 49.8R (rated 50R)." (at 495.3 215.9 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "f8aa5bf5-706a-4430-bb2d-da17745da382"))
 (pin "2" (uuid "b382a2e9-182a-4537-8c63-906a96a42b51"))
-(pin "3" (uuid "76149f28-f8b7-48d9-a216-08676cade84a"))
 (instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "T2") (unit 1))))
 )
 (symbol (lib_id "Device:R") (at 525.78 214.63 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "687011e5-3bdc-423d-9194-bb2be432923d")
@@ -4201,7 +3890,7 @@
 (property "LCSC" "C22916" (at 525.78 214.63 0) (effects (font (size 1.27 1.27)) hide))
 (property "MPN" "0603WAF249JT5E" (at 525.78 214.63 0) (effects (font (size 1.27 1.27)) hide))
 (property "Manufacturer" "UNI-ROYAL" (at 525.78 214.63 0) (effects (font (size 1.27 1.27)) hide))
-(property "Note" "0.1% burden" (at 525.78 214.63 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "CT burden half: 24.9R 1 % 100 ppm/K (C22916). 2 x 24.9R = 49.8R = ZMCT103C rated 50R. Absolute gain set by per-channel calibration (xIGAIN); was mislabelled 0.1 % (pass-1 N4 / pass-3 m5)" (at 525.78 214.63 0) (effects (font (size 1.27 1.27)) hide))
 (pin "1" (uuid "6a23ffa1-c320-49e3-a472-b96f5feb8668"))
 (pin "2" (uuid "3867e0f0-da67-485c-9b2f-fc0825a67d21"))
 (instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "R478") (unit 1))))
@@ -4215,7 +3904,7 @@
 (property "LCSC" "C22916" (at 535.94 217.17 0) (effects (font (size 1.27 1.27)) hide))
 (property "MPN" "0603WAF249JT5E" (at 535.94 217.17 0) (effects (font (size 1.27 1.27)) hide))
 (property "Manufacturer" "UNI-ROYAL" (at 535.94 217.17 0) (effects (font (size 1.27 1.27)) hide))
-(property "Note" "0.1% burden" (at 535.94 217.17 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "CT burden half: 24.9R 1 % 100 ppm/K (C22916). 2 x 24.9R = 49.8R = ZMCT103C rated 50R. Absolute gain set by per-channel calibration (xIGAIN); was mislabelled 0.1 % (pass-1 N4 / pass-3 m5)" (at 535.94 217.17 0) (effects (font (size 1.27 1.27)) hide))
 (pin "1" (uuid "12d79d24-0929-4bb7-af46-874afa79be65"))
 (pin "2" (uuid "b4d5e652-5cdc-4109-b948-d66b21d2a760"))
 (instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "R479") (unit 1))))
@@ -4272,20 +3961,17 @@
 (pin "2" (uuid "5d1151d6-590c-4e25-b859-0f3644da5dee"))
 (instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "C274") (unit 1))))
 )
-(symbol (lib_id "genctl:AC1005") (at 581.66 215.9 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "321a9c60-daf0-4ecd-aeae-2455aa51ecf2")
+(symbol (lib_id "genctl:ZMCT103C") (at 581.66 215.9 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "321a9c60-daf0-4ecd-aeae-2455aa51ecf2")
 (property "Reference" "T3" (at 576.58 209.55 0) (effects (font (size 1.27 1.27))))
-(property "Value" "AC1005" (at 576.58 222.25 0) (effects (font (size 1.27 1.27))))
-(property "Footprint" "genctl:AC1005_CT" (at 581.66 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(property "Datasheet" "" (at 581.66 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(property "Description" "Current transformer 5A:5mA 1000:1, pass-through primary. S1/S2 = CT pins 1/2, pin 3 mechanical. P1/P2 = footprint wire-loop pads 4/5 (primary wire passes through the core window)" (at 581.66 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(property "LCSC" "C6117861" (at 581.66 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(property "MPN" "AC1005" (at 581.66 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(property "Manufacturer" "Talema Group LLC" (at 581.66 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(pin "4" (uuid "d6a949ef-d2b4-4577-9c07-89f58d77adff"))
-(pin "5" (uuid "f4f0cda2-fc18-4784-bf46-d47604ea43bc"))
-(pin "1" (uuid "8b88fc79-1fdb-4174-ade9-a1e9579db519"))
+(property "Value" "ZMCT103C" (at 576.58 222.25 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "genctl:Transformer_Zeming_ZMCT103C" (at 581.66 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "https://datasheet.lcsc.com/datasheet/pdf/fadce25fa7c9b6a55b2a8de064d6384d.pdf?productCode=C94571" (at 581.66 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Window CT 5 A:5 mA 1000:1, rated 50 R burden, +/-0.2 % ratio, <=15 min phase (class A), linear 0-15 A, 4.5 kV isolation, -40..+85 C" (at 581.66 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C94571" (at 581.66 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "ZMCT103C" (at 581.66 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Qingxian Zeming Langxi Electronic" (at 581.66 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "Batch 29 (pass-3 B1): replaces AC1005 C6117861. The field CT loop is a 600 V insulated wire (UL1015 14 AWG max, OD <=3.5 mm) through the 5 mm window; no CT-loop copper on this board. Wire from the external CT S1 enters the P1* face. Burden R474..R489 2 x 24.9R = 49.8R (rated 50R)." (at 581.66 215.9 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "8b88fc79-1fdb-4174-ade9-a1e9579db519"))
 (pin "2" (uuid "f7227964-331a-45d8-91f1-c9c9961d2f48"))
-(pin "3" (uuid "dfa166b2-3f22-4d74-93fa-301b15303d7a"))
 (instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "T3") (unit 1))))
 )
 (symbol (lib_id "Device:R") (at 612.14 214.63 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "41a22f8f-647f-4465-827d-c54fe68930cf")
@@ -4297,7 +3983,7 @@
 (property "LCSC" "C22916" (at 612.14 214.63 0) (effects (font (size 1.27 1.27)) hide))
 (property "MPN" "0603WAF249JT5E" (at 612.14 214.63 0) (effects (font (size 1.27 1.27)) hide))
 (property "Manufacturer" "UNI-ROYAL" (at 612.14 214.63 0) (effects (font (size 1.27 1.27)) hide))
-(property "Note" "0.1% burden" (at 612.14 214.63 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "CT burden half: 24.9R 1 % 100 ppm/K (C22916). 2 x 24.9R = 49.8R = ZMCT103C rated 50R. Absolute gain set by per-channel calibration (xIGAIN); was mislabelled 0.1 % (pass-1 N4 / pass-3 m5)" (at 612.14 214.63 0) (effects (font (size 1.27 1.27)) hide))
 (pin "1" (uuid "56fdd9fc-f991-4093-b96a-6e4683dca282"))
 (pin "2" (uuid "05903784-6197-43b4-833b-6d075b0fb0cd"))
 (instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "R482") (unit 1))))
@@ -4311,7 +3997,7 @@
 (property "LCSC" "C22916" (at 622.3 217.17 0) (effects (font (size 1.27 1.27)) hide))
 (property "MPN" "0603WAF249JT5E" (at 622.3 217.17 0) (effects (font (size 1.27 1.27)) hide))
 (property "Manufacturer" "UNI-ROYAL" (at 622.3 217.17 0) (effects (font (size 1.27 1.27)) hide))
-(property "Note" "0.1% burden" (at 622.3 217.17 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "CT burden half: 24.9R 1 % 100 ppm/K (C22916). 2 x 24.9R = 49.8R = ZMCT103C rated 50R. Absolute gain set by per-channel calibration (xIGAIN); was mislabelled 0.1 % (pass-1 N4 / pass-3 m5)" (at 622.3 217.17 0) (effects (font (size 1.27 1.27)) hide))
 (pin "1" (uuid "37a3b61d-51ee-4b3f-aa10-8a9a810c60c4"))
 (pin "2" (uuid "83ec5c3a-6b5a-4166-88e3-85b1fd1118c0"))
 (instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "R483") (unit 1))))
@@ -4368,20 +4054,17 @@
 (pin "2" (uuid "d7e57b1a-36cd-4e75-956d-bca39a15f91a"))
 (instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "C276") (unit 1))))
 )
-(symbol (lib_id "genctl:AC1005") (at 666.75 215.9 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "4de536da-21af-4840-aaaa-cacdee2014ea")
+(symbol (lib_id "genctl:ZMCT103C") (at 666.75 215.9 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "4de536da-21af-4840-aaaa-cacdee2014ea")
 (property "Reference" "T4" (at 661.67 209.55 0) (effects (font (size 1.27 1.27))))
-(property "Value" "AC1005" (at 661.67 222.25 0) (effects (font (size 1.27 1.27))))
-(property "Footprint" "genctl:AC1005_CT" (at 666.75 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(property "Datasheet" "" (at 666.75 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(property "Description" "Current transformer 5A:5mA 1000:1, pass-through primary. S1/S2 = CT pins 1/2, pin 3 mechanical. P1/P2 = footprint wire-loop pads 4/5 (primary wire passes through the core window)" (at 666.75 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(property "LCSC" "C6117861" (at 666.75 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(property "MPN" "AC1005" (at 666.75 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(property "Manufacturer" "Talema Group LLC" (at 666.75 215.9 0) (effects (font (size 1.27 1.27)) hide))
-(pin "4" (uuid "83ab59c4-018f-420c-94b1-4ab76ffbaec8"))
-(pin "5" (uuid "c38fff21-ccc0-459e-b862-74e18acae5f3"))
-(pin "1" (uuid "f6eb4122-451e-4d8d-a765-ba1f62fa914c"))
+(property "Value" "ZMCT103C" (at 661.67 222.25 0) (effects (font (size 1.27 1.27))))
+(property "Footprint" "genctl:Transformer_Zeming_ZMCT103C" (at 666.75 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Datasheet" "https://datasheet.lcsc.com/datasheet/pdf/fadce25fa7c9b6a55b2a8de064d6384d.pdf?productCode=C94571" (at 666.75 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Description" "Window CT 5 A:5 mA 1000:1, rated 50 R burden, +/-0.2 % ratio, <=15 min phase (class A), linear 0-15 A, 4.5 kV isolation, -40..+85 C" (at 666.75 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "LCSC" "C94571" (at 666.75 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "MPN" "ZMCT103C" (at 666.75 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Manufacturer" "Qingxian Zeming Langxi Electronic" (at 666.75 215.9 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "Batch 29 (pass-3 B1): replaces AC1005 C6117861. The field CT loop is a 600 V insulated wire (UL1015 14 AWG max, OD <=3.5 mm) through the 5 mm window; no CT-loop copper on this board. Wire from the external CT S1 enters the P1* face. Burden R474..R489 2 x 24.9R = 49.8R (rated 50R)." (at 666.75 215.9 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "f6eb4122-451e-4d8d-a765-ba1f62fa914c"))
 (pin "2" (uuid "ba67f9dc-dc43-4ca9-9f10-50c79dbe9ea6"))
-(pin "3" (uuid "2520289a-a38c-4cb8-a5b4-be0c67c57a8f"))
 (instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "T4") (unit 1))))
 )
 (symbol (lib_id "Device:R") (at 697.23 214.63 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "f5384a16-6170-4828-9e33-32cfc2819619")
@@ -4393,7 +4076,7 @@
 (property "LCSC" "C22916" (at 697.23 214.63 0) (effects (font (size 1.27 1.27)) hide))
 (property "MPN" "0603WAF249JT5E" (at 697.23 214.63 0) (effects (font (size 1.27 1.27)) hide))
 (property "Manufacturer" "UNI-ROYAL" (at 697.23 214.63 0) (effects (font (size 1.27 1.27)) hide))
-(property "Note" "0.1% burden" (at 697.23 214.63 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "CT burden half: 24.9R 1 % 100 ppm/K (C22916). 2 x 24.9R = 49.8R = ZMCT103C rated 50R. Absolute gain set by per-channel calibration (xIGAIN); was mislabelled 0.1 % (pass-1 N4 / pass-3 m5)" (at 697.23 214.63 0) (effects (font (size 1.27 1.27)) hide))
 (pin "1" (uuid "8947e697-ea9f-4255-90f9-def577047f62"))
 (pin "2" (uuid "ae2fb6da-0c28-4697-839a-52f6705ee614"))
 (instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "R486") (unit 1))))
@@ -4407,7 +4090,7 @@
 (property "LCSC" "C22916" (at 707.39 217.17 0) (effects (font (size 1.27 1.27)) hide))
 (property "MPN" "0603WAF249JT5E" (at 707.39 217.17 0) (effects (font (size 1.27 1.27)) hide))
 (property "Manufacturer" "UNI-ROYAL" (at 707.39 217.17 0) (effects (font (size 1.27 1.27)) hide))
-(property "Note" "0.1% burden" (at 707.39 217.17 0) (effects (font (size 1.27 1.27)) hide))
+(property "Note" "CT burden half: 24.9R 1 % 100 ppm/K (C22916). 2 x 24.9R = 49.8R = ZMCT103C rated 50R. Absolute gain set by per-channel calibration (xIGAIN); was mislabelled 0.1 % (pass-1 N4 / pass-3 m5)" (at 707.39 217.17 0) (effects (font (size 1.27 1.27)) hide))
 (pin "1" (uuid "66c67bbf-6527-41ea-88ed-49a0e98159b1"))
 (pin "2" (uuid "ad348215-286e-4d2e-ab43-9cb1da995364"))
 (instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "R487") (unit 1))))
@@ -4464,29 +4147,7 @@
 (pin "2" (uuid "decf05f0-bfba-4fa3-bda5-671862916a3e"))
 (instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "C278") (unit 1))))
 )
-(symbol (lib_id "Connector_Generic:Conn_01x08") (at 750.57 205.74 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "cbeb53ee-4beb-477d-b41d-bfb4df99c6cf")
-(property "Reference" "J30" (at 750.57 195.58 0) (effects (font (size 1.27 1.27))))
-(property "Value" "J9 CT secondaries (5A)" (at 750.57 218.44 0) (effects (font (size 1.27 1.27))))
-(property "Footprint" "genctl:KF2EDGRM-5.08-8P" (at 750.57 205.74 0) (effects (font (size 1.27 1.27)) hide))
-(property "Datasheet" "~" (at 750.57 205.74 0) (effects (font (size 1.27 1.27)) hide))
-(property "Description" "Generic connector, single row, 01x08, script generated (kicad-library-utils/schlib/autogen/connector/)" (at 750.57 205.74 0) (effects (font (size 1.27 1.27)) hide))
-(property "LCSC" "C441294" (at 750.57 205.74 0) (effects (font (size 1.27 1.27)) hide))
-(property "MPN" "KF2EDGRM-5.08-8P" (at 750.57 205.74 0) (effects (font (size 1.27 1.27)) hide))
-(property "Manufacturer" "Cixi Kefa Elec" (at 750.57 205.74 0) (effects (font (size 1.27 1.27)) hide))
-(property "Note" "external 5A CT loops pass through AC1005 cores. Kefa KF2EDGRM-5.08-8P (300 V) matches the PCB footprint; reverted from Phoenix 1720851 per Safety Round 4 (CONNECTOR_SAFETY_MINIMUMS.md, 2026-11-21): J30 is HV-group wiring, CT S2 earthed at the external shorting block, per-board 1000 V DC megger test." (at 750.57 205.74 0) (effects (font (size 1.27 1.27)) hide))
-(property "Mate_MPN" "KF2EDGKNM-5.08-8P" (at 750.57 205.74 0) (effects (font (size 1.27 1.27)) hide))
-(property "Mate_LCSC" "C2974987" (at 750.57 205.74 0) (effects (font (size 1.27 1.27)) hide))
-(property "Mate_Qty" "1" (at 750.57 205.74 0) (effects (font (size 1.27 1.27)) hide))
-(pin "1" (uuid "10499ee1-4b83-4413-b6c1-f4e5faf32b1d"))
-(pin "2" (uuid "9f8976a8-34b6-4813-8ef9-34be454605e2"))
-(pin "3" (uuid "f05ad434-0db6-4014-bf2c-4eef18c845ef"))
-(pin "4" (uuid "cced0717-4347-4103-b453-454c1c1fa40e"))
-(pin "5" (uuid "bba6f8cc-e339-43f4-968d-1f9e4152f3a1"))
-(pin "6" (uuid "ce914dd6-d2cd-48ef-80b0-b6583ec80797"))
-(pin "7" (uuid "2a39d6ca-1f3d-41a6-9788-bbf22d9dc329"))
-(pin "8" (uuid "ff221e2b-5426-4ad3-a13e-ae83390bf896"))
-(instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "J30") (unit 1))))
-)
+
 (symbol (lib_id "power:PWR_FLAG") (at 208.28 312.42 0) (unit 1) (exclude_from_sim no) (in_bom no) (on_board yes) (dnp no) (uuid "6ea73dc1-497f-4e38-b909-d7298aa24b22")
 (property "Reference" "#FLG0020" (at 208.28 310.515 0) (effects (font (size 1.27 1.27))))
 (property "Value" "PWR_FLAG" (at 208.28 308.61 0) (effects (font (size 1.27 1.27))))
@@ -4960,15 +4621,15 @@
 (label "BUS_VN_TAP" (at 29.21 210.82 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "257049a4-4881-4a6e-a50d-adf882717bee"))
 (wire (pts (xy 29.21 220.98) (xy 29.21 223.52)) (stroke (width 0) (type default)) (uuid "c0c7d10a-89c2-4007-a39f-eaadd4a5dd93"))
 (symbol (lib_id "power:GND") (at 29.21 223.52 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "933efa4a-5625-42a5-8e5c-788aa6a95442")(property "Reference" "#PWR0959" (at 29.21 223.52 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND_AC" (at 29.21 227.33 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 29.21 223.52 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 29.21 223.52 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "06b18ec0-6846-4f8c-abb4-9e861952fa78"))(instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "#PWR0959") (unit 1)))))
-(wire (pts (xy 401.32 215.9) (xy 398.78 215.9)) (stroke (width 0) (type default)) (uuid "02470151-0df5-4120-922c-d07bf9d3dc9a"))
-(label "CT1_S1" (at 398.78 215.9 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "6c17fa9b-cbc4-4bd7-a9c7-9937be709a27"))
-(wire (pts (xy 401.32 218.44) (xy 398.78 218.44)) (stroke (width 0) (type default)) (uuid "77501e21-45fa-4552-bf3a-59ed57355d13"))
-(label "CT1_S2" (at 398.78 218.44 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "3570336b-2307-41bf-9f93-55c57c982ad6"))
+
+
+
+
 (wire (pts (xy 416.56 213.36) (xy 419.1 213.36)) (stroke (width 0) (type default)) (uuid "98afe519-7fbe-46b5-8155-877b5e9eda24"))
 (label "GEN_CTA_1" (at 419.1 213.36 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "b6edabbe-3de1-4eb8-ae55-8e6f7dea0adc"))
 (wire (pts (xy 416.56 215.9) (xy 419.1 215.9)) (stroke (width 0) (type default)) (uuid "ea92ce4f-da83-44f6-a226-592951f9b029"))
 (label "GEN_CTA_2" (at 419.1 215.9 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "1166f067-87a4-422b-9759-419235a59295"))
-(no_connect (at 416.56 218.44) (uuid "3d3858a9-3d35-4e00-8253-e5b906cb716d"))
+
 (wire (pts (xy 439.42 210.82) (xy 439.42 208.28)) (stroke (width 0) (type default)) (uuid "f816c8db-3f74-4b90-8ec7-65a2b08fd0ef"))
 (label "GEN_CTA_1" (at 439.42 208.28 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "2abbe162-b09a-4b9f-8ece-8f26ec7370a7"))
 (wire (pts (xy 439.42 218.44) (xy 439.42 220.98)) (stroke (width 0) (type default)) (uuid "de69f269-32d8-4733-8922-ecc971919520"))
@@ -4993,15 +4654,15 @@
 (label "GEN_IA_N" (at 412.75 97.79 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "eca9026b-3bea-47b0-b7f0-8651fb8cf63e"))
 (wire (pts (xy 412.75 107.95) (xy 412.75 110.49)) (stroke (width 0) (type default)) (uuid "733a9923-8d8d-4d17-a710-3abc570f5331"))
 (symbol (lib_id "power:GND") (at 412.75 110.49 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "66342844-9371-4a3d-a3d4-544c17063f46")(property "Reference" "#PWR0963" (at 412.75 110.49 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND_AC" (at 412.75 114.3 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 412.75 110.49 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 412.75 110.49 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "deb5eb76-a8cb-447b-b3ec-6ecd4c0a44b7"))(instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "#PWR0963") (unit 1)))))
-(wire (pts (xy 487.68 215.9) (xy 485.14 215.9)) (stroke (width 0) (type default)) (uuid "056b3894-095d-4eaa-aaa4-0a2cc3781bb4"))
-(label "CT2_S1" (at 485.14 215.9 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "c3a0daaa-24ca-49b5-8d5a-1fc35bd28e97"))
-(wire (pts (xy 487.68 218.44) (xy 485.14 218.44)) (stroke (width 0) (type default)) (uuid "6f505662-1986-4916-8001-b74bdef49137"))
-(label "CT2_S2" (at 485.14 218.44 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "58a1bf68-c7e5-454b-864a-8d6e924e02b6"))
+
+
+
+
 (wire (pts (xy 502.92 213.36) (xy 505.46 213.36)) (stroke (width 0) (type default)) (uuid "78365677-ad93-4870-a756-24eeef48058b"))
 (label "GEN_CTB_1" (at 505.46 213.36 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "2b2e4c7b-64fb-4321-af2d-d51dbbdf5f74"))
 (wire (pts (xy 502.92 215.9) (xy 505.46 215.9)) (stroke (width 0) (type default)) (uuid "2c074453-c220-4460-aba5-e475b4580099"))
 (label "GEN_CTB_2" (at 505.46 215.9 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "70fd286a-03a4-4149-b6a4-2410affc8793"))
-(no_connect (at 502.92 218.44) (uuid "33fe0aec-2e41-4bbe-b391-bbd6c990c58a"))
+
 (wire (pts (xy 525.78 210.82) (xy 525.78 208.28)) (stroke (width 0) (type default)) (uuid "71d7c0db-f23a-4e3e-bbc7-3595df80f4a1"))
 (label "GEN_CTB_1" (at 525.78 208.28 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "d36613ac-8ba6-45e8-8126-2e1644c8ff30"))
 (wire (pts (xy 525.78 218.44) (xy 525.78 220.98)) (stroke (width 0) (type default)) (uuid "1a3d86dd-be0a-4a9e-b666-31cf0ddcdfaa"))
@@ -5026,15 +4687,15 @@
 (label "GEN_IB_N" (at 372.11 102.87 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "f29c6453-0ed1-473e-a0f2-6b7191063d0b"))
 (wire (pts (xy 372.11 113.03) (xy 372.11 115.57)) (stroke (width 0) (type default)) (uuid "686591ea-bbee-42c8-a60b-e7632f632f19"))
 (symbol (lib_id "power:GND") (at 372.11 115.57 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "c8cd0216-22cf-4b06-812c-c2d7e5b25f31")(property "Reference" "#PWR0967" (at 372.11 115.57 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND_AC" (at 372.11 119.38 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 372.11 115.57 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 372.11 115.57 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "8d3717a9-5bae-4529-b054-5a2b8e5a6b1f"))(instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "#PWR0967") (unit 1)))))
-(wire (pts (xy 574.04 215.9) (xy 571.5 215.9)) (stroke (width 0) (type default)) (uuid "e51c7e59-168c-41db-9275-d005580b8304"))
-(label "CT3_S1" (at 571.5 215.9 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "8efd0fd5-f8b6-4580-b82a-b4595aa5fa6c"))
-(wire (pts (xy 574.04 218.44) (xy 571.5 218.44)) (stroke (width 0) (type default)) (uuid "9dcdd078-b8a8-4e09-8354-db6c349ceb29"))
-(label "CT3_S2" (at 571.5 218.44 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "9b79bf32-15d6-41ae-9cc7-6bca5136f707"))
+
+
+
+
 (wire (pts (xy 589.28 213.36) (xy 591.82 213.36)) (stroke (width 0) (type default)) (uuid "2fde972b-063b-4ed8-ab62-1ac9349c1d03"))
 (label "GEN_CTC_1" (at 591.82 213.36 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "7bbf7264-878b-4058-baab-fab8366c33a8"))
 (wire (pts (xy 589.28 215.9) (xy 591.82 215.9)) (stroke (width 0) (type default)) (uuid "3fa55934-f1f3-484f-bd82-7aa67b51efc3"))
 (label "GEN_CTC_2" (at 591.82 215.9 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "ed18fc12-6c14-4e52-bf73-e120d32da62d"))
-(no_connect (at 589.28 218.44) (uuid "71eb7142-560d-4885-a51f-0af223d47c84"))
+
 (wire (pts (xy 612.14 210.82) (xy 612.14 208.28)) (stroke (width 0) (type default)) (uuid "cf7faf9f-7a8f-40ea-b43e-37f6092ac398"))
 (label "GEN_CTC_1" (at 612.14 208.28 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "5249fb29-cae8-4953-8a4a-e3b8fec9f8f7"))
 (wire (pts (xy 612.14 218.44) (xy 612.14 220.98)) (stroke (width 0) (type default)) (uuid "7a1e6e08-46fc-4beb-a71f-983479dcb1f8"))
@@ -5059,15 +4720,15 @@
 (label "GEN_IC_N" (at 331.47 107.95 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "5ee5bc23-0611-4a21-b84d-acb97fbced45"))
 (wire (pts (xy 331.47 118.11) (xy 331.47 120.65)) (stroke (width 0) (type default)) (uuid "64f6674f-fe77-401d-a055-db01b4f50667"))
 (symbol (lib_id "power:GND") (at 331.47 120.65 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "18e98c83-aa03-4712-8814-d437118ef605")(property "Reference" "#PWR0971" (at 331.47 120.65 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND_AC" (at 331.47 124.46 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 331.47 120.65 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 331.47 120.65 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "b0175bef-eaad-4d03-9737-9aa6b1b2a0ab"))(instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "#PWR0971") (unit 1)))))
-(wire (pts (xy 659.13 215.9) (xy 656.59 215.9)) (stroke (width 0) (type default)) (uuid "416667f5-bb87-401d-9d8d-422eaa2c576a"))
-(label "CT4_S1" (at 656.59 215.9 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "2a3fd595-5ffe-4e92-a70e-d0b13741bddc"))
-(wire (pts (xy 659.13 218.44) (xy 656.59 218.44)) (stroke (width 0) (type default)) (uuid "3523d6e2-9fb8-4063-b739-3e637247e961"))
-(label "CT4_S2" (at 656.59 218.44 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "cbe3790c-c219-423f-8a66-337fdc1c1d81"))
+
+
+
+
 (wire (pts (xy 674.37 213.36) (xy 676.91 213.36)) (stroke (width 0) (type default)) (uuid "a880a965-b557-45ca-b197-a90626b4ad96"))
 (label "GEN_CTN_1" (at 676.91 213.36 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "0f2d0c50-b457-4a39-849c-21ee61b24a1a"))
 (wire (pts (xy 674.37 215.9) (xy 676.91 215.9)) (stroke (width 0) (type default)) (uuid "e2cc370e-6da8-4a63-9cd2-a1740b374845"))
 (label "GEN_CTN_2" (at 676.91 215.9 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "0162d47b-05f1-4ea6-8b64-8776b6e2798f"))
-(no_connect (at 674.37 218.44) (uuid "ada53a61-5cad-4ad8-8f8d-9082420073aa"))
+
 (wire (pts (xy 697.23 210.82) (xy 697.23 208.28)) (stroke (width 0) (type default)) (uuid "82ab6879-ea73-4b1e-adbb-372e3964db3e"))
 (label "GEN_CTN_1" (at 697.23 208.28 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "71b94394-9d32-4ddd-95eb-588a42e1322f"))
 (wire (pts (xy 697.23 218.44) (xy 697.23 220.98)) (stroke (width 0) (type default)) (uuid "3cb75c99-d9ea-4b72-a7af-239d75f1d9e5"))
@@ -5092,22 +4753,22 @@
 (label "GEN_IN_N" (at 453.39 138.43 90) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "580145ad-1c94-4091-b4b5-e136b0fe5c67"))
 (wire (pts (xy 453.39 148.59) (xy 453.39 151.13)) (stroke (width 0) (type default)) (uuid "e05581fc-e9af-45ac-bb52-8b575a99c1db"))
 (symbol (lib_id "power:GND") (at 453.39 151.13 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "56ddbdb3-1c6b-4ed5-9009-7a051c184cb3")(property "Reference" "#PWR0975" (at 453.39 151.13 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND_AC" (at 453.39 154.94 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 453.39 151.13 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 453.39 151.13 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "94974333-0576-4181-86ad-43334a628cad"))(instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "#PWR0975") (unit 1)))))
-(wire (pts (xy 745.49 198.12) (xy 742.95 198.12)) (stroke (width 0) (type default)) (uuid "e59bef63-d239-4978-ae9f-417496e4d62b"))
-(label "CT1_S1" (at 742.95 198.12 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "c8f0c577-301b-4ec3-ba97-70a5d681c8a0"))
-(wire (pts (xy 745.49 200.66) (xy 742.95 200.66)) (stroke (width 0) (type default)) (uuid "0595eb73-b596-4f4e-adb6-045d60ed270f"))
-(label "CT1_S2" (at 742.95 200.66 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "6760488a-f1b4-429a-a3e5-7ef3f51cb1ed"))
-(wire (pts (xy 745.49 203.2) (xy 742.95 203.2)) (stroke (width 0) (type default)) (uuid "0e05d2bd-79a3-4f43-bd59-5517d1f0a65c"))
-(label "CT2_S1" (at 742.95 203.2 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "2a6f9470-47a1-44a9-bb4a-a389891d6aa0"))
-(wire (pts (xy 745.49 205.74) (xy 742.95 205.74)) (stroke (width 0) (type default)) (uuid "a1253549-9da3-4cbe-af42-4ad95cd8f74e"))
-(label "CT2_S2" (at 742.95 205.74 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "4fcf96d0-faa3-4d18-81c5-a7e1bb9da3ab"))
-(wire (pts (xy 745.49 208.28) (xy 742.95 208.28)) (stroke (width 0) (type default)) (uuid "08823c98-4a9f-47ce-886c-18867e325024"))
-(label "CT3_S1" (at 742.95 208.28 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "a69ab574-98d9-4da9-9a2a-47f468fceca0"))
-(wire (pts (xy 745.49 210.82) (xy 742.95 210.82)) (stroke (width 0) (type default)) (uuid "8d539f00-4719-4797-ac24-8c18c3f41a59"))
-(label "CT3_S2" (at 742.95 210.82 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "36fb1b7e-375e-495e-9271-a17e86009afc"))
-(wire (pts (xy 745.49 213.36) (xy 742.95 213.36)) (stroke (width 0) (type default)) (uuid "c54cb477-854e-41b8-a595-04fb45cfd65b"))
-(label "CT4_S1" (at 742.95 213.36 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "fb950778-dd96-4a66-9f70-2ddb94fb4315"))
-(wire (pts (xy 745.49 215.9) (xy 742.95 215.9)) (stroke (width 0) (type default)) (uuid "047dc6d0-a4fb-4c8e-beb1-4bd63f7fb363"))
-(label "CT4_S2" (at 742.95 215.9 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "5a8a611a-afa1-4098-ae0e-169091537354"))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 (wire (pts (xy 208.28 312.42) (xy 208.28 314.96)) (stroke (width 0) (type default)) (uuid "65747bda-36b9-4591-a1b9-857a7228e3b6"))
 (symbol (lib_id "power:GND") (at 208.28 314.96 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "8b118354-9d63-4001-b9c7-1fd99d187894")(property "Reference" "#PWR0976" (at 208.28 314.96 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND_AC" (at 208.28 318.77 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 208.28 314.96 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "" (at 208.28 314.96 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "1691d03b-e569-454d-a768-e442de733a5d"))(instances (project "genctl_meter" (path "/9e6f0d2c-41a7-4b55-8f3e-2d7c1b9a6e21/85a0e338-a2a6-41fc-926e-ce6716749f84" (reference "#PWR0976") (unit 1)))))
 (wire (pts (xy 482.6 93.98) (xy 492.76 93.98)) (stroke (width 0) (type default)) (uuid "6ae561eb-36bc-419e-955c-815f9dc92429"))
@@ -5354,7 +5015,7 @@
 (rectangle (start 20.32 46.99) (end 134.62 106.68) (stroke (width 0.25) (type dash) (color 72 72 160 1)) (fill (type none)) (uuid "63127a35-2cef-4054-b887-512a0ccd4d02"))
 (text "DO NOT PLUG OR UNPLUG LIVE\n(J28 / J7 GEN voltage: isolate the 600 V source first)" (exclude_from_sim no) (at 58.42 331.47 0) (effects (font (size 1.5 1.5) (thickness 0.3) bold (color 200 0 0 1)) (justify left bottom)) (uuid "58ff19af-1726-494f-b978-2af2827d2e61"))
 (text "DO NOT PLUG OR UNPLUG LIVE\n(J29 / J8 BUS voltage: isolate the 600 V source first)" (exclude_from_sim no) (at 138.43 331.47 0) (effects (font (size 1.5 1.5) (thickness 0.3) bold (color 200 0 0 1)) (justify left bottom)) (uuid "f1c2340b-86fc-4005-a80f-3acaa8718653"))
-(text "U69 ISOW7841DWER" (exclude_from_sim no) (at 21.59 46.355 0) (effects (font (size 2 2) (thickness 0.3) bold (color 72 72 160 1)) (justify left bottom)) (uuid "94041b0f-4832-4bf3-92f4-53d573ca55fb"))
+(text "U69 ISOW7841AQDWERQ1" (exclude_from_sim no) (at 21.59 46.355 0) (effects (font (size 2 2) (thickness 0.3) bold (color 72 72 160 1)) (justify left bottom)) (uuid "94041b0f-4832-4bf3-92f4-53d573ca55fb"))
 (rectangle (start 144.78 46.99) (end 281.94 109.22) (stroke (width 0.25) (type dash) (color 72 72 160 1)) (fill (type none)) (uuid "5fa5e305-6272-4816-a508-ae2446a24a07"))
 (text "U70 ISO7741DWR" (exclude_from_sim no) (at 146.05 46.355 0) (effects (font (size 2 2) (thickness 0.3) bold (color 72 72 160 1)) (justify left bottom)) (uuid "a064c29d-6c47-4169-a04c-8f542b8a017d"))
 (rectangle (start 290.83 46.99) (end 811.53 177.8) (stroke (width 0.25) (type dash) (color 72 72 160 1)) (fill (type none)) (uuid "d6ca2231-042c-4eaa-b2ab-b8c436e04448"))
@@ -5362,20 +5023,21 @@
 (rectangle (start 20.32 187.96) (end 373.38 293.37) (stroke (width 0.25) (type dash) (color 72 72 160 1)) (fill (type none)) (uuid "257c2d3d-56b6-42ab-a728-a61230e06f4f"))
 (text "U72 ADE9000ACPZ (BUS)" (exclude_from_sim no) (at 21.59 187.325 0) (effects (font (size 2 2) (thickness 0.3) bold (color 72 72 160 1)) (justify left bottom)) (uuid "004f4fd2-1d9d-469a-bb19-5d116e157c03"))
 (rectangle (start 382.27 187.96) (end 458.47 241.3) (stroke (width 0.25) (type dash) (color 72 72 160 1)) (fill (type none)) (uuid "35b5210b-e925-4761-af4a-f561375a75f5"))
-(text "T1 AC1005" (exclude_from_sim no) (at 383.54 187.325 0) (effects (font (size 2 2) (thickness 0.3) bold (color 72 72 160 1)) (justify left bottom)) (uuid "9efe9f19-c1d4-41ff-a7be-7a169a584d35"))
+(text "T1 ZMCT103C" (exclude_from_sim no) (at 383.54 187.325 0) (effects (font (size 2 2) (thickness 0.3) bold (color 72 72 160 1)) (justify left bottom)) (uuid "9efe9f19-c1d4-41ff-a7be-7a169a584d35"))
 (rectangle (start 468.63 187.96) (end 544.83 241.3) (stroke (width 0.25) (type dash) (color 72 72 160 1)) (fill (type none)) (uuid "4bffc403-b5c8-45c3-8dc2-884cb824353a"))
-(text "T2 AC1005" (exclude_from_sim no) (at 469.9 187.325 0) (effects (font (size 2 2) (thickness 0.3) bold (color 72 72 160 1)) (justify left bottom)) (uuid "37809fdd-22a7-4d6b-aefa-3b0f061ddea5"))
+(text "T2 ZMCT103C" (exclude_from_sim no) (at 469.9 187.325 0) (effects (font (size 2 2) (thickness 0.3) bold (color 72 72 160 1)) (justify left bottom)) (uuid "37809fdd-22a7-4d6b-aefa-3b0f061ddea5"))
 (rectangle (start 554.99 187.96) (end 631.19 241.3) (stroke (width 0.25) (type dash) (color 72 72 160 1)) (fill (type none)) (uuid "4f7190cb-155a-4578-95e5-dc6876a4be17"))
-(text "T3 AC1005" (exclude_from_sim no) (at 556.26 187.325 0) (effects (font (size 2 2) (thickness 0.3) bold (color 72 72 160 1)) (justify left bottom)) (uuid "60f0aecf-1d49-4569-94c7-e2bd9c43c8b0"))
+(text "T3 ZMCT103C" (exclude_from_sim no) (at 556.26 187.325 0) (effects (font (size 2 2) (thickness 0.3) bold (color 72 72 160 1)) (justify left bottom)) (uuid "60f0aecf-1d49-4569-94c7-e2bd9c43c8b0"))
 (rectangle (start 640.08 187.96) (end 716.28 241.3) (stroke (width 0.25) (type dash) (color 72 72 160 1)) (fill (type none)) (uuid "28d9754f-538c-4ea8-adf7-c4a86d2183d2"))
-(text "T4 AC1005" (exclude_from_sim no) (at 641.35 187.325 0) (effects (font (size 2 2) (thickness 0.3) bold (color 72 72 160 1)) (justify left bottom)) (uuid "6462004f-b50e-4ea5-a44e-b64548bb0716"))
+(text "T4 ZMCT103C" (exclude_from_sim no) (at 641.35 187.325 0) (effects (font (size 2 2) (thickness 0.3) bold (color 72 72 160 1)) (justify left bottom)) (uuid "6462004f-b50e-4ea5-a44e-b64548bb0716"))
 (rectangle (start 726.44 187.96) (end 759.46 226.06) (stroke (width 0.25) (type dash) (color 72 72 160 1)) (fill (type none)) (uuid "65333141-d76b-4963-b7ff-b98b814b138d"))
-(text "J30 J9 CT secondaries (5A)" (exclude_from_sim no) (at 727.71 187.325 0) (effects (font (size 2 2) (thickness 0.3) bold (color 72 72 160 1)) (justify left bottom)) (uuid "2f5b06b2-2ca7-4235-b21b-de845301b919"))
+(text "NEVER OPEN A CT LOOP OR DISCONNECT J30 WITH THE GENERATOR LIVE\n(short the CTs at the J30 shorting block first: an open 5 A CT secondary develops lethal voltage)" (exclude_from_sim no) (at 383.54 250.0 0) (effects (font (size 1.5 1.5) (thickness 0.3) bold (color 200 0 0 1)) (justify left bottom)) (uuid "4fed85de-5ed4-44bd-a698-2c44fb9b265f"))
+(text "J30: OFF-BOARD (Batch 29)" (exclude_from_sim no) (at 727.71 187.325 0) (effects (font (size 2 2) (thickness 0.3) bold (color 72 72 160 1)) (justify left bottom)) (uuid "2f5b06b2-2ca7-4235-b21b-de845301b919"))
 (rectangle (start 20.32 303.53) (end 114.3 358.14) (stroke (width 0.25) (type dash) (color 72 72 160 1)) (fill (type none)) (uuid "78117b9f-585f-4022-bab2-7dc6ab7e1fd4"))
 (text "misc / support" (exclude_from_sim no) (at 21.59 302.895 0) (effects (font (size 2 2) (thickness 0.3) bold (color 72 72 160 1)) (justify left bottom)) (uuid "78fede63-2bab-46df-ad15-d9cc7416a8be"))
 (rectangle (start 123.19 303.53) (end 215.9 350.52) (stroke (width 0.25) (type dash) (color 72 72 160 1)) (fill (type none)) (uuid "a165843d-2532-4524-ab9d-af557151e0db"))
 (text "misc / support" (exclude_from_sim no) (at 124.46 302.895 0) (effects (font (size 2 2) (thickness 0.3) bold (color 72 72 160 1)) (justify left bottom)) (uuid "eb45496f-cc3a-4ba8-b25c-f46519821fcd"))
-(text "AC METERING. Hot side GND_AC isolated by ISOW7841 (data+power) + ISO7741, both 5kVrms reinforced, SOIC-16W 8mm. Barrier keep-out >=8mm + slot.\nVoltage: fully differential. Each line 4x1M -> tap (1k to GND_AC); each neutral (GEN_N, BUS_N separately) 4x1M -> N_TAP (1k to GND_AC); VxN <- 1k <- N_TAP.\nNo 0R neutral link: GND_AC floats at the divider mid-point, common-mode attenuated 4001:1. Current: AC1005 CTs, burden 2x24.9R." (exclude_from_sim no) (at 15 12 0) (effects (font (size 1.6 1.6)) (justify left top)) (uuid "cb291dc5-0b61-45f6-b659-b242aed16e99"))
+(text "AC METERING. Hot side GND_AC isolated by ISOW7841 (data+power) + ISO7741, both 5kVrms reinforced, SOIC-16W 8mm. Barrier keep-out >=13mm + slot (docs/ISOLATION_CHECK.md).\nVoltage: fully differential. Each line 12x330k (1206) -> tap (1k to GND_AC); each neutral (GEN_N, BUS_N separately) 12x330k -> N_TAP (1k to GND_AC); VxN <- 1k <- N_TAP. Ratio 1:3961.\nNo 0R neutral link: GND_AC floats at the divider mid-point, common-mode attenuated 3961:1. Current: ZMCT103C window CTs (Batch 29), burden 2x24.9R 1%, field CT loop = 600 V wire through the window." (exclude_from_sim no) (at 15 12 0) (effects (font (size 1.6 1.6)) (justify left top)) (uuid "cb291dc5-0b61-45f6-b659-b242aed16e99"))
 (label "BUS_VA_P" (at 243.84 236.22 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "d7b3a0c9-829a-4ee5-8e7f-6092ec3e3519"))
 (symbol (lib_id "74xGxx:74LVC1GU04") (at 60.96 355.6 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "5d57e5c7-645c-4d91-8eef-18804e1d2b45")
 (property "Reference" "U87" (at 66.04 353.06 0) (effects (font (size 1.27 1.27))))
@@ -6629,4 +6291,5 @@
 (label "GEN_IN_N" (at 500.38 304.8 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "d384cbd3-cb9f-49ef-bd3c-f249faf516c2"))
 (label "GEN_IN_P" (at 515.62 304.8 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "c63f7cc2-b343-4d8b-ad07-e8173e00a25c"))
 (no_connect (at 508.0 309.88) (uuid "d380c859-769c-49cf-bc14-a0cec933d706"))
+(text "Batch 29 (pass-3 B1), CT architecture: J30 is no longer on this board. T1-T4 are\nZMCT103C window CTs (C94571). Each external 5 A CT circuit is a factory-fitted\npigtail of 600 V UL1015 wire (14 AWG max, Ø5 mm window) threaded once through\nits CT window, P1* face toward the external CT S1, and both ends leave the\nenclosure to J30 = the off-board CT shorting/test terminal block in the genset\npanel (site wiring; CT S2 earthed there). No CT-loop copper anywhere on this\nPCB. The barrier between the earthed CT loop and GND_AC is the wire insulation\n(600 V) plus the CT body (4.5 kV withstand). Layout rules:\ndocs/ISOLATION_CHECK.md §5c." (exclude_from_sim no) (at 383.54 262.00 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "d4ea4399-6d97-4072-a08a-8776b189c3bc"))
 )

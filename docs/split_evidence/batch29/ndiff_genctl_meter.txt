@@ -1,0 +1,47 @@
+parts 221 -> 220
+REMOVED J30
+PROP R474 Note '0.1% burden' -> 'CT burden half: 24.9R 1 % 100 ppm/K (C22916). 2 x 24.9R = 49.8R = ZMCT103C rate
+PROP R475 Note '0.1% burden' -> 'CT burden half: 24.9R 1 % 100 ppm/K (C22916). 2 x 24.9R = 49.8R = ZMCT103C rate
+PROP R478 Note '0.1% burden' -> 'CT burden half: 24.9R 1 % 100 ppm/K (C22916). 2 x 24.9R = 49.8R = ZMCT103C rate
+PROP R479 Note '0.1% burden' -> 'CT burden half: 24.9R 1 % 100 ppm/K (C22916). 2 x 24.9R = 49.8R = ZMCT103C rate
+PROP R482 Note '0.1% burden' -> 'CT burden half: 24.9R 1 % 100 ppm/K (C22916). 2 x 24.9R = 49.8R = ZMCT103C rate
+PROP R483 Note '0.1% burden' -> 'CT burden half: 24.9R 1 % 100 ppm/K (C22916). 2 x 24.9R = 49.8R = ZMCT103C rate
+PROP R486 Note '0.1% burden' -> 'CT burden half: 24.9R 1 % 100 ppm/K (C22916). 2 x 24.9R = 49.8R = ZMCT103C rate
+PROP R487 Note '0.1% burden' -> 'CT burden half: 24.9R 1 % 100 ppm/K (C22916). 2 x 24.9R = 49.8R = ZMCT103C rate
+CHG T1 value AC1005 -> ZMCT103C
+CHG T1 fp genctl:AC1005_CT -> genctl:Transformer_Zeming_ZMCT103C
+PROP T1 LCSC 'C6117861' -> 'C94571'
+PROP T1 MPN 'AC1005' -> 'ZMCT103C'
+PROP T1 Manufacturer 'Talema Group LLC' -> 'Qingxian Zeming Langxi Electronic'
+PROP T1 Note None -> 'Batch 29 (pass-3 B1): replaces AC1005 C6117861. The field CT loop is a 600 V in
+CHG T2 value AC1005 -> ZMCT103C
+CHG T2 fp genctl:AC1005_CT -> genctl:Transformer_Zeming_ZMCT103C
+PROP T2 LCSC 'C6117861' -> 'C94571'
+PROP T2 MPN 'AC1005' -> 'ZMCT103C'
+PROP T2 Manufacturer 'Talema Group LLC' -> 'Qingxian Zeming Langxi Electronic'
+PROP T2 Note None -> 'Batch 29 (pass-3 B1): replaces AC1005 C6117861. The field CT loop is a 600 V in
+CHG T3 value AC1005 -> ZMCT103C
+CHG T3 fp genctl:AC1005_CT -> genctl:Transformer_Zeming_ZMCT103C
+PROP T3 LCSC 'C6117861' -> 'C94571'
+PROP T3 MPN 'AC1005' -> 'ZMCT103C'
+PROP T3 Manufacturer 'Talema Group LLC' -> 'Qingxian Zeming Langxi Electronic'
+PROP T3 Note None -> 'Batch 29 (pass-3 B1): replaces AC1005 C6117861. The field CT loop is a 600 V in
+CHG T4 value AC1005 -> ZMCT103C
+CHG T4 fp genctl:AC1005_CT -> genctl:Transformer_Zeming_ZMCT103C
+PROP T4 LCSC 'C6117861' -> 'C94571'
+PROP T4 MPN 'AC1005' -> 'ZMCT103C'
+PROP T4 Manufacturer 'Talema Group LLC' -> 'Qingxian Zeming Langxi Electronic'
+PROP T4 Note None -> 'Batch 29 (pass-3 B1): replaces AC1005 C6117861. The field CT loop is a 600 V in
+PROP U69 Sourcing None -> 'CONSIGN (Batch 29): buy ISOW7841AQDWERQ1 from the TI store (live 2,026 on 2026-
+NET A CT1_S1 not identical in B -> B nets ['?']
+NET A CT1_S2 not identical in B -> B nets ['?']
+NET A CT2_S1 not identical in B -> B nets ['?']
+NET A CT2_S2 not identical in B -> B nets ['?']
+NET A CT3_S1 not identical in B -> B nets ['?']
+NET A CT3_S2 not identical in B -> B nets ['?']
+NET A CT4_S1 not identical in B -> B nets ['?']
+NET A CT4_S2 not identical in B -> B nets ['?']
+NET A unconnected-(T1-NC-Pad3) not identical in B -> B nets ['?']
+NET A unconnected-(T2-NC-Pad3) not identical in B -> B nets ['?']
+NET A unconnected-(T3-NC-Pad3) not identical in B -> B nets ['?']
+NET A unconnected-(T4-NC-Pad3) not identical in B -> B nets ['?']
