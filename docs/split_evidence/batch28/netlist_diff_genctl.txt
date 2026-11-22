@@ -1,0 +1,117 @@
+parts 1127 -> 1138
+ADDED C318 1u Capacitor_SMD:C_0805_2012Metric C28323
+ADDED C319 100n Capacitor_SMD:C_0603_1608Metric C14663
+ADDED D150 SMAJ40A Diode_SMD:D_SMA C113969
+ADDED D151 SMAJ40A Diode_SMD:D_SMA C113969
+ADDED D152 RClamp0524PA genctl:RClamp0524P_SLP2510P8 C40960
+ADDED D153 RClamp0524PA genctl:RClamp0524P_SLP2510P8 C40960
+ADDED R644 33R Resistor_SMD:R_0603_1608Metric C23140
+ADDED R645 33R Resistor_SMD:R_0603_1608Metric C23140
+ADDED R646 33R Resistor_SMD:R_0603_1608Metric C23140
+ADDED R647 33R Resistor_SMD:R_0603_1608Metric C23140
+ADDED R648 33R Resistor_SMD:R_0603_1608Metric C23140
+CHG Q15 value DMN6075S -> IRLML0100
+PROP Q15 LCSC 'C155242' -> 'C53658'
+PROP Q15 MPN 'DMN6075S' -> 'IRLML0100TRPBF'
+PROP Q15 Manufacturer 'Diodes Incorporated' -> 'Infineon Technologies'
+PROP Q15 Note None -> 'Batch 28: was DMN6075S (60 V < SMAJ40CA 64.5 V clamp; VGS(th) up to 3.0 V at 3.
+CHG Q19 value DMN6075S -> IRLML0100
+PROP Q19 LCSC 'C155242' -> 'C53658'
+PROP Q19 MPN 'DMN6075S' -> 'IRLML0100TRPBF'
+PROP Q19 Manufacturer 'Diodes Incorporated' -> 'Infineon Technologies'
+PROP Q19 Note None -> 'Batch 28: was DMN6075S (60 V < SMAJ40CA 64.5 V clamp; VGS(th) up to 3.0 V at 3.
+CHG Q23 value DMN6075S -> IRLML0100
+PROP Q23 LCSC 'C155242' -> 'C53658'
+PROP Q23 MPN 'DMN6075S' -> 'IRLML0100TRPBF'
+PROP Q23 Manufacturer 'Diodes Incorporated' -> 'Infineon Technologies'
+PROP Q23 Note None -> 'Batch 28: was DMN6075S (60 V < SMAJ40CA 64.5 V clamp; VGS(th) up to 3.0 V at 3.
+CHG Q27 value DMN6075S -> IRLML0100
+PROP Q27 LCSC 'C155242' -> 'C53658'
+PROP Q27 MPN 'DMN6075S' -> 'IRLML0100TRPBF'
+PROP Q27 Manufacturer 'Diodes Incorporated' -> 'Infineon Technologies'
+PROP Q27 Note None -> 'Batch 28: was DMN6075S (60 V < SMAJ40CA 64.5 V clamp; VGS(th) up to 3.0 V at 3.
+CHG Q31 value DMN6075S -> IRLML0100
+PROP Q31 LCSC 'C155242' -> 'C53658'
+PROP Q31 MPN 'DMN6075S' -> 'IRLML0100TRPBF'
+PROP Q31 Manufacturer 'Diodes Incorporated' -> 'Infineon Technologies'
+PROP Q31 Note None -> 'Batch 28: was DMN6075S (60 V < SMAJ40CA 64.5 V clamp; VGS(th) up to 3.0 V at 3.
+CHG Q35 value DMN6075S -> IRLML0100
+PROP Q35 LCSC 'C155242' -> 'C53658'
+PROP Q35 MPN 'DMN6075S' -> 'IRLML0100TRPBF'
+PROP Q35 Manufacturer 'Diodes Incorporated' -> 'Infineon Technologies'
+PROP Q35 Note None -> 'Batch 28: was DMN6075S (60 V < SMAJ40CA 64.5 V clamp; VGS(th) up to 3.0 V at 3.
+CHG Q38 value DMN6075S -> IRLML0100
+PROP Q38 LCSC 'C155242' -> 'C53658'
+PROP Q38 MPN 'DMN6075S' -> 'IRLML0100TRPBF'
+PROP Q38 Manufacturer 'Diodes Incorporated' -> 'Infineon Technologies'
+PROP Q38 Note None -> 'Batch 28: was DMN6075S (60 V < SMAJ40CA 64.5 V clamp; VGS(th) up to 3.0 V at 3.
+CHG Q41 value DMN6075S -> IRLML0100
+PROP Q41 LCSC 'C155242' -> 'C53658'
+PROP Q41 MPN 'DMN6075S' -> 'IRLML0100TRPBF'
+PROP Q41 Manufacturer 'Diodes Incorporated' -> 'Infineon Technologies'
+PROP Q41 Note None -> 'Batch 28: was DMN6075S (60 V < SMAJ40CA 64.5 V clamp; VGS(th) up to 3.0 V at 3.
+CHG R138 value 100k -> 10k
+PROP R138 LCSC 'C25803' -> 'C25804'
+PROP R138 MPN '0603WAF1003T5E' -> '0603WAF1002T5E'
+PROP R138 Note None -> 'Batch 28: 100k -> 10k so the AI shunt FET stays off (~0.30 V gate) while U31 is
+CHG R149 value 100k -> 10k
+PROP R149 LCSC 'C25803' -> 'C25804'
+PROP R149 MPN '0603WAF1003T5E' -> '0603WAF1002T5E'
+PROP R149 Note None -> 'Batch 28: 100k -> 10k so the AI shunt FET stays off (~0.30 V gate) while U31 is
+CHG R160 value 100k -> 10k
+PROP R160 LCSC 'C25803' -> 'C25804'
+PROP R160 MPN '0603WAF1003T5E' -> '0603WAF1002T5E'
+PROP R160 Note None -> 'Batch 28: 100k -> 10k so the AI shunt FET stays off (~0.30 V gate) while U31 is
+CHG R171 value 100k -> 10k
+PROP R171 LCSC 'C25803' -> 'C25804'
+PROP R171 MPN '0603WAF1003T5E' -> '0603WAF1002T5E'
+PROP R171 Note None -> 'Batch 28: 100k -> 10k so the AI shunt FET stays off (~0.30 V gate) while U31 is
+CHG R182 value 100k -> 10k
+PROP R182 LCSC 'C25803' -> 'C25804'
+PROP R182 MPN '0603WAF1003T5E' -> '0603WAF1002T5E'
+PROP R182 Note None -> 'Batch 28: 100k -> 10k so the AI shunt FET stays off (~0.30 V gate) while U31 is
+CHG R193 value 100k -> 10k
+PROP R193 LCSC 'C25803' -> 'C25804'
+PROP R193 MPN '0603WAF1003T5E' -> '0603WAF1002T5E'
+PROP R193 Note None -> 'Batch 28: 100k -> 10k so the AI shunt FET stays off (~0.30 V gate) while U31 is
+CHG R204 value 100k -> 10k
+PROP R204 LCSC 'C25803' -> 'C25804'
+PROP R204 MPN '0603WAF1003T5E' -> '0603WAF1002T5E'
+PROP R204 Note None -> 'Batch 28: 100k -> 10k. TCA9555 (U31) powers up as input with ~100k internal pul
+CHG R209 value 100k -> 10k
+PROP R209 LCSC 'C25803' -> 'C25804'
+PROP R209 MPN '0603WAF1003T5E' -> '0603WAF1002T5E'
+PROP R209 Note None -> 'Batch 28: 100k -> 10k. TCA9555 (U31) powers up as input with ~100k internal pul
+PROP R294 Note 'RISCP to GND per DS eq.5: Isc=(35.7k*2uA+19mV)/1mR = 90A' -> 'RISCP, ISCP to GND (TPS48100-Q1 DS SLUSEW1C pin table). V(SCP) = 2 uA x 40.2k +
+PROP R300 Note 'RISCP to GND per DS eq.5: Isc=(35.7k*2uA+19mV)/1mR = 90A' -> 'RISCP, ISCP to GND (TPS48100-Q1 DS SLUSEW1C pin table). V(SCP) = 2 uA x 40.2k +
+NET A +3V3_SAFE not identical in B -> B nets ['+3V3_SAFE', 'VDDA_F']
+NET A DI_BIAS_A not identical in B -> B nets ['DI_BIAS_A']
+NET A DI_BIAS_B not identical in B -> B nets ['DI_BIAS_B']
+NET A ADE_CS1_N not identical in B -> B nets ['ADE_CS1_N_J', 'ADE_CS1_N']
+NET A ADE_CS2_N not identical in B -> B nets ['ADE_CS2_N_J', 'ADE_CS2_N']
+NET A ADE_IRQ_N not identical in B -> B nets ['ADE_IRQ_N']
+NET A ADE_MISO not identical in B -> B nets ['ADE_MISO']
+NET A ADE_MOSI not identical in B -> B nets ['ADE_MOSI_J', 'ADE_MOSI']
+NET A ADE_RST_N not identical in B -> B nets ['ADE_RST_N_J', 'ADE_RST_N']
+NET A ADE_SCK not identical in B -> B nets ['ADE_SCK_J', 'ADE_SCK']
+NET A GND not identical in B -> B nets ['GND']
+NET A MTR_DET_N not identical in B -> B nets ['MTR_DET_N']
+NET A Net-(U7-VDDA) not identical in B -> B nets ['VDDA_F']
+NET B +3V3_SAFE 144 nodes from A nets ['+3V3_SAFE'] | B nodes: 144
+NET B DI_BIAS_A 10 nodes from A nets ['DI_BIAS_A', '<new>'] | B nodes: 10
+NET B DI_BIAS_B 10 nodes from A nets ['DI_BIAS_B', '<new>'] | B nodes: 10
+NET B ADE_CS1_N_J 4 nodes from A nets ['<new>', 'ADE_CS1_N'] | B nodes: [('D152', '5'), ('D152', '6'), ('J31', '10'), ('R646', '2')]
+NET B ADE_CS2_N_J 4 nodes from A nets ['<new>', 'ADE_CS2_N'] | B nodes: [('D153', '1'), ('D153', '10'), ('J31', '11'), ('R647', '2')]
+NET B ADE_MOSI_J 4 nodes from A nets ['<new>', 'ADE_MOSI'] | B nodes: [('D152', '2'), ('D152', '9'), ('J31', '6'), ('R645', '2')]
+NET B ADE_RST_N_J 4 nodes from A nets ['<new>', 'ADE_RST_N'] | B nodes: [('D153', '2'), ('D153', '9'), ('J31', '13'), ('R648', '2')]
+NET B ADE_SCK_J 4 nodes from A nets ['<new>', 'ADE_SCK'] | B nodes: [('D152', '1'), ('D152', '10'), ('J31', '4'), ('R644', '2')]
+NET B VDDA_F 7 nodes from A nets ['+3V3_SAFE', '<new>', 'Net-(U7-VDDA)'] | B nodes: [('C318', '1'), ('C319', '1'), ('C56', '1'), ('C57', '1'), ('FB1', '2'), ('U7', '20'), ('U7', '21')]
+NET B ADE_CS1_N 2 nodes from A nets ['<new>', 'ADE_CS1_N'] | B nodes: [('R646', '1'), ('U7', '28')]
+NET B ADE_CS2_N 2 nodes from A nets ['<new>', 'ADE_CS2_N'] | B nodes: [('R647', '1'), ('U7', '32')]
+NET B ADE_IRQ_N 5 nodes from A nets ['<new>', 'ADE_IRQ_N'] | B nodes: [('D153', '4'), ('D153', '7'), ('J31', '14'), ('R48', '1'), ('U7', '34')]
+NET B ADE_MISO 4 nodes from A nets ['<new>', 'ADE_MISO'] | B nodes: [('D152', '4'), ('D152', '7'), ('J31', '8'), ('U7', '30')]
+NET B ADE_MOSI 2 nodes from A nets ['<new>', 'ADE_MOSI'] | B nodes: [('R645', '1'), ('U7', '31')]
+NET B ADE_RST_N 2 nodes from A nets ['<new>', 'ADE_RST_N'] | B nodes: [('R648', '1'), ('U7', '33')]
+NET B ADE_SCK 2 nodes from A nets ['<new>', 'ADE_SCK'] | B nodes: [('R644', '1'), ('U7', '29')]
+NET B GND 906 nodes from A nets ['<new>', 'GND'] | B nodes: 906
+NET B MTR_DET_N 5 nodes from A nets ['<new>', 'MTR_DET_N'] | B nodes: [('D153', '5'), ('D153', '6'), ('J31', '15'), ('R636', '2'), ('U73', '17')]

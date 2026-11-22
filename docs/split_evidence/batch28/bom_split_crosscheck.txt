@@ -1,0 +1,3 @@
+BOM_main.csv PCB refs 1122 fitted in netlist 1122
+BOM_daughter.csv PCB refs 219 fitted in netlist 219
+crosscheck mismatches 0

@@ -15,7 +15,7 @@ pin-name mapping vs its LCSC datasheet (fetched live 2026-10-28 HST).
 | MMBT3904 x35 | C20526 JSCJ | 1 B, 2 E, 3 C | 1 B 2 E 3 C |
 | MMBT3906 x6 | C2143 JSCJ | 1 B, 2 E, 3 C | same |
 | BSS84 x6 | C8492 LRC LBSS84LT1G | 1 G, 2 S, 3 D | 1 G 2 S 3 D |
-| DMN6075S x8 | C155242 Diodes | G S / D (top view) | 1 G 2 S 3 D |
+| IRLML0100TRPBF x8 (Batch 28; was DMN6075S C155242) | C53658 Infineon | G S / D (top view) | 1 G 2 S 3 D (same SOT-23 pinout) |
 | AO3401A Q68 | C347476 UMW | 1 G, 2 S, 3 D | same |
 | SI2309CDS Q36/39/42 | C10493 Vishay | 1 G, 2 S, 3 D | same (AO3401A symbol) |
 | SQD40P10-40L Q70/71 | C141570 Vishay TO-252 | G D S, D = tab | 1 G 2 D 3 S |

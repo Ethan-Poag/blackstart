@@ -1,0 +1,11 @@
+parts 221 -> 221
+CHG C257 value 22p -> 15p
+PROP C257 LCSC 'C1555' -> 'C1548'
+PROP C257 MPN '0402CG220J500NT' -> '0402CG150J500NT'
+PROP C257 Manufacturer 'FH' -> 'FH (Guangdong Fenghua Advanced Tech)'
+PROP C257 Note None -> 'Batch 28: 22p -> 15p C0G. Y3 X322524576MOB4SI CL = 12 pF; Cext = 2 x (CL - Cstr
+CHG C258 value 22p -> 15p
+PROP C258 LCSC 'C1555' -> 'C1548'
+PROP C258 MPN '0402CG220J500NT' -> '0402CG150J500NT'
+PROP C258 Manufacturer 'FH' -> 'FH (Guangdong Fenghua Advanced Tech)'
+PROP C258 Note None -> 'Batch 28: 22p -> 15p C0G. Y3 X322524576MOB4SI CL = 12 pF; Cext = 2 x (CL - Cstr

@@ -1,0 +1,5 @@
+"Item","Qty","Description","MPN","Manufacturer","LCSC","Unit USD qty1","Unit USD qty10","Ext USD qty1","Ext USD qty10","Notes"
+"HARNESS-1","2","Micro-Fit 3.0 2x8 receptacle housing","43025-1600","Molex","C293527","0.4429","0.4429","0.89","0.89","LCSC 5+ break, MOQ 5"
+"HARNESS-2","32","Micro-Fit 3.0 crimp terminal 20-24 AWG (2x16)","43030-0001","Molex","C259786","0.0475","0.0152","1.52","0.49","qty1 buys the 100-piece minimum (1.52 USD); 100+ break"
+"HARNESS-3","1","Hook-up wire 22-24 AWG UL1007, 16 x ~80 mm","","","","0.50","0.50","0.50","0.50","ESTIMATE"
+"TOTAL harness","","","","","","","","2.91","1.87","one harness per controller"

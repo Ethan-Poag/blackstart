@@ -109,9 +109,9 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - **Note:** SWO is not available because PB3 drives the buzzer.
 
 **Support circuitry**
-- HSE: 25 MHz with 18 pF load caps (*assumes CL = 12 pF*). LSE: 32.768 kHz with 18 pF caps (*assumes CL = 12.5 pF*). Check the crystal datasheets.
+- HSE: Y1 X322525MOB4SI 25 MHz, CL 12 pF (LCSC C9006 data), C61/C62 18 pF: about −30 ppm of pulling, inside the CAN/USB budget (pass-2 review NOTE, kept). LSE: Y2 SC-32S 32.768 kHz, CL 7 pF, C63/C64 6.8 pF.
 - VCAP1/VCAP2: separate 2.2 µF caps.
-- VDDA through a ferrite bead. VREF+ tied to +3V3.
+- VDDA through a ferrite bead (FB1) onto net VDDA_F. **Batch 28:** VREF+ (pin 20) is on VDDA_F too (was +3V3_SAFE, unfiltered), with C318 1 µF X7R + C319 100 nF at the pin (DS12110 §6.1.6). VREF+ = VDDA, so VREF+ ≤ VDDA holds at all times.
 - VBAT: BAT54C OR of +3V3 and the CR2032.
 - JP1 (2x4 header) lets the CM5 drive SWD, NRST and BOOT0 for in-field reflash. It is open by default.
 - FM24CL64B FRAM at 0x50 sits on this sheet. It uses the KiCad FM24C64B symbol, which has the same pinout.
@@ -232,7 +232,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
   - Output path: 1N4148W + 1k to the terminal.
 - Disable: a BSS84 pulls the op-amp + input to VBAT_P. Its gate is driven by a 100k/100k divider and an NPN, which keeps |Vgs| ≤ 15 V.
   - **The default state is source ON**: the expander powers up Hi-Z, so the NPN is off.
-- 4–20 mA: 100R shunt switched by a DMN6075S. **The gate is driven at only 3.3 V**; check RDS(on) at that Vgs.
+- 4–20 mA: 100R shunt switched by an IRLML0100 (Batch 28; was DMN6075S). 100 V (above the SMAJ40CA 64.5 V clamp), VGS(th) 1.0–2.5 V, RDS(on) 235 mΩ max at 4.5 V; Infineon Fig. 1 shows the 3.3 V curve in the linear region (typ a few hundred mΩ, ~0.3 % of the 100R; calibrated out). Gate pull-down R138/R149/R160/R171/R182/R193 = **10k** (Batch 28; 100k against the TCA9555's ~100k power-up pull-up left ~1.65 V on the gate) → ~0.30 V, FET off until firmware drives it.
 - Measurement chain: 100k/18k divider referenced to VMID (1.65 V, TLV9062 buffer), BAV99 clamp, ADS1115 ×2 (0x48/0x49).
   - The divided COM_A/COM_B commons go to AIN3.
 
@@ -240,7 +240,8 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 - Terminal → 68k/33k + 100 nF → 74HC14.
 - Bank bias:
   - Pull-up through SI2309 (AO3401A symbol) to VBAT_P.
-  - Pull-down through DMN6075S.
+  - Pull-down through IRLML0100 Q38/Q41 (Batch 28; was DMN6075S). Gate pull-downs R204/R209 = **10k** (Batch 28; was 100k, which left ~1.65 V on the gate at power-up while the bank pull-up defaults ON → linear-mode FET against the 0.2 A eFuse).
+  - SMAJ40A D150/D151 at J21.6/J22.1 (Batch 28): DI_BIAS max 40.1 V (LM74800 OV cut-off max) < VBR 44.4 V min; clamp 64.5 V < 100 V FET.
   - 4.7k wetting resistor on each pin.
 - **Open:** at 36 V input the HC14 pin sees about 12 V, which relies on the input clamp current through 68k. Consider a lower ratio or a series clamp.
 
@@ -271,14 +272,14 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 **Fuel and crank (TPS48100)**
 - Each channel:
   - Driver powered from VBAT_ESTOP. G1 drives two parallel BSC070N10NS5.
-  - 1 mΩ shunt, INA281A2 (gain 50) to the ADC.
-  - BST 470 nF, TMR 68 nF.
+  - 20 mΩ shunt R297/R303 (B3-8), INA281A1 (gain 20) → 0.40 V/A to the ADC.
+  - BST 470 nF, TMR 4.7 nF (C197/C201, B3-8).
   - EN/UVLO 100k/27k (about 5.7 V).
 - **Assumed pin strapping:**
   - G2 unused: INP2 = GND.
   - CS_SEL = GND.
   - SCP_TEST = GND.
-- **Open:** the ISCP 35.7k is wired ISCP → CS−, and its reference node is *assumed*. Verify CS_SEL and ISCP wiring against the datasheet.
+- RISCP R294/R300 = 40.2k from ISCP to GND (DS pin table: "a resistor across ISCP to GND sets the short-circuit threshold"). V(SCP) = 2 µA × 40.2k + 19 mV = 99.4 mV typ → 4.97 A with 20 mΩ (B3-8; DS table 75 mV @ 28k, 300 mV @ 140.5k). CS_SEL = GND.
 - Fuel clamp: SK1010C + SMDJ24A in series (the TVS cathode sits at the Schottky). Crank: SK1010C freewheel diode.
 
 **Small outputs (TPS1HTC30 ×13)**
@@ -311,6 +312,8 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 
 **ADE9000 ×2 (GEN and BUS)**
 - Shared SPI bus. Clock: 24.576 MHz crystal on the GEN ADE; its CLKOUT feeds the BUS ADE's CLKIN.
+- **Batch 28:** Y3 X322524576MOB4SI (CL 12 pF) load caps C257/C258 = 15 pF C0G (were 22 pF). Cext = 2 × (CL − Cstray), Cstray ≈ 2 pF (ADE9000 4 pF per pin, in series) + ~2.5 pF board ≈ 4.5 pF → 15 pF. 22 pF gave CL ≈ 15.5 pF, ~40–60 ppm slow. Confirm the frequency at bring-up.
+- **Batch 28, main board (mtr_if):** 33R source resistors R644–R648 on SCK/MOSI/CS1/CS2/RST (place at U7), and two RClamp0524PA (D152/D153, same part as D17/D18) at J31 on all 8 signals (SCK, MOSI, MISO, CS1, CS2, RST, IRQ, MTR_DET_N). Fitted, not DNP: the harness is unplugged in service and MISO/IRQ/MTR_DET_N otherwise reach MCU/TCA pins directly; cost ≈ $0.6/board, 0.3 pF/line.
 - PM0 = PM1 = 0 (normal mode). NC1/NC2 tied to AGND.
 - AVDDOUT, DVDDOUT and REF each get 4.7 µF + 100 nF.
 
@@ -368,7 +371,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 ### Calculations replacing placeholders
 - LM5176: RT 27.4k; slope 220p; comp 22.1k/33n/220p; sense single 8 mOhm 2512; MODE 93.1k; external BAS70 boot diodes VCC->BOOT1/2.
 - TPS56637 (5V, 3V3, modem): EN 121k/16k -> 12*16/137 = 1.40 V > 1.2 V rising (modem: DS-suggested 27k also acceptable, kept 121k/16k for consistency); MODE 0R DNP (float = valid; 100k was in the invalid band); 3.3 uH; feed-forward 100p+20k. 5V FB kept 75k/10k (5.1 V; 73.2k gives 5.0 V if preferred).
-- TPS48100: RISCP 35.7k -> Isc = (35.7k*2 uA + 19 mV)/1 mOhm = 90 A.
+- TPS48100: RISCP 40.2k -> Isc = (40.2k*2 uA + 19 mV)/20 mOhm = 4.97 A typ (B3-8; the old 35.7k / 1 mOhm / 90 A figure is superseded).
 - TPS61500: VIN max 18 V (abs 20 V) on +12 V OK; FREQ 180k (~580 kHz; 176k low stock); SS 47n; L 10 uH SWPA6045S100MT; SS36 diode.
 - TCA9555: 18 mA/pin, ~96 mA/package worst case, under 160 mA GND limit.
 - ISOW7841: 75 mA available vs ~42 mA load.

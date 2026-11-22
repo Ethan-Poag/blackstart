@@ -879,6 +879,176 @@
 					(effects
 						(font
 							(size 1.27 1.27)))))))
+(symbol "genctl:RClamp0524P"
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "D"
+			(at -7.62 8.89 0)
+			(effects
+				(font
+					(size 1.27 1.27))))
+		(property "Value" "RClamp0524P"
+			(at -7.62 -8.89 0)
+			(effects
+				(font
+					(size 1.27 1.27))))
+		(property "Footprint" "genctl:RClamp0524P_SLP2510P8"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(property "Description" "4-line ESD array, flow-through SLP2510P8 (pins 6/7/9/10 are internally the same lines as 5/4/2/1 - route through)"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(property "LCSC" "C40960"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(property "MPN" "RCLAMP0524P.TCT"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(property "Manufacturer" "Semtech"
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27))
+				hide))
+		(symbol "RClamp0524P_0_1"
+			(rectangle
+				(start -7.62 7.62)
+				(end 7.62 -7.62)
+				(stroke
+					(width 0.254)
+					(type default))
+				(fill
+					(type background))))
+		(symbol "RClamp0524P_1_1"
+			(pin passive line
+				(at -10.16 5.08 0)
+				(length 2.54)
+				(name "IO1"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin passive line
+				(at -10.16 2.54 0)
+				(length 2.54)
+				(name "IO2"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin passive line
+				(at -10.16 0 0)
+				(length 2.54)
+				(name "IO3"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin passive line
+				(at -10.16 -2.54 0)
+				(length 2.54)
+				(name "IO4"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "5"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin passive line
+				(at -10.16 -5.08 0)
+				(length 2.54)
+				(name "GND"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin passive line
+				(at 10.16 5.08 180)
+				(length 2.54)
+				(name "IO1"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "10"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin passive line
+				(at 10.16 2.54 180)
+				(length 2.54)
+				(name "IO2"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "9"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin passive line
+				(at 10.16 0 180)
+				(length 2.54)
+				(name "IO3"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "7"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin passive line
+				(at 10.16 -2.54 180)
+				(length 2.54)
+				(name "IO4"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "6"
+					(effects
+						(font
+							(size 1.27 1.27)))))
+			(pin passive line
+				(at 10.16 -5.08 180)
+				(length 2.54)
+				(name "GND"
+					(effects
+						(font
+							(size 1.27 1.27))))
+				(number "8"
+					(effects
+						(font
+							(size 1.27 1.27)))))))
 )
 (symbol (lib_id "Connector_Generic:Conn_02x08_Top_Bottom") (at 101.60 88.90 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "7ba3a538-8667-4115-9fdb-87f224088a54")
 (property "Reference" "J31" (at 104.14 87.63 0) (effects (font (size 1.27 1.27))))
@@ -935,7 +1105,7 @@
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/5d1b3a52-6c1e-4f0a-9a31-3b0c2a6e7f10" (reference "#PWR2002") (unit 1))))
 )
 (wire (pts (xy 96.52 88.90) (xy 88.90 88.90)) (stroke (width 0) (type default)) (uuid "c85b656b-064c-4444-a25c-410c85818b70"))
-(global_label "ADE_SCK" (shape passive) (at 88.90 88.90 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "91ee6a7d-f658-414f-a0c5-6bde95072bfd") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 88.90 88.90 0) (effects (font (size 1.27 1.27)) hide)))
+
 (wire (pts (xy 96.52 91.44) (xy 88.90 91.44)) (stroke (width 0) (type default)) (uuid "bd4e5cc3-d2fd-4db5-b415-ce81a6c91d4e"))
 (symbol (lib_id "power:GND") (at 88.90 91.44 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "2ddb8f62-1341-4d73-ac6f-d23099264941")
 (property "Reference" "#PWR2003" (at 91.44 90.17 0) (effects (font (size 1.27 1.27)) hide))
@@ -946,7 +1116,7 @@
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/5d1b3a52-6c1e-4f0a-9a31-3b0c2a6e7f10" (reference "#PWR2003") (unit 1))))
 )
 (wire (pts (xy 96.52 93.98) (xy 88.90 93.98)) (stroke (width 0) (type default)) (uuid "a7102f3c-792a-406d-8561-3da70785fb34"))
-(global_label "ADE_MOSI" (shape passive) (at 88.90 93.98 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "f731755e-237f-4ac4-9992-d079a16a6866") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 88.90 93.98 0) (effects (font (size 1.27 1.27)) hide)))
+
 (wire (pts (xy 96.52 96.52) (xy 88.90 96.52)) (stroke (width 0) (type default)) (uuid "72d3aacb-780f-4d1d-9aa2-e086be88048a"))
 (symbol (lib_id "power:GND") (at 88.90 96.52 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "e7e26e9b-f143-4f33-bc2e-921678228a6c")
 (property "Reference" "#PWR2004" (at 91.44 95.25 0) (effects (font (size 1.27 1.27)) hide))
@@ -968,9 +1138,9 @@
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/5d1b3a52-6c1e-4f0a-9a31-3b0c2a6e7f10" (reference "#PWR2005") (unit 1))))
 )
 (wire (pts (xy 109.22 83.82) (xy 116.84 83.82)) (stroke (width 0) (type default)) (uuid "ac4e55e9-9cdd-455d-95ad-7383ae3d570e"))
-(global_label "ADE_CS1_N" (shape passive) (at 116.84 83.82 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "625438c2-5593-4ca4-8a10-74cd6731ed46") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 116.84 83.82 0) (effects (font (size 1.27 1.27)) hide)))
+
 (wire (pts (xy 109.22 86.36) (xy 116.84 86.36)) (stroke (width 0) (type default)) (uuid "36d70e26-2bb3-4e45-9fbd-f44216b7d869"))
-(global_label "ADE_CS2_N" (shape passive) (at 116.84 86.36 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "4dd3711d-3ca6-4502-9b4b-d58509d10b11") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 116.84 86.36 0) (effects (font (size 1.27 1.27)) hide)))
+
 (wire (pts (xy 109.22 88.90) (xy 116.84 88.90)) (stroke (width 0) (type default)) (uuid "a34aba2f-94ac-45b4-a953-a3ddbe787cb3"))
 (symbol (lib_id "power:GND") (at 116.84 88.90 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "505fa12b-000d-433b-9491-700b8f2104d9")
 (property "Reference" "#PWR2006" (at 119.38 87.63 0) (effects (font (size 1.27 1.27)) hide))
@@ -981,7 +1151,7 @@
 (instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/5d1b3a52-6c1e-4f0a-9a31-3b0c2a6e7f10" (reference "#PWR2006") (unit 1))))
 )
 (wire (pts (xy 109.22 91.44) (xy 116.84 91.44)) (stroke (width 0) (type default)) (uuid "e1aa5a0f-f5da-4dcf-9639-28fcea7aebf5"))
-(global_label "ADE_RST_N" (shape passive) (at 116.84 91.44 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "d409725a-806e-4416-aab4-e1ae5f2ccf7b") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 116.84 91.44 0) (effects (font (size 1.27 1.27)) hide)))
+
 (wire (pts (xy 109.22 93.98) (xy 116.84 93.98)) (stroke (width 0) (type default)) (uuid "9b7020e2-fc4f-4dc7-a5fd-fcfd421af0ab"))
 (global_label "ADE_IRQ_N" (shape passive) (at 116.84 93.98 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "43cbd066-9a82-4494-ab7e-e8d5795ce9c4") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 116.84 93.98 0) (effects (font (size 1.27 1.27)) hide)))
 (wire (pts (xy 109.22 96.52) (xy 116.84 96.52)) (stroke (width 0) (type default)) (uuid "f86e68cd-34bf-4a42-a851-2af129801422"))
@@ -1063,4 +1233,77 @@
 (text "J31 -> harness (2x Molex 43025-1600 + 32x 43030-0001, ~80 mm, pin n to pin n) -> J32 on HV metering daughter (genctl_meter)." (exclude_from_sim no) (at 25.40 40.64 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "7c543600-2282-43e1-b36a-35b127309b5c"))
 (text "All 16 pins are SELV. Pin 15 MTR_DET_N: daughter straps it to GND; R636 pulls high; read on U73 P14 (TCA9555 @0x20). Pin 16 spare (NC)." (exclude_from_sim no) (at 25.40 45.72 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "3696c327-d009-43f2-a56e-13a1b63397e7"))
 (text "Firmware: missing or silent metering board = fault -> engine shutdown (docs/FW_REQ_METERING_PRESENCE.md)." (exclude_from_sim no) (at 25.40 50.80 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "f469936d-c589-45c5-b948-b9a84d939f00"))
+(label "ADE_SCK_J" (at 88.90 88.90 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "a5091c0b-e4b3-43c4-a8d5-012cc5cd6072"))
+(label "ADE_MOSI_J" (at 88.90 93.98 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "d67b6656-7009-499f-8701-97a50c140069"))
+(label "ADE_CS1_N_J" (at 116.84 83.82 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "70a84184-54dd-426d-acd4-e1e922ae0f24"))
+(label "ADE_CS2_N_J" (at 116.84 86.36 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "2ed07271-8ecc-483a-a34e-ac3a499279cb"))
+(label "ADE_RST_N_J" (at 116.84 91.44 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "b510f3ea-3255-48ab-bbfe-839dece7093b"))
+(text "Batch 28: R644-R648 33R source series resistors on the MCU-driven inter-board\nlines (place within 10 mm of U7 PA5/PA7/PA4/PC4/PC5): damp ringing on the ~80 mm\nharness and limit ESD current into the MCU. D152/D153 RClamp0524PA (same part as\nD17/D18, 0.3 pF, 5 V) fitted at J31 on all 8 signal lines: the harness is\nunplugged in service (FW-MTR-8) and MISO/IRQ/MTR_DET_N otherwise reach MCU/TCA\npins unprotected." (exclude_from_sim no) (at 25.40 129.54 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "cc7902f2-ab4b-4109-9083-c3fd321ca010"))
+(symbol (lib_id "Device:R") (at 60.96 139.70 90) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "089711ea-2afa-4539-88af-341cea5d6b64")(property "Reference" "R644" (at 63.50 138.43 0) (effects (font (size 1.27 1.27))))(property "Value" "33R" (at 63.50 140.97 0) (effects (font (size 1.27 1.27))))(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 60.96 139.70 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 60.96 139.70 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C23140" (at 60.96 139.70 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "0603WAF330JT5E" (at 60.96 139.70 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "UNI-ROYAL" (at 60.96 139.70 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "Resistor 33R 1% 0603" (at 60.96 139.70 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 28: SPI source series R, place at U7" (at 60.96 139.70 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "755f6067-c8c7-4a7f-9628-dca9f49b0a0e"))(pin "2" (uuid "5a4ce1f5-d5cf-4b48-aa44-e67cf80a91d0"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/5d1b3a52-6c1e-4f0a-9a31-3b0c2a6e7f10" (reference "R644") (unit 1)))))
+(wire (pts (xy 57.15 139.70) (xy 54.61 139.70)) (stroke (width 0) (type default)) (uuid "2e2e4e23-5285-4346-9999-302bacf8734a"))
+(global_label "ADE_SCK" (shape passive) (at 54.61 139.70 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "93491bf2-1ea1-4a8f-836a-172147a9bdda") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 54.61 139.70 0) (effects (font (size 1.27 1.27)) hide)))
+(wire (pts (xy 64.77 139.70) (xy 67.31 139.70)) (stroke (width 0) (type default)) (uuid "67fa6d95-98f4-4ea7-8e98-e5a9c57bf83a"))
+(label "ADE_SCK_J" (at 67.31 139.70 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "3edc88b0-515c-411c-8161-8c059f0d52ab"))
+(symbol (lib_id "Device:R") (at 60.96 147.32 90) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "fc5fbf13-cb29-496e-84f4-cf4c0eedfd88")(property "Reference" "R645" (at 63.50 146.05 0) (effects (font (size 1.27 1.27))))(property "Value" "33R" (at 63.50 148.59 0) (effects (font (size 1.27 1.27))))(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 60.96 147.32 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 60.96 147.32 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C23140" (at 60.96 147.32 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "0603WAF330JT5E" (at 60.96 147.32 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "UNI-ROYAL" (at 60.96 147.32 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "Resistor 33R 1% 0603" (at 60.96 147.32 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 28: SPI source series R, place at U7" (at 60.96 147.32 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "8b4a2336-4198-4edb-b28c-e3265064720b"))(pin "2" (uuid "9f4f95f8-5ab6-4205-9be7-6976215e81a8"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/5d1b3a52-6c1e-4f0a-9a31-3b0c2a6e7f10" (reference "R645") (unit 1)))))
+(wire (pts (xy 57.15 147.32) (xy 54.61 147.32)) (stroke (width 0) (type default)) (uuid "257d1a28-426e-4d5a-92bc-f7d205569be8"))
+(global_label "ADE_MOSI" (shape passive) (at 54.61 147.32 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "315380fa-b3e1-461f-bfff-95aea0b63a66") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 54.61 147.32 0) (effects (font (size 1.27 1.27)) hide)))
+(wire (pts (xy 64.77 147.32) (xy 67.31 147.32)) (stroke (width 0) (type default)) (uuid "eba49c6c-8092-4dbe-9d59-00daf98251a1"))
+(label "ADE_MOSI_J" (at 67.31 147.32 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "edf87a62-899b-4c73-aa6b-2f045afaae48"))
+(symbol (lib_id "Device:R") (at 60.96 154.94 90) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "e6500583-4a23-4b6f-a864-879cb2774ace")(property "Reference" "R646" (at 63.50 153.67 0) (effects (font (size 1.27 1.27))))(property "Value" "33R" (at 63.50 156.21 0) (effects (font (size 1.27 1.27))))(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 60.96 154.94 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 60.96 154.94 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C23140" (at 60.96 154.94 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "0603WAF330JT5E" (at 60.96 154.94 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "UNI-ROYAL" (at 60.96 154.94 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "Resistor 33R 1% 0603" (at 60.96 154.94 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 28: SPI source series R, place at U7" (at 60.96 154.94 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "42266cae-a2a1-4928-95f8-ec2e2cbfb31e"))(pin "2" (uuid "0257a83a-950f-4b55-b322-53935ff564d9"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/5d1b3a52-6c1e-4f0a-9a31-3b0c2a6e7f10" (reference "R646") (unit 1)))))
+(wire (pts (xy 57.15 154.94) (xy 54.61 154.94)) (stroke (width 0) (type default)) (uuid "6c33d4d8-3e08-4109-8a9b-91a1d9fe6ccf"))
+(global_label "ADE_CS1_N" (shape passive) (at 54.61 154.94 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "5ccbf566-a3a7-4c61-8acc-8d97d44a3ee7") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 54.61 154.94 0) (effects (font (size 1.27 1.27)) hide)))
+(wire (pts (xy 64.77 154.94) (xy 67.31 154.94)) (stroke (width 0) (type default)) (uuid "08af5992-c700-48bc-a6d1-6ceaa22fedac"))
+(label "ADE_CS1_N_J" (at 67.31 154.94 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "4f6be248-13e3-411f-84dc-252f50bda34c"))
+(symbol (lib_id "Device:R") (at 60.96 162.56 90) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "4f1cc2e6-5dea-4f64-89fe-539edadfd773")(property "Reference" "R647" (at 63.50 161.29 0) (effects (font (size 1.27 1.27))))(property "Value" "33R" (at 63.50 163.83 0) (effects (font (size 1.27 1.27))))(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 60.96 162.56 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 60.96 162.56 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C23140" (at 60.96 162.56 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "0603WAF330JT5E" (at 60.96 162.56 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "UNI-ROYAL" (at 60.96 162.56 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "Resistor 33R 1% 0603" (at 60.96 162.56 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 28: SPI source series R, place at U7" (at 60.96 162.56 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "2709ff33-6e43-4b5b-8b2d-045e648e12e0"))(pin "2" (uuid "0487c193-9083-46a8-8c44-69e1a0258745"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/5d1b3a52-6c1e-4f0a-9a31-3b0c2a6e7f10" (reference "R647") (unit 1)))))
+(wire (pts (xy 57.15 162.56) (xy 54.61 162.56)) (stroke (width 0) (type default)) (uuid "cd5da2d5-23f6-46c6-86f2-aa4108c9b3b8"))
+(global_label "ADE_CS2_N" (shape passive) (at 54.61 162.56 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "a6367d95-1feb-4441-8098-5bcfc60e611e") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 54.61 162.56 0) (effects (font (size 1.27 1.27)) hide)))
+(wire (pts (xy 64.77 162.56) (xy 67.31 162.56)) (stroke (width 0) (type default)) (uuid "0db555d8-c2ab-459a-a14a-9fc60a824d47"))
+(label "ADE_CS2_N_J" (at 67.31 162.56 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "a3275577-09e8-45a5-ba4f-99df81f85cc7"))
+(symbol (lib_id "Device:R") (at 60.96 170.18 90) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "9a581ebe-2fc2-4941-8921-44fd7a6770b6")(property "Reference" "R648" (at 63.50 168.91 0) (effects (font (size 1.27 1.27))))(property "Value" "33R" (at 63.50 171.45 0) (effects (font (size 1.27 1.27))))(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 60.96 170.18 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 60.96 170.18 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C23140" (at 60.96 170.18 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "0603WAF330JT5E" (at 60.96 170.18 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "UNI-ROYAL" (at 60.96 170.18 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "Resistor 33R 1% 0603" (at 60.96 170.18 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 28: SPI source series R, place at U7" (at 60.96 170.18 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "29024276-beb5-4454-a91f-12fd6adbac13"))(pin "2" (uuid "f602938e-9d50-4820-8b04-1ac30b9b71fd"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/5d1b3a52-6c1e-4f0a-9a31-3b0c2a6e7f10" (reference "R648") (unit 1)))))
+(wire (pts (xy 57.15 170.18) (xy 54.61 170.18)) (stroke (width 0) (type default)) (uuid "63b3ea99-502c-4263-bc53-5635f1b98113"))
+(global_label "ADE_RST_N" (shape passive) (at 54.61 170.18 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "dcaef037-74dc-4287-bf3f-f55d41ee2c80") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 54.61 170.18 0) (effects (font (size 1.27 1.27)) hide)))
+(wire (pts (xy 64.77 170.18) (xy 67.31 170.18)) (stroke (width 0) (type default)) (uuid "3ab3dcfa-b36d-4456-ae4f-8c55299413fd"))
+(label "ADE_RST_N_J" (at 67.31 170.18 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "9dac75fe-9664-4c29-8852-f376a1a22193"))
+(symbol (lib_id "genctl:RClamp0524P") (at 170.18 124.46 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "44c49da9-1a32-4650-adb1-8529387c9ac8")(property "Reference" "D152" (at 172.72 123.19 0) (effects (font (size 1.27 1.27))))(property "Value" "RClamp0524PA" (at 172.72 125.73 0) (effects (font (size 1.27 1.27))))(property "Footprint" "genctl:RClamp0524P_SLP2510P8" (at 170.18 124.46 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 170.18 124.46 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C40960" (at 170.18 124.46 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "RCLAMP0524PATCT" (at 170.18 124.46 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "SEMTECH" (at 170.18 124.46 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "4-line ESD array RClamp0524PA (LCSC C40960), flow-through SLP2510P8 (pins 6/7/9/10 are internally the same lines as 5/4/2/1 - route through). Batch 25: MPN was RCLAMP0524P.TCT (NRND); PA has same package/pinout/land pattern and ratings, ESD +/-12 kV contact vs +/-8 kV." (at 170.18 124.46 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 28: J31 ESD array, place at J31 (flow-through)" (at 170.18 124.46 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "5361b2ed-29f2-48b7-840f-61ca3128ef5c"))(pin "2" (uuid "62541aff-b775-45d8-b4fd-3080fbe9c3de"))(pin "4" (uuid "f340d64d-1b86-4c14-9354-72e8458059a6"))(pin "5" (uuid "57959fb3-6137-4742-ad54-5b41f6d2d6e7"))(pin "3" (uuid "d247c452-5602-426b-9178-23251a295a6c"))(pin "10" (uuid "0ade702f-308f-47fb-be2b-62401d57c720"))(pin "9" (uuid "2ea450cd-707a-4db0-92ee-59ce13c20127"))(pin "7" (uuid "94cc4fa7-d32b-458d-afa1-ab19a337186d"))(pin "6" (uuid "f1df7968-3b1f-436c-b11b-ba11ff7c5fee"))(pin "8" (uuid "a290156d-3ea1-40b4-b924-f9a613db399d"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/5d1b3a52-6c1e-4f0a-9a31-3b0c2a6e7f10" (reference "D152") (unit 1)))))
+(wire (pts (xy 160.02 119.38) (xy 157.48 119.38)) (stroke (width 0) (type default)) (uuid "62a03d3f-4072-470b-afd8-07c7b1ee6819"))
+(label "ADE_SCK_J" (at 157.48 119.38 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "3e1a8f5d-54e1-461f-9446-9480b483e44a"))
+(wire (pts (xy 180.34 119.38) (xy 182.88 119.38)) (stroke (width 0) (type default)) (uuid "9b31861e-bec8-4d77-bb0b-893c8c956963"))
+(label "ADE_SCK_J" (at 182.88 119.38 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "46c4fae2-586b-40c1-a153-ee4d4530ed43"))
+(wire (pts (xy 160.02 121.92) (xy 157.48 121.92)) (stroke (width 0) (type default)) (uuid "a7aa3a9c-1fcf-4fed-aed5-4da4854240d3"))
+(label "ADE_MOSI_J" (at 157.48 121.92 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "6c11b96b-2d22-49f6-87ce-26e947589b77"))
+(wire (pts (xy 180.34 121.92) (xy 182.88 121.92)) (stroke (width 0) (type default)) (uuid "1f768d7f-51a1-4cc0-a041-afc4e79f777d"))
+(label "ADE_MOSI_J" (at 182.88 121.92 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "b8370865-264f-4015-9fa4-a0dea6c76ba8"))
+(wire (pts (xy 160.02 124.46) (xy 157.48 124.46)) (stroke (width 0) (type default)) (uuid "ecae3431-5654-48be-955a-8a69bbee4208"))
+(global_label "ADE_MISO" (shape passive) (at 157.48 124.46 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "60449509-ef15-4834-800e-ae08683eaf19") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 157.48 124.46 0) (effects (font (size 1.27 1.27)) hide)))
+(wire (pts (xy 180.34 124.46) (xy 182.88 124.46)) (stroke (width 0) (type default)) (uuid "bde45f92-84a8-4894-8b3d-a8213e124885"))
+(global_label "ADE_MISO" (shape passive) (at 182.88 124.46 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "0d5965c2-ed48-4208-a915-0a5620a6a1a6") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 182.88 124.46 0) (effects (font (size 1.27 1.27)) hide)))
+(wire (pts (xy 160.02 127.00) (xy 157.48 127.00)) (stroke (width 0) (type default)) (uuid "81cc9bcf-37b8-4af5-8664-51e448cea2e4"))
+(label "ADE_CS1_N_J" (at 157.48 127.00 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "6e993d13-f7a9-4838-bf1c-863b04c69c4e"))
+(wire (pts (xy 180.34 127.00) (xy 182.88 127.00)) (stroke (width 0) (type default)) (uuid "ebdb80a2-de2a-4952-b9a5-a10ae9904154"))
+(label "ADE_CS1_N_J" (at 182.88 127.00 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "926b91ff-e130-4ae3-b5b6-cebe18cfeb00"))
+(wire (pts (xy 160.02 129.54) (xy 157.48 129.54)) (stroke (width 0) (type default)) (uuid "f4addee1-02c3-48b6-ba21-e6a44e15713f"))
+(symbol (lib_id "power:GND") (at 157.48 129.54 270) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "9c69c731-73f2-4ab6-8e94-7fc3ac3aac2d")(property "Reference" "#PWR3104" (at 160.02 128.27 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 160.02 130.81 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 157.48 129.54 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 157.48 129.54 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "2a6758fe-3968-46b1-a902-3a6399e6ac35"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/5d1b3a52-6c1e-4f0a-9a31-3b0c2a6e7f10" (reference "#PWR3104") (unit 1)))))
+(wire (pts (xy 180.34 129.54) (xy 182.88 129.54)) (stroke (width 0) (type default)) (uuid "2c9c4733-e32a-4298-b98a-4f661ff1fca1"))
+(symbol (lib_id "power:GND") (at 182.88 129.54 90) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "dcc6a022-69be-4884-853e-59e9017dcdc9")(property "Reference" "#PWR3105" (at 185.42 128.27 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 185.42 130.81 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 182.88 129.54 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 182.88 129.54 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "e17c576a-23af-4660-b230-1f43cbee9d4b"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/5d1b3a52-6c1e-4f0a-9a31-3b0c2a6e7f10" (reference "#PWR3105") (unit 1)))))
+(symbol (lib_id "genctl:RClamp0524P") (at 231.14 124.46 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "4f245b9b-892e-44ac-8beb-aaff0b9ba342")(property "Reference" "D153" (at 233.68 123.19 0) (effects (font (size 1.27 1.27))))(property "Value" "RClamp0524PA" (at 233.68 125.73 0) (effects (font (size 1.27 1.27))))(property "Footprint" "genctl:RClamp0524P_SLP2510P8" (at 231.14 124.46 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 231.14 124.46 0) (effects (font (size 1.27 1.27)) hide))(property "LCSC" "C40960" (at 231.14 124.46 0) (effects (font (size 1.27 1.27)) hide))(property "MPN" "RCLAMP0524PATCT" (at 231.14 124.46 0) (effects (font (size 1.27 1.27)) hide))(property "Manufacturer" "SEMTECH" (at 231.14 124.46 0) (effects (font (size 1.27 1.27)) hide))(property "Description" "4-line ESD array RClamp0524PA (LCSC C40960), flow-through SLP2510P8 (pins 6/7/9/10 are internally the same lines as 5/4/2/1 - route through). Batch 25: MPN was RCLAMP0524P.TCT (NRND); PA has same package/pinout/land pattern and ratings, ESD +/-12 kV contact vs +/-8 kV." (at 231.14 124.46 0) (effects (font (size 1.27 1.27)) hide))(property "Note" "Batch 28: J31 ESD array, place at J31 (flow-through)" (at 231.14 124.46 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "8573fd0a-0a3b-4e9b-8cea-4681c5eceeac"))(pin "2" (uuid "d01ebcdb-21d7-4941-a227-5c0a49a8a3f5"))(pin "4" (uuid "6b413d73-c497-4b96-ad84-efa1b27cd22d"))(pin "5" (uuid "e2ee5179-5255-494b-9f17-bf87ab9c8bbd"))(pin "3" (uuid "fb45ad5c-96aa-4583-acf9-8ace4d060104"))(pin "10" (uuid "7d9dbe97-2b09-41f5-afc6-40e1964a6aea"))(pin "9" (uuid "952fac73-dfa0-4715-ae0e-93c931ea1dd6"))(pin "7" (uuid "b7966c9a-15df-4e17-9331-214125546aa0"))(pin "6" (uuid "19c3e00c-d1b5-4385-af02-f02b9e0ad7a3"))(pin "8" (uuid "0250b34c-8790-4924-b944-1cdc1a4d2aea"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/5d1b3a52-6c1e-4f0a-9a31-3b0c2a6e7f10" (reference "D153") (unit 1)))))
+(wire (pts (xy 220.98 119.38) (xy 218.44 119.38)) (stroke (width 0) (type default)) (uuid "b8fb4022-1631-4db6-8a9b-30d8c37e4ac6"))
+(label "ADE_CS2_N_J" (at 218.44 119.38 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "e03345ec-d4d2-4e81-bd45-11b05267b3af"))
+(wire (pts (xy 241.30 119.38) (xy 243.84 119.38)) (stroke (width 0) (type default)) (uuid "90334041-9ef6-4c61-ba59-72e46b82e514"))
+(label "ADE_CS2_N_J" (at 243.84 119.38 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "72e96f25-9532-43d7-807f-d754c0317387"))
+(wire (pts (xy 220.98 121.92) (xy 218.44 121.92)) (stroke (width 0) (type default)) (uuid "7b471282-547d-43ab-94bb-0999c76f12ee"))
+(label "ADE_RST_N_J" (at 218.44 121.92 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "cc444555-01df-4a6e-87ed-7bc73da6367d"))
+(wire (pts (xy 241.30 121.92) (xy 243.84 121.92)) (stroke (width 0) (type default)) (uuid "fe9495b0-616f-47f2-be28-2602bbae93ee"))
+(label "ADE_RST_N_J" (at 243.84 121.92 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "81a709a2-f77c-4390-8d00-e4c9a825f8dc"))
+(wire (pts (xy 220.98 124.46) (xy 218.44 124.46)) (stroke (width 0) (type default)) (uuid "fdb740ae-33fe-4e5b-ad5f-86ac58197faa"))
+(global_label "ADE_IRQ_N" (shape passive) (at 218.44 124.46 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "2589b149-86b4-4863-9ae5-97baa32a340d") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 218.44 124.46 0) (effects (font (size 1.27 1.27)) hide)))
+(wire (pts (xy 241.30 124.46) (xy 243.84 124.46)) (stroke (width 0) (type default)) (uuid "e9a2e549-ca47-4f7d-a503-0641ea8752e2"))
+(global_label "ADE_IRQ_N" (shape passive) (at 243.84 124.46 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "880898c4-906e-4af7-b1b5-35450a12016e") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 243.84 124.46 0) (effects (font (size 1.27 1.27)) hide)))
+(wire (pts (xy 220.98 127.00) (xy 218.44 127.00)) (stroke (width 0) (type default)) (uuid "f147989e-431e-427c-807c-803d4dd3bd5f"))
+(global_label "MTR_DET_N" (shape passive) (at 218.44 127.00 180) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify right)) (uuid "9bcebfe6-3f76-4df2-8d30-afeb321bc1b6") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 218.44 127.00 0) (effects (font (size 1.27 1.27)) hide)))
+(wire (pts (xy 241.30 127.00) (xy 243.84 127.00)) (stroke (width 0) (type default)) (uuid "4ea6064d-cd30-494e-9500-445fcfff117b"))
+(global_label "MTR_DET_N" (shape passive) (at 243.84 127.00 0) (fields_autoplaced yes) (effects (font (size 1.27 1.27)) (justify left)) (uuid "deebac54-a481-40fd-a1ff-304d25370342") (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 243.84 127.00 0) (effects (font (size 1.27 1.27)) hide)))
+(wire (pts (xy 220.98 129.54) (xy 218.44 129.54)) (stroke (width 0) (type default)) (uuid "8dbf3e9d-bd49-491a-9083-13e1d8d6eb0b"))
+(symbol (lib_id "power:GND") (at 218.44 129.54 270) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "cc2cb3fd-6d8a-4a8a-9614-20a89706781f")(property "Reference" "#PWR3106" (at 220.98 128.27 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 220.98 130.81 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 218.44 129.54 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 218.44 129.54 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "c1305b39-4c66-4b5d-8e40-b5c7fc0783b0"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/5d1b3a52-6c1e-4f0a-9a31-3b0c2a6e7f10" (reference "#PWR3106") (unit 1)))))
+(wire (pts (xy 241.30 129.54) (xy 243.84 129.54)) (stroke (width 0) (type default)) (uuid "c3dc9f23-5de6-439b-b950-c415950c9df6"))
+(symbol (lib_id "power:GND") (at 243.84 129.54 90) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "98841461-4b43-46c2-a5dc-0a5ee616ff3a")(property "Reference" "#PWR3107" (at 246.38 128.27 0) (effects (font (size 1.27 1.27)) hide))(property "Value" "GND" (at 246.38 130.81 0) (effects (font (size 1.27 1.27))))(property "Footprint" "" (at 243.84 129.54 0) (effects (font (size 1.27 1.27)) hide))(property "Datasheet" "~" (at 243.84 129.54 0) (effects (font (size 1.27 1.27)) hide))(pin "1" (uuid "1e2a62d7-c1b8-42f9-929f-971a3f09626b"))(instances (project "genctl" (path "/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/5d1b3a52-6c1e-4f0a-9a31-3b0c2a6e7f10" (reference "#PWR3107") (unit 1)))))
 )

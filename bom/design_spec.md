@@ -1,5 +1,5 @@
 # genctl: open-source diesel generator controller, design spec and decisions
-Status: 2026-10-24 (display: RVT121HVLNWCA0-B; previous version design_spec_rvt101.md). Sources: inputs_bom.csv, outputs_bom.csv, power_bom.csv, ac_metering_bom_jlc.csv, outputs_survey.md, estop_notes.md, connectors.md.
+Status: 2026-10-24. **Batch 28 (2026-11-22): the category BOMs named below were replaced by per-board BOMs generated from the schematics; see bom/README.md.** Original status: 2026-10-24 (display: RVT121HVLNWCA0-B; previous version design_spec_rvt101.md). Sources: inputs_bom.csv, outputs_bom.csv, power_bom.csv, ac_metering_bom_jlc.csv, outputs_survey.md, estop_notes.md, connectors.md.
 
 ## 1. Product and form factor
 - Uses the DSE 8610 MKII form factor and cutout. Assembled by JLCPCB. LCSC parts are preferred; low stock is acceptable. Only NRND/obsolete parts are flagged.
@@ -15,15 +15,15 @@ Status: 2026-10-24 (display: RVT121HVLNWCA0-B; previous version design_spec_rvt1
 
 ## 3. Power (power_bom.csv)
 - Battery enters on J1 (was J0; Phoenix PC 5/SPC 5, 7.62 mm), (BAT_IN; no on-board fuse; battery net BAT_IN; installer fits an external fuse <=10 A standard (non-time-delay), >=58 V DC in the battery lead), SMDJ36CA, LM74800-Q1 ideal diode + OV cutoff (BSC070N10NS5 back-to-back), SMDJ33CA, and an LM5176 4-switch buck-boost to a 12 V bus. A buck then supplies 5 V for the CM5. Rev B: +3V3 is a second TPS56637 (6 A part, >=3 A rail) from the 12 V bus (replaces the 1 A TPS629210 + MBR0540 diode-OR).
-- Max operating battery voltage: **31 V**. OV trip (R3 9.76k): OV trip (rising) 32.39 / 34.01 / 35.74 V (min/typ/max, 1 % R + Vref spread + 200 nA pin leakage), release (falling) 29.57 / 31.22 / 32.70 V, UV rising 5.32 / 5.56 / 5.86 V. OV-min margin vs 31 V = 1.39 V (4.5 %, INFERRED; TCR not included; 0.1 % resistors are an option). (Was: "OV cutoff <= 30.5 V"; superseded.)
+- Max operating battery voltage: **31 V**. OV trip (R3 8.66k, B3-2 / Batch 27): OV trip (rising) 36.35 / 38.18 / 40.10 V (min/typ/max, 1 % R + Vref spread + 200 nA pin leakage); see DESIGN_NOTES §3 for release and UV. (The R3 9.76k figures 32.39 / 34.01 / 35.74 V are superseded.) (Was: "OV cutoff <= 30.5 V"; superseded.)
 - Supply assumption: the board assumes a battery-backed, suppressed 35 V-class supply. A 3 kW SMC TVS (D1) will NOT survive an unsuppressed 24 V alternator load dump; it is not designed for one (see docs/INSTALL_SAFETY.md).
 
 ## 4. Inputs (inputs_bom.csv)
-- 6 analogue inputs (resistive / 4-20 mA / 0-10 V) on 2x ADS1115 with excitation current sources, an MPU input, 12 DIs (HC14 thresholds meet DSE <2.1 V closed / >6.6 V open), D+, VBAT sense and the E-stop sense. SMAJ40CA TVS + 100 nF on every pin.
+- 6 analogue inputs (resistive / 4-20 mA / 0-10 V) on 2x ADS1115 with excitation current sources, an MPU input, 12 DIs (HC14 thresholds meet DSE <2.1 V closed / >6.6 V open), D+, VBAT sense and the E-stop sense. SMAJ40CA TVS + 100 nF on every pin; SMAJ40A on the DI_BIAS_A/B pins (Batch 28).
 
 ## 5. Outputs (outputs_bom.csv, outputs_survey.md)
 - 17 outputs, all with current sensing, using TPS1HTC30-Q1 for the small outputs (glow, GCB/MCB close/open coil drivers for external DIN relays, AUX1-10, E-stop trip). Rev e: AUX1-10.
-- Fuel and crank: path and copper rated 10 A (power box F2 10 A on the J23 feed; Enginerd 2026-11-21, was 15 A); each channel is limited to 2.8 A electronically and big loads go through a relay. TPS48100-Q1 + MOSFETs, a 1 mOhm shunt + INA281. They drive solenoids or external DIN relays and are supplied **only** from VBAT_ESTOP.
+- Fuel and crank: path and copper rated 10 A (power box F2 10 A on the J23 feed; Enginerd 2026-11-21, was 15 A); each channel is limited to 2.8 A electronically and big loads go through a relay. TPS48100-Q1 + MOSFETs, a 20 mOhm shunt (R297/R303) + INA281A1 (0.40 V/A); TPS48100 short-circuit trip 4.97 A typ (RISCP 40.2k, B3-8). They drive solenoids or external DIN relays and are supplied **only** from VBAT_ESTOP.
 - The board has no on-board 250 VAC relays (unlike DSE). Breakers are driven through external DIN relays.
 - A TPS3431 watchdog trip kills all outputs (the hardware E-stop trip path is exempt).
 
@@ -99,7 +99,7 @@ Rows still unpriced inside the BOMs: power (display 12 V load switch, 3V3 LDO ba
 ## 12. Open cautions
 - LM74800 OV trip 32.39-35.74 V vs 31 V max battery (s3c6f). Unsuppressed load dump is out of scope (external module, future work); surge test still needed (OPEN RISK, DESIGN_NOTES).
 - The TPS7B6950 is a 40 V part and the residual surge is ~45 V. Verify, or use a 45 V+ LDO.
-- Unchecked: fuel TVS energy, MOSFET SOA, the 1 mOhm shunt pulse rating (60 A pull-in), and analogue mux injection current.
+- Unchecked: fuel TVS energy, MOSFET SOA, the 20 mOhm 2 W shunt pulse rating at the 4.97 A SCP trip, and analogue mux injection current.
 - Some LCSC codes and prices are unverified (see the BOM notes).
 - A shorted one-shot transistor (Q1) silently disables the hardware trip. Mitigate with periodic E-stop proof tests, the MCU coil-current check, and the optional UVR.
 - Connectors: the Kefa push-in ratings, mating and coding are UNVERIFIED. The PC 5 header is UL 300 V (IEC 1 kV). Confirm it is acceptable for 600 V-class AC or find a UL 600 V variant. Coloured housings and PC 5 coding parts are UNVERIFIED.
@@ -136,7 +136,7 @@ Rows still unpriced inside the BOMs: power (display 12 V load switch, 3V3 LDO ba
 ### Calculations replacing placeholders
 - LM5176: RT 27.4k; slope 220p; comp 4.7k/33n/220p (R8 changed from 22.1k, review c65); sense single 8 mOhm 2512; MODE 93.1k; external BAS70 boot diodes VCC->BOOT1/2.
 - TPS56637 (5V, 3V3; modem buck removed rev e): EN 121k/16k -> 12*16/137 = 1.40 V > 1.2 V rising (modem: DS-suggested 27k also acceptable, kept 121k/16k for consistency); MODE 0R DNP (float = valid; 100k was in the invalid band); 3.3 uH; feed-forward 100p+20k. 5V FB kept 75k/10k (5.1 V; 73.2k gives 5.0 V if preferred).
-- TPS48100: RISCP 35.7k -> Isc = (35.7k*2 uA + 19 mV)/1 mOhm = 90 A.
+- TPS48100: RISCP 40.2k -> Isc = (40.2k*2 uA + 19 mV)/20 mOhm = 4.97 A typ (B3-8).
 - TPS61500: VIN max 18 V (abs 20 V) on +12 V OK; FREQ 180k (~580 kHz; 176k low stock); SS 47n; L 10 uH SWPA6045S100MT; SS36 diode.
 - TCA9555: 18 mA/pin, ~96 mA/package worst case, under 160 mA GND limit.
 - ISOW7841: 75 mA available vs ~42 mA load.

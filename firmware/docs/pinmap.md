@@ -1,6 +1,6 @@
 # STM32H743VIT6 (U7, LQFP-100) pin / peripheral map
 
-Generated 2026-10-25 from the KiCad schematic. No schematic or PCB file was edited.
+Generated 2026-10-25 from the KiCad schematic. **Batch 28 (2026-11-22 HST): the "Net" and "Connects to" columns of the full pin table were regenerated from the m7-split netlist** (so series-R values, TVS part names, INA281A1, LSE caps and the J31 metering interface are current). Text in the later revision sections is historical.
 
 ## Sources and labels
 - **[S] Schematic (read directly).** `kicad-cli sch export netlist --format kicadsexpr genctl.kicad_sch`, parsed by `firmware/tools/extract_pinmap.py`. The raw dump is `pins_raw_netlist.json`. All 100 U7 pins resolve to nets. Series resistors are followed one hop to show the far end.
@@ -15,16 +15,16 @@ Generated 2026-10-25 from the KiCad schematic. No schematic or PCB file was edit
 | Peripheral | Pins (AF) | Far end [S] | AF [D] |
 |---|---|---|---|
 | SPI4 slave ← CM5 SPI0 | PE2 SCK, PE4 NSS, PE5 MISO, PE6 MOSI (AF5). PE3 = MCU_IRQ GPIO with 10k pull-down | CM5 GPIO11/8/9/10/25, each through 1k | ✔ |
-| SPI1 master → 2× ADE9000 | PA5 SCK, PA6 MISO, PA7 MOSI (AF5). PA4 CS1 / PC4 CS2 are GPIO. PC5 RST, PB0 IRQ (10k pull-up) | ISOW7841 U69 (SCK/MOSI/CS1/MISO), ISO7741 U70 (CS2/RST/IRQ), 1k each | ✔ |
+| SPI1 master → 2× ADE9000 | PA5 SCK, PA6 MISO, PA7 MOSI (AF5). PA4 CS1 / PC4 CS2 are GPIO. PC5 RST, PB0 IRQ (10k pull-up) | Main board: 33R series R644–R648 on SCK/MOSI/CS1/CS2/RST (Batch 28), D152/D153 RClamp0524PA ESD on all 8 J31 signals, then J31 → harness → J32 on genctl_meter. The ISOW7841 U69 (SCK/MOSI/CS1/MISO) and ISO7741 U70 (CS2/RST/IRQ) with their 1k series R413–R419 are on the meter board | ✔ |
 | USART1 ↔ CM5 (bootloader port) | PA9 TX, PA10 RX (AF7) | CM5 GPIO15 RXD0 / GPIO14 TXD0, 1k | ✔ |
 | USART3 RS-485 | PD8 TX, PD9 RX, PD12 DE (all AF7, so hardware DE is possible) | CA-IS2092W U17. DE has a 10k pull-down. **/RE is tied to GND** (always receiving) | ✔ |
 | FDCAN1 | PD0 RX, PD1 TX (AF9) | CA-IS3062W U13 | ✔ |
 | FDCAN2 | PB12 RX, PB13 TX (AF9) | CA-IS3062W U14 | TX ✔; RX partial (PDF cell is split across a page) |
 | I2C1 | PB8 SCL, PB9 SDA (AF4), 2.2k pull-ups. PE7 I2C_INT_N | 6× TCA9555 (0x20–0x25), 2× ADS1115, FM24CL64B FRAM, header J3 | ✔ |
 | Timers | PA15 MPU_SPEED = TIM2_CH1 (AF1). PB3 BUZZER = TIM2_CH2 (AF1). PC7 MPU_GATE can be TIM3_CH2 (AF2) or GPIO | TLV1812 U35 (push-pull, Batch 27; was LM393), buzzer NPN Q69 | ✔. TIM2 CH1 capture and CH2 PWM share one timer, so TIM2 needs a common timebase [I] |
-| ADC | PA0 VBAT, PA1 VESTOP, PA2 D+, PA3 FUEL_ISNS, PB1 CRANK_ISNS, PC0 MUXA, PC1 MUXB | dividers (100k/10k), INA281, TMUX1208 | channels per Table 9 ✔ |
+| ADC | PA0 VBAT, PA1 VESTOP, PA2 D+, PA3 FUEL_ISNS, PB1 CRANK_ISNS, PC0 MUXA, PC1 MUXB | dividers (100k/10k), INA281A1 (20 V/V, 20 mΩ), TMUX1208 | channels per Table 9 ✔ |
 | SWD | PA13 SWDIO, PA14 SWCLK (AF0), NRST | J2 10-pin SWD, JP1 (CM5 SWD, optional) | ✔ |
-| Clocks | PH0/PH1 HSE 25 MHz (Y1, 18p). PC14/PC15 LSE 32.768k (Y2, 18p) | — | HSE 4–48 MHz range per DS p.1 ✔ |
+| Clocks | PH0/PH1 HSE 25 MHz (Y1 X322525MOB4SI, CL 12 pF, C61/C62 18p). PC14/PC15 LSE 32.768k (Y2 SC-32S, CL 7 pF, C63/C64 6.8p) | — | HSE 4–48 MHz range per DS p.1 ✔ |
 | Boot / reset | BOOT0: 10k pull-down, SW2, CM5 GPIO27 via 1k. NRST: SW1, J2, CM5 via Q7 open-collector | — | — |
 | Outputs (GPIO) | PD2 FUEL, PD3 CRANK, PD4 GLOW, PD7 TRIP (each ANDed with WDO_N by LVC1G08). PC9–12 GCB/MCB, PE0/PE1/PB4–7/PD11/PD13 AUX1–8 (through LVC541 U41/U42 with /OE = WD_OE_N) | | |
 | Inputs (GPIO) | DI1–12: PE9–15, PB10, PB11, PB14, PB15, PD10. PD14 ESTOP_DIG, PC6 ESTOP2_DIG, PD15 DPLUS_DIG, PB2 OUT_FAULT_N, PC3_C PSU_MAIN_OK, PC2_C CM5 heartbeat | 74HC14 on +3V3_SAFE | |
@@ -33,38 +33,38 @@ Generated 2026-10-25 from the KiCad schematic. No schematic or PCB file was edit
 **Front panel [S]:** there is **no key/LED matrix on the MCU**. The 12 buttons (SW9–SW20) go to TCA9555 U73 @0x20 (for example BTN1 → P00). The RGB LED cathodes sit on @0x21, @0x24 and @0x25. Everything is reached over I2C1, with the shared I2C_INT_N on PE7.
 
 ## Full pin table
-Power pins are omitted here; see the CSV. VDD/VREF+ = +3V3_SAFE, VDDA through FB1, VCAP1/2 each with 2.2 µF, VBAT from BAT54C (CR2032 / 3V3).
+Power pins are omitted here; see the CSV. VDD = +3V3_SAFE; VDDA and VREF+ (pin 20) = VDDA_F, after FB1, with C56/C57 at VDDA and C318 1u / C319 100n at VREF+ (Batch 28), VCAP1/2 each with 2.2 µF, VBAT from BAT54C (CR2032 / 3V3).
 | Pin | Name | Net [S] | Connects to / far end [S] | Intended fn [I] | Dir [I] | AF [D] | I/O struct [D] | ADC [D] |
 |---|---|---|---|---|---|---|---|---|
 | 1 | PE2 | MCU_SPI_SCK | R51[1k]->CM5_SPI_SCK: U9.38(GPIO11)[CM5 (conn A)] | SPI4_SCK slave from CM5 GPIO11 | in | AF5 ✔ | FT_h |  |
-| 2 | PE3 | MCU_IRQ | R49[10k]->GND: (rail) / R57[1k]->CM5_MCU_IRQ: U9.41(GPIO25)[CM5 (conn A)] | MCU_IRQ to CM5 GPIO25 (GPIO out, 10k pd) | out | GPIO | FT_h |  |
+| 2 | PE3 | MCU_IRQ | R49[10k]->GND: (rail) / R57[10k]->CM5_MCU_IRQ: U9.41(GPIO25)[CM5 (conn A)] | MCU_IRQ to CM5 GPIO25 (GPIO out, 10k pd) | out | GPIO | FT_h |  |
 | 3 | PE4 | MCU_SPI_NSS | R54[1k]->CM5_SPI_CE0: U9.39(GPIO8)[CM5 (conn A)] | SPI4_NSS from CM5 CE0 | in | AF5 ✔ | FT_h |  |
 | 4 | PE5 | MCU_SPI_MISO | R53[1k]->CM5_SPI_MISO: U9.40(GPIO9)[CM5 (conn A)] | SPI4_MISO to CM5 | out | AF5 ✔ | FT_h |  |
 | 5 | PE6 | MCU_SPI_MOSI | R52[1k]->CM5_SPI_MOSI: U9.44(GPIO10)[CM5 (conn A)] | SPI4_MOSI from CM5 | in | AF5 ✔ | FT_h |  |
-| 7 | PC13 | EXP_12V_EN | U15.1(IN)[TPS1H200AQDGNRQ1] | EXP_12V_EN -> TPS1H200 IN (GPIO) | out | GPIO | FT |  |
-| 8 | PC14 | Net-(U7-PC14) | C63.1[18p] Y2.1(1)[32.768kHz] | LSE OSC32_IN 32.768k | analog | GPIO | FT (LSE) |  |
-| 9 | PC15 | Net-(U7-PC15) | C64.1[18p] Y2.2(2)[32.768kHz] | LSE OSC32_OUT | analog | GPIO | FT (LSE) |  |
+| 7 | PC13 | EXP_12V_EN | U15.1(IN)[TPS1H200AQDGNRQ1] / R551[100k]->GND: (rail) | EXP_12V_EN -> TPS1H200 IN (GPIO) | out | GPIO | FT |  |
+| 8 | PC14 | Net-(U7-PC14) | C63.1[6.8p] Y2.1(1)[32.768kHz] | LSE OSC32_IN 32.768k | analog | GPIO | FT (LSE) |  |
+| 9 | PC15 | Net-(U7-PC15) | C64.1[6.8p] Y2.2(2)[32.768kHz] | LSE OSC32_OUT | analog | GPIO | FT (LSE) |  |
 | 12 | PH0 | HSE_IN | C61.1[18p] Y1.1(1)[25MHz] | HSE OSC_IN 25 MHz | analog | GPIO | FT (HSE) |  |
 | 13 | PH1 | HSE_OUT | C62.1[18p] Y1.3(3)[25MHz] | HSE OSC_OUT | analog | GPIO | FT (HSE) |  |
 | 14 | NRST | NRST | C65.1[100n] J2.10(~{RESET})[SWD] Q7.3(C)[MMBT3904] SW1.1(1)[RESET] | Reset: SWD, SW1, CM5 via Q7 o/c | in | GPIO |  |  |
 | 15 | PC0 | MUXA_OUT | C222.1[10n] U63.8(D)[TMUX1208PWR] | MUXA_OUT analog (TMUX1208 U63 D) - output current sense | analog | GPIO | FT_a | ADC123_INP10 |
 | 16 | PC1 | MUXB_OUT | C224.1[10n] U64.8(D)[TMUX1208PWR] | MUXB_OUT analog (U64 D) | analog | GPIO | FT_ha | ADC123_INP11 |
 | 17 | PC2_C | MCU_CM5_HB | R43[100k]->GND: (rail) / R61[1k]->Net-(U9-GPIO26): U9.24(GPIO26)[CM5 (conn A)] | CM5 heartbeat in (GPIO26, 100k pd) - needs analog switch closed | in | GPIO | ANA TT_a (note 6) | ADC3_INP0 |
-| 18 | PC3_C | PSU_MAIN_OK | R32[100k]->+3V3_SAFE: (rail) | PSU_MAIN_OK in (TPS2116 ST, 100k pu) | in | GPIO | ANA TT_a (note 6) | ADC3_INP1 |
-| 22 | PA0 | VBAT_SNS | R268[100k]->VBAT_SENSE: D66.1(A1)[SMAJ40CA] J21.4(Pin_4)[J3A E-stop/D+/VBAT/bias] / R269[10k]->GND: (rail) | VBAT_SNS analog 100k/10k | analog | GPIO | FT_a | ADC1_INP16 |
-| 23 | PA1 | VESTOP_SNS | R411[100k]->VBAT_ESTOP: C199.1[100n] C203.1[100n] D126.1(A1)[SMBJ33CA] / R412[10k]->GND: (rail) | VESTOP_SNS analog 100k/10k | analog | GPIO | FT_ha | ADC1_INP17 |
-| 24 | PA2 | DPLUS_SNS | R266[100k]->DPLUS: C187.1[100n] D63.1(A1)[SMBJ36CA] D64.1(K)[SS110] / R267[10k]->GND: (rail) | DPLUS_SNS analog 100k/10k | analog | GPIO | FT_a | ADC12_INP14 |
-| 25 | PA3 | FUEL_ISNS | U44.1(OUT)[INA281A2] | FUEL_ISNS analog (INA281) | analog | GPIO | FT_ha | ADC12_INP15 |
-| 28 | PA4 | ADE_CS1_N | R415[1k]->Net-(U69-INC): U69.5(INC)[ISOW7841DWER] | ADE_CS1_N (GPIO CS; HW alt SPI1_NSS) | out | AF5 ✔ | TT_a |  |
-| 29 | PA5 | ADE_SCK | R413[1k]->ADE_SCK_I: U69.3(INA)[ISOW7841DWER] | SPI1_SCK -> ISOW7841 | out | AF5 ✔ | TT_ha |  |
-| 30 | PA6 | ADE_MISO | R416[1k]->ADE_MISO_I: U69.6(OUTD)[ISOW7841DWER] | SPI1_MISO <- ISOW7841 | in | AF5 ✔ | FT_a |  |
-| 31 | PA7 | ADE_MOSI | R414[1k]->ADE_MOSI_I: U69.4(INB)[ISOW7841DWER] | SPI1_MOSI -> ISOW7841 | out | AF5 ✔ | TT_a |  |
-| 32 | PC4 | ADE_CS2_N | R417[1k]->Net-(U70-INA): U70.3(INA)[ISO7741DWR] | ADE_CS2_N GPIO -> ISO7741 | out | GPIO | TT_a |  |
-| 33 | PC5 | ADE_RST_N | R418[1k]->Net-(U70-INB): U70.4(INB)[ISO7741DWR] | ADE_RST_N GPIO -> ISO7741 | out | GPIO | TT_a |  |
-| 34 | PB0 | ADE_IRQ_N | R419[1k]->ADE_IRQ_N_I: U70.6(OUTD)[ISO7741DWR] / R48[10k]->+3V3_SAFE: (rail) | ADE_IRQ_N GPIO/EXTI0 in (10k pu) | in | GPIO | FT_a |  |
-| 35 | PB1 | CRANK_ISNS | U46.1(OUT)[INA281A2] | CRANK_ISNS analog (INA281) | analog | GPIO | TT_u | ADC12_INP5 |
-| 36 | PB2 | OUT_FAULT_N | R44.1[10k] U15.3(FAULT)[TPS1H200AQDGNRQ1] U16.3(FAULT)[TPS1H200AQDGNRQ1] U18.4(FAULT)[TPS2553DBVR] U19.4(FAULT | OUT_FAULT_N wired-OR in (10k pu) | in | GPIO | FT_ha |  |
-| 37 | PE7 | I2C_INT_N | R45.1[10k] U31.1(~{INT})[TCA9555PWR @0x22] U62.1(~{INT})[TCA9555PWR @0x23] U73.1(~{INT})[TCA9555PWR @0x20] U74 | I2C_INT_N in, expanders wired-OR, EXTI7 (Rev 8j) | in | GPIO | TT_ha |  |
+| 18 | PC3_C | PSU_MAIN_OK | U6.8(ST)[TPS2116DRLR] / R32[100k]->+3V3_SAFE: (rail) | PSU_MAIN_OK in (TPS2116 ST, 100k pu) | in | GPIO | ANA TT_a (note 6) | ADC3_INP1 |
+| 22 | PA0 | VBAT_SNS | C190.1[100n] D67.3(COM)[BAT54S] / R268[100k]->VBAT_SENSE: D66.1(A1)[SMAJ40CA] J21.4(Pin_4)[J3A E-stop/D+/VBAT/bias] / R269[10k]->GND: (rail) | VBAT_SNS analog 100k/10k | analog | GPIO | FT_a | ADC1_INP16 |
+| 23 | PA1 | VESTOP_SNS | C234.1[100n] D125.3(COM)[BAT54S] / R411[100k]->VBAT_ESTOP: C199.1[100n] C203.1[100n] D126.1(A1)[SMDJ40CA] D137.1(K)[BZT52C15] Q70.3(S)[SQD40P10-40L] Q71.3(S)[SQD40P10-40L] R251.1[68k] R292.1[100k] R297.1[20m] R298.1[100k] R303.1[20m] R400.1[47k] U43.18(CS+)[TPS48100QDGXRQ1] U43.20(VS)[TPS48100QDGXRQ1] U44.3(Vin+)[INA281A1] U45.18(CS+)[TPS48100QDGXRQ1] U45.20(VS)[TPS48100QDGXRQ1] U46.3(Vin+)[INA281A1] / R412[10k]->GND: (rail) | VESTOP_SNS analog 100k/10k | analog | GPIO | FT_ha | ADC1_INP17 |
+| 24 | PA2 | DPLUS_SNS | C189.1[100n] D65.3(COM)[BAT54S] / R266[100k]->DPLUS: C187.1[100n] D63.1(A1)[SMBJ40CA] D64.1(K)[SS110] J21.3(Pin_3)[J3A E-stop/D+/VBAT/bias] R249.1[68k] / R267[10k]->GND: (rail) | DPLUS_SNS analog 100k/10k | analog | GPIO | FT_a | ADC12_INP14 |
+| 25 | PA3 | FUEL_ISNS | U44.1(OUT)[INA281A1] | FUEL_ISNS analog (INA281) | analog | GPIO | FT_ha | ADC12_INP15 |
+| 28 | PA4 | ADE_CS1_N | R646[33R]->ADE_CS1_N_J: D152.5(IO4)[RClamp0524PA] D152.6(IO4)[RClamp0524PA] J31.10(Pin_10)[Micro-Fit 2x8 RA 43045-1] | ADE_CS1_N (GPIO CS; HW alt SPI1_NSS) | out | AF5 ✔ | TT_a |  |
+| 29 | PA5 | ADE_SCK | R644[33R]->ADE_SCK_J: D152.1(IO1)[RClamp0524PA] D152.10(IO1)[RClamp0524PA] J31.4(Pin_4)[Micro-Fit 2x8 RA 43045-1] | SPI1_SCK -> J31 -> ISOW7841 (meter board) | out | AF5 ✔ | TT_ha |  |
+| 30 | PA6 | ADE_MISO | D152.4(IO3)[RClamp0524PA] D152.7(IO3)[RClamp0524PA] J31.8(Pin_8)[Micro-Fit 2x8 RA 43045-1] | SPI1_MISO <- J31 <- ISOW7841 (meter board) | in | AF5 ✔ | FT_a |  |
+| 31 | PA7 | ADE_MOSI | R645[33R]->ADE_MOSI_J: D152.2(IO2)[RClamp0524PA] D152.9(IO2)[RClamp0524PA] J31.6(Pin_6)[Micro-Fit 2x8 RA 43045-1] | SPI1_MOSI -> J31 -> ISOW7841 (meter board) | out | AF5 ✔ | TT_a |  |
+| 32 | PC4 | ADE_CS2_N | R647[33R]->ADE_CS2_N_J: D153.1(IO1)[RClamp0524PA] D153.10(IO1)[RClamp0524PA] J31.11(Pin_11)[Micro-Fit 2x8 RA 43045-1] | ADE_CS2_N GPIO -> J31 -> ISO7741 (meter board) | out | GPIO | TT_a |  |
+| 33 | PC5 | ADE_RST_N | R648[33R]->ADE_RST_N_J: D153.2(IO2)[RClamp0524PA] D153.9(IO2)[RClamp0524PA] J31.13(Pin_13)[Micro-Fit 2x8 RA 43045-1] | ADE_RST_N GPIO -> J31 -> ISO7741 (meter board) | out | GPIO | TT_a |  |
+| 34 | PB0 | ADE_IRQ_N | D153.4(IO3)[RClamp0524PA] D153.7(IO3)[RClamp0524PA] J31.14(Pin_14)[Micro-Fit 2x8 RA 43045-1] / R48[10k]->+3V3_SAFE: (rail) | ADE_IRQ_N GPIO/EXTI0 in (10k pu) | in | GPIO | FT_a |  |
+| 35 | PB1 | CRANK_ISNS | U46.1(OUT)[INA281A1] | CRANK_ISNS analog (INA281) | analog | GPIO | TT_u | ADC12_INP5 |
+| 36 | PB2 | OUT_FAULT_N | U15.3(FAULT)[TPS1H200AQDGNRQ1] U16.3(FAULT)[TPS1H200AQDGNRQ1] U18.4(FAULT)[TPS2553DBVR] U19.4(FAULT)[TPS2553DBVR] U43.5(FLT)[TPS48100QDGXRQ1] U45.5(FLT)[TPS48100QDGXRQ1] U47.4(FAULT)[TPS1HTC30AQPWPRQ1] U48.4(FAULT)[TPS1HTC30AQPWPRQ1] U49.4(FAULT)[TPS1HTC30AQPWPRQ1] U50.4(FAULT)[TPS1HTC30AQPWPRQ1] U51.4(FAULT)[TPS1HTC30AQPWPRQ1] U52.4(FAULT)[TPS1HTC30AQPWPRQ1] U53.4(FAULT)[TPS1HTC30AQPWPRQ1] U54.4(FAULT)[TPS1HTC30AQPWPRQ1] U55.4(FAULT)[TPS1HTC30AQPWPRQ1] U56.4(FAULT)[TPS1HTC30AQPWPRQ1] U57.4(FAULT)[TPS1HTC30AQPWPRQ1] U58.4(FAULT)[TPS1HTC30AQPWPRQ1] U59.4(FAULT)[TPS1HTC30AQPWPRQ1] U60.4(FAULT)[TPS1HTC30AQPWPRQ1] U61.4(FAULT)[TPS1HTC30AQPWPRQ1] U68.4(FAULT)[TPS1HTC30AQPWPRQ1] U86.3(~{Alert})[INA237AIDGSR] / R44[10k]->+3V3_SAFE: (rail) | OUT_FAULT_N wired-OR in (10k pu) | in | GPIO | FT_ha |  |
+| 37 | PE7 | I2C_INT_N | U31.1(~{INT})[TCA9555PWR @0x22] U62.1(~{INT})[TCA9555PWR @0x23] U73.1(~{INT})[TCA9555PWR @0x20] U74.1(~{INT})[TCA9555PWR @0x21] U75.1(~{INT})[TCA9555PWR @0x24] U76.1(~{INT})[TCA9555PWR @0x25] / R45[10k]->+3V3_SAFE: (rail) | I2C_INT_N in, expanders wired-OR, EXTI7 (Rev 8j) | in | GPIO | TT_ha |  |
 | 38 | PE8 | MCU_LED | R50[1k]->LED_HB_A: D6.2(A)[green] | MCU_LED heartbeat out | out | GPIO | TT_ha |  |
 | 39 | PE9 | DI1_N | U32.2[74HC14] | DI1_N in (74HC14) | in | GPIO | TT_ha |  |
 | 40 | PE10 | DI2_N | U32.4[74HC14] | DI2_N in | in | GPIO | FT_ha |  |
@@ -82,44 +82,44 @@ Power pins are omitted here; see the CSV. VDD/VREF+ = +3V3_SAFE, VDDA through FB
 | 55 | PD8 | RS485_TX | R98[1k]->Net-(U17-DI): U17.6(DI)[CA-IS2092W] | USART3_TX -> CA-IS2092W DI | out | AF7 ✔ | FT_h |  |
 | 56 | PD9 | RS485_RX | R99[1k]->Net-(U17-RO): U17.3(RO)[CA-IS2092W] | USART3_RX <- RO | in | AF7 ✔ | FT_h |  |
 | 57 | PD10 | DI12_N | U33.12[74HC14] | DI12_N in | in | GPIO | FT_h |  |
-| 58 | PD11 | AUX7_MCU | U42.4(A3)[SN74LVC541APWR] | AUX7 enable -> LVC541 U42 | out | GPIO | FT_h |  |
+| 58 | PD11 | AUX7_MCU | U42.4(A3)[SN74LVC541APWR] / R547[100k]->GND: (rail) | AUX7 enable -> LVC541 U42 | out | GPIO | FT_h |  |
 | 59 | PD12 | RS485_DE | R100[1k]->Net-(U17-DE): R101.1[10k] U17.5(DE)[CA-IS2092W] | USART3_DE (HW DE) -> U17 DE (10k pd); /RE tied GND | out | AF7 ✔ | FT_fh |  |
-| 60 | PD13 | AUX8_MCU | U42.5(A4)[SN74LVC541APWR] | AUX8 enable -> U42 | out | GPIO | FT_fh |  |
+| 60 | PD13 | AUX8_MCU | U42.5(A4)[SN74LVC541APWR] / R548[100k]->GND: (rail) | AUX8 enable -> U42 | out | GPIO | FT_fh |  |
 | 61 | PD14 | ESTOP_DIG | U34.6[74HC14] | ESTOP_DIG in (VBAT_ESTOP via HC14) | in | GPIO | FT_h |  |
 | 62 | PD15 | DPLUS_DIG | U34.4[74HC14] | DPLUS_DIG in | in | GPIO | FT_h |  |
 | 63 | PC6 | ESTOP2_DIG | U34.2[74HC14] | ESTOP2_DIG in (NC2 sense) | in | GPIO | FT_h |  |
-| 64 | PC7 | MPU_GATE | R260[2.2k, DNP Batch 27]->+3V3_SAFE: (rail) | MPU_GATE in (TLV1812 B, push-pull) | in | AF2 ✔ | FT_h |  |
+| 64 | PC7 | MPU_GATE | U35.7[TLV1812] / R260[2.2k]->+3V3_SAFE: (rail) | MPU_GATE in (TLV1812 B, push-pull) | in | AF2 ✔ | FT_h |  |
 | 65 | PC8 | DPLUS_EXC_EN | R263[10k]->DPX_NB: Q43.1(B)[MMBT3904] R264.1[100k] | DPLUS_EXC_EN out (NPN) | out | GPIO | FT_h |  |
-| 66 | PC9 | GCB_CL_MCU | U41.2(A1)[SN74LVC541APWR] | GCB close enable -> U41 | out | GPIO | FT_fh |  |
-| 67 | PA8 | DIAG_EN | U47.3(DIAG_EN)[TPS1HTC30QPWPRQ1] U48.3(DIAG_EN)[TPS1HTC30QPWPRQ1] U49.3(DIAG_EN)[TPS1HTC30QPWPRQ1] U50.3(DIAG_ | DIAG_EN out to 13x TPS1HTC30 | out | GPIO | FT_h? |  |
-| 68 | PA9 | MCU_UART_TX | R56[1k]->CM5_UART_RX: U9.51(GPIO15)[CM5 (conn A)] | USART1_TX -> CM5 GPIO15 RXD0 (bootloader port) | out | AF7 ✔ | FT_u |  |
+| 66 | PC9 | GCB_CL_MCU | U41.2(A1)[SN74LVC541APWR] / R538[100k]->GND: (rail) | GCB close enable -> U41 | out | GPIO | FT_fh |  |
+| 67 | PA8 | DIAG_EN | U47.3(DIAG_EN)[TPS1HTC30AQPWPRQ1] U48.3(DIAG_EN)[TPS1HTC30AQPWPRQ1] U49.3(DIAG_EN)[TPS1HTC30AQPWPRQ1] U50.3(DIAG_EN)[TPS1HTC30AQPWPRQ1] U51.3(DIAG_EN)[TPS1HTC30AQPWPRQ1] U52.3(DIAG_EN)[TPS1HTC30AQPWPRQ1] U53.3(DIAG_EN)[TPS1HTC30AQPWPRQ1] U54.3(DIAG_EN)[TPS1HTC30AQPWPRQ1] U55.3(DIAG_EN)[TPS1HTC30AQPWPRQ1] U56.3(DIAG_EN)[TPS1HTC30AQPWPRQ1] U57.3(DIAG_EN)[TPS1HTC30AQPWPRQ1] U58.3(DIAG_EN)[TPS1HTC30AQPWPRQ1] U59.3(DIAG_EN)[TPS1HTC30AQPWPRQ1] U60.3(DIAG_EN)[TPS1HTC30AQPWPRQ1] U61.3(DIAG_EN)[TPS1HTC30AQPWPRQ1] U68.3(DIAG_EN)[TPS1HTC30AQPWPRQ1] | DIAG_EN out to 13x TPS1HTC30 | out | GPIO | FT_h? |  |
+| 68 | PA9 | MCU_UART_TX | R56[10k]->CM5_UART_RX: U9.51(GPIO15)[CM5 (conn A)] | USART1_TX -> CM5 GPIO15 RXD0 (bootloader port) | out | AF7 ✔ | FT_u |  |
 | 69 | PA10 | MCU_UART_RX | R55[1k]->CM5_UART_TX: U9.55(GPIO14)[CM5 (conn A)] | USART1_RX <- CM5 GPIO14 TXD0 | in | AF7 ✔ | FT_u |  |
 | 70 | PA11 | MUX_A2 | U63.15(A2)[TMUX1208PWR] U64.15(A2)[TMUX1208PWR] | MUX_A2 out | out | GPIO | FT_u |  |
-| 71 | PA12 | WDI | U37.6(WDI)[TPS3431SQDRBRQ1] | WDI kick -> TPS3431 | out | GPIO | FT_u |  |
-| 72 | PA13 | SWDIO | J2.2(SWDIO/TMS)[SWD] JP1.2(Pin_2)[JP1 CM5->MCU SWD (opt)] | SWDIO | bidir | AF0 ✔ | FT? (not parsed) |  |
-| 76 | PA14 | SWCLK | J2.4(SWCLK/TCK)[SWD] JP1.4(Pin_4)[JP1 CM5->MCU SWD (opt)] | SWCLK | in | AF0 ✔ | FT? (not parsed) |  |
-| 77 | PA15 | MPU_SPEED | R258[1M]->MPU_PH: R257.2[10k] U35.3(+)[TLV1812] / R259[2.2k, DNP Batch 27]->+3V3_SAFE: (rail) | MPU_SPEED in (TIM2_CH1 capture) | in | AF1 ✔ | FT? (not parsed) |  |
-| 78 | PC10 | GCB_OP_MCU | U41.3(A2)[SN74LVC541APWR] | GCB open enable -> U41 | out | GPIO | FT_ha |  |
-| 79 | PC11 | MCB_CL_MCU | U41.4(A3)[SN74LVC541APWR] | MCB close enable | out | GPIO | FT_h |  |
-| 80 | PC12 | MCB_OP_MCU | U41.5(A4)[SN74LVC541APWR] | MCB open enable | out | GPIO | FT_h |  |
+| 71 | PA12 | WDI | U37.6(WDI)[TPS3431SQDRBRQ1] / R626[100k]->GND: (rail) | WDI kick -> TPS3431 | out | GPIO | FT_u |  |
+| 72 | PA13 | SWDIO | JP1.2(Pin_2)[JP1 CM5->MCU SWD (opt)] J2.2(SWDIO/TMS)[SWD] | SWDIO | bidir | AF0 ✔ | FT? (not parsed) |  |
+| 76 | PA14 | SWCLK | JP1.4(Pin_4)[JP1 CM5->MCU SWD (opt)] J2.4(SWCLK/TCK)[SWD] | SWCLK | in | AF0 ✔ | FT? (not parsed) |  |
+| 77 | PA15 | MPU_SPEED | U35.1[TLV1812] / R258[1M]->MPU_PH: R257.2[10k] U35.3(+)[TLV1812] / R259[2.2k]->+3V3_SAFE: (rail) | MPU_SPEED in (TIM2_CH1 capture) | in | AF1 ✔ | FT? (not parsed) |  |
+| 78 | PC10 | GCB_OP_MCU | U41.3(A2)[SN74LVC541APWR] / R539[100k]->GND: (rail) | GCB open enable -> U41 | out | GPIO | FT_ha |  |
+| 79 | PC11 | MCB_CL_MCU | U41.4(A3)[SN74LVC541APWR] / R540[100k]->GND: (rail) | MCB close enable | out | GPIO | FT_h |  |
+| 80 | PC12 | MCB_OP_MCU | U41.5(A4)[SN74LVC541APWR] / R541[100k]->GND: (rail) | MCB open enable | out | GPIO | FT_h |  |
 | 81 | PD0 | CAN1_RX | R86[1k]->CAN1_RX_T: U13.5(RXD)[CA-IS3062W] | FDCAN1_RX <- U13 | in | AF9 ✔ | FT_h |  |
 | 82 | PD1 | CAN1_TX | R85[1k]->Net-(U13-TXD): U13.3(TXD)[CA-IS3062W] | FDCAN1_TX -> U13 | out | AF9 ✔ | FT_h |  |
-| 83 | PD2 | FUEL_EN_MCU | U38.1[74LVC1G08W5-7] | FUEL_EN (AND WDO_N) | out | GPIO | FT_h |  |
-| 84 | PD3 | CRANK_EN_MCU | U39.1[74LVC1G08W5-7] | CRANK_EN (AND WDO_N) | out | GPIO | FT_h |  |
-| 85 | PD4 | GLOW_EN_MCU | U40.1[74LVC1G08W5-7] | GLOW_EN (AND WDO_N) | out | GPIO | FT_h |  |
+| 83 | PD2 | FUEL_EN_MCU | U38.1[74LVC1G08] / R534[100k]->GND: (rail) | FUEL_EN (AND WDO_N) | out | GPIO | FT_h |  |
+| 84 | PD3 | CRANK_EN_MCU | U39.1[74LVC1G08] / R535[100k]->GND: (rail) | CRANK_EN (AND WDO_N) | out | GPIO | FT_h |  |
+| 85 | PD4 | GLOW_EN_MCU | U40.1[74LVC1G08] / R537[100k]->GND: (rail) | GLOW_EN (AND WDO_N) | out | GPIO | FT_h |  |
 | 86 | PD5 | MUX_A0 | U63.1(A0)[TMUX1208PWR] U64.1(A0)[TMUX1208PWR] | MUX_A0 out | out | GPIO | FT_h |  |
 | 87 | PD6 | MUX_A1 | U63.16(A1)[TMUX1208PWR] U64.16(A1)[TMUX1208PWR] | MUX_A1 out | out | GPIO | FT_h |  |
-| 88 | PD7 | MCU_TRIP | R405[100k]->GND: (rail) | MCU_TRIP out (100k pd, AND WDO_N) | out | GPIO | FT_h |  |
+| 88 | PD7 | MCU_TRIP | U67.1[74LVC1G08] / R405[100k]->GND: (rail) | MCU_TRIP out (100k pd, AND WDO_N) | out | GPIO | FT_h |  |
 | 89 | PB3 | BUZZER_PWM | R529[1k]->Net-(Q69-B): Q69.1(B)[MMBT3904] R530.1[100k] | BUZZER_PWM (TIM2_CH2) -> NPN | out | AF1 ✔ | FT? (not parsed) |  |
-| 90 | PB4 | AUX3_MCU | U41.8(A7)[SN74LVC541APWR] | AUX3 enable -> U41 | out | GPIO | FT? (not parsed) |  |
-| 91 | PB5 | AUX4_MCU | U41.9(A8)[SN74LVC541APWR] | AUX4 enable | out | GPIO | FT |  |
-| 92 | PB6 | AUX5_MCU | U42.2(A1)[SN74LVC541APWR] | AUX5 enable -> U42 | out | GPIO | FT_f |  |
-| 93 | PB7 | AUX6_MCU | U42.3(A2)[SN74LVC541APWR] | AUX6 enable | out | GPIO | FT_fa |  |
-| 94 | BOOT0 | BOOT0 | R42[10k]->GND: (rail) / R62[1k]->Net-(U9-GPIO27): U9.48(GPIO27)[CM5 (conn A)] | BOOT0: 10k pd, SW2, CM5 GPIO27 via 1k | in | GPIO |  |  |
-| 95 | PB8 | I2C1_SCL | J3.5(Pin_5)[Header B (MCU spare)] R46.1[2.2k] U29.10(SCL)[ADS1115 @0x48] U30.10(SCL)[ADS1115 @0x49] U31.22(SCL | I2C1_SCL (2.2k pu) | od | AF4 ✔ | FT_fh |  |
-| 96 | PB9 | I2C1_SDA | J3.6(Pin_6)[Header B (MCU spare)] R47.1[2.2k] U29.9(SDA)[ADS1115 @0x48] U30.9(SDA)[ADS1115 @0x49] U31.23(SDA)[ | I2C1_SDA | od | AF4 ✔ | FT_fh |  |
-| 97 | PE0 | AUX1_MCU | U41.6(A5)[SN74LVC541APWR] | AUX1 enable -> U41 | out | GPIO | FT_h |  |
-| 98 | PE1 | AUX2_MCU | U41.7(A6)[SN74LVC541APWR] | AUX2 enable | out | GPIO | FT_h |  |
+| 90 | PB4 | AUX3_MCU | U41.8(A7)[SN74LVC541APWR] / R536[4.7k]->GND: (rail) | AUX3 enable -> U41 | out | GPIO | FT? (not parsed) |  |
+| 91 | PB5 | AUX4_MCU | U41.9(A8)[SN74LVC541APWR] / R544[100k]->GND: (rail) | AUX4 enable | out | GPIO | FT |  |
+| 92 | PB6 | AUX5_MCU | U42.2(A1)[SN74LVC541APWR] / R545[100k]->GND: (rail) | AUX5 enable -> U42 | out | GPIO | FT_f |  |
+| 93 | PB7 | AUX6_MCU | U42.3(A2)[SN74LVC541APWR] / R546[100k]->GND: (rail) | AUX6 enable | out | GPIO | FT_fa |  |
+| 94 | BOOT0 | BOOT0 | SW2.1(1)[BOOT0] / R42[10k]->GND: (rail) / R62[1k]->Net-(U9-GPIO27): U9.48(GPIO27)[CM5 (conn A)] | BOOT0: 10k pd, SW2, CM5 GPIO27 via 1k | in | GPIO |  |  |
+| 95 | PB8 | I2C1_SCL | J3.5(Pin_5)[Header B (MCU spare)] U8.6(SCL)[FM24CL64B] U29.10(SCL)[ADS1115 @0x48] U30.10(SCL)[ADS1115 @0x49] U31.22(SCL)[TCA9555PWR @0x22] U62.22(SCL)[TCA9555PWR @0x23] U73.22(SCL)[TCA9555PWR @0x20] U74.22(SCL)[TCA9555PWR @0x21] U75.22(SCL)[TCA9555PWR @0x24] U76.22(SCL)[TCA9555PWR @0x25] U83.2(SCL)[TMP1075DSGR @0x4A] U86.5(SCL)[INA237AIDGSR] / R46[2.2k]->+3V3_SAFE: (rail) | I2C1_SCL (2.2k pu) | od | AF4 ✔ | FT_fh |  |
+| 96 | PB9 | I2C1_SDA | J3.6(Pin_6)[Header B (MCU spare)] U8.5(SDA)[FM24CL64B] U29.9(SDA)[ADS1115 @0x48] U30.9(SDA)[ADS1115 @0x49] U31.23(SDA)[TCA9555PWR @0x22] U62.23(SDA)[TCA9555PWR @0x23] U73.23(SDA)[TCA9555PWR @0x20] U74.23(SDA)[TCA9555PWR @0x21] U75.23(SDA)[TCA9555PWR @0x24] U76.23(SDA)[TCA9555PWR @0x25] U83.1(SDA)[TMP1075DSGR @0x4A] U86.4(SDA)[INA237AIDGSR] / R47[2.2k]->+3V3_SAFE: (rail) | I2C1_SDA | od | AF4 ✔ | FT_fh |  |
+| 97 | PE0 | AUX1_MCU | U41.6(A5)[SN74LVC541APWR] / R542[100k]->GND: (rail) | AUX1 enable -> U41 | out | GPIO | FT_h |  |
+| 98 | PE1 | AUX2_MCU | U41.7(A6)[SN74LVC541APWR] / R543[100k]->GND: (rail) | AUX2 enable | out | GPIO | FT_h |  |
 PB12 note: in DS12110 Table 11 (p.90) the AF9 cell reads "FDCAN2_" and its second line is lost at the page break in the text extraction. The RX suffix follows from PB13 = FDCAN2_TX at AF9 [I]. Check the PDF visually.
 
 ## Issues for Enginerd (not fixed)

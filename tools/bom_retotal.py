@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
-"""Recompute each bom/*.csv TOTAL row exactly from its rows: sum(qty per board x unit price USD) over
-rows whose price parses as a number; every other row is listed as EXCLUDED (unpriced/UNVERIFIED/ESTIMATE).
-The total goes in column 11 (13-column files) or 5 (ac_metering). Line endings are preserved."""
-import csv,io,glob,os,sys
-root=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-for p in sorted(glob.glob(os.path.join(root,'bom','*.csv'))):
-    if 'off_board' in os.path.basename(p): continue  # excluded from all totals by design
-    raw=open(p,newline='',encoding='utf-8').read(); nl='\r\n' if '\r\n' in raw else '\n'
-    L=list(csv.reader(io.StringIO(raw))); ti=[i for i,r in enumerate(L) if r and r[0].startswith('TOTAL')][0]
-    tot=0.0; ex=[]
-    for r in L[1:]:
-        if not r or r[0].startswith('TOTAL') or not any(r): continue
-        try: tot+=float(r[4])*float(r[5])
-        except (ValueError,IndexError): ex.append(r[0][:40])
-    col=11 if len(L[0])>=13 else 5; f=os.path.basename(p)
-    L[ti][0]='TOTAL (%s; m7-sch 2026-10-28: recomputed exactly from the rows = sum(qty x unit price) over priced rows, rounded to cents; EXCLUDED unpriced/UNVERIFIED/ESTIMATE rows (%d): %s)'%(f,len(ex),'; '.join(ex) or 'none')
-    old=L[ti][col]; L[ti][col]='%.2f'%tot
-    o=io.StringIO(); w=csv.writer(o,lineterminator=nl); [w.writerow(r) for r in L]
-    if '--check' not in sys.argv: open(p,'w',newline='',encoding='utf-8').write(o.getvalue())
-    print('%-22s TOTAL %s -> %.2f  excluded %d'%(f,old,tot,len(ex)))
+"""Check the TOTAL rows of the generated per-board BOMs (bom/genctl_main_bom.csv, bom/genctl_meter_bom.csv,
+bom/harness_bom.csv): each TOTAL must equal sum(qty x unit price) over the priced fitted rows.
+The files themselves are written by tools/bom_from_sch.py --write (Batch 28: two projects, main + meter);
+this script never edits them. Exit code 1 if a TOTAL does not match."""
+import csv,os,sys
+root=os.path.dirname(os.path.dirname(os.path.abspath(__file__))); bad=0
+for f,qcol,u1,u10,e1,e10 in (('bom/genctl_main_bom.csv','Qty','Unit USD qty1','Unit USD qty10','Ext USD qty1','Ext USD qty10'),
+                             ('bom/genctl_meter_bom.csv','Qty','Unit USD qty1','Unit USD qty10','Ext USD qty1','Ext USD qty10'),
+                             ('bom/harness_bom.csv','Qty','Unit USD qty1','Unit USD qty10','Ext USD qty1','Ext USD qty10')):
+    rows=list(csv.DictReader(open(os.path.join(root,f),encoding='utf-8'))); t1=t10=0.0; tot=None
+    first=list(rows[0].keys())[0]
+    for r in rows:
+        if r[first].startswith('TOTAL'): tot=r; continue
+        if r.get('DNP')=='DNP': continue
+        try: t1+=float(r[qcol])*float(r[u1]); t10+=float(r[qcol])*float(r[u10])
+        except ValueError: pass
+    ok=abs(float(tot[e1])-t1)<0.006 and abs(float(tot[e10])-t10)<0.006
+    bad+=not ok
+    print(f'{f:28s} TOTAL qty1 {tot[e1]:>8s} (sum {t1:.2f})  qty10 {tot[e10]:>8s} (sum {t10:.2f})  {"OK" if ok else "MISMATCH"}')
+sys.exit(1 if bad else 0)

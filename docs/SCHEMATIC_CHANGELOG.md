@@ -1087,3 +1087,37 @@ Checks (kicad-cli 9.0.2):
   - genctl_meter: no change.
 - BOM: no change.
 - Board note: on the next PCB refresh, J10 pads 11–14 pick up the swapped nets.
+
+## Batch 28: pass-2 review fixes (SCH_REVIEW_2026-11-22_pass2) + per-board BOMs (Grok Bot for Ethan, approved 2026-11-22; PCB not touched)
+Source: /workspace/review/sch_review/SCH_REVIEW_2026-11-22_pass2.md. Edit script and evidence: docs/split_evidence/batch28/ (batch28.py reruns cleanly from 91ccb62 schematics). LCSC prices/stock: JLC parts API, 2026-11-22 ~8:30 AM HST.
+
+| ref | old | new | reason |
+|---|---|---|---|
+| R204, R209 (inputs) | 100k 0603WAF1003T5E C25803 | **10k 0603WAF1002T5E C25804** (Basic) | DI pull-down FET gates. U31 TCA9555 powers up as inputs with ~100k internal pull-ups; with 100k the gate sat at ~1.65 V (FETs half-on during boot). With 10k: ~0.30 V, below Vth min 1.0 V. Extra load 0.33 mA per output when driven high |
+| R138, R149, R160, R171, R182, R193 (inputs) | 100k C25803 | **10k C25804** | same issue on the 4–20 mA shunt-enable FETs: shunts stay off until firmware drives them |
+| Q15, Q19, Q23, Q27, Q31, Q35, Q38, Q41 (inputs) | DMN6075S Diodes C155242 (60 V, VGS(th) up to 3.0 V) | **IRLML0100TRPBF Infineon C53658** (Extended; 100 V, VGS(th) 1.0–2.5 V, RDS(on) 235 mΩ max at 4.5 V, −55..150 °C, SOT-23 G1/S2/D3, same pinout) | 60 V was below the SMAJ40CA 64.5 V clamp; 3.0 V Vth max is not a full-on part at 3.3 V drive. No 100 V SOT-23 on JLC has RDS(on) specified at ≤2.5 V; IRLML0100 is picked on Vth max 2.5 V (DS Fig. 1 has 2.5 V/3.3 V curves). Loads are ≤24 mA, so RDS(on) is not critical. IDSS ≤20 µA at 25 °C |
+| U7 VREF+ (mcu) | on +3V3_SAFE | **on VDDA_F** (FB1 filtered VDDA node, was Net-(U7-VDDA)), new **C318 1u 0805 X7R CL21B105KBFNNNE C28323** + **C319 100n C14663** | ADC reference shared the noisy digital rail. Ferrite drop is negligible (µA-range VREF current) |
+| C257, C258 (ac_metering, meter board) | 22p 0402CG220J500NT C1555 | **15p C0G 0402CG150J500NT C1548** (Basic) | Y3 X322524576MOB4SI CL = 12 pF. Cext = 2 × (CL − Cstray) = 2 × (12 − 4.5) = 15 pF (4.5 pF = 2 pF ADE pins in series + ~2.5 pF board). 22p pulled the crystal low (~−30 ppm) and cut oscillator margin. Only one crystal: the 2nd ADE9000 runs from CLKOUT |
+| R644–R648 (mtr_if) | — | **33R 0603WAF330JT5E C23140** (Basic), in series on ADE_SCK, ADE_MOSI, ADE_CS1_N, ADE_CS2_N, ADE_RST_N between U7 and J31 (new nets *_J on the J31 side) | edge-rate damping on the 0.3 m harness; MCU-driven lines only (MISO/IRQ/DET are driven from the meter board) |
+| D152, D153 (mtr_if) | — | **2× RClamp0524PA C40960** (already used in comms) at J31: D152 SCK_J/MOSI_J/MISO/CS1_J, D153 CS2_J/RST_J/IRQ_N/MTR_DET_N | **Fitted, not DNP**: the harness is unplugged during service, so the J31 pins are touchable. 0.3 pF/line, 1 µA leakage (10 mV into 10k pull-ups), ≈$0.6/board, no new extended part |
+| D150, D151 (inputs) | — | **SMAJ40A MDD C113969** (Extended), K on DI_BIAS_A / DI_BIAS_B (J21.6 / J22.1), A to GND, at the connector | DI_BIAS max is 40.1 V (LM74800 OV trip max with R3 8.66k), within VRWM 40 V; VBR 44.4 V min, Vc 64.5 V (below IRLML0100 100 V). Leakage ≤1 µA |
+| R294, R300 notes (outputs) | "35.7k … 1 mR = 90 A" | 40.2k, 20 mΩ, V(SCP) = 2 µA × 40.2k + 19 mV = 99.4 mV, 4.97 A | note was left over from an old design; values unchanged |
+| C1, C2 (power) | — | **not changed** | pass-2 finding m5 was wrong: C1 is already 100 V (CL21B104KCFNNNE C28233); C2 is across LM74800 CAP–VS (≤15 V abs max) and its rating is fine |
+
+Docs:
+- **DESIGN_NOTES.md:** HSE/LSE and ADE crystal load maths; VREF+; AI and DI pull-down lines (IRLML0100, 10k, SMAJ40A); fuel/crank shunt 20 mΩ + INA281A1 gain 20; TPS48100 ISCP 40.2k maths (replaces "ISCP open"); J31 33R + ESD rationale.
+- **bom/design_spec.md:** OV trip R3 8.66k (36.35/38.18/40.10 V); shunt 20 mΩ + INA281A1, SCP 4.97 A; RISCP; SMAJ40A note; status line points to the new BOMs.
+- **firmware/docs/pinmap.md:** Net / Connects-to columns regenerated from the Batch 28 netlist (pinmap_regen.py); SPI1, clocks, ADC and VREF+ rows; ADE lines go via J31 to the meter board. No firmware change needed: the new defaults are all "off".
+- **docs/PIN_FOOTPRINT_SWEEP.md:** DMN6075S row → IRLML0100.
+
+BOMs (replaces the six category BOMs, which had no refdes and had drifted):
+- **tools/bom_from_sch.py** now handles both projects and writes bom/genctl_main_bom.csv, bom/genctl_meter_bom.csv, bom/harness_bom.csv, docs/genctl_bom.csv, docs/genctl_meter_bom.csv, mechanical/bom.csv, mechanical/bom_meter.csv. Prices from bom/lcsc_prices.csv. Run without --write to check; it cross-checks every ref's value, footprint, MPN, LCSC, DNP and each row's qty against the kicad-cli netlist. **tools/bom_retotal.py** verifies the TOTAL rows. See bom/README.md.
+- Removed bom/{power,inputs,outputs,comms,other,ac_metering}_bom.csv. tools/gen.py (retired generator, DO NOT REGENERATE) still names them and is not used.
+- Totals (parts only, USD per board, qty1 / qty10): main **261.13 / 221.21** (was 259.68 / 219.84 with the same tool on 91ccb62: **+1.45 / +1.37**); meter **87.74 / 75.35** (±0.00); harness 2.91 / 1.87.
+- Priced controller BOM /workspace/review/bom_split (bom_b28.py, pre-batch copies *.pre_b28.*): controller **$1,774.23 / $1,267.13** per unit (was 1,769.70 / 1,265.44: **+4.53 / +1.69**, incl. +$3.07 per order for the one new extended part SMAJ40A).
+
+Checks (kicad-cli 9.0.2):
+- **ERC --severity-all:** genctl **0**, genctl_meter **0**.
+- **Netlist diff vs 91ccb62** (netlist_diff_*.txt): genctl 1127 → 1138 parts (+C318, C319, D150–D153, R644–R648); value/LCSC/MPN changes only on the 8 FETs and 8 resistors above; R294/R300 note text. Nets changed: VDDA_F (was Net-(U7-VDDA), gains U7.21 VREF+, C318, C319); +3V3_SAFE loses U7.21; ADE_SCK/MOSI/CS1_N/CS2_N/RST_N split at R644–R648 into *_J; ADE_MISO, ADE_IRQ_N, MTR_DET_N, DI_BIAS_A/B and GND gain the new protection parts. genctl_meter: C257/C258 value/LCSC/MPN/note only, no net change.
+- **BOM vs netlist:** 0 mismatches (main 1131 refs incl. 9 DNP, meter 219); bom_split PCB rows 1122 + 219 = netlist fitted set, 0 mismatches.
+- **BOARD (out of scope, NOT done):** frozen PCBs in mechanical/pcb_v4 unchanged. Next layout refresh must add C318, C319, D150–D153, R644–R648 and pick up the VREF+/SPI net changes.
