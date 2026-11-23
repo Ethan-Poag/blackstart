@@ -1,4 +1,4 @@
-# Modular "card" architecture: Phase 1 proposal + Phase 2 engine-card update
+# Modular "card" architecture: Phase 1 proposal, Phase 2 cards, mainboard rework (§12)
 
 Branch `m7-modular`, from the locked baseline tag `baseline-2026-11-23-locked` (5bac9fe). Written Mon Nov 23, 2026, ~10:15 AM HST.
 **Phase 2 (§9, Nov 23 ~10:40 AM HST):** the engine I/O moves to its own keyed card slot; card schematics now live in `cards/`. The baseline schematics, BOM and PCB are still untouched. Nothing has been ordered or pushed.
@@ -367,7 +367,7 @@ The full pinout is in `cards/engine/engine_slot_pinout.csv`. Signals use rows a 
 Each `cards/<name>/` project is one A3 sheet with no sub-sheets, using net labels and rendered to PNG/PDF. The engine card fits (156 parts, ERC 0 errors / 0 warnings): `cards/engine/engine.png`. **The HV meter card does not fit legibly on one sheet:** it has about 215 parts plus 600 V creepage notes, and is two sheets today (root + `ac_metering`). It stays a 2-sheet project, with the EEPROM added on its SELV side, unless Ethan wants it on A2 or split into two cards.
 
 ### 9.7 Design issues
-1. **No rail-level watchdog cut** (baseline issue, carried over). Proposal: a mainboard P-FET or ideal-diode controller in series with VBAT_ESTOP, gated by WD_OK AND ESTOP_OK. Then a shorted driver FET or a stuck card is cut by the watchdog as well, not only by the external E-stop. That is about 3-5 parts [E], and the parts aren't picked yet.
+1. **No rail-level watchdog cut** (baseline issue, carried over; **resolved and drawn, §11.1/§12.3**). Original proposal: a mainboard P-FET or ideal-diode controller in series with VBAT_ESTOP, gated by WD_OK AND ESTOP_OK. Then a shorted driver FET or a stuck card is cut by the watchdog as well, not only by the external E-stop. That is about 3-5 parts [E], and the parts aren't picked yet.
 2. Glow now draws on VBAT_ESTOP (see §9.4 budget).
 3. DI_BIAS_A is shared: DI1-4 on the engine card use it, and DI5-6 (DI-8 card) use bank A too. It crosses the slot on one contact (PTC-limited).
 4. Mainboard terminals J17.1-2, J18 (whole), J19.1-4, J21.3 and J24.1 become NC when the engine card fits. J18 moves to the card, and the mainboard layout loses those terminal positions.
@@ -446,7 +446,7 @@ HSO-5 uses all 16 MCP23S17 GPIOs except two, so it reads only SLOT_ID0/1 (GPA6/7
 
 ## 11. Phase 2: watchdog rail cut, Q70/Q71 thermal check, datasheet checks, true cost (Nov 23, HST)
 
-### 11.1 Watchdog rail cut (design; mainboard schematic not yet edited, see 11.6)
+### 11.1 Watchdog rail cut (now drawn: `estop.kicad_sch`, see §12)
 - **Circuit:** a copy of the proven fuel-driver circuit, placed in series after Q70/Q71.
   - Parts: TPS48100QDGXRQ1 (C43131316), 2× BSC070N10NS5 in parallel (C534364, 100 V, 7.0 mΩ max), and an RLP25FEER002 2 mΩ 2 W 2512 shunt (C160590, LCSC stock 31,525).
   - Same 100 V FET rating, same SMDJ40CA TVS (D126) on the input, same EN/UVLO divider (100k/27k), TMR 4.7n, BST 470n, G1PU 10R, G1PD 0R.
@@ -473,11 +473,13 @@ TjMax is 347 °F for SQD40P10-40L and 302 °F for BSC070N10NS5. The 60/40 rows a
 |---|---|---|---|---|---|
 | 7.6 | Q70/Q71 SQD40P10-40L (each, 50/50) | 3.8 | 0.86 | 182 | 78 |
 | 7.6 | Q70/Q71 SQD40P10-40L (hot FET, 60/40) | 4.6 | 1.45 | 235 | 131 |
+| 7.6 | Ideal-diode LM74700-Q1 + 1x BSC070N10NS5 (single FET, chosen §12.2) | 7.6 | 0.49 | 148 | 44 |
 | 7.6 | Rail-cut BSC070N10NS5 (each, 50/50) | 3.8 | 0.11 | 114 | 10 |
 | 7.6 | Rail-cut BSC070N10NS5 (hot FET, 60/40) | 4.6 | 0.16 | 119 | 15 |
 | 7.6 | Shunt 2 mOhm 2512 (2 W) | 7.6 | 0.12 | - | - |
 | 10.0 | Q70/Q71 SQD40P10-40L (each, 50/50) | 5.0 | 1.99 | 283 | 179 |
 | 10.0 | Q70/Q71 SQD40P10-40L (hot FET, 60/40) | 6.0 | 4.75 | 532 | 428 |
+| 10.0 | Ideal-diode LM74700-Q1 + 1x BSC070N10NS5 (single FET, chosen §12.2) | 10.0 | 0.94 | 189 | 85 |
 | 10.0 | Rail-cut BSC070N10NS5 (each, 50/50) | 5.0 | 0.20 | 122 | 18 |
 | 10.0 | Rail-cut BSC070N10NS5 (hot FET, 60/40) | 6.0 | 0.29 | 130 | 26 |
 | 10.0 | Shunt 2 mOhm 2512 (2 W) | 10.0 | 0.20 | - | - |
@@ -491,7 +493,7 @@ TjMax is 347 °F for SQD40P10-40L and 302 °F for BSC070N10NS5. The 60/40 rows a
   - At 7.6 A they are acceptable: 182 °F with an even split.
   - At 10 A they run about 283 °F junction even with a perfect split. With a 60/40 split they run away past TjMax. Their RthJA is 50 °C/W on 1 in² of copper.
   - SQD40P10-40L (C141570) also shows **0 LCSC stock** today.
-  - **Decision needed:** replace the Q70/Q71 reverse-block with a lower-loss part, for example an ideal-diode controller plus N-FETs (not picked; I'd look at LM74700-Q1 + BSC070N10NS5), or give each FET at least 2 in² of copper on 2 oz and re-check.
+  - **Decided and drawn (§12.2):** Q70/Q71 are replaced by an LM74700-Q1 ideal-diode controller + 1× BSC070N10NS5 (148 °F at 7.6 A, 189 °F at 10 A).
 - **The rail cut is fine:** 122 °F junction at 10 A with an even split, 130 °F at 60/40. The shunt dissipates 0.20 W of its 2 W rating.
 - **Copper (IPC-2221) for VBAT_ESTOP_IN → Q70/Q71 → cut → engine slot:** at least **7.2 mm** of 1 oz outer copper for 10 A at 18 °F rise (4.9 mm at 7.6 A).
   - Alternatives: 4.7 mm at 36 °F rise, or 3.6 mm on 2 oz.
@@ -528,14 +530,130 @@ Per controller, example build (ENGINE + 2× HSO-5 + BRK-4 + DI-8 + AI-4 + HV), a
 - The combined build BOM has 214 lines and 1,290 parts, plus the 221-ref HV meter board.
 - Every price comes from LCSC/JLC (dated in bom/lcsc_prices.csv) except the [E] lines: bare PCBs, fees, guides, the slot shunt part and passives.
 
-### 11.6 Not done yet: mainboard schematic rework
-These are specified here and in §10 but not drawn in genctl.kicad_sch:
-- slot sheets (engine + 8 LV, per-slot TPS48100);
-- 2× TCA9548A on I2C2;
-- presence/fault sensing;
-- the rail cut and the VBAT_ESTOP net split;
-- the relocated ESTOP_TRIP clamp;
-- J31.12/J31.16 → MTR_ID_SCL/SDA;
-- removal of moved parts.
+### 11.6 Mainboard schematic rework: done, see §12
+The items that were only specified here (slot sheets, ID muxes, presence/fault sensing, rail cut and VBAT_ESTOP split, relocated ESTOP_TRIP clamp, J31.12/16, removal of moved parts) are now drawn, ERC-clean and audited end to end. Details in §12. §11.5's estimate is superseded by the BOM-extracted figure in §12.6.
 
-The end-to-end system netlist check therefore covers the five cards one at a time: 1:1 mapping, 0 unaccounted nets each, intentional changes in net_changes.csv. The mainboard side can only be closed after that rework.
+## 12. Phase 2 final: mainboard rework, ideal diode, full-system audit (Nov 23, HST)
+
+### 12.1 Mainboard sheets (`genctl.kicad_sch`, ERC 0 errors / 0 warnings, `docs/modular/erc/genctl_main.rpt`)
+Generator: `cards/tools/mainboard.py` (from the locked tag netlist plus the edits it lists; drawn by `schdraw.py`). Drawn-vs-intended check: `cards/tools/verify_mainboard.py` (2,716 pins, 0 errors). Renders: `docs/modular/img/mainboard/*.png` and `genctl_mainboard.pdf`.
+
+| Sheet | Status | Content |
+|---|---|---|
+| power, cm5, comms, display | unchanged | |
+| frontpanel | 3 global labels renamed | U76 P07/P10 spares (were AUX9/10_MCU), P12 spare pull-up (was AUX10_RB_N) |
+| mcu (A3) | regenerated | PC10/11/12 = SPI3 slot bus, PE0/PE1/PD11 = CS decoder A0-A2, PD13 = decoder enable, PC9 = SLOT_RST_N, PB4 = SLOT_EXP_INT_N, PB10/11 = I2C2 (R38/R39 removed), PA ADC MUXB_OUT → SLOT_ANA; DI5-12 pins free |
+| io_core (A2) | new (replaces inputs + outputs) | what stays: AI1/AI2 + COM ADCs, DI1-4 Schmitt, D+, MPU, U31/U62 expanders, fuel/crank/glow WD gating + latch, U63 sense mux (S1 GLOW, S2 ESTOP_TRIP), new BAT54C clamp GLOW_SNSM + ESTOP_TRIP_SNSM |
+| estop (A3) | regenerated | J23 → LM74700-Q1 + BSC070N10NS5 → VBAT_ESTOP_PRE → rail cut → VBAT_ESTOP; trip driver, E-stop sense |
+| backplane (A2) | new | ENGINE slot J48 (1:1 with `cards/engine/engine_slot_pinout.csv`: 12× VBAT_ESTOP, 8× FUEL_OUT, 8× CRANK_OUT), LV slots J40-J47 (`docs/modular/slot_pinout_LV.csv`, 15a OUT_EN_N, 18a ID_WP), 2× TCA9548A, SN74LVC138A CS decoder, 2× TCA9555, TMUX1208 ANA mux |
+| slot_power (A1) | new | 8× (TPS48100 + 2× BSC070N10NS5 + 10 mΩ, 2× TPS2553, 74LVC1G02 + 74LVC1G00, pull-ups, 100R +3V3_ID) |
+| mtr_if (A3) | regenerated | J31.12 = MTR_ID_SCL, J31.16 = MTR_ID_SDA (matching J32.12/16) |
+
+**Slot wiring:**
+- Slot n uses ID n−1. ID0..2 bits: 0 = strap to GND, 1 = open (card pull-up). IDP makes ID0+ID1+ID2+IDP odd, so all-open and all-shorted never decode as valid.
+- **I2C2 (PB10/PB11 AF4)**, 2.2k root pull-ups.
+  - TCA9548A 0x70: channels 0-7 = LV1-8 ID buses. TCA9548A 0x71: channel 0 = ENGINE, channel 1 = HV meter (J31.12/16); channels 2-7 are unused (NC).
+  - 4.7k pull-ups on every used channel. Reset is a 10k pull-up.
+  - Slot expanders on the same root bus: TCA9555 0x20 (P0 = SL1-8_EN_N, P1 = SL1-8_FAULT_N) and TCA9555 0x21 (P0 = SL1-8_INT_N, P1 spare). Their INTs go to SLOT_EXP_INT_N on PB4.
+  - No address clash: the FRAM (0x50) and ADS1115s (0x48/0x49) stay on I2C1. Behind the muxes there are EEPROMs at 0x50/0x58 (one per channel) and the AI-4 ADS1115 at 0x48.
+- **Per slot:** PWR_EN = NOT EN_N AND NOT PRESENT_N (74LVC1G02). It drives TPS48100 INP and both TPS2553 EN pins.
+  - OUT_EN_N = NOT(PWR_EN AND WD_OK) (74LVC1G00), which is exactly the pinout rule.
+  - EN_N has a 10k pull-up, so expander reset means the slot is off.
+  - TPS48100 FLT, both TPS2553 FAULT pins and the card CARD_FAULT_N share SLn_FAULT_N (10k pull-up).
+  - Freed U62 inputs read SL1-8_PRESENT_N (10k pull-ups on the backplane).
+- **Limits:**
+  - VBAT_FIELD: 10 mΩ + ISCP 30.1k gives 7.9 A typ.
+  - +5V_SLOT: TPS2553 with 45.3k gives 523-638 mA. The datasheet equations are IOSmin = 25230/R^1.016 and IOSmax = 22980/R^0.94.
+  - +3V3_SLOT: 80.6k gives 291-370 mA.
+  - +3V3_ID: +3V3_SAFE through 100R.
+- **Shared signals:**
+  - SPI: SPI3 is shared by all slots. CS comes from the '138 (G1 = PD13 with a 100k pull-down, so nothing is selected at reset).
+  - RST_N: one shared line from PC9 (100k pull-down, so slots are held in reset).
+  - ANA_OUT: slots 1-8 go through the TMUX1208 to SLOT_ANA, the old MUXB_OUT ADC pin. It uses the same MUX_A0-2 lines as U63.
+  - ID_WP: one net to all slots plus the engine slot, 10k pull-up (protected). Closing solder jumper JP10 allows factory writes.
+- **Removed from the mainboard (not moved to a card):**
+  - Q70, Q71, D137, R627: ideal-diode swap.
+  - D151: DI_BIAS_B TVS; DI-8 has its own.
+  - J27: AUX7-10 terminal.
+  - Q44, R272-R274: WD_OE_N inverter for the removed '541s.
+  - R536: PB4 pull-down; PB4 is now a pulled-up INT input.
+  - R36-R41: DI series resistors.
+  - The Phase 2a list (U41, U42, U64, D133-D135, RN2, J17, J19, J26).
+- **Firmware notes** (to add to FW_REQ_CARDS):
+  - Set U62 P13-P17 and TCA9555 0x21 port 1 to outputs, driven low (they are unconnected spares).
+  - Treat U29 AIN2 and U30 AIN1-3 as unused.
+
+### 12.2 Reverse-battery front end: LM74700-Q1 + BSC070N10NS5 (replaces Q70/Q71 SQD40P10-40L)
+- **Part:** TI **LM74700QDBVRQ1**, LCSC **C2941042**, AEC-Q100, SOT-23-6 [DS: TI SNOSD17, `fetch/ds_C2941042.txt`].
+  - JLC stock 8,307 on 2026-11-23. Price $2.7311 at 1 pc, $2.4562 at 10 pcs.
+  - DBV pinout: 1 VCAP, 2 GND, 3 EN, 4 CATHODE, 5 GATE, 6 ANODE. EN is tied to ANODE (always on, allowed by the datasheet).
+  - Ratings: ANODE −65 to +65 V abs max (recommended −60 to +60 V, operating 4-60 V); CATHODE−ANODE −5 to +75 V; GATE−ANODE 15 V max.
+  - Caps: VCAP to ANODE 100n (≥ 0.1 µF required); 100n on ANODE (≥ 22 nF); C199 100n on CATHODE (≥ 0.1 µF).
+- **FET:** BSC070N10NS5 (C534364, 100 V, 7.0 mΩ max). Source on the J23 side (VBAT_ESTOP_IN), drain on VBAT_ESTOP_PRE.
+- **Reverse battery:**
+  - With J23 negative, the controller holds GATE at ANODE, and the FET body diode (source → drain) is reverse-biased. VBAT_ESTOP_PRE and everything after it see no negative voltage: R251 (the VESTOP_D E-stop sense divider), R400, the rail cut, VBAT_ESTOP, R411 and the engine slot.
+  - Reverse current (PRE above IN, for example when the E-stop opens with the caps charged) turns the gate off fast. The datasheet threshold is about −11 mV [DS].
+  - D126 SMDJ40CA (bidirectional, 40 V standoff) moved ahead of the controller onto VBAT_ESTOP_IN. It does not conduct at −24 V and it clamps load dump for the controller and the FET.
+- **Thermal (104 °F ambient, RthJA 50 K/W on 6 cm² of 2 oz copper per the BSC070N10NS5 datasheet; `modular/tools/railcut_thermal.py`):** one FET is enough.
+
+| Current | Loss | Junction | Rise |
+|---|---|---|---|
+| 7.6 A | 0.49 W | 148 °F | 44 °F |
+| 10 A | 0.94 W | 189 °F | 85 °F |
+
+  - TjMax is 302 °F. For comparison, two in parallel would run 122 °F with an even split or 130 °F at 60/40 at 10 A. That is not needed.
+  - Q70/Q71 were 283 °F (even split) and runaway (60/40) at 10 A.
+- **SQD40P10-40L elsewhere:** only Q70/Q71 used it (main BOM line, CONSIGN, Mouser $3.71 each), so it is gone from the BOM. VBAT_P already uses an LM74800-Q1 (U1, C3215600) with back-to-back BSC070N10NS5 (Q1/Q2), so nothing changes there.
+
+### 12.3 VBAT_ESTOP net split (as drawn)
+
+| Net | Nodes |
+|---|---|
+| VBAT_ESTOP_IN | J23.1/2, D126, LM74700 ANODE/EN, FET source, 100n |
+| VBAT_ESTOP_PRE | FET drain, LM74700 CATHODE, C199, R251 (E-stop status, pre-cut), R400 (TRIP_QB), rail-cut VS/CS+, 2 mΩ shunt, UVLO divider |
+| VBAT_ESTOP | rail-cut FET sources, SRC, BST cap, C203, R411 (ADC readback, post-cut), ENGINE slot a/b/c 1-4 |
+
+### 12.4 Full-system netlist audit (`modular/tools/system_audit.py` → `modular/system_audit.json`, `modular/system_net_changes.csv`)
+- **Joined netlists** (kicad-cli export), through their mating connectors:
+  - mainboard;
+  - ENGINE in J48;
+  - DI-8 in LV1, AI-4 in LV2, HSO-5 #1 (AUX1-5) in LV3, HSO-5 #2 (AUX6-10) in LV4, BRK-4 in LV5;
+  - HV meter through the J31↔J32 1:1 harness.
+- **Baseline mapping:** every baseline (ref, pin) from the locked tag (mainboard + meter, joined through J31/J32 too) is mapped to its new home:
+  - refs that stay keep their name;
+  - card refs go through refmap.json;
+  - HSO-B refs pair to HSO-5 #2 by structural match (all 60 paired);
+  - removed refs drop out.
+- **Result:**
+  - 1,062 baseline nets have identical connectivity.
+  - 112 intentional splits/merges are each tied to a recorded reason: mainboard edit, card net_changes / net_accounting, universal-slot signal, the glow supply decision, or the meter EEPROM.
+  - **0 unexplained.**
+  - **0 orphaned or broken cross-connector contacts.** Of the 592 mating contacts: 423 are wired on both sides, 156 are open/NC on both sides (RSVD, unused), 7 are slot signals the card does not use (card NC), and 6 are ID straps left open (card pull-up = 1).
+
+### 12.5 Part counts (fitted)
+
+| Board | Parts |
+|---|---|
+| Mainboard (bom/genctl_main_bom.csv, 230 lines) | 908 (baseline 1,127) + 11 DNP |
+| ENGINE / DI-8 / AI-4 / HSO-5 / BRK-4 | 156 / 76 / 104 / 76 (×2) / 64 |
+| HV meter | 221 |
+| **Example build, combined (docs/modular/combined_bom.csv, 226 lines)** | **1,681** |
+
+### 12.6 True net cost delta, from the regenerated BOMs (`modular/tools/true_cost.py` → `modular/true_cost_delta.csv`)
+
+| | qty 1 | qty 10 (per unit) |
+|---|---|---|
+| Baseline mainboard + meter BOM (tag) | −$330.25 | −$279.37 |
+| Reworked mainboard BOM (includes backplane, slot power, ideal diode, rail cut) | +$231.40 | +$194.87 |
+| HV meter BOM with ID EEPROM | +$65.33 | +$54.60 |
+| Card BOMs (ENGINE, DI-8, AI-4, 2× HSO-5, BRK-4) | +$131.10 | +$110.51 |
+| Card PCBs + PCBA fees + extended-part loading (5 designs) [E/DS] | +$200.80 | +$22.08 |
+| Card bays, guides, faceplates [E] | +$29.00 | +$17.50 |
+| **Total** | **+$327.38** | **+$120.19** |
+
+The parts-only delta is +$97.58 at qty 1 and +$80.61 at qty 10. The rest is boards and mechanics for the five card designs.
+
+### 12.7 Still open
+- The PCB layout is not started. The DIN male row lettering needs checking on a sample (§11.4).
+- The firmware items in §12.1 need to go into FW_REQ_CARDS.
+- The SPI3 slot bus runs to 8 slots with no series termination. Add 33R at the MCU if the layout length needs it [E].

@@ -1,82 +1,15 @@
 group,item,qty,unit_qty1,unit_qty10,ext_qty1,ext_qty10,source
-card engine x1,100n CL21B104KCFNNNE (C28233) new: C21,1,0.016,0.0119,0.02,0.01,M
-card engine x1,DIN41612_C96 9001-11961C00A (C5173361) new: J2,1,1.2659,1.061,1.27,1.06,M
-card engine x1,DI1-4/AI1-2 KF2EDGRM-5.08-6P (C441292) new: J3,1,0.3626,0.2887,0.36,0.29,M
-card engine x1,D+/GLOW/BIAS KF2EDGRM-5.08-6P (C441292) new: J4,1,0.3626,0.2887,0.36,0.29,M
-card engine x1,10k 1206W4F1002T5E (C17902) new: R78,1,0.0056,0.0056,0.01,0.01,M
-card engine x1,AT24CS32-STUM-T AT24CS32-STUM-T (C147891) new: U9,1,1.4297,1.1721,1.43,1.17,M
-card hso5 x2,100n CC0603KRX7R9BB104 (C14663) new: C1,2,0.0056,0.0045,0.01,0.01,M
-card hso5 x2,100n CL21B104KCFNNNE (C28233) new: C2 C3,4,0.016,0.0119,0.06,0.05,M
-card hso5 x2,"BAT54C BAT54C,215 (C37704) new: D18",2,0.0144,0.0144,0.03,0.03,M
-card hso5 x2,DIN41612_C96 9001-11961C00A (C5173361) new: J1,2,1.2659,1.061,2.53,2.12,M
-card hso5 x2,OUT_FIELD KF2EDGRM-5.08-6P (C441292) new: J2,2,0.3626,0.2887,0.73,0.58,M
-card hso5 x2,10k 1206W4F1002T5E (C17902) new: R36 R37 R38 R39,8,0.0056,0.0056,0.04,0.04,M
-card hso5 x2,SN74LVC541APWR SN74LVC541APWR (C113281) new: U6,2,0.5939,0.4745,1.19,0.95,M
-card hso5 x2,TMUX1208PWR TMUX1208PWR (C494728) new: U7,2,0.571,0.4598,1.14,0.92,M
-card hso5 x2,AT24CS32-STUM-T AT24CS32-STUM-T (C147891) new: U8,2,1.4297,1.1721,2.86,2.34,M
-card hso5 x2,MCP23S17T-E/SS MCP23S17T-E/SS (C128577) new: U9,2,1.7271,1.4661,3.45,2.93,M
-card brk4 x1,100n CC0603KRX7R9BB104 (C14663) new: C1,1,0.0056,0.0045,0.01,0.0,M
-card brk4 x1,100n CL21B104KCFNNNE (C28233) new: C2 C3,2,0.016,0.0119,0.03,0.02,M
-card brk4 x1,DIN41612_C96 9001-11961C00A (C5173361) new: J1,1,1.2659,1.061,1.27,1.06,M
-card brk4 x1,OUT_FIELD KF2EDGRM-5.08-6P (C441292) new: J2,1,0.3626,0.2887,0.36,0.29,M
-card brk4 x1,10k 1206W4F1002T5E (C17902) new: R29 R30 R31 R32,4,0.0056,0.0056,0.02,0.02,M
-card brk4 x1,SN74LVC541APWR SN74LVC541APWR (C113281) new: U5,1,0.5939,0.4745,0.59,0.47,M
-card brk4 x1,TMUX1208PWR TMUX1208PWR (C494728) new: U6,1,0.571,0.4598,0.57,0.46,M
-card brk4 x1,AT24CS32-STUM-T AT24CS32-STUM-T (C147891) new: U7,1,1.4297,1.1721,1.43,1.17,M
-card brk4 x1,MCP23S17T-E/SS MCP23S17T-E/SS (C128577) new: U8,1,1.7271,1.4661,1.73,1.47,M
-card di8 x1,100n CL21B104KCFNNNE (C28233) new: C20 C21,2,0.016,0.0119,0.03,0.02,M
-card di8 x1,DIN41612_C96 9001-11961C00A (C5173361) new: J3,1,1.2659,1.061,1.27,1.06,M
-card di8 x1,10k RC0603FR-0710KL (C98220) new: R32,1,0.0023,0.0023,0.0,0.0,M
-card di8 x1,10k 1206W4F1002T5E (C17902) new: R33 R34,2,0.0056,0.0056,0.01,0.01,M
-card di8 x1,"74HC14 74HC14D,653 (C5605) new: U3",1,0.0763,0.0763,0.08,0.08,M
-card di8 x1,AT24CS32-STUM-T AT24CS32-STUM-T (C147891) new: U4,1,1.4297,1.1721,1.43,1.17,M
-card di8 x1,MCP23S17T-E/SS MCP23S17T-E/SS (C128577) new: U5,1,1.7271,1.4661,1.73,1.47,M
-card ai4 x1,100n CC0603KRX7R9BB104 (C14663) new: C9 C10,2,0.0056,0.0045,0.01,0.01,M
-card ai4 x1,100n CL21B104KCFNNNE (C28233) new: C11 C12 C13 C15 C16,5,0.016,0.0119,0.08,0.06,M
-card ai4 x1,100n CL10B104KC8NNNC (C15725) new: C14,1,0.0101,0.0101,0.01,0.01,M
-card ai4 x1,BZT52C30 BZT52C30 (C21561) new: D13,1,0.022,0.022,0.02,0.02,M
-card ai4 x1,LM4040A25 LM4040A25IDBZR (C9421) new: D14,1,1.8161,1.533,1.82,1.53,M
-card ai4 x1,DIN41612_C96 9001-11961C00A (C5173361) new: J1,1,1.2659,1.061,1.27,1.06,M
-card ai4 x1,AI_FIELD KF2EDGRM-5.08-6P (C441292) new: J2,1,0.3626,0.2887,0.36,0.29,M
-card ai4 x1,BCP56-16 BCP56-16TX (C426787) new: Q17,1,0.13,0.13,0.13,0.13,M
-card ai4 x1,10k RC0603FR-0710KL (C98220) new: R41 R42 R43,3,0.0023,0.0023,0.01,0.01,M
-card ai4 x1,10k 1206W4F1002T5E (C17902) new: R44 R45 R46 R47,4,0.0056,0.0056,0.02,0.02,M
-card ai4 x1,10k x4 4D03WGJ0103T5E (C29718) new: RN1,1,0.0071,0.0071,0.01,0.01,M
-card ai4 x1,ADS1115 @0x49 ADS1115IDGSR (C37593) new: U3,1,1.2189,1.0668,1.22,1.07,M
-card ai4 x1,TLV9062 TLV9062IDR (C398355) new: U4,1,0.1142,0.1142,0.11,0.11,M
-card ai4 x1,SN74LVC541APWR SN74LVC541APWR (C113281) new: U5,1,0.5939,0.4745,0.59,0.47,M
-card ai4 x1,AT24CS32-STUM-T AT24CS32-STUM-T (C147891) new: U6,1,1.4297,1.1721,1.43,1.17,M
-card ai4 x1,MCP23S17T-E/SS MCP23S17T-E/SS (C128577) new: U7,1,1.7271,1.4661,1.73,1.47,M
-backplane,"DIN 41612 C96 female vertical 9001-12961C00A, 8 LV + engine (C5173363)",9,1.3035,1.0953,11.73,9.86,M-LCSC
-backplane,TPS48100QDGXRQ1 slot VBAT_FIELD switch (C43131316),8,3.5209,3.12,28.17,24.96,M
-backplane,"BSC070N10NS5 slot FETs, 2 in parallel (C534364)",16,0.5569,0.4693,8.91,7.51,M-LCSC
-backplane,10 mOhm 2512 slot shunt (priced as the 20 mOhm C105360) [E part],8,0.0655,0.0655,0.52,0.52,E
-backplane,TPS2553DBVR +5V_SLOT/+3V3_SLOT switches (C55266),16,0.5563,0.4614,8.9,7.38,M
-backplane,74LVC1G08 slot OUT_EN gate (C176929),8,0.0868,0.0694,0.69,0.56,M
-backplane,Slot passives ~10 per slot [E],8,0.1,0.1,0.8,0.8,E
-backplane,TCA9548APWR x2 ID mux 0x70/0x71 on I2C2 (C130026),2,0.8659,0.732,1.73,1.46,M-LCSC
-backplane,TCA9555PWR x2 slot PRESENT/INT/FAULT/EN (C465732),2,0.7314,0.517,1.46,1.03,M
-backplane,TMUX1208PWR slot ANA_OUT mux (C494728),1,0.571,0.4598,0.57,0.46,M
-backplane,I2C pull-ups 4.7k x20 + CS decoder [E],1,0.35,0.3,0.35,0.3,E
-backplane,BAT54C clamp GLOW_SNSM + ESTOP_TRIP_SNSM (replaces D133-D135),1,0.0144,0.0144,0.01,0.01,M
-rail cut,TPS48100QDGXRQ1 watchdog rail cut (C43131316),1,3.5209,3.12,3.52,3.12,M
-rail cut,BSC070N10NS5 x2 parallel (C534364),2,0.5569,0.4693,1.11,0.94,M-LCSC
-rail cut,RLP25FEER002 2 mOhm 2 W 2512 shunt (C160590),1,0.0593,0.0593,0.06,0.06,M-LCSC
-rail cut,74LVC1G08 WD_OK AND ESTOP_OK (C176929),1,0.0868,0.0694,0.09,0.07,M
-rail cut,"10.5k ISCP RC0603FR-0710K5L (C137808) + 100k/27k UVLO, 4.7n TMR, 470n BST, 10R, 0R, 100k pull-down [E for the rest]",1,0.064,0.054000000000000006,0.06,0.05,M/E
-hv meter,U94 AT24CS32 + R650 + C323 (meter BOM regenerated),1,1.43,1.18,1.43,1.18,M
-removed,U41 '541 for GCB/MCB/AUX1-4 enables (card '541s replace it) (C113281),-1,0.5939,0.4745,-0.59,-0.47,M
-removed,U42 '541 for AUX5-10 enables (C113281),-1,0.5939,0.4745,-0.59,-0.47,M
-removed,U64 TMUX1208 AUX4-10 + ESTOP_TRIP (ESTOP_TRIP moves to U63) (C494728),-1,0.571,0.4598,-0.57,-0.46,M
-removed,D133 BAT54C AUX6/7 clamp (C37704),-1,0.0144,0.0144,-0.01,-0.01,M
-removed,D134 BAT54C AUX8/9 clamp (C37704),-1,0.0144,0.0144,-0.01,-0.01,M
-removed,D135 BAT54C AUX10/ESTOP_TRIP clamp (C37704),-1,0.0144,0.0144,-0.01,-0.01,M
-removed,RN2 SH_G5/6 pull-downs (AI-4 card RN copy) (C29718),-1,0.0071,0.0071,-0.01,-0.01,M
-removed,"J17 AI1-6 terminal (AI1-2 on engine card, AI3-6 on AI-4) (C441292)",-1,0.3626,0.2887,-0.36,-0.29,M
-removed,J26 AUX1-6 terminal (HSO-5 headers) (C441292),-1,0.3626,0.2887,-0.36,-0.29,M
-removed,J19 DI1-6 terminal (engine card + DI-8) (C441292),-1,0.3626,0.2887,-0.36,-0.29,M
+baseline,Locked one-board mainboard BOM (tag),-1,266.36,225.95,-266.36,-225.95,BOM
+baseline,Locked HV meter BOM (tag),-1,63.89,53.42,-63.89,-53.42,BOM
+mainboard,"Reworked mainboard BOM (bom/genctl_main_bom.csv: backplane, slot power, ideal diode, rail cut)",1,231.4,194.87,231.4,194.87,BOM
+hv meter,HV meter BOM with ID EEPROM (bom/genctl_meter_bom.csv),1,65.33,54.6,65.33,54.6,BOM
+cards,"engine card parts (156 parts, cards/engine/engine_bom.csv) x1",1,28.7486,24.5112,28.75,24.51,BOM
+cards,"di8 card parts (76 parts, cards/di8/di8_bom.csv) x1",1,8.9052,7.5087,8.91,7.51,BOM
+cards,"ai4 card parts (104 parts, cards/ai4/ai4_bom.csv) x1",1,12.1689,10.3818,12.17,10.38,BOM
+cards,"hso5 card parts (76 parts, cards/hso5/hso5_bom.csv) x2",2,28.5944,23.9651,57.19,47.93,BOM
+cards,"brk4 card parts (64 parts, cards/brk4/brk4_bom.csv) x1",1,24.0862,20.1753,24.09,20.18,BOM
 boards,"Card PCBs: 4 LV designs + engine, 4-layer, 5 pcs per design at qty 1 [E]",5,8.0,1.2,40.0,6.0,E
-boards,PCBA fixed fees per extra card order (JLC fee table) ,5,13.74,1.374,68.7,6.87,DS
+boards,PCBA fixed fees per extra card order (JLC fee table),5,13.74,1.374,68.7,6.87,DS
 boards,Extended-part loading ~6 per card order at 3.07 [E count],5,18.42,1.842,92.1,9.21,E
 mechanical,"Card bays: guides, faceplates, captive screws, coding ribs [E]",1,29.0,17.5,29.0,17.5,E
-TOTAL,true net delta per controller vs baseline,,,,331.9,126.57,mix
+TOTAL,true net delta per controller vs baseline (actual BOMs),,,,327.38,120.19,mix
