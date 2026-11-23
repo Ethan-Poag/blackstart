@@ -23,6 +23,15 @@ syms.append('(symbol "AT24CS32-STUM" (pin_names (offset 0.5)) (exclude_from_sim 
   +prop('Reference','U',3.81,6.35)+prop('Value','AT24CS32-STUM-T',3.81,-6.35)+prop('Footprint','Package_TO_SOT_SMD:SOT-23-5',0,0,True)+prop('Datasheet','',0,0,True)
   +prop('Description','32 Kbit I2C EEPROM + 128-bit factory serial (0x50 EEPROM / 0x58 serial, SOT-23 A2..A0 = 0)',0,0,True)
   +'(symbol "AT24CS32-STUM_1_1" (rectangle (start -5.08 5.08) (end 5.08 -5.08) (stroke (width 0.254) (type default)) (fill (type background))) '+' '.join(p)+'))')
+L=[(11,'~{CS}','input'),(12,'SCK','input'),(13,'SI','input'),(14,'SO','output'),(18,'~{RESET}','input'),(20,'INTA','open_collector'),(19,'INTB','open_collector'),(15,'A0','input'),(16,'A1','input'),(17,'A2','input')]
+p=[pin(n,nm,-12.7,round(17.78-i*2.54,2),0,t) for i,(n,nm,t) in enumerate(L)]
+R=[(21+i,f'GPA{i}') for i in range(8)]+[(1+i,f'GPB{i}') for i in range(8)]
+p+=[pin(n,nm,12.7,round(19.05-i*2.54-(1.27 if i>=8 else 0),2),180,'bidirectional') for i,(n,nm) in enumerate(R)]
+p+=[pin(9,'VDD',0,25.4,270,'power_in'),pin(10,'VSS',0,-25.4,90,'power_in')]
+syms.append('(symbol "MCP23S17-SS" (pin_names (offset 0.5)) (exclude_from_sim no) (in_bom yes) (on_board yes) '
+  +prop('Reference','U',0,27.94)+prop('Value','MCP23S17T-E/SS',0,-27.94)+prop('Footprint','Package_SO:SSOP-28_5.3x10.2mm_P0.65mm',0,0,True)+prop('Datasheet','',0,0,True)
+  +prop('Description','16-bit SPI I/O expander, SSOP-28 (pinout per Microchip DS / LCSC C128577)',0,0,True)
+  +'(symbol "MCP23S17-SS_1_1" (rectangle (start -10.16 22.86) (end 10.16 -22.86) (stroke (width 0.254) (type default)) (fill (type background))) '+' '.join(p)+'))')
 open(os.path.join(D,'cards.kicad_sym'),'w').write('(kicad_symbol_lib (version 20241209) (generator "mklib") (generator_version "9.0")\n'+'\n'.join(syms)+'\n)\n')
 def fp(name,desc,holes,dx_row):
     pads=[]

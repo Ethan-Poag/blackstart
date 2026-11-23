@@ -1,0 +1,51 @@
+net,card_nodes,mainboard_nodes,how,mainboard_nodes_sample
++3V3_SLOT,2,148,slot connector a9 b9,C130.1 C151.1 C152.1 C153.1 C182.1 C183.1 C184.1 C186.1 ...
+CARD_FAULT_N,5,20,slot connector c15,R44.1 U15.3 U16.3 U18.4 U19.4 U43.5 U45.5 U47.4 ...
+DIAG_EN,5,12,replaced on the card: was one mainboard net shared by all 15 high-side switches; now driven by the card MCP23S17,U47.3 U48.3 U49.3 U50.3 U51.3 U57.3 U58.3 U59.3 ...
+GND,55,869,slot connector a4 a5 a6 a7 a31 a32 b4 b5 b6 b7 b10 b11 b12 b13 b14 b15 b17 b18 b20 b22 b24 b26 b28 b30 b31 b32 c4 c5 c6 c7 c8 c9 c10 c31 c32,BT1.2 C1.2 C10.2 C102.2 C103.2 C104.2 C105.2 C106.2 ...
+Net-(U52-ILIM),2,0,internal to card,
+Net-(U52-SNS),3,0,internal to card,
+Net-(U53-ILIM),2,0,internal to card,
+Net-(U53-SNS),3,0,internal to card,
+Net-(U54-ILIM),2,0,internal to card,
+Net-(U54-SNS),3,0,internal to card,
+Net-(U55-ILIM),2,0,internal to card,
+Net-(U55-SNS),3,0,internal to card,
+Net-(U56-ILIM),2,0,internal to card,
+Net-(U56-SNS),3,0,internal to card,
+OUT1,7,1,replaced on the card: field terminal moved from the mainboard output header to the card header,J26.1
+OUT1_EN,2,1,replaced on the card: was mainboard '541 U41/U42 output; now the card '541,U41.14
+OUT1_LED,2,0,internal to card,
+OUT1_RBB,3,0,internal to card,
+OUT1_RB_N,1,1,replaced on the card: was mainboard TCA9555 U62 input; now card MCP23S17,U62.11
+OUT1_SNSM,1,2,replaced on the card: was a mainboard TMUX1208 U63/U64 channel; now the card TMUX1208,D130.2 U63.11
+OUT2,7,1,replaced on the card: field terminal moved from the mainboard output header to the card header,J26.2
+OUT2_EN,2,1,replaced on the card: was mainboard '541 U41/U42 output; now the card '541,U41.13
+OUT2_LED,2,0,internal to card,
+OUT2_RBB,3,0,internal to card,
+OUT2_RB_N,1,1,replaced on the card: was mainboard TCA9555 U62 input; now card MCP23S17,U62.13
+OUT2_SNSM,2,1,replaced on the card: was a mainboard TMUX1208 U63/U64 channel; now the card TMUX1208,U63.10
+OUT3,7,1,replaced on the card: field terminal moved from the mainboard output header to the card header,J26.3
+OUT3_EN,2,1,replaced on the card: was mainboard '541 U41/U42 output; now the card '541,U41.12
+OUT3_LED,2,0,internal to card,
+OUT3_RBB,3,0,internal to card,
+OUT3_RB_N,1,1,replaced on the card: was mainboard TCA9555 U62 input; now card MCP23S17,U62.14
+OUT3_SNSM,2,1,replaced on the card: was a mainboard TMUX1208 U63/U64 channel; now the card TMUX1208,U63.9
+OUT4,7,1,replaced on the card: field terminal moved from the mainboard output header to the card header,J26.4
+OUT4_EN,2,1,replaced on the card: was mainboard '541 U41/U42 output; now the card '541,U41.11
+OUT4_LED,2,0,internal to card,
+OUT4_RBB,3,0,internal to card,
+OUT4_RB_N,1,1,replaced on the card: was mainboard TCA9555 U62 input; now card MCP23S17,U62.15
+OUT4_SNSM,2,1,replaced on the card: was a mainboard TMUX1208 U63/U64 channel; now the card TMUX1208,U64.4
+OUT5,7,1,replaced on the card: field terminal moved from the mainboard output header to the card header,J26.5
+OUT5_EN,2,1,replaced on the card: was mainboard '541 U41/U42 output; now the card '541,U42.18
+OUT5_LED,2,0,internal to card,
+OUT5_RBB,3,0,internal to card,
+OUT5_RB_N,1,1,replaced on the card: was mainboard TCA9555 U62 input; now card MCP23S17,U62.16
+OUT5_SNSM,2,1,replaced on the card: was a mainboard TMUX1208 U63/U64 channel; now the card TMUX1208,U64.5
+VBAT_FIELD,15,81,slot connector a1 a2 a3 b1 b2 b3 c1 c2 c3,C205.1 C206.1 C207.1 C208.1 C209.1 C210.1 C211.1 C212.1 ...
+unconnected-(U52-NC-Pad11),1,0,nc (unchanged),
+unconnected-(U53-NC-Pad11),1,0,nc (unchanged),
+unconnected-(U54-NC-Pad11),1,0,nc (unchanged),
+unconnected-(U55-NC-Pad11),1,0,nc (unchanged),
+unconnected-(U56-NC-Pad11),1,0,nc (unchanged),

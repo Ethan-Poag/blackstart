@@ -299,7 +299,7 @@ def packm(masks,W,H):
         if len(fr)==0: out.append(None); continue
         r,c=fr[0]; occ[r:r+h,c:c+w]=np.maximum(occ[r:r+h,c:c+w],M); out.append((c,r))
     return out
-def pack(rects,W,H,reserved=()):
+def pack(rects,W,H,reserved=(),colmajor=False):
     """rects: list of (w,h) in units -> list of (x,y) top-left, row-major first fit on an occupancy grid."""
     occ=np.zeros((int(H)+1,int(W)+1),dtype=np.int8); out=[]
     for (x0,y0,x1,y1) in reserved: occ[max(0,int(y0)):int(y1)+1,max(0,int(x0)):int(x1)+1]=1
@@ -309,6 +309,7 @@ def pack(rects,W,H,reserved=()):
         S=np.zeros((occ.shape[0]+1,occ.shape[1]+1),dtype=np.int32); S[1:,1:]=occ.cumsum(0).cumsum(1)
         win=S[m:,n:]-S[:-m,n:]-S[m:,:-n]+S[:-m,:-n]; fr=np.argwhere(win==0)
         if len(fr)==0: out.append(None); continue
+        if colmajor: fr=fr[np.lexsort((fr[:,0],fr[:,1]))]
         r,c=fr[0]; occ[r:r+m,c:c+n]=1; out.append((c,r))
     return out
 
@@ -336,7 +337,7 @@ def run(D,outdir,title):
         for pp in p['pins']:
             n=p['pn'][pp['num']]
             if n: types[n].add(pp['typ'])
-    flags=sorted(n for n,t in types.items() if ('power_in' in t or (n in D.rails and n!='GND')) and 'power_out' not in t)
+    flags=sorted(n for n,t in types.items() if ('power_in' in t or (n in D.rails and n!='GND')) and 'power_out' not in t and 'output' not in t)
     D.force_label={n for n in flags if n not in D.rails}
     blocks=[]
     for bt,keys in D.blocks:
@@ -372,7 +373,7 @@ def run(D,outdir,title):
         if not cl: continue
         sizes=[(P.bb.b[2]-P.bb.b[0]+2,P.bb.b[3]-P.bb.b[1]+2) for P in cl]
         masks=[mask_of(P) for P in cl]
-        area=sum(M.sum() for M in masks); best=None
+        area=sum(M.sum() for M in masks); best=None; alts=[]
         wmin=math.ceil(max(max(M.shape[1] for M in masks)+1,tw(bt)*1.6+2))
         for bw in sorted(set([wmin]+[int(wmin+k*(Wu-wmin)/10) for k in range(11)])):
             if bw>Wu: continue
@@ -383,9 +384,11 @@ def run(D,outdir,title):
             for i,pp_ in zip(order,pos_): pos[i]=pp_
             uw=max(x+M.shape[1] for (x,y),M in zip(pos,masks)); uh=max(y+M.shape[0] for (x,y),M in zip(pos,masks))
             score=(uw+3)*(uh+6)*(1+0.1*max(uw/uh,uh/uw))
+            alts.append((score,pos,uw,uh))
             if best is None or score<best[0]: best=(score,pos,uw,uh)
         _,pos,used_w,used_h=best
-        laid.append(dict(title=bt,cl=cl,pos=pos,w=used_w+3,h=used_h+6))
+        alts=sorted(alts,key=lambda a:a[0])[:6]
+        laid.append(dict(title=bt,cl=cl,pos=pos,w=used_w+3,h=used_h+6,alts=[(a[1],a[2]+3,a[3]+6) for a in alts]))
     notes=[l for t in D.notes for l in textwrap.wrap(t,78)]
     if notes:
         P=Piece(); P.prims.append(('text',(0,0),notes)); P.bb.box(0,0,max(len(l) for l in notes)*CW*1.0,len(notes)*1.75*FS/G)
@@ -394,9 +397,23 @@ def run(D,outdir,title):
     best=None
     for key in (lambda i:-laid[i]['w']*laid[i]['h'],lambda i:-laid[i]['h'],lambda i:-laid[i]['w'],lambda i:-max(laid[i]['w'],laid[i]['h'])):
         order=sorted(range(len(laid)),key=key)
-        bp=pack([(laid[i]['w'],laid[i]['h']) for i in order],Wu,Hu,res)
+        for cm in (False,True):
+            bp=pack([(laid[i]['w'],laid[i]['h']) for i in order],Wu,Hu,res,cm)
+            nover=sum(1 for x in bp if x is None)
+            if best is None or nover<best[0]: best=(nover,order,bp)
+    import random; rnd=random.Random(1)
+    tries=0
+    pick=None
+    while best[0] and tries<1500:
+        tries+=1; order=list(range(len(laid))); rnd.shuffle(order); cm=tries%2==1
+        ch=[rnd.randrange(len(B['alts'])) if B.get('alts') and tries>200 else 0 for B in laid]
+        dims=[(B['alts'][k][1],B['alts'][k][2]) if B.get('alts') else (B['w'],B['h']) for B,k in zip(laid,ch)]
+        bp=pack([dims[i] for i in order],Wu,Hu,res,cm)
         nover=sum(1 for x in bp if x is None)
-        if best is None or nover<best[0]: best=(nover,order,bp)
+        if nover<best[0]: best=(nover,order,bp); pick=ch
+    if pick:
+        for B,k in zip(laid,pick):
+            if B.get('alts'): B['pos'],B['w'],B['h']=B['alts'][k]
     _,order,bp=best
     over=[laid[i]['title'] for i,pp_ in zip(order,bp) if pp_ is None]
     if over: print('OVERFLOW blocks:',over)

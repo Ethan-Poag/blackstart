@@ -15,7 +15,7 @@ Status: requirements only. Nothing is implemented. Source: `docs/MODULAR_ARCHITE
 - C1.4 Writes are allowed only while stopped, with ID_WP driven low, from the config suite.
 
 ## C2 Boot and auto-configuration
-- C2.1 At boot every LV slot is unpowered and every output is off (OUT_EN low).
+- C2.1 At boot every LV slot is unpowered and every output is off (OUT_EN_N high, card pull-up).
 - C2.2 Read PRESENT_N, then each EEPROM, then compare with the commissioned map in FRAM: slot → type + serial, CRC, A/B copies.
 - C2.3 Matching card: power the slot, run the self-test (outputs-off readback, DI bias test), then enable.
 - C2.4 Same type with a new serial (a replaced card):
@@ -50,3 +50,20 @@ Status: requirements only. Nothing is implemented. Source: `docs/MODULAR_ARCHITE
 - C5.1 Any card: PRESENT edge, CARD_FAULT_N or SPI/CRC failure → the slot power drops in hardware. Firmware then applies C2.5's protection-class rule.
 - C5.2 A missing BRK-4 blocks every breaker close. It never opens a closed breaker by itself. ESTOP_TRIP stays on the mainboard.
 - C5.3 Cards are re-enumerated only after a power cycle. There is no hot-plug.
+
+## C6 LV card register maps (MCP23S17 on the slot SPI chip select; ADS1115 / EEPROM on the slot I2C channel)
+- **DI-8 (0x0010):**
+  - GPA0-7 = IN1_N..IN8_N.
+  - GPB0 BIAS_ON (out), GPB1 BIAS_DISCH (out), GPB2 CARD_FAULT_N (in), GPB4-7 SLOT_ID0-2/IDP (in, pull-ups on).
+  - Debounce in firmware, as today.
+- **AI-4 (0x0011):**
+  - GPA0-3 CS_DIS1-4 (out), GPA4-7 SH_EN1-4 (out); GPB0-3 SLOT_ID0-2/IDP.
+  - ADS1115 at 0x48: AIN0-3 = IN1-4.
+  - The 4-20 mA shunt only closes while the backplane drives OUT_EN_N low.
+- **HSO-5 (0x0012):**
+  - GPA0-4 OUT1-5_REQ, GPA5 DIAG_EN, GPA6-7 SLOT_ID0/1; GPB0-4 OUT1-5_RB_N, GPB5-7 MUX_A0-2.
+  - Current: select MUX_A, then read ANA_OUT through the backplane ADC mux.
+- **BRK-4 (0x0013):**
+  - GPA0-3 OUT1-4_REQ, GPA4 DIAG_EN, GPA5-7 SLOT_ID0-2; GPB0-3 OUT1-4_RB_N, GPB4-6 MUX_A0-2, GPB7 SLOT_IDP.
+- **C6.1** Firmware writes the EEPROM only with ID_WP pulled low by the backplane (commissioning and calibration only).
+- **C6.2** A CARD_FAULT_N low for longer than 10 ms switches off that slot's TPS48100 and raises CARD_FAULT(slot).

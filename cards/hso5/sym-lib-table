@@ -1,0 +1,5 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "genctl")(type "KiCad")(uri "${KIPRJMOD}/../../genctl.kicad_sym")(options "")(descr ""))
+  (lib (name "cards")(type "KiCad")(uri "${KIPRJMOD}/../lib/cards.kicad_sym")(options "")(descr "card/slot symbols"))
+)

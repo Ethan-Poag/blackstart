@@ -1,0 +1,25 @@
+{
+  "meta": {
+    "filename": "ai4.kicad_pro",
+    "version": 3
+  },
+  "schematic": {
+    "legacy_lib_dir": "",
+    "legacy_lib_list": []
+  },
+  "sheets": [
+    [
+      "5eef0b9a-07ec-4402-acd5-8f2de3f8fb9a",
+      "Root"
+    ]
+  ],
+  "boards": [],
+  "libraries": {
+    "pinned_footprint_libs": [],
+    "pinned_symbol_libs": []
+  },
+  "erc": {
+    "rule_severities": {}
+  },
+  "text_variables": {}
+}

@@ -1,0 +1,58 @@
+net,card_nodes,mainboard_nodes,how,mainboard_nodes_sample
++3V3_SLOT,4,146,slot connector a9 b9,C130.1 C151.1 C152.1 C153.1 C182.1 C183.1 C184.1 C186.1 ...
+AI_VSET,4,6,replaced on the card: card-local copy of the baseline rail/reference (engine card keeps its own),C131.2 D23.2 D23.3 R129.1 R132.1 R143.1
+CS_DIS1,1,1,replaced on the card: was mainboard TCA9555 U31; now card MCP23S17 GPA,U31.6
+CS_DIS2,1,1,replaced on the card: was mainboard TCA9555 U31; now card MCP23S17 GPA,U31.7
+CS_DIS3,1,1,replaced on the card: was mainboard TCA9555 U31; now card MCP23S17 GPA,U31.8
+CS_DIS4,1,1,replaced on the card: was mainboard TCA9555 U31; now card MCP23S17 GPA,U31.9
+GND,30,894,slot connector a4 a5 a6 a7 a31 a32 b4 b5 b6 b7 b10 b11 b12 b13 b14 b15 b17 b18 b20 b22 b24 b26 b28 b30 b31 b32 c4 c5 c6 c7 c8 c9 c10 c31 c32,BT1.2 C1.2 C10.2 C102.2 C103.2 C104.2 C105.2 C106.2 ...
+IN1,5,1,replaced on the card: field terminal moved from mainboard J17.3 to the card header,J17.3
+IN1_ADC,4,1,replaced on the card: mainboard ADS1115 input replaced by the card ADS1115 copy,U29.6
+IN1_B,2,0,internal to card,
+IN1_C,2,0,internal to card,
+IN1_D,2,0,internal to card,
+IN1_E,3,0,internal to card,
+IN1_NB,3,0,internal to card,
+IN1_PG,3,0,internal to card,
+IN1_REF,3,0,internal to card,
+IN1_SH,2,0,internal to card,
+IN2,5,1,replaced on the card: field terminal moved from mainboard J17.4 to the card header,J17.4
+IN2_ADC,4,1,replaced on the card: mainboard ADS1115 input replaced by the card ADS1115 copy,U30.4
+IN2_B,2,0,internal to card,
+IN2_C,2,0,internal to card,
+IN2_D,2,0,internal to card,
+IN2_E,3,0,internal to card,
+IN2_NB,3,0,internal to card,
+IN2_PG,3,0,internal to card,
+IN2_REF,3,0,internal to card,
+IN2_SH,2,0,internal to card,
+IN3,5,1,replaced on the card: field terminal moved from mainboard J17.5 to the card header,J17.5
+IN3_ADC,4,1,replaced on the card: mainboard ADS1115 input replaced by the card ADS1115 copy,U30.5
+IN3_B,2,0,internal to card,
+IN3_C,2,0,internal to card,
+IN3_D,2,0,internal to card,
+IN3_E,3,0,internal to card,
+IN3_NB,3,0,internal to card,
+IN3_PG,3,0,internal to card,
+IN3_REF,3,0,internal to card,
+IN3_SH,2,0,internal to card,
+IN4,5,1,replaced on the card: field terminal moved from mainboard J17.6 to the card header,J17.6
+IN4_ADC,4,1,replaced on the card: mainboard ADS1115 input replaced by the card ADS1115 copy,U30.6
+IN4_B,2,0,internal to card,
+IN4_C,2,0,internal to card,
+IN4_D,2,0,internal to card,
+IN4_E,3,0,internal to card,
+IN4_NB,3,0,internal to card,
+IN4_PG,3,0,internal to card,
+IN4_REF,3,0,internal to card,
+IN4_SH,2,0,internal to card,
+Net-(Q22-C),2,0,internal to card,
+Net-(Q26-C),2,0,internal to card,
+Net-(Q30-C),2,0,internal to card,
+Net-(Q34-C),2,0,internal to card,
+SH_G1,1,2,replaced on the card: was 74LVC08 (SH_EN AND SH_ALLOW) on mainboard; now card '541 gated by OUT_EN_N,RN1.6 U91.8
+SH_G2,1,2,replaced on the card: was 74LVC08 (SH_EN AND SH_ALLOW) on mainboard; now card '541 gated by OUT_EN_N,RN1.5 U91.11
+SH_G3,1,2,replaced on the card: was 74LVC08 (SH_EN AND SH_ALLOW) on mainboard; now card '541 gated by OUT_EN_N,RN2.8 U92.3
+SH_G4,1,2,replaced on the card: was 74LVC08 (SH_EN AND SH_ALLOW) on mainboard; now card '541 gated by OUT_EN_N,RN2.7 U92.6
+VBAT_AI,14,13,replaced on the card: card-local copy of the baseline rail/reference (engine card keeps its own),C131.1 C144.1 C145.1 C146.1 D23.1 Q13.2 Q17.2 Q72.3 ...
+VMID,4,10,replaced on the card: card-local copy of the baseline rail/reference (engine card keeps its own),R140.2 R151.2 R197.2 R199.2 R254.2 R256.2 R638.1 U25.1 ...

@@ -1,0 +1,25 @@
+{
+  "meta": {
+    "filename": "brk4.kicad_pro",
+    "version": 3
+  },
+  "schematic": {
+    "legacy_lib_dir": "",
+    "legacy_lib_list": []
+  },
+  "sheets": [
+    [
+      "03353970-b728-4756-8760-d6fa932ad647",
+      "Root"
+    ]
+  ],
+  "boards": [],
+  "libraries": {
+    "pinned_footprint_libs": [],
+    "pinned_symbol_libs": []
+  },
+  "erc": {
+    "rule_severities": {}
+  },
+  "text_variables": {}
+}

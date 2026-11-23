@@ -1,0 +1,5 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "genctl")(type "KiCad")(uri "${KIPRJMOD}/../../genctl.pretty")(options "")(descr ""))
+  (lib (name "cards")(type "KiCad")(uri "${KIPRJMOD}/../lib/cards.pretty")(options "")(descr "card/slot footprints (VERIFY)"))
+)

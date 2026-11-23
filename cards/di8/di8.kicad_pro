@@ -1,0 +1,25 @@
+{
+  "meta": {
+    "filename": "di8.kicad_pro",
+    "version": 3
+  },
+  "schematic": {
+    "legacy_lib_dir": "",
+    "legacy_lib_list": []
+  },
+  "sheets": [
+    [
+      "5e7d9925-b952-42d3-a72f-47edd7703f66",
+      "Root"
+    ]
+  ],
+  "boards": [],
+  "libraries": {
+    "pinned_footprint_libs": [],
+    "pinned_symbol_libs": []
+  },
+  "erc": {
+    "rule_severities": {}
+  },
+  "text_variables": {}
+}

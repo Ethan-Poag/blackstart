@@ -135,7 +135,7 @@ Boundary parts (shared bias, decoupling) are heuristic, the same caveat as `revi
 | 11-12 | SPI SCK/MOSI/MISO/CS_N (shared bus; CS decoded per slot) |
 | 13 | I2C SDA/SCL. A **dedicated slot I2C bus**, one TCA9548A channel per slot |
 | 14 | INT_N, RST_N |
-| 15 | **OUT_EN**, CARD_FAULT_N |
+| 15 | **OUT_EN_N** (active low, Phase 2), CARD_FAULT_N |
 | 16-17 | SLOT_ID0-2 + parity (backplane straps), ANA_OUT (to an STM32 ADC through a backplane TMUX1208) |
 | 18-30 | Reserved. Every second b-row pin is GND |
 | 31-32 | GND |
@@ -191,7 +191,7 @@ Boundary parts (shared bias, decoupling) are heuristic, the same caveat as `revi
 - **Power off to swap, both battery and AC.** For the HV card, isolate the voltage-sense feeds and short the CTs first.
 - **Hot-swap is not supported.** It is made *survivable*, which costs little:
   - Each slot's TPS48100 and TPS2553 enables are ANDed in hardware with PRESENT. Pulling a live card cuts its slot power immediately, with no firmware step.
-  - OUT_EN = WD_OK AND SLOT_EN_x AND PRESENT, also in hardware. Every card output buffer (SN74LVC541 OE) is off unless the watchdog is healthy, and every driver EN input has a pull-down on the card. That is today's fail-safe default (ARCHITECTURE §2, §13.2), carried onto the card.
+  - OUT_EN_N = NOT(WD_OK AND SLOT_EN_x AND PRESENT), also in hardware (Phase 2: active low with a 10k pull-up on every card, so an open or unplugged line means outputs off). Every card output buffer (SN74LVC541 OE) is off unless the watchdog is healthy, and every driver EN input has a pull-down on the card. That is today's fail-safe default (ARCHITECTURE §2, §13.2), carried onto the card.
 
 ### 3.2 What the STM32 does
 At boot every slot is unpowered. Firmware then reads PRESENT_N, then each EEPROM on +3V3_ID, then compares what it finds with the **commissioned configuration** stored in FRAM (slot → card type + serial):
@@ -379,3 +379,54 @@ The total is now **+$326 at qty 1 and +$120 per unit at qty 10** (it was +$276 /
 1. Add the rail-level watchdog cut (§9.7-1)? My pick: yes.
 2. Glow on VBAT_ESTOP: OK to re-rate the VBAT_ESTOP path for 7.6 A?
 3. HV meter: keep it as 2 sheets (my pick), or go to A2?
+
+## 10. Phase 2: the four universal LV cards (Nov 23, HST)
+
+Each card is one flat A3 sheet in `cards/<card>/` made by `cards/tools/lvcards.py`, ERC 0 errors / 0 warnings, rendered to `<card>.png` and `.pdf`.
+
+### 10.1 Card type codes (AT24CS32 at 0x50, serial at 0x58, on the slot I2C bus)
+
+| Code | Card | Parts | Where |
+|---|---|---|---|
+| 0x0001 | ENGINE (keyed slot) | 156 | cards/engine |
+| 0x0010 | DI-8 | 76 | cards/di8 |
+| 0x0011 | AI-4 | 104 | cards/ai4 |
+| 0x0012 | HSO-5 | 76 | cards/hso5 (2 per example build: AUX1-5, AUX6-10) |
+| 0x0013 | BRK-4 | 64 | cards/brk4 |
+| 0x0020 | HV-METER | | genctl_meter |
+
+### 10.2 Self-contained: nothing shared between cards
+- **DI-8:** own bias switch/eFuse/PTC/TVS (copy of the bank-B block, fed from VBAT_FIELD), own 74HC14s (U33 moved plus a copy of U32 for IN1/IN2), own MCP23S17.
+- **AI-4:** own ADS1115 (0x48), own VMID buffer, own VBAT_AI pre-regulator plus LM4040 current-source reference, own MCP23S17.
+- **HSO-5 / BRK-4:** own SN74LVC541A enable buffer, own TMUX1208 current-sense mux to ANA_OUT, own MCP23S17.
+- **Clamps:** the shared BAT54C clamps are split.
+  - D128 GLOW half and D130 AUX1 half are left NC on BRK-4.
+  - HSO-5 gets its own BAT54C for OUT1.
+  - The mainboard gets a new BAT54C for GLOW_SNSM + ESTOP_TRIP_SNSM.
+- **ESTOP_TRIP:** the current sense moves off HSO-B onto the mainboard safety path. U63 stays on the mainboard for glow + ESTOP_TRIP; U64 and D133-D135 go.
+
+### 10.3 Universal LV pinout changes (docs/modular/slot_pinout_LV.csv)
+- **15a OUT_EN → OUT_EN_N.** Active low, driven by the backplane, with a 10k pull-up on the card, so an open line means off. It gates the card '541 OE1/OE2.
+- **18a RSVD → ID_WP.** EEPROM write protect, 10k pull-up to +3V3_ID on the card. The backplane pulls it low only for factory or calibration writes.
+- On every card: FIELD_GND and PRESENT_N join GND; unused slot signals are NC on the card.
+
+### 10.4 Intentional net changes (per card: `cards/<card>/net_changes.csv`; full accounting: `net_accounting.csv`, 0 unaccounted on every card)
+
+| Baseline | On the card | Why |
+|---|---|---|
+| VBAT_P / +3V3_SAFE / OUT_FAULT_N | VBAT_FIELD / +3V3_SLOT / CARD_FAULT_N | slot-switched supply; fault is per card, with a card pull-up |
+| DI5-DI12, DI_BIAS_B, DI_PU_B, DI_PD_B, DI_BIAS_FLT_N | IN1-IN8, BIAS, BIAS_ON, BIAS_DISCH, CARD_FAULT_N | DI-8 names |
+| R222.1, R225.1 on DI_BIAS_A | BIAS | DI5/DI6 move off bank-A bias onto the card bias |
+| J22.2-4 (DI_BIAS_B terminal) | IN1, IN2, GND | J22 becomes the IN1/IN2 terminal |
+| DIx_N to STM32 pins; U31 (TCA9555) bias controls | card MCP23S17 | DI read over the slot SPI |
+| AI3-AI6, AI_CS_DISx, AI_SH_ENx, AI_SH_Gx | IN1-IN4, CS_DIS1-4, SH_EN1-4, SH_G1-4 | AI-4 names; J17.3-6 become NC |
+| SH_G = SH_EN AND SH_ALLOW (U91 '08) | SH_G = '541(SH_EN), OE = OUT_EN_N, RN pull-downs | shunt only closes while the slot is enabled (watchdog healthy) |
+| AUX1-5_* / GCB_CL, GCB_OP, MCB_CL, MCB_OP_* | OUT1-5_* / OUT1-4_* | HSO-5 / BRK-4 names |
+| *_EN from mainboard U41/U42 '541 | card '541 (OE = OUT_EN_N) | |
+| *_RB_N to U62 TCA9555 | card MCP23S17 | |
+| *_SNSM to U63/U64 TMUX | card TMUX1208, D → ANA_OUT | |
+| DIAG_EN (one net, 15 drivers) | per-card DIAG_EN from MCP23S17 | |
+| D128.1 GLOW_SNSM, D130.2 AUX1_SNSM | NC | clamp halves split (see 10.2) |
+
+### 10.5 HSO-5 slot-ID straps
+HSO-5 uses all 16 MCP23S17 GPIOs except two, so it reads only SLOT_ID0/1 (GPA6/7). Its slot identity also comes from the TCA9548A channel its EEPROM answers on. If Ethan wants all 4 straps read, the options are a second expander or a TCA9534 on the slot I2C bus [open].

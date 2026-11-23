@@ -1,0 +1,35 @@
+baseline_ref,pin,baseline_net,card_net,why
+D128,1,GLOW_SNSM,,clamp half for GLOW_SNSM stays on the mainboard (new BAT54C there)
+D130,2,AUX1_SNSM,,clamp half for AUX1_SNSM moves to the HSO-5 card
+(rename),,+3V3_SAFE,+3V3_SLOT,card-local name
+(rename),,DIAG_EN,DIAG_EN,card-local name
+(rename),,GCB_CL_EN,OUT1_EN,card-local name
+(rename),,GCB_CL_LED,OUT1_LED,card-local name
+(rename),,GCB_CL_MCU,OUT1_MCU,card-local name
+(rename),,GCB_CL_OUT,OUT1,card-local name
+(rename),,GCB_CL_RBB,OUT1_RBB,card-local name
+(rename),,GCB_CL_RB_N,OUT1_RB_N,card-local name
+(rename),,GCB_CL_SNSM,OUT1_SNSM,card-local name
+(rename),,GCB_OP_EN,OUT2_EN,card-local name
+(rename),,GCB_OP_LED,OUT2_LED,card-local name
+(rename),,GCB_OP_MCU,OUT2_MCU,card-local name
+(rename),,GCB_OP_OUT,OUT2,card-local name
+(rename),,GCB_OP_RBB,OUT2_RBB,card-local name
+(rename),,GCB_OP_RB_N,OUT2_RB_N,card-local name
+(rename),,GCB_OP_SNSM,OUT2_SNSM,card-local name
+(rename),,MCB_CL_EN,OUT3_EN,card-local name
+(rename),,MCB_CL_LED,OUT3_LED,card-local name
+(rename),,MCB_CL_MCU,OUT3_MCU,card-local name
+(rename),,MCB_CL_OUT,OUT3,card-local name
+(rename),,MCB_CL_RBB,OUT3_RBB,card-local name
+(rename),,MCB_CL_RB_N,OUT3_RB_N,card-local name
+(rename),,MCB_CL_SNSM,OUT3_SNSM,card-local name
+(rename),,MCB_OP_EN,OUT4_EN,card-local name
+(rename),,MCB_OP_LED,OUT4_LED,card-local name
+(rename),,MCB_OP_MCU,OUT4_MCU,card-local name
+(rename),,MCB_OP_OUT,OUT4,card-local name
+(rename),,MCB_OP_RBB,OUT4_RBB,card-local name
+(rename),,MCB_OP_RB_N,OUT4_RB_N,card-local name
+(rename),,MCB_OP_SNSM,OUT4_SNSM,card-local name
+(rename),,OUT_FAULT_N,CARD_FAULT_N,card-local name
+(rename),,VBAT_P,VBAT_FIELD,card-local name

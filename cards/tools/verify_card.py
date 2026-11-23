@@ -22,24 +22,28 @@ def card_netlist(name):
         for nd in [x for x in n if x[0]=='node']:
             pin[([y for y in nd if y[0]=='ref'][0][1],[y for y in nd if y[0]=='pin'][0][1])]=nm
     return pin,refs
-def verify(name,slot_pins,field_refs,overrides,netmap):
+def verify(name,slot_pins,field_refs,overrides,netmap,replaced=None):
+    replaced=replaced or {}
     comps,nets,pinnet,_,_=load('genctl'); base={'nets':nets,'pinnet':pinnet}; pin,refs=card_netlist(name)
     inv={v:k for k,v in refs.items()}
     moved=set(refs.values()); errs=[]
     # 1) connectivity: baseline net <-> card net must be a 1:1 mapping over the moved pins
     #    (wired-only nets get KiCad auto names on the card; documented overrides excluded)
-    fwd=collections.defaultdict(set); rev=collections.defaultdict(set)
+    fwd=collections.defaultdict(set); rev=collections.defaultdict(set); ovchk=[]
     for (r,p),n in base['pinnet'].items():
         if r not in moved: continue
         got=pin.get((inv[r],p))
         if (r,p) in overrides:
-            if got!=overrides[(r,p)]: errs.append(f'{r}.{p}: override {overrides[(r,p)]} card {got}')
-            continue
+            ovchk.append((r,p,overrides[(r,p)],got)); continue
         b=netmap.get(n,short(n))
         if b.startswith('unconnected-'):
             if got and not got.startswith('unconnected-'): errs.append(f'{r}.{p}: baseline NC card {got}')
             continue
         fwd[b].add(got); rev[got].add(b)
+    for r,p,want,got in ovchk:   # override target: same card net as the baseline net that maps to that name
+        exp=list(fwd[want])[0] if len(fwd.get(want,()))==1 else want
+        if want is None and (got is None or got.startswith('unconnected-')): continue
+        if got!=exp: errs.append(f'{r}.{p}: override {want} ({exp}) card {got}')
     for b,g in fwd.items():
         if len(g)!=1: errs.append(f'baseline net {b} split on card into {sorted(map(str,g))}')
     for g,b in rev.items():
@@ -52,9 +56,11 @@ def verify(name,slot_pins,field_refs,overrides,netmap):
         nodes=n['nodes']; on=[f'{r}.{p}' for r,p in nodes if r in moved]; off=[f'{r}.{p}' for r,p in nodes if r not in moved]
         if not on: continue
         nm=netmap.get(n['name'],short(n['name']))
-        if (nm.startswith('unconnected-')): how='nc (unchanged)'
+        if all((r,p) in overrides for r,p in nodes if r in moved): how='intentional change: these pins were re-pointed (net_changes.csv)'
+        elif (nm.startswith('unconnected-')): how='nc (unchanged)'
         elif not off: how='internal to card'
         elif nm in slot_pins: how='slot connector '+' '.join(sorted(slot_pins[nm],key=lambda x:(x[0],int(x[1:]))))
+        elif nm in replaced: how='replaced on the card: '+replaced[nm]
         elif nm in field_refs: how='card field header '+field_refs[nm]+' (mainboard terminal '+','.join(o for o in off if o.startswith('J'))+' becomes NC)'
         else: how='UNACCOUNTED'; unacc.append(nm)
         rows.append([nm,len(on),len(off),how,' '.join(off[:8])+(' ...' if len(off)>8 else '')])

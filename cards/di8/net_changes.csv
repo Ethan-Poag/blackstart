@@ -1,0 +1,37 @@
+baseline_ref,pin,baseline_net,card_net,why
+R222,1,DI_BIAS_A,BIAS,IN1/IN2 (baseline DI5/DI6) pull-ups move from bank-A bias to the card bias
+R225,1,DI_BIAS_A,BIAS,IN1/IN2 (baseline DI5/DI6) pull-ups move from bank-A bias to the card bias
+J22,2,,IN1,J22 becomes IN1/IN2/BIAS header (was DI_BIAS_B only)
+J22,3,,IN2,J22 becomes IN1/IN2/BIAS header
+J22,4,,GND,J22 return terminal
+(rename),,+3V3_SAFE,+3V3_SLOT,card-local name
+(rename),,DI10,IN6,card-local name
+(rename),,DI10_D,IN6_D,card-local name
+(rename),,DI10_N,IN6_N,card-local name
+(rename),,DI11,IN7,card-local name
+(rename),,DI11_D,IN7_D,card-local name
+(rename),,DI11_N,IN7_N,card-local name
+(rename),,DI12,IN8,card-local name
+(rename),,DI12_D,IN8_D,card-local name
+(rename),,DI12_N,IN8_N,card-local name
+(rename),,DI5,IN1,card-local name
+(rename),,DI5_D,IN1_D,card-local name
+(rename),,DI5_N,IN1_N,card-local name
+(rename),,DI6,IN2,card-local name
+(rename),,DI6_D,IN2_D,card-local name
+(rename),,DI6_N,IN2_N,card-local name
+(rename),,DI7,IN3,card-local name
+(rename),,DI7_D,IN3_D,card-local name
+(rename),,DI7_N,IN3_N,card-local name
+(rename),,DI8,IN4,card-local name
+(rename),,DI8_D,IN4_D,card-local name
+(rename),,DI8_N,IN4_N,card-local name
+(rename),,DI9,IN5,card-local name
+(rename),,DI9_D,IN5_D,card-local name
+(rename),,DI9_N,IN5_N,card-local name
+(rename),,DI_BIAS_B,BIAS,card-local name
+(rename),,DI_BIAS_FLT_N,CARD_FAULT_N,card-local name
+(rename),,DI_PD_B,BIAS_DISCH,card-local name
+(rename),,DI_PU_B,BIAS_ON,card-local name
+(rename),,OUT_FAULT_N,CARD_FAULT_N,card-local name
+(rename),,VBAT_P,VBAT_FIELD,card-local name

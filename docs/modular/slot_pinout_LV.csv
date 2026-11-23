@@ -13,10 +13,10 @@ position,row_a,row_b,row_c,note
 12,SPI_MISO,GND,SPI_CS_N,CS_N decoded per slot on the backplane
 13,I2C_SDA,GND,I2C_SCL,dedicated slot I2C bus via TCA9548A channel per slot (NOT the FRAM bus)
 14,INT_N,GND,RST_N,open-drain interrupt; reset driven by backplane expander
-15,OUT_EN,GND,CARD_FAULT_N,OUT_EN = WD_OK AND SLOT_EN_x AND PRESENT (hardware); low = every card output off
+15,OUT_EN_N,GND,CARD_FAULT_N,"OUT_EN_N active LOW = NOT(WD_OK AND SLOT_EN_x AND PRESENT), driven by the backplane; 10k pull-up on every card so an open/unplugged line = all card outputs off (gates the card SN74LVC541A OE1/OE2). Phase 2 change: was active-high OUT_EN"
 16,SLOT_ID0,SLOT_ID1,SLOT_ID2,backplane straps (GND or open); card pull-ups
 17,SLOT_IDP,GND,ANA_OUT,strap parity; ANA_OUT = card analog (e.g. current-sense mux) to STM32 ADC via backplane mux
-18,RSVD,GND,RSVD,"reserved, not connected in rev 1"
+18,ID_WP,GND,RSVD,"ID_WP = AT24CS32 write protect (10k pull-up to +3V3_ID on card = protected; backplane pulls low only for factory/cal writes). Phase 2 change: 18a was RSVD"
 19,RSVD,RSVD,RSVD,"reserved, not connected in rev 1"
 20,RSVD,GND,RSVD,"reserved, not connected in rev 1"
 21,RSVD,RSVD,RSVD,"reserved, not connected in rev 1"

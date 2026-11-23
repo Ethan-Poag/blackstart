@@ -1,0 +1,25 @@
+{
+  "meta": {
+    "filename": "hso5.kicad_pro",
+    "version": 3
+  },
+  "schematic": {
+    "legacy_lib_dir": "",
+    "legacy_lib_list": []
+  },
+  "sheets": [
+    [
+      "05d8a422-ba6d-4e0c-b736-0e6ee0b71c42",
+      "Root"
+    ]
+  ],
+  "boards": [],
+  "libraries": {
+    "pinned_footprint_libs": [],
+    "pinned_symbol_libs": []
+  },
+  "erc": {
+    "rule_severities": {}
+  },
+  "text_variables": {}
+}
