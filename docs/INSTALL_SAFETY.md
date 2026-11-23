@@ -130,6 +130,18 @@ at the coil keeps that energy off the board and the cable.
 - **Reconnect:** land and tighten **both** pigtail ends at J30 first, check them, **then** remove the short.
 - Every meter board must have passed the bench megger test (docs/BENCH_12V_TEST.md §B30-1) before it is installed live.
 
+## Swapping a card (modular controller, branch m7-modular; see docs/MODULAR_ARCHITECTURE.md §3 and §9)
+> **WARNING: cards are NOT hot-swappable.** Power off before you pull or fit any card.
+
+1. Stop the engine. Open the generator breaker (GCB).
+2. **HV meter card only:** close the **J30 CT shorting links** first, or stop the generator and open the breaker. Never open a CT loop with the generator live. Then pull the 600 V sense fuses (F26-F31), and confirm 0 V on J28/J29 with a meter.
+3. Remove both controller feeds at the power box: F1 (J1 battery) and F2 (J23 E-stop/fuel feed). The engine card is fed from J23, so **F2 must be out** before you touch it.
+4. Unplug the card's field plugs. Remove the faceplate screw and slide the card out.
+5. Fit the new card. The engine slot and the LV slots are keyed: the engine card fits only the engine slot. Never force a card or file the key.
+6. Refit the field plugs and screw. Refit F2 and F1, then refit F26-F31 and open the J30 shorting links (HV card).
+7. At power-up the panel shows "Card replaced: slot n". **Acknowledge before the next start.** A replaced engine card runs a forced outputs-off self-test first. If the engine card is missing or is the wrong card, the engine will not start.
+8. Check the replaced functions before return to service: DI states, AI readings, a test of every output, and, after an HV-card swap, meter readings against a reference.
+
 ## Battle short (Batch 33/33a, firmware spec docs/FW_REQ_BATTLESHORT.md; Ethan's decisions D1–D6 final, Nov 22, 2026 HST)
 > **WARNING – BATTLE SHORT.** Battle short turns OFF the controller's engine and breaker protections: low oil pressure, high temperature, over/undervoltage, over/underfrequency, overcurrent, metering-fault and breaker trips. Only the emergency stop and engine overspeed stay active (plus, on generators run in parallel, the reverse-power breaker trip). If the engine will not start, the controller keeps cranking with rest breaks until it starts or is stopped. Running in battle short can destroy the engine, the generator or the connected equipment, and an overload or short circuit can overheat cables and start a fire. Use it only when losing power is more dangerous than losing the generator. Fit an external generator circuit breaker sized for the generator and the cable; the controller does not protect them in battle short. A controller fault (firmware hang) still stops the engine, and the controller must then be power-cycled to restart. Every use of battle short and every fault overridden is permanently recorded in the controller. Battle short is off unless enabled in the configuration suite by an administrator.
 

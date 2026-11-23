@@ -202,7 +202,7 @@ At boot every slot is unpowered. Firmware then reads PRESENT_N, then each EEPROM
 | **Same type, new serial** (a replaced card) | Power and self-test, load calibration from the card, show "Card replaced: slot n" on the UI. **The next start needs an operator acknowledgment** at the panel (recommended; open question 3) |
 | Missing, wrong type, unknown type, bad CRC, fails self-test, or over budget | **Slot stays unpowered.** Raise `CARD_FAULT` slot n. Every function mapped to it is unavailable. If any of those functions is **protection-class** (a shutdown input, or the GCB on a paralleled set): **no start** (IDLE → PREHEAT refused, like the DI_BIAS lockout rule). Otherwise: alarm only |
 | New card in a slot that wasn't commissioned | Power it, raise a "new card" notice. Its channels stay unmapped until they're assigned in the config suite |
-| Card lost while running (PRESENT edge, failed SPI/CRC, CARD_FAULT_N) | Its slot power drops in hardware. If the card carried a protection-class function: shut down on the existing fault path (FUEL_EN = 0, GCB open; the fuel/crank drivers are on the mainboard, so this always works). Otherwise: alarm. A missing BRK-4 blocks every breaker close but never opens a closed breaker by itself. That mirrors the METERING_SILENT BUS rule, and the ESTOP_TRIP breaker shunt-trip (U68) stays on the mainboard. Re-enumeration only happens after a power cycle |
+| Card lost while running (PRESENT edge, failed SPI/CRC, CARD_FAULT_N) | Its slot power drops in hardware. If the card carried a protection-class function: shut down on the existing fault path (FUEL_EN = 0, GCB open; the EN gates and the VBAT_ESTOP feed are on the mainboard, so this always works, even if the lost card is the engine card: no engine card = no fuel). Otherwise: alarm. A missing BRK-4 blocks every breaker close but never opens a closed breaker by itself. That mirrors the METERING_SILENT BUS rule, and the ESTOP_TRIP breaker shunt-trip (U68) stays on the mainboard. Re-enumeration only happens after a power cycle |
 | HV card | Existing `FW_REQ_METERING_PRESENCE` rules, plus `METERING_UNCALIBRATED` (blank or bad calibration CRC) → block breaker close until it's calibrated (open question 3 also covers this) |
 
 ### 3.3 Auto-configuration
@@ -211,7 +211,8 @@ At boot every slot is unpowered. Firmware then reads PRESENT_N, then each EEPROM
 - **Moving a card to a different slot** is allowed after an acknowledgment. The serial number follows the card, and the map follows by serial when the type is unique.
 
 ### 3.4 Paths that never cross a card
-- E-stop loop and sense, `VBAT_ESTOP`, fuel, crank, glow, ESTOP_TRIP, the watchdog/latch (TPS3431, 74LVC1G74) and MPU/D+ speed.
+- E-stop loop, sense and latch, the J23 E-stop feed, ESTOP_TRIP, and the watchdog/latch (TPS3431, 74LVC1G74) with the WD_OK AND gates.
+- Phase 2 change: fuel, crank, glow, MPU/D+ speed, DI1-4 and AI1-2 now cross the **keyed engine slot** (§9). Only VBAT_ESTOP (switched upstream) and already-gated EN signals go to the card, so no card fault can turn fuel on.
 - External relays stay de-energize-to-stop (ARCHITECTURE §11.1). Pulling any card can only de-energize its outputs.
 
 ---
