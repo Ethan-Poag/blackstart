@@ -46,7 +46,7 @@ def bufcopy(c,inputs,outputs):
     for i in range(8):
         pinmap[str(2+i)]=inputs[i] if i<len(inputs) else 'GND'; pinmap[str(18-i)]=outputs[i] if i<len(outputs) else None
     return L.copy_parts(c,['U42'],lambda full,pin:pinmap[pin])['U42']
-def finish(c,blocks,slot_ref,fields,paper,notes,replaced,labels_only=(),extra=None,rails=()):
+def finish(c,blocks,slot_ref,fields,paper,notes,replaced,labels_only=(),extra=None,rails=(),pad=1):
     c.notes=notes
     cnt=collections.Counter(v for p in c.parts if p['ref']!=slot_ref for v in p['pn'].values() if v)
     for p in c.parts:
@@ -54,7 +54,7 @@ def finish(c,blocks,slot_ref,fields,paper,notes,replaced,labels_only=(),extra=No
             for k,v in p['pn'].items():
                 if v and v not in RAILS and cnt[v]==0: p['pn'][k]=None; c.P[k]=None   # slot signal unused on this card: NC
     c.write(os.path.join(ROOT,'cards',c.name))      # project files + refmap (sheet re-drawn below)
-    D=schdraw.Drawer(c,RAILS|set(rails),blocks,paper,notes); D.labels_only=set(labels_only)|{slot_ref}; D.extra=dict(extra or {})
+    D=schdraw.Drawer(c,RAILS|set(rails),blocks,paper,notes); D.labels_only=set(labels_only)|{slot_ref}; D.pad=pad; D.extra=dict(extra or {})
     for p in c.parts:
         if p['lib_id']=='Device:C' and p['ref'] not in D.extra and p['props'].get('BaselineRef') is None: D.extra[p['ref']]=blocks[-1][0]
     over=schdraw.run(D,os.path.join(ROOT,'cards',c.name),c.title)
@@ -177,7 +177,7 @@ def grow(c,seed,allowed,rails):
     return seen
 
 # ---------------------------------------------------------------- HSO-5 / BRK-4 (high-side output cards)
-def hso_card(name,title,typ,part,outs,extra_moves,clamp,straps,notes,nc_pins=(),paper='A3'):
+def hso_card(name,title,typ,part,outs,extra_moves,clamp,straps,notes,nc_pins=(),paper='A3',pad=1):
     """outs: baseline output prefixes in card order (OUT1..). Each card: its outputs' high-side switches (moved), own '541
     (OUT_EN_N gated), own TMUX1208 current-sense mux to ANA_OUT, own MCP23S17, own clamps, CARD_FAULT_N pull-up."""
     rn={'DIAG_EN':'DIAG_EN'}
@@ -231,7 +231,7 @@ def hso_card(name,title,typ,part,outs,extra_moves,clamp,straps,notes,nc_pins=(),
         replaced[f'OUT{k}_EN']="was mainboard '541 U41/U42 output; now the card '541"
         replaced[f'OUT{k}_RB_N']='was mainboard TCA9555 U62 input; now card MCP23S17'
         replaced[f'OUT{k}_SNSM']='was a mainboard TMUX1208 U63/U64 channel; now the card TMUX1208'
-    return finish(c,blocks,JS,[J],os.environ.get('PAPER',paper),notes,replaced)
+    return finish(c,blocks,JS,[J],os.environ.get('PAPER',paper),notes,replaced,pad=pad)
 
 
 def hso5():
@@ -249,7 +249,7 @@ def brk4():
       'Baseline names: OUT1 GCB_CL, OUT2 GCB_OP, OUT3 MCB_CL, OUT4 MCB_OP. Net changes: net_changes.csv.']
     return hso_card('brk4','BRK-4 card (type 0x0013): 4 breaker coil outputs',0x13,'BRK4',['GCB_CL','GCB_OP','MCB_CL','MCB_OP'],[],None,
         ['SLOT_ID0','SLOT_ID1','SLOT_ID2','SLOT_IDP'],notes,
-        nc_pins=[('D128','1','clamp half for GLOW_SNSM stays on the mainboard (new BAT54C there)'),('D130','2','clamp half for AUX1_SNSM moves to the HSO-5 card')])
+        pad=2,nc_pins=[('D128','1','clamp half for GLOW_SNSM stays on the mainboard (new BAT54C there)'),('D130','2','clamp half for AUX1_SNSM moves to the HSO-5 card')])
 
 if __name__=='__main__':
     which=sys.argv[1:] or ['di8','ai4','hso5','brk4']

@@ -372,7 +372,7 @@ def run(D,outdir,title):
     for bt,cl in blocks:
         if not cl: continue
         sizes=[(P.bb.b[2]-P.bb.b[0]+2,P.bb.b[3]-P.bb.b[1]+2) for P in cl]
-        masks=[mask_of(P) for P in cl]
+        masks=[mask_of(P,getattr(D,'pad',1)) for P in cl]
         area=sum(M.sum() for M in masks); best=None; alts=[]
         wmin=math.ceil(max(max(M.shape[1] for M in masks)+1,tw(bt)*1.6+2))
         for bw in sorted(set([wmin]+[int(wmin+k*(Wu-wmin)/10) for k in range(11)])):

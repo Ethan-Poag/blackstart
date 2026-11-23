@@ -19,6 +19,7 @@ def width(I,dT_C,oz,k):
 rows=[]
 for tot in (7.6,10.0):
     for name,rds,rth,share in (('Q70/Q71 SQD40P10-40L (each, 50/50)',rds_sqd,50,0.5),('Q70/Q71 SQD40P10-40L (hot FET, 60/40)',rds_sqd,50,0.6),
+                               ('Ideal-diode LM74700-Q1 + 1x BSC070N10NS5 (single FET)',rds_bsc,50,1.0),
                                ('Rail-cut BSC070N10NS5 (each, 50/50)',rds_bsc,50,0.5),('Rail-cut BSC070N10NS5 (hot FET, 60/40)',rds_bsc,50,0.6)):
         t,p=tj(tot*share,rds,rth); rows.append((tot,name,tot*share,p,F(t),dF(t-TA)))
     rows.append((tot,'Shunt 2 mOhm 2512 (2 W)',tot,tot*tot*0.002,None,None))
