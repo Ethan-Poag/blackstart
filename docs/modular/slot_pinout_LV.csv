@@ -1,0 +1,33 @@
+position,row_a,row_b,row_c,note
+1,VBAT_FIELD,VBAT_FIELD,VBAT_FIELD,"slot-switched battery (TPS48100), 9 contacts x 2 A rated; slot budget 6 A cont"
+2,VBAT_FIELD,VBAT_FIELD,VBAT_FIELD,"slot-switched battery (TPS48100), 9 contacts x 2 A rated; slot budget 6 A cont"
+3,VBAT_FIELD,VBAT_FIELD,VBAT_FIELD,"slot-switched battery (TPS48100), 9 contacts x 2 A rated; slot budget 6 A cont"
+4,FIELD_GND,FIELD_GND,FIELD_GND,"high-current return, 9 contacts"
+5,FIELD_GND,FIELD_GND,FIELD_GND,"high-current return, 9 contacts"
+6,FIELD_GND,FIELD_GND,FIELD_GND,"high-current return, 9 contacts"
+7,GND,GND,GND,guard row between power and logic
+8,+5V_SLOT,+5V_SLOT,GND,"TPS2553 switched, 0.5 A budget"
+9,+3V3_SLOT,+3V3_SLOT,GND,"TPS2553 switched, 0.25 A budget"
+10,+3V3_ID,GND,PRESENT_N,"+3V3_ID always on via 100 ohm, EEPROM only (<5 mA). PRESENT_N tied to GND on every card"
+11,SPI_SCK,GND,SPI_MOSI,"shared slot SPI bus, card-local buffer"
+12,SPI_MISO,GND,SPI_CS_N,CS_N decoded per slot on the backplane
+13,I2C_SDA,GND,I2C_SCL,dedicated slot I2C bus via TCA9548A channel per slot (NOT the FRAM bus)
+14,INT_N,GND,RST_N,open-drain interrupt; reset driven by backplane expander
+15,OUT_EN,GND,CARD_FAULT_N,OUT_EN = WD_OK AND SLOT_EN_x AND PRESENT (hardware); low = every card output off
+16,SLOT_ID0,SLOT_ID1,SLOT_ID2,backplane straps (GND or open); card pull-ups
+17,SLOT_IDP,GND,ANA_OUT,strap parity; ANA_OUT = card analog (e.g. current-sense mux) to STM32 ADC via backplane mux
+18,RSVD,GND,RSVD,"reserved, not connected in rev 1"
+19,RSVD,RSVD,RSVD,"reserved, not connected in rev 1"
+20,RSVD,GND,RSVD,"reserved, not connected in rev 1"
+21,RSVD,RSVD,RSVD,"reserved, not connected in rev 1"
+22,RSVD,GND,RSVD,"reserved, not connected in rev 1"
+23,RSVD,RSVD,RSVD,"reserved, not connected in rev 1"
+24,RSVD,GND,RSVD,"reserved, not connected in rev 1"
+25,RSVD,RSVD,RSVD,"reserved, not connected in rev 1"
+26,RSVD,GND,RSVD,"reserved, not connected in rev 1"
+27,RSVD,RSVD,RSVD,"reserved, not connected in rev 1"
+28,RSVD,GND,RSVD,"reserved, not connected in rev 1"
+29,RSVD,RSVD,RSVD,"reserved, not connected in rev 1"
+30,RSVD,GND,RSVD,"reserved, not connected in rev 1"
+31,GND,GND,GND,
+32,GND,GND,GND,
