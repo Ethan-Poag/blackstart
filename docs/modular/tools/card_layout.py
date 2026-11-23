@@ -35,22 +35,23 @@ for i,(s,u) in enumerate(zip(slots_bot,use_bot)):
     box(ax,x0+i*pitch,96,14,94,'#ffe08a' if 'spare' not in u else '#ffffff',ec='#7a5200',lw=2,r=1.5)
     ax.text(x0+i*pitch+7,103,s,ha='center',fontsize=12,weight='bold')
     ax.text(x0+i*pitch+7,147,u,ha='center',va='center',fontsize=13,rotation=90,weight='bold')
-ax.text(x0+2*pitch,89.5,'8 universal LV slots: any LV card, any slot',ha='center',va='center',fontsize=12.5,color='#7a5200',weight='bold')
+ax.text(x0+2*pitch-3,89.5,'8 universal LV slots, any card',ha='center',va='center',fontsize=11.5,color='#7a5200',weight='bold')
 # fixed blocks
-box(ax,195,1,62,40,'#d9f2d9',txt='CM5 + display\n+ Ethernet/USB',fs=14)
-box(ax,195,47,82,48,'#cfe3ff',txt='SAFETY CORE (fixed)\nSTM32, watchdog,\nE-stop latch + J23,\nFRAM',fs=13,bold=True)
-box(ax,195,100,82,40,'#e0e0e0',txt='Power entry +\nsupplies, CAN x2,\nRS-485',fs=14)
+box(ax,195,-12,40,42,'#d9f2d9',txt='CM5 +\ndisplay\nEth/USB',fs=12)
+box(ax,238,-12,39,42,'#e0e0e0',txt='Power entry\nsupplies\nCAN x2\nRS-485',fs=11.5)
+box(ax,195,34,82,46,'#cfe3ff',txt='SAFETY CORE (fixed)\nSTM32, watchdog,\nWD_OK latch, E-stop\nsense/latch, FRAM',fs=11.5,bold=True)
+box(ax,195,84,82,56,'#ffd9b3',ec='#a04a00',lw=3,txt='E-STOP RAIL FEED\n+ WATCHDOG RAIL CUT\nJ23 > Q70/Q71 >\nTPS48100 cut\n(WD_OK AND ESTOP_OK)\n> VBAT_ESTOP',fs=10.5,bold=True)
+ax.annotate('',xy=(236,145),xytext=(236,140),arrowprops=dict(arrowstyle='-|>',lw=3,color='#a04a00'))
 box(ax,195,145,82,47,'#ffc27a',ec='#a04a00',lw=3,txt='ENGINE I/O CARD\n(keyed slot)\nfuel, crank, glow,\nMPU, D+, DI1-4, AI1-2',fs=12.5,bold=True)
 ax.add_patch(Rectangle((200,186),6,6,fc='#a04a00',ec='#a04a00')); ax.text(208,189,'coding key',fontsize=11,color='#a04a00',va='center',weight='bold')
-box(ax,80,-12,24,98,'#f2f2f2',txt='slot\npower\nswitches\n+ ID\nmux',fs=12)
-box(ax,80,96,24,96,'#f2f2f2',txt='E-stop\nrail\nfeed\nto\nengine\nslot',fs=12)
+box(ax,80,-12,24,204,'#f2f2f2',txt='slot\npower\nswitch\nTPS-\n48100\nx 8\n\nID mux\n2x TCA-\n9548A\nI2C2\n\npresence\n+ fault\nsense',fs=10.5)
 # bottom legend
 lx=fig.add_axes([0.03,0.015,0.94,0.29]); lx.axis('off'); lx.set_xlim(0,100); lx.set_ylim(0,100)
 L=[('#ffe08a','LV cards (power off to swap, ID EEPROM, pluggable field terminals):'),
-   (None,'  DI-8   8 digital inputs (DI5-12 today), ~74 parts'),
-   (None,'  AI-4   4 analog/resistive/4-20 mA inputs (AI3-6), ~89 parts'),
-   (None,'  HSO-5  5 high-side outputs, 2 A each (AUX1-5 / AUX6-10), ~71-74 parts'),
-   (None,'  BRK-4  breaker open/close coils GCB/MCB, ~60 parts'),
+   (None,'  DI-8   8 digital inputs (DI5-12 today), 76 parts'),
+   (None,'  AI-4   4 analog/resistive/4-20 mA inputs (AI3-6), 104 parts'),
+   (None,'  HSO-5  5 high-side outputs, 2 A each (AUX1-5 / AUX6-10), 76 parts'),
+   (None,'  BRK-4  breaker open/close coils GCB/MCB, 64 parts'),
    (None,'  PAR    future governor/AVR bias card for Ethernet paralleling'),
    ('#ffc27a','ENGINE card: keyed slot, only an engine card fits; no start without it'),
    (None,'  drivers fed from the mainboard E-stop rail; no card = no fuel = stop'),

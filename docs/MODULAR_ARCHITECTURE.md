@@ -443,3 +443,99 @@ HSO-5 uses all 16 MCP23S17 GPIOs except two, so it reads only SLOT_ID0/1 (GPA6/7
   - The harness is already 16 wires pin n to pin n, so it needs no change.
 - **Mainboard side:** J31.12 and J31.16 must carry the same nets to the HV TCA9548A channel, with 4.7k pull-ups there (see §11).
 - **Cost:** meter BOM goes from $63.90 to $65.33 at qty 1, and from $53.42 to $54.60 per board at qty 10 (bom/genctl_meter_bom.csv, 221 refs, 0 mismatches).
+
+## 11. Phase 2: watchdog rail cut, Q70/Q71 thermal check, datasheet checks, true cost (Nov 23, HST)
+
+### 11.1 Watchdog rail cut (design; mainboard schematic not yet edited, see 11.6)
+- **Circuit:** a copy of the proven fuel-driver circuit, placed in series after Q70/Q71.
+  - Parts: TPS48100QDGXRQ1 (C43131316), 2× BSC070N10NS5 in parallel (C534364, 100 V, 7.0 mΩ max), and an RLP25FEER002 2 mΩ 2 W 2512 shunt (C160590, LCSC stock 31,525).
+  - Same 100 V FET rating, same SMDJ40CA TVS (D126) on the input, same EN/UVLO divider (100k/27k), TMR 4.7n, BST 470n, G1PU 10R, G1PD 0R.
+- **Control:** INP = **WD_OK AND ESTOP_OK**, with ESTOP_OK = NOT ESTOP_DIG.
+  - New 74LVC1G08 (C176929); the inverter is the spare U34 74HC14 gate on pins 9→8.
+  - A 100k pull-down on INP means that losing logic or +3V3_SAFE opens the rail (fail-safe = no fuel).
+  - FLT goes to OUT_FAULT_N.
+- **Short-circuit trip:** R(ISCP) = 10.5k (RC0603FR-0710K5L, C137808). TPS4810-Q1 datasheet table: V(SCP) = 31.6 / 40 / 49.5 mV at 10.5 kΩ, so with 2 mΩ the trip is **15.8 / 20 / 24.8 A** (min/typ/max).
+  - The minimum is above the 10 A F2 fuse, so the cut never nuisance-trips at the full fuse current. F2 stays the overcurrent device; the cut is the watchdog disconnect plus a backup trip.
+- **Net split (intentional change):**
+
+| Net | Nodes |
+|---|---|
+| VBAT_ESTOP_RP (new, pre-cut) | Q70.3, Q71.3, D126, D137 (Q70/Q71 gate clamp), C199, R251 (VESTOP_D, E-stop status), R400 (TRIP_QB), cut VS/CS+, shunt pin 1, EN divider |
+| VBAT_ESTOP (post-cut) | cut FET sources, SRC, BST cap, C203, R411 (VESTOP_SNS to ADC), engine slot contacts 1-4 a/b/c |
+
+  - The ESTOP_DIG status is taken from the pre-cut node, so the cut cannot latch itself off.
+  - The ADC reading on the post-cut node lets firmware prove that the cut opened. That is a boot self-test: pull WD_OK low and expect VESTOP_SNS to read about 0 V.
+
+### 11.2 Dissipation and junction temperature (ambient 104 °F; `modular/tools/railcut_thermal.py`)
+TjMax is 347 °F for SQD40P10-40L and 302 °F for BSC070N10NS5. The 60/40 rows assume an uneven current split [E]; the 532 °F figure means thermal runaway.
+
+| Total A | Part | A in part | Loss W | Tj °F | Rise °F |
+|---|---|---|---|---|---|
+| 7.6 | Q70/Q71 SQD40P10-40L (each, 50/50) | 3.8 | 0.86 | 182 | 78 |
+| 7.6 | Q70/Q71 SQD40P10-40L (hot FET, 60/40) | 4.6 | 1.45 | 235 | 131 |
+| 7.6 | Rail-cut BSC070N10NS5 (each, 50/50) | 3.8 | 0.11 | 114 | 10 |
+| 7.6 | Rail-cut BSC070N10NS5 (hot FET, 60/40) | 4.6 | 0.16 | 119 | 15 |
+| 7.6 | Shunt 2 mOhm 2512 (2 W) | 7.6 | 0.12 | - | - |
+| 10.0 | Q70/Q71 SQD40P10-40L (each, 50/50) | 5.0 | 1.99 | 283 | 179 |
+| 10.0 | Q70/Q71 SQD40P10-40L (hot FET, 60/40) | 6.0 | 4.75 | 532 | 428 |
+| 10.0 | Rail-cut BSC070N10NS5 (each, 50/50) | 5.0 | 0.20 | 122 | 18 |
+| 10.0 | Rail-cut BSC070N10NS5 (hot FET, 60/40) | 6.0 | 0.29 | 130 | 26 |
+| 10.0 | Shunt 2 mOhm 2512 (2 W) | 10.0 | 0.20 | - | - |
+
+| Current | 1 oz outer, 18 °F rise | 1 oz outer, 36 °F rise | 2 oz outer, 18 °F rise | 0.5 oz inner, 18 °F rise |
+|---|---|---|---|---|
+| 7.6 A | 4.9 mm | 3.2 mm | 2.5 mm | 25.6 mm |
+| 10.0 A | 7.2 mm | 4.7 mm | 3.6 mm | 37.4 mm |
+
+- **Q70/Q71 are not OK for a clean 10 A rating.**
+  - At 7.6 A they are acceptable: 182 °F with an even split.
+  - At 10 A they run about 283 °F junction even with a perfect split. With a 60/40 split they run away past TjMax. Their RthJA is 50 °C/W on 1 in² of copper.
+  - SQD40P10-40L (C141570) also shows **0 LCSC stock** today.
+  - **Decision needed:** replace the Q70/Q71 reverse-block with a lower-loss part, for example an ideal-diode controller plus N-FETs (not picked; I'd look at LM74700-Q1 + BSC070N10NS5), or give each FET at least 2 in² of copper on 2 oz and re-check.
+- **The rail cut is fine:** 122 °F junction at 10 A with an even split, 130 °F at 60/40. The shunt dissipates 0.20 W of its 2 W rating.
+- **Copper (IPC-2221) for VBAT_ESTOP_IN → Q70/Q71 → cut → engine slot:** at least **7.2 mm** of 1 oz outer copper for 10 A at 18 °F rise (4.9 mm at 7.6 A).
+  - Alternatives: 4.7 mm at 36 °F rise, or 3.6 mm on 2 oz.
+  - A 0.5 oz inner layer is not practical (37 mm), so use outer layers or a pour. The 1 oz / 0.5 oz stackup is still ASSUMED (ROUTING_PLAN).
+
+### 11.3 STM32 I2C2 pins [DS]
+- The parent wrote "STM32G474 … DS12110". The MCU is the **STM32H743VIT6** (U7), and DS12110 is the STM32H742/743/753 datasheet. I checked the H743.
+- DS12110 rev 10, Port B alternate functions: **PB10 AF4 = I2C2_SCL, PB11 AF4 = I2C2_SDA**. The rev 8 parsed table in firmware/tools agrees.
+- On LQFP100 they are U7 pins 46 / 47. Today they go through R38/R39 to DI8/DI9, which move onto the DI-8 card, so both pins are free for the 2× TCA9548A (0x70/0x71) ID bus.
+
+### 11.4 DIN 41612 C96 footprints [DS]
+Checked against the WingTAT drawings 9001D11001 R7 (male RA, C5173361) and 9001D12003 R7 (female vertical, C5173363).
+- **Correct before and after:** contact span 78.74 (2.54 × 31), row pitch 2.54 (a-c 5.08), contact drill 1.0 ±0.05, mounting holes Ø2.8.
+- **Fixed:**
+  - Female mounting holes are 90.0 apart (were 88.9), at 2.24 from row a (were at row b).
+  - Male RA holes sit 2.54 beyond the outer row on the card-edge side (were at row b). The card edge is 5.30 from that row (now drawn on F.Fab).
+  - Male contact 1 is at the right end of the drawing's PCB-layout view.
+- **Still VERIFY:** the male drawing does not print row letters. I took the edge row as "a"; check it on a sample before layout.
+
+### 11.5 True net cost delta (`modular/tools/true_cost.py` → `modular/true_cost_delta.csv`, `modular/combined_bom.csv`)
+Per controller, example build (ENGINE + 2× HSO-5 + BRK-4 + DI-8 + AI-4 + HV), against the locked baseline:
+
+| | qty 1 | qty 10 (per unit) |
+|---|---|---|
+| New parts on cards (moved parts are free; 2nd HSO-5 counted) | +$34.86 | +$29.02 |
+| Backplane: 9 DIN sockets, 8 slot TPS48100 + FETs + shunts, TPS2553 ×16, ID muxes, clamp | +$63.86 | +$54.86 |
+| Watchdog rail cut | +$4.84 | +$4.24 |
+| HV meter EEPROM | +$1.43 | +$1.18 |
+| Removed from the mainboard (U41, U42, U64, D133-135, RN2, J17, J19, J26) | −$2.90 | −$2.33 |
+| Card PCBs + PCBA fees + extended-part loading (5 designs) [E] | +$200.80 | +$22.08 |
+| Card bays, guides, faceplates [E] | +$29.00 | +$17.50 |
+| **Total** | **+$331.90** | **+$126.57** |
+
+- The combined build BOM has 214 lines and 1,290 parts, plus the 221-ref HV meter board.
+- Every price comes from LCSC/JLC (dated in bom/lcsc_prices.csv) except the [E] lines: bare PCBs, fees, guides, the slot shunt part and passives.
+
+### 11.6 Not done yet: mainboard schematic rework
+These are specified here and in §10 but not drawn in genctl.kicad_sch:
+- slot sheets (engine + 8 LV, per-slot TPS48100);
+- 2× TCA9548A on I2C2;
+- presence/fault sensing;
+- the rail cut and the VBAT_ESTOP net split;
+- the relocated ESTOP_TRIP clamp;
+- J31.12/J31.16 → MTR_ID_SCL/SDA;
+- removal of moved parts.
+
+The end-to-end system netlist check therefore covers the five cards one at a time: 1:1 mapping, 0 unaccounted nets each, intentional changes in net_changes.csv. The mainboard side can only be closed after that rework.

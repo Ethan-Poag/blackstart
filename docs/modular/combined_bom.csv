@@ -1,0 +1,215 @@
+LCSC,Value,Qty,From
+C7498149,CR2032,1,mainboard
+C94599,MLT-8530,1,mainboard
+C28233,100n,42,ai4+brk4+di8+engine+hso5+mainboard
+C14663,100n,111,ai4+brk4+di8+engine+hso5+mainboard
+C178628,100u 63V,2,mainboard
+C576517,10u,5,mainboard
+C1603,220p,1,mainboard
+C1622,47n,2,mainboard
+C21117,33n,1,mainboard
+C1588,1n,4,engine+mainboard
+C29823,4.7u,4,mainboard
+C28323,1u,2,mainboard
+C12891,22u,17,mainboard
+C14858,100p,3,mainboard
+C15850,10u,16,mainboard
+C170101,2.2u,1,mainboard
+C15849,1u,16,mainboard
+C68361,47u,2,mainboard
+C41017,4.7n,3,mainboard
+C23630,2.2u,2,mainboard
+C1549,18p,2,mainboard
+C1679,6.8p,2,mainboard
+none (consigned; Mouser 594-MAL223051003E3),20F 3.0V,2,mainboard
+C2932477,47u,3,mainboard
+C1621,4.7n,1,mainboard
+C57112,10n,7,mainboard
+C1623,470n,3,engine+mainboard
+C15725,100n,2,ai4+mainboard
+C1945,100n,22,ai4+di8+engine+mainboard
+C5137595,2.2u,1,mainboard
+C464977,220n,1,mainboard
+C513710,220n,1,mainboard
+C1872,4.7u,1,mainboard
+C1589,10n,2,di8+mainboard
+C224077,SMDJ40CA,4,engine+mainboard
+C114004,SMBJ40CA,18,brk4+engine+hso5+mainboard
+C77297,BAS70,2,mainboard
+C113976,SMBJ6.0A,1,mainboard
+C2297,green,19,brk4+engine+hso5+mainboard
+C2135,BAT54C,3,mainboard
+C2295,red,2,mainboard
+C8678,SS34,1,mainboard
+C133092,NUP3105L,2,mainboard
+C2482,SS110,20,brk4+engine+hso5+mainboard
+C12067,SM712,1,mainboard
+C40960,RClamp0524PA,4,mainboard
+C7519,USBLC6-2SC6,3,mainboard
+C16015,SS36,1,mainboard
+C9421,LM4040A25,2,ai4+mainboard
+C113970,SMAJ40CA,22,ai4+di8+engine+mainboard
+C81598,1N4148W,7,ai4+engine+mainboard
+C2500,BAV99,10,ai4+engine+mainboard
+C8592,BAT54S,3,mainboard
+C124205,BAT54WS-7-F,1,mainboard
+C2104,BZT52C15,4,di8+engine+mainboard
+C21561,BZT52C30,2,ai4+mainboard
+C113969,SMAJ40A,2,mainboard
+C27568256,1210L020/72WR,2,di8+mainboard
+C1002,600R@100MHz,1,mainboard
+C3579760,"PC 5/4-GF-7,62 (battery in)",2,mainboard
+C5199898,SWD,1,mainboard
+C3294463,Header B (MCU spare),2,mainboard
+C7245,CAN1 (PC 5/4),1,mainboard
+C7246,Expansion bus (PC 5/6),1,mainboard
+C8387,Router 12V (3.81/2),1,mainboard
+C8406,RS-485 (PC 5/3),1,mainboard
+C19724763,HR963380AE,1,mainboard
+C47817619,USB-C service,1,mainboard
+C160404,Internal USB0 touch (SM04B),2,mainboard
+C5362161,LVDS FPC 40p 0.5mm,1,mainboard
+C5362168,Touch FPC 10p 0.5mm,1,mainboard
+C485339,Backlight (JST SM02B-BHSS),1,mainboard
+C441292,J3A E-stop/D+/VBAT/bias,13,ai4+brk4+di8+engine+hso5+mainboard
+C277731,Micro-Fit 2x8 RA 43045-1600,1,mainboard
+C225519,JP1 CM5->MCU SWD (opt),1,mainboard
+C501976,4.7u,1,mainboard
+C408483,3.3u,2,mainboard
+C83451,33u,1,mainboard
+C167920,1u,1,mainboard
+C76584,ACT45B-510-2P,2,mainboard
+C79272,10u,1,mainboard
+C534364,BSC070N10NS5,28,backplane+engine+mainboard+rail cut
+C20526,MMBT3904,37,ai4+brk4+di8+engine+hso5+mainboard
+C53658,IRLML0100,8,ai4+di8+engine+mainboard
+C10493,SI2309CDS,3,di8+engine+mainboard
+C347476,AO3401A,1,mainboard
+C141570,SQD40P10-40L,2,mainboard
+C426787,BCP56-16,2,ai4+mainboard
+C22952,210k,1,mainboard
+C23184,49.9k,3,mainboard
+C23114,8.66k,1,mainboard
+C25803,100k,94,ai4+brk4+di8+engine+hso5+mainboard
+C4216,33k,16,di8+engine+mainboard
+C23266,93.1k,1,mainboard
+C22964,27.4k,1,mainboard
+C13167,2.7k,1,mainboard
+C22875,140k,1,mainboard
+C98220,10k,84,ai4+brk4+di8+engine+hso5+mainboard
+C469375,8m,1,mainboard
+C25809,121k,2,mainboard
+C4210,16k,2,mainboard
+C23242,75k,1,mainboard
+C4184,20k,2,mainboard
+C23058,45.3k,1,mainboard
+C12447,40.2k,3,engine+mainboard
+C23053,43.2k,1,mainboard
+C22893,18.7k,1,mainboard
+C17927,1M,3,mainboard
+C21190,1k,52,ai4+brk4+engine+hso5+mainboard
+C4190,2.2k,6,engine+mainboard
+C17917,150R,3,mainboard
+C23162,4.7k,4,mainboard
+C23237,715k,1,mainboard
+C23003,33.2k,3,di8+mainboard
+C22974,29.4k,1,mainboard
+C17971,62R,2,mainboard
+C22838,1.33k,1,mainboard
+C17909,120R,1,mainboard
+C23138,330R,14,mainboard
+C23186,5.1k,2,mainboard
+C22827,180k,1,mainboard
+C22913,232k,1,mainboard
+C2933354,1.1R,2,mainboard
+C17902,10k,40,ai4+brk4+di8+engine+hso5+mainboard
+C25804,10k,8,di8+mainboard
+C122538,100k,10,ai4+engine+mainboard
+C309650,18k,8,ai4+mainboard
+C49308172,4.7k,13,di8+engine+mainboard
+C23231,68k,15,di8+engine+mainboard
+C22935,1M,5,di8+engine+mainboard
+C25819,47k,18,brk4+engine+hso5+mainboard
+C22859,10R,4,engine+mainboard
+C22764,1.1k,16,brk4+engine+hso5+mainboard
+C22976,2M,1,mainboard
+C23179,470R,24,mainboard
+C25811,200k,1,mainboard
+C22961,220k,1,mainboard
+C2093761,2m,1,mainboard
+C22775,100R,1,mainboard
+C23140,33R,5,mainboard
+C29718,10k x4,2,ai4+mainboard
+C318884,RESET,4,mainboard
+C6077135,BTN1,12,mainboard
+C3215600,LM74800QDRRRQ1,1,mainboard
+C442493,LM5176PWPR,1,mainboard
+C841386,TPS56637RPAR,2,mainboard
+C2870127,LMR36506RRPER,1,mainboard
+C3235557,TPS2116DRLR,1,mainboard
+C5271084,STM32H743VIT6,1,mainboard
+C9829,FM24CL64B,1,mainboard
+C597931,CM5 (conn A),2,mainboard
+C919459,TPS61023DRLR,1,mainboard
+C485916,TPS2121RUXR,1,mainboard
+C2890050,CA-IS3062W,2,mainboard
+C2653785,TPS1H200AQDGNRQ1,2,mainboard
+C5121950,CA-IS2092W,1,mainboard
+C55266,TPS2553DBVR,18,backplane+mainboard
+C2877863,TLV75518PDBVR,1,mainboard
+C2871688,SN65DSI83ZXHR,1,mainboard
+C131941,TPS22918DBVR,2,mainboard
+C71160,TPS61500PWPR,1,mainboard
+C398355,TLV9062,2,ai4+mainboard
+C37593,ADS1115 @0x48,3,ai4+mainboard
+C465732,TCA9555PWR @0x22,8,backplane+mainboard
+C5605,74HC14,4,di8+mainboard
+C702145,TPS3431SDRBR,1,mainboard
+C176929,74LVC1G08,14,backplane+mainboard+rail cut
+C22414694,TPS1HTC30AQPWPRQ1,16,brk4+engine+hso5+mainboard
+C494728,TMUX1208PWR,5,backplane+brk4+hso5+mainboard
+C132202,TPS7B6950QDBVRQ1,1,mainboard
+C130208,TLC555QDRQ1,1,mainboard
+C33196,PCA9306DCUR,1,mainboard
+C7843,SN74LVC1T45DBVR,2,mainboard
+C2870250,TMP1075DSGR @0x4A,1,mainboard
+C548409,74LVC1G74DP-Q100H,1,mainboard
+C7836,SN74LVC1G17DBVR,2,mainboard
+C2864837,INA237AIDGSR,1,mainboard
+C1848341,TPS26621DRCR,2,di8+mainboard
+C6053,74LVC08APW,2,mainboard
+C9006,25MHz,1,mainboard
+C97604,32.768kHz,1,mainboard
+,,1,mainboard
+C106218,4.7n,2,engine
+C114007,SMBJ58CA,2,engine
+C3018527,SK1010C,2,engine
+C362107,SMDJ24A,1,engine
+C5173361,DIN41612_C96,6,ai4+brk4+di8+engine+hso5
+C2143,MMBT3906,6,ai4+engine
+C8492,BSS84,6,ai4+engine
+C5122072,2.49k,6,ai4+engine
+C876535,100R,6,ai4+engine
+C47019,10R,1,engine
+C22967,27k,2,engine
+C21189,0R,2,engine
+C105360,20m,2,engine
+C25962,24.9k,15,brk4+engine+hso5
+C35218,100R,2,engine
+C1849422,LM2904B,3,ai4+engine
+C6333176,TLV1812,1,engine
+C3015165,LM317M,1,engine
+C43131316,TPS48100QDGXRQ1,11,backplane+engine+rail cut
+C2862615,INA281A1,2,engine
+C147891,AT24CS32-STUM-T,6,ai4+brk4+di8+engine+hso5
+C37704,BAT54C,9,brk4+hso5
+C113281,SN74LVC541APWR,4,ai4+brk4+hso5
+C128577,MCP23S17T-E/SS,5,ai4+brk4+di8+hso5
+C5173363,DIN 41612 C96 female vertical 9001-12961,9,backplane
+,10 mOhm 2512 slot shunt (priced as the 2,8,backplane
+,Slot passives ~10 per slot [E],8,backplane
+C130026,TCA9548APWR x2 ID mux 0x70/0x71 on I2C2 ,2,backplane
+,I2C pull-ups 4.7k x20 + CS decoder [E],1,backplane
+,BAT54C clamp GLOW_SNSM + ESTOP_TRIP_SNSM,1,backplane
+C160590,RLP25FEER002 2 mOhm 2 W 2512 shunt (C160,1,rail cut
+C137808,10.5k ISCP RC0603FR-0710K5L (C137808) + ,1,rail cut
