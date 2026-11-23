@@ -344,11 +344,11 @@ Why: Ethan asked whether fuel, crank, glow, speed and the core inputs are just a
 | Net | Contacts | Rated / derated | Needs |
 |---|---|---|---|
 | VBAT_ESTOP | 12 (a/b/c 1-4) | 24 A / 12 A | ≥ 10 A F2 fuse ✓ |
-| FUEL_OUT | 6 (a/b/c 5-6) | 12 A / 6 A | ≥ 6.14 A max short-circuit trip (TPS48100, 40.2k / 20 mΩ) ✓ |
-| CRANK_OUT | 6 (a/b/c 7-8) | 12 A / 6 A | same ✓ |
+| FUEL_OUT | 8 (a/b/c 5-6, a/c 7) | 16 A / 8 A | ≥ 6.14 A max short-circuit trip (TPS48100, 40.2k / 20 mΩ) ✓ |
+| CRANK_OUT | 8 (a/b/c 8-9, a/c 10) | 16 A / 8 A | same ✓ |
 | VBAT_P (MPU/D+ bias only) | 2 | 4 A / 2 A | < 0.2 A [E] ✓ |
 
-The full pinout is in `cards/engine/engine_slot_pinout.csv`. Signals use rows a and c, and every b contact from 9 to 32 is GND (guard). **Budget flag:** fuel 2.8 A + crank 2.8 A + glow ~2 A = 7.6 A, above the 6 A that the baseline allowed for the VBAT_ESTOP node. It is still under the 10 A F2 fuse and the 12 A contact rating, but the VBAT_ESTOP copper and the Q70/Q71 FETs need re-checking for glow (open question 9.8-2).
+The full pinout is in `cards/engine/engine_slot_pinout.csv`. Signals use rows a and c (positions 14-31), every b contact from 11 to 32 is GND (guard), and b7/b10 are GND between the power groups. The 4 extra output contacts came from the spare GND positions 30-31, so no pin is short. **Budget flag:** fuel 2.8 A + crank 2.8 A + glow ~2 A = 7.6 A, above the 6 A that the baseline allowed for the VBAT_ESTOP node. It is still under the 10 A F2 fuse and the 12 A contact rating, but the VBAT_ESTOP copper and the Q70/Q71 FETs need re-checking for glow (open question 9.8-2).
 
 ### 9.5 Datasheet checks done this phase
 - **AT24CS32** (LCSC C147891 PDF) [DS]:

@@ -1,13 +1,13 @@
 # cards/ — swappable card schematics (Phase 2, m7-modular)
 
-Each card is its own KiCad 9 project on ONE flat sheet (A3), nets by local label, no hierarchy.
+Each card is its own KiCad 9 project on ONE flat sheet, no hierarchy. Sheets are drawn by `tools/schdraw.py` as framed functional blocks: parts that connect directly are wired to each other, and labels are used only between blocks, on slot-connector pins and for rails (rails and GND are power symbols).
 Schematics are generated from the locked baseline (tag `baseline-2026-11-23-locked`) by MOVING
 the existing parts: values, footprints and LCSC numbers are unchanged; refs are renumbered per card
 and the original ref is kept in the `BaselineRef` field (`refmap.json`).
 
 | card | sheet | ERC | parts | files |
 |---|---|---|---|---|
-| engine (keyed ENGINE slot) | A3, 1 page | 0 err / 0 warn | 156 (150 moved + 6 new) | `engine/engine.kicad_sch`, `engine.png`, `engine.pdf`, `engine_slot_pinout.csv`, `net_accounting.csv`, `unaccounted_nets.txt` (empty) |
+| engine (keyed ENGINE slot) | **A2**, 1 page (156 parts do not fit A3 legibly with wires; text 1.27 mm) | 0 err / 0 warn | 156 (150 moved + 6 new) | `engine/engine.kicad_sch`, `engine.png`, `engine.pdf`, `engine_slot_pinout.csv`, `net_accounting.csv`, `unaccounted_nets.txt` (empty) |
 
 Rebuild + check: `python3 tools/card_engine.py && tools/render.sh engine`
 

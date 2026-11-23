@@ -26,17 +26,26 @@ def verify(name,slot_pins,field_refs,overrides,netmap):
     comps,nets,pinnet,_,_=load('genctl'); base={'nets':nets,'pinnet':pinnet}; pin,refs=card_netlist(name)
     inv={v:k for k,v in refs.items()}
     moved=set(refs.values()); errs=[]
-    # 1) connectivity
-    bmap={}
+    # 1) connectivity: baseline net <-> card net must be a 1:1 mapping over the moved pins
+    #    (wired-only nets get KiCad auto names on the card; documented overrides excluded)
+    fwd=collections.defaultdict(set); rev=collections.defaultdict(set)
     for (r,p),n in base['pinnet'].items():
-        if r in moved:
-            exp=overrides.get((r,p),netmap.get(n,short(n)))
-            got=pin.get((inv[r],p))
-            if exp.startswith('unconnected-') or exp.startswith('Net-'):
-                bmap.setdefault(exp,set()).add(got)   # auto-named: check partition equivalence below
-            elif got!=exp: errs.append(f'{r}.{p}: baseline {exp} card {got}')
-    for k,v in bmap.items():
-        if len(v)!=1 and not k.startswith('unconnected-'): errs.append(f'auto net {k} split into {v}')
+        if r not in moved: continue
+        got=pin.get((inv[r],p))
+        if (r,p) in overrides:
+            if got!=overrides[(r,p)]: errs.append(f'{r}.{p}: override {overrides[(r,p)]} card {got}')
+            continue
+        b=netmap.get(n,short(n))
+        if b.startswith('unconnected-'):
+            if got and not got.startswith('unconnected-'): errs.append(f'{r}.{p}: baseline NC card {got}')
+            continue
+        fwd[b].add(got); rev[got].add(b)
+    for b,g in fwd.items():
+        if len(g)!=1: errs.append(f'baseline net {b} split on card into {sorted(map(str,g))}')
+    for g,b in rev.items():
+        if len(b)!=1: errs.append(f'card net {g} merges baseline nets {sorted(b)}')
+    named=[(b,list(g)[0]) for b,g in fwd.items() if len(g)==1 and not list(g)[0].startswith('Net-(') and not b.startswith('Net-(') and list(g)[0]!=b]
+    for b,g in named: errs.append(f'baseline net {b} renamed on card to {g}')
     # 2) accounting
     rows=[]; unacc=[]
     for n in base['nets']:

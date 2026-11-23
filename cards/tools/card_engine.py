@@ -20,14 +20,16 @@ SIG=['AI1_ADC','AI2_ADC','COM_A_ADC','COM_B_ADC','AI_CS_DIS2','AI_SH_G1','AI_SH_
      'DIAG_EN','OUT_FAULT_N','ID_SDA','ID_SCL','ID_WP','ENG_PRESENT_N']
 PIN={}
 def row(pos,a,b,c_): PIN[f'a{pos}']=a; PIN[f'b{pos}']=b; PIN[f'c{pos}']=c_
-for pos in (1,2,3,4): row(pos,'VBAT_ESTOP','VBAT_ESTOP','VBAT_ESTOP')
+for pos in (1,2,3,4): row(pos,'VBAT_ESTOP','VBAT_ESTOP','VBAT_ESTOP')          # 12 contacts
 for pos in (5,6): row(pos,'FUEL_OUT','FUEL_OUT','FUEL_OUT')
-for pos in (7,8): row(pos,'CRANK_OUT','CRANK_OUT','CRANK_OUT')
-row(9,'GND','GND','GND'); row(10,'VBAT_P','GND','VBAT_P'); row(11,'+3V3_SAFE','GND','+3V3_SAFE')
-for i in range(0,len(SIG),2): row(12+i//2,SIG[i],'GND',SIG[i+1])
-for pos in range(12+len(SIG)//2,33): row(pos,'GND','GND','GND')
+row(7,'FUEL_OUT','GND','FUEL_OUT')                                                # FUEL_OUT 8 contacts
+for pos in (8,9): row(pos,'CRANK_OUT','CRANK_OUT','CRANK_OUT')
+row(10,'CRANK_OUT','GND','CRANK_OUT')                                             # CRANK_OUT 8 contacts
+row(11,'GND','GND','GND'); row(12,'VBAT_P','GND','VBAT_P'); row(13,'+3V3_SAFE','GND','+3V3_SAFE')
+for i in range(0,len(SIG),2): row(14+i//2,SIG[i],'GND',SIG[i+1])
+for pos in range(14+len(SIG)//2,33): row(pos,'GND','GND','GND')
 PIN={k:('GND' if v=='ENG_PRESENT_N' else v) for k,v in PIN.items()} | {'_present':'ENG_PRESENT_N'}
-present_pin=[k for k,v in zip([f'{r}{12+i//2}' for i in range(len(SIG)) for r in ('a' if i%2==0 else 'c')],SIG) if v=='ENG_PRESENT_N'][0]
+present_pin=[k for k,v in zip([f'{r}{14+i//2}' for i in range(len(SIG)) for r in ('a' if i%2==0 else 'c')],SIG) if v=='ENG_PRESENT_N'][0]
 PIN.pop('_present'); PIN[present_pin]='GND'   # card ties PRESENT_N to GND: net on the card is GND
 din={'Footprint':'cards:DIN41612_C96_Male_RA_WingTAT_9001-11961','MPN':'9001-11961C00A','Manufacturer':'WingTAT','LCSC':'C5173361',
      'Description':'ENGINE slot plug, DIN 41612 C96 RA male. Keyed: engine-only coding notch (see notes). Pinout: cards/engine/engine_slot_pinout.csv'}
@@ -42,13 +44,13 @@ cap=dict(c.inst['C199'][0]['props']); cap.pop('Reference')
 res=dict(c.inst['R349'][0]['props']); res.pop('Reference')
 c.add('cards:AT24CS32-STUM',c.newref('U'),'AT24CS32-STUM-T',{'1':'ID_SCL','2':'GND','3':'ID_SDA','4':'+3V3_SAFE','5':'ID_WP'},
       {'Footprint':'Package_TO_SOT_SMD:SOT-23-5','MPN':'AT24CS32-STUM-T','Manufacturer':'Microchip','LCSC':'C147891','Description':'Card ID + calibration EEPROM (0x50 / serial 0x58)'})
-c.add('Device:C',c.newref('C'),cap['Value'],{'1':'+3V3_SAFE','2':'GND'},cap)
+CID=c.newref('C'); c.add('Device:C',CID,cap['Value'],{'1':'+3V3_SAFE','2':'GND'},cap)
 c.add('Device:R',c.newref('R'),res['Value'],{'1':'+3V3_SAFE','2':'ID_WP'},res)
 c.notes=['ENGINE I/O CARD (dedicated keyed slot, card type 0x0001)',
  'Key: engine-only coding notch in the card edge + matching rib in the engine slot guide; LV cards have the LV notch. ID EEPROM type check too.',
  'Fuel/crank/glow drivers are fed ONLY from VBAT_ESTOP (E-stop cut is external, upstream of J23 on the mainboard).',
  'FUEL_EN/CRANK_EN/GLOW_EN arrive already gated by WD_OK on the mainboard (U38-U40). Missing card = no drive = engine stops.',
- 'Contacts: VBAT_ESTOP 12 in parallel (24 A rated, 12 A at 50 % derate >= 10 A F2 fuse); FUEL_OUT and CRANK_OUT 6 each (12 A / 6 A derated >= 6.14 A max SCP trip).',
+ 'Contacts (2 A each, 50 % derate): VBAT_ESTOP 12 (12 A >= 10 A F2 fuse); FUEL_OUT 8 and CRANK_OUT 8 (8 A >= 6.14 A max short-circuit trip).',
  'Glow driver (baseline U47) VS moved VBAT_P -> VBAT_ESTOP (Nov 23 decision): E-stop now also cuts glow.',
  'Slot pinout table: cards/engine/engine_slot_pinout.csv. b-row signals are GND guards. PRESENT_N tied to GND on the card.']
 def key(p):
@@ -58,6 +60,22 @@ def key(p):
         if re.search(rx,p['ref'] if i<1 else nets): return (i,br)
     return (99,br)
 used=c.write(os.path.join(ROOT,'cards','engine'),key)
+import schdraw
+B=lambda *refs:[k for r in refs for k in sorted((p['ref'],p['unit']) for p in c.parts if p['props'].get('BaselineRef')==r or (r.startswith('=') and p['ref']==r[1:]))]
+BLOCKS=[('Slot connector (ENGINE slot, keyed) - DIN 41612 C96',B('='+JS)),
+ ('Fuel driver + current sense + readback',B('U43','Q45','Q46','U44','Q49')),
+ ('Crank driver + current sense + readback',B('U45','Q47','Q48','U46','Q50')),
+ ('Glow driver (VS on VBAT_ESTOP)',B('U47','Q51')),
+ ('MPU speed comparator + COM_A/B (J1)',B('U35','D60','D62','J18')),
+ ('D+ excite / sense + field header J4',B('U36','Q42','Q43','='+JF2)),
+ ('AI1 channel',[k for k in B('U26') if k[1]==1]+B('Q12','Q13','Q14','Q15')),
+ ('AI2 channel',[k for k in B('U26') if k[1]!=1]+B('Q16','Q17','Q18','Q19')),
+ ('DI1-4 inputs + AI1/AI2 field header J3',B('='+JF1)),
+ ('Card ID EEPROM',[k for k in ((p['ref'],p['unit']) for p in c.parts) if c.parts and k[0].startswith('U') and k[0] not in c.refmap.values()])]
+RAILS={'GND','+3V3_SAFE','VBAT_ESTOP','VBAT_P','VBAT_AI','VMID','AI_VSET','DI_BIAS_A'}
+D=schdraw.Drawer(c,RAILS,BLOCKS,os.environ.get('PAPER','A2'),c.notes); D.labels_only={JS}; D.extra={CID:'Card ID EEPROM'}
+over=schdraw.run(D,os.path.join(ROOT,'cards','engine'),c.title)
+print('leftover clusters',len(D.left),D.left[:20])
 import csv
 with open(os.path.join(ROOT,'cards','engine','engine_slot_pinout.csv'),'w',newline='') as f:
     w=csv.writer(f); w.writerow(['position','row_a','row_b','row_c'])
