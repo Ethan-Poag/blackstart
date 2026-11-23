@@ -16,7 +16,8 @@ from mkcard import body,U,q,f,G,PAPER,dump
 FS=float(os.environ.get('FS','1.27'))   # text size mm (labels, refs, values)
 CW=1.05*FS/1.27/G   # char width in grid units (measured: 20 chars = 23.5 mm at 1.27 mm)
 TH=1.3*FS/G
-def tw(s): return len(s)*CW+0.6
+GLOBALS=set()   # nets drawn as global labels (wider: flag outline)
+def tw(s): return len(s)*CW+0.6+(2.4 if s in GLOBALS else 0)
 
 DIRS={(1,0):0,(0,-1):90,(-1,0):180,(0,1):270}   # direction -> KiCad angle (label text direction)
 def rot(v,th):  # rotate a screen vector CCW (visually) by th degrees
@@ -325,7 +326,7 @@ def emit_sym(out,p,O,th,F,proj,root):
             lines.append(f'(property {q(k)} {q(v)} (at {f(x*G)} {f(y*G)} {fa}) (effects (font (size {FS} {FS})){jj}))')
         else:
             lines.append(f'(property {q(k)} {q(v)} (at {f(X)} {f(Y)} 0) (effects (font (size 1.27 1.27)) hide))')
-    out.append(f'(symbol (lib_id {q(p["lib_id"])}) (at {f(X)} {f(Y)} {th}) (unit {p["unit"]}) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp {"yes" if p["dnp"] else "no"}) (uuid "{U()}") '
+    out.append(f'(symbol (lib_id {q(p["lib_id"])}) (at {f(X)} {f(Y)} {th}) (unit {p["unit"]}) (exclude_from_sim no) (in_bom {"no" if p.get("in_bom") is False else "yes"}) (on_board yes) (dnp {"yes" if p["dnp"] else "no"}) (uuid "{U()}") '
         +' '.join(lines)+' '+' '.join(f'(pin {q(pp["num"])} (uuid "{U()}"))' for pp in p['pins'])
         +f' (instances (project "{proj}" (path "/{root}" (reference {q(p["ref"])}) (unit {p["unit"]})))))')
 
@@ -337,8 +338,8 @@ def run(D,outdir,title):
         for pp in p['pins']:
             n=p['pn'][pp['num']]
             if n: types[n].add(pp['typ'])
-    flags=sorted(n for n,t in types.items() if ('power_in' in t or (n in D.rails and n!='GND')) and 'power_out' not in t and 'output' not in t)
-    D.force_label={n for n in flags if n not in D.rails}
+    flags=sorted(n for n in getattr(D,'flagnets',()) if n in types) if getattr(D,'noflags',False) else sorted(n for n,t in types.items() if ('power_in' in t or (n in D.rails and n!='GND')) and 'power_out' not in t and 'output' not in t)
+    D.force_label={n for n in flags if n not in D.rails}|set(getattr(D,'glabels',()))
     blocks=[]
     for bt,keys in D.blocks:
         cl=[]
@@ -366,7 +367,7 @@ def run(D,outdir,title):
         else: P.prims.append(('label',n,(0,2),(0,1))); P.bb.box(-1,2,1,2+tw(n))
         P.bb.box(-2,-3,2,2)
         fl.append(P)
-    blocks.append(['PWR_FLAG (rails enter via the slot)',fl])
+    blocks.append([getattr(D,'flagtitle','PWR_FLAG (rails enter via the slot)'),fl])
     # lay out clusters inside each block
     laid=[]
     for bt,cl in blocks:
@@ -421,8 +422,11 @@ def run(D,outdir,title):
     for i,pp_ in zip(order,bp): laid[i]['at']=pp_ if pp_ else (0,Hu+5)
     # emit
     out=[]; root=U(); proj=c.name; x0u=round(13.97/G); y0u=round(15.24/G)
+    fileuuid=root
+    if getattr(D,'path',None): proj,root=D.proj,D.path   # sub-sheet of a hierarchy: instances under /<root>/<sheet>
+    GL=getattr(D,'glabels',set())
     out.append('(kicad_sch (version 20250114) (generator "eeschema") (generator_version "9.0")')
-    out.append(f'(uuid "{root}")'); out.append(f'(paper "{D.paper}")')
+    out.append(f'(uuid "{fileuuid}")'); out.append(f'(paper "{D.paper}")')
     out.append('(title_block (title %s) (date "2026-11-23") (rev "M-mod P2b") (company "Project Blackstart") (comment 1 %s) (comment 2 %s))'%(
         q(title),q('cards/tools (schdraw.py) from tag baseline-2026-11-23-locked; BaselineRef = old ref'),q('One flat page: functional blocks, wired inside, labels between blocks')))
     out.append('(lib_symbols '+' '.join(dump(L) for L in c.libs.values())+' '+dump(c.srclibs['power:GND'])+' '+dump(c.srclibs['power:PWR_FLAG'])+' '+dump(c.srclibs['power:+3V3'])+')')
@@ -462,7 +466,11 @@ def run(D,outdir,title):
                 elif k=='nc': out.append(f'(no_connect (at {f(pr[1][0]*G)} {f(pr[1][1]*G)}) (uuid "{U()}"))')
                 elif k=='label':
                     n,(x,y),d=pr[1],pr[2],pr[3]; ang=DIRS[d]; just='left' if ang in (0,90) else 'right'
-                    out.append(f'(label {q(n)} (at {f(x*G)} {f(y*G)} {ang}) (fields_autoplaced yes) (effects (font (size {FS} {FS})) (justify {just} bottom)) (uuid "{U()}"))')
+                    if n in GL:
+                        gj='left' if ang in (0,90) else 'right'
+                        out.append(f'(global_label {q(n)} (shape bidirectional) (at {f(x*G)} {f(y*G)} {ang}) (fields_autoplaced yes) (effects (font (size {FS} {FS})) (justify {gj})) (uuid "{U()}") (property "Intersheetrefs" "${{INTERSHEET_REFS}}" (at {f(x*G)} {f(y*G)} 0) (effects (font (size 1.27 1.27)) hide)))')
+                    else:
+                        out.append(f'(label {q(n)} (at {f(x*G)} {f(y*G)} {ang}) (fields_autoplaced yes) (effects (font (size {FS} {FS})) (justify {just} bottom)) (uuid "{U()}"))')
                 elif k=='pwr':
                     n,(x,y),d=pr[1],pr[2],pr[3]
                     if n=='GND': pwr('power:GND',x*G,y*G,{(0,1):0,(0,-1):180,(1,0):90,(-1,0):270}[d],True)
@@ -472,7 +480,8 @@ def run(D,outdir,title):
                     out.append(f'(text {q(chr(10).join(pr[2]))} (exclude_from_sim no) (at {f(pr[1][0]*G)} {f(pr[1][1]*G)} 0) (effects (font (size {FS} {FS})) (justify left top)) (uuid "{U()}"))')
                 elif k=='sym':
                     p,O,th,F=pr[1],pr[2],pr[3],pr[4]; emit_sym(out,p,O,th,F,proj,root)
-    out.append('(sheet_instances (path "/" (page "1")))'); out.append('(embedded_fonts no))')
+    if not getattr(D,'path',None): out.append('(sheet_instances (path "/" (page "1")))')
+    out.append('(embedded_fonts no))')
     os.makedirs(outdir,exist_ok=True)
     open(os.path.join(outdir,c.name+'.kicad_sch'),'w').write('\n'.join(out)+'\n')
     return over

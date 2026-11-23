@@ -32,6 +32,30 @@ syms.append('(symbol "MCP23S17-SS" (pin_names (offset 0.5)) (exclude_from_sim no
   +prop('Reference','U',0,27.94)+prop('Value','MCP23S17T-E/SS',0,-27.94)+prop('Footprint','Package_SO:SSOP-28_5.3x10.2mm_P0.65mm',0,0,True)+prop('Datasheet','',0,0,True)
   +prop('Description','16-bit SPI I/O expander, SSOP-28 (pinout per Microchip DS / LCSC C128577)',0,0,True)
   +'(symbol "MCP23S17-SS_1_1" (rectangle (start -10.16 22.86) (end 10.16 -22.86) (stroke (width 0.254) (type default)) (fill (type background))) '+' '.join(p)+'))')
+
+def box(name,value,fpn,desc,left,right,top=(),bottom=(),w=7.62):
+    """generic box symbol: left/right = [(num,name,type)], top/bottom = power pins"""
+    n=max(len(left),len(right)); h=round((n+1)*2.54/2/1.27)*1.27; h=max(h,5.08)
+    p=[pin(num,nm,-(w+2.54),round(h-2.54-i*2.54,2),0,t) for i,(num,nm,t) in enumerate(left)]
+    p+=[pin(num,nm,w+2.54,round(h-2.54-i*2.54,2),180,t) for i,(num,nm,t) in enumerate(right)]
+    p+=[pin(num,nm,round((i-(len(top)-1)/2)*2.54,2),h+2.54,270,t) for i,(num,nm,t) in enumerate(top)]
+    p+=[pin(num,nm,round((i-(len(bottom)-1)/2)*2.54,2),-(h+2.54),90,t) for i,(num,nm,t) in enumerate(bottom)]
+    syms.append(f'(symbol "{name}" (pin_names (offset 0.5)) (exclude_from_sim no) (in_bom yes) (on_board yes) '
+      +prop('Reference','U',0,h+3.81)+prop('Value',value,0,-(h+3.81))+prop('Footprint',fpn,0,0,True)+prop('Datasheet','',0,0,True)
+      +prop('Description',desc,0,0,True)
+      +f'(symbol "{name}_1_1" (rectangle (start {-w} {h}) (end {w} {-h}) (stroke (width 0.254) (type default)) (fill (type background))) '+' '.join(p)+'))')
+I,O,B,P,OD='input','output','bidirectional','power_in','open_collector'
+box('TCA9548APWR','TCA9548APWR','Package_SO:TSSOP-24_4.4x7.8mm_P0.65mm','8-channel I2C switch with reset (TI SCPS207, pinout Table 4-1 PW)',
+    [(22,'SCL',B),(23,'SDA',B),(3,'~{RESET}',I),(1,'A0',I),(2,'A1',I),(21,'A2',I)],
+    [(5,'SC0',B),(4,'SD0',B),(7,'SC1',B),(6,'SD1',B),(9,'SC2',B),(8,'SD2',B),(11,'SC3',B),(10,'SD3',B),(14,'SC4',B),(13,'SD4',B),(16,'SC5',B),(15,'SD5',B),(18,'SC6',B),(17,'SD6',B),(20,'SC7',B),(19,'SD7',B)],
+    [(24,'VCC',P)],[(12,'GND',P)])
+box('LM74700QDBVRQ1','LM74700QDBVRQ1','Package_TO_SOT_SMD:SOT-23-6','Automotive ideal-diode controller, N-FET, -65 V reverse (TI SNOSD17, DBV: 1 VCAP 2 GND 3 EN 4 CATHODE 5 GATE 6 ANODE)',
+    [(6,'ANODE',P),(3,'EN',I),(1,'VCAP','passive')],[(4,'CATHODE',I),(5,'GATE',O)],(),[(2,'GND',P)])
+box('SN74LVC138APWR','SN74LVC138APWR','Package_SO:TSSOP-16_4.4x5mm_P0.65mm','3-to-8 decoder, active-low outputs (TI SCAS291, PW pinout)',
+    [(1,'A',I),(2,'B',I),(3,'C',I),(6,'G1',I),(4,'~{G2A}',I),(5,'~{G2B}',I)],[(15,'~{Y0}',O),(14,'~{Y1}',O),(13,'~{Y2}',O),(12,'~{Y3}',O),(11,'~{Y4}',O),(10,'~{Y5}',O),(9,'~{Y6}',O),(7,'~{Y7}',O)],
+    [(16,'VCC',P)],[(8,'GND',P)])
+box('74LVC1G02','74LVC1G02','Package_TO_SOT_SMD:SOT-23-5','Single 2-input NOR (DBV: 1 A 2 B 3 GND 4 Y 5 VCC, TI SCES213)',[(1,'A',I),(2,'B',I)],[(4,'Y',O)],[(5,'VCC',P)],[(3,'GND',P)],w=5.08)
+box('74LVC1G00','74LVC1G00','Package_TO_SOT_SMD:SOT-23-5','Single 2-input NAND (DBV: 1 A 2 B 3 GND 4 Y 5 VCC, TI SCES212)',[(1,'A',I),(2,'B',I)],[(4,'Y',O)],[(5,'VCC',P)],[(3,'GND',P)],w=5.08)
 open(os.path.join(D,'cards.kicad_sym'),'w').write('(kicad_symbol_lib (version 20241209) (generator "mklib") (generator_version "9.0")\n'+'\n'.join(syms)+'\n)\n')
 def fp(name,desc,holes,hole_y,pin1_right,edge_y=None):
     """Pads per the WingTAT 'P.C. Board Layout' (component-side view): rows c (top, y=0), b (2.54), a (5.08); 2.54 pitch,

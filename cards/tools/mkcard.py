@@ -10,7 +10,7 @@ def U(): return str(uuid.uuid4())
 def snap(v): return round(v/G)*G
 def q(s): return '"'+str(s).replace('\\','\\\\').replace('"','\\"').replace('\n','\\n')+'"'
 def f(v): return ('%.4f'%v).rstrip('0').rstrip('.')
-PAPER={'A3':(420,297),'A2':(594,420),'A4':(297,210)}
+PAPER={'A3':(420,297),'A2':(594,420),'A4':(297,210),'A1':(841,594),'A0':(1189,841)}
 CARDLIB=parse(open(os.path.join(ROOT,'cards','lib','cards.kicad_sym')).read())[0]
 CARDSYMS={e[1]:e for e in find(CARDLIB,'symbol')}
 

@@ -1,0 +1,113 @@
+kind,baseline_net,new_system_net,baseline_nodes,count,why
+split,+3V3_SAFE,BRK4:+3V3_SLOT = MB:SL5_3V3,MB:D128.3 MB:D129.3 MB:D130.3,3,brk4 card: universal LV slot signal +3V3_SLOT -> per-slot backplane net
+split,+3V3_SAFE,HSO5a:+3V3_SLOT = MB:SL3_3V3,MB:D131.3 MB:D132.3,2,hso5 card: universal LV slot signal +3V3_SLOT -> per-slot backplane net
+split,+3V3_SAFE,AI4:+3V3_SLOT = MB:SL2_3V3,MB:D32.2 MB:D35.2 MB:D38.2 MB:D41.2,4,ai4 card: universal LV slot signal +3V3_SLOT -> per-slot backplane net
+split,+3V3_SAFE,DI8:+3V3_SLOT = MB:SL1_3V3,MB:U33.14,1,di8 card: universal LV slot signal +3V3_SLOT -> per-slot backplane net
+split,AI3_ADC,AI4:IN1_ADC,MB:C137.1 MB:D32.3 MB:R161.2 MB:R162.1,4,ai4 card: IN1_ADC replaced on the card (net_accounting.csv)
+split,AI3_ADC,MB:unconnected-(U29-AIN2-Pad6),MB:U29.6,1,mainboard edit -> NC
+split,AI4_ADC,AI4:IN2_ADC,MB:C139.1 MB:D35.3 MB:R172.2 MB:R173.1,4,ai4 card: IN2_ADC replaced on the card (net_accounting.csv)
+split,AI4_ADC,MB:unconnected-(U30-AIN0-Pad4),MB:U30.4,1,mainboard edit -> NC
+split,AI5_ADC,AI4:IN3_ADC,MB:C141.1 MB:D38.3 MB:R183.2 MB:R184.1,4,ai4 card: IN3_ADC replaced on the card (net_accounting.csv)
+split,AI5_ADC,MB:unconnected-(U30-AIN1-Pad5),MB:U30.5,1,mainboard edit -> NC
+split,AI6_ADC,AI4:IN4_ADC,MB:C143.1 MB:D41.3 MB:R194.2 MB:R195.1,4,ai4 card: IN4_ADC replaced on the card (net_accounting.csv)
+split,AI6_ADC,MB:unconnected-(U30-AIN2-Pad6),MB:U30.6,1,mainboard edit -> NC
+split,AI_CS_DIS3,AI4:CS_DIS1,MB:R157.1,1,ai4 card: CS_DIS1 replaced on the card (net_accounting.csv)
+split,AI_CS_DIS3,MB:unconnected-(U31-P02-Pad6),MB:U31.6,1,mainboard edit -> NC
+split,AI_CS_DIS4,AI4:CS_DIS2,MB:R168.1,1,ai4 card: CS_DIS2 replaced on the card (net_accounting.csv)
+split,AI_CS_DIS4,MB:unconnected-(U31-P03-Pad7),MB:U31.7,1,mainboard edit -> NC
+split,AI_CS_DIS5,AI4:CS_DIS3,MB:R179.1,1,ai4 card: CS_DIS3 replaced on the card (net_accounting.csv)
+split,AI_CS_DIS5,MB:unconnected-(U31-P04-Pad8),MB:U31.8,1,mainboard edit -> NC
+split,AI_CS_DIS6,AI4:CS_DIS4,MB:R190.1,1,ai4 card: CS_DIS4 replaced on the card (net_accounting.csv)
+split,AI_CS_DIS6,MB:unconnected-(U31-P05-Pad9),MB:U31.9,1,mainboard edit -> NC
+split,AI_SH_G3,AI4:SH_G1,MB:Q23.1,1,ai4 card: SH_G1 replaced on the card (net_accounting.csv)
+split,AI_SH_G4,AI4:SH_G2,MB:Q27.1,1,ai4 card: SH_G2 replaced on the card (net_accounting.csv)
+split,AI_SH_G5,AI4:SH_G3,MB:Q31.1,1,ai4 card: SH_G3 replaced on the card (net_accounting.csv)
+split,AI_SH_G5,MB:unconnected-(U92-Pad3),MB:U92.3,1,mainboard edit -> NC
+split,AI_SH_G6,AI4:SH_G4,MB:Q35.1,1,ai4 card: SH_G4 replaced on the card (net_accounting.csv)
+split,AI_SH_G6,MB:unconnected-(U92-Pad6),MB:U92.6,1,mainboard edit -> NC
+split,AI_VSET,AI4:AI_VSET,MB:R154.1 MB:R165.1 MB:R176.1 MB:R187.1,4,ai4 card: AI_VSET replaced on the card (net_accounting.csv)
+split,AUX10_RB_N,HSO5b:OUT5_RB_N,MB:Q65.3,1,hso5 card: OUT5_RB_N replaced on the card (net_accounting.csv)
+split,AUX1_RB_N,HSO5a:OUT1_RB_N,MB:Q56.3,1,hso5 card: OUT1_RB_N replaced on the card (net_accounting.csv)
+split,AUX1_RB_N,AI4:GND = AI4:SLOT_ID1 = AI4:SLOT_ID2 = AI4:SLOT_IDP ...,MB:U62.11,1,mainboard edit -> SL5_PRESENT_N
+split,AUX1_SNSM,BRK4:unconnected-(D7-Pad2),MB:D130.2,1,brk4: clamp half for AUX1_SNSM moves to the HSO-5 card
+split,AUX1_SNSM,HSO5a:OUT1_SNSM,MB:R321.2,1,hso5 card: OUT1_SNSM replaced on the card (net_accounting.csv)
+split,AUX1_SNSM,AI4:GND = AI4:SLOT_ID1 = AI4:SLOT_ID2 = AI4:SLOT_IDP ...,MB:U63.11,1,mainboard edit -> GND
+split,AUX2_RB_N,HSO5a:OUT2_RB_N,MB:Q57.3,1,hso5 card: OUT2_RB_N replaced on the card (net_accounting.csv)
+split,AUX2_RB_N,MB:SL6_PRESENT_N,MB:U62.13,1,mainboard edit -> SL6_PRESENT_N
+split,AUX2_SNSM,HSO5a:OUT2_SNSM,MB:D131.1 MB:R324.2,2,hso5 card: OUT2_SNSM replaced on the card (net_accounting.csv)
+split,AUX2_SNSM,AI4:GND = AI4:SLOT_ID1 = AI4:SLOT_ID2 = AI4:SLOT_IDP ...,MB:U63.10,1,mainboard edit -> GND
+split,AUX3_RB_N,HSO5a:OUT3_RB_N,MB:Q58.3,1,hso5 card: OUT3_RB_N replaced on the card (net_accounting.csv)
+split,AUX3_RB_N,MB:SL7_PRESENT_N,MB:U62.14,1,mainboard edit -> SL7_PRESENT_N
+split,AUX3_SNSM,HSO5a:OUT3_SNSM,MB:D131.2 MB:R327.2,2,hso5 card: OUT3_SNSM replaced on the card (net_accounting.csv)
+split,AUX3_SNSM,AI4:GND = AI4:SLOT_ID1 = AI4:SLOT_ID2 = AI4:SLOT_IDP ...,MB:U63.9,1,mainboard edit -> GND
+split,AUX4_RB_N,HSO5a:OUT4_RB_N,MB:Q59.3,1,hso5 card: OUT4_RB_N replaced on the card (net_accounting.csv)
+split,AUX4_RB_N,MB:SL8_PRESENT_N,MB:U62.15,1,mainboard edit -> SL8_PRESENT_N
+split,AUX5_RB_N,HSO5a:OUT5_RB_N,MB:Q60.3,1,hso5 card: OUT5_RB_N replaced on the card (net_accounting.csv)
+split,AUX5_RB_N,MB:unconnected-(U62-P13-Pad16),MB:U62.16,1,mainboard edit -> NC
+split,AUX6_RB_N,HSO5b:OUT1_RB_N,MB:Q61.3,1,hso5 card: OUT1_RB_N replaced on the card (net_accounting.csv)
+split,AUX6_RB_N,MB:unconnected-(U62-P14-Pad17),MB:U62.17,1,mainboard edit -> NC
+split,AUX7_RB_N,HSO5b:OUT2_RB_N,MB:Q62.3,1,hso5 card: OUT2_RB_N replaced on the card (net_accounting.csv)
+split,AUX7_RB_N,MB:unconnected-(U62-P15-Pad18),MB:U62.18,1,mainboard edit -> NC
+split,AUX8_RB_N,HSO5b:OUT3_RB_N,MB:Q63.3,1,hso5 card: OUT3_RB_N replaced on the card (net_accounting.csv)
+split,AUX8_RB_N,MB:unconnected-(U62-P16-Pad19),MB:U62.19,1,mainboard edit -> NC
+split,AUX9_RB_N,HSO5b:OUT4_RB_N,MB:Q64.3,1,hso5 card: OUT4_RB_N replaced on the card (net_accounting.csv)
+split,AUX9_RB_N,MB:unconnected-(U62-P17-Pad20),MB:U62.20,1,mainboard edit -> NC
+split,DI12_N,DI8:IN8_N,MB:U33.12,1,di8 card: IN8_N replaced on the card (net_accounting.csv)
+split,DI12_N,MB:unconnected-(U7-PD10-Pad57),MB:U7.57,1,mainboard edit -> NC
+split,DI5_D,AI4:GND = AI4:SLOT_ID1 = AI4:SLOT_ID2 = AI4:SLOT_IDP ...,MB:U32.11,1,mainboard edit -> GND
+split,DI6_D,AI4:GND = AI4:SLOT_ID1 = AI4:SLOT_ID2 = AI4:SLOT_IDP ...,MB:U32.13,1,mainboard edit -> GND
+split,DI7_N,DI8:IN3_N,MB:U33.2,1,di8 card: IN3_N replaced on the card (net_accounting.csv)
+split,DI7_N,MB:unconnected-(U7-PE15-Pad45),MB:U7.45,1,mainboard edit -> NC
+split,DIAG_EN,BRK4:DIAG_EN,MB:U48.3 MB:U49.3 MB:U50.3 MB:U51.3,4,brk4 card: DIAG_EN replaced on the card (net_accounting.csv)
+split,DIAG_EN,HSO5a:DIAG_EN,MB:U52.3 MB:U53.3 MB:U54.3 MB:U55.3 MB:U56.3,5,hso5 card: DIAG_EN replaced on the card (net_accounting.csv)
+split,DIAG_EN,HSO5b:DIAG_EN,MB:U57.3 MB:U58.3 MB:U59.3 MB:U60.3 MB:U61.3,5,hso5 card: DIAG_EN replaced on the card (net_accounting.csv)
+split,DI_BIAS_A,DI8:BIAS,MB:R222.1 MB:R225.1,2,di8: IN1/IN2 (baseline DI5/DI6) pull-ups move from bank-A bias to the card bias
+split,DI_BIAS_FLT_N,DI8:CARD_FAULT_N = MB:SL1_FAULT_N,MB:U90.9,1,di8 card: universal LV slot signal CARD_FAULT_N -> per-slot backplane net
+split,DI_PD_B,DI8:BIAS_DISCH,MB:Q41.1 MB:R209.1,2,di8 card: BIAS_DISCH replaced on the card (net_accounting.csv)
+split,DI_PD_B,MB:unconnected-(U31-P17-Pad20),MB:U31.20,1,mainboard edit -> NC
+split,DI_PU_B,DI8:BIAS_ON,MB:R207.1,1,di8 card: BIAS_ON replaced on the card (net_accounting.csv)
+split,DI_PU_B,MB:unconnected-(U31-P15-Pad18),MB:U31.18,1,mainboard edit -> NC
+split,DPLUS,MB:unconnected-(J21-Pin_3-Pad3),MB:J21.3,1,mainboard edit -> NC
+split,GCB_CL_OUT,BRK4:OUT1,MB:D75.1 MB:D76.1 MB:R358.1 MB:R359.1 MB:U48.10 MB:U48.8 ...,7,brk4 card: OUT1 replaced on the card (net_accounting.csv)
+split,GCB_CL_OUT,MB:unconnected-(J24-Pin_2-Pad2),MB:J24.2,1,mainboard edit -> NC
+split,GCB_CL_RB_N,BRK4:OUT1_RB_N,MB:Q52.3,1,brk4 card: OUT1_RB_N replaced on the card (net_accounting.csv)
+split,GCB_CL_RB_N,AI4:GND = AI4:SLOT_ID1 = AI4:SLOT_ID2 = AI4:SLOT_IDP ...,MB:U62.7,1,mainboard edit -> SL1_PRESENT_N
+split,GCB_CL_SNSM,BRK4:OUT1_SNSM,MB:D128.2 MB:R309.2,2,brk4 card: OUT1_SNSM replaced on the card (net_accounting.csv)
+split,GCB_CL_SNSM,MB:ESTOP_TRIP_SNSM,MB:U63.5,1,mainboard edit -> ESTOP_TRIP_SNSM
+split,GCB_OP_OUT,BRK4:OUT2,MB:D77.1 MB:D78.1 MB:R361.1 MB:R362.1 MB:U49.10 MB:U49.8 ...,7,brk4 card: OUT2 replaced on the card (net_accounting.csv)
+split,GCB_OP_OUT,MB:unconnected-(J24-Pin_3-Pad3),MB:J24.3,1,mainboard edit -> NC
+split,GCB_OP_RB_N,BRK4:OUT2_RB_N,MB:Q53.3,1,brk4 card: OUT2_RB_N replaced on the card (net_accounting.csv)
+split,GCB_OP_RB_N,AI4:GND = AI4:SLOT_ID1 = AI4:SLOT_ID2 = AI4:SLOT_IDP ...,MB:U62.8,1,mainboard edit -> SL2_PRESENT_N
+split,GCB_OP_SNSM,BRK4:OUT2_SNSM,MB:D129.1 MB:R312.2,2,brk4 card: OUT2_SNSM replaced on the card (net_accounting.csv)
+split,GCB_OP_SNSM,AI4:GND = AI4:SLOT_ID1 = AI4:SLOT_ID2 = AI4:SLOT_IDP ...,MB:U63.6,1,mainboard edit -> GND
+split,GLOW_OUT,MB:unconnected-(J24-Pin_1-Pad1),MB:J24.1,1,mainboard edit -> NC
+split,GLOW_SNSM,BRK4:unconnected-(D5-Pad1),MB:D128.1,1,brk4: clamp half for GLOW_SNSM stays on the mainboard (new BAT54C there)
+split,GND,MB:MTR_ID_SCL = MTR:MTR_ID_SCL,MB:J31.12 MTR:J32.12,2,"HV meter: J32.12 GND -> MTR_ID_SCL (meter ID EEPROM, cards/tools/meter_eeprom.py); mainboard edit -> MTR_ID_SCL"
+split,GND,MB:ESTOP_DIG,MB:U34.9,1,mainboard edit -> ESTOP_DIG
+split,MCB_CL_OUT,BRK4:OUT3,MB:D79.1 MB:D80.1 MB:R364.1 MB:R365.1 MB:U50.10 MB:U50.8 ...,7,brk4 card: OUT3 replaced on the card (net_accounting.csv)
+split,MCB_CL_OUT,MB:unconnected-(J24-Pin_4-Pad4),MB:J24.4,1,mainboard edit -> NC
+split,MCB_CL_RB_N,BRK4:OUT3_RB_N,MB:Q54.3,1,brk4 card: OUT3_RB_N replaced on the card (net_accounting.csv)
+split,MCB_CL_RB_N,AI4:GND = AI4:SLOT_ID1 = AI4:SLOT_ID2 = AI4:SLOT_IDP ...,MB:U62.9,1,mainboard edit -> SL3_PRESENT_N
+split,MCB_CL_SNSM,BRK4:OUT3_SNSM,MB:D129.2 MB:R315.2,2,brk4 card: OUT3_SNSM replaced on the card (net_accounting.csv)
+split,MCB_CL_SNSM,AI4:GND = AI4:SLOT_ID1 = AI4:SLOT_ID2 = AI4:SLOT_IDP ...,MB:U63.7,1,mainboard edit -> GND
+split,MCB_OP_OUT,BRK4:OUT4,MB:D81.1 MB:D82.1 MB:R367.1 MB:R368.1 MB:U51.10 MB:U51.8 ...,7,brk4 card: OUT4 replaced on the card (net_accounting.csv)
+split,MCB_OP_OUT,MB:unconnected-(J24-Pin_5-Pad5),MB:J24.5,1,mainboard edit -> NC
+split,MCB_OP_RB_N,BRK4:OUT4_RB_N,MB:Q55.3,1,brk4 card: OUT4_RB_N replaced on the card (net_accounting.csv)
+split,MCB_OP_RB_N,AI4:GND = AI4:SLOT_ID1 = AI4:SLOT_ID2 = AI4:SLOT_IDP ...,MB:U62.10,1,mainboard edit -> SL4_PRESENT_N
+split,MCB_OP_SNSM,BRK4:OUT4_SNSM,MB:D130.1 MB:R318.2,2,brk4 card: OUT4_SNSM replaced on the card (net_accounting.csv)
+split,MCB_OP_SNSM,AI4:GND = AI4:SLOT_ID1 = AI4:SLOT_ID2 = AI4:SLOT_IDP ...,MB:U63.12,1,mainboard edit -> GND
+split,OUT_FAULT_N,BRK4:CARD_FAULT_N = MB:SL5_FAULT_N,MB:U48.4 MB:U49.4 MB:U50.4 MB:U51.4,4,brk4 card: universal LV slot signal CARD_FAULT_N -> per-slot backplane net
+split,OUT_FAULT_N,HSO5a:CARD_FAULT_N = MB:SL3_FAULT_N,MB:U52.4 MB:U53.4 MB:U54.4 MB:U55.4 MB:U56.4,5,hso5 card: universal LV slot signal CARD_FAULT_N -> per-slot backplane net
+split,OUT_FAULT_N,HSO5b:CARD_FAULT_N = MB:SL4_FAULT_N,MB:U57.4 MB:U58.4 MB:U59.4 MB:U60.4 MB:U61.4,5,hso5 card: universal LV slot signal CARD_FAULT_N -> per-slot backplane net
+split,VBAT_AI,AI4:VBAT_AI,MB:Q21.2 MB:Q25.2 MB:Q29.2 MB:Q33.2 MB:R152.1 MB:R155.1 ...,14,ai4 card: VBAT_AI replaced on the card (net_accounting.csv)
+split,VBAT_ESTOP,MB:VBAT_ESTOP_PRE,MB:C199.1 MB:R251.1 MB:R400.1,3,mainboard edit -> VBAT_ESTOP_PRE
+split,VBAT_ESTOP,MB:VBAT_ESTOP_IN,MB:D126.1,1,mainboard edit -> VBAT_ESTOP_IN
+split,VBAT_P,DI8:VBAT_FIELD = MB:SL1_VBAT,MB:D148.1 MB:Q39.2 MB:R205.1,3,di8 card: universal LV slot signal VBAT_FIELD -> per-slot backplane net
+split,VBAT_P,ENG:VBAT_ESTOP = MB:VBAT_ESTOP,MB:U47.12 MB:U47.13 MB:U47.14,3,"engine card: glow driver U47 supply moved VBAT_P -> VBAT_ESTOP (MODULAR_ARCHITECTURE 9.4 / 9.7-2, re-rated 7.6 A path)"
+split,VBAT_P,BRK4:VBAT_FIELD = MB:SL5_VBAT,MB:U48.12 MB:U48.13 MB:U48.14 MB:U49.12 MB:U49.13 MB:U49.14 ...,12,brk4 card: universal LV slot signal VBAT_FIELD -> per-slot backplane net
+split,VBAT_P,HSO5a:VBAT_FIELD = MB:SL3_VBAT,MB:U52.12 MB:U52.13 MB:U52.14 MB:U53.12 MB:U53.13 MB:U53.14 ...,15,hso5 card: universal LV slot signal VBAT_FIELD -> per-slot backplane net
+split,VBAT_P,HSO5b:VBAT_FIELD = MB:SL4_VBAT,MB:U57.12 MB:U57.13 MB:U57.14 MB:U58.12 MB:U58.13 MB:U58.14 ...,15,hso5 card: universal LV slot signal VBAT_FIELD -> per-slot backplane net
+split,VMID,AI4:VMID,MB:R162.2 MB:R173.2 MB:R184.2 MB:R195.2,4,ai4 card: VMID replaced on the card (net_accounting.csv)
+merge,unconnected-(J22-Pin_2-Pad2),DI8:Net-(D1-A1),MB:J22.2,1,di8: J22 becomes IN1/IN2/BIAS header (was DI_BIAS_B only)
+merge,unconnected-(J22-Pin_3-Pad3),DI8:Net-(D2-A1),MB:J22.3,1,di8: J22 becomes IN1/IN2/BIAS header
+merge,unconnected-(J22-Pin_4-Pad4),AI4:GND = AI4:SLOT_ID1 = AI4:SLOT_ID2 = AI4:SLOT_IDP ...,MB:J22.4,1,di8: J22 return terminal
