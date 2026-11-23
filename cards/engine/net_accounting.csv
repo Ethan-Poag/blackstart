@@ -1,0 +1,112 @@
+net,card_nodes,mainboard_nodes,how,mainboard_nodes_sample
++3V3_SAFE,7,143,slot connector a11 c11,C130.1 C151.1 C152.1 C153.1 C182.1 C183.1 C184.1 C186.1 ...
+AI1,5,1,card field header J3.5 (mainboard terminal J17.1 becomes NC),J17.1
+AI1_ADC,1,4,slot connector a12,C133.1 D26.3 R140.1 U29.4
+AI1_B,2,0,internal to card,
+AI1_C,2,0,internal to card,
+AI1_D,2,0,internal to card,
+AI1_E,3,0,internal to card,
+AI1_NB,3,0,internal to card,
+AI1_PG,3,0,internal to card,
+AI1_REF,3,0,internal to card,
+AI1_SH,2,0,internal to card,
+AI2,5,1,card field header J3.6 (mainboard terminal J17.2 becomes NC),J17.2
+AI2_ADC,1,4,slot connector c12,C135.1 D29.3 R151.1 U29.5
+AI2_B,2,0,internal to card,
+AI2_C,2,0,internal to card,
+AI2_D,2,0,internal to card,
+AI2_E,3,0,internal to card,
+AI2_NB,3,0,internal to card,
+AI2_PG,3,0,internal to card,
+AI2_REF,3,0,internal to card,
+AI2_SH,2,0,internal to card,
+AI_CS_DIS2,1,1,slot connector a14,U31.5
+AI_SH_G1,1,2,slot connector c14,RN1.8 U91.3
+AI_SH_G2,1,2,slot connector a15,RN1.7 U91.6
+AI_VSET,2,8,slot connector c15,C131.2 D23.2 D23.3 R129.1 R154.1 R165.1 R176.1 R187.1
+COM_A,4,0,internal to card,
+COM_A_ADC,1,4,slot connector a13,C148.1 D43.3 R197.1 U29.7
+COM_B,4,0,internal to card,
+COM_B_ADC,1,4,slot connector c13,C150.1 D45.3 R199.1 U30.7
+CRANK_DRN,5,0,internal to card,
+CRANK_EN,2,1,slot connector a23,U39.4
+CRANK_G,4,0,internal to card,
+CRANK_GPD,2,0,internal to card,
+CRANK_ISCP,2,0,internal to card,
+CRANK_ISNS,1,1,slot connector c26,U7.35
+CRANK_LED,2,0,internal to card,
+CRANK_OUT,12,1,slot connector a7 a8 b7 b8 c7 c8,J23.4
+CRANK_RBB,3,0,internal to card,
+CRANK_RB_N,1,1,slot connector c24,U62.5
+CRANK_TMR,2,0,internal to card,
+DI1,4,1,card field header J3.1 (mainboard terminal J19.1 becomes NC),J19.1
+DI1_D,3,1,slot connector a17,U32.1
+DI2,4,1,card field header J3.2 (mainboard terminal J19.2 becomes NC),J19.2
+DI2_D,3,1,slot connector c17,U32.3
+DI3,4,1,card field header J3.3 (mainboard terminal J19.3 becomes NC),J19.3
+DI3_D,3,1,slot connector a18,U32.5
+DI4,4,1,card field header J3.4 (mainboard terminal J19.4 becomes NC),J19.4
+DI4_D,3,1,slot connector c18,U32.9
+DIAG_EN,1,16,slot connector a27,U48.3 U49.3 U50.3 U51.3 U52.3 U53.3 U54.3 U55.3 ...
+DI_BIAS_A,4,6,slot connector a19,D150.1 F101.1 J21.6 Q38.3 R222.1 R225.1
+DPLUS,5,1,card field header J4.1 (mainboard terminal J21.3 becomes NC),J21.3
+DPLUS_D,3,1,slot connector c19,U34.3
+DPLUS_EXC_EN,1,1,slot connector c20,U7.65
+DPLUS_SNS,1,4,slot connector a20,C189.1 D65.3 R267.1 U7.24
+DPX_ADJ,3,0,internal to card,
+DPX_LDO_IN,4,0,internal to card,
+DPX_NB,3,0,internal to card,
+DPX_VI,3,0,internal to card,
+FUEL_CLMP,2,0,internal to card,
+FUEL_DRN,5,0,internal to card,
+FUEL_EN,2,1,slot connector c22,U38.4
+FUEL_GPD,2,0,internal to card,
+FUEL_ISCP,2,0,internal to card,
+FUEL_ISNS,1,1,slot connector a26,U7.25
+FUEL_LED,2,0,internal to card,
+FUEL_OUT,12,1,slot connector a5 a6 b5 b6 c5 c6,J23.3
+FUEL_RBB,3,0,internal to card,
+FUEL_RB_N,1,1,slot connector a24,U62.4
+FUEL_TMR,2,0,internal to card,
+GLOW_EN,2,1,slot connector c23,U40.4
+GLOW_LED,2,0,internal to card,
+GLOW_OUT,7,1,card field header J4.2 (mainboard terminal J24.1 becomes NC),J24.1
+GLOW_RBB,3,0,internal to card,
+GLOW_RB_N,1,1,slot connector a25,U62.6
+GLOW_SNSM,1,2,slot connector c25,D128.1 U63.4
+GND,83,841,slot connector a9 a30 a31 a32 b9 b10 b11 b12 b13 b14 b15 b16 b17 b18 b19 b20 b21 b22 b23 b24 b25 b26 b27 b28 b29 b30 b31 b32 c9 c29 c30 c31 c32,BT1.2 C1.2 C10.2 C102.2 C103.2 C104.2 C105.2 C106.2 ...
+MPU_GATE,2,1,slot connector a21,U7.64
+MPU_N,3,0,internal to card,
+MPU_NC,5,0,internal to card,
+MPU_P,3,0,internal to card,
+MPU_PC,6,0,internal to card,
+MPU_PH,3,0,internal to card,
+MPU_SPEED,3,1,slot connector c21,U7.77
+Net-(Q14-C),2,0,internal to card,
+Net-(Q18-C),2,0,internal to card,
+Net-(Q43-C),2,0,internal to card,
+Net-(Q45-G),4,0,internal to card,
+Net-(U36-VO),2,0,internal to card,
+Net-(U43-BST),2,0,internal to card,
+Net-(U43-EN{slash}UVLO),3,0,internal to card,
+Net-(U43-G1PU),2,0,internal to card,
+Net-(U45-BST),2,0,internal to card,
+Net-(U45-EN{slash}UVLO),3,0,internal to card,
+Net-(U45-G1PU),2,0,internal to card,
+Net-(U47-ILIM),2,0,internal to card,
+Net-(U47-SNS),3,0,internal to card,
+OUT_FAULT_N,3,22,slot connector c27,R44.1 U15.3 U16.3 U18.4 U19.4 U48.4 U49.4 U50.4 ...
+Q42_G,4,0,internal to card,
+U31_P00,1,1,slot connector a22,U31.4
+VBAT_AI,7,20,slot connector c16,C131.1 C144.1 C145.1 C146.1 D23.1 Q21.2 Q25.2 Q29.2 ...
+VBAT_ESTOP,10,9,slot connector a1 a2 a3 a4 b1 b2 b3 b4 c1 c2 c3 c4,C199.1 C203.1 D126.1 D137.1 Q70.3 Q71.3 R251.1 R400.1 ...
+VBAT_P,6,90,slot connector a10 c10,C205.1 C206.1 C207.1 C208.1 C209.1 C210.1 C211.1 C212.1 ...
+VMID,3,11,slot connector a16,R140.2 R151.2 R162.2 R173.2 R184.2 R195.2 R197.2 R199.2 ...
+unconnected-(J18-Pin_6-Pad6),1,0,nc (unchanged),
+unconnected-(U43-G2-Pad11),1,0,nc (unchanged),
+unconnected-(U43-NC-Pad19),1,0,nc (unchanged),
+unconnected-(U43-NC-Pad4),1,0,nc (unchanged),
+unconnected-(U45-G2-Pad11),1,0,nc (unchanged),
+unconnected-(U45-NC-Pad19),1,0,nc (unchanged),
+unconnected-(U45-NC-Pad4),1,0,nc (unchanged),
+unconnected-(U47-NC-Pad11),1,0,nc (unchanged),

@@ -1,0 +1,77 @@
+"""ENGINE I/O card (dedicated keyed slot): fuel/crank/glow drivers, MPU, D+, COM_A/B, DI1-4, AI1-2 + protection."""
+import json,re,sys,os,collections
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
+from mkcard import Card,ROOT
+from partition import ASSIGN
+c=Card('engine','ENGINE I/O card: fuel, crank, glow, speed, D+, DI1-4, AI1-2','A3')
+refs=sorted([r for r,v in ASSIGN.items() if v=='ENGINE'])
+c.netmap={'/Inputs: 6 AI, 12 DI, MPU, D+, E-stop sense, VBAT sense/Net-(U31-P00)':'U31_P00','Net-(U31-P00)':'U31_P00'}
+c.move(refs)
+# Enginerd decision 2026-11-23 10:24 HST: glow driver supply on the E-stop rail (was VBAT_P)
+for p in c.parts:
+    if p['props'].get('BaselineRef')=='U47':
+        for k in ('12','13','14'): assert p['pn'][k]=='VBAT_P'; p['pn'][k]='VBAT_ESTOP'
+# field headers (KF2EDGRM-5.08-6P, same part as baseline J17-J22)
+J18=[p for p in c.parts if p['props'].get('BaselineRef')=='J18'][0]
+hdr=dict(J18['props']); [hdr.pop(k,None) for k in ('Reference','BaselineRef','Value')]
+SIG=['AI1_ADC','AI2_ADC','COM_A_ADC','COM_B_ADC','AI_CS_DIS2','AI_SH_G1','AI_SH_G2','AI_VSET','VMID','VBAT_AI',
+     'DI1_D','DI2_D','DI3_D','DI4_D','DI_BIAS_A','DPLUS_D','DPLUS_SNS','DPLUS_EXC_EN','MPU_GATE','MPU_SPEED','U31_P00',
+     'FUEL_EN','CRANK_EN','GLOW_EN','FUEL_RB_N','CRANK_RB_N','GLOW_RB_N','GLOW_SNSM','FUEL_ISNS','CRANK_ISNS',
+     'DIAG_EN','OUT_FAULT_N','ID_SDA','ID_SCL','ID_WP','ENG_PRESENT_N']
+PIN={}
+def row(pos,a,b,c_): PIN[f'a{pos}']=a; PIN[f'b{pos}']=b; PIN[f'c{pos}']=c_
+for pos in (1,2,3,4): row(pos,'VBAT_ESTOP','VBAT_ESTOP','VBAT_ESTOP')
+for pos in (5,6): row(pos,'FUEL_OUT','FUEL_OUT','FUEL_OUT')
+for pos in (7,8): row(pos,'CRANK_OUT','CRANK_OUT','CRANK_OUT')
+row(9,'GND','GND','GND'); row(10,'VBAT_P','GND','VBAT_P'); row(11,'+3V3_SAFE','GND','+3V3_SAFE')
+for i in range(0,len(SIG),2): row(12+i//2,SIG[i],'GND',SIG[i+1])
+for pos in range(12+len(SIG)//2,33): row(pos,'GND','GND','GND')
+PIN={k:('GND' if v=='ENG_PRESENT_N' else v) for k,v in PIN.items()} | {'_present':'ENG_PRESENT_N'}
+present_pin=[k for k,v in zip([f'{r}{12+i//2}' for i in range(len(SIG)) for r in ('a' if i%2==0 else 'c')],SIG) if v=='ENG_PRESENT_N'][0]
+PIN.pop('_present'); PIN[present_pin]='GND'   # card ties PRESENT_N to GND: net on the card is GND
+din={'Footprint':'cards:DIN41612_C96_Male_RA_WingTAT_9001-11961','MPN':'9001-11961C00A','Manufacturer':'WingTAT','LCSC':'C5173361',
+     'Description':'ENGINE slot plug, DIN 41612 C96 RA male. Keyed: engine-only coding notch (see notes). Pinout: cards/engine/engine_slot_pinout.csv'}
+JS=c.newref('J')
+for u,r in enumerate('abc',1): c.add('cards:DIN41612_C96',JS,'DIN41612_C96',{k:v for k,v in PIN.items() if k[0]==r},din,unit=u)
+JF1=c.newref('J'); c.add('Connector_Generic:Conn_01x06',JF1,'DI1-4/AI1-2',{'1':'DI1','2':'DI2','3':'DI3','4':'DI4','5':'AI1','6':'AI2'},hdr)
+JF2=c.newref('J'); c.add('Connector_Generic:Conn_01x06',JF2,'D+/GLOW/BIAS',{'1':'DPLUS','2':'GLOW_OUT','3':'DI_BIAS_A','4':'GND','5':None,'6':None},hdr)
+for p in c.parts:
+    if p['props'].get('BaselineRef')=='J18': p['props']['Value']='COM/MPU'
+# ID EEPROM
+cap=dict(c.inst['C199'][0]['props']); cap.pop('Reference')
+res=dict(c.inst['R349'][0]['props']); res.pop('Reference')
+c.add('cards:AT24CS32-STUM',c.newref('U'),'AT24CS32-STUM-T',{'1':'ID_SCL','2':'GND','3':'ID_SDA','4':'+3V3_SAFE','5':'ID_WP'},
+      {'Footprint':'Package_TO_SOT_SMD:SOT-23-5','MPN':'AT24CS32-STUM-T','Manufacturer':'Microchip','LCSC':'C147891','Description':'Card ID + calibration EEPROM (0x50 / serial 0x58)'})
+c.add('Device:C',c.newref('C'),cap['Value'],{'1':'+3V3_SAFE','2':'GND'},cap)
+c.add('Device:R',c.newref('R'),res['Value'],{'1':'+3V3_SAFE','2':'ID_WP'},res)
+c.notes=['ENGINE I/O CARD (dedicated keyed slot, card type 0x0001)',
+ 'Key: engine-only coding notch in the card edge + matching rib in the engine slot guide; LV cards have the LV notch. ID EEPROM type check too.',
+ 'Fuel/crank/glow drivers are fed ONLY from VBAT_ESTOP (E-stop cut is external, upstream of J23 on the mainboard).',
+ 'FUEL_EN/CRANK_EN/GLOW_EN arrive already gated by WD_OK on the mainboard (U38-U40). Missing card = no drive = engine stops.',
+ 'Contacts: VBAT_ESTOP 12 in parallel (24 A rated, 12 A at 50 % derate >= 10 A F2 fuse); FUEL_OUT and CRANK_OUT 6 each (12 A / 6 A derated >= 6.14 A max SCP trip).',
+ 'Glow driver (baseline U47) VS moved VBAT_P -> VBAT_ESTOP (Nov 23 decision): E-stop now also cuts glow.',
+ 'Slot pinout table: cards/engine/engine_slot_pinout.csv. b-row signals are GND guards. PRESENT_N tied to GND on the card.']
+def key(p):
+    br=p['props'].get('BaselineRef','')
+    nets=' '.join(n or '' for n in p['pn'].values())
+    for i,rx in enumerate([r'^J',r'ID_',r'FUEL',r'CRANK',r'GLOW',r'MPU',r'DPLUS',r'COM_',r'DI[1-4]',r'AI[12]',r'AI_']):
+        if re.search(rx,p['ref'] if i<1 else nets): return (i,br)
+    return (99,br)
+used=c.write(os.path.join(ROOT,'cards','engine'),key)
+import csv
+with open(os.path.join(ROOT,'cards','engine','engine_slot_pinout.csv'),'w',newline='') as f:
+    w=csv.writer(f); w.writerow(['position','row_a','row_b','row_c'])
+    for pos in range(1,33): w.writerow([pos]+[PIN[f'{r}{pos}'] for r in 'abc'])
+print('parts',len({p['ref'] for p in c.parts}),'overflow',c.over)
+if __name__=='__main__':
+    from verify_card import verify
+    slot=collections.defaultdict(list)
+    for k,v in PIN.items(): slot[v].append(k)
+    slot['ENG_PRESENT_N']=[present_pin]
+    field={}
+    for p in c.parts:
+        if p['ref'] in (c.refmap['J18'],JF1,JF2):
+            for k,v in p['pn'].items():
+                if v: field.setdefault(v,f"{p['ref']}.{k}")
+    ov={('U47',k):'VBAT_ESTOP' for k in ('12','13','14')}
+    verify('engine',slot,field,ov,{'Net-(U31-P00)':'U31_P00'})
