@@ -430,3 +430,16 @@ Each card is one flat A3 sheet in `cards/<card>/` made by `cards/tools/lvcards.p
 
 ### 10.5 HSO-5 slot-ID straps
 HSO-5 uses all 16 MCP23S17 GPIOs except two, so it reads only SLOT_ID0/1 (GPA6/7). Its slot identity also comes from the TCA9548A channel its EEPROM answers on. If Ethan wants all 4 straps read, the options are a second expander or a TCA9534 on the slot I2C bus [open].
+
+### 10.6 HV meter ID EEPROM (genctl_meter, still 2 sheets, ERC 0/0)
+- **Parts added on the SELV side (+3V3 / GND, not GND_AC):**
+  - U94 AT24CS32-STUM-T (LCSC C147891, type 0x0020);
+  - R650 10k WP pull-up (C98220);
+  - TP3 EE_WP pad (short it to GND only for a calibration write);
+  - C323 100n (C14663).
+- **Harness pins:** J32.12 goes from GND to MTR_ID_SCL, and J32.16 goes from spare (NC) to MTR_ID_SDA.
+  - J32.15 stays the MTR_DET_N GND strap.
+  - 5 GND pins remain (3, 5, 7, 9, 15).
+  - The harness is already 16 wires pin n to pin n, so it needs no change.
+- **Mainboard side:** J31.12 and J31.16 must carry the same nets to the HV TCA9548A channel, with 4.7k pull-ups there (see §11).
+- **Cost:** meter BOM goes from $63.90 to $65.33 at qty 1, and from $53.42 to $54.60 per board at qty 10 (bom/genctl_meter_bom.csv, 221 refs, 0 mismatches).
