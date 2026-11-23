@@ -1,7 +1,7 @@
-# Modular "card" architecture: Phase 1 proposal (docs only)
+# Modular "card" architecture: Phase 1 proposal + Phase 2 engine-card update
 
 Branch `m7-modular`, from the locked baseline tag `baseline-2026-11-23-locked` (5bac9fe). Written Mon Nov 23, 2026, ~10:15 AM HST.
-**No schematic, BOM, PCB or enclosure file has been changed.** This is a proposal for Ethan's review. Nothing has been ordered or pushed.
+**Phase 2 (§9, Nov 23 ~10:40 AM HST):** the engine I/O moves to its own keyed card slot; card schematics now live in `cards/`. The baseline schematics, BOM and PCB are still untouched. Nothing has been ordered or pushed.
 
 Ethan's asks (Nov 23, 10:00 and 10:01 AM HST):
 - Make the parts of the controller that fail into swappable "cards" (LV inputs, HV inputs, LV outputs, and so on).
@@ -28,11 +28,10 @@ Supporting files in `docs/modular/`:
 
 ## 0. Recommendation in one screen
 
-- **Mainboard/backplane, fixed.** It keeps everything that must never be removable, plus the minimum engine I/O:
-  - STM32 safety core, watchdog and latch, E-stop sense and trip, FRAM;
-  - fuel, crank and glow drivers;
-  - speed inputs (MPU, D+, COM), VBAT sense, **DI1-4 and AI1-2** (the engine-protection inputs);
+- **Mainboard/backplane, fixed.** It keeps only what must never be removable:
+  - STM32 safety core, watchdog and engine-stop latch, E-stop sense/latch and the E-stop feed (J23), FRAM;
   - power entry and supplies, CAN ×2, RS-485, CM5 + display + Ethernet/USB, front-panel keys.
+- **1 dedicated, keyed ENGINE slot (Phase 2, §9).** Fuel, crank and glow drivers, MPU speed, D+, COM_A/B, DI1-4 and AI1-2 with their protection are on a card. Only an engine card fits (coding key + ID EEPROM type check), and the engine will not start without it. Its drivers are fed only from the mainboard's E-stop rail, so a missing card means no fuel.
 - **8 universal LV slots.** Any LV card goes in any LV slot. Each card is identified by an ID EEPROM, and firmware configures itself from what it finds. Card types:
   - **DI-8:** 8 digital inputs.
   - **AI-4:** 4 analog, resistive or 4-20 mA inputs.
@@ -306,7 +305,76 @@ Build 2 (baseline-equivalent I/O: DI-8, AI-4, 2× HSO-5, BRK-4, HV) against the 
 
 ## 8. Open questions for Ethan
 1. Is **about +8 mm overall depth** OK (the card bays stick out 14 mm) so cards can be swapped from the rear without opening the box?
-2. Keep the **engine core fixed** (E-stop, fuel/crank/glow, speed, DI1-4, AI1-2 on the mainboard), or put those on cards too?
+2. ~~Keep the engine core fixed?~~ Decided Nov 23 10:24: engine I/O goes on a keyed card (§9). E-stop, watchdog and latch stay fixed.
 3. A **replaced card of the same type**: require a panel acknowledgment before the next start (my pick), or auto-accept? The same goes for a blank-calibration HV card.
 4. **8 LV slots** (5 used in a full build), or 6 to save about $14 per unit?
 5. **Power-off swap only** OK? True hot-swap would need staggered-contact connectors, and I haven't priced those.
+
+---
+
+## 9. Phase 2: dedicated keyed ENGINE I/O card (Nov 23, 10:24 AM HST decision)
+
+Why: Ethan asked whether fuel, crank, glow, speed and the core inputs are just as likely to fail or get shorted as the other I/O. They are: they face the same field wiring. So they go on a swappable card too, in a slot of their own.
+
+### 9.1 What is where
+| On the mainboard (fixed) | On the ENGINE card (`cards/engine/`, 156 parts [M]) |
+|---|---|
+| STM32, watchdog + WD_OK latch (U84), FUEL/CRANK/GLOW_EN AND gates (U38-U40) | Fuel + crank TPS48100 drivers, FETs, shunts, INA281 current sense |
+| E-stop input J23 (VBAT_ESTOP_IN), reverse-block FETs Q70/Q71, E-stop sense/latch/trip | Glow driver TPS1HTC30 + its protection |
+| FRAM, supplies, CM5/display/comms, front panel | MPU speed front end, D+ excitation (LM317) + sense, COM_A/B |
+| J23 also carries FUEL_OUT/CRANK_OUT to the engine harness | DI1-4 and AI1-2 front ends, DI_BIAS_A input clamp |
+| | Field headers: COM/MPU (moved J18), new DI1-4/AI1-2, new D+/GLOW/BIAS (same KF2EDGRM-5.08-6P part, C441292) |
+| | ID EEPROM AT24CS32 (type 0x0001 = engine) |
+
+### 9.2 E-stop cut location (checked against the baseline netlist) [M]
+- **The cut is external and upstream.** J23.1-2 (VBAT_ESTOP_IN) comes from the external E-stop / power box F2 10 A. Q70/Q71 SQD40P10-40L are reverse-block FETs that make VBAT_ESTOP. VBAT_ESTOP feeds the fuel and crank TPS48100s (U43/U45 VS/CS+) through 20 mΩ shunts. So no driver sits upstream of the cut, and the boundary works as planned: **VBAT_ESTOP goes to the card, FUEL_OUT/CRANK_OUT come back, and J23 stays on the mainboard.**
+- **Watchdog gating is logic-level only.** FUEL/CRANK/GLOW_EN = *_EN_MCU AND WD_OK, through U38-U40 on the mainboard. A watchdog trip turns the drivers off, but it does not remove the rail. A shorted driver FET keeps fuel on until the external E-stop opens, **the same as the baseline**. This is a design issue (§9.7, item 1).
+- **Glow was on VBAT_P, not VBAT_ESTOP.** The E-stop did not cut glow. On the card, glow VS is moved to VBAT_ESTOP, as decided. This is the only intentional net change (`cards/engine/net_accounting.csv`, override listed in `cards/tools/card_engine.py`).
+
+### 9.3 Fail-safe rules met
+- The card's driver supply comes only from the mainboard VBAT_ESTOP over the slot. With no card, nothing can drive FUEL_OUT: fuel is energize-to-run, so the engine stops.
+- EN signals arrive already gated by WD_OK. The card has its own pull-downs on them (baseline parts, moved).
+- ENG_PRESENT_N is tied to GND on the card, and the ID EEPROM type must be 0x0001. If either is missing, the firmware blocks start and shows "ENGINE CARD MISSING" (FW_REQ_CARDS).
+- Keying: the engine card edge has a coding notch at a different position from LV cards, with a matching rib in the engine bay. Two-way coding means an LV card can't go in the engine slot and the engine card can't go in an LV slot.
+
+### 9.4 Contacts: parallel DIN 41612 contacts, no extra power connector
+2 A per contact [DS], derated 50 % to 1 A:
+
+| Net | Contacts | Rated / derated | Needs |
+|---|---|---|---|
+| VBAT_ESTOP | 12 (a/b/c 1-4) | 24 A / 12 A | ≥ 10 A F2 fuse ✓ |
+| FUEL_OUT | 6 (a/b/c 5-6) | 12 A / 6 A | ≥ 6.14 A max short-circuit trip (TPS48100, 40.2k / 20 mΩ) ✓ |
+| CRANK_OUT | 6 (a/b/c 7-8) | 12 A / 6 A | same ✓ |
+| VBAT_P (MPU/D+ bias only) | 2 | 4 A / 2 A | < 0.2 A [E] ✓ |
+
+The full pinout is in `cards/engine/engine_slot_pinout.csv`. Signals use rows a and c, and every b contact from 9 to 32 is GND (guard). **Budget flag:** fuel 2.8 A + crank 2.8 A + glow ~2 A = 7.6 A, above the 6 A that the baseline allowed for the VBAT_ESTOP node. It is still under the 10 A F2 fuse and the 12 A contact rating, but the VBAT_ESTOP copper and the Q70/Q71 FETs need re-checking for glow (open question 9.8-2).
+
+### 9.5 Datasheet checks done this phase
+- **AT24CS32** (LCSC C147891 PDF) [DS]:
+  - SOT-23-5 pinout: 1 SCL, 2 GND, 3 SDA, 4 VCC, 5 WP.
+  - EEPROM at 0x50. In SOT-23 the A2..A0 bits are fixed at 0, so every card reads as 0x50 and each card needs its own mux channel.
+  - 128-bit factory serial, read-only, at 0x58.
+  - WP: 10k pull-up to 3V3 on the card. A slot ID_WP pin lets firmware write.
+- **Slot ID mux count:** 8 LV + engine + HV = 10 ID buses, more than the TCA9548A's 8 channels. So a second TCA9548A (0x71) is needed, priced in.
+- **TPS48100 LV-slot limit** (TI TPS4810-Q1 Eq. 5: RISCP = (ISC·RSNS − 19 mV)/2 µA) [DS]:
+  - Baseline check: 40.2k with 20 mΩ gives 4.97 A ✓.
+  - With 10 mΩ and 40.2k it would be 9.9 A typ, too high.
+  - **Use 10 mΩ + 30.1k: 7.9 A typ, ~6.2-9.8 A min/max [E, tolerance scaled].** The minimum is above the 6 A slot budget.
+- **STM32 pins:** all 100 pins of U7 are used. The slot ID bus goes on **I2C2 = PB10/PB11 (pins 46/47, AF4; confirm in DS12110)**. Those pins carry DI8/DI9 today and are freed when the DI-8 card serializes DI5-12 behind its SPI expander. This also keeps card EEPROMs (0x50) off I2C1, where the FRAM (0x50) and ADS1115s (0x48/0x49) already sit.
+
+### 9.6 Schematic rule (Ethan, 10:26): one flat sheet per card
+Each `cards/<name>/` project is one A3 sheet with no sub-sheets, using net labels and rendered to PNG/PDF. The engine card fits (156 parts, ERC 0 errors / 0 warnings): `cards/engine/engine.png`. **The HV meter card does not fit legibly on one sheet:** it has about 215 parts plus 600 V creepage notes, and is two sheets today (root + `ac_metering`). It stays a 2-sheet project, with the EEPROM added on its SELV side, unless Ethan wants it on A2 or split into two cards.
+
+### 9.7 Design issues
+1. **No rail-level watchdog cut** (baseline issue, carried over). Proposal: a mainboard P-FET or ideal-diode controller in series with VBAT_ESTOP, gated by WD_OK AND ESTOP_OK. Then a shorted driver FET or a stuck card is cut by the watchdog as well, not only by the external E-stop. That is about 3-5 parts [E], and the parts aren't picked yet.
+2. Glow now draws on VBAT_ESTOP (see §9.4 budget).
+3. DI_BIAS_A is shared: DI1-4 on the engine card use it, and DI5-6 (DI-8 card) use bank A too. It crosses the slot on one contact (PTC-limited).
+4. Mainboard terminals J17.1-2, J18 (whole), J19.1-4, J21.3 and J24.1 become NC when the engine card fits. J18 moves to the card, and the mainboard layout loses those terminal positions.
+
+### 9.8 Updated cost delta (`modular/cost_delta.csv`)
+The total is now **+$326 at qty 1 and +$120 per unit at qty 10** (it was +$276 / +$108). The engine-slot lines add $49.77 / $12.12: DIN pair, EEPROM, second I2C mux, 2 extra field headers, engine card PCB + fees, bay guide. Savings from parts removed from the mainboard are not subtracted.
+
+### 9.9 Open questions
+1. Add the rail-level watchdog cut (§9.7-1)? My pick: yes.
+2. Glow on VBAT_ESTOP: OK to re-rate the VBAT_ESTOP path for 7.6 A?
+3. HV meter: keep it as 2 sheets (my pick), or go to A2?

@@ -28,6 +28,14 @@ add('cards','TMUX1208PWR current-sense mux (C494728) on HSO-5 x2, BRK-4',3,0.571
 add('cards','TCA9555PWR on AI-4 (excitation/shunt enables) (C465732)',1,0.7314,0.517,'M-BOM')
 add('cards','DI-8 own bias switch block (copy of DI_BIAS, ~10 parts)',1,1.00,0.80,'E')
 add('cards','Card passives (~6 per card) + 1 extra field header KF2EDGRM-5.08-6P net',nc+1,0.41,0.34,'E')
+# Phase 2 (Nov 23 10:24 decision): dedicated keyed ENGINE I/O card slot (circuitry moved, not added)
+add('engine slot','DIN 41612 C96 female vertical on mainboard, engine slot (C5173363)',1,1.3035,1.0953,'M-LCSC')
+add('engine slot','DIN 41612 C96 male RA on the engine card (C5173361)',1,1.2659,1.061,'M-LCSC')
+add('engine slot','AT24CS32-STUM-T engine card ID EEPROM + 100n + 10k (C147891)',1,1.4297+0.02,1.1721+0.02,'M-LCSC')
+add('engine slot','2nd TCA9548APWR (0x71): 8 LV + engine + HV = 10 ID buses > 8 channels (C130026)',1,0.8659,0.732,'M-LCSC')
+add('engine slot','KF2EDGRM-5.08-6P extra field headers on the engine card (DI1-4/AI1-2, D+/GLOW/BIAS) (C441292)',2,0.3626,0.3626,'M-BOM')
+add('engine slot','Engine card PCB 4-layer ~100 x 80 mm (double-width) + PCBA fees + ~6 extended parts',1,8.0+13.74+18.42,1.6+1.374+1.842,'E (same basis as LV card lines)')
+add('engine slot','Engine bay guide with coding rib + faceplate + captive screw',1,4.00,2.50,'E')
 # boards and fees
 designs=4
 add('boards','LV card PCB, 4-layer ~100 x 36 mm, 5 pcs per design at qty 1 (per-unit share at qty 10)',designs,8.00,1.20,'E (SPLIT_SCOPE JLC 100x100 4L x5 ~ EUR 5.92)')
@@ -42,5 +50,5 @@ with open(os.path.join(H,'cost_delta.csv'),'w',newline='') as f:
         w.writerow([g,i,q,p1,p10,round(q*p1,2),round(q*p10,2),s]); t1+=q*p1; t10+=q*p10
     w.writerow(['TOTAL','delta vs one-board baseline (savings from removed shared mainboard parts NOT subtracted)','','','',round(t1,2),round(t10,2),'mix'])
 print(round(t1,2),round(t10,2))
-for g in ['backplane x8','backplane shared','cards','boards','mechanical']:
+for g in ['backplane x8','backplane shared','cards','engine slot','boards','mechanical']:
     print(g, round(sum(q*p1 for gg,i,q,p1,p10,s in rows if gg==g),2), round(sum(q*p10 for gg,i,q,p1,p10,s in rows if gg==g),2))

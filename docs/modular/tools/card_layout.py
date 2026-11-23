@@ -38,11 +38,12 @@ for i,(s,u) in enumerate(zip(slots_bot,use_bot)):
 ax.text(x0+2*pitch,89.5,'8 universal LV slots: any LV card, any slot',ha='center',va='center',fontsize=12.5,color='#7a5200',weight='bold')
 # fixed blocks
 box(ax,195,1,62,40,'#d9f2d9',txt='CM5 + display\n+ Ethernet/USB',fs=14)
-box(ax,195,47,82,48,'#cfe3ff',txt='SAFETY CORE\nSTM32 + watchdog\nE-stop latch, FRAM',fs=13,bold=True)
+box(ax,195,47,82,48,'#cfe3ff',txt='SAFETY CORE (fixed)\nSTM32, watchdog,\nE-stop latch + J23,\nFRAM',fs=13,bold=True)
 box(ax,195,100,82,40,'#e0e0e0',txt='Power entry +\nsupplies, CAN x2,\nRS-485',fs=14)
-box(ax,195,145,82,47,'#cfe3ff',txt='ENGINE CORE I/O\nfuel, crank, glow,\nE-stop trip, speed,\nDI1-4, AI1-2',fs=12.5,bold=True)
+box(ax,195,145,82,47,'#ffc27a',ec='#a04a00',lw=3,txt='ENGINE I/O CARD\n(keyed slot)\nfuel, crank, glow,\nMPU, D+, DI1-4, AI1-2',fs=12.5,bold=True)
+ax.add_patch(Rectangle((200,186),6,6,fc='#a04a00',ec='#a04a00')); ax.text(208,189,'coding key',fontsize=11,color='#a04a00',va='center',weight='bold')
 box(ax,80,-12,24,98,'#f2f2f2',txt='slot\npower\nswitches\n+ ID\nmux',fs=12)
-box(ax,80,96,24,96,'#f2f2f2',txt='fixed\nfield\nplugs\nCOM,\nMPU,\nD+',fs=12)
+box(ax,80,96,24,96,'#f2f2f2',txt='E-stop\nrail\nfeed\nto\nengine\nslot',fs=12)
 # bottom legend
 lx=fig.add_axes([0.03,0.015,0.94,0.29]); lx.axis('off'); lx.set_xlim(0,100); lx.set_ylim(0,100)
 L=[('#ffe08a','LV cards (power off to swap, ID EEPROM, pluggable field terminals):'),
@@ -51,14 +52,16 @@ L=[('#ffe08a','LV cards (power off to swap, ID EEPROM, pluggable field terminals
    (None,'  HSO-5  5 high-side outputs, 2 A each (AUX1-5 / AUX6-10), ~71-74 parts'),
    (None,'  BRK-4  breaker open/close coils GCB/MCB, ~60 parts'),
    (None,'  PAR    future governor/AVR bias card for Ethernet paralleling'),
-   ('#cfe3ff','Fixed on the mainboard, never on a card: E-stop, watchdog, fuel/crank'),
-   (None,'  = the minimum build, with the HV card (must always be fitted)'),
+   ('#ffc27a','ENGINE card: keyed slot, only an engine card fits; no start without it'),
+   (None,'  drivers fed from the mainboard E-stop rail; no card = no fuel = stop'),
+   ('#cfe3ff','Fixed on the mainboard: STM32, watchdog, E-stop latch/cut, FRAM'),
+   (None,'  minimum build = mainboard + ENGINE card + HV card'),
    ('#ffd6d6','HV card keeps its own 600 V plugs; only SELV crosses to the mainboard')]
 y=96
 for c,t in L:
     if c: lx.add_patch(Rectangle((0,y-4.5),3,6,fc=c,ec='#222'))
     lx.text(4.5 if c else 4.5,y-1.5,t,fontsize=15.5 if c else 15,va='center',weight='bold' if c else 'normal')
-    y-=10.5
+    y-=8.7
 out=os.path.join(MOD,'card_layout.png'); fig.savefig(out,dpi=100); print(out)
 
 # connector comparison sheet
