@@ -43,9 +43,14 @@ Labels used throughout:
 ## 3. State machine [I]
 States: `BOOT → SELFTEST → IDLE → PREHEAT → CRANK → RUN_WARMUP → RUN → (TRANSFER sub-states) → COOLDOWN → STOPPING → IDLE`, plus the latched `FAULT` and `ESTOP`.
 
-**Battle short overlay (Batch 33, spec only: docs/FW_REQ_BATTLESHORT.md).** `BATTLE_SHORT` is a mode flag (FRAM, CRC, A/B), not a state. While it is set:
+**Battle short overlay (Batch 33, spec only: docs/FW_REQ_BATTLESHORT.md; Ethan's decisions D1–D6 final in Batch 33a, D7 key mapping pending).** `BATTLE_SHORT` is a mode flag (FRAM, CRC, A/B), not a state. While it is set:
 - every protection transition to FAULT, every protection breaker-open and every start inhibit in the table below becomes alarm + log only (BS-3);
-- **E-stop (→ ESTOP) and overspeed (→ FAULT) still act**, the local STOP key still stops, and breaker close permissives (sync-check, dead bus) are not relaxed;
+- **E-stop (→ ESTOP) and overspeed (→ FAULT) still act**, the local STOP key still stops, and breaker close permissives (sync-check, or a dead bus proven by a valid BUS ADE reading, D3) are not relaxed;
+- if speed is lost (MPU and the GEN-frequency backup), keep running and alarm (D5);
+- on a paralleled set the reverse-power trip still opens that set's GCB: the one exception to "breaker trips overridden" (D6);
+- CRANK timeout does not go to FAULT: retry indefinitely with rest breaks (`BS_CRANK_*`, D4);
+- E-stop clears the flag (D2); a power-on reset clears it unless `BS_PERSIST_POWER_CYCLE` is on (D1);
+- editable settings, defaults and hard limits: FW_REQ_BATTLESHORT §12 (BS-13);
 - the TPS3431/U84 watchdog latch still stops the engine on a firmware hang. Firmware cannot reach it (BS-8);
 - after a non-POR reset with the engine turning, re-assert FUEL_EN ≤ 50 ms and go to RUN (BS-11).
 

@@ -621,4 +621,17 @@ Source: /workspace/review/sch_review/SCH_REVIEW_2026-11-22_pass6.md m1-m3, NOTEs
 ## m7-split Batch 33 (2026-11-22 HST): battle short mode (spec only, no hardware change)
 - New docs/FW_REQ_BATTLESHORT.md (Ethan's feature and rulings): only E-stop and overspeed stay active; every other trip, latch and start inhibit is alarm + log. Enable = configuration-suite pre-authorisation (`BS_AVAILABLE`, admin, off by default) + local two-hand 5 s corner-key hold + confirm; remote enable only with `BS_REMOTE_ENABLE`. Survives MCU reset, cleared by power cycle (default). Lifetime counters never cleared.
 - Hardware audit: battle short cannot bypass the TPS3431/U84 watchdog latch (FUEL/CRANK/GLOW/MCU_TRIP gates, LVC541 /OE; power-cycle re-arm), the E-stop chain (VBAT_ESTOP + TLC555/K4), supply loss (LM74800 OV, UVLO) or driver short-circuit limits. The keep-alive/3-mismatch drop is not on m7-split. D+ 30 s cap and shunt gating cannot stop the engine. No schematic change needed.
-- Limitation: a firmware hang still stops the engine (watchdog), until power cycle. Decisions D1–D7 open for Ethan.
+- Limitation: a firmware hang still stops the engine (watchdog), until power cycle. Decisions D1–D7 open for Ethan (D1–D6 decided in Batch 33a, below).
+
+## m7-split Batch 33a (2026-11-22 HST): battle short decisions D1–D6 final, editable settings
+- Ethan, Nov 22, 2026 ≈ 2:55 PM HST: "Yes, go with all your battle short suggestions." Recorded in docs/FW_REQ_BATTLESHORT.md §14:
+  - D1: power cycle clears battle short; admin `BS_PERSIST_POWER_CYCLE` can make it persist.
+  - D2: E-stop clears it.
+  - D3: no dead-bus close without proof of a dead bus (valid BUS ADE).
+  - D4: indefinite crank retries with rest breaks.
+  - D5: speed lost → keep running + alarm.
+  - D6: reverse-power trip stays active on paralleled sets, the one exception to "all breaker trips overridden".
+  - D7 (key mapping) is pending until the front-panel legend exists.
+- §12 now splits editable settings (default + hard limits, out-of-range refused) from fixed items (E-stop, overspeed, watchdog latch, close permissives, reverse-power, retry count, warnings, counters). New BS-13.
+- Open: no reverse-power function or paralleling spec exists yet, so D6 is a requirement on future paralleling work.
+- Docs only: ERC 0/0 on both boards, BOM-vs-netlist 0 mismatches, netlists identical to Batch 33 (docs/split_evidence/batch33a).

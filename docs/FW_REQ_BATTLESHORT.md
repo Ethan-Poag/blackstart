@@ -1,6 +1,6 @@
 # Battle short mode: keep the genset running, protections overridden (firmware spec)
 
-Status: **requirement/spec only, not implemented.** Branch m7-split, Batch 33, Nov 22, 2026 (HST). Feature and rulings from Ethan, relayed by Enginerd at 1:28 PM HST. No schematic, BOM or firmware file changed. The held overvoltage engine-shutdown change and the held master reset are not touched.
+Status: **requirement/spec only, not implemented.** Branch m7-split, Batch 33, Nov 22, 2026 (HST); Ethan's decisions D1–D6 recorded in Batch 33a (Nov 22, 2026, ≈ 2:55 PM HST). Feature and rulings from Ethan, relayed by Enginerd at 1:28 PM HST. No schematic, BOM or firmware file changed. The held overvoltage engine-shutdown change and the held master reset are not touched.
 
 Battle short works like the switch on military generators. When it is on, the controller keeps the engine running and the breaker closed, and it ignores the protection trips that would normally stop the engine or open the breaker. It is meant for emergencies where losing power costs more than the engine does.
 
@@ -9,6 +9,7 @@ Battle short works like the switch on military generators. When it is on, the co
 - **Overridden:** low oil pressure, high coolant/oil temperature, over/undervoltage, overcurrent, over/underfrequency, every metering fault including the whole meter board missing (FW-MTR-3), the power-dip latches (FW-MTR-9), and the breaker trips.
 - **Software only.** No new hardware. Enabled through a hard-to-trigger local action (Ethan suggested a secret button combination; method chosen in §4).
 - Many settings are editable in the controller's configuration suite (Ethan's earlier remark). Battle short uses that: its availability and options are configuration settings (§4, §12).
+- **Follow-up decisions D1–D6** (Nov 22, 2026, ≈ 2:55 PM HST): Ethan accepted all the Batch 33 suggestions. They are recorded in §14 and written into §5–§8 and §12. D7 (key mapping) is pending until the front-panel legend exists.
 
 ## 2. Hardware audit: what can stop the engine or open a breaker without firmware consent
 The firmware cannot override hardware. This table lists every path on the m7-split schematic (netlist at Batch 32, 2c7a495) that can stop the engine or open a breaker by itself, and whether battle short can bypass it.
@@ -56,7 +57,7 @@ All of these either are required by Ethan's rulings (E-stop, watchdog) or are a 
 1. **Arm:** press and hold the **top-left and bottom-right keys together for 5 s**. These are diagonally opposite corners about 270 mm apart, so it needs two hands and cannot happen by leaning on the panel. While held, those two key LEDs flash amber. After 5 s, every key LED flashes red, the buzzer chirps twice, and the display (if alive) shows "BATTLE SHORT: CONFIRM? Protections will be OFF".
 2. **Confirm within 10 s:** either tap "ENABLE BATTLE SHORT" on the display (plus the PIN, if `BS_PIN_REQUIRED` is on), **or**, with no display, press and hold the **centre-top key** for 3 s. If nothing happens within 10 s, it cancels and logs `BS_ARM_TIMEOUT`.
 3. The combination is not secret, so security does not rely on it. It is documented in the operator manual and printed on the inside of the enclosure door. What makes it safe is step 1 (pre-authorisation) plus the two-hand hold, the confirm and the loud warning.
-- The final mapping of these keys to BTN1–BTN12 follows the front-panel legend (TBD with the panel artwork). The STOP key is never part of the combination.
+- The final mapping of these keys to BTN1–BTN12 follows the front-panel legend (TBD with the panel artwork; **decision D7, pending**). The STOP key is never part of the combination.
 
 **Remote enable:**
 - Not allowed unless the setting `BS_REMOTE_ENABLE` is on. It is a second setting, off by default, admin-only, and it also needs `BS_AVAILABLE` on.
@@ -69,15 +70,15 @@ All of these either are required by Ethan's rulings (E-stop, watchdog) or are a 
 | Protection / latch | Normal action | In battle short |
 |---|---|---|
 | **E-stop** (hardware + ESTOP state) | Stop, K4 trip | **Unchanged, active** |
-| **Overspeed** (MPU speed; backup: GEN frequency × pole pairs if the ADE is valid) | Shutdown | **Unchanged, active.** If the MPU signal is lost while running, use the GEN-frequency backup. If both are lost, keep running and alarm `BS_OVERSPEED_UNPROTECTED` (decision D5). |
+| **Overspeed** (MPU speed; backup: GEN frequency × pole pairs if the ADE is valid) | Shutdown | **Unchanged, active.** If the MPU signal is lost while running, use the GEN-frequency backup. If both are lost, keep running and alarm `BS_OVERSPEED_UNPROTECTED` (**Ethan's decision D5**). |
 | Low oil pressure, high coolant/oil temperature, other engine DIs/AIs | Shutdown | Alarm and log only, keep running |
 | Over/undervoltage, over/underfrequency (GEN) | Shutdown and/or GCB open | Alarm and log only, keep running, GCB stays closed |
 | Overcurrent / short-circuit (controller-measured) | GCB open and/or shutdown | Alarm and log only. **Fire and cable risk, see §9** |
-| Breaker trips (any controller-commanded GCB/MCB open for a protection) | Open pulse | Not sent. Alarm and log |
+| Breaker trips (any controller-commanded GCB/MCB open for a protection) | Open pulse | Not sent. Alarm and log. **One exception (Ethan's decision D6): the reverse-power trip on a paralleled set stays active (§8)** |
 | Metering faults: `METERING_SILENT` GEN/BUS, `METERING_MISSING` (whole meter board) | Latched shutdown / start block (FW-MTR-3) | Alarm and log only, keep running, starts allowed. Voltage/frequency/current protections are blind and already overridden |
 | Power-dip latches (FW-MTR-9: 2 s running cap, 5 dips in 10 min) | Latched shutdown | Alarm and log only. The recheck still runs, so metering comes back automatically |
 | Start inhibits: `RELAY_KIT_*`, `INA_VBUS_FAULT`, DI_BIAS faults, panel faults, latched FAULT from before | Block start | Do not block the start. Log the start as "started over inhibit X" |
-| Fail-to-start (overcrank) | FAULT after N attempts | Keep retrying with rest periods (each rest ≥ 2 × the crank time, crank ≤ the configured maximum); alarm. Starter overheating risk (decision D4) |
+| Fail-to-start (overcrank) | FAULT after N attempts | **Retry indefinitely with rest breaks (Ethan's decision D4)**: crank ≤ `BS_CRANK_MAX_S`, rest `BS_CRANK_REST_S` between attempts, long rest `BS_CRANK_LONG_REST_S` after every 3 attempts (§12); alarm `BS_OVERCRANK_RETRYING`. Starter overheating risk is accepted |
 | Firmware readback mismatch on outputs | FAULT | Rewrite the output, alarm, keep running |
 | **Kept active** (they cannot stop the engine): D+ 30 s excitation cap, glow 60 s cap and cooldown, battery load-shed of AUX/EXP_12V/GLOW (FUEL and CRANK are never shed), PSU_MAIN_OK load-shed and back-off | as normal | as normal |
 | **Breaker close permissives** (sync-check, dead-bus check) | Block close | **Not overridden.** See §8 |
@@ -87,12 +88,12 @@ Operator commands are not protections. **The local STOP key (long press) always 
 ## 6. Disabling, persistence and reboot
 - **Disable locally:** hold the same two corner keys for 3 s (no confirm step; turning it off is the safe direction), or tap "Disable battle short" on the display.
 - **Disable remotely:** allowed whenever the remote-control permission exists, even if `BS_REMOTE_ENABLE` is off.
-- **When it turns off:** protections come back after a 5 s grace period. Any fault that is still present then acts normally. For example, low oil pressure still present → shutdown 5 s after disable. The display warns about this before confirming ("3 faults are active and will stop the engine").
-- **E-stop:** pressing E-stop stops the engine (hardware) and **clears battle short** (recommended; decision D2). After the E-stop is reset, battle short must be enabled again with step 2.
+- **When it turns off:** protections come back after a grace period, `BS_DISABLE_GRACE_S` (default 5 s, 2–30 s, §12). Any fault that is still present then acts normally. For example, low oil pressure still present → shutdown 5 s after disable. The display warns about this before confirming ("3 faults are active and will stop the engine").
+- **E-stop:** pressing E-stop stops the engine (hardware) and **clears battle short** (**Ethan's decision D2**). After the E-stop is reset, battle short must be enabled again with step 2.
 - **Survives an MCU reset:** **yes.** The battle-short state is stored in FRAM (CRC, A/B), so an IWDG or brown-out reset does not silently bring protections back mid-run (BS-11 warm restart).
 - **Survives a power cycle:** **no, by default.** A power-on reset clears it to OFF and logs `BS_CLEARED_BY_POWER_CYCLE`.
   - A power cycle is also the only way out of a watchdog latch, so the restart after a hang comes back with full protection, and a technician servicing the set never finds protections off without knowing.
-  - Option `BS_PERSIST_POWER_CYCLE` (admin, off by default) keeps it on across power cycles for unattended remote sites. Decision D1.
+  - Option `BS_PERSIST_POWER_CYCLE` (admin, off by default) keeps it on across power cycles for unattended remote sites. **Ethan's decision D1:** clears on a power cycle by default; the admin setting can make it persist.
 - **Optional auto-expiry:** `BS_TIMEOUT_H` (0 = never, default 0). If set, battle short turns off after that many hours, with a 10 min warning.
 
 ## 7. Warning, alarm output and remote status (cannot be missed)
@@ -100,7 +101,7 @@ Operator commands are not protections. **The local STOP key (long press) always 
   - A red banner on every screen, which cannot be dismissed: "BATTLE SHORT ACTIVE – ENGINE AND BREAKER PROTECTIONS OVERRIDDEN".
   - The banner shows how long battle short has been on and the number of faults overridden in this session, and opens the list of faults overridden right now.
 - **Front panel without the display:** one dedicated key LED (the centre-top key) flashes red, 1 s on / 1 s off, all the time.
-- **Buzzer:** three chirps when it is enabled, then one chirp every 30 s. Silencing the alarm mutes it for 15 min, then it resumes. A **new** overridden fault always sounds the full alarm pattern until it is acknowledged.
+- **Buzzer:** three chirps when it is enabled, then one chirp every `BS_BUZZER_REPEAT_S` (default 30 s). Silencing the alarm mutes it for `BS_SILENCE_MIN` (default 15 min), then it resumes. A **new** overridden fault always sounds the full alarm pattern until it is acknowledged.
 - **Alarm output:** configuration setting `BS_ALARM_AUX` assigns one AUX output (AUX1–10) as "battle short active" (steady on), for a beacon or a common-alarm relay. Default: none assigned; the installer must choose (§11).
 - **Remote status:** a status bit and the session counters in the Modbus/CAN map and the CM5 status frame. An event message goes out on enable, disable and every newly overridden fault, through the CM5 network/modem if alerts are configured. The status is sent whether or not remote enable is allowed.
 
@@ -109,9 +110,13 @@ Operator commands are not protections. **The local STOP key (long press) always 
 - **Breaker closing is not overridden.**
   - Closing out of phase onto a live bus wrecks the alternator and the coupling, and can hurt people. Battle short overrides trips (opening), not close permissives.
   - A GCB/MCB close still needs a valid sync-check (both ADEs good) or a verified dead bus. With the BUS ADE silent (FW-MTR-3), no close is possible, as before.
-  - Decision D3: whether a dead-bus close without bus metering may be allowed in battle short when an external ATS/interlock input proves the utility side is open.
+  - **Ethan's decision D3: no dead-bus close without proof that the bus is dead.** Proof = a valid BUS ADE reading below the dead-bus threshold. With the BUS ADE silent there is no close, in battle short too. (An external ATS/interlock "utility open" input could become a second proof later; it does not exist on this board and is not part of this spec.)
 - **A closed breaker stays closed.** That is already the bus-side rule (FW-MTR-3), and battle short also suppresses the protection opens.
-- **Paralleling (two or more sets on one bus):** per Ethan's ruling, battle short overrides all breaker trips, including reverse power if implemented. **Flagged risk:** a set that loses its engine but keeps its breaker closed is driven as a motor by the other sets. That pulls the bus down and can damage both sets, which defeats the purpose of battle short. Recommendation (decision D6): keep the reverse-power breaker trip active in battle short **when paralleled**. It opens only that set's breaker and never stops an engine.
+- **Paralleling (two or more sets on one bus): exception to "all breaker trips overridden" (Ethan's decision D6).** On a paralleled set the **reverse-power breaker trip stays active in battle short**. Every other breaker trip is still overridden.
+  - Why: a set that loses its engine but keeps its breaker closed is driven as a motor by the other sets. That pulls the bus down and can damage both sets, which defeats the purpose of battle short.
+  - It opens **only that set's GCB** and never stops an engine.
+  - Not editable (§12).
+  - **Note:** no reverse-power function is specified in ARCHITECTURE.md yet, because paralleling is not specified. When paralleling is added, it must include a reverse-power trip, and this rule applies to it.
 
 ## 9. Overcurrent: overridden, with a fire and cable warning
 - Per Ethan, controller overcurrent and short-circuit trips are overridden.
@@ -132,28 +137,53 @@ Operator commands are not protections. **The local STOP key (long press) always 
 - **Visibility:** the counters appear on a service screen and in the configuration suite as read-only "Battle short history" for warranty and engine-life records.
 
 ## 11. Installation and manual warning text (paste as is)
-> **WARNING – BATTLE SHORT.** Battle short turns OFF the controller's engine and breaker protections: low oil pressure, high temperature, over/undervoltage, over/underfrequency, overcurrent, metering-fault and breaker trips. Only the emergency stop and engine overspeed stay active. Running in battle short can destroy the engine, the generator or the connected equipment, and an overload or short circuit can overheat cables and start a fire. Use it only when losing power is more dangerous than losing the generator. Fit an external generator circuit breaker sized for the generator and the cable; the controller does not protect them in battle short. A controller fault (firmware hang) still stops the engine, and the controller must then be power-cycled to restart. Every use of battle short and every fault overridden is permanently recorded in the controller. Battle short is off unless enabled in the configuration suite by an administrator.
+> **WARNING – BATTLE SHORT.** Battle short turns OFF the controller's engine and breaker protections: low oil pressure, high temperature, over/undervoltage, over/underfrequency, overcurrent, metering-fault and breaker trips. Only the emergency stop and engine overspeed stay active (plus, on generators run in parallel, the reverse-power breaker trip). If the engine will not start, the controller keeps cranking with rest breaks until it starts or is stopped. Running in battle short can destroy the engine, the generator or the connected equipment, and an overload or short circuit can overheat cables and start a fire. Use it only when losing power is more dangerous than losing the generator. Fit an external generator circuit breaker sized for the generator and the cable; the controller does not protect them in battle short. A controller fault (firmware hang) still stops the engine, and the controller must then be power-cycled to restart. Every use of battle short and every fault overridden is permanently recorded in the controller. Battle short is off unless enabled in the configuration suite by an administrator.
 
 Also in the manual: the two-step enable procedure (§4), how to turn it off (§6), what the 5 s grace on disable means, and "assign a battle-short beacon output" (§7).
 
-## 12. Configuration settings (configuration suite, admin-only, FRAM)
-| Setting | Default | Meaning |
-|---|---|---|
-| `BS_AVAILABLE` | off | Pre-authorises the local enable (§4 step 1) |
-| `BS_REMOTE_ENABLE` | off | Allows an authenticated remote enable (§4) |
-| `BS_PIN_REQUIRED` | off | Display confirm also asks for the PIN |
-| `BS_PERSIST_POWER_CYCLE` | off | Keep battle short across a power cycle (D1) |
-| `BS_TIMEOUT_H` | 0 (never) | Auto-expiry (§6) |
-| `BS_ALARM_AUX` | none | AUX output for "battle short active" (§7) |
-| `BS_KEEP_REVERSE_POWER_PARALLEL` | per D6 | Keep reverse-power breaker trip when paralleled |
+## 12. Configuration settings: what the configuration suite can and cannot edit
+All battle-short settings live in MCU FRAM (CRC, A/B copies), like the other safety settings.
+- **Who can change them:** only with the configuration suite's admin credential. Remotely, only if the configuration-edit permission allows it.
+- **When:** not while battle short is active. The one exception is turning `BS_AVAILABLE` off, which also turns battle short off at once.
+- **Logging:** every change is logged with who, when, the old value and the new value.
+- **Out-of-range values** are refused, not clamped. The suite shows the limit.
 
-Settings changes are logged. Battle-short settings cannot be changed while battle short is active, except turning it off.
+**Editable (admin):**
+| Setting | Default | Allowed values (hard limits) | Notes |
+|---|---|---|---|
+| `BS_AVAILABLE` | off | on / off | Pre-authorises the local enable (§4 step 1). Turning it on needs a typed confirmation of the §11 warning |
+| `BS_REMOTE_ENABLE` | off | on / off; can be on only while `BS_AVAILABLE` is on | Allows an authenticated remote enable (§4). Remote **disable** never needs it |
+| `BS_PIN_REQUIRED` | off | on / off; PIN 4–8 digits | Display confirm also asks for the PIN. The no-display key confirm is unaffected |
+| `BS_PERSIST_POWER_CYCLE` (D1) | off | on / off | Off = a power cycle clears battle short (Ethan's D1 default). On = it persists, for unattended sites |
+| `BS_TIMEOUT_H` | 0 (never) | 0, or 1–168 h | Auto-expiry with a 10 min warning (§6) |
+| `BS_DISABLE_GRACE_S` | 5 s | 2–30 s | Delay before protections return after disable (§6). Cannot be 0, so a still-present fault never acts the instant the operator lets go of the keys |
+| `BS_CRANK_MAX_S` (D4) | 10 s | 3–15 s, and never above the normal crank-time setting | Length of one crank attempt in battle short |
+| `BS_CRANK_REST_S` (D4) | 30 s | 20–300 s, and at least 2 × `BS_CRANK_MAX_S` | Rest between attempts (starter cooling) |
+| `BS_CRANK_LONG_REST_S` (D4) | 120 s | 60–600 s, and at least `BS_CRANK_REST_S` | Longer rest after every 3 failed attempts |
+| `BS_ALARM_AUX` | none | none, or one of AUX1–AUX10 not already assigned | AUX output held on while battle short is active, for a beacon or common-alarm relay (§7). The installer should assign one |
+| `BS_BUZZER_REPEAT_S` | 30 s | 10–120 s | Chirp interval while active (§7). The buzzer cannot be switched off for battle short |
+| `BS_SILENCE_MIN` | 15 min | 1–60 min | How long "silence" mutes the repeat chirp. A **new** overridden fault always sounds the full alarm, whatever this is set to |
+
+**Fixed (not editable in the configuration suite or anywhere else):**
+| Item | Fixed behaviour |
+|---|---|
+| E-stop | Always active. Pressing it stops the engine and clears battle short (D2) |
+| Overspeed | Always active. Uses the normal engine overspeed setpoint; battle short cannot raise or disable it. Speed lost (MPU and GEN frequency): keep running and alarm (D5) |
+| Watchdog latch (TPS3431/U84) | Always stops the engine on a firmware hang until power cycle (hardware; §2–3) |
+| Breaker close permissives | Sync-check, or a dead bus proven by a valid BUS ADE reading (D3). Never relaxed |
+| Reverse-power trip on paralleled sets | Stays active in battle short (D6) |
+| Overcrank retries | Indefinite (D4); only the timing above is editable |
+| Local STOP key | Always stops the engine |
+| Enable sequence | Two-hand 5 s corner hold, 10 s confirm window, 3 s confirm-key hold (§4). Key mapping per D7 (pending) |
+| Warnings | Banner, flashing key LED and remote status bit (§7) cannot be turned off |
+| Logging and lifetime counters | Always on; never cleared (§10) |
+| Kept-active items | D+ 30 s excitation cap, glow 60 s cap/cooldown, load-shed (§5) |
 
 ## 13. Requirements index (for the firmware writer)
 - **BS-1** Mode flag in FRAM (CRC, A/B). An overlay on the state machine, not a state.
 - **BS-2** Enable per §4 (two-step, local; remote only with `BS_REMOTE_ENABLE`).
 - **BS-3** Override table §5. E-stop and overspeed stay active, the STOP key always works, close permissives stay.
-- **BS-4** Disable per §6, with the 5 s grace and the warning.
+- **BS-4** Disable per §6, with the `BS_DISABLE_GRACE_S` grace and the warning.
 - **BS-5** Warnings per §7.
 - **BS-6** Logging and lifetime counters per §10.
 - **BS-7** Auto-start/ATS/paralleling per §8.
@@ -166,15 +196,19 @@ Settings changes are logged. Battle-short settings cannot be changed while battl
   - simulate each overridden fault and check it alarms and logs without a stop;
   - check overspeed still stops the engine;
   - check E-stop still stops and clears battle short;
+  - with the engine unable to start, check cranking retries past the normal limit with the configured crank, rest and long-rest times;
+  - with the BUS ADE silent, check no dead-bus close happens in battle short (D3);
+  - when paralleling exists: check a reverse-power condition opens the GCB in battle short (D6);
   - stop PA12 kicks and check the engine stops and stays stopped until power cycle;
   - force an IWDG reset while running and measure the FUEL_EN gap (≤ 50 ms target);
   - check the counters survive a factory reset.
+- **BS-13** Configuration settings, defaults and hard limits per §12. Out-of-range values are refused. The fixed items in §12 have no setting at all.
 
-## 14. Decisions for Ethan
-- **D1** Survive a power cycle? Recommended **no** by default, with the admin option for unattended sites (§6).
-- **D2** Does E-stop clear battle short? Recommended **yes** (§6).
-- **D3** Allow a dead-bus GCB close without bus metering in battle short, if an external ATS/interlock input proves the utility side is open? Recommended **no** unless that input exists (§8).
-- **D4** Overcrank in battle short: keep retrying with rests (recommended) or keep the normal attempt limit?
-- **D5** Overspeed when both MPU speed and GEN frequency are lost while running: keep running with an alarm (recommended, matches "running at all costs"), or shut down?
-- **D6** Paralleled sets: keep the reverse-power breaker trip active in battle short (recommended), or override it as per the current ruling?
-- **D7** Front-panel combination keys: corners plus centre-top as proposed, or other keys once the panel legend is fixed.
+## 14. Decisions (Ethan, Nov 22, 2026, ≈ 2:55 PM HST: "Yes, go with all your battle short suggestions")
+- **D1** Battle short clears on a power cycle. The admin setting `BS_PERSIST_POWER_CYCLE` can make it persist (§6, §12).
+- **D2** E-stop also clears battle short (§6).
+- **D3** No dead-bus close without proof that the bus is dead (a valid BUS ADE reading) (§8).
+- **D4** Cranking retries indefinitely, with rest breaks (§5, §12).
+- **D5** If the speed signal is lost (MPU and the GEN-frequency backup), keep running and raise an alarm (§5).
+- **D6** The reverse-power breaker trip stays active on paralleled sets: the one exception to "all breaker trips overridden" (§5, §8).
+- **D7 (pending)** Front-panel combination keys: corners plus centre-top as proposed; final BTN mapping once the front-panel legend exists.

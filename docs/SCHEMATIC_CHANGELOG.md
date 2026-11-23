@@ -1254,3 +1254,16 @@ Checks (kicad-cli 9.0.2):
   - INSTALL_SAFETY: warning text and installer items.
   - DESIGN_NOTES: Batch 33 summary.
 - Checks (kicad-cli 9.0.2): ERC --severity-all genctl **0**, genctl_meter **0**; netlist diff vs 2c7a495: 1147 / 220 parts, no part, property or net change; BOM vs netlist 0 mismatches; schematic, library and BOM files byte-identical to 2c7a495.
+
+## Batch 33a: battle short decisions D1–D6 final, editable settings (Grok Bot for Ethan, 2026-11-22 HST, docs only)
+- Ethan, ≈ 2:55 PM HST: "Yes, go with all your battle short suggestions."
+- docs/FW_REQ_BATTLESHORT.md:
+  - D1–D6 recorded as Ethan's decisions (§1, §5, §6, §8, §14). "Recommended" and "open" wording removed.
+  - D6 is stated as the one exception to "all breaker trips overridden".
+  - D7 (key mapping) stays pending until the front-panel legend exists.
+  - §12 rewritten: editable settings with defaults and hard limits, and a fixed (not editable) list. New requirement BS-13 and new bench tests in BS-12.
+  - Warning text (§11) now mentions the paralleled reverse-power trip and indefinite cranking.
+- firmware/ARCHITECTURE.md: battle-short overlay lists D1–D6 and points to §12.
+- docs/INSTALL_SAFETY.md: warning text synced; installer items for D1/D2 persistence, D4 crank timing and D3 bus sensing.
+- DESIGN_NOTES.md: Batch 33a summary; the Batch 33 "D1–D7 open" line now points to it.
+- Checks (kicad-cli 9.0.2): ERC --severity-all genctl **0**, genctl_meter **0**; netlists identical to 5bd77c4 (1147 / 220 parts); BOM vs netlist 0 mismatches; no schematic, library, BOM or tools change. Evidence: docs/split_evidence/batch33a.
