@@ -1,7 +1,7 @@
 position,row_a,row_b,row_c,note
-1,VBAT_FIELD,VBAT_FIELD,VBAT_FIELD,"slot-switched battery (TPS48100), 9 contacts x 2 A rated; slot budget 6 A cont"
-2,VBAT_FIELD,VBAT_FIELD,VBAT_FIELD,"slot-switched battery (TPS48100), 9 contacts x 2 A rated; slot budget 6 A cont"
-3,VBAT_FIELD,VBAT_FIELD,VBAT_FIELD,"slot-switched battery (TPS48100), 9 contacts x 2 A rated; slot budget 6 A cont"
+1,VBAT_FIELD,VBAT_FIELD,VBAT_FIELD,"slot-switched battery (TPS16630 eFuse, limit 4.14-4.86 A since Pass 5), 9 contacts x 2 A rated"
+2,VBAT_FIELD,VBAT_FIELD,VBAT_FIELD,"slot-switched battery (TPS16630 eFuse, limit 4.14-4.86 A since Pass 5), 9 contacts x 2 A rated"
+3,VBAT_FIELD,VBAT_FIELD,VBAT_FIELD,"slot-switched battery (TPS16630 eFuse, limit 4.14-4.86 A since Pass 5), 9 contacts x 2 A rated"
 4,FIELD_GND,FIELD_GND,FIELD_GND,"high-current return, 9 contacts"
 5,FIELD_GND,FIELD_GND,FIELD_GND,"high-current return, 9 contacts"
 6,FIELD_GND,FIELD_GND,FIELD_GND,"high-current return, 9 contacts"
