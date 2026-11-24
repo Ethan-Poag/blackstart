@@ -97,7 +97,7 @@ print('   transient T_J limit = T(TSD) (6.1 Abs Max), then latched OFF (MODE ope
 print('Start into a short: thermal regulation T_J(REG) 136/145/154 C (277/293/309 F) for 1.1/1.25/1.5 s, then latched OFF (FLT#).')
 print('Trip-kick energy into the eFuse (120 us window incl. I_OL phase): <= %.1f mJ; SS310B freewheel: <= %.2f mJ (IFSM 80 A / 8.3 ms).'%(
     max(r['E_ef'].max() for r in worst.values())*1e3,max(r['E_sch'].max() for r in worst.values())*1e3))
-print('OUT negative excursion: SS310B holds OUT at -%.1f V worst (Vf 1.2 V + 20 mOhm x loop current, MDD Fig. 3; Pass 6 m2) for about 1 us. That is'%(-min(r['pk']['vout_neg'].min() for r in worst.values())))
+print('OUT negative excursion: SS310B holds OUT at -%.1f V in these corners (64-corner bound -7.5 V: kick_calc.txt) (Vf 1.2 V + 20 mOhm x loop current, MDD Fig. 3; Pass 6 m2) for about 1 us. That is'%(-min(r['pk']['vout_neg'].min() for r in worst.values())))
 print('   below the -0.3 V OUT abs max for that time; TI SLVSET9G 9.4.1 / 9.5 anticipate this inductive spike and name the Schottky at OUT/GND')
 print('   (place it at the OUT/GND pins: layout note). Hot reverse leakage: pass6_calc.txt section 4 (stable).')
 

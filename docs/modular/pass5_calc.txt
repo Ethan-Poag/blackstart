@@ -64,7 +64,7 @@ After the 1 us trip the eFuse regulates I_OL: P = (32 - 0) x 4.86 A = 156 W -> T
    transient T_J limit = T(TSD) (6.1 Abs Max), then latched OFF (MODE open). FLT# asserts at TSD or at 1.09-1.6 ms, whichever is first.
 Start into a short: thermal regulation T_J(REG) 136/145/154 C (277/293/309 F) for 1.1/1.25/1.5 s, then latched OFF (FLT#).
 Trip-kick energy into the eFuse (120 us window incl. I_OL phase): <= 13.4 mJ; SS310B freewheel: <= 0.37 mJ (IFSM 80 A / 8.3 ms).
-OUT negative excursion: SS310B holds OUT at -6.4 V worst (Vf 1.2 V + 20 mOhm x loop current, MDD Fig. 3; Pass 6 m2) for about 1 us. That is
+OUT negative excursion: SS310B holds OUT at -6.4 V in these corners (64-corner bound -7.5 V: kick_calc.txt) (Vf 1.2 V + 20 mOhm x loop current, MDD Fig. 3; Pass 6 m2) for about 1 us. That is
    below the -0.3 V OUT abs max for that time; TI SLVSET9G 9.4.1 / 9.5 anticipate this inductive spike and name the Schottky at OUT/GND
    (place it at the OUT/GND pins: layout note). Hot reverse leakage: pass6_calc.txt section 4 (stable).
 
