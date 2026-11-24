@@ -1,4 +1,4 @@
-ERC report (2026-11-23T11:56:46-1000, Encoding UTF8)
+ERC report (2026-11-23T15:30:11-1000, Encoding UTF8)
 
 ***** Sheet /
 
@@ -16,7 +16,7 @@ ERC report (2026-11-23T11:56:46-1000, Encoding UTF8)
 
 ***** Sheet /Backplane: ENGINE slot + 8 universal LV slots, ID muxes, slot bus/
 
-***** Sheet /Per-slot power: TPS48100 VBAT_FIELD, TPS2553 +5V/+3V3, OUT_EN_N / PWR_EN logic/
+***** Sheet /Slot power: bank limiter, 8x TPS48100 + TPS2553, OUT_EN_N logic/
 
 ***** Sheet /E-stop feed: J23, LM74700-Q1 ideal diode, watchdog rail cut, trip and sense/
 

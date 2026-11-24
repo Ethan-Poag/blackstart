@@ -1,15 +1,15 @@
 group,item,qty,unit_qty1,unit_qty10,ext_qty1,ext_qty10,source
 baseline,Locked one-board mainboard BOM (tag),-1,266.36,225.95,-266.36,-225.95,BOM
 baseline,Locked HV meter BOM (tag),-1,63.89,53.42,-63.89,-53.42,BOM
-mainboard,"Reworked mainboard BOM (bom/genctl_main_bom.csv: backplane, slot power, ideal diode, rail cut)",1,231.4,194.87,231.4,194.87,BOM
+mainboard,"Reworked mainboard BOM (bom/genctl_main_bom.csv: backplane, slot power, ideal diode, rail cut)",1,232.97,195.77,232.97,195.77,BOM
 hv meter,HV meter BOM with ID EEPROM (bom/genctl_meter_bom.csv),1,65.33,54.6,65.33,54.6,BOM
-cards,"engine card parts (156 parts, cards/engine/engine_bom.csv) x1",1,28.7486,24.5112,28.75,24.51,BOM
-cards,"di8 card parts (76 parts, cards/di8/di8_bom.csv) x1",1,8.9052,7.5087,8.91,7.51,BOM
-cards,"ai4 card parts (104 parts, cards/ai4/ai4_bom.csv) x1",1,12.1689,10.3818,12.17,10.38,BOM
-cards,"hso5 card parts (76 parts, cards/hso5/hso5_bom.csv) x2",2,28.5944,23.9651,57.19,47.93,BOM
-cards,"brk4 card parts (64 parts, cards/brk4/brk4_bom.csv) x1",1,24.0862,20.1753,24.09,20.18,BOM
+cards,"engine card parts (158 parts, cards/engine/engine_bom.csv) x1",1,28.8849,24.6434,28.88,24.64,BOM
+cards,"di8 card parts (82 parts, cards/di8/di8_bom.csv) x1",1,9.2777,7.8133,9.28,7.81,BOM
+cards,"ai4 card parts (119 parts, cards/ai4/ai4_bom.csv) x1",1,12.5869,10.7319,12.59,10.73,BOM
+cards,"hso5 card parts (97 parts, cards/hso5/hso5_bom.csv) x2",2,29.216,24.4983,58.43,49.0,BOM
+cards,"brk4 card parts (83 parts, cards/brk4/brk4_bom.csv) x1",1,24.6857,20.6905,24.69,20.69,BOM
 boards,"Card PCBs: 4 LV designs + engine, 4-layer, 5 pcs per design at qty 1 [E]",5,8.0,1.2,40.0,6.0,E
 boards,PCBA fixed fees per extra card order (JLC fee table),5,13.74,1.374,68.7,6.87,DS
 boards,Extended-part loading ~6 per card order at 3.07 [E count],5,18.42,1.842,92.1,9.21,E
 mechanical,"Card bays: guides, faceplates, captive screws, coding ribs [E]",1,29.0,17.5,29.0,17.5,E
-TOTAL,true net delta per controller vs baseline (actual BOMs),,,,327.38,120.19,mix
+TOTAL,true net delta per controller vs baseline (actual BOMs),,,,331.72,123.46,mix

@@ -1,14 +1,14 @@
 {
- "same": 1062,
- "changes": 112,
+ "same": 1057,
+ "changes": 127,
  "unexplained": 0,
  "orphans": 0,
  "missing_mb_refs": [],
  "unpaired_hso_b": [],
  "contacts": {
-  "wired both sides": 423,
+  "wired both sides": 413,
+  "both open/NC": 166,
   "slot signal unused by this card (card NC)": 7,
-  "ID strap open (card pull-up = 1)": 6,
-  "both open/NC": 156
+  "ID strap open (card pull-up = 1)": 6
  }
 }
