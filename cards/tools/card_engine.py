@@ -13,7 +13,7 @@ for p in c.parts:
         for k in ('12','13','14'): assert p['pn'][k]=='VBAT_P'; p['pn'][k]='VBAT_ESTOP'
 # field headers (KF2EDGRM-5.08-6P, same part as baseline J17-J22)
 J18=[p for p in c.parts if p['props'].get('BaselineRef')=='J18'][0]
-hdr=dict(J18['props']); [hdr.pop(k,None) for k in ('Reference','BaselineRef','Value')]
+hdr=dict(J18['props']); [hdr.pop(k,None) for k in ('Reference','BaselineRef','Value','Note')]
 SIG=['AI1_ADC','AI2_ADC','COM_A_ADC','COM_B_ADC','AI_CS_DIS2','AI_SH_G1','AI_SH_G2','AI_VSET','VMID','VBAT_AI',
      'DI1_D','DI2_D','DI3_D','DI4_D','DI_BIAS_A','DPLUS_D','DPLUS_SNS','DPLUS_EXC_EN','MPU_GATE','MPU_SPEED','U31_P00',
      'FUEL_EN','CRANK_EN','GLOW_EN','FUEL_RB_N','CRANK_RB_N','GLOW_RB_N','GLOW_SNSM','FUEL_ISNS','CRANK_ISNS',
@@ -40,7 +40,7 @@ JF2=c.newref('J'); c.add('Connector_Generic:Conn_01x06',JF2,'D+/GLOW/BIAS',{'1':
 for p in c.parts:
     if p['props'].get('BaselineRef')=='J18': p['props']['Value']='COM/MPU'
 # ID EEPROM
-cap=dict(c.inst['C199'][0]['props']); cap.pop('Reference')
+cap=dict(c.inst['C199'][0]['props']); cap.pop('Reference'); cap.pop('Note',None)
 import lvcommon as L
 res=L.r10k('ID_WP pull-up: write-protected unless the backplane pulls ID_WP low')   # Pass 2 m16: 0603
 c.add('cards:AT24CS32-STUM',c.newref('U'),'AT24CS32-STUM-T',{'1':'ID_SCL','2':'GND','3':'ID_SDA','4':'+3V3_SAFE','5':'ID_WP'},

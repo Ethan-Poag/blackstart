@@ -23,7 +23,7 @@ def slot(c,mpn_note=''):
     for u,r in enumerate('abc',1): c.add('cards:DIN41612_C96',JS,'DIN41612_C96',{k:v for k,v in P.items() if k[0]==r},din,unit=u)
     return JS,P
 def eeprom(c):
-    cap=dict(c.inst['C199'][0]['props']); cap.pop('Reference'); res=r10k('ID_WP pull-up: write-protected unless the backplane pulls ID_WP low')
+    cap=dict(c.inst['C199'][0]['props']); cap.pop('Reference'); cap.pop('Note',None); res=r10k('ID_WP pull-up: write-protected unless the backplane pulls ID_WP low')
     U=c.newref('U'); c.add('cards:AT24CS32-STUM',U,'AT24CS32-STUM-T',{'1':'I2C_SCL','2':'GND','3':'I2C_SDA','4':'+3V3_ID','5':'ID_WP'},
       {'Footprint':'Package_TO_SOT_SMD:SOT-23-5','MPN':'AT24CS32-STUM-T','Manufacturer':'Microchip','LCSC':'C147891','Description':'Card ID + calibration EEPROM (0x50 / serial 0x58)'})
     C=c.newref('C'); c.add('Device:C',C,cap['Value'],{'1':'+3V3_ID','2':'GND'},cap)
@@ -43,7 +43,7 @@ NEWP={'C6059':{'Footprint':'Package_SO:TSSOP-14_4.4x5mm_P0.65mm','MPN':'74LVC125
 def r10k(desc=''):
     """Pass 2 m16: new 10k card pull-ups are 0603 (C25804), not the baseline R349 1206 part."""
     d=dict(NEWP['C25804']); d['Description']=desc; return d
-def capp(c): cap=dict(c.inst['C199'][0]['props']); cap.pop('Reference'); return cap
+def capp(c): cap=dict(c.inst['C199'][0]['props']); cap.pop('Reference'); cap.pop('Note',None); return cap   # Pass 4 m3
 def res(c,lcsc,a,b,desc=''):
     d=dict(NEWP[lcsc]); d['Description']=desc or d['Description']; R=c.newref('R'); c.add('Device:R',R,d['Value'],{'1':a,'2':b},d); return R
 def slotbuf(c):
@@ -84,7 +84,8 @@ def copy_parts(c,refs,netfn,tag='copy'):
             lsym=c.srclibs[i['lib_id']]; c.libs[i['lib_id']]=lsym; pins=lib_pins(lsym,i['unit'])
             pn={p['num']:netfn(c.pinnet.get((r,p['num']),'unconnected-'),p['num']) for p in pins}
             props=dict(i['props']); props['Reference']=nr; props['BaselineRef']=f'{tag}:{r}'
-            c.parts.append(dict(ref=nr,lib_id=i['lib_id'],unit=i['unit'],props=props,pins=pins,pn=pn,dnp=i['dnp'],lsym=lsym))
+            c.parts.append(dict(ref=nr,lib_id=i['lib_id'],unit=i['unit'],props=props,pins=pins,pn=pn,dnp=i['dnp'],lsym=lsym,carried='copy:'+r))
+    c.copymap=dict(getattr(c,'copymap',{})); c.copymap.update(out)
     return out
 def bfs(c,seeds,stop_refs,rails):
     """baseline parts reachable from seeds through non-rail nets, not crossing nets that touch stop_refs."""

@@ -73,7 +73,7 @@ class Card:
                 s.libs[lib]=lsym
                 pins=lib_pins(lsym,i['unit'])
                 pn={p['num']:s.netname(s.pinnet.get((r,p['num']),'unconnected-')) for p in pins}
-                s.parts.append(dict(ref=nr,lib_id=lib,unit=i['unit'],props=props,pins=pins,pn=pn,dnp=i['dnp'],lsym=lsym))
+                s.parts.append(dict(ref=nr,lib_id=lib,unit=i['unit'],props=props,pins=pins,pn=pn,dnp=i['dnp'],lsym=lsym,carried=r))
     def add(s,lib_id,ref,value,pn,props=None,unit=1,lsym=None):
         lsym=lsym or s.srclibs.get(lib_id) or CARDSYMS[lib_id.split(':')[1]]
         if lsym[1]!=lib_id:  # card lib symbols are stored with bare names; embed under full id

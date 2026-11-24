@@ -36,7 +36,7 @@ def nf(c,extra=None,default_keep=True):
         return c.netname(full)
     return f
 def header(c,nets,desc):
-    J18=c.inst['J18'][0]['props']; h=dict(J18); [h.pop(k,None) for k in ('Reference','Value')]
+    J18=c.inst['J18'][0]['props']; h=dict(J18); [h.pop(k,None) for k in ('Reference','Value','Note')]
     J=c.newref('J'); c.add('Connector_Generic:Conn_01x06',J,desc,{str(i+1):n for i,n in enumerate(nets)},h); return J
 def pullup(c,net,rail='+3V3_SLOT'):
     res=L.r10k(f'{net} pull-up to {rail}'); R=c.newref('R'); c.add('Device:R',R,res['Value'],{'1':rail,'2':net},res); return R
