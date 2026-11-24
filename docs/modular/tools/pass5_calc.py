@@ -46,7 +46,7 @@ print('   Trip-kick exposure of healthy slots above %.1f V: <= 1.8 us (kick_calc
 print('ILIM 4.02k: I_OL 4.185/4.500/4.815 A (datasheet row at 4.02k, VIN-VOUT 1 V); with 1 %% R: %.3f-%.3f A >= 4.0 A ROOM budget (margin %.0f mA)'%(4.185/1.01,4.815/0.99,(4.185/1.01-4.0)*1e3))
 IOLMAX=4.815/0.99
 print('Fast-trip 2 x I_OL = %.1f-%.1f A (soft short 2.2-4.5 us); I(SCP) 45 A typ, hot-short response 1 us typ; then I_OL regulation'%(2*4.185/1.01,2*IOLMAX))
-sr=(1.775*23.5/10e-9/1.1,2*25/10e-9,2.225*26/10e-9/0.9)
+sr=(1.775e-6*23.5/10e-9/1.1,2e-6*25/10e-9,2.225e-6*26/10e-9/0.9)  # V/s
 print('dVdT 10 nF (+/-10 %%): %.2f/%.2f/%.2f V/ms -> 32 V in %.1f/%.1f/%.1f ms; card load 2.76 uF -> %.0f mA max inrush'%(sr[0]/1e3,sr[1]/1e3,sr[2]/1e3,32/sr[2]*1e3,32/sr[1]*1e3,32/sr[0]*1e3,2.76e-6*sr[2]*1e3))
 ton=(742+49.5*10)*1e-6
 pg=1.5*ton+32/sr[0]+13e-3
@@ -86,6 +86,7 @@ for V in (24.0,28.8,32.0):
         worst[(V,cap)]=r
         print('slot dead short at %4.1f V, %-55s F1 I2t %.4f A2s (%.0fx below 115 A2s), eFuse peak %3.0f A, harness pk %3.0f A, eFuse energy %.1f mJ'%(
             V,lab,r['I2t'].max(),115/r['I2t'].max(),p['ief'].max(),p['iL'].max(),r['E_ef'].max()*1e3))
+print('(single corner Lbank 150 nH, t_resp 1.5 us; worst of the full 64-corner grid in kick_calc.txt PART 2: 363 A, 0.0527 A2s at 32 V)')
 print('Bank FETs (Q106/Q107) carry the slot peak for ~2 us: (0.55 x 363 A)^2 x 11.5 mOhm = %.0f W x ZthJC(2 us) 0.012 K/W = %.0f K (negligible).'%((0.55*363)**2*0.0115,(0.55*363)**2*0.0115*0.012))
 print('Residual (not a card fault, unchanged from Pass 4): a dead short ON VBAT_SLOTS itself (mainboard bus) is cleared by F1 (74-115 A2s at')
 print('   ~0.18-0.28 ms) before the U110 latch (466 us min) - see pass4_calc.txt. Every card-side short is now upstream-isolated by an eFuse.')

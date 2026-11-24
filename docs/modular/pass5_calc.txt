@@ -1,0 +1,79 @@
+Pass 5 (Ethan 2026-11-23 10:20 PM HST): slot switches TPS48100 + 2x BSC070N10NS5 -> TPS16630 eFuse, U1 HGATE dV/dt network,
+47R ahead of C225/U65. Every number below comes from the datasheets in docs/split_evidence/modular_pass5/ (tps1663.txt = TI SLVSET9G,
+tps2663.txt = TI SLVSE94G, bsc070_soa.png) and the live JLC/LCSC searches in docs/split_evidence/modular_pass5/fetch/ (2026-11-23).
+Transient numbers: docs/modular/tools/kick_calc.py (docs/modular/kick_calc.txt).
+
+== Part selection (JLC/LCSC live 2026-11-23; per board 8 + spares)
+TPS16630PWPR (HTSSOP-20 PWP)           C1849461  stock 1833   $2.9202  CHOSEN: adjustable UVLO + OVP cut-off (no clamp), I_OL 0.6-6 A, latch or retry, best stock and price
+TPS26631PWPR (same PWP footprint)      C2866319  stock 1      $5.521   pin-compatible alternate: pins 4/5 B_GATE/DRV open, 6 IN_SYS = IN, 16 PGTH (tie to the fault line), 17 PGOOD open; stock 1 only
+TPS26631RGER (VQFN-24)                 C1850273  stock 217    $10.9176 function-compatible second source (same die family, different footprint): needs a layout variant
+TPS26632RGER                           C1850278  stock 131    $3.5311  REJECTED: fixed OV clamp 32/32.8/35 V above 35 V with 162 ms timeout -> slot cut inside the 32-36 V rating
+TPS26636PWPT                           C1849494  stock 104    $4.7775  REJECTED: OV clamp 35.7/36.6/39 V (min below the 36 V / 60 s rating)
+MAX17613AATP+                          C3198160  stock 45     $9.4452  REJECTED: 3 A max < 4.0 A ROOM slot budget
+TPS26600PWPR                           C544399   stock 7006   $1.551   REJECTED: I_LIM 2.23 A max < 4.0 A ROOM slot budget
+Second source as fitted: TPS26631PWPR drops into the same land pattern (pin 16 PGTH to SLn_PWR_FAULT_N, pin 17 PGOOD unused ->
+start-into-short is then reported by FLT# only, after t(Treg_timeout) 1.1-1.5 s). TPS26631RGER (217 in stock) is the volume second source
+but needs a VQFN-24 footprint variant (layout frozen now: noted as a layout-time option, not done).
+
+== TPS16630 settings (SLVSET9G 6.5 / 6.6)
+UVLO 100k/27k (kept, 1 %): on 5.64 V (5.45-5.85), off 5.28 V (5.05-5.50); UVLO_toff 9-16 us; leakage 150 nA x 21k = 3 mV
+OVP 453k/10k: off rising 53.4/55.6/57.8 V, back on below 49.5/51.9/54.3 V; OVP_toff 8.5-14 us, re-on 150 + 49.5 x 10 = 645 us + dVdT ramp
+   -> never trips inside the 9-32 V / 36 V-60 s rating (min 53.4 V); cuts a slot before card parts rated 60-62 V see sustained OV (max 57.8 V).
+   Trip-kick exposure of healthy slots above 53.4 V: <= 1.8 us (kick_calc pessimistic corner) << OVP_toff min 8.5 us -> no nuisance OVP.
+ILIM 4.02k: I_OL 4.185/4.500/4.815 A (datasheet row at 4.02k, VIN-VOUT 1 V); with 1 % R: 4.144-4.864 A >= 4.0 A ROOM budget (margin 144 mA)
+Fast-trip 2 x I_OL = 8.3-9.7 A (soft short 2.2-4.5 us); I(SCP) 45 A typ, hot-short response 1 us typ; then I_OL regulation
+dVdT 10 nF (+/-10 %): 3.79/5.00/6.43 V/ms -> 32 V in 5.0/6.4/8.4 ms; card load 2.76 uF -> 18 mA max inrush
+PGOOD high after SHDN# high: delay 1.24 ms (x1.5 margin) + ramp 8.4 ms + deglitch 13 ms max = 23.3 ms << C2.3 150 ms charging mask
+IMON 15k: 0.418 V/A typ; 2.16 V at I_OL max (gain 29.58 uA/A); pin abs max 5.5 V. Test point only (no ADC channel; layout frozen).
+SHDN#: internal pull-up (open 2.48-3.3 V, 10 uA): NEW 10k pull-down on SLn_PWR_EN -> <= 0.10 V if the 1G02 is unpowered/open (V_SHUTF 0.8 V);
+   1G02 drive 3.3 V / 10k = 0.33 mA. Abs max SHDN 5.5 V (3.3 V logic).
+FLT# and PGOOD (open drain, 36-130 ohm, 10 mA) wired-OR with the TPS2553 FAULT onto SLn_PWR_FAULT_N (10k to +3V3_SAFE: 0.33 mA, VOL <= 43 mV).
+MODE open = latch: current limit > t_CL 129/162/202 ms, TSD, -> OFF until SHDN# or UVLO toggles (FW: EN_N high >= 20 ms).
+
+== Fault behaviour seen on SLn_PWR_FAULT_N (FW C5.1)
+  slot off (SHDN# low)               PGOOD low -> line LOW: invalid, masked (N8) - unchanged rule
+  enable into a healthy card         line LOW for <= 23 ms (PGOOD rising deglitch) then HIGH: inside the 150 ms C2.3 mask
+  hard short while running           1 us SCP trip, then I_OL regulation; FLT# LOW after 1.09-1.6 ms; TSD (ms, Fig 6-13) -> latched OFF, PGOOD LOW
+  overload > I_OL (soft)             I_OL regulation, FLT# LOW after 1.09-1.6 ms; latch at 129-202 ms or TSD; FW cuts EN_N at the first FLT#
+  enable into a short                thermal regulation T_J 136-154 C (277-309 F) for 1.1-1.5 s, PGOOD never rises -> line stays LOW -> C2.3 250 ms timeout -> SLOT_SHORT_LOCKOUT
+  VBAT_SLOTS > OVP (53.4-57.8 V)     FET off in 8.5-14 us, FLT# LOW; auto-on below 49.5-53.9 V: all slots at once -> C7.9 supply event (VBAT_P INA237 high)
+  VBAT_SLOTS < UVLO (5.13-5.44 V)    FET off, FLT# LOW: all slots at once -> C7.9 supply dip
+  ILIM pin open/short                FET off, FLT# LOW -> CARD_FAULT on that slot (board fault, service)
+
+== Coordination: slot vs bank (U110 kept) vs F1 (10 A, melt I2t >= 115 A2s)
+m9 HOT: card capped at I_OL max 4.864 A by its eFuse: bank overload trip >= 41.9 ms (was 27.4 ms for two channels at 3.61 A each; one channel 58.2 ms)
+     -> FW ">1 channel faulted = cut card by 20 ms" keeps 21.9 ms margin (was 7.4); the eFuse FLT# (<= 1.6 ms) normally cuts the card first.
+m9 ROOM: card capped at I_OL max 4.864 A by its eFuse: bank overload trip >= 40.0 ms (was 25.8 ms for two channels at 3.61 A each; one channel 56.7 ms)
+     -> FW ">1 channel faulted = cut card by 20 ms" keeps 20.0 ms margin (was 5.8); the eFuse FLT# (<= 1.6 ms) normally cuts the card first.
+Overload selectivity: eFuse FLT# 1.09-1.6 ms -> FW cut (C5.1, first scan) << bank overload trip >= 40.0 ms; eFuse self-latch 129-202 ms is the
+   no-FW backstop for a dead short (TSD in ms); for a soft overload with FW dead the bank overload cutoff (hardware) trips first: safe, not selective.
+Hard-short selectivity: slot SCP 1 us typ (soft 2.2-4.5 us) vs bank U110 SCP 21.2 A min with t_SC 466 us min -> > 100x; bank never trips on a slot short.
+slot dead short at 24.0 V, pessimistic (no FET saturation, current free for t_resp) F1 I2t 0.0303 A2s (3794x below 115 A2s), eFuse peak 266 A, harness pk  78 A, eFuse energy 9.0 mJ
+slot dead short at 24.0 V, realistic (FET saturates ~60 A)                         F1 I2t 0.0038 A2s (30505x below 115 A2s), eFuse peak  60 A, harness pk  24 A, eFuse energy 8.0 mJ
+slot dead short at 28.8 V, pessimistic (no FET saturation, current free for t_resp) F1 I2t 0.0426 A2s (2699x below 115 A2s), eFuse peak 319 A, harness pk  93 A, eFuse energy 11.5 mJ
+slot dead short at 28.8 V, realistic (FET saturates ~60 A)                         F1 I2t 0.0038 A2s (30660x below 115 A2s), eFuse peak  60 A, harness pk  24 A, eFuse energy 9.7 mJ
+slot dead short at 32.0 V, pessimistic (no FET saturation, current free for t_resp) F1 I2t 0.0518 A2s (2219x below 115 A2s), eFuse peak 354 A, harness pk 103 A, eFuse energy 13.3 mJ
+slot dead short at 32.0 V, realistic (FET saturates ~60 A)                         F1 I2t 0.0037 A2s (30733x below 115 A2s), eFuse peak  60 A, harness pk  24 A, eFuse energy 10.8 mJ
+(single corner Lbank 150 nH, t_resp 1.5 us; worst of the full 64-corner grid in kick_calc.txt PART 2: 363 A, 0.0527 A2s at 32 V)
+Bank FETs (Q106/Q107) carry the slot peak for ~2 us: (0.55 x 363 A)^2 x 11.5 mOhm = 458 W x ZthJC(2 us) 0.012 K/W = 6 K (negligible).
+Residual (not a card fault, unchanged from Pass 4): a dead short ON VBAT_SLOTS itself (mainboard bus) is cleared by F1 (74-115 A2s at
+   ~0.18-0.28 ms) before the U110 latch (466 us min) - see pass4_calc.txt. Every card-side short is now upstream-isolated by an eFuse.
+
+== eFuse thermal, hard short at 32 V (Tc 149 F / 65 C board)
+After the 1 us trip the eFuse regulates I_OL: P = (32 - 0) x 4.86 A = 156 W -> TSD 165 C (329 F) typ in the ms range (SLVSET9G Fig 6-13),
+   transient T_J limit = T(TSD) (6.1 Abs Max), then latched OFF (MODE open). FLT# asserts at TSD or at 1.09-1.6 ms, whichever is first.
+Start into a short: thermal regulation T_J(REG) 136/145/154 C (277/293/309 F) for 1.1/1.25/1.5 s, then latched OFF (FLT#).
+Trip-kick energy into the eFuse (120 us window incl. I_OL phase): <= 13.3 mJ; SS310B freewheel: <= 0.64 mJ (IFSM 80 A / 8.3 ms).
+OUT negative excursion: clamped by SS310B at -1.2 V (model Vf at high current) for a few us; TI SLVSET9G 9.4.1 / 9.5 prescribe exactly this
+   Schottky for the -0.3 V OUT rating under inductive turn-off (place at the OUT/GND pins: layout note).
+
+== U65 feed: D120 -> 47R 1206 (R1002) -> C225 10 uF / U65 TPS7B6950 (IN abs max 45 V)
+DC: 5 mA x 47R = 0.24 V drop, 1.2 mW (1206 rating 250 mW); RC 47R x 10 uF = 470 us vs the us-scale kick -> U65 IN <= 31.8 V at 32 V
+Cold crank 9 V: 9 - 0.45 (D120) - 0.24 = 8.3 V at U65 IN (LDO 5 V needs >= ~5.5 V). Surge 36 V / 60 s: U65 IN <= 35.6 V < 40 V operating.
+Inrush at power-up: C225 charge peak <= 32/47 = 0.68 A for ~0.5 ms: 47R pulse energy 1/2 C V^2 = 5.1 mJ (1206 pulse rating >> this).
+
+== U1 HGATE network (C601 22 nF / 100 V + R1001 1k) - see kick_calc.txt hot-plug table for Q2 SOA and Tj
+I_INRUSH = I_HGATE x C_OUT / CdVdT: C_OUT ~230 uF (2x100 uF + ceramics) -> 39/55/75 uA -> 0.41/0.58/0.78 A no load; ramp to 32 V 10.3-19.8 ms
+Turn-off: HGATE sinks 168 mA; through 1k the 22 nF can return <= 45 mA -> Q2 still off in ~0.2 us after the OV deglitch (kick_calc adds 1 us).
+CdVdT discharge to the source level through 1k: tau 22 us; after an OV cut Q2 re-conducts as a follower once VBAT_P sags ~3-5 V.
+C601 voltage: <= VBAT_P + 11 V (HGATE clamp) ~ 47-58 V on transients vs 100 V rating.

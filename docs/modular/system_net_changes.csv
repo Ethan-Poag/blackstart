@@ -110,6 +110,7 @@ split,MCB_OP_RB_N,BRK4:OUT4_RB_N,MB:Q55.3,1,brk4 card: OUT4_RB_N replaced on the
 split,MCB_OP_RB_N,AI4:GND = AI4:SLOT_ID1 = AI4:SLOT_ID2 = AI4:SLOT_IDP ...,MB:U62.10,1,mainboard edit -> SL4_PRESENT_N
 split,MCB_OP_SNSM,BRK4:OUT4_SNSM,MB:D130.1 MB:R318.2,2,brk4 card: OUT4_SNSM replaced on the card (net_accounting.csv)
 split,MCB_OP_SNSM,AI4:GND = AI4:SLOT_ID1 = AI4:SLOT_ID2 = AI4:SLOT_IDP ...,MB:U63.12,1,mainboard edit -> GND
+split,Net-(D120-K),MB:U65_IN,MB:C225.1 MB:U65.1,2,mainboard edit -> U65_IN
 split,OUT_FAULT_N,BRK4:CARD_FAULT_N = MB:SL5_CARD_FAULT_N,MB:U48.4 MB:U49.4 MB:U50.4 MB:U51.4,4,brk4 card: universal LV slot signal CARD_FAULT_N -> per-slot backplane net
 split,OUT_FAULT_N,HSO5a:CARD_FAULT_N = MB:SL3_CARD_FAULT_N,MB:U52.4 MB:U53.4 MB:U54.4 MB:U55.4 MB:U56.4,5,hso5 card: universal LV slot signal CARD_FAULT_N -> per-slot backplane net
 split,OUT_FAULT_N,HSO5b:CARD_FAULT_N = MB:SL4_CARD_FAULT_N,MB:U57.4 MB:U58.4 MB:U59.4 MB:U60.4 MB:U61.4,5,hso5 card: universal LV slot signal CARD_FAULT_N -> per-slot backplane net

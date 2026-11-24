@@ -65,6 +65,11 @@ box('74LVC1G10','SN74LVC1G10DBVR','Package_TO_SOT_SMD:SOT-23-6','Single 3-input 
 box('74LVC1G11','SN74LVC1G11DBVR','Package_TO_SOT_SMD:SOT-23-6','Single 3-input AND, Ioff (TI SCES487J, DBV-6: 1 A 2 GND 3 B 4 Y 5 VCC 6 C)',[(1,'A',I),(3,'B',I),(6,'C',I)],[(4,'Y',O)],[(5,'VCC',P)],[(2,'GND',P)],w=5.08)
 box('TLV3012B','TLV3012BIDBVR','Package_TO_SOT_SMD:SOT-23-6','Comparator, push-pull, 1.242 V reference, POR (output low while V+ ramps) (TI SBOS300C, DBV-6: 1 OUT 2 V- 3 IN+ 4 IN- 5 REF 6 V+)',
     [(3,'IN+',I),(4,'IN-',I)],[(1,'OUT',O),(5,'REF',O)],[(6,'V+',P)],[(2,'V-',P)],w=5.08)
+box('TPS16630PWPR','TPS16630PWPR','Package_SO:HTSSOP-20-1EP_4.4x6.5mm_P0.65mm_EP3.4x6.5mm_Mask2.96x2.96mm_ThermalVias',
+    'eFuse 4.5-60 V, 6 A, 31 mOhm, adjustable UVLO/OVP cut-off, I_OL = 18/R_ILIM(k), fast-trip 2x I_OL, SCP 45 A / 1 us, MODE open = latch (TI SLVSET9G, PWP: 1-3 IN 4-5 NC 6 P_IN 7 UVLO 8 OVP 9 GND 10 dVdT 11 ILIM 12 MODE 13 SHDN# 14 IMON 15 FLT# 16 PGOOD 17 NC 18-20 OUT, EP = GND) (Pass 5)',
+    [(1,'IN','passive'),(2,'IN','passive'),(3,'IN','passive'),(6,'P_IN','passive'),(7,'UVLO',I),(8,'OVP',I),(13,'~{SHDN}',I),(12,'MODE',I),(4,'NC','no_connect'),(5,'NC','no_connect')],
+    [(18,'OUT','passive'),(19,'OUT','passive'),(20,'OUT','passive'),(15,'~{FLT}',OD),(16,'PGOOD',OD),(14,'IMON','passive'),(11,'ILIM','passive'),(10,'dVdT','passive'),(17,'NC','no_connect')],
+    (),[(9,'GND',P),(21,'EP',P)],w=7.62)
 box('TS5A3166','TS5A3166DBVR','Package_TO_SOT_SMD:SOT-23-5','SPST analog switch, NO, 0.9 ohm (TI SCDS186E, DBV: 1 NO 2 COM 3 GND 4 IN 5 V+; INO(OFF) +/-100 nA max -40..85 C at V+ 4.5-5.5 V)',
     [(1,'NO','passive'),(4,'IN',I)],[(2,'COM','passive')],[(5,'V+',P)],[(3,'GND',P)],w=5.08)
 # Pass 3 N13: KiCad stock symbols renamed to the parts actually fitted (pinout identical, flattened from the stock 'extends' parent)

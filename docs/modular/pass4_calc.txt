@@ -19,7 +19,7 @@ NOT specified anywhere: the CS+/CS- common-mode range of the SCP comparator in h
 -> >= 8.3 ms of guaranteed VS >= 4 V vs a slot latch <= 25.2 us: > 100x margin
 VS steady drop: Vf + 100R x 559 uA = 0.81 V below the feed; RVS power 31 uW
 C_VS recharge after the latch (feed back up within us): tau = 100R x 1 uF = 100 us; diode peak at bank turn-on <= 32 V/100R = 0.32 A (IFSM 1 A @ 1 s)
-Voltage stress: VBAT_P clamp SMBJ33CA 53.3 V @ 11.3 A (D1 SMDJ36CA ~58 V upstream) -> C_VS rated 100 V; 1N4148W VRRM 75 V vs reverse <= VS - VBAT_SLOTS <= 58 V
+Voltage stress: VBAT_P clamp D2 SMBJ40CA 64.5 V @ 9.3 A (D1 SMDJ40CA 64.5 V @ 46.5 A upstream; as-built parts, Pass 5 netlist audit) -> C_VS rated 100 V; 1N4148W VRRM 75 V vs reverse <= VS - VBAT_SLOTS <= 64.5 V
 Feed choice (16.1): slots from VBAT_SLOTS, bank U110 from VBAT_P. Bank off -> slot VS = 0 (POR, 0 uA from VBAT_P); 8 x VBAT_P feeds would cost
    8 x I(SHDN) 4.6 uA = 37 uA parked plus 8 x diode leakage and keep the slot controllers powered with CS+ = 0 V. Both satisfy 5.1.
 
@@ -54,18 +54,20 @@ grid per VBAT: Rb 15/35 mOhm x Lb 0.5/2 uH x electrolytic ESR 80/250 mOhm x Rd2 
 32.0 V: slot VS min 31.18 V (>= 4 V: YES) | VBAT_SLOTS min -8.16 V | slot UVLO node min before latch -> never below 1.19 V | bank VS min 31.18 V | bank UVLO node min 5.26 V (UVLOF max 1.19 V) | bank I>21.2 A for <= 26 us (bank latch needs >= 466 us) | VBAT_P peak 68.7 V | F1 I2t <= 5.3 A2s | slot current pk 607 A | hot FET dTj <= 68 K (bank FET 68 K), E 22 mJ | harness current at latch <= 554 A | VS diode reverse <= 39.4 V
 
 Notes: VBAT_SLOTS goes below 0 V in the lumped model (undamped 50 nH / 0.9 uF ring); the UVLO RC and the VS diode ride through it. VBAT_P peak is the
-   harness energy (1/2 Lb I^2) dumped into VBAT_P ceramics/electrolytic ESR/SMBJ33CA (linear 1.47 ohm above 36.7 V) when the slot latches: < 100 V
+   harness energy (1/2 Lb I^2) dumped into VBAT_P ceramics/electrolytic ESR/TVS (modelled as SMBJ33CA, linear 1.47 ohm above 36.7 V; the as-built D2 is SMBJ40CA,
+   which clamps higher - see kick_calc.txt) when the slot latches: < 100 V
    (TPS48100, BSC070, C_VS ratings) but above 40 V parts on VBAT_P -> the pre-existing VBAT_P surge open item (DESIGN_NOTES) now has a defined source;
    a shorter latch lowers it (it was larger with the bank-only latch).
 Without the hold-up (Pass 3) the reviewer measured slot VS 0.70-3.14 V at 12.6 V for most of the 103 us window and 33-93 A2s on F1.
 
-== VBAT_P overshoot at the slot latch (1.0 nF), worst of the grid, by clamp model (OPEN ITEM, bench test 16.7 #6)
-SMBJ33CA only (as above)                   24.0 V -> 52.0 V | 28.8 V -> 62.0 V | 32.0 V -> 68.7 V
-+ D1 SMDJ36CA at BAT_IN (40 V, 0.35 ohm)   24.0 V -> 50.4 V | 28.8 V -> 58.7 V | 32.0 V -> 64.2 V
-SMBJ33CA -> SMDJ33CA 3 kW, + D1            24.0 V -> 48.8 V | 28.8 V -> 55.9 V | 32.0 V -> 60.5 V
-VBAT_P ratings: LM5176 55 V, LMR36506 65 V, TPS1HTC30 (U68) 64 V, LM74800 (U1) 70 V, INA237 85 V, 50 V electrolytic/MLCCs on VBAT_P.
--> at a 24 V battery the peak sits at the 50 V capacitor ratings; at 28.8-32 V it exceeds LM5176 55 V. Not fixed in Pass 4: needs a decision
-   (stronger VBAT_P clamp sized for 1/2 Lb I^2 ~0.3 J, slower slot turn-off, or a battery-voltage limit) and the bench measurement.
+== VBAT_P overshoot at the TPS48100 slot latch (1.0 nF), worst of the grid, by clamp model (historical; closed by Pass 5 eFuse slots, section 17)
+D2 SMBJ40CA as built (49.1 V, 1.66 ohm)    24.0 V -> 52.6 V | 28.8 V -> 62.8 V | 32.0 V -> 69.5 V
++ D1 SMDJ40CA as built (49.1 V, 0.331 ohm) 24.0 V -> 52.3 V | 28.8 V -> 60.9 V | 32.0 V -> 66.4 V
+Pass 4 text model: SMBJ33CA (not fitted)   24.0 V -> 52.0 V | 28.8 V -> 62.0 V | 32.0 V -> 68.7 V
+VBAT_P ratings (Pass 5 netlist audit): LM5176 U2 60 V abs max (55 V recommended), LMR36506 U5 70 V, TPS1HTC30 U68 64 V, LM74800 U1 70 V, INA237 85 V;
+   C3/C4 EEETG1J101UP 63 V electrolytics, C5-C8 10 uF X7S 100 V, C38 2.2 uF 100 V (the Pass 4 text "50 V electrolytic/MLCCs" was wrong).
+-> with the TPS48100 slot latch the VBAT_P peak exceeds LM5176 at 28.8-32 V. RESOLVED in Pass 5 (Ethan 2026-11-23): slots on TPS16630 eFuses
+   (1 us trip, per-slot 2.2 uF IN cap): VBAT_P <= 47.3 V pessimistic / 35.0 V realistic at 32 V - see kick_calc.txt and MODULAR_ARCHITECTURE section 17.
 
 == m1: on-state dead short at 32 V, Tc 149 F (65 C): hot FET 55 % share, RDS(on) 11.5 mOhm at Tj 125 C, ZthJC Diagram 4 (max) superposition
 4.7 nF X7R (Pass 3)  Rd2 12 mOhm: latch 115.7 us, pk slot current 640 A (hot FET 352 A vs ID,pulse 320 A), above 320 A for 90.87 us, E 147 mJ, dTj 279 K -> Tj 652 F (344 C) vs Tj max 302 F (150 C)

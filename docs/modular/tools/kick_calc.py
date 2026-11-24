@@ -132,7 +132,7 @@ def hotplug(Vb,bulk=(('elec',2),),rcd=False,c_dvdt=0.0,cgd=28e-12,K=30.0,Vt=2.86
         C,E={'elec':(100e-6,0.8),'zu150':(150e-6,0.010),'zc56':(56e-6,0.030),'hx82':(82e-6,0.030)}[kind]
         for _ in range(k): caps.append([0.0,C,E])
     vg=0.0; vp=0.0; vdd=Vb; iL=0.0; E=0.0; I2t=0.0; ipk=0.0; P=[]; t=0.0; acc=0.0; nacc=0; samp=int(round(1e-6/dt)); step=0; t_on=None; ild=0.0; iDpk=0.0
-    vn=0.0; trv=[]; tri=[]; av=0.0; ai=0.0; na=0; s10=max(1,int(round(1e-5/dt)))
+    t_on_pred=None; vn=0.0; trv=[]; tri=[]; av=0.0; ai=0.0; na=0; s10=max(1,int(round(1e-5/dt)))
     while t<T:
         vgs=vg-vp; iD=K*max(vgs-Vt,0)**2
         vds=vdd-vp
@@ -165,8 +165,12 @@ def hotplug(Vb,bulk=(('elec',2),),rcd=False,c_dvdt=0.0,cgd=28e-12,K=30.0,Vt=2.86
         if step%samp==0: P.append(acc/max(nacc,1)); acc=0.0; nacc=0
         step+=1; t+=dt
         if vp>Vb-0.3 and t>50e-6 and iD<ild+0.5 and (p_load==0 or (t_on is not None and t>t_on+t_ss)): break
+        if p_load>0 and c_uvlo>0 and t_on is None and vp>Vb-0.3 and t>50e-6 and iD<0.5:
+            # VBAT_P is up and Q2 fully on before U2 starts: the converter load then sees Q2 at Vds ~ 0 (no linear-mode stress).
+            vth=v_on*33/133; vinf=vp*33/133
+            t_on_pred=t+(24.8e3*c_uvlo*math.log((vinf-vn)/(vinf-vth)) if vinf>vth else float('inf')); break
     P=np.array(P); 
-    return dict(ipk=ipk,iDpk=iDpk,E=E,I2t=I2t,dTj=tj_rise(P,1e-6) if len(P) else 0.0,t=t,t_on=t_on,vds=np.array(trv),iD=np.array(tri))
+    return dict(ipk=ipk,iDpk=iDpk,E=E,I2t=I2t,dTj=tj_rise(P,1e-6) if len(P) else 0.0,t=t,t_on=t_on,t_on_pred=t_on_pred,vds=np.array(trv),iD=np.array(tri))
 
 # BSC070N10NS5 Diagram 3 (SOA, Tc 77 F / 25 C, single pulse), digitised from the 400 dpi render (docs/split_evidence/modular_pass5/
 # bsc070_soa.png): 1 ms, 10 ms and DC lines follow I = A / V^2 (Spirito-limited linear mode); 100 us is piecewise.
@@ -296,6 +300,7 @@ if __name__=='__main__':
     print(__doc__)
     print('Limits: VBAT_P target <= 52 V (LM5176 U2 VIN abs max 60 V, ROC 55 V; TPS1HTC30 U68 VS 64 V; TPS26621 U89 IN 62 V; LMR36506 U5 70 V)')
     print('        BAT_IN target <= 62 V (LM74800 U1 A abs max 70 V; C297 100 V); U65 TPS7B6950 IN abs max 45 V (via D120 SS110 + C225 10 uF)')
+    print('PART 1 (historical, Pass 4 slot = TPS48100 latch; superseded by PART 2 in Pass 5)')
     print('Worst of 16 corners (Rb 15/35 mOhm x Lb 0.5/2 uH x Rd2 12/25 mOhm x caps nominal/cold-aged); slot latch 25.2 us; Tj rise incl. 0.5 us turn-off loss, Tc 149 F (65 C) start\n')
     print('%-64s %5s %7s %7s %6s %7s %7s %8s %8s %6s %6s'%('scenario','Vbat','VBAT_P','BAT_IN','U65','OVtrip','slotIpk','slotdTj','iL@latch','E_D2','E_D1'))
     for i,V,P,B,U,tr,ip,dt_,il,e2,e1 in res:
@@ -306,3 +311,55 @@ if __name__=='__main__':
             slow='dVdT' in lab
             r=hotplug(32.0,cgd=cgd,dt=2e-8 if slow else 5e-9,T=40e-3 if slow else 3e-3,**kw)
             print('  %-50s Cgd %3.0f pF: inrush pk %4.0f A, Q2 E %4.0f mJ, Q2 dTj %4.0f K -> Tj %4.0f F (%3.0f C), F1 I2t %.2f A2s, ramp %.1f ms'%(lab,cgd*1e12,r['ipk'],r['E']*1e3,r['dTj'],F(65+r['dTj']),65+r['dTj'],r['I2t'],r['t']*1e3))
+
+def ef_one(a):
+    V,cs,lb,tr,cap=a
+    r=run_ef(V,Cs_slot=cs,Lbank=lb,t_resp=tr,ipk_cap=cap,T=60e-6,dt=2e-9); p=r['pk']
+    return a,dict(vP=p['vP'].max(),vB=p['vB'].max(),vS=p['vS'].max(),vU=p['vU'].max(),ief=p['ief'].max(),iL=p['iL'].max(),trip=int(r['tripped'].sum()),
+                  I2t=r['I2t'].max(),vneg=p['vout_neg'].min(),Eef=r['E_ef'].max(),tovp=r['t_ovp'].max(),vSlo=r['vS_lo'].min())
+def hp_one(a):
+    lab,kw=a; r=hotplug(32.0,cgd=200e-12,T=120e-3,**kw); return a,r,soa_check(r['vds'],r['iD'])
+if __name__=='__main__':
+    print('\n\nPART 2 - Pass 5 design (Ethan 2026-11-23): slots on TPS16630 eFuses (2.2 uF/100 V IN cap, SS310B OUT->GND), U1 HGATE 22 nF + 1k,')
+    print('47R ahead of C225/U65, C602 10 uF on U2 EN/UVLO. Grid: 16 corners above x Lbank 60/150 nH (bank FETs + shunt + backplane) x eFuse')
+    print('response 1.0/1.5 us. "pessimistic" = current rises freely until the SCP turn-off (no FET saturation); "realistic" = FET saturates at 60 A.')
+    import multiprocessing as mp, itertools
+    jobs=list(itertools.product((24.0,28.8,32.0),(2.2e-6,),(60e-9,150e-9),(1.0e-6,1.5e-6),(None,60.0)))
+    with mp.Pool(min(8,mp.cpu_count())) as P: R=P.map(ef_one,jobs)
+    print('%-5s %-12s %7s %7s %10s %6s %8s %8s %6s %9s %7s %7s'%('Vbat','case','VBAT_P','BAT_IN','VBAT_SLOTS','U65','eFuse pk','harness','OVtrip','F1 I2t','OUT min','t>OVP'))
+    W={}
+    for V in (24.0,28.8,32.0):
+        for cap,lab in ((None,'pessimistic'),(60.0,'realistic')):
+            rr=[r for a,r in R if a[0]==V and a[4]==cap]
+            w={k:(min if k in ('vneg','vSlo') else max)(x[k] for x in rr) for k in rr[0]}; W[(V,lab)]=w
+            print('%-5.1f %-12s %6.1fV %6.1fV %9.1fV %5.1fV %7.0fA %7.0fA %3d/%-3d %8.4f %6.2fV %5.1fus'%(V,lab,w['vP'],w['vB'],w['vS'],w['vU'],w['ief'],w['iL'],w['trip'],16*len(rr),w['I2t'],w['vneg'],w['tovp']*1e6))
+    p32=W[(32.0,'pessimistic')]
+    print('\nAbs-max check at the worst corner (32 V, pessimistic):')
+    for part,v,lim in (('U1 LM74800 A (BAT_IN)',p32['vB'],70),('C297 100 V (BAT_IN)',p32['vB'],100),('U2 LM5176 VIN (VBAT_P)',p32['vP'],60),('U68 TPS1HTC30 VS (VBAT_P)',p32['vP'],64),
+                       ('U5 LMR36506 VIN (VBAT_P)',p32['vP'],70),('C3/C4 63 V electrolytic (VBAT_P)',p32['vP'],63),('TPS16630 IN, all slots (VBAT_SLOTS)',p32['vS'],67),
+                       ('U110 TPS48100 CS+/VS (VBAT_P), SRC (VBAT_SLOTS)',max(p32['vP'],p32['vS']),100),('card LM5176 VIN via healthy slots (VBAT_SLOTS, us)',p32['vS'],60),
+                       ('U65 TPS7B6950 IN',p32['vU'],45)):
+        print('  %-52s %5.1f V vs %3d V  margin %5.1f V (%3.0f %%)'%(part,v,lim,lim-v,100*(lim-v)/lim))
+    print('  healthy-slot OVP: VBAT_SLOTS above the 53.4 V OVP minimum for <= %.1f us << OVP_toff 8.5 us min: no nuisance trip'%(p32['tovp']*1e6))
+    print('  faulted-slot OUT: clamped by SS310B at %.2f V for us (TI SLVSET9G 9.4.1/9.5 recommends exactly this Schottky for the -0.3 V OUT rating)'%p32['vneg'])
+    print('  VBAT_SLOTS minimum in the pessimistic corner %.1f V is a lumped-model artefact (the healthy slots\' card capacitors back-feed through their'%p32['vSlo'])
+    print('  ON eFuses and are not modelled); realistic corner >= %.1f V; healthy-slot UVLO has a 100 us RC and a 9-16 us deglitch.'%min(W[(V,'realistic')]['vSlo'] for V in (24.0,28.8,32.0)))
+    print('\nHot-plug / power-up at 32 V, Q2 turn-on (Cgd 200 pF corner), Tc 149 F (65 C); load = U2 LM5176 70 W out (eta 0.88) starting at its')
+    print('EN/UVLO threshold and ramping over the 7.5 ms soft start (linear in time). SOA = worst sliding window vs BSC070 Diagram 3 derated to Tc 65 C.')
+    HP=[('as built: no CdVdT, U2 load',dict(c_dvdt=0.0,ihg=75e-6,p_load=70.0,dt=5e-9)),
+        ('as built: no CdVdT, U2 load, HGATE 39 uA',dict(c_dvdt=0.0,ihg=39e-6,p_load=70.0,dt=5e-9)),
+        ('22 nF + 1k, U2 starts at 4.96 V (no C602)',dict(c_dvdt=22e-9,ihg=39e-6,p_load=70.0,dt=5e-8)),
+        ('22 nF + 1k, U2 starts at 4.96 V, HGATE 75 uA',dict(c_dvdt=22e-9,ihg=75e-6,p_load=70.0,dt=5e-8)),
+        ('10 nF + 1k, U2 starts at 4.96 V',dict(c_dvdt=10e-9,ihg=75e-6,p_load=70.0,dt=5e-8)),
+        ('CHOSEN 22 nF + 1k + C602 10 uF (5 uF eff), HGATE 39 uA',dict(c_dvdt=22e-9,ihg=39e-6,p_load=70.0,c_uvlo=5e-6,dt=5e-8)),
+        ('CHOSEN 22 nF + 1k + C602 10 uF (5 uF eff), HGATE 75 uA',dict(c_dvdt=22e-9,ihg=75e-6,p_load=70.0,c_uvlo=5e-6,dt=5e-8)),
+        ('CHOSEN, no load (other VBAT_P loads < 1 W), HGATE 39 uA',dict(c_dvdt=22e-9,ihg=39e-6,dt=5e-8)),
+        ('CHOSEN, no load, HGATE 75 uA',dict(c_dvdt=22e-9,ihg=75e-6,dt=5e-8))]
+    with mp.Pool(min(8,mp.cpu_count())) as P: H=P.map(hp_one,HP)
+    for (lab,kw),r,sc in H:
+        st=('U2 starts %.0f ms (after the ramp)'%(r['t_on_pred']*1e3)) if r.get('t_on_pred') else (('U2 starts %.1f ms'%(r['t_on']*1e3)) if r['t_on'] else 'no load')
+        print('  %-56s pk %5.1f A, Q2 dTj %3.0f K -> Tj %3.0f F (%3.0f C), ramp %4.1f ms, %-30s SOA %.2f (%s)'%(lab,r['ipk'],r['dTj'],F(65+r['dTj']),65+r['dTj'],r['t']*1e3,st,sc[0],
+              'OK' if sc[0]<=1 else 'EXCEEDED'))
+    print('  C602 10 uF X5R 25 V with R4/R5 (Thevenin 24.8k): tau 124 ms (5 uF eff at 8 V bias) .. 273 ms (11 uF): U2 starts 31-68 ms after VBAT_P at 32 V')
+    print('  (Q2 ramp <= 20 ms), %.0f-%.0f ms at 9 V. U2 EN/UVLO range 0-55 V; hysteresis current 3.15 uA unchanged (DC).'%(
+          124*-math.log(1-4.96/9.0),273*-math.log(1-4.96/9.0)))

@@ -1,15 +1,15 @@
 group,item,qty,unit_qty1,unit_qty10,ext_qty1,ext_qty10,source
 baseline,Locked one-board mainboard BOM (tag),-1,266.36,225.95,-266.36,-225.95,BOM
 baseline,Locked HV meter BOM (tag),-1,63.89,53.42,-63.89,-53.42,BOM
-mainboard,"Reworked mainboard BOM (bom/genctl_main_bom.csv: backplane, slot power, ideal diode, rail cut)",1,241.14,202.44,241.14,202.44,BOM
+mainboard,"Reworked mainboard BOM (bom/genctl_main_bom.csv: backplane, slot power, ideal diode, rail cut)",1,231.27,193.01,231.27,193.01,BOM
 hv meter,HV meter BOM with ID EEPROM (bom/genctl_meter_bom.csv),1,65.33,54.6,65.33,54.6,BOM
-cards,"engine card parts (160 parts, cards/engine/engine_bom.csv) x1",1,28.0189,23.7177,28.02,23.72,BOM
+cards,"engine card parts (160 parts, cards/engine/engine_bom.csv) x1",1,28.019,23.6944,28.02,23.69,BOM
 cards,"di8 card parts (84 parts, cards/di8/di8_bom.csv) x1",1,9.2211,7.8085,9.22,7.81,BOM
 cards,"ai4 card parts (122 parts, cards/ai4/ai4_bom.csv) x1",1,12.3847,10.7367,12.38,10.74,BOM
-cards,"hso5 card parts (99 parts, cards/hso5/hso5_bom.csv) x2",2,29.2067,24.4894,58.41,48.98,BOM
-cards,"brk4 card parts (85 parts, cards/brk4/brk4_bom.csv) x1",1,24.6766,20.6817,24.68,20.68,BOM
+cards,"hso5 card parts (99 parts, cards/hso5/hso5_bom.csv) x2",2,29.2068,24.4661,58.41,48.93,BOM
+cards,"brk4 card parts (85 parts, cards/brk4/brk4_bom.csv) x1",1,24.6767,20.6584,24.68,20.66,BOM
 boards,"Card PCBs: 4 LV designs + engine, 4-layer, 5 pcs per design at qty 1 [E]",5,8.0,1.2,40.0,6.0,E
 boards,PCBA fixed fees per extra card order (JLC fee table),5,13.74,1.374,68.7,6.87,DS
 boards,Extended-part loading ~6 per card order at 3.07 [E count],5,18.42,1.842,92.1,9.21,E
 mechanical,"Card bays: guides, faceplates, captive screws, coding ribs [E]",1,29.0,17.5,29.0,17.5,E
-TOTAL,true net delta per controller vs baseline (actual BOMs),,,,338.73,129.17,mix
+TOTAL,true net delta per controller vs baseline (actual BOMs),,,,328.87,119.65,mix
