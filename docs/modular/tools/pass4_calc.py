@@ -4,8 +4,9 @@ of FW_REQ_CARDS / INSTALL_SAFETY comes from this script.  Run from the repo root
 Sources: TI TPS4810-Q1 SLUSEW1C (docs/split_evidence/modular_pass1/tps48100-q1_SLUSEW1C.txt), TI SFFS636 pin FMA and E2E threads
 (docs/split_evidence/modular_pass4/), BSC070N10NS5 rev 2.3 Diagram 4 (ZthJC single pulse, read off the curve), TCA9555 SCPS200,
 TS5A3166 SCDS186E, 1N4148W (C81598). The battery/harness/VBAT_P dead-short model is the Pass 4 reviewer's /tmp/p4/hardshort12.py
-(same topology and parameter grid), extended with the per-controller VS hold-up, UVLO RC nodes, bank SCP timer, the SMBJ33CA on
-VBAT_P and the FET junction-temperature convolution. Temperatures in F (C in parentheses)."""
+(same topology and parameter grid), extended with the per-controller VS hold-up, UVLO RC nodes, bank SCP timer, the VBAT_P TVS D2 (as-built SMBJ40CA; Pass 4 text
+said SMBJ33CA, corrected in Pass 5) and the FET junction-temperature convolution. HISTORICAL: Pass 5 replaced the slot TPS48100s with
+TPS16630 eFuses - current numbers in pass5_calc.txt and kick_calc.txt. Temperatures in F (C in parentheses)."""
 import math, itertools, os
 F=lambda c:c*9/5+32
 def hdr(t): print('\n== '+t)
@@ -49,7 +50,7 @@ for V0 in (12.6,24.0,28.8,32.0):
 print('-> >= %.1f ms of guaranteed VS >= 4 V vs a slot latch <= %.1f us: > 100x margin'%(cvs_eff(12.6)*(12.6-VF-RVS*I_VS-4)/(I_VS+ID_LEAK_HOT)*1e3,(TSC_1N_MAX+T_PROP)*1e6))
 print('VS steady drop: Vf + 100R x %.0f uA = %.2f V below the feed; RVS power %.0f uW'%(I_VS*1e6,VF+RVS*I_VS,RVS*I_VS**2*1e6))
 print('C_VS recharge after the latch (feed back up within us): tau = 100R x 1 uF = 100 us; diode peak at bank turn-on <= 32 V/100R = 0.32 A (IFSM 1 A @ 1 s)')
-print('Voltage stress: VBAT_P clamp SMBJ33CA 53.3 V @ 11.3 A (D1 SMDJ36CA ~58 V upstream) -> C_VS rated 100 V; 1N4148W VRRM 75 V vs reverse <= VS - VBAT_SLOTS <= 58 V')
+print('Voltage stress: VBAT_P clamp D2 SMBJ40CA 64.5 V @ 9.3 A (D1 SMDJ40CA 64.5 V @ 46.5 A upstream; as-built parts, Pass 5 netlist audit) -> C_VS rated 100 V; 1N4148W VRRM 75 V vs reverse <= VS - VBAT_SLOTS <= 64.5 V')
 print('Feed choice (16.1): slots from VBAT_SLOTS, bank U110 from VBAT_P. Bank off -> slot VS = 0 (POR, 0 uA from VBAT_P); 8 x VBAT_P feeds would cost')
 print('   8 x I(SHDN) 4.6 uA = %.0f uA parked plus 8 x diode leakage and keep the slot controllers powered with CS+ = 0 V. Both satisfy 5.1.'%(8*4.6))
 
@@ -144,27 +145,29 @@ for lab in ('4.7 nF X7R (Pass 3)','1.5 nF C0G','1.0 nF C0G'):
             'UVLO trips first (HICCUP)' if any(x['uvlo_before_latch'] for x in R) else 'never below 1.19 V',
             w('vb_min',min),w('vuB_min',min),w('ibank_over')*1e6,BANK[0]*1e6,w('vp_max'),w('I2t'),w('ipk'),w('dTj'),w('dTjb'),w('E_fet')*1e3,w('iL_latch'),w('vrev')))
 print('\nNotes: VBAT_SLOTS goes below 0 V in the lumped model (undamped 50 nH / 0.9 uF ring); the UVLO RC and the VS diode ride through it. VBAT_P peak is the\n'
-      '   harness energy (1/2 Lb I^2) dumped into VBAT_P ceramics/electrolytic ESR/SMBJ33CA (linear 1.47 ohm above 36.7 V) when the slot latches: < 100 V\n'
+      '   harness energy (1/2 Lb I^2) dumped into VBAT_P ceramics/electrolytic ESR/TVS (modelled as SMBJ33CA, linear 1.47 ohm above 36.7 V; the as-built D2 is SMBJ40CA,\n'
+      '   which clamps higher - see kick_calc.txt) when the slot latches: < 100 V\n'
       '   (TPS48100, BSC070, C_VS ratings) but above 40 V parts on VBAT_P -> the pre-existing VBAT_P surge open item (DESIGN_NOTES) now has a defined source;\n'
       '   a shorter latch lowers it (it was larger with the bank-only latch).')
 print('Without the hold-up (Pass 3) the reviewer measured slot VS 0.70-3.14 V at 12.6 V for most of the 103 us window and 33-93 A2s on F1.')
 
 # ---------------- VBAT_P overshoot sensitivity (open item) ----------------
-hdr('VBAT_P overshoot at the slot latch (1.0 nF), worst of the grid, by clamp model (OPEN ITEM, bench test 16.7 #6)')
+hdr('VBAT_P overshoot at the TPS48100 slot latch (1.0 nF), worst of the grid, by clamp model (historical; closed by Pass 5 eFuse slots, section 17)')
 _SRC=open(__file__).read(); _CUT=_SRC.index("FAST=os.environ.get('P4_FAST')")
 _BASE=_SRC[_SRC.index('# ---------------- dead-short model'):_CUT]
-for lab,expr in (('SMBJ33CA only (as above)',"(vp-36.7)/1.47 if vp>36.7 else 0.0"),
-                 ('+ D1 SMDJ36CA at BAT_IN (40 V, 0.35 ohm)',"((vp-36.7)/1.47 if vp>36.7 else 0.0)+((vp-40.0)/0.35 if vp>40.0 else 0.0)"),
-                 ('SMBJ33CA -> SMDJ33CA 3 kW, + D1',"((vp-36.7)/0.295 if vp>36.7 else 0.0)+((vp-40.0)/0.35 if vp>40.0 else 0.0)")):
+for lab,expr in (('D2 SMBJ40CA as built (49.1 V, 1.66 ohm)',"(vp-49.1)/1.66 if vp>49.1 else 0.0"),
+                 ('+ D1 SMDJ40CA as built (49.1 V, 0.331 ohm)',"((vp-49.1)/1.66 if vp>49.1 else 0.0)+((vp-49.1)/0.331 if vp>49.1 else 0.0)"),
+                 ('Pass 4 text model: SMBJ33CA (not fitted)',"(vp-36.7)/1.47 if vp>36.7 else 0.0")):
     g=dict(globals()); exec(_BASE.replace("(vp-36.7)/1.47 if vp>36.7 else 0.0",expr),g)
     out=[]
     for Vb in (24.0,28.8,32.0):
         pk=max(g['run'](Vb,Rb,Lb,E,Rd,TSC_1N_MAX+T_PROP,T=150e-6,dt=1e-8)['vp_max'] for Rb,Lb,E,Rd in GRID)
         out.append('%.1f V -> %.1f V'%(Vb,pk))
     print('%-42s %s'%(lab,' | '.join(out)))
-print('VBAT_P ratings: LM5176 55 V, LMR36506 65 V, TPS1HTC30 (U68) 64 V, LM74800 (U1) 70 V, INA237 85 V, 50 V electrolytic/MLCCs on VBAT_P.')
-print('-> at a 24 V battery the peak sits at the 50 V capacitor ratings; at 28.8-32 V it exceeds LM5176 55 V. Not fixed in Pass 4: needs a decision')
-print('   (stronger VBAT_P clamp sized for 1/2 Lb I^2 ~0.3 J, slower slot turn-off, or a battery-voltage limit) and the bench measurement.')
+print('VBAT_P ratings (Pass 5 netlist audit): LM5176 U2 60 V abs max (55 V recommended), LMR36506 U5 70 V, TPS1HTC30 U68 64 V, LM74800 U1 70 V, INA237 85 V;')
+print('   C3/C4 EEETG1J101UP 63 V electrolytics, C5-C8 10 uF X7S 100 V, C38 2.2 uF 100 V (the Pass 4 text "50 V electrolytic/MLCCs" was wrong).')
+print('-> with the TPS48100 slot latch the VBAT_P peak exceeds LM5176 at 28.8-32 V. RESOLVED in Pass 5 (Ethan 2026-11-23): slots on TPS16630 eFuses')
+print('   (1 us trip, per-slot 2.2 uF IN cap): VBAT_P <= 47.3 V pessimistic / 35.0 V realistic at 32 V - see kick_calc.txt and MODULAR_ARCHITECTURE section 17.')
 
 # ---------------- m1 ----------------
 hdr('m1: on-state dead short at 32 V, Tc 149 F (65 C): hot FET 55 %% share, RDS(on) %.1f mOhm at Tj 125 C, ZthJC Diagram 4 (max) superposition'%(rds(125)*1e3))

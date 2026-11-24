@@ -118,15 +118,21 @@ def run(Vb,d1='SMDJ40CA (D1 as built, 3 kW)',d2='SMBJ40CA (D2 as built, 600 W)',
     dTj=np.array([tj_rise(Ps[:,j],0.1e-6) for j in range(n)]); dTjb=np.array([tj_rise(Pk[:,j],0.1e-6) for j in range(n)])
     return dict(dTj=dTj,dTjb=dTjb,ipk2=ipk2,ipk1=ipk1,pkU=pkU,pkB=pkB,pkP=pkP,tripped=tripped,EQ2=EQ2,ED1=ED1,ED2=ED2,Eslot=Eslot,iLl=iLl,ilatch=ilatch)
 
-def hotplug(Vb,bulk=(('elec',2),),rcd=False,c_dvdt=0.0,cgd=28e-12,K=30.0,Vt=2.86,ihg=75e-6,Rb=0.015,Lb=0.5e-6,Rfe=0.008,T=3e-3,dt=2e-9,Tc=65.0):
+def hotplug(Vb,bulk=(('elec',2),),rcd=False,c_dvdt=0.0,cgd=28e-12,K=30.0,Vt=2.86,ihg=75e-6,Rb=0.015,Lb=0.5e-6,Rfe=0.008,T=3e-3,dt=2e-9,Tc=65.0,
+            p_load=0.0,v_on=4.96,v_off=4.6,t_ss=7.5e-3,eta=0.88,c_uvlo=0.0,load_shape='lin'):
     """Q2 turn-on into VBAT_P with VBAT_DD already at Vb (U1 charge pump up). HGATE sources ihg (75 uA max) into Cgs (2.1 nF), Cgd and
     an optional C_dVdT HGATE->GND (TI inrush method). Q2 saturation I = K (Vgs-Vt)^2 (BSC070 fast corner, as pass4_calc).
-    Returns peak inrush, Q2 energy, Q2 dTj (ZthJC Diagram 4, Tc 149 F) and F1 I2t."""
+    Returns peak inrush, Q2 energy, Q2 dTj (ZthJC Diagram 4, Tc 149 F) and F1 I2t.
+    Pass 5: optional converter load p_load (W, input side = p/eta): starts when VBAT_P passes v_on (LM5176 UVLO 4.96 V, R4/R5
+    100k/33k), ramps linearly over t_ss (C10 47 nF soft start ~7.5 ms), drops out below v_off. c_uvlo: capacitor on the LM5176
+    EN/UVLO node (Thevenin 24.8k): the converter starts when that node passes 1.23 V. load_shape 'lin' (P ~ t) or 'res' (P ~ t^2,
+    resistive loads on a ramping +12 V). Returns a 10 us trace (vds, iD) for the SOA check."""
     Cc=4*10e-6*0.65+2.2e-6*0.6+0.2e-6; caps=[]
     for kind,k in bulk:
         C,E={'elec':(100e-6,0.8),'zu150':(150e-6,0.010),'zc56':(56e-6,0.030),'hx82':(82e-6,0.030)}[kind]
         for _ in range(k): caps.append([0.0,C,E])
-    vg=0.0; vp=0.0; vdd=Vb; iL=0.0; E=0.0; I2t=0.0; ipk=0.0; P=[]; t=0.0; acc=0.0; nacc=0; samp=int(round(1e-6/dt)); step=0
+    vg=0.0; vp=0.0; vdd=Vb; iL=0.0; E=0.0; I2t=0.0; ipk=0.0; P=[]; t=0.0; acc=0.0; nacc=0; samp=int(round(1e-6/dt)); step=0; t_on=None; ild=0.0; iDpk=0.0
+    vn=0.0; trv=[]; tri=[]; av=0.0; ai=0.0; na=0; s10=max(1,int(round(1e-5/dt)))
     while t<T:
         vgs=vg-vp; iD=K*max(vgs-Vt,0)**2
         vds=vdd-vp
@@ -140,18 +146,135 @@ def hotplug(Vb,bulk=(('elec',2),),rcd=False,c_dvdt=0.0,cgd=28e-12,K=30.0,Vt=2.86
             ib=0.0
             for c in caps:
                 i=(vp-c[0])/c[2]; c[0]+=i/c[1]*dt; ib+=i
-        dvp=(iD-ib)/Cc*dt
+        if p_load>0:
+            if c_uvlo>0: vn+=((vp*33/133-vn)/24.8e3)/c_uvlo*dt
+            else: vn=vp*33/133
+            if t_on is None and vn>=v_on*33/133 and vp>=v_on: t_on=t
+            if t_on is not None and vp<v_off: t_on=None
+            x=min(1.0,(t-t_on)/t_ss) if t_on is not None else 0.0
+            ild=p_load*(x if load_shape=='lin' else x*x)/eta/max(vp,1.0)
+        dvp=(iD-ib-ild)/Cc*dt
         # gate: ihg = Cgs d(vg-vp) + (Cgd+Cdvdt) dvg  -> solve for dvg
         dvg=(ihg*dt+2.1e-9*dvp)/(2.1e-9+cgd+c_dvdt)
         vp+=dvp; vg=min(vg+dvg,vp+11.1)
         iL+=(Vb-iL*Rb-vdd)/Lb*dt; vdd+=(iL-iD)/2e-6*dt   # VBAT_DD/BAT_IN local caps ~2 uF incl. C297, C1
-        E+=iD*max(vds,0)*dt; I2t+=iL*iL*dt; ipk=max(ipk,iL)
+        E+=iD*max(vds,0)*dt; I2t+=iL*iL*dt; ipk=max(ipk,iL); iDpk=max(iDpk,iD)
         acc+=iD*max(vds,0); nacc+=1
+        av+=max(vds,0); ai+=iD; na+=1
+        if na>=s10: trv.append(av/na); tri.append(ai/na); av=ai=0.0; na=0
         if step%samp==0: P.append(acc/max(nacc,1)); acc=0.0; nacc=0
         step+=1; t+=dt
-        if vp>Vb-0.3 and t>50e-6 and iD<0.5: break
+        if vp>Vb-0.3 and t>50e-6 and iD<ild+0.5 and (p_load==0 or (t_on is not None and t>t_on+t_ss)): break
     P=np.array(P); 
-    return dict(ipk=ipk,E=E,I2t=I2t,dTj=tj_rise(P,1e-6) if len(P) else 0.0,t=t)
+    return dict(ipk=ipk,iDpk=iDpk,E=E,I2t=I2t,dTj=tj_rise(P,1e-6) if len(P) else 0.0,t=t,t_on=t_on,vds=np.array(trv),iD=np.array(tri))
+
+# BSC070N10NS5 Diagram 3 (SOA, Tc 77 F / 25 C, single pulse), digitised from the 400 dpi render (docs/split_evidence/modular_pass5/
+# bsc070_soa.png): 1 ms, 10 ms and DC lines follow I = A / V^2 (Spirito-limited linear mode); 100 us is piecewise.
+SOA_100US=[(10,74.8),(20,31.5),(40,7.77),(90,1.54)]
+SOA_A={1e-3:1160.0,1e-2:359.0,1.0:167.0}
+def soa_i(V,tau):
+    V=max(V,1.0)
+    def l100(V):
+        pts=SOA_100US
+        if V<=pts[0][0]: return pts[0][1]*(pts[0][0]/V)
+        for (v1,i1),(v2,i2) in zip(pts,pts[1:]):
+            if v1<=V<=v2: return math.exp(math.log(i1)+(math.log(i2)-math.log(i1))*(math.log(V)-math.log(v1))/(math.log(v2)-math.log(v1)))
+        return pts[-1][1]*(pts[-1][0]/V)**2
+    lines=[(1e-4,l100(V))]+[(t,A/V/V) for t,A in sorted(SOA_A.items())]
+    if tau<=lines[0][0]: return lines[0][1]
+    for (t1,i1),(t2,i2) in zip(lines,lines[1:]):
+        if t1<=tau<=t2: return math.exp(math.log(i1)+(math.log(i2)-math.log(i1))*(math.log(tau)-math.log(t1))/(math.log(t2)-math.log(t1)))
+    return lines[-1][1]
+def soa_check(vds,iD,Tc=65.0,dt=1e-5):
+    """Worst sliding-window ratio I_avg / (SOA(V_eff, tau) x (150-Tc)/125) for tau = 0.1/1/10 ms and the whole event;
+    V_eff = P_avg / I_avg. Returns (ratio, tau, V_eff, I_avg)."""
+    der=(150.0-Tc)/125.0; best=(0.0,0,0,0); n=len(vds)
+    if n==0: return best
+    P=np.concatenate([[0.0],np.cumsum(vds*iD)]); I=np.concatenate([[0.0],np.cumsum(iD)])
+    for tau in (1e-4,1e-3,1e-2,n*dt):
+        w=max(1,min(n,int(round(tau/dt))))
+        Ia=(I[w:]-I[:-w])/w if w<n else np.array([I[-1]/n]); Pa=(P[w:]-P[:-w])/w if w<n else np.array([P[-1]/n])
+        for k in np.argsort(-Pa)[:200]:
+            if Ia[k]<=1e-3: continue
+            Ve=Pa[k]/Ia[k]; r=Ia[k]/(soa_i(Ve,w*dt)*der)
+            if r>best[0]: best=(r,w*dt,Ve,Ia[k])
+    return best
+
+
+# ---------------- Pass 5: slots on TPS16630 eFuses (Ethan 2026-11-23 10:20 PM HST) ----------------
+TVS['SMBJ40CA per slot (IN)']=(44.4,49.1,64.5,9.3)
+def run_ef(Vb,I_scp=45.0,t_resp=1.0e-6,t_ramp=0.2e-6,t_hold=5e-6,I_ol=4.815,Ron=0.019,Lbank=60e-9,Rd1=0.010,
+           Cs_slot=1e-6,n_slot=8,tvs_in=None,Ls=50e-9,v_sch=1.2,r_sch=0.004,T=120e-6,dt=1e-9,r_u65=48.0,i_u65=5e-3,
+           d1='SMDJ40CA (D1 as built, 3 kW)',d2='SMBJ40CA (D2 as built, 600 W)',bulk=(('elec',2),),vovr=1.195,tdeg=3.98e-6,
+           hgate_extra=1.0e-6,ipk_cap=None,ovp_min=1.176*(453e3+10e3*1.01)/(10e3*1.01)):
+    """Dead short at a slot output (card side), slot switch = TPS16630 (SLVSET9G): integrated FET Ron (19 mOhm min / 53 max);
+    fast-trip/hot-short comparator I(SCP) 45 A typ -> FET off after t_resp (1 us typ; 'few us' hold-off), then the current-limit loop
+    re-enters at I(OL) (4.02k: 4.185-4.815 A) until TSD -> latch (MODE open). Output-side loop Ls freewheels through the SS310B
+    Schottky (OUT->GND, Vf ~1.2 V at high current). VBAT_SLOTS = per-slot C_IN (1 uF/100 V X7R, -40 % bias) + 100 nF at every slot
+    (lumped; the faulted slot's caps sit right at its IN pin, the bus inductance Lbank (bank FETs, 5 mOhm shunt, backplane bus) sits
+    between VBAT_P and VBAT_SLOTS). U1 OV with the real deglitch; the new 22 nF + 1k on HGATE adds hgate_extra to Q2 turn-off.
+    U65 behind D120 + 47R + C225 10 uF. ipk_cap: optional eFuse saturation-current cap (A) for the realistic case."""
+    G=np.array(GRID); Rb=G[:,0]; Lb=G[:,1]; Rd2=G[:,2]; cold=G[:,3]>0; n=len(G)
+    Cc=np.where(cold,4*10e-6*0.55+2.2e-6*0.5,4*10e-6*0.65+2.2e-6*0.6)+0.2e-6
+    CB=0.22e-6*0.8+0.05e-6
+    Cs=n_slot*(Cs_slot*np.where(cold,0.5,0.6)+0.1e-6*0.63)+0.2e-6
+    caps=[]
+    for kind,k in bulk:
+        C,E,ec={'elec':(100e-6,0.8,4.0)}[kind]
+        for _ in range(k): caps.append([np.full(n,Vb),C*np.where(cold,0.8,1.0),E*np.where(cold,ec,1.0)])
+    iL=np.zeros(n); iF=np.zeros(n); vB=np.full(n,Vb); vP=np.full(n,Vb); vS=np.full(n,Vb); iK=np.zeros(n); iO=np.zeros(n)
+    vU=np.full(n,Vb-0.5); vov=np.full(n,Vb/OV_RATIO)
+    state=np.zeros(n,int)   # 0 on, 1 detected, 2 ramp, 3 hold, 4 current limit
+    tdet=np.full(n,np.inf); tramp=np.full(n,np.inf); i_at=np.zeros(n); trip=np.full(n,np.inf); qoff=np.full(n,np.inf)
+    pk=dict(vP=np.full(n,Vb),vB=np.full(n,Vb),vS=np.full(n,Vb),vU=vU.copy(),ief=np.zeros(n),iK=np.zeros(n),iL=np.zeros(n),vout_neg=np.zeros(n))
+    E_ef=np.zeros(n); E_sch=np.zeros(n); E_bank=np.zeros(n); I2t=np.zeros(n); tripped=np.zeros(n,bool); t_ovp=np.zeros(n); vS_lo=np.full(n,Vb)
+    t=0.0
+    while t<T:
+        frac=np.clip((t-qoff)/0.2e-6,0,1); vq2=110.0*frac
+        on=frac<=0
+        diF=np.where(on,(vB-vP-iF*0.013)/10e-9,(vB-vP-vq2-iF*0.033)/10e-9)
+        iF=np.maximum(iF+diF*dt,0.0)
+        iD1=tvs_i(vB,d1); iD2=tvs_i(vP,d2)
+        iL+=(Vb-iL*Rb-vB)/Lb*dt
+        vB+=(iL-iF-iD1)/CB*dt
+        ib=0.0
+        for c in caps:
+            i=(vP-c[0])/c[2]; c[0]=c[0]+i/c[1]*dt; ib=ib+i
+        iK+=(vP-vS-iK*Rd1)/Lbank*dt
+        vP+=(iF-ib-iK-iD2)/Cc*dt
+        # eFuse + output loop
+        if True:
+            newdet=(state==0)&(iO>I_scp); tdet[newdet]=t; state[newdet]=1
+            go=(state==1)&(t-tdet>=t_resp); tramp[go]=t; i_at[go]=iO[go]; state[go]=2
+            hold=(state==2)&(t-tramp>=t_ramp); state[hold]=3
+            cl=(state==3)&(t-tramp>=t_ramp+t_hold); state[cl]=4
+            # current the eFuse can carry
+            lim=np.where(state<=1,np.inf,np.where(state==2,i_at*np.clip(1-(t-tramp)/t_ramp,0,1),np.where(state==3,0.0,I_ol)))
+            if ipk_cap is not None: lim=np.minimum(lim,ipk_cap)
+            # output loop: try conducting through the eFuse (Ron) into the short
+            diO_on=(vS-iO*(Ron+Rd2))/Ls
+            iO_try=iO+diO_on*dt
+            thru=iO_try<=lim
+            # if the eFuse limits, OUT falls; Schottky clamps OUT at -v_sch: loop current decays through Rd2 + Schottky
+            diO_sch=(-v_sch-iO*(Rd2+r_sch))/Ls
+            iO_new=np.where(thru,iO_try,np.maximum(iO+diO_sch*dt,np.minimum(lim,iO_try)))
+            ief=np.where(thru,iO_new,np.minimum(lim,iO_new))
+            vout=np.where(thru,iO_new*Rd2,np.where(iO_new>ief+1e-9,-v_sch,iO_new*Rd2))
+            isch=np.maximum(iO_new-ief,0)
+            iO=iO_new
+        iDin=tvs_i(vS,tvs_in,n_slot) if tvs_in else 0.0*vS
+        vS+=(iK-ief-iDin)/Cs*dt
+        E_ef+=np.maximum(vS-vout,0)*ief*dt; E_sch+=isch*v_sch*dt; E_bank+=iK*iK*0.0035*dt; I2t+=iL*iL*dt
+        vU+=(np.maximum(vP-0.45-vU,0)/r_u65-i_u65)/10e-6*0.75*dt
+        vov=vB/OV_RATIO
+        newt=(vov>vovr)&~np.isfinite(trip); trip[newt]=t
+        trip[(vov<1.091)&np.isfinite(trip)&(t-trip<tdeg)]=np.inf
+        fire=np.isfinite(trip)&(t-trip>=tdeg+hgate_extra)&~np.isfinite(qoff); qoff[fire]=t; tripped|=fire
+        for k_,v_ in (('vP',vP),('vB',vB),('vS',vS),('vU',vU),('ief',ief),('iK',iK),('iL',iL)): pk[k_]=np.maximum(pk[k_],v_)
+        pk['vout_neg']=np.minimum(pk['vout_neg'],vout)
+        t_ovp+=(vS>ovp_min)*dt; vS_lo=np.minimum(vS_lo,vS)
+        t+=dt
+    return dict(pk=pk,E_ef=E_ef,E_sch=E_sch,E_bank=E_bank,I2t=I2t,tripped=tripped,t_ovp=t_ovp,vS_lo=vS_lo)
 
 SCEN=[
  ('A  as built: D1 SMDJ40CA, D2 SMBJ40CA, C3/C4 2x EEETG1J101UP',dict()),
