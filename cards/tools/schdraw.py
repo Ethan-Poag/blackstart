@@ -132,7 +132,7 @@ class Drawer:
             xa,xb=(tx,tx+w) if side[0]>0 else (tx-w,tx)
             fb.box(xa,cy-0.5-TH,xb,cy+0.5+TH)
         else:            # text above/below a horizontal part
-            ty=(y0-0.6) if side[1]<0 else (y1+0.6+TH)
+            ty=(y0-1.3) if side[1]<0 else (y1+1.3+TH)   # Pass 3: clear of resistor outlines and capacitor plates
             F=[('Reference',(cx,ty-TH),'center'),('Value',(cx,ty),'center')]
             fb.box(cx-w/2,ty-2*TH,cx+w/2,ty+0.2)
         return F,fb
@@ -230,17 +230,18 @@ class Drawer:
         for dv,lst in sides.items():
             a=(0,1) if dv[0] else (1,0)
             lst.sort(key=lambda t:t[1][0]*a[0]+t[1][1]*a[1])
-            simple=[]; trees=[]
+            simple=[]; trees=[]; lo_=lambda e,a=a:e[0]*a[0]+e[1]*a[1]
             for pp,end in lst:
                 n=p['pn'][pp['num']]
                 if n and not lonly and not s.is_rail(n) and s.two_on(n,allowed): trees.append((pp,end,n))
                 else: simple.append((pp,end,n))
             # simple pins: stub + label / GND, consecutive same-net pins joined into one
-            base=2; i=0
+            base=2; i=0; prevg=None   # (coordinate along a, net) of the previous labelled group on this side
             while i<len(simple):
                 pp,end,n=simple[i]; j=i
                 while (j+1<len(simple) and simple[j+1][2]==n and n is not None and
-                       abs((simple[j+1][1][0]-simple[j][1][0])+(simple[j+1][1][1]-simple[j][1][1]))<=2): j+=1
+                       abs((simple[j+1][1][0]-simple[j][1][0])+(simple[j+1][1][1]-simple[j][1][1]))<=(4 if s.is_rail(n) else 2) and
+                       not any(lo_(simple[j][1])<lo_(e2)<lo_(simple[j+1][1]) for _,e2 in lst)): j+=1   # rail pins up to 4 apart share one symbol (no pin between)
                 grp=simple[i:j+1]; i=j+1
                 if n is None:
                     for pp_,e_,_ in grp: C.prims.append(('nc',e_)); C.bb.pt(*e_)
@@ -260,9 +261,15 @@ class Drawer:
                 if s.is_rail(n):
                     pwr_prim(C,n,tip,dv); base=max(base,(3 if len(stubs)>1 else 2)+3+(tw(n)+1 if dv[1]==0 and n!='GND' else 0))
                 else:
+                    ex=0
+                    if (n not in GLOBALS and prevg and prevg[1] in GLOBALS and lo_(tip)-prevg[0]<=2):
+                        # a local label's text sits on the side of its wire facing the previous row;
+                        # a flag outline 1 row away there touches it, so run this wire on past the flag
+                        ex=int(math.ceil(tw(prevg[1])))+1; t2=add(tip,mul(dv,ex)); C.prims.append(('wire',tip,t2)); tip=t2
                     C.prims.append(('label',n,tip,dv)); w=tw(n)
                     ext=add(tip,mul(dv,w)); C.bb.pt(*ext); C.bb.pt(*add(ext,mul(a,-TH)))
-                    base=max(base,(3 if len(stubs)>1 else 2)+w+1)
+                    base=max(base,(3 if len(stubs)>1 else 2)+ex+w+1)
+                prevg=(lo_(tip),n)
             if len(simple)>0 and any(g[2] for g in simple): pass
             # tree pins: staircase (upper pins jog further out, rows stacked along a: no crossings)
             m=len(trees); base=int(math.ceil(base)) if simple else 0
@@ -432,7 +439,7 @@ def run(D,outdir,title):
     GL=getattr(D,'glabels',set())
     out.append('(kicad_sch (version 20250114) (generator "eeschema") (generator_version "9.0")')
     out.append(f'(uuid "{fileuuid}")'); out.append(f'(paper "{D.paper}")')
-    out.append('(title_block (title %s) (date "2026-11-23") (rev "M-mod P2b") (company "Project Blackstart") (comment 1 %s) (comment 2 %s))'%(
+    out.append('(title_block (title %s) (date "2026-11-23") (rev "M-mod P3") (company "Project Blackstart") (comment 1 %s) (comment 2 %s))'%(
         q(title),q('cards/tools (schdraw.py) from tag baseline-2026-11-23-locked; BaselineRef = old ref'),q('One flat page: functional blocks, wired inside, labels between blocks')))
     out.append('(lib_symbols '+' '.join(dump(L) for L in c.libs.values())+' '+dump(c.srclibs['power:GND'])+' '+dump(c.srclibs['power:PWR_FLAG'])+' '+dump(c.srclibs['power:+3V3'])+')')
     cnt=collections.Counter()

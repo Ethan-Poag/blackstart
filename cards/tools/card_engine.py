@@ -52,6 +52,9 @@ C100N100V=dict(Value='100n',Footprint='Capacitor_SMD:C_0805_2012Metric',MPN='CL2
 C2U2100V=dict(Value='2.2u',Footprint='Capacitor_SMD:C_1206_3216Metric',MPN='CL31B225KCHSNNE',Manufacturer='Samsung Electro-Mechanics',LCSC='C170101',Description='VBAT_ESTOP bulk, 100 V X7R')
 CVS=c.newref('C'); c.add('Device:C',CVS,'100n',{'1':'VBAT_ESTOP','2':'GND'},C100N100V)
 CBK=c.newref('C'); c.add('Device:C',CBK,'2.2u',{'1':'VBAT_ESTOP','2':'GND'},C2U2100V)
+# Pass 3 MAJ-D: TPS48100-Q1 recommends >= 22 nF on SRC; U4 (fuel) / U6 (crank) SRC = FUEL_OUT / CRANK_OUT had none (63 nF worst at 32 V)
+CSF=c.newref('C'); c.add('Device:C',CSF,'100n',{'1':'FUEL_OUT','2':'GND'},dict(C100N100V,Description='fuel TPS48100 SRC cap 100 nF / 100 V (Pass 3 MAJ-D)'))
+CSC=c.newref('C'); c.add('Device:C',CSC,'100n',{'1':'CRANK_OUT','2':'GND'},dict(C100N100V,Description='crank TPS48100 SRC cap 100 nF / 100 V (Pass 3 MAJ-D)'))
 c.notes=['ENGINE I/O CARD (dedicated keyed slot, card type 0x0001)',
  'Key: engine-only coding notch in the card edge + matching rib in the engine slot guide; LV cards have the LV notch. ID EEPROM type check too.',
  'Fuel/crank/glow drivers are fed ONLY from VBAT_ESTOP (E-stop cut is external, upstream of J23 on the mainboard).',
@@ -59,7 +62,7 @@ c.notes=['ENGINE I/O CARD (dedicated keyed slot, card type 0x0001)',
  'Contacts (2 A each, 50 % derate): VBAT_ESTOP 12 (12 A >= 10 A F2 fuse); FUEL_OUT 8 and CRANK_OUT 8 (8 A >= 6.14 A max short-circuit trip).',
  'Glow driver (baseline U47) VS moved VBAT_P -> VBAT_ESTOP (Nov 23 decision): E-stop now also cuts glow.',
  'Slot pinout table: cards/engine/engine_slot_pinout.csv. b-row signals are GND guards. ENG_PRESENT_N (c31) tied to GND on the card, read on the mainboard 0x22 P10.',
- 'Pass 1 M1: 100 nF / 100 V at the glow driver VS + 2.2 uF / 100 V bulk on VBAT_ESTOP (mainboard C205-C219 removed).']
+ 'Pass 1 M1: 100 nF / 100 V at the glow driver VS + 2.2 uF / 100 V bulk on VBAT_ESTOP (mainboard C205-C219 removed). Pass 3 MAJ-D: 100 nF / 100 V on the fuel / crank TPS48100 SRC (FUEL_OUT, CRANK_OUT).']
 def key(p):
     br=p['props'].get('BaselineRef','')
     nets=' '.join(n or '' for n in p['pn'].values())
@@ -80,7 +83,7 @@ BLOCKS=[('Slot connector (ENGINE slot, keyed) - DIN 41612 C96',B('='+JS)),
  ('DI1-4 inputs + AI1/AI2 field header J3',B('='+JF1)),
  ('Card ID EEPROM',[k for k in ((p['ref'],p['unit']) for p in c.parts) if c.parts and k[0].startswith('U') and k[0] not in c.refmap.values()])]
 RAILS={'GND','+3V3_SAFE','VBAT_ESTOP','VBAT_P','VBAT_AI','VMID','AI_VSET','DI_BIAS_A'}
-D=schdraw.Drawer(c,RAILS,BLOCKS,os.environ.get('PAPER','A2'),c.notes); D.labels_only={JS}; D.extra={CID:'Card ID EEPROM',CVS:'Glow driver (VS on VBAT_ESTOP)',CBK:'Glow driver (VS on VBAT_ESTOP)'}
+D=schdraw.Drawer(c,RAILS,BLOCKS,os.environ.get('PAPER','A2'),c.notes); D.labels_only={JS}; D.extra={CID:'Card ID EEPROM',CVS:'Glow driver (VS on VBAT_ESTOP)',CBK:'Glow driver (VS on VBAT_ESTOP)',CSF:'Fuel driver + current sense + readback',CSC:'Crank driver + current sense + readback'}
 over=schdraw.run(D,os.path.join(ROOT,'cards','engine'),c.title)
 print('leftover clusters',len(D.left),D.left[:20])
 import csv

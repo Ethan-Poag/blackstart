@@ -53,17 +53,27 @@ class Card:
         return n
     def newref(s,prefix):
         s.count[prefix]+=1; return f'{prefix}{s.count[prefix]}'
+    def symfix(s,lib_id,props):
+        """Pass 3 N13: baseline parts drawn with stand-in stock symbols get the cards: symbol of the fitted part (identical pinout)."""
+        v=props.get('Value','')
+        new={'Transistor_FET:DMN6075S':{'IRLML0100':'cards:IRLML0100','AO3400A':'cards:AO3400A'}.get(v),'74xGxx:74AUP1G74':'cards:74LVC1G74'}.get(lib_id)
+        if not new: return lib_id,None
+        if 'Note' in props: props['Note']=props['Note'].replace('Stock symbol 74AUP1G74 used (no 74LVC1G74 in KiCad 9 libs)','Symbol cards:74LVC1G74 (Pass 3 N13)')
+        L=copy.deepcopy(CARDSYMS[new.split(':')[1]]); L[1]=new; return new,L
     def move(s,refs,rename=None):
         for r in refs:
             insts=s.inst[r]; assert insts,r
             prefix=re.match(r'[A-Z]+',r).group(0)
             nr=(rename or {}).get(r) or s.newref(prefix); s.refmap[r]=nr
             for i in sorted(insts,key=lambda x:x['unit']):
-                lsym=s.srclibs[i['lib_id']]; s.libs[i['lib_id']]=lsym
+                props=dict(i['props']); props['Reference']=nr; props['BaselineRef']=r
+                lib,lsym=s.symfix(i['lib_id'],props)
+                if lsym is None: lsym=s.srclibs[lib]
+                else: assert sorted(x['num'] for x in lib_pins(lsym,i['unit']))==sorted(x['num'] for x in lib_pins(s.srclibs[i['lib_id']],i['unit'])),lib
+                s.libs[lib]=lsym
                 pins=lib_pins(lsym,i['unit'])
                 pn={p['num']:s.netname(s.pinnet.get((r,p['num']),'unconnected-')) for p in pins}
-                props=dict(i['props']); props['Reference']=nr; props['BaselineRef']=r
-                s.parts.append(dict(ref=nr,lib_id=i['lib_id'],unit=i['unit'],props=props,pins=pins,pn=pn,dnp=i['dnp'],lsym=lsym))
+                s.parts.append(dict(ref=nr,lib_id=lib,unit=i['unit'],props=props,pins=pins,pn=pn,dnp=i['dnp'],lsym=lsym))
     def add(s,lib_id,ref,value,pn,props=None,unit=1,lsym=None):
         lsym=lsym or s.srclibs.get(lib_id) or CARDSYMS[lib_id.split(':')[1]]
         if lsym[1]!=lib_id:  # card lib symbols are stored with bare names; embed under full id

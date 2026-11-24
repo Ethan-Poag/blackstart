@@ -1,0 +1,111 @@
+
+== B1: peak Vgs when SRC collapses (hard short downstream), channel fully on (BST-SRC at pump max 12.83 V); abs max BST/G1PU/G1PD-SRC 19 V
+C_BST effective 0.678 uF; C1 modelled at +10 % (2.42 nF); zener Vz 16.2 V / 30 ohm (worst = highest)
+drain follows = reviewer model (FET ohmic, Cgd charge ~0); drain fixed = worst bound (full Cgd injection from a stiff drain)
+Pass 2: 150R G1PU, 22 nF + 10R gate->GND, 470 nF C_BST
+   drain follows12.6 V/0.5 us: 20.59  12.6 V/3.0 us: 18.97  24.0 V/0.5 us: 27.68  24.0 V/3.0 us: 24.57  28.8 V/0.5 us: 30.71  28.8 V/3.0 us: 26.97  32.0 V/0.5 us: 33.07  32.0 V/3.0 us: 28.84
+                 max Vgs 33.07 V (limit 17 V), zener peak 0 mA, BST clamp diode peak 0 mA, BST-SRC peak 14.52 V
+   drain fixed  12.6 V/0.5 us: 21.60  12.6 V/3.0 us: 19.76  24.0 V/0.5 us: 29.60  24.0 V/3.0 us: 26.09  28.8 V/0.5 us: 33.03  28.8 V/3.0 us: 28.80  32.0 V/0.5 us: 35.70  32.0 V/3.0 us: 30.91
+                 max Vgs 35.70 V (limit 17 V), zener peak 0 mA, BST clamp diode peak 0 mA, BST-SRC peak 14.67 V
+Pass 3: 470R G1PU, gate->1N4148W->10R->2.2 nF->GND (1M C1->SRC), 1N4148W gate->BST, BZT52C15 G-S, 1 uF C_BST
+   drain follows12.6 V/0.5 us: 12.83  12.6 V/3.0 us: 12.83  24.0 V/0.5 us: 12.83  24.0 V/3.0 us: 12.83  28.8 V/0.5 us: 12.83  28.8 V/3.0 us: 12.83  32.0 V/0.5 us: 12.83  32.0 V/3.0 us: 12.83
+                 max Vgs 12.83 V (limit 17 V), zener peak 0 mA, BST clamp diode peak 0 mA, BST-SRC peak 12.83 V
+   drain fixed  12.6 V/0.5 us: 13.89  12.6 V/3.0 us: 13.57  24.0 V/0.5 us: 14.52  24.0 V/3.0 us: 13.81  28.8 V/0.5 us: 14.68  28.8 V/3.0 us: 13.85  32.0 V/0.5 us: 14.79  32.0 V/3.0 us: 13.88
+                 max Vgs 14.79 V (limit 17 V), zener peak 0 mA, BST clamp diode peak 211 mA, BST-SRC peak 12.90 V
+
+== MAJ-C: BST sag at turn-on into the slot load (start at pump-ON min 9.27 V, I_BST min 190 uA, Ciss max, C1 +10 %, C_BST eff)
+SLUSEW1C Eq 4: C_BST >= Qg/dV_BST + 10*C1 = 2*38 nC/(9.27-8.93 V) + 10*2.42 nF = 248 nF; fitted 678 nF effective (2.7x)
+12.6 V: BST-SRC min 9.080 V (> BST_UVLOF max 8.93 V by 0.150 V; > G1_GOOD max 8.33 V), final Vgs 9.85 V, inrush 10.7 A, 10-90 % 3.8 us
+24.0 V: BST-SRC min 9.038 V (> BST_UVLOF max 8.93 V by 0.108 V; > G1_GOOD max 8.33 V), final Vgs 9.81 V, inrush 11.5 A, 10-90 % 5.8 us
+28.8 V: BST-SRC min 9.021 V (> BST_UVLOF max 8.93 V by 0.091 V; > G1_GOOD max 8.33 V), final Vgs 9.80 V, inrush 11.6 A, 10-90 % 6.6 us
+32.0 V: BST-SRC min 9.009 V (> BST_UVLOF max 8.93 V by 0.079 V; > G1_GOOD max 8.33 V), final Vgs 9.78 V, inrush 11.6 A, 10-90 % 7.1 us
+Pass 2 network for reference:
+   12.6 V: BST-SRC min 7.753 V
+   32.0 V: BST-SRC min 6.597 V
+
+== Inrush, fast corner (C1 -10 % tol -30 % bias, C_BST 1.1 uF at 12.83 V, low-Vth hot FET, Ciss typ)
+12.6 V: inrush peak 31.0 A for 1.4 us (slot SCP blind below G1_GOOD; bank SCP min 21.2 A timer needs 517 us -> no trip)
+32.0 V: inrush peak 36.0 A for 2.3 us (slot SCP blind below G1_GOOD; bank SCP min 21.2 A timer needs 517 us -> no trip)
+Eq 3 typ: I_inrush = 0.63*11 V*2.76 uF/(470*2.2 nF) = 18.5 A
+
+== N11: turn-on into a dead short at 32 V, Tc 149 F (65 C), one FET takes the bulk of the linear-mode current
+SOA derating at Tc 149 F (65 C) = 0.68
+slot (C_TMR 4.7 nF, 103 us max), 100 % in one FET: linear-mode energy 9.0 mJ, Ppk 6.04 kW, t_eq 1.50 us, derated SOA 5.70 kW -> ratio 1.06
+slot (C_TMR 4.7 nF, 103 us max),  75 % in one FET: linear-mode energy 6.8 mJ, Ppk 4.53 kW, t_eq 1.50 us, derated SOA 5.70 kW -> ratio 0.80
+bank (C_TMR 68 nF, 1490 us max), 100 % in one FET: linear-mode energy 9.0 mJ, Ppk 6.04 kW, t_eq 1.50 us, derated SOA 5.70 kW -> ratio 1.06
+bank (C_TMR 68 nF, 1490 us max),  75 % in one FET: linear-mode energy 6.8 mJ, Ppk 4.53 kW, t_eq 1.50 us, derated SOA 5.70 kW -> ratio 0.80
+Pass 2 150R/22n for comparison: E_lin 10 mJ, Ppk 5.73 kW, t_eq 1.8 us, ratio 1.11
+TI 100k/220p for comparison: E_lin 808 mJ, Ppk 4.09 kW, t_eq 197.7 us, ratio 28.93
+-> the turn-on-into-short peak is set by the stiff VBAT_P source, not the gate network: firmware must not auto-retry a slot that latched SCP (C7.9), and the first power-on of a new card is a bench test item (MOD section 15.4).
+
+== N1: TPS48100 SCP thresholds, offset-correct model V_SCP = 19 mV + (V_28k - 19 mV)*R/28k, shunt +/-1 %
+slot 24.3k: 10.6/13.5/16.6 A, latch-off 36/64/103 us
+bank 61.9k: 21.2/28.6/36.3 A, latch-off 517/919/1490 us  (time grading bank min / slot max = 5.02x)
+current grading HOT: bank SCP min 21.18 A > slot SCP max 16.60 A + 2.4 A budget = 19.00 A (margin +2.18 A)
+current grading ROOM: bank SCP min 21.18 A > slot SCP max 16.60 A + 4.0 A budget = 20.60 A (margin +0.58 A)
+68.1k alternative: 22.9/31.0/39.6 A (raises the double-fault I2t, not taken)
+
+== MAJ-A: INA281A2 -> 15.8k / 2x10 uF (HOT) or 15.8k||25.5k via TS5A3166 (ROOM) -> TLV3012B (V_TH 0.8613 V)
+tau factors: min 0.791 (R -1 %, C -10 % tol, -10 % hot, -1.3 % bias), max 1.111
+HOT: k 1.0000, tau 316 ms, trip nominal 3.45 A, window 3.15..3.76 A (tolerances +/-8.34 %, switch leakage 0.18 %, cap IR +0.63 %)
+ROOM: k 0.6174, tau 195 ms, trip nominal 5.58 A, window 5.11..6.08 A (tolerances +/-8.35 %, switch leakage 0.11 %, cap IR +0.39 %)
+   Pass 2 for reference: AO3400A IDSS bound 1 uA (77 F) into the 220k node = 26 % of V_TH, 5 uA at 131 F (55 C) worse: not budgetable (review MAJ-A)
+   Pass 3: TS5A3166 +/-100 nA max over -40..185 F (-40..85 C) into 15.8k = 0.18 % of V_TH (< 0.25 %)
+INA281 output saturates at 19.0 A
+HOT budget 2.4 A (margin to trip min 0.75 A):
+   from cold, budget + one channel in current limit (3.61 A max) = 6.01 A: trips no sooner than 185.9 ms
+   preloaded at 1.0 A for > 5 tau, then one channel in current limit: bank 4.61 A trips no sooner than 226.7 ms (FW isolation <= 25 ms -> 9.1x)
+   preloaded at 2.0 A for > 5 tau, then one channel in current limit: bank 5.61 A trips no sooner than 96.1 ms (FW isolation <= 25 ms -> 3.8x)
+   preloaded at 2.4 A for > 5 tau, then one channel in current limit: bank 6.01 A trips no sooner than 58.4 ms (FW isolation <= 25 ms -> 2.3x)
+     6.0 A from cold: 186..346 ms
+     8.0 A from cold: 125..223 ms
+    10.6 A from cold: 88..154 ms
+    16.6 A from cold: 53..90 ms
+    19.0 A from cold: 45..77 ms
+   re-arm: filter back to < 1 % after 5 tau max = 1.76 s (FW waits >= 3 s)
+ROOM budget 4.0 A (margin to trip min 1.11 A):
+   from cold, budget + one channel in current limit (3.61 A max) = 7.61 A: trips no sooner than 171.8 ms
+   preloaded at 1.0 A for > 5 tau, then one channel in current limit: bank 4.61 A never trips
+   preloaded at 2.0 A for > 5 tau, then one channel in current limit: bank 5.61 A trips no sooner than 304.5 ms (FW isolation <= 25 ms -> 12.2x)
+   preloaded at 4.0 A for > 5 tau, then one channel in current limit: bank 7.61 A trips no sooner than 56.6 ms (FW isolation <= 25 ms -> 2.3x)
+     6.0 A from cold: 294..inf ms
+     8.0 A from cold: 157..309 ms
+    10.6 A from cold: 102..185 ms
+    16.6 A from cold: 57..99 ms
+    19.0 A from cold: 48..84 ms
+   re-arm: filter back to < 1 % after 5 tau max = 1.08 s (FW waits >= 3 s)
+
+== F1 10 A ATO coordination (hold 110 %; hot rerate 0.8 at 149 F; melt I2t 115 A2s room, ~74 A2s hot [estimate])
+ROOM (77 F): base 4.79 A + trip max 6.08 A = 10.87 A vs F1 hold 11.0 A (margin 0.13 A)
+   single fault: slot at SCP max 16.6 A + 4.0 A budget, unpreloaded: bank trips <= 84 ms, F1 25.4 A -> 53.9 A2s (47 % of 115)
+   double fault just under bank SCP min 21.2 A: <= 84 ms, 56.4 A2s (49 %)
+HOT (149 F): base 4.95 A + trip max 3.76 A = 8.71 A vs F1 hold 8.8 A (margin 0.09 A)
+   single fault: slot at SCP max 16.6 A + 2.4 A budget, unpreloaded: bank trips <= 77 ms, F1 24.0 A -> 44.4 A2s (60 % of 74)
+   double fault just under bank SCP min 21.2 A: <= 77 ms, 52.9 A2s (72 %)
+ROOM VBAT floor 12.4 V: firmware leaves ROOM (selects HOT) below 12.4 V; base 59.4 W / 12.4 V = 4.79 A
+multi-fault above bank SCP min (> 21.2 A): bank SCP latches in 517-1490 us; a hard short on VBAT_SLOTS copper may still open F1 (board-fault class, Pass 2)
+
+== Bank FET / shunt steady state at the trip max (RthJA 50 K/W, RDS(on) 7 mOhm x 1.5 hot, 60/40 split)
+ROOM 77 F, 6.08 A: hot FET 0.14 W, Tj 90 F; shunt 0.18 W of 3 W
+HOT 149 F, 3.76 A: hot FET 0.05 W, Tj 154 F; shunt 0.07 W of 3 W
+
+== MAJ-B: 4.7 nF on BANK_UVLO and SL1-8_UVLO (100k/27k divider, Thevenin 21.26k)
+tau min 81 us
+tau typ 100 us
+tau max 110 us
+VS 12.6 V dips to 4.0 V: UVLO node 2.68 V -> UVLOF max 1.19 V after >= 139 us (> slot SCP latch-off max 103 us)
+VS 12.6 V dips to 6.0 V: node settles at 1.28 V >= UVLOF min 1.083 V -> no UVLO turn-off
+VS 24.0 V dips to 4.0 V: UVLO node 5.10 V -> UVLOF max 1.19 V after >= 207 us (> slot SCP latch-off max 103 us)
+VS 24.0 V dips to 6.0 V: node settles at 1.28 V >= UVLOF min 1.083 V -> no UVLO turn-off
+VS 32.0 V dips to 4.0 V: UVLO node 6.80 V -> UVLOF max 1.19 V after >= 235 us (> slot SCP latch-off max 103 us)
+VS 32.0 V dips to 6.0 V: node settles at 1.28 V >= UVLOF min 1.083 V -> no UVLO turn-off
+turn-on delay added: <= 5 tau max = 0.55 ms; Q109 (overload latch) discharges the cap through AO3400A in < 1 us
+Bulk would not help: holding VBAT_SLOTS above 4 V through a 300 A, 100 us short needs C >= 300 A*100 us/8.6 V = 3.5 mF
+
+== MAJ-D: 100 nF / 100 V 0805 X7R (CL21B104KCFNNNE) on VBAT_SLOTS (U110 SRC + 8 slot VS) and on each SLn_VBAT
+12.6 V: 92.4 nF typ, 83.2 nF worst (-10 % tol)  >= 22 nF
+24.0 V: 80.1 nF typ, 72.1 nF worst (-10 % tol)  >= 22 nF
+32.0 V: 70.4 nF typ, 63.4 nF worst (-10 % tol)  >= 22 nF
+36.0 V: 65.4 nF typ, 58.9 nF worst (-10 % tol)  >= 22 nF
+slot load cap at turn-on with the new 100 nF: 2.76 uF (inrush above)
+bank turn-on into VBAT_SLOTS (9 x 100 nF): typ dV/dt 0.63*11/(470*2.2n)=6.7 V/us -> 4.2 A

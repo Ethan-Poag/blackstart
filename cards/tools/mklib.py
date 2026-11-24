@@ -65,6 +65,36 @@ box('74LVC1G10','SN74LVC1G10DBVR','Package_TO_SOT_SMD:SOT-23-6','Single 3-input 
 box('74LVC1G11','SN74LVC1G11DBVR','Package_TO_SOT_SMD:SOT-23-6','Single 3-input AND, Ioff (TI SCES487J, DBV-6: 1 A 2 GND 3 B 4 Y 5 VCC 6 C)',[(1,'A',I),(3,'B',I),(6,'C',I)],[(4,'Y',O)],[(5,'VCC',P)],[(2,'GND',P)],w=5.08)
 box('TLV3012B','TLV3012BIDBVR','Package_TO_SOT_SMD:SOT-23-6','Comparator, push-pull, 1.242 V reference, POR (output low while V+ ramps) (TI SBOS300C, DBV-6: 1 OUT 2 V- 3 IN+ 4 IN- 5 REF 6 V+)',
     [(3,'IN+',I),(4,'IN-',I)],[(1,'OUT',O),(5,'REF',O)],[(6,'V+',P)],[(2,'V-',P)],w=5.08)
+box('TS5A3166','TS5A3166DBVR','Package_TO_SOT_SMD:SOT-23-5','SPST analog switch, NO, 0.9 ohm (TI SCDS186E, DBV: 1 NO 2 COM 3 GND 4 IN 5 V+; INO(OFF) +/-100 nA max -40..85 C at V+ 4.5-5.5 V)',
+    [(1,'NO','passive'),(4,'IN',I)],[(2,'COM','passive')],[(5,'V+',P)],[(3,'GND',P)],w=5.08)
+# Pass 3 N13: KiCad stock symbols renamed to the parts actually fitted (pinout identical, flattened from the stock 'extends' parent)
+import sys as _s; _s.path.insert(0,os.path.join(os.path.dirname(D),'..','tools'))
+from sexp import parse as _parse,dump as _dump,find as _find,Sym as _Sym
+STOCK=os.environ.get('KICAD9_SYMBOL_DIR','/workspace/kicad-libs/kicad-symbols-9.0.2')
+def flat(lib,name,new,props):
+    L=_parse(open(os.path.join(STOCK,lib+'.kicad_sym')).read())[0]
+    S={e[1]:e for e in _find(L,'symbol')}
+    ch=S[name]; ext=[e for e in ch if isinstance(e,list) and e[0]=='extends']
+    par=S[ext[0][1]] if ext else ch
+    out=[_Sym('symbol'),new]
+    for e in par[2:]:
+        if isinstance(e,list) and e[0]=='property':
+            e=list(e); k=e[1]
+            src=[x for x in ch if isinstance(x,list) and x[0]=='property' and x[1]==k]
+            if src: e=list(src[0])
+            if k in props: e[2]=props[k]
+            out.append(e)
+        elif isinstance(e,list) and e[0]=='symbol':
+            sub=list(e); sub[1]=sub[1].replace(par[1],new,1); out.append(sub)
+        elif isinstance(e,list) and e[0]=='extends': continue
+        else: out.append(e)
+    syms.append(_dump(out))
+flat('Transistor_FET','DMN6075S','AO3400A',{'Value':'AO3400A','Footprint':'Package_TO_SOT_SMD:SOT-23','Datasheet':'http://www.aosmd.com/pdfs/datasheet/AO3400A.pdf',
+     'Description':'30 V N-FET, VGS(th) 0.65-1.45 V, SOT-23 (G 1, S 2, D 3)'})
+flat('Transistor_FET','DMN6075S','IRLML0100',{'Value':'IRLML0100','Footprint':'Package_TO_SOT_SMD:SOT-23','Datasheet':'https://www.infineon.com/dgdl/irlml0100pbf.pdf',
+     'Description':'100 V N-FET, VGS(th) 1.0-2.5 V, 235 mOhm at 4.5 V, SOT-23 (G 1, S 2, D 3)'})
+flat('74xGxx','74AUP1G74','74LVC1G74',{'Value':'74LVC1G74','Footprint':'Package_SO:TSSOP-8_3x3mm_P0.65mm','Datasheet':'https://assets.nexperia.com/documents/data-sheet/74LVC1G74_Q100.pdf',
+     'Description':'Single D flip-flop, set/reset, 5.5 V tolerant, Ioff (Nexperia 74LVC1G74-Q100, DP: 1 CP 2 D 3 Q# 4 GND 5 Q 6 RD# 7 SD# 8 VCC)'})
 open(os.path.join(D,'cards.kicad_sym'),'w').write('(kicad_symbol_lib (version 20241209) (generator "mklib") (generator_version "9.0")\n'+'\n'.join(syms)+'\n)\n')
 def fp(name,desc,holes,hole_y,pin1_right,edge_y=None):
     """Pads per the WingTAT 'P.C. Board Layout' (component-side view): rows c (top, y=0), b (2.54), a (5.08); 2.54 pitch,

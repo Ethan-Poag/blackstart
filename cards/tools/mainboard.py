@@ -63,7 +63,7 @@ OV[('U63','5')]='ESTOP_TRIP_SNSM'                                  # ESTOP_TRIP 
 for p in ('6','7','9','10','11','12'): OV[('U63',p)]='GND'
 OV[('J21','3')]=None                                               # D+ terminal now on the engine card
 for p in ('1','2','3','4','5'): OV[('J24',p)]=None                 # GLOW/GCB/MCB terminals now on the engine card / BRK-4; J24.6 ESTOP_TRIP_OUT stays
-OV[('C224','1')]='SLOT_ANA'; OV[('U7','16')]='SLOT_ANA'             # PA? ADC: was MUXB_OUT (U64), now the slot ANA_OUT mux
+OV[('C224','1')]='SLOT_ANA'; OV[('U7','16')]='SLOT_ANA'             # PC1 (pin 16) ADC: was MUXB_OUT (U64), now the slot ANA_OUT mux
 REN={'GCB_CL_MCU':'SLOT_RST_N_M','GCB_OP_MCU':'SLOT_SPI_SCK_M','MCB_CL_MCU':'SLOT_SPI_MISO','MCB_OP_MCU':'SLOT_SPI_MOSI_M',
      'AUX1_MCU':'SLOT_CS_A0','AUX2_MCU':'SLOT_CS_A1','AUX7_MCU':'SLOT_CS_A2','AUX8_MCU':'SLOT_CS_EN',
      'AUX4_MCU':'ID_MUX_RST_N','AUX5_MCU':'ID_WP_UNLOCK','AUX6_MCU':'RC_ALLOW','AUX3_MCU':'SLOT_EXP_INT_N',
@@ -129,14 +129,14 @@ NEWP={'C2941042':P('LM74700QDBVRQ1','Package_TO_SOT_SMD:SOT-23-6','LM74700QDBVRQ
  'C13967':P('470n','Capacitor_SMD:C_0805_2012Metric','CL21B474KBFNNNE','Samsung','C13967','0.47 uF 50 V X7R 0805'),
  'C23091':P('61.9k',R0603,'0603WAF6192T5E','UNI-ROYAL','C23091','bank ISCP 61.9k: 22.4/28.6/35.0 A with 5 mOhm (Pass 2 MAJ-1)'),
  'C31658':P('68n','Capacitor_SMD:C_0603_1608Metric','CL10B683KB8NNNC','Samsung','C31658','bank C_TMR 68 nF X7R 50 V: 517/919/1490 us with 100k latch (Pass 2 MAJ-1)'),
- 'C22808':P('150R',R0603,'0603WAF1500T5E','UNI-ROYAL','C22808','G1PU gate resistor R1 150R: dV/dt 1.9 V/us with C1 22 nF (SLUSEW1C Fig 7-4, Pass 2 m11)'),
- 'C21122':P('22n','Capacitor_SMD:C_0603_1608Metric','CL10B223KB8NNNC','Samsung','C21122','gate dV/dt cap C1 22 nF X7R 50 V, in series with R2 10R to GND (Pass 2 m11)'),
  'C1517405':P('INA281A2IDBVR','Package_TO_SOT_SMD:SOT-23-5','INA281A2IDBVR','Texas Instruments','C1517405','bank current monitor 50 V/V on the 5 mOhm bank shunt (CM -4..110 V, VS +5V_TRIP)'),
  'C20345924':P('TLV3012BIDBVR','Package_TO_SOT_SMD:SOT-23-6','TLV3012BIDBVR','Texas Instruments','C20345924','bank overload comparator + 1.242 V ref; POR holds OUT low = trip (fail-safe)'),
- 'C22961':P('220k',R0603,'0603WAF2203T5E','UNI-ROYAL','C22961','bank overload filter R 220k (tau 220 ms with 1 uF)'),
- 'C23031':P('365k',R0603,'0603WAF3653T5E','UNI-ROYAL','C23031','bank overload ROOM divider 365k (k 0.624, tau 137 ms)'),
  'C23056':P('44.2k',R0603,'0603WAF4422T5E','UNI-ROYAL','C23056','REF divider 44.2k/100k: V_TH 0.861 V'),
- 'C29936':P('1u','Capacitor_SMD:C_0603_1608Metric','CL10B105KA8NNNC','Samsung','C29936','bank overload filter C 1 uF X7R 25 V'),
+ 'C113804':P('2.2n','Capacitor_SMD:C_0603_1608Metric','CC0603KRX7R0BB222','YAGEO','C113804','gate dV/dt cap C1 2.2 nF X7R 100 V, diode-steered (charge only) via 1N4148W + 10R (Pass 3 B1)'),
+ 'C22880':P('15.8k',R0603,'0603WAF1582T5E','UNI-ROYAL','C22880','bank overload filter R 15.8k: tau 316 ms with 2x 10 uF (Pass 3 MAJ-A)'),
+ 'C22920':P('25.5k',R0603,'0603WAF2552T5E','UNI-ROYAL','C22920','bank overload ROOM divider 25.5k (k 0.617, tau 195 ms) (Pass 3 MAJ-A)'),
+ 'C14860':P('10u','Capacitor_SMD:C_1206_3216Metric','CL31B106KAHNNNE','Samsung','C14860','bank overload filter C 10 uF X7R 25 V 1206 (2 in parallel; -1.3 % at 1.5 V) (Pass 3 MAJ-A)'),
+ 'C353035':P('TS5A3166DBVR','Package_TO_SOT_SMD:SOT-23-5','TS5A3166DBVR','Texas Instruments','C353035','ROOM-select analog switch: off-leakage +/-100 nA max -40..185 F (replaces AO3400A Q108, Pass 3 MAJ-A)'),
  'C421608':P('2.2k 1W','Resistor_SMD:R_2512_6332Metric','25121WF2201T4E','UNI-ROYAL','C421608','VBAT_ESTOP bleeder 2.2k 2512 1 W (2 in parallel = 1.1k, Pass 2 MAJ-3)'),
  'C17976':P('68R','Resistor_SMD:R_1206_3216Metric','1206W4F680JT5E','UNI-ROYAL','C17976','+3V3_ID feed 68R 1206 0.25 W: 160 mW into a short, >= 3.0 V at 3.7 mA (Pass 2 m14)'),
  'C5173363':{'Value':'DIN41612_C96','Footprint':'cards:DIN41612_C96_Female_Vertical_WingTAT_9001-12961','MPN':'9001-12961C00A','Manufacturer':'WingTAT','LCSC':'C5173363','Description':'slot socket'}}
@@ -152,6 +152,17 @@ def C(sheet,lcsc,a,b='GND',**kw): return add(sheet,'Device:C','C',lcsc,{'1':a,'2
 class Shared(collections.Counter): pass
 shared=collections.Counter({'R':699,'C':399,'U':99,'Q':99,'J':39,'D':199,'JP':9})
 for f in SHEETS: card(f).count=shared
+def gate_net(S,k,src):
+    """Pass 3 B1/MAJ-C (all 9 slot-power channels): R1 470R G1PU; C1 2.2 nF diode-steered (gate -> 1N4148W -> 10R -> C1 -> GND, 1M C1 -> SRC):
+    C1 only sinks gate current (dV/dt control) and can never hold the gate up when SRC collapses; 1N4148W gate -> BST clamps Vgs to BST-SRC + Vf;
+    BZT52C15 G-S secondary clamp; C_BST 1 uF / 50 V 0805 X7R (678 nF worst effective). Math: docs/modular/pass3_calc.txt."""
+    return [R(S,'C23179',f'{k}_GPU',f'{k}_G',Description='G1PU gate resistor R1 470R (Pass 3 B1)'),R(S,'C21189',f'{k}_GPD',f'{k}_G'),
+            add(S,'Diode:1N4148W','D','C81598',{'2':f'{k}_G','1':f'{k}_GD'},Description='C1 steering diode: gate charges C1, C1 cannot drive the gate (Pass 3 B1)'),
+            R(S,'C22859',f'{k}_GD',f'{k}_GC'),C(S,'C113804',f'{k}_GC','GND'),
+            R(S,'C22935',f'{k}_GC',src,Description='C1 bleed to SRC (tau 2.2 ms): C1 reset between turn-ons (re-enable >= 20 ms)'),
+            add(S,'Diode:1N4148W','D','C81598',{'2':f'{k}_G','1':f'{k}_BST'},Description='gate -> BST clamp: Vgs <= BST-SRC + Vf (14.8 V worst, abs max 19 V) (Pass 3 B1)'),
+            add(S,'Device:D_Zener','D','C2104',{'1':f'{k}_G','2':src},Description='G-S clamp BZT52C15 13.8-15.6 V (Pass 3 B1, secondary)'),
+            C(S,'C28323',f'{k}_BST',src,Description='C_BST 1 uF / 50 V X7R 0805: 678 nF worst (-16.3 % at 12.83 V) vs Eq 4 248 nF (Pass 3 MAJ-C)')]
 C10N='C57112'; FET='C534364'; R10K='C25804'; R100K='C25803'; R47K='C23162'; R22K='C4190'; C100N='C14663'; R100='C22775'
 # ---- E-stop feed: ideal diode + rail cut ----
 S='estop'
@@ -170,9 +181,9 @@ R(S,R100K,'VBAT_ESTOP_PRE','RC_UVLO'); R(S,'C22967','RC_UVLO','GND')
 add(S,'cards:74LVC1G11','U','C22046',{'1':'WD_OK','3':'ESTOP_OK','6':'RC_ALLOW','2':'GND','4':'RC_EN','5':'+3V3_SAFE'},Description='rail cut enable = WD_OK AND ESTOP_OK AND RC_ALLOW (PB7, 100k pull-down R546)')
 C(S,C100N,'+3V3_SAFE'); R(S,R100K,'RC_EN','GND')
 # Pass 2 MAJ-3: switched active bleeder on VBAT_ESTOP, ON whenever RC_EN is low (E-stop, watchdog, RC_ALLOW low): 1.1k, tau ~2 ms, 32 V -> 2 V in <= 6.6 ms
-add(S,'Transistor_FET:DMN6075S','Q','C20917',{'1':'RC_EN','2':'GND','3':'RC_BLEED_G'},Description='bleeder gate inverter: RC_EN high -> on -> bleeder gate low (off)')
+add(S,'cards:AO3400A','Q','C20917',{'1':'RC_EN','2':'GND','3':'RC_BLEED_G'},Description='bleeder gate inverter: RC_EN high -> on -> bleeder gate low (off)')
 R(S,R100K,'+5V_TRIP','RC_BLEED_G',Description='bleeder gate pull-up to +5V_TRIP (from VBAT_P): bleeder ON when RC_EN is low')
-add(S,'Transistor_FET:DMN6075S','Q','C53658',{'1':'RC_BLEED_G','2':'GND','3':'RC_BLEED_D'},Description='bleeder switch IRLML0100 100 V: VGS 5 V vs VGS(th) 2.5 V max, 235 mOhm at 4.5 V')
+add(S,'cards:IRLML0100','Q','C53658',{'1':'RC_BLEED_G','2':'GND','3':'RC_BLEED_D'},Description='bleeder switch IRLML0100 100 V: VGS 5 V vs VGS(th) 2.5 V max, 235 mOhm at 4.5 V')
 for i in range(2): R(S,'C421608','VBAT_ESTOP','RC_BLEED_D',Description='bleeder 2.2k 2512 1 W (x2 = 1.1k): stuck-on Q101/Q102 at 32 V = 0.47 W each')
 for a,b in (('SLOT_SPI_SCK_M','SLOT_SPI_SCK'),('SLOT_SPI_MOSI_M','SLOT_SPI_MOSI'),('SLOT_RST_N_M','SLOT_RST_N')):
     R('mcu','C23140',a,b,Description='33R source series at the MCU pin (N12)')
@@ -214,7 +225,7 @@ R(S,R10K,'ID_MUX_RST_N','+3V3_SAFE'); R(S,R22K,'I2C2_SCL','+3V3_SAFE'); R(S,R22K
 for n in [f'SL{i}' for i in range(1,9)]+['ENG','MTR']:
     R(S,R47K,f'{n}_ID_SCL','+3V3_SAFE'); R(S,R47K,f'{n}_ID_SDA','+3V3_SAFE')
 R(S,R10K,'ID_WP','+3V3_SAFE',Description='ID_WP idle high = all ID EEPROMs write-protected')
-add(S,'Transistor_FET:DMN6075S','Q','C20917',{'1':'ID_WP_UNLOCK','2':'GND','3':'ID_WP'},Description='M7: PB6 high (ID_WP_UNLOCK, 100k pull-down R545) pulls ID_WP low = slot + engine ID EEPROMs writable')
+add(S,'cards:AO3400A','Q','C20917',{'1':'ID_WP_UNLOCK','2':'GND','3':'ID_WP'},Description='M7: PB6 high (ID_WP_UNLOCK, 100k pull-down R545) pulls ID_WP low = slot + engine ID EEPROMs writable')
 # slot SPI chip selects
 add(S,'cards:SN74LVC138APWR','U','C485077',{'1':'SLOT_CS_A0','2':'SLOT_CS_A1','3':'SLOT_CS_A2','6':'SLOT_CS_EN','4':'GND','5':'GND','16':'+3V3_SAFE','8':'GND',
     '15':'SL1_CS_N','14':'SL2_CS_N','13':'SL3_CS_N','12':'SL4_CS_N','11':'SL5_CS_N','10':'SL6_CS_N','9':'SL7_CS_N','7':'SL8_CS_N'}); C(S,C100N,'+3V3_SAFE')
@@ -242,25 +253,29 @@ refs.append(add(S,'genctl:TPS48100QDGXRQ1','U','C43131316',{'1':'BANK_UVLO','2':
     '12':'BANK_BST','13':'VBAT_SLOTS','14':'BANK_GPD','15':'BANK_GPU','17':'BANK_DRN','18':'VBAT_P','20':'VBAT_P','4':None,'11':None,'19':None}))
 refs.append(R(S,'C2903482','VBAT_P','BANK_DRN'))
 for i in range(2): refs.append(add(S,'Transistor_FET:BSC070N10NS5','Q',FET,{'5':'BANK_DRN','1':'VBAT_SLOTS','2':'VBAT_SLOTS','3':'VBAT_SLOTS','4':'BANK_G'}))
-refs+=[R(S,'C22808','BANK_GPU','BANK_G'),R(S,'C21189','BANK_GPD','BANK_G'),C(S,'C21122','BANK_G','BANK_GC'),R(S,'C22859','BANK_GC','GND'),
-       R(S,'C23091','BANK_ISCP','GND'),C(S,'C31658','BANK_TMR'),
+refs+=gate_net(S,'BANK','VBAT_SLOTS')
+refs+=[R(S,'C23091','BANK_ISCP','GND'),C(S,'C31658','BANK_TMR'),
        R(S,R100K,'BANK_TMR','GND',Description='latch-off (TPS48100 Eq 9); reset by toggling BANK_EN'),
-       C(S,'C1623','BANK_BST','VBAT_SLOTS'),R(S,R100K,'VBAT_P','BANK_UVLO'),R(S,'C22967','BANK_UVLO','GND'),
+       R(S,R100K,'VBAT_P','BANK_UVLO'),R(S,'C22967','BANK_UVLO','GND'),
+       C(S,'C1621','BANK_UVLO','GND',Description='UVLO filter 4.7 nF: tau 100 us, dips <= 120 us cannot beat the SCP latch (Pass 3 MAJ-B)'),
+       C(S,'C28233','VBAT_SLOTS',Description='U110 SRC cap 100 nF / 100 V (>= 22 nF: 63 nF worst at 32 V) (Pass 3 MAJ-D)'),
        R(S,R10K,'BANK_EN','GND',Description='slot bank off while the expander is in reset / inputs'),R(S,R10K,'BANK_FAULT_N','+3V3_SAFE')]
-blocks_sp.append(('Bank limiter VBAT_P -> VBAT_SLOTS (SCP 22.4 A, 517 us min)',refs))
-# Pass 2 MAJ-2: hardware bank overload cutoff. INA281A2 on the bank shunt -> RC (tau 220 ms HOT / 137 ms ROOM) -> TLV3012B (V_TH 0.861 V)
-# -> 74LVC1G74 ~SD (level set, POR-low = set) -> Q -> AO3400A pulls BANK_UVLO low (U110 off). Reset: BANK_EN low (~RD). Trip 3.16-3.73 A HOT, 5.06-5.98 A ROOM.
+blocks_sp.append(('Bank limiter VBAT_P -> VBAT_SLOTS (SCP 21.2 A min, 517 us min)',refs))
+# Pass 2 MAJ-2 / Pass 3 MAJ-A: hardware bank overload cutoff. INA281A2 on the bank shunt -> RC (tau 316 ms HOT / 195 ms ROOM) -> TLV3012B (V_TH 0.861 V)
+# -> 74LVC1G74 ~SD (level set, POR-low = set) -> Q -> AO3400A pulls BANK_UVLO low (U110 off). Reset: BANK_EN low (~RD). Trip 3.15-3.76 A HOT, 5.11-6.08 A ROOM.
 refs=[]
 refs.append(add(S,'Amplifier_Current:INA281A2','U','C1517405',{'5':'+5V_TRIP','3':'VBAT_P','4':'BANK_DRN','2':'GND','1':'BANK_IMON'}))
-refs+=[C(S,C100N,'+5V_TRIP'),R(S,'C22961','BANK_IMON','BANK_OVL_F'),C(S,'C29936','BANK_OVL_F'),R(S,'C23031','BANK_OVL_F','BANK_OVL_RX')]
-refs.append(add(S,'Transistor_FET:DMN6075S','Q','C20917',{'1':'BANK_OVL_ROOM','2':'GND','3':'BANK_OVL_RX'},Description='ROOM select (0x22 P13 high): 365k in, trip 5.52 A; off (default) = HOT 3.45 A'))
+refs+=[C(S,C100N,'+5V_TRIP'),R(S,'C22880','BANK_IMON','BANK_OVL_F'),C(S,'C14860','BANK_OVL_F'),C(S,'C14860','BANK_OVL_F'),R(S,'C22920','BANK_OVL_F','BANK_OVL_RX')]
+refs.append(add(S,'cards:TS5A3166','U','C353035',{'1':'BANK_OVL_RX','2':'GND','3':'GND','4':'BANK_OVL_ROOM','5':'+5V_TRIP'},
+    Description='ROOM select (0x22 P13 high): 25.5k in, trip 5.11-6.08 A; off (default, or unpowered) = HOT 3.15-3.76 A. NO leakage +/-100 nA'))
+refs.append(C(S,C100N,'+5V_TRIP'))
 refs.append(R(S,R100K,'BANK_OVL_ROOM','GND',Description='HOT threshold by default (expander in reset / P13 input)'))
 refs.append(add(S,'cards:TLV3012B','U','C20345924',{'6':'+5V_TRIP','2':'GND','3':'BANK_OVL_TH','4':'BANK_OVL_F','5':'BANK_OVL_REF','1':'BANK_OVL_TRIP_N'}))
 refs+=[C(S,C100N,'+5V_TRIP'),R(S,'C23056','BANK_OVL_REF','BANK_OVL_TH'),R(S,R100K,'BANK_OVL_TH','GND')]
-refs.append(add(S,'74xGxx:74AUP1G74','U','C548409',{'1':'GND','2':'GND','7':'BANK_OVL_TRIP_N','6':'BANK_EN','5':'BANK_OVL','3':'BANK_OVL_N','8':'+3V3_SAFE','4':'GND'},
-    Value='74LVC1G74DP-Q100H',Description='overload latch: ~SD = trip (level), ~RD = BANK_EN (firmware clears by toggling BANK_EN); ~Q -> 0x22 P14'))
+refs.append(add(S,'cards:74LVC1G74','U','C548409',{'1':'GND','2':'GND','7':'BANK_OVL_TRIP_N','6':'BANK_EN','5':'BANK_OVL','3':'BANK_OVL_N','8':'+3V3_SAFE','4':'GND'},
+    Value='74LVC1G74DP-Q100H',Note='Bank overload latch (Pass 2 MAJ-2). Symbol cards:74LVC1G74 (Pass 3 N13): DP pinout 1 CP, 2 D, 3 Q#, 4 GND, 5 Q, 6 RD#, 7 SD#, 8 VCC',Description='overload latch: ~SD = trip (level), ~RD = BANK_EN (firmware clears by toggling BANK_EN); ~Q -> 0x22 P14'))
 refs+=[C(S,C100N,'+3V3_SAFE'),R(S,R100K,'BANK_OVL','GND',Description='keeps the UVLO FET off while +3V3_SAFE is down (Ioff output)')]
-refs.append(add(S,'Transistor_FET:DMN6075S','Q','C20917',{'1':'BANK_OVL','2':'GND','3':'BANK_UVLO'},Description='overload latched: pulls U110 EN/UVLO < 0.3 V = bank off'))
+refs.append(add(S,'cards:AO3400A','Q','C20917',{'1':'BANK_OVL','2':'GND','3':'BANK_UVLO'},Description='overload latched: pulls U110 EN/UVLO < 0.3 V = bank off'))
 blocks_sp.append(('Bank overload cutoff: INA281A2, RC, TLV3012B, 1G74 latch',refs))
 for s in range(1,9):
     k=f'SL{s}'; refs=[]
@@ -268,10 +283,13 @@ for s in range(1,9):
         '12':f'{k}_BST','13':f'{k}_VBAT','14':f'{k}_GPD','15':f'{k}_GPU','17':f'{k}_DRN','18':'VBAT_SLOTS','20':'VBAT_SLOTS','4':None,'11':None,'19':None}); refs.append(u)
     refs.append(R(S,'C2903482','VBAT_SLOTS',f'{k}_DRN'))
     for i in range(2): refs.append(add(S,'Transistor_FET:BSC070N10NS5','Q',FET,{'5':f'{k}_DRN','1':f'{k}_VBAT','2':f'{k}_VBAT','3':f'{k}_VBAT','4':f'{k}_G'}))
-    refs+=[R(S,'C22808',f'{k}_GPU',f'{k}_G'),R(S,'C21189',f'{k}_GPD',f'{k}_G'),C(S,'C21122',f'{k}_G',f'{k}_GC'),R(S,'C22859',f'{k}_GC','GND'),
-           R(S,'C23348',f'{k}_ISCP','GND'),C(S,'C106218',f'{k}_TMR'),
+    refs+=gate_net(S,k,f'{k}_VBAT')
+    refs+=[R(S,'C23348',f'{k}_ISCP','GND'),C(S,'C106218',f'{k}_TMR'),
            R(S,R100K,f'{k}_TMR','GND',Description='latch-off (TPS48100 Eq 9); reset by toggling SLn_EN_N'),
-           C(S,'C1623',f'{k}_BST',f'{k}_VBAT'),R(S,R100K,'VBAT_SLOTS',f'{k}_UVLO'),R(S,'C22967',f'{k}_UVLO','GND')]
+           R(S,R100K,'VBAT_SLOTS',f'{k}_UVLO'),R(S,'C22967',f'{k}_UVLO','GND'),
+           C(S,'C1621',f'{k}_UVLO','GND',Description='UVLO filter 4.7 nF: tau 100 us (Pass 3 MAJ-B)'),
+           C(S,'C28233','VBAT_SLOTS',Description='VS cap 100 nF / 100 V (Pass 3 MAJ-D)'),
+           C(S,'C28233',f'{k}_VBAT',Description='SRC cap 100 nF / 100 V: 63 nF worst at 32 V >= 22 nF (Pass 3 MAJ-D)')]
     u3=add(S,'genctl:TPS2553DBVR','U','C55266',{'1':'+3V3','2':'GND','3':f'{k}_PWR_EN','4':f'{k}_PWR_FAULT_N','5':f'{k}_ILIM3','6':f'{k}_3V3'})
     refs+=[u3,R(S,'C22952',f'{k}_ILIM3','GND'),C(S,C100N,f'{k}_3V3')]
     g1=add(S,'cards:74LVC1G02','U','C7394016',{'1':f'{k}_EN_N','2':f'{k}_PRESENT_N','3':'GND','4':f'{k}_PWR_EN','5':'+3V3_SAFE'})
@@ -335,13 +353,14 @@ def blocks_for(f,c):
     rest=[k for k in keys if k[0] in two and k[0] not in owner]
     if rest: out.append(('Decoupling, bulk caps and rail-to-rail passives',rest))
     return out
-NOTES={'mcu':['Regenerated from the baseline netlist (tag baseline-2026-11-23-locked) with the Phase 2 pin re-use: PC10/PC11/PC12 = SPI3 SCK/MISO/MOSI (AF6) slot bus, SCK/MOSI through 33R source resistors; PE0/PE1/PD11 = slot CS decoder A0-A2, PD13 = decoder enable (100k pull-down = no slot selected); PC9 = SLOT_RST_N via 33R (100k pull-down = slots held in reset, also forces GLOBAL_OUT_ALLOW low); PB4 = SLOT_EXP_INT_N; PB5 = ID_MUX_RST_N (10k pull-up on the backplane: muxes run at MCU reset, pulse low to recover a stuck ID bus); PB6 = ID_WP_UNLOCK (100k pull-down, drives the ID_WP FET); PB7 = RC_ALLOW (100k pull-down: rail cut off until firmware allows it); PB10/PB11 = I2C2 SCL/SDA (AF4, DS12110 rev 10) for the slot ID bus; PA? MUXB_OUT ADC pin = SLOT_ANA; PE13 = SLOT_ANA_EN (U109 EN, 100k pull-down); MUX_A0-2 100k pull-downs. Baseline sheet notes: docs/modular/mainboard_sheet_notes.md.'],
+NOTES={'mcu':['Regenerated from the baseline netlist (tag baseline-2026-11-23-locked) with the Phase 2 pin re-use: PC10/PC11/PC12 = SPI3 SCK/MISO/MOSI (AF6) slot bus, SCK/MOSI through 33R source resistors; PE0/PE1/PD11 = slot CS decoder A0-A2, PD13 = decoder enable (100k pull-down = no slot selected); PC9 = SLOT_RST_N via 33R (100k pull-down = slots held in reset, also forces GLOBAL_OUT_ALLOW low); PB4 = SLOT_EXP_INT_N; PB5 = ID_MUX_RST_N (10k pull-up on the backplane: muxes run at MCU reset, pulse low to recover a stuck ID bus); PB6 = ID_WP_UNLOCK (100k pull-down, drives the ID_WP FET); PB7 = RC_ALLOW (100k pull-down: rail cut off until firmware allows it); PB10/PB11 = I2C2 SCL/SDA (AF4, DS12110 rev 10) for the slot ID bus; PC1 (pin 16, ADC123_INP11; was MUXB_OUT) = SLOT_ANA; PE13 = SLOT_ANA_EN (U109 EN, 100k pull-down); MUX_A0-2 100k pull-downs. Baseline sheet notes: docs/modular/mainboard_sheet_notes.md.'],
  'estop':['J23 E-stop feed -> SMDJ36CA TVS -> LM74700-Q1 ideal diode + BSC070N10NS5 (reverse battery to -65 V) -> VBAT_ESTOP_PRE: E-stop status sense (R251 -> U34), trip driver bias (R400). Rail cut TPS48100 + 2x BSC070N10NS5 + 2 mOhm (trip 15.8/20/24.8 A), latch-off (100k across C_TMR), enabled by WD_OK AND ESTOP_OK AND RC_ALLOW (74LVC1G11) -> VBAT_ESTOP: engine slot (fuel/crank/glow) and ADC readback R411. Re-arm after a trip: firmware toggles RC_ALLOW (PB7). Switched bleeder: RC_EN low -> AO3400A off -> IRLML0100 gate to +5V_TRIP -> 1.1k (2x 2.2k 2512 1 W) on VBAT_ESTOP: tau ~2 ms, 32 V -> 2 V in <= 6.6 ms; stuck-on rail-cut FETs at 32 V = 0.47 W per resistor. Replaces Q70/Q71 SQD40P10-40L, D137, R627.'],
  'io_core':['What stays of the baseline inputs + outputs sheets after the card split. Free U62 inputs read SL1-8_PRESENT_N; U63 S1 GLOW_SNSM, S2 ESTOP_TRIP_SNSM (new BAT54C clamp next to U63), S3-S8 GND. U30 AIN1-3 / U29 AIN2 unused (AI-4 card). U91 gates 3-4 and U92 gates 1-2 unused (inputs GND); U92 gate 4 = GLOBAL_OUT_ALLOW = SH_ALLOW (WD_OK AND NRST_S) AND SLOT_RST_N. Baseline sheet notes: docs/modular/mainboard_sheet_notes.md.'],
  'backplane':['Universal LV pinout docs/modular/slot_pinout_LV.csv; engine pinout cards/engine/engine_slot_pinout.csv. Slot ID straps: slot n = ID n-1, 0 = GND, 1 = open (card pull-up); IDP makes ID0..2+IDP odd. ID_WP is high (protected); PB6 -> AO3400A pulls it low for factory/calibration writes (all LV slots + engine). Expanders on I2C2: 0x20 P0 EN_N / P1 PWR_FAULT_N (TPS48100 FLT + TPS2553 FAULT), 0x21 P0 INT_N / P1 ARM_N, 0x22 P0 CARD_FAULT_N, P10 ENG_PRESENT_N, P11 BANK_EN, P12 BANK_FAULT_N, P13 BANK_OVL_ROOM (out), P14 BANK_OVL_N (in). Slot ANA_OUT -> 1k -> U109 (EN = PE13 SLOT_ANA_EN, 100k pull-down).'],
- 'slot_power':['Bank TPS48100 VBAT_P -> VBAT_SLOTS: 5 mOhm + 61.9k = SCP 22.4/28.6/35.0 A, 68 nF + 100k latch-off 517-1490 us (5x the slot timer). Hardware overload cutoff: INA281A2 -> 220k/1 uF -> TLV3012B -> 1G74 latch -> U110 UVLO low; trip 3.16-3.73 A HOT (default) or 5.06-5.98 A ROOM (0x22 P13), 32-217 ms inverse time; clear by toggling BANK_EN.',
-  'Each slot: TPS48100 + 2x BSC070N10NS5 + 5 mOhm + 24.3k = SCP 10.6/13.5/16.5 A, 4.7 nF + 100k latch-off 36-103 us. Gate dV/dt on bank and slots: 150R G1PU + 22 nF/10R to GND = 1.9 V/us. TPS2553 210k (+3V3 main, 110-150 mA), FAULT wired-OR with FLT onto SLn_PWR_FAULT_N.',
-  'PWR_EN = NOT EN_N AND NOT PRESENT_N (1G02); OUT_EN_N = NAND(PWR_EN, GLOBAL_OUT_ALLOW, NOT ARM_N) (1G04 + 1G10). +3V3_ID via 68R 1206. Ladder and math: MODULAR_ARCHITECTURE section 14, docs/modular/pass2_calc.txt.'],
+ 'slot_power':['Bank TPS48100 VBAT_P -> VBAT_SLOTS: 5 mOhm + 61.9k = SCP 21.2/28.6/36.3 A, 68 nF + 100k latch-off 517-1490 us (5.0x the slot timer). Hardware overload cutoff: INA281A2 -> 15.8k / 2x 10 uF -> TLV3012B -> 74LVC1G74 latch -> AO3400A pulls U110 UVLO low; trip 3.15-3.76 A HOT (default, tau 316 ms) or 5.11-6.08 A ROOM (TS5A3166 adds 25.5k, 0x22 P13, tau 195 ms); clear by toggling BANK_EN.',
+  'Each slot: TPS48100 + 2x BSC070N10NS5 + 5 mOhm + 24.3k = SCP 10.6/13.5/16.6 A, 4.7 nF + 100k latch-off 36-103 us. Gate network (bank + 8 slots): 470R G1PU; 2.2 nF C1 diode-steered (1N4148W + 10R, 1M bleed to SRC); 1N4148W gate -> BST clamp; BZT52C15 G-S; C_BST 1 uF / 50 V. Peak Vgs 14.8 V worst when SRC collapses; BST-SRC >= 9.01 V at turn-on.',
+  'UVLO nodes 4.7 nF (tau 100 us): supply dips cannot drop a channel before its SCP latches. 100 nF / 100 V on VBAT_SLOTS at U110 SRC and every slot VS, and on every SLn_VBAT. TPS2553 210k (+3V3 main, 110-150 mA), FAULT wired-OR with FLT onto SLn_PWR_FAULT_N.',
+  'PWR_EN = NOT EN_N AND NOT PRESENT_N (1G02); OUT_EN_N = NAND(PWR_EN, GLOBAL_OUT_ALLOW, NOT ARM_N) (1G04 + 1G10). +3V3_ID via 68R 1206. Math: MODULAR_ARCHITECTURE sections 14-15, docs/modular/pass3_calc.txt.'],
  'mtr_if':['J31.12 / J31.16 now carry MTR_ID_SCL / MTR_ID_SDA from ID mux 0x71 channel 1 (HV meter AT24CS32), matching J32.12 / J32.16 on genctl_meter. No spare harness pin for the meter WP: it stays on the meter TP3 bench pad.']}
 def write_root():
     fn=os.path.join(ROOT,'genctl.kicad_sch'); t=open(fn).read()
