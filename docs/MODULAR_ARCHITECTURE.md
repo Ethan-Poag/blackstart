@@ -1482,3 +1482,29 @@ Scope: the new hold-off, U5 EN divider and C602 change; the R_ILIM change and ev
 - Supply note (not new): TPS1HTC30 (HSO-5, BRK-4, engine card U8) is JLC stock 0 today; the BOM already plans it as consigned from the TI store.
 
 **Verdict: READY** (schematic level, local commits only; layout stays frozen, so the Pass 6 parts need a rework or respin plan when Ethan unfreezes it).
+
+## 21. Pass 8 full review (2026-11-24 HST, after Ethan's "make fixes to both, then do a full review pass on both")
+Review file: /workspace/review/modular_pass8.md.
+
+**Verdict: READY** (schematic level; layout frozen, Pass 6 parts are still rework/respin items).
+
+| # | Sev | Finding | Fix |
+|---|---|---|---|
+| P8-B1 | **Blocker** | The Pass 6 hold-off was drawn with **R1121 = R1123 = 2.2k and R1126 = 4.7k**. mainboard.py's constants `R22K='C4190'` and `R47K='C23162'` are really the 2.2k and 4.7k I2C pull-up parts.<br>Effects as drawn:<br>• hold-off threshold ≈ 20 V, so it never engages;<br>• U5 only enabled above VBAT_P ≈ 30 V, so there is no +3V3_SAFE backup at 12/24 V.<br>Pass 7 READY missed this because pass6_fix_calc hard-codes the intended values. | R1121/R1123 → 22k C31850 and R1126 → 47k C25819 (bce8509). pass6_fix_calc now starts with a drawn-value check that fails the rebuild gate. Model numbers are unchanged: worst Q2 SOA 0.89. |
+| P8-m1 | minor | The constant names invited the same mistake again | Renamed R2K2/R4K7. A check of every value-named constant against its part found no others wrong. |
+| P8-m2 | minor | Power-sheet SAFE DOMAIN text, the U5 Note and design_spec still said U5 is "always on" | Fixed in pass6_power_patch (idempotent), with a note_lint EDITS entry. |
+| P8-m3 | minor | Engine card U3 LM317M (UMW LM317MDT-TR) is rated 0 to +125 °C junction, but the analyses use −40 °F (−40 °C) corners | onsemi LM317MBDTRKG C179570: −40 to +125 °C, same DPAK and pinout, +$0.04. |
+
+Whole-design audits with no findings:
+- R/C Value vs MPN code on all 7 projects;
+- Description vs Value;
+- capacitor voltage ratings on battery-side nets;
+- all 259 LCSC codes vs the JLC MPN;
+- Pass 6 part values (U160/U161 networks, R1112–R1117, C1111/C1112, slot R_ILIM 3.09k ×8);
+- I2C pull-up intent (2.2k root, 4.7k per channel, as §10).
+
+Gates: ERC 0 ×7, BOM 0 mismatches, note_lint 0, pass6_fix_calc value check OK. kick_calc not rerun, because no part on its path changed.
+
+Info for the owner (no change made):
+- Any battery interruption longer than ≈ 0.15–0.35 ms while running resets the MCU, so FUEL_EN drops and the engine stops. Before Pass 6 the threshold was ≈ 1–2 ms. This is the accepted cost of the B1 hold-off.
+- Some HMI/mechanical parts are rated −20…−35 °C at the low end: buzzer, CM5 connector, FPC, tact switches, USB-C.
