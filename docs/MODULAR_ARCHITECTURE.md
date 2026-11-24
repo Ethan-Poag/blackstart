@@ -1175,6 +1175,24 @@ C_TMR 4.7 nF X7R → **1.0 nF C0G 50 V 5 %** (YAGEO CC0603JRNPO9BN102, C106246, 
 
   Parts on VBAT_P: LM5176 55 V, LMR36506 65 V, TPS1HTC30 (U68) 64 V, LM74800 (U1) 70 V, INA237 85 V, and 50 V electrolytic/MLCCs. At a 24 V battery the peak reaches the 50 V capacitor ratings; at 28.8–32 V it exceeds the LM5176's 55 V. A bigger TVS alone does not fix it. This gives the existing VBAT_P surge open item (DESIGN_NOTES s3c6f, "needs surge test") a defined source. Pass 3 was worse (4.7 nF slot timer: up to 95.2 V in the same model). **Needs a decision:** a VBAT_P clamp sized for the harness energy, a slower slot turn-off (trading FET energy), or a lower maximum battery voltage; plus bench test 16.7 #6.
 
+  > **Pass 5 pre-check (2026-11-23, `docs/modular/tools/kick_calc.py` → `docs/modular/kick_calc.txt`). The table above understates the problem. Schematic not changed (STOP-GATE).** The netlist audit found different real parts from the ones the Pass 4 model assumed:
+  > - D2 on VBAT_P is SMBJ40CA (600 W, VBR 44.4–49.1 V), not SMBJ33CA.
+  > - D1 on BAT_IN is SMDJ40CA, not SMDJ36CA.
+  > - C3/C4 are EEETG1J101UP 100 µF **63 V** with 800 mΩ at 100 kHz (not 80/250 mΩ). C5–C8 are 100 V X7S.
+  >
+  > Two effects were missing from the model:
+  > - **LM74800 U1 OV trips on the kick.** BAT_IN = VBAT_P + I·(Q1+Q2+R555) crosses 37.1–39.3 V, and the OV deglitch (3.98/5.4 µs, SNOSD95C) is shorter than the kick. Q2 then opens with hundreds of amps still in the harness, so BAT_IN rides D1.
+  > - **U65 TPS7B6950 IN abs max is 45 V** (it is fed from VBAT_P via D120 + C225 and holds the peak). This limit is tighter than the 52 V target.
+  >
+  > As built, worst of 16 corners at 24/28.8/32 V:
+  > - VBAT_P 67.4/77.5/84.0 V (LM5176 abs max 60 V)
+  > - BAT_IN 96.9/112.9/123.6 V (U1 A pin 70 V, C297 100 V)
+  > - U65 48.5/55.0/59.3 V
+  >
+  > Only diode-steered low-ESR bulk + SM8S36A + an OV-pin RC + HGATE C_dVdT meets every limit. That needs topology and protection-timing changes (see `kick_calc.txt`), so it is a decision for Ethan, not a Pass 5 drop-in. Model flags to confirm on the bench (16.7 #6):
+  > - Slot FET turn-off loss into the 50 nH slot loop adds about 35 K to the 68 K above.
+  > - As-built hot-plug Q2 Tj is about 301 °F (149 °C) at the slow-Cgd corner.
+
 **m1, on-state dead short at 32 V, Tc 149 °F (65 °C)** (ZthJC Diagram 4 superposition, RDS(on) 11.5 mΩ at 257 °F (125 °C)):
 
 | C_TMR | Rd2 | Hot FET peak | > 320 A for | E | Tj |

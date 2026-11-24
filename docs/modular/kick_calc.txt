@@ -1,0 +1,60 @@
+Pass 5 pre-check: VBAT_P / BAT_IN inductive kick when a slot latches off a dead short.
+Two-node model with the REAL power.kicad_sch parts (netlist audit 2026-11-23):
+  battery Vb - Rb - Lb -> BAT_IN [C297 220n X7R, D1 TVS, U1 A pin, OV divider R1/R2/R3 = 210k/49.9k/8.66k]
+  -> Q1 (ideal diode) + Q2 (U1 HGATE) + R555 2 mOhm, loop Lf -> VBAT_P [C5-C8 4x10u X7S 100 V, C38 2.2u, C39/C233,
+     C3/C4 2x EEETG1J101UP 100u 63 V (800 mOhm @100 kHz), D2 TVS] -> bank Rd1 -> VBAT_SLOTS (Cs) -> slot Ls/Rd2 dead short.
+Slot latch at t_SC(1.0 nF C0G, max) + t_prop = 25.2 us, slot FET turn-off ramp t_off (G1PD 2 A: 0.5 us).
+U1 modes: 'on' = Q2 forced on (case a); 'ov' = real LM74800 OV: BAT_IN/31.01 > V_OVR (1.195/1.267 V) for t_deg
+(3.98 typ / 5.4 max us), then HGATE 168 mA sink -> Q2 off in ~0.2 us; Q2 then blocks until V(BR)DSS (100 V min,
+avalanche modelled 110 V + 20 mOhm); Q1 blocks reverse. Optional C_OV on the OV pin (RC with the divider Thevenin R).
+TVS: V = VBR_max + Rd*I, Rd = (VC - VBR_max)/Ipp (datasheet/JLC values), linear above Ipp.
+No load current (worst case). numpy-vectorised over the reviewer grid Rb 15/35 mOhm x Lb 0.5/2 uH x Rd2 12/25 mOhm x
+cap corner (nominal / cold-aged).
+
+Limits: VBAT_P target <= 52 V (LM5176 U2 VIN abs max 60 V, ROC 55 V; TPS1HTC30 U68 VS 64 V; TPS26621 U89 IN 62 V; LMR36506 U5 70 V)
+        BAT_IN target <= 62 V (LM74800 U1 A abs max 70 V; C297 100 V); U65 TPS7B6950 IN abs max 45 V (via D120 SS110 + C225 10 uF)
+Worst of 16 corners (Rb 15/35 mOhm x Lb 0.5/2 uH x Rd2 12/25 mOhm x caps nominal/cold-aged); slot latch 25.2 us; Tj rise incl. 0.5 us turn-off loss, Tc 149 F (65 C) start
+
+scenario                                                          Vbat  VBAT_P  BAT_IN    U65  OVtrip slotIpk  slotdTj iL@latch   E_D2   E_D1
+A  as built: D1 SMDJ40CA, D2 SMBJ40CA, C3/C4 2x EEETG1J101UP      12.6   39.4V   46.4V  30.2V    1/16    231A     16K     224A    0mJ    0mJ
+A  as built: D1 SMDJ40CA, D2 SMBJ40CA, C3/C4 2x EEETG1J101UP      24.0   67.4V   96.9V  48.5V   16/16    440A     57K     426A    6mJ   36mJ
+A  as built: D1 SMDJ40CA, D2 SMBJ40CA, C3/C4 2x EEETG1J101UP      28.8   77.5V  112.9V  55.0V   16/16    528A     82K     511A   14mJ   65mJ
+A  as built: D1 SMDJ40CA, D2 SMBJ40CA, C3/C4 2x EEETG1J101UP      32.0   84.0V  123.6V  59.3V   16/16    587A    102K     568A   21mJ   88mJ
+B  D1+D2 -> SM8S36A (6.6 kW DO-218AB)                             12.6   39.4V   44.6V  30.2V    1/16    231A     16K     224A    0mJ    0mJ
+B  D1+D2 -> SM8S36A (6.6 kW DO-218AB)                             24.0   55.6V   63.3V  38.8V   16/16    440A     57K     426A   21mJ   50mJ
+B  D1+D2 -> SM8S36A (6.6 kW DO-218AB)                             28.8   60.4V   73.0V  41.1V   16/16    528A     82K     511A   35mJ   93mJ
+B  D1+D2 -> SM8S36A (6.6 kW DO-218AB)                             32.0   63.5V   80.0V  42.7V   16/16    587A    102K     568A   45mJ  130mJ
+C  B + C_OV 100 nF on U1 OV pin                                   12.6   39.4V   39.5V  30.2V    0/16    231A     16K     224A    0mJ    0mJ
+C  B + C_OV 100 nF on U1 OV pin                                   24.0   55.6V   56.5V  41.0V    0/16    440A     57K     426A   27mJ   31mJ
+C  B + C_OV 100 nF on U1 OV pin                                   28.8   60.4V   61.8V  44.3V    0/16    528A     82K     511A   52mJ   59mJ
+C  B + C_OV 100 nF on U1 OV pin                                   32.0   63.5V   65.2V  46.6V    0/16    587A    102K     568A   74mJ   85mJ
+D  D2 SM8S36A + C3/C4 -> 4x EEH-ZU1J151V direct on VBAT_P         12.6   17.6V   17.7V  17.0V    0/16    420A     25K     194A    0mJ    0mJ
+D  D2 SM8S36A + C3/C4 -> 4x EEH-ZU1J151V direct on VBAT_P         24.0   33.5V   33.8V  32.9V    0/16    800A     91K     370A    0mJ    0mJ
+D  D2 SM8S36A + C3/C4 -> 4x EEH-ZU1J151V direct on VBAT_P         28.8   36.6V  105.2V  35.8V    4/16    960A    132K     444A    0mJ   48mJ
+D  D2 SM8S36A + C3/C4 -> 4x EEH-ZU1J151V direct on VBAT_P         32.0   36.5V  131.1V  35.6V    8/16   1067A    163K     493A    0mJ   98mJ
+E  D + C_OV 100 nF                                                12.6   17.6V   17.7V  17.0V    0/16    420A     25K     194A    0mJ    0mJ
+E  D + C_OV 100 nF                                                24.0   33.5V   33.8V  32.9V    0/16    800A     91K     370A    0mJ    0mJ
+E  D + C_OV 100 nF                                                28.8   40.2V   40.6V  39.5V    0/16    960A    132K     444A    0mJ    0mJ
+E  D + C_OV 100 nF                                                32.0   44.6V   45.1V  43.8V    0/16   1067A    163K     493A    4mJ    0mJ
+F  D2 SM8S36A + 4x ZU1J151V diode-steered (RCD) + C_OV 100 nF     12.6   17.9V   18.1V  17.3V    0/16    226A     15K     225A    0mJ    0mJ
+F  D2 SM8S36A + 4x ZU1J151V diode-steered (RCD) + C_OV 100 nF     24.0   33.8V   34.3V  33.2V    0/16    430A     53K     429A    0mJ    0mJ
+F  D2 SM8S36A + 4x ZU1J151V diode-steered (RCD) + C_OV 100 nF     28.8   40.6V   41.1V  39.9V    0/16    516A     77K     515A    0mJ    0mJ
+F  D2 SM8S36A + 4x ZU1J151V diode-steered (RCD) + C_OV 100 nF     32.0   44.9V   45.6V  43.7V    0/16    573A     95K     572A    4mJ    0mJ
+G  F with C_OV 47 nF                                              12.6   17.9V   18.1V  17.3V    0/16    226A     15K     225A    0mJ    0mJ
+G  F with C_OV 47 nF                                              24.0   33.8V   34.3V  33.2V    0/16    430A     53K     429A    0mJ    0mJ
+G  F with C_OV 47 nF                                              28.8   40.6V   41.1V  39.9V    0/16    516A     77K     515A    0mJ    0mJ
+G  F with C_OV 47 nF                                              32.0   44.9V   45.6V  43.7V    0/16    573A     95K     572A    4mJ    0mJ
+H  F with 2x ZU1J151V                                             12.6   20.3V   20.5V  19.6V    0/16    226A     15K     225A    0mJ    0mJ
+H  F with 2x ZU1J151V                                             24.0   38.5V   38.9V  37.7V    0/16    430A     53K     429A    0mJ    0mJ
+H  F with 2x ZU1J151V                                             28.8   45.7V   46.3V  43.7V    0/16    516A     77K     515A    7mJ    0mJ
+H  F with 2x ZU1J151V                                             32.0   49.0V   50.0V  45.7V    0/16    573A     95K     572A   38mJ    1mJ
+
+Hot-plug at 32 V, Q2 turn-on with HGATE 75 uA (no C_dVdT in the as-built schematic), Lb 0.5 uH, Rb 15 mOhm, Tc 149 F (65 C):
+  as built (2x EEETG1J101UP)                         Cgd  28 pF: inrush pk   87 A, Q2 E   29 mJ, Q2 dTj   67 K -> Tj  270 F (132 C), F1 I2t 0.29 A2s, ramp 0.5 ms
+  as built (2x EEETG1J101UP)                         Cgd 200 pF: inrush pk   53 A, Q2 E   47 mJ, Q2 dTj   84 K -> Tj  301 F (149 C), F1 I2t 0.22 A2s, ramp 0.6 ms
+  4x ZU1J151V direct                                 Cgd  28 pF: inrush pk  359 A, Q2 E  223 mJ, Q2 dTj  424 K -> Tj  912 F (489 C), F1 I2t 5.42 A2s, ramp 0.2 ms
+  4x ZU1J151V direct                                 Cgd 200 pF: inrush pk  208 A, Q2 E  263 mJ, Q2 dTj  448 K -> Tj  956 F (513 C), F1 I2t 3.31 A2s, ramp 0.3 ms
+  4x ZU1J151V diode-steered                          Cgd  28 pF: inrush pk  343 A, Q2 E  204 mJ, Q2 dTj  388 K -> Tj  847 F (453 C), F1 I2t 4.96 A2s, ramp 0.2 ms
+  4x ZU1J151V diode-steered                          Cgd 200 pF: inrush pk  204 A, Q2 E  244 mJ, Q2 dTj  418 K -> Tj  901 F (483 C), F1 I2t 3.12 A2s, ramp 0.3 ms
+  4x ZU1J151V diode-steered + C_dVdT 22 nF HGATE-GND Cgd  28 pF: inrush pk    2 A, Q2 E  309 mJ, Q2 dTj   40 K -> Tj  220 F (105 C), F1 I2t 0.04 A2s, ramp 10.4 ms
+  4x ZU1J151V diode-steered + C_dVdT 22 nF HGATE-GND Cgd 200 pF: inrush pk    2 A, Q2 E  309 mJ, Q2 dTj   39 K -> Tj  220 F (104 C), F1 I2t 0.04 A2s, ramp 10.5 ms
