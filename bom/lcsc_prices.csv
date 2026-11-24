@@ -228,3 +228,6 @@
 "meter","C98220","","Extended","JLC 9515841; LCSC 5263500","0.0023","0.0023","JLC parts API live","2026-11-21 HST"
 "main","C6053","","Extended","JLC 12517","0.1164","0.1164","JLC parts API live 2026-11-22 ~12:37 PM HST","2026-11-22 HST (Batch 31)"
 "main","C29718","","Basic","JLC 1271372","0.0071","0.0071","JLC parts API live 2026-11-22 ~12:37 PM HST","2026-11-22 HST (Batch 31)"
+"main","C313105","CC0603KRX7R0BB223","Extended","JLC 77944","0.0128","0.0128","JLC parts API live (split P7, from m7-modular)","2026-11-23 HST"
+"main","C8326","MMBT5401","Basic","JLC 689253","0.0143","0.0143","JLC parts API live (split P7, from m7-modular)","2026-11-24 HST"
+"main","C31850","0603WAF2202T5E","Basic","JLC 2124687","0.0042","0.0042","JLC parts API live (split P7, from m7-modular)","2026-11-24 HST"

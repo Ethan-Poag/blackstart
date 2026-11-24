@@ -1,0 +1,54 @@
+Netlist diff m7-split 5bac9fe -> m7-split-p7 (genctl main, kicad-cli 9.0.2). Parts 1147 -> 1161
+Added parts:
+  C1121 100n C14663
+  C601 22n 100V C313105
+  C602 1u 50V C28323
+  D401 1N4148W C81598
+  D402 BAT54C C37704
+  Q121 MMBT5401 C8326
+  Q122 MMBT3904 C20526
+  R1001 1k C21190
+  R1121 22k C31850
+  R1122 68k C23231
+  R1123 22k C31850
+  R1124 100k C25803
+  R1125 100k C25803
+  R1126 47k C25819
+Removed parts: none
+Changed value/LCSC: none
+Pin net changes (every one intended: new parts, BB_UVLO named net for U2 EN/UVLO + R4/R5, U5.3 EN moved off VBAT_P):
+  C1121.1  None -> HO_F
+  C1121.2  None -> GND
+  C601.1  None -> LM748_DVDT
+  C601.2  None -> GND
+  C602.1  None -> BB_UVLO
+  C602.2  None -> GND
+  D401.1  None -> HO_E
+  D401.2  None -> BAT_IN
+  D402.1  None -> BB_UVLO
+  D402.2  None -> U5_EN
+  D402.3  None -> HO_K
+  Q121.1  None -> HO_B
+  Q121.2  None -> HO_E
+  Q121.3  None -> HO_C
+  Q122.1  None -> HO_F
+  Q122.2  None -> GND
+  Q122.3  None -> HO_K
+  R1001.1  None -> LM748_HGATE
+  R1001.2  None -> LM748_DVDT
+  R1121.1  None -> HO_E
+  R1121.2  None -> HO_B
+  R1122.1  None -> HO_B
+  R1122.2  None -> VBAT_P
+  R1123.1  None -> HO_C
+  R1123.2  None -> HO_F
+  R1124.1  None -> HO_F
+  R1124.2  None -> GND
+  R1125.1  None -> VBAT_P
+  R1125.2  None -> U5_EN
+  R1126.1  None -> U5_EN
+  R1126.2  None -> GND
+  R4.2  UVLO) -> BB_UVLO
+  R5.1  UVLO) -> BB_UVLO
+  U2.1  UVLO) -> BB_UVLO
+  U5.3  VBAT_P -> U5_EN

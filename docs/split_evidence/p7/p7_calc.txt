@@ -1,0 +1,110 @@
+m7-split P7 (2026-11-24 HST): Q2 BSC070N10NS5 start-up with the front-end fix ported from m7-modular (MOD sections 19/20 + Pass 8):
+R1001 1k + C601 22 nF HGATE dV/dt, C602 1 uF on U2 EN/UVLO, U5 EN divider R1125 100k / R1126 47k, Vds hold-off D401/Q121/R1121-R1124/
+C1121/Q122/D402. Model, SOA curve and hold-off corners copied verbatim from m7-modular docs/modular/tools/pass6_fix_calc.py and
+kick_calc.py (soa_i/soa_check); only the VBAT_P capacitance differs (split: + 15 x 100 nF TPS1HTC30 VS caps + C225 10 uF behind D120).
+Also checks the drawn part values in power.kicad_sch (m7-modular Pass 8 found R1121/R1123 = 2.2k, R1126 = 4.7k there).
+  R1001  1k        C21190   OK
+  C601   22n 100V  C313105  OK
+  C602   1u 50V    C28323   OK
+  D401   1N4148W   C81598   OK
+  Q121   MMBT5401  C8326    OK
+  R1121  22k       C31850   OK
+  R1122  68k       C23231   OK
+  R1123  22k       C31850   OK
+  R1124  100k      C25803   OK
+  C1121  100n      C14663   OK
+  Q122   MMBT3904  C20526   OK
+  D402   BAT54C    C37704   OK
+  R1125  100k      C25803   OK
+  R1126  47k       C25819   OK
+  R4     100k      C25803   OK
+  R5     33k       C4216    OK
+
+VBAT_P effective capacitance 234 uF (m7-modular 228 uF)
+
+== 1. Hold-off threshold vs temperature (Vth = Vf(D401) + Veb(Q121) x 90k/22k)
+  cold -40 F (-40 C)   Vf 0.72 V, Veb 0.75 V -> Vth 3.79 V
+  room 77 F (25 C)     Vf 0.55 V, Veb 0.62 V -> Vth 3.09 V
+  hot 185 F (85 C)     Vf 0.42 V, Veb 0.50 V -> Vth 2.47 V
+
+== 2. U5 EN divider 100k / 47k: on at VBAT_P 3.63-4.25 V, EN at 57.6 V clamp = 18.4 V (abs max VIN+0.3)
+
+== 3. Q2 cold start (U2 70 W and U5 2.1 W held off until BAT_IN - VBAT_P < Vth; C602 from 0 V)
+  12.0 V 39 uA cold  | Q2 E    18 mJ, ramp   10.5 ms, SOA ratio  0.06 OK
+  12.0 V 39 uA hot   | Q2 E    17 mJ, ramp   10.5 ms, SOA ratio  0.06 OK
+  12.0 V 75 uA cold  | Q2 E    17 mJ, ramp    5.5 ms, SOA ratio  0.10 OK
+  12.0 V 75 uA hot   | Q2 E    17 mJ, ramp    5.5 ms, SOA ratio  0.10 OK
+  13.8 V 39 uA cold  | Q2 E    23 mJ, ramp   11.5 ms, SOA ratio  0.09 OK
+  13.8 V 39 uA hot   | Q2 E    23 mJ, ramp   11.5 ms, SOA ratio  0.09 OK
+  13.8 V 75 uA cold  | Q2 E    23 mJ, ramp    6.0 ms, SOA ratio  0.14 OK
+  13.8 V 75 uA hot   | Q2 E    22 mJ, ramp    6.0 ms, SOA ratio  0.14 OK
+  24.0 V 39 uA cold  | Q2 E    68 mJ, ramp   17.3 ms, SOA ratio  0.39 OK
+  24.0 V 39 uA hot   | Q2 E    67 mJ, ramp   17.3 ms, SOA ratio  0.39 OK
+  24.0 V 75 uA cold  | Q2 E    68 mJ, ramp    9.0 ms, SOA ratio  0.49 OK
+  24.0 V 75 uA hot   | Q2 E    67 mJ, ramp    9.0 ms, SOA ratio  0.49 OK
+  28.8 V 39 uA cold  | Q2 E    97 mJ, ramp   20.0 ms, SOA ratio  0.67 OK
+  28.8 V 39 uA hot   | Q2 E    97 mJ, ramp   20.0 ms, SOA ratio  0.67 OK
+  28.8 V 75 uA cold  | Q2 E    97 mJ, ramp   10.4 ms, SOA ratio  0.73 OK
+  28.8 V 75 uA hot   | Q2 E    97 mJ, ramp   10.4 ms, SOA ratio  0.73 OK
+  32.0 V 39 uA cold  | Q2 E   120 mJ, ramp   21.9 ms, SOA ratio  0.91 OK
+  32.0 V 39 uA hot   | Q2 E   120 mJ, ramp   21.9 ms, SOA ratio  0.91 OK
+  32.0 V 75 uA cold  | Q2 E   120 mJ, ramp   11.4 ms, SOA ratio  0.91 OK
+  32.0 V 75 uA hot   | Q2 E   120 mJ, ramp   11.4 ms, SOA ratio  0.91 OK
+  (m7-split before P7, no C601: 32 V hot cold start SOA ratio 0.97-0.99, Q2 dTj 85-91 K, inrush 36-53 A peak: /workspace/review/split_hp.txt)
+
+== 4. Q2 warm restart (C602 charged; from VBAT_P 4 V with U2 restarting, and from Vb/2 with U2 at FULL load at t = 0)
+  12.0   4.0 V 39 uA cold | engage   0.17 ms, U2 off   0.19 ms, U2 back    -   ms | Q2 E     9 mJ, SOA ratio  0.03 OK
+  12.0   4.0 V 39 uA hot  | engage   0.11 ms, U2 off   0.20 ms, U2 back    -   ms | Q2 E     9 mJ, SOA ratio  0.03 OK
+  12.0   4.0 V 75 uA cold | engage   0.17 ms, U2 off   0.19 ms, U2 back    -   ms | Q2 E     9 mJ, SOA ratio  0.05 OK
+  12.0   4.0 V 75 uA hot  | engage   0.11 ms, U2 off   0.20 ms, U2 back    -   ms | Q2 E     9 mJ, SOA ratio  0.05 OK
+  12.0   6.0 V 39 uA cold | engage   0.17 ms, U2 off   0.15 ms, U2 back    -   ms | Q2 E     9 mJ, SOA ratio  0.03 OK
+  12.0   6.0 V 39 uA hot  | engage   0.11 ms, U2 off   0.15 ms, U2 back    -   ms | Q2 E     9 mJ, SOA ratio  0.03 OK
+  12.0   6.0 V 75 uA cold | engage   0.17 ms, U2 off   0.15 ms, U2 back    -   ms | Q2 E     9 mJ, SOA ratio  0.05 OK
+  12.0   6.0 V 75 uA hot  | engage   0.11 ms, U2 off   0.15 ms, U2 back    -   ms | Q2 E     9 mJ, SOA ratio  0.05 OK
+  13.8   4.0 V 39 uA cold | engage   0.14 ms, U2 off   0.19 ms, U2 back    -   ms | Q2 E    13 mJ, SOA ratio  0.05 OK
+  13.8   4.0 V 39 uA hot  | engage   0.09 ms, U2 off   0.20 ms, U2 back    -   ms | Q2 E    13 mJ, SOA ratio  0.05 OK
+  13.8   4.0 V 75 uA cold | engage   0.14 ms, U2 off   0.19 ms, U2 back    -   ms | Q2 E    13 mJ, SOA ratio  0.07 OK
+  13.8   4.0 V 75 uA hot  | engage   0.09 ms, U2 off   0.20 ms, U2 back    -   ms | Q2 E    12 mJ, SOA ratio  0.07 OK
+  13.8   6.9 V 39 uA cold | engage   0.14 ms, U2 off   0.29 ms, U2 back    -   ms | Q2 E    16 mJ, SOA ratio  0.09 OK
+  13.8   6.9 V 39 uA hot  | engage   0.09 ms, U2 off   0.20 ms, U2 back    -   ms | Q2 E    12 mJ, SOA ratio  0.05 OK
+  13.8   6.9 V 75 uA cold | engage   0.14 ms, U2 off   0.29 ms, U2 back    -   ms | Q2 E    16 mJ, SOA ratio  0.12 OK
+  13.8   6.9 V 75 uA hot  | engage   0.09 ms, U2 off   0.20 ms, U2 back    -   ms | Q2 E    12 mJ, SOA ratio  0.08 OK
+  24.0   4.0 V 39 uA cold | engage   0.08 ms, U2 off   0.23 ms, U2 back    -   ms | Q2 E    50 mJ, SOA ratio  0.24 OK
+  24.0   4.0 V 39 uA hot  | engage   0.05 ms, U2 off   0.18 ms, U2 back    -   ms | Q2 E    48 mJ, SOA ratio  0.24 OK
+  24.0   4.0 V 75 uA cold | engage   0.08 ms, U2 off   0.23 ms, U2 back    -   ms | Q2 E    49 mJ, SOA ratio  0.35 OK
+  24.0   4.0 V 75 uA hot  | engage   0.05 ms, U2 off   0.18 ms, U2 back    -   ms | Q2 E    48 mJ, SOA ratio  0.34 OK
+  24.0  12.0 V 39 uA cold | engage   0.08 ms, U2 off   0.25 ms, U2 back    -   ms | Q2 E    30 mJ, SOA ratio  0.17 OK
+  24.0  12.0 V 39 uA hot  | engage   0.05 ms, U2 off   0.18 ms, U2 back    -   ms | Q2 E    26 mJ, SOA ratio  0.10 OK
+  24.0  12.0 V 75 uA cold | engage   0.08 ms, U2 off   0.25 ms, U2 back    -   ms | Q2 E    30 mJ, SOA ratio  0.24 OK
+  24.0  12.0 V 75 uA hot  | engage   0.05 ms, U2 off   0.18 ms, U2 back    -   ms | Q2 E    26 mJ, SOA ratio  0.17 OK
+  28.8   4.0 V 39 uA cold | engage   0.06 ms, U2 off   0.24 ms, U2 back  17.03 ms | Q2 E    75 mJ, SOA ratio  0.46 OK
+  28.8   4.0 V 39 uA hot  | engage   0.04 ms, U2 off   0.17 ms, U2 back  17.71 ms | Q2 E    74 mJ, SOA ratio  0.45 OK
+  28.8   4.0 V 75 uA cold | engage   0.06 ms, U2 off   0.24 ms, U2 back    -   ms | Q2 E    75 mJ, SOA ratio  0.55 OK
+  28.8   4.0 V 75 uA hot  | engage   0.04 ms, U2 off   0.17 ms, U2 back    -   ms | Q2 E    74 mJ, SOA ratio  0.54 OK
+  28.8  14.4 V 39 uA cold | engage   0.06 ms, U2 off   0.24 ms, U2 back  11.11 ms | Q2 E    39 mJ, SOA ratio  0.21 OK
+  28.8  14.4 V 39 uA hot  | engage   0.04 ms, U2 off   0.17 ms, U2 back  11.79 ms | Q2 E    34 mJ, SOA ratio  0.13 OK
+  28.8  14.4 V 75 uA cold | engage   0.06 ms, U2 off   0.24 ms, U2 back    -   ms | Q2 E    39 mJ, SOA ratio  0.33 OK
+  28.8  14.4 V 75 uA hot  | engage   0.04 ms, U2 off   0.17 ms, U2 back    -   ms | Q2 E    34 mJ, SOA ratio  0.24 OK
+  32.0   4.0 V 39 uA cold | engage   0.06 ms, U2 off   0.24 ms, U2 back  18.48 ms | Q2 E    95 mJ, SOA ratio  0.65 OK
+  32.0   4.0 V 39 uA hot  | engage   0.04 ms, U2 off   0.17 ms, U2 back  19.17 ms | Q2 E    93 mJ, SOA ratio  0.64 OK
+  32.0   4.0 V 75 uA cold | engage   0.06 ms, U2 off   0.24 ms, U2 back    -   ms | Q2 E    95 mJ, SOA ratio  0.71 OK
+  32.0   4.0 V 75 uA hot  | engage   0.04 ms, U2 off   0.17 ms, U2 back    -   ms | Q2 E    93 mJ, SOA ratio  0.70 OK
+  32.0  16.0 V 39 uA cold | engage   0.06 ms, U2 off   0.24 ms, U2 back  11.65 ms | Q2 E    45 mJ, SOA ratio  0.25 OK
+  32.0  16.0 V 39 uA hot  | engage   0.04 ms, U2 off   0.17 ms, U2 back  12.34 ms | Q2 E    41 mJ, SOA ratio  0.17 OK
+  32.0  16.0 V 75 uA cold | engage   0.06 ms, U2 off   0.24 ms, U2 back    -   ms | Q2 E    45 mJ, SOA ratio  0.39 OK
+  32.0  16.0 V 75 uA hot  | engage   0.04 ms, U2 off   0.17 ms, U2 back    -   ms | Q2 E    41 mJ, SOA ratio  0.28 OK
+  32.0   4.0 V 39 uA cold C602 0.5 uF (derated) | U2 back  16.96 ms | SOA ratio  0.64
+  32.0   4.0 V 39 uA hot  C602 0.5 uF (derated) | U2 back  17.67 ms | SOA ratio  0.63
+  32.0  16.0 V 39 uA cold C602 0.5 uF (derated) | U2 back  10.13 ms | SOA ratio  0.15
+  32.0  16.0 V 39 uA hot  C602 0.5 uF (derated) | U2 back  10.84 ms | SOA ratio  0.14
+  Without the hold-off but with C601 (why the hold-off is needed once HGATE is slow):
+  24.0  12.0 V no hold-off | SOA ratio  1.08
+  32.0  16.0 V no hold-off | SOA ratio  1.85
+
+WORST SOA ratio with the P7 front end, all corners: 0.91 (OK)
+  U2 restart after hold-off release at  9.0 V:   6.4- 17.4 ms (then 7.5 ms soft start)
+  U2 restart after hold-off release at 13.8 V:   3.4-  9.1 ms (then 7.5 ms soft start)
+  U2 restart after hold-off release at 24.0 V:   1.7-  4.5 ms (then 7.5 ms soft start)
+  U2 restart after hold-off release at 32.0 V:   1.3-  3.2 ms (then 7.5 ms soft start)
+EXIT 0
+CDONE
