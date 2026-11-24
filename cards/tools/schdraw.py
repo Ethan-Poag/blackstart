@@ -440,7 +440,7 @@ def run(D,outdir,title):
     GL=getattr(D,'glabels',set())
     out.append('(kicad_sch (version 20250114) (generator "eeschema") (generator_version "9.0")')
     out.append(f'(uuid "{fileuuid}")'); out.append(f'(paper "{D.paper}")')
-    out.append('(title_block (title %s) (date "2026-11-23") (rev "M-mod P5") (company "Project Blackstart") (comment 1 %s) (comment 2 %s))'%(
+    out.append('(title_block (title %s) (date "2026-11-24") (rev "M-mod P6") (company "Project Blackstart") (comment 1 %s) (comment 2 %s))'%(
         q(title),q('cards/tools (schdraw.py) from tag baseline-2026-11-23-locked; BaselineRef = old ref'),q('One flat page: functional blocks, wired inside, labels between blocks')))
     out.append('(lib_symbols '+' '.join(dump(L) for L in c.libs.values())+' '+dump(c.srclibs['power:GND'])+' '+dump(c.srclibs['power:PWR_FLAG'])+' '+dump(c.srclibs['power:+3V3'])+')')
     cnt=collections.Counter()

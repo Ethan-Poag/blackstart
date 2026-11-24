@@ -1,20 +1,20 @@
 LCSC,Value,Qty,From
 C7498149,CR2032,1,mainboard
 C94599,MLT-8530,1,mainboard
-C28233,100n,76,ai4+brk4+di8+engine+hso5+mainboard
-C14663,100n,171,ai4+brk4+di8+engine+hso5+hv meter+mainboard
+C28233,100n,77,ai4+brk4+di8+engine+hso5+mainboard
+C14663,100n,174,ai4+brk4+di8+engine+hso5+hv meter+mainboard
 C178628,100u 63V,2,mainboard
 C576517,10u,5,mainboard
 C1603,220p,1,mainboard
 C1622,47n,2,mainboard
 C21117,33n,21,hv meter+mainboard
-C1588,1n,4,engine+mainboard
+C1588,1n,6,engine+mainboard
 C29823,4.7u,4,mainboard
-C28323,1u,2,mainboard
+C28323,1u,3,mainboard
 C12891,22u,17,mainboard
 C14858,100p,4,hv meter+mainboard
-C15850,10u,22,hv meter+mainboard
-C170101,2.2u,13,brk4+engine+hso5+mainboard
+C15850,10u,21,hv meter+mainboard
+C170101,2.2u,14,brk4+engine+hso5+mainboard
 C15849,1u,16,mainboard
 C68361,47u,2,mainboard
 C41017,4.7n,3,mainboard
@@ -23,8 +23,8 @@ C1549,18p,2,mainboard
 C1679,6.8p,2,mainboard
 none (consigned; Mouser 594-MAL223051003E3),20F 3.0V,2,mainboard
 C2932477,47u,3,mainboard
-C1621,4.7n,10,mainboard
-C57112,10n,15,mainboard
+C1621,4.7n,11,mainboard
+C57112,10n,16,mainboard
 C1623,470n,4,engine+mainboard
 C15725,100n,2,ai4+mainboard
 C1945,100n,22,ai4+di8+engine+mainboard
@@ -58,15 +58,15 @@ C16015,SS36,1,mainboard
 C9421,LM4040A25,2,ai4+mainboard
 C2500,BAV99,18,ai4+engine+hv meter+mainboard
 C113970,SMAJ40CA,22,ai4+di8+engine+mainboard
-C8592,BAT54S,3,mainboard
+C8592,BAT54S,9,mainboard
 C224075,SMDJ36CA,1,mainboard
-C81598,1N4148W,10,ai4+engine+mainboard
+C81598,1N4148W,11,ai4+engine+mainboard
 C124205,BAT54WS-7-F,1,mainboard
 C21561,BZT52C30,2,ai4+mainboard
 C2104,BZT52C15,4,di8+engine+mainboard
 C113969,SMAJ40A,1,mainboard
-C37704,BAT54C,10,brk4+hso5+mainboard
-C14281,SS310B,8,mainboard
+C37704,BAT54C,11,brk4+hso5+mainboard
+C14281,SS310B,9,mainboard
 C27568256,1210L020/72WR,2,di8+mainboard
 C1002,600R@100MHz,1,mainboard
 C3579760,"PC 5/4-GF-7,62 (battery in)",4,hv meter+mainboard
@@ -93,16 +93,17 @@ C167920,1u,1,mainboard
 C76584,ACT45B-510-2P,2,mainboard
 C79272,10u,1,mainboard
 C534364,BSC070N10NS5,15,engine+mainboard
-C20526,MMBT3904,36,ai4+brk4+di8+engine+hso5+mainboard
+C20526,MMBT3904,37,ai4+brk4+di8+engine+hso5+mainboard
 C10493,SI2309CDS,3,di8+engine+mainboard
 C53658,IRLML0100,9,ai4+di8+engine+mainboard
 C347476,AO3401A,1,mainboard
 C426787,BCP56-16,2,ai4+mainboard
 C20917,AO3400A,3,mainboard
-C22952,210k,9,mainboard
+C8326,MMBT5401,1,mainboard
+C22952,210k,10,mainboard
 C23184,49.9k,3,mainboard
 C23114,8.66k,1,mainboard
-C25803,100k,122,ai4+brk4+di8+engine+hso5+mainboard
+C25803,100k,125,ai4+brk4+di8+engine+hso5+mainboard
 C4216,33k,16,di8+engine+mainboard
 C23266,93.1k,1,mainboard
 C22964,27.4k,1,mainboard
@@ -119,10 +120,10 @@ C12447,40.2k,3,engine+mainboard
 C23053,43.2k,1,mainboard
 C22893,18.7k,1,mainboard
 C17927,1M,3,mainboard
-C21190,1k,77,ai4+engine+hv meter+mainboard
-C4190,2.2k,8,engine+mainboard
+C21190,1k,78,ai4+engine+hv meter+mainboard
+C4190,2.2k,10,engine+mainboard
 C17917,150R,3,mainboard
-C23162,4.7k,37,brk4+hso5+mainboard
+C23162,4.7k,38,brk4+hso5+mainboard
 C23237,715k,1,mainboard
 C23003,33.2k,17,brk4+di8+hso5+mainboard
 C22974,29.4k,1,mainboard
@@ -135,10 +136,10 @@ C22827,180k,1,mainboard
 C22913,232k,1,mainboard
 C2933354,1.1R,2,mainboard
 C17902,10k,22,ai4+brk4+engine+hso5+mainboard
-C25804,10k,91,ai4+brk4+di8+engine+hso5+mainboard
+C25804,10k,93,ai4+brk4+di8+engine+hso5+mainboard
 C309650,18k,8,ai4+mainboard
 C49308172,4.7k,13,di8+engine+mainboard
-C23231,68k,15,di8+engine+mainboard
+C23231,68k,16,di8+engine+mainboard
 C122538,100k,10,ai4+engine+mainboard
 C25819,47k,52,ai4+brk4+engine+hso5+mainboard
 C22976,2M,1,mainboard
@@ -154,18 +155,20 @@ C23140,33R,14,ai4+brk4+di8+hso5+hv meter+mainboard
 C160590,2m,1,mainboard
 C21189,0R,4,engine+mainboard
 C137808,10.5k,1,mainboard
-C22967,27k,12,engine+mainboard
+C22967,27k,13,engine+mainboard
 C421608,2.2k 1W,2,mainboard
 C2903482,5m,1,mainboard
 C23091,61.9k,1,mainboard
 C22880,15.8k,1,mainboard
 C22920,25.5k,1,mainboard
 C23056,44.2k,1,mainboard
-C23040,4.02k,8,mainboard
+C22992,3.09k,8,mainboard
 C17976,68R,8,mainboard
 C17969,47R,1,mainboard
-C25818,453k,8,mainboard
+C25818,453k,9,mainboard
 C22809,15k,8,mainboard
+C22984,30k,1,mainboard
+C17414,10k,6,mainboard
 C29718,10k x4,2,ai4+mainboard
 C318884,RESET,4,mainboard
 C6077135,BTN1,12,mainboard
@@ -182,7 +185,7 @@ C485916,TPS2121RUXR,1,mainboard
 C2890050,CA-IS3062W,2,mainboard
 C2653785,TPS1H200AQDGNRQ1,2,mainboard
 C5121950,CA-IS2092W,1,mainboard
-C55266,TPS2553DBVR,10,mainboard
+C55266,TPS2553DBVR,11,mainboard
 C2877863,TLV75518PDBVR,1,mainboard
 C2871688,SN65DSI83ZXHR,1,mainboard
 C131941,TPS22918DBVR,2,mainboard
@@ -213,7 +216,7 @@ C485077,SN74LVC138APWR,1,mainboard
 C1517405,INA281A2IDBVR,1,mainboard
 C353035,TS5A3166DBVR,1,mainboard
 C20345924,TLV3012BIDBVR,1,mainboard
-C1849461,TPS16630PWPR,8,mainboard
+C1849461,TPS16630PWPR,9,mainboard
 C7394016,74LVC1G02,8,mainboard
 C7827,SN74LVC1G04DBVR,8,mainboard
 C403721,SN74LVC1G10DBVR,8,mainboard

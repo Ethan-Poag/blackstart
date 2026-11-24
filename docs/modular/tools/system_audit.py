@@ -178,6 +178,7 @@ def reason(bn):
     w=nmap[bn]; card=CARDOF.get(w[0])
     if not card: return None
     nm=short(names[netof[w]]) if w in netof else ''
+    if card=='engine' and nm in ('+3V3_SAFE','VBAT_P'): return f'Pass 6 M3: engine card {nm} now fed through the mainboard limiter (ENG_3V3_SAFE: TPS2553 U160; ENG_VBAT_P: TPS16630 eFuse U161)'
     how=acc_how.get((card,nm),'')
     if how.startswith(('replaced','intentional')): return f'{card} card: {nm} {how.split(":")[0]} (net_accounting.csv)'
     if card!='engine' and nm in LVSIG: return f'{card} card: universal LV slot signal {nm} -> per-slot backplane net'

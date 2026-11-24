@@ -207,13 +207,13 @@ def soa_check(vds,iD,Tc=65.0,dt=1e-5):
 
 # ---------------- Pass 5: slots on TPS16630 eFuses (Ethan 2026-11-23 10:20 PM HST) ----------------
 TVS['SMBJ40CA per slot (IN)']=(44.4,49.1,64.5,9.3)
-def run_ef(Vb,I_scp=45.0,t_resp=1.0e-6,t_ramp=0.2e-6,t_hold=5e-6,I_ol=4.815,Ron=0.019,Lbank=60e-9,Rd1=0.010,
+def run_ef(Vb,I_scp=45.0,t_resp=1.0e-6,t_ramp=0.2e-6,t_hold=5e-6,I_ol=6.30,Ron=0.019,Lbank=60e-9,Rd1=0.010,
            Cs_slot=1e-6,n_slot=8,tvs_in=None,Ls=50e-9,v_sch=1.2,r_sch=0.020,T=120e-6,dt=1e-9,r_u65=48.0,i_u65=5e-3,
            d1='SMDJ40CA (D1 as built, 3 kW)',d2='SMBJ40CA (D2 as built, 600 W)',bulk=(('elec',2),),vovr=1.195,tdeg=3.98e-6,
            hgate_extra=1.0e-6,ipk_cap=None,ovp_min=1.176*(453e3+10e3*1.01)/(10e3*1.01)):
     """Dead short at a slot output (card side), slot switch = TPS16630 (SLVSET9G): integrated FET Ron (19 mOhm min / 53 max);
     fast-trip/hot-short comparator I(SCP) 45 A typ -> FET off after t_resp (1 us typ; 'few us' hold-off), then the current-limit loop
-    re-enters at I(OL) (4.02k: 4.185-4.815 A) until TSD -> latch (MODE open). Output-side loop Ls freewheels through the SS310B
+    re-enters at I(OL) (Pass 6 M2: 3.09k, 5.36-6.30 A incl. 1 % R; was 4.02k) until TSD -> latch (MODE open). Output-side loop Ls freewheels through the SS310B
     Schottky (OUT->GND, Vf ~1.2 V at high current). VBAT_SLOTS = per-slot C_IN (1 uF/100 V X7R, -40 % bias) + 100 nF at every slot
     (lumped; the faulted slot's caps sit right at its IN pin, the bus inductance Lbank (bank FETs, 5 mOhm shunt, backplane bus) sits
     between VBAT_P and VBAT_SLOTS). U1 OV with the real deglitch; the new 22 nF + 1k on HGATE adds hgate_extra to Q2 turn-off.
@@ -322,7 +322,7 @@ def hp_one(a):
     lab,kw=a; r=hotplug(32.0,cgd=200e-12,T=120e-3,**kw); return a,r,soa_check(r['vds'],r['iD'])
 if __name__=='__main__':
     print('\n\nPART 2 - Pass 5 design (Ethan 2026-11-23): slots on TPS16630 eFuses (2.2 uF/100 V IN cap, SS310B OUT->GND), U1 HGATE 22 nF + 1k,')
-    print('47R ahead of C225/U65, C602 10 uF on U2 EN/UVLO. Grid: 16 corners above x Lbank 60/150 nH (bank FETs + shunt + backplane) x eFuse')
+    print('47R ahead of C225/U65, C602 1 uF + Q2 hold-off on U2 EN/UVLO (Pass 6). Grid: 16 corners above x Lbank 60/150 nH (bank FETs + shunt + backplane) x eFuse')
     print('response 1.0/1.5 us. "pessimistic" = current rises freely until the SCP turn-off (no FET saturation); "realistic" = FET saturates at 60 A.')
     import multiprocessing as mp, itertools
     jobs=list(itertools.product((24.0,28.8,32.0),(2.2e-6,),(60e-9,150e-9),(1.0e-6,1.5e-6),(None,60.0)))
@@ -355,15 +355,14 @@ if __name__=='__main__':
         ('22 nF + 1k, U2 starts at 4.96 V (no C602)',dict(c_dvdt=22e-9,ihg=39e-6,p_load=70.0,dt=5e-8)),
         ('22 nF + 1k, U2 starts at 4.96 V, HGATE 75 uA',dict(c_dvdt=22e-9,ihg=75e-6,p_load=70.0,dt=5e-8)),
         ('10 nF + 1k, U2 starts at 4.96 V',dict(c_dvdt=10e-9,ihg=75e-6,p_load=70.0,dt=5e-8)),
-        ('CHOSEN 22 nF + 1k + C602 10 uF (5 uF eff), HGATE 39 uA',dict(c_dvdt=22e-9,ihg=39e-6,p_load=70.0,c_uvlo=5e-6,dt=5e-8)),
-        ('CHOSEN 22 nF + 1k + C602 10 uF (5 uF eff), HGATE 75 uA',dict(c_dvdt=22e-9,ihg=75e-6,p_load=70.0,c_uvlo=5e-6,dt=5e-8)),
-        ('CHOSEN, U2 and U5 off (idealised; U5 boot load: pass6_calc), HGATE 39 uA',dict(c_dvdt=22e-9,ihg=39e-6,dt=5e-8)),
-        ('CHOSEN, U2 and U5 off (idealised), HGATE 75 uA',dict(c_dvdt=22e-9,ihg=75e-6,dt=5e-8))]
+        ('Pass 5: 22 nF + 1k + C602 10 uF (5 uF eff), HGATE 39 uA',dict(c_dvdt=22e-9,ihg=39e-6,p_load=70.0,c_uvlo=5e-6,dt=5e-8)),
+        ('Pass 5: 22 nF + 1k + C602 10 uF (5 uF eff), HGATE 75 uA',dict(c_dvdt=22e-9,ihg=75e-6,p_load=70.0,c_uvlo=5e-6,dt=5e-8)),
+        ('22 nF + 1k, U2 and U5 held off (Pass 6 hold-off), HGATE 39 uA',dict(c_dvdt=22e-9,ihg=39e-6,dt=5e-8)),
+        ('22 nF + 1k, U2 and U5 held off (Pass 6 hold-off), HGATE 75 uA',dict(c_dvdt=22e-9,ihg=75e-6,dt=5e-8))]
     with mp.Pool(min(8,mp.cpu_count())) as P: H=P.map(hp_one,HP)
     for (lab,kw),r,sc in H:
         st=('U2 starts %.0f ms (after the ramp)'%(r['t_on_pred']*1e3)) if r.get('t_on_pred') else (('U2 starts %.1f ms'%(r['t_on']*1e3)) if r['t_on'] else 'no load')
         print('  %-56s pk %5.1f A, Q2 dTj %3.0f K -> Tj %3.0f F (%3.0f C), ramp %4.1f ms, %-30s SOA %.2f (%s)'%(lab,r['ipk'],r['dTj'],F(65+r['dTj']),65+r['dTj'],r['t']*1e3,st,sc[0],
               'OK' if sc[0]<=1 else 'EXCEEDED'))
-    print('  C602 10 uF X5R 25 V with R4/R5 (Thevenin 24.8k): tau 124 ms (5 uF eff at 8 V bias) .. 273 ms (11 uF): U2 starts 31-68 ms after VBAT_P at 32 V')
-    print('  (Q2 ramp <= 20 ms), %.0f-%.0f ms at 9 V. U2 EN/UVLO range 0-55 V; hysteresis current 3.15 uA unchanged (DC).'%(
-          124*-math.log(1-4.96/9.0),273*-math.log(1-4.96/9.0)))
+    print('  Pass 6 B1: the Q2 hold-off (BAT_IN - VBAT_P > 2.5-3.8 V) now keeps U2 and U5 off during the ramp, and C602 is 1 uF (was 10 uF) so the')
+    print('  hold-off can stop U2 within 0.25 ms on a warm restart. Cold start, warm restart and all corners: docs/modular/pass6_fix_calc.txt.')

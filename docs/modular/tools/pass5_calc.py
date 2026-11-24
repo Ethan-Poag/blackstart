@@ -2,7 +2,8 @@
 """Pass 5 (Ethan 2026-11-23 10:20 PM HST): slot switches TPS48100 + 2x BSC070N10NS5 -> TPS16630 eFuse, U1 HGATE dV/dt network,
 47R ahead of C225/U65. Every number below comes from the datasheets in docs/split_evidence/modular_pass5/ (tps1663.txt = TI SLVSET9G,
 tps2663.txt = TI SLVSE94G, bsc070_soa.png) and the live JLC/LCSC searches in docs/split_evidence/modular_pass5/fetch/ (2026-11-23).
-Transient numbers: docs/modular/tools/kick_calc.py (docs/modular/kick_calc.txt)."""
+Transient numbers: docs/modular/tools/kick_calc.py (docs/modular/kick_calc.txt).
+Pass 5 RECORD: R_ILIM 4.02k as built in Pass 5. Pass 6 (M2) moved R_ILIM to 3.09k: current numbers in docs/modular/pass6_fix_calc.txt."""
 import math, json, os, sys
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 F=lambda c: c*9/5+32
@@ -82,7 +83,7 @@ import kick_calc as k
 worst={}
 for V in (24.0,28.8,32.0):
     for cap,lab in ((None,'pessimistic (no FET saturation, current free for t_resp)'),(60.0,'realistic (FET saturates ~60 A)')):
-        r=k.run_ef(V,Cs_slot=2.2e-6,Lbank=150e-9,t_resp=1.5e-6,ipk_cap=cap,T=60e-6,dt=2e-9); p=r['pk']
+        r=k.run_ef(V,I_ol=4.815,Cs_slot=2.2e-6,Lbank=150e-9,t_resp=1.5e-6,ipk_cap=cap,T=60e-6,dt=2e-9); p=r['pk']
         worst[(V,cap)]=r
         print('slot dead short at %4.1f V, %-55s F1 I2t %.4f A2s (%.0fx below 115 A2s), eFuse peak %3.0f A, harness pk %3.0f A, eFuse energy %.1f mJ'%(
             V,lab,r['I2t'].max(),115/r['I2t'].max(),p['ief'].max(),p['iL'].max(),r['E_ef'].max()*1e3))
