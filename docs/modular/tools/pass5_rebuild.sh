@@ -16,3 +16,4 @@ python3 docs/modular/tools/pass4_calc.py > docs/modular/pass4_calc.txt
 python3 docs/modular/tools/note_lint.py | tail -3
 if [ -z "$SKIP_KICK" ]; then python3 docs/modular/tools/kick_calc.py > docs/modular/kick_calc.txt; fi   # ~20 min; SKIP_KICK=1 when kick_calc.py is unchanged
 python3 docs/modular/tools/pass5_calc.py > docs/modular/pass5_calc.txt
+python3 docs/modular/tools/pass6_calc.py > docs/modular/pass6_calc.txt   # Pass 6: boot load, warm restart, selectivity, SS310B

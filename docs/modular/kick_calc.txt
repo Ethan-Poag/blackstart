@@ -65,12 +65,12 @@ PART 2 - Pass 5 design (Ethan 2026-11-23): slots on TPS16630 eFuses (2.2 uF/100 
 47R ahead of C225/U65, C602 10 uF on U2 EN/UVLO. Grid: 16 corners above x Lbank 60/150 nH (bank FETs + shunt + backplane) x eFuse
 response 1.0/1.5 us. "pessimistic" = current rises freely until the SCP turn-off (no FET saturation); "realistic" = FET saturates at 60 A.
 Vbat  case          VBAT_P  BAT_IN VBAT_SLOTS    U65 eFuse pk  harness OVtrip    F1 I2t OUT min   t>OVP
-24.0  pessimistic    35.5V   35.4V      42.9V  23.7V     272A      78A   0/64    0.0303  -1.20V   0.0us
-24.0  realistic      27.0V   27.1V      29.3V  23.5V      60A      24A   0/64    0.0038  -1.20V   0.0us
-28.8  pessimistic    42.6V   42.5V      51.4V  28.6V     327A      93A   1/64    0.0426  -1.20V   0.0us
-28.8  realistic      31.8V   31.9V      34.1V  28.3V      60A      24A   0/64    0.0038  -1.20V   0.0us
-32.0  pessimistic    47.3V   57.2V      57.0V  31.8V     363A     103A   6/64    0.0527  -1.20V   1.8us
-32.0  realistic      35.0V   35.0V      37.3V  31.5V      60A      24A   0/64    0.0037  -1.20V   0.0us
+24.0  pessimistic    35.5V   35.4V      42.9V  23.7V     272A      78A   0/64    0.0303  -5.89V   0.0us
+24.0  realistic      27.0V   27.1V      29.3V  23.5V      60A      24A   0/64    0.0038  -2.17V   0.0us
+28.8  pessimistic    42.6V   42.5V      51.4V  28.6V     327A      93A   1/64    0.0426  -6.84V   0.0us
+28.8  realistic      31.8V   31.9V      34.1V  28.3V      60A      24A   0/64    0.0038  -2.17V   0.0us
+32.0  pessimistic    47.3V   57.2V      57.0V  31.8V     363A     103A   6/64    0.0527  -7.48V   1.8us
+32.0  realistic      35.0V   35.0V      37.3V  31.5V      60A      24A   0/64    0.0037  -2.17V   0.0us
 
 Abs-max check at the worst corner (32 V, pessimistic):
   U1 LM74800 A (BAT_IN)                                 57.2 V vs  70 V  margin  12.8 V ( 18 %)
@@ -81,10 +81,13 @@ Abs-max check at the worst corner (32 V, pessimistic):
   C3/C4 63 V electrolytic (VBAT_P)                      47.3 V vs  63 V  margin  15.7 V ( 25 %)
   TPS16630 IN, all slots (VBAT_SLOTS)                   57.0 V vs  67 V  margin  10.0 V ( 15 %)
   U110 TPS48100 CS+/VS (VBAT_P), SRC (VBAT_SLOTS)       57.0 V vs 100 V  margin  43.0 V ( 43 %)
-  card LM5176 VIN via healthy slots (VBAT_SLOTS, us)    57.0 V vs  60 V  margin   3.0 V (  5 %)
+  card SLn_VBAT parts via healthy slots: SI2309CDS DI-8 (VBAT_SLOTS, us)  57.0 V vs  60 V  margin   3.0 V (  5 %)
   U65 TPS7B6950 IN                                      31.8 V vs  45 V  margin  13.2 V ( 29 %)
   healthy-slot OVP: VBAT_SLOTS above the 53.4 V OVP minimum for <= 1.8 us << OVP_toff 8.5 us min: no nuisance trip
-  faulted-slot OUT: clamped by SS310B at -1.20 V for us (TI SLVSET9G 9.4.1/9.5 recommends exactly this Schottky for the -0.3 V OUT rating)
+  faulted-slot OUT: SS310B clamps it at -7.48 V (pessimistic) / -2.17 V (realistic) for about 1 us (Vf 1.2 V + 20 mOhm, MDD Fig. 3). That is below the
+  -0.3 V OUT abs max for that time; TI SLVSET9G 9.4.1 anticipates this inductive negative spike and names the Schottky at OUT/GND as the remedy.
+  Card-side SLn_VBAT parts (netlist, Pass 6 m1): DI-8 SI2309CDS 60 V (tightest), HSO-5/BRK-4 TPS1HTC30 VS 64 V (81 V < 100 us), AI-4 BCP56 80 V,
+  card caps 100 V. There is no LM5176 on any card.
   VBAT_SLOTS minimum in the pessimistic corner -2.6 V is a lumped-model artefact (the healthy slots' card capacitors back-feed through their
   ON eFuses and are not modelled); realistic corner >= 16.6 V; healthy-slot UVLO has a 100 us RC and a 9-16 us deglitch.
 
@@ -97,7 +100,7 @@ EN/UVLO threshold and ramping over the 7.5 ms soft start (linear in time). SOA =
   10 nF + 1k, U2 starts at 4.96 V                          pk   2.9 A, Q2 dTj  33 K -> Tj 208 F ( 98 C), ramp  8.7 ms, U2 starts 1.2 ms               SOA 1.66 (EXCEEDED)
   CHOSEN 22 nF + 1k + C602 10 uF (5 uF eff), HGATE 39 uA   pk   0.4 A, Q2 dTj   9 K -> Tj 166 F ( 74 C), ramp 19.9 ms, U2 starts 32 ms (after the ramp) SOA 0.87 (OK)
   CHOSEN 22 nF + 1k + C602 10 uF (5 uF eff), HGATE 75 uA   pk   0.8 A, Q2 dTj  15 K -> Tj 175 F ( 80 C), ramp 10.5 ms, U2 starts 27 ms (after the ramp) SOA 0.85 (OK)
-  CHOSEN, no load (other VBAT_P loads < 1 W), HGATE 39 uA  pk   0.4 A, Q2 dTj   9 K -> Tj 166 F ( 74 C), ramp 19.9 ms, no load                        SOA 0.87 (OK)
-  CHOSEN, no load, HGATE 75 uA                             pk   0.8 A, Q2 dTj  15 K -> Tj 175 F ( 80 C), ramp 10.5 ms, no load                        SOA 0.85 (OK)
+  CHOSEN, U2 and U5 off (idealised; U5 boot load: pass6_calc), HGATE 39 uA pk   0.4 A, Q2 dTj   9 K -> Tj 166 F ( 74 C), ramp 19.9 ms, no load                        SOA 0.87 (OK)
+  CHOSEN, U2 and U5 off (idealised), HGATE 75 uA           pk   0.8 A, Q2 dTj  15 K -> Tj 175 F ( 80 C), ramp 10.5 ms, no load                        SOA 0.85 (OK)
   C602 10 uF X5R 25 V with R4/R5 (Thevenin 24.8k): tau 124 ms (5 uF eff at 8 V bias) .. 273 ms (11 uF): U2 starts 31-68 ms after VBAT_P at 32 V
   (Q2 ramp <= 20 ms), 99-219 ms at 9 V. U2 EN/UVLO range 0-55 V; hysteresis current 3.15 uA unchanged (DC).

@@ -50,10 +50,10 @@ Overload selectivity: eFuse FLT# 1.09-1.6 ms -> FW cut (C5.1, first scan) << ban
 Hard-short selectivity: slot SCP 1 us typ (soft 2.2-4.5 us) vs bank U110 SCP 21.2 A min with t_SC 466 us min -> > 100x; bank never trips on a slot short.
 slot dead short at 24.0 V, pessimistic (no FET saturation, current free for t_resp) F1 I2t 0.0303 A2s (3794x below 115 A2s), eFuse peak 266 A, harness pk  78 A, eFuse energy 9.0 mJ
 slot dead short at 24.0 V, realistic (FET saturates ~60 A)                         F1 I2t 0.0038 A2s (30505x below 115 A2s), eFuse peak  60 A, harness pk  24 A, eFuse energy 8.0 mJ
-slot dead short at 28.8 V, pessimistic (no FET saturation, current free for t_resp) F1 I2t 0.0426 A2s (2699x below 115 A2s), eFuse peak 319 A, harness pk  93 A, eFuse energy 11.5 mJ
+slot dead short at 28.8 V, pessimistic (no FET saturation, current free for t_resp) F1 I2t 0.0426 A2s (2699x below 115 A2s), eFuse peak 319 A, harness pk  93 A, eFuse energy 11.6 mJ
 slot dead short at 28.8 V, realistic (FET saturates ~60 A)                         F1 I2t 0.0038 A2s (30660x below 115 A2s), eFuse peak  60 A, harness pk  24 A, eFuse energy 9.7 mJ
-slot dead short at 32.0 V, pessimistic (no FET saturation, current free for t_resp) F1 I2t 0.0518 A2s (2219x below 115 A2s), eFuse peak 354 A, harness pk 103 A, eFuse energy 13.3 mJ
-slot dead short at 32.0 V, realistic (FET saturates ~60 A)                         F1 I2t 0.0037 A2s (30733x below 115 A2s), eFuse peak  60 A, harness pk  24 A, eFuse energy 10.8 mJ
+slot dead short at 32.0 V, pessimistic (no FET saturation, current free for t_resp) F1 I2t 0.0518 A2s (2219x below 115 A2s), eFuse peak 354 A, harness pk 103 A, eFuse energy 13.4 mJ
+slot dead short at 32.0 V, realistic (FET saturates ~60 A)                         F1 I2t 0.0037 A2s (30733x below 115 A2s), eFuse peak  60 A, harness pk  24 A, eFuse energy 10.9 mJ
 (single corner Lbank 150 nH, t_resp 1.5 us; worst of the full 64-corner grid in kick_calc.txt PART 2: 363 A, 0.0527 A2s at 32 V)
 Bank FETs (Q106/Q107) carry the slot peak for ~2 us: (0.55 x 363 A)^2 x 11.5 mOhm = 458 W x ZthJC(2 us) 0.012 K/W = 6 K (negligible).
 Residual (not a card fault, unchanged from Pass 4): a dead short ON VBAT_SLOTS itself (mainboard bus) is cleared by F1 (74-115 A2s at
@@ -63,9 +63,10 @@ Residual (not a card fault, unchanged from Pass 4): a dead short ON VBAT_SLOTS i
 After the 1 us trip the eFuse regulates I_OL: P = (32 - 0) x 4.86 A = 156 W -> TSD 165 C (329 F) typ in the ms range (SLVSET9G Fig 6-13),
    transient T_J limit = T(TSD) (6.1 Abs Max), then latched OFF (MODE open). FLT# asserts at TSD or at 1.09-1.6 ms, whichever is first.
 Start into a short: thermal regulation T_J(REG) 136/145/154 C (277/293/309 F) for 1.1/1.25/1.5 s, then latched OFF (FLT#).
-Trip-kick energy into the eFuse (120 us window incl. I_OL phase): <= 13.3 mJ; SS310B freewheel: <= 0.64 mJ (IFSM 80 A / 8.3 ms).
-OUT negative excursion: clamped by SS310B at -1.2 V (model Vf at high current) for a few us; TI SLVSET9G 9.4.1 / 9.5 prescribe exactly this
-   Schottky for the -0.3 V OUT rating under inductive turn-off (place at the OUT/GND pins: layout note).
+Trip-kick energy into the eFuse (120 us window incl. I_OL phase): <= 13.4 mJ; SS310B freewheel: <= 0.37 mJ (IFSM 80 A / 8.3 ms).
+OUT negative excursion: SS310B holds OUT at -6.4 V worst (Vf 1.2 V + 20 mOhm x loop current, MDD Fig. 3; Pass 6 m2) for about 1 us. That is
+   below the -0.3 V OUT abs max for that time; TI SLVSET9G 9.4.1 / 9.5 anticipate this inductive spike and name the Schottky at OUT/GND
+   (place it at the OUT/GND pins: layout note). Hot reverse leakage: pass6_calc.txt section 4 (stable).
 
 == U65 feed: D120 -> 47R 1206 (R1002) -> C225 10 uF / U65 TPS7B6950 (IN abs max 45 V)
 DC: 5 mA x 47R = 0.24 V drop, 1.2 mW (1206 rating 250 mW); RC 47R x 10 uF = 470 us vs the us-scale kick -> U65 IN <= 31.8 V at 32 V

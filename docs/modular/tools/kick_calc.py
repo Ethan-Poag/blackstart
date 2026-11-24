@@ -208,7 +208,7 @@ def soa_check(vds,iD,Tc=65.0,dt=1e-5):
 # ---------------- Pass 5: slots on TPS16630 eFuses (Ethan 2026-11-23 10:20 PM HST) ----------------
 TVS['SMBJ40CA per slot (IN)']=(44.4,49.1,64.5,9.3)
 def run_ef(Vb,I_scp=45.0,t_resp=1.0e-6,t_ramp=0.2e-6,t_hold=5e-6,I_ol=4.815,Ron=0.019,Lbank=60e-9,Rd1=0.010,
-           Cs_slot=1e-6,n_slot=8,tvs_in=None,Ls=50e-9,v_sch=1.2,r_sch=0.004,T=120e-6,dt=1e-9,r_u65=48.0,i_u65=5e-3,
+           Cs_slot=1e-6,n_slot=8,tvs_in=None,Ls=50e-9,v_sch=1.2,r_sch=0.020,T=120e-6,dt=1e-9,r_u65=48.0,i_u65=5e-3,
            d1='SMDJ40CA (D1 as built, 3 kW)',d2='SMBJ40CA (D2 as built, 600 W)',bulk=(('elec',2),),vovr=1.195,tdeg=3.98e-6,
            hgate_extra=1.0e-6,ipk_cap=None,ovp_min=1.176*(453e3+10e3*1.01)/(10e3*1.01)):
     """Dead short at a slot output (card side), slot switch = TPS16630 (SLVSET9G): integrated FET Ron (19 mOhm min / 53 max);
@@ -263,8 +263,9 @@ def run_ef(Vb,I_scp=45.0,t_resp=1.0e-6,t_ramp=0.2e-6,t_hold=5e-6,I_ol=4.815,Ron=
             diO_sch=(-v_sch-iO*(Rd2+r_sch))/Ls
             iO_new=np.where(thru,iO_try,np.maximum(iO+diO_sch*dt,np.minimum(lim,iO_try)))
             ief=np.where(thru,iO_new,np.minimum(lim,iO_new))
-            vout=np.where(thru,iO_new*Rd2,np.where(iO_new>ief+1e-9,-v_sch,iO_new*Rd2))
             isch=np.maximum(iO_new-ief,0)
+            # Pass 6 m2: OUT = -(Vf0 + r_dyn x I) while the Schottky carries the loop (MDD SS310B Fig. 3: ~1.15 V @ 10 A, ~1.35 V @ 20 A)
+            vout=np.where(thru,iO_new*Rd2,np.where(iO_new>ief+1e-9,-(v_sch+r_sch*isch),iO_new*Rd2))
             iO=iO_new
         iDin=tvs_i(vS,tvs_in,n_slot) if tvs_in else 0.0*vS
         vS+=(iK-ief-iDin)/Cs*dt
@@ -337,11 +338,14 @@ if __name__=='__main__':
     print('\nAbs-max check at the worst corner (32 V, pessimistic):')
     for part,v,lim in (('U1 LM74800 A (BAT_IN)',p32['vB'],70),('C297 100 V (BAT_IN)',p32['vB'],100),('U2 LM5176 VIN (VBAT_P)',p32['vP'],60),('U68 TPS1HTC30 VS (VBAT_P)',p32['vP'],64),
                        ('U5 LMR36506 VIN (VBAT_P)',p32['vP'],70),('C3/C4 63 V electrolytic (VBAT_P)',p32['vP'],63),('TPS16630 IN, all slots (VBAT_SLOTS)',p32['vS'],67),
-                       ('U110 TPS48100 CS+/VS (VBAT_P), SRC (VBAT_SLOTS)',max(p32['vP'],p32['vS']),100),('card LM5176 VIN via healthy slots (VBAT_SLOTS, us)',p32['vS'],60),
+                       ('U110 TPS48100 CS+/VS (VBAT_P), SRC (VBAT_SLOTS)',max(p32['vP'],p32['vS']),100),('card SLn_VBAT parts via healthy slots: SI2309CDS DI-8 (VBAT_SLOTS, us)',p32['vS'],60),
                        ('U65 TPS7B6950 IN',p32['vU'],45)):
         print('  %-52s %5.1f V vs %3d V  margin %5.1f V (%3.0f %%)'%(part,v,lim,lim-v,100*(lim-v)/lim))
     print('  healthy-slot OVP: VBAT_SLOTS above the 53.4 V OVP minimum for <= %.1f us << OVP_toff 8.5 us min: no nuisance trip'%(p32['tovp']*1e6))
-    print('  faulted-slot OUT: clamped by SS310B at %.2f V for us (TI SLVSET9G 9.4.1/9.5 recommends exactly this Schottky for the -0.3 V OUT rating)'%p32['vneg'])
+    print('  faulted-slot OUT: SS310B clamps it at %.2f V (pessimistic) / %.2f V (realistic) for about 1 us (Vf 1.2 V + 20 mOhm, MDD Fig. 3). That is below the'%(p32['vneg'],W[(32.0,'realistic')]['vneg']))
+    print('  -0.3 V OUT abs max for that time; TI SLVSET9G 9.4.1 anticipates this inductive negative spike and names the Schottky at OUT/GND as the remedy.')
+    print('  Card-side SLn_VBAT parts (netlist, Pass 6 m1): DI-8 SI2309CDS 60 V (tightest), HSO-5/BRK-4 TPS1HTC30 VS 64 V (81 V < 100 us), AI-4 BCP56 80 V,')
+    print('  card caps 100 V. There is no LM5176 on any card.')
     print('  VBAT_SLOTS minimum in the pessimistic corner %.1f V is a lumped-model artefact (the healthy slots\' card capacitors back-feed through their'%p32['vSlo'])
     print('  ON eFuses and are not modelled); realistic corner >= %.1f V; healthy-slot UVLO has a 100 us RC and a 9-16 us deglitch.'%min(W[(V,'realistic')]['vSlo'] for V in (24.0,28.8,32.0)))
     print('\nHot-plug / power-up at 32 V, Q2 turn-on (Cgd 200 pF corner), Tc 149 F (65 C); load = U2 LM5176 70 W out (eta 0.88) starting at its')
@@ -353,8 +357,8 @@ if __name__=='__main__':
         ('10 nF + 1k, U2 starts at 4.96 V',dict(c_dvdt=10e-9,ihg=75e-6,p_load=70.0,dt=5e-8)),
         ('CHOSEN 22 nF + 1k + C602 10 uF (5 uF eff), HGATE 39 uA',dict(c_dvdt=22e-9,ihg=39e-6,p_load=70.0,c_uvlo=5e-6,dt=5e-8)),
         ('CHOSEN 22 nF + 1k + C602 10 uF (5 uF eff), HGATE 75 uA',dict(c_dvdt=22e-9,ihg=75e-6,p_load=70.0,c_uvlo=5e-6,dt=5e-8)),
-        ('CHOSEN, no load (other VBAT_P loads < 1 W), HGATE 39 uA',dict(c_dvdt=22e-9,ihg=39e-6,dt=5e-8)),
-        ('CHOSEN, no load, HGATE 75 uA',dict(c_dvdt=22e-9,ihg=75e-6,dt=5e-8))]
+        ('CHOSEN, U2 and U5 off (idealised; U5 boot load: pass6_calc), HGATE 39 uA',dict(c_dvdt=22e-9,ihg=39e-6,dt=5e-8)),
+        ('CHOSEN, U2 and U5 off (idealised), HGATE 75 uA',dict(c_dvdt=22e-9,ihg=75e-6,dt=5e-8))]
     with mp.Pool(min(8,mp.cpu_count())) as P: H=P.map(hp_one,HP)
     for (lab,kw),r,sc in H:
         st=('U2 starts %.0f ms (after the ramp)'%(r['t_on_pred']*1e3)) if r.get('t_on_pred') else (('U2 starts %.1f ms'%(r['t_on']*1e3)) if r['t_on'] else 'no load')

@@ -1,0 +1,92 @@
+Pass 6 deep review (Nov 24, 2026 HST): numbers behind /workspace/review/modular_pass6.md and MOD section 18.
+Q2 (U1 HGATE FET) linear-mode stress at cold start with the real boot load and after a supply interruption (warm restart),
+channel -> card selectivity with the TPS16630 limit, SS310B hot leakage and OUT clamp. Same Q2 / gate / SOA model as kick_calc.hotplug.
+== 1. Cold start at 32 V (C601 22 nF + 1k, C602 holds U2 off until after the ramp): U5 is NOT off
+U5 LMR36506 has EN tied to VIN (VBAT_P): it starts at ~4.2 V and, through the TPS2116, carries all of +3V3_SAFE (<= 0.55 A bound,
+RAIL_PLAN) while Q2 is still in its 10-20 ms linear ramp. Input power 0.5 / 1.0 / 2.1 W = boot-typical / mid / 0.55 A bound at eta 0.85.
+  HGATE 39 uA, U5 0.0 W: Q2 E  116 mJ, ramp 20.1 ms, SOA ratio 0.88 (OK)
+  HGATE 39 uA, U5 0.5 W: Q2 E  127 mJ, ramp 20.1 ms, SOA ratio 0.97 (OK)
+  HGATE 39 uA, U5 1.0 W: Q2 E  138 mJ, ramp 20.1 ms, SOA ratio 1.05 (EXCEEDED)
+  HGATE 39 uA, U5 2.1 W: Q2 E  161 mJ, ramp 20.1 ms, SOA ratio 1.24 (EXCEEDED)
+  HGATE 75 uA, U5 0.0 W: Q2 E  116 mJ, ramp 10.5 ms, SOA ratio 0.89 (OK)
+  HGATE 75 uA, U5 0.5 W: Q2 E  122 mJ, ramp 10.5 ms, SOA ratio 0.89 (OK)
+  HGATE 75 uA, U5 1.0 W: Q2 E  128 mJ, ramp 10.5 ms, SOA ratio 0.89 (OK)
+  HGATE 75 uA, U5 2.1 W: Q2 E  140 mJ, ramp 10.5 ms, SOA ratio 0.98 (OK)
+
+== 2. Warm restart after a supply interruption (loose battery terminal, isolator blip, U1 UVLO/OV): C602 does not re-arm
+U1 EN/UVLO has no filter: BAT_IN < ~5.2 V turns HGATE off in 3-6 us. VBAT_P (230 uF) then feeds U2 at up to 70 W: it falls ~10 V/ms
+at 32 V and U2 stops near its 3.5-4 V floor within ~1-2 ms. C602 keeps U2 EN/UVLO above 1.23 V for:
+  13.8 V: EN starts at 3.42 V -> held for 127-280 ms (tau 124-273 ms)
+  24.0 V: EN starts at 5.95 V -> held for 196-431 ms (tau 124-273 ms)
+  28.8 V: EN starts at 7.15 V -> held for 218-480 ms (tau 124-273 ms)
+  32.0 V: EN starts at 7.94 V -> held for 231-509 ms (tau 124-273 ms)
+so any interruption from ~1 ms up to that hold time restarts U2 the moment VBAT_P passes its floor, while Q2 is still ramping.
+Q2 ramp from VBAT_P = 4 V (U2 stopped) or Vb/2 (short dip), U2 70 W out, input <= 3.56 A, U5 1 W:
+  Vb 32.0 V from  4.0 V, HGATE 39 uA: Q2 E  1063 mJ, ramp  17.9 ms, SOA ratio  7.87 (EXCEEDED)
+  Vb 32.0 V from  4.0 V, HGATE 75 uA: Q2 E   500 mJ, ramp   9.3 ms, SOA ratio  3.54 (EXCEEDED)
+  Vb 32.0 V from 16.0 V, HGATE 39 uA: Q2 E   226 mJ, ramp  11.1 ms, SOA ratio  0.81 (OK)
+  Vb 32.0 V from 16.0 V, HGATE 75 uA: Q2 E    85 mJ, ramp   7.5 ms, SOA ratio  0.46 (OK)
+  Vb 28.8 V from  4.0 V, HGATE 39 uA: Q2 E   858 mJ, ramp  16.1 ms, SOA ratio  5.73 (EXCEEDED)
+  Vb 28.8 V from  4.0 V, HGATE 75 uA: Q2 E   398 mJ, ramp   8.4 ms, SOA ratio  2.78 (EXCEEDED)
+  Vb 28.8 V from 14.4 V, HGATE 39 uA: Q2 E   198 mJ, ramp  10.2 ms, SOA ratio  0.59 (OK)
+  Vb 28.8 V from 14.4 V, HGATE 75 uA: Q2 E    72 mJ, ramp   7.5 ms, SOA ratio  0.39 (OK)
+  Vb 24.0 V from  4.0 V, HGATE 39 uA: Q2 E   587 mJ, ramp  13.4 ms, SOA ratio  3.19 (EXCEEDED)
+  Vb 24.0 V from  4.0 V, HGATE 75 uA: Q2 E   266 mJ, ramp   7.5 ms, SOA ratio  1.81 (EXCEEDED)
+  Vb 24.0 V from 12.0 V, HGATE 39 uA: Q2 E   157 mJ, ramp   8.8 ms, SOA ratio  0.42 (OK)
+  Vb 24.0 V from 12.0 V, HGATE 75 uA: Q2 E    55 mJ, ramp   7.5 ms, SOA ratio  0.29 (OK)
+  Vb 13.8 V from  4.0 V, HGATE 39 uA: Q2 E   176 mJ, ramp   7.6 ms, SOA ratio  0.66 (OK)
+  Vb 13.8 V from  4.0 V, HGATE 75 uA: Q2 E    74 mJ, ramp   7.5 ms, SOA ratio  0.44 (OK)
+  Vb 13.8 V from  6.9 V, HGATE 39 uA: Q2 E    86 mJ, ramp   7.5 ms, SOA ratio  0.24 (OK)
+  Vb 13.8 V from  6.9 V, HGATE 75 uA: Q2 E    28 mJ, ramp   7.5 ms, SOA ratio  0.14 (OK)
+Same restart (from 4 V) with other C601 values: the FET, not the capacitor, is the root cause
+  Vb 32.0 V, C601  0.0 nF, HGATE 39 uA: Q2 E    92 mJ, SOA ratio  1.61
+  Vb 32.0 V, C601  0.0 nF, HGATE 75 uA: Q2 E    90 mJ, SOA ratio  1.94
+  Vb 32.0 V, C601  4.7 nF, HGATE 39 uA: Q2 E   178 mJ, SOA ratio  2.71
+  Vb 32.0 V, C601  4.7 nF, HGATE 75 uA: Q2 E   114 mJ, SOA ratio  2.37
+  Vb 32.0 V, C601 22.0 nF, HGATE 39 uA: Q2 E  1063 mJ, SOA ratio  7.87
+  Vb 32.0 V, C601 22.0 nF, HGATE 75 uA: Q2 E   500 mJ, SOA ratio  3.54
+  Vb 24.0 V, C601  0.0 nF, HGATE 39 uA: Q2 E    48 mJ, SOA ratio  0.82
+  Vb 24.0 V, C601  0.0 nF, HGATE 75 uA: Q2 E    46 mJ, SOA ratio  0.92
+  Vb 24.0 V, C601  4.7 nF, HGATE 39 uA: Q2 E    95 mJ, SOA ratio  1.27
+  Vb 24.0 V, C601  4.7 nF, HGATE 75 uA: Q2 E    59 mJ, SOA ratio  0.92
+  Vb 24.0 V, C601 22.0 nF, HGATE 39 uA: Q2 E   587 mJ, SOA ratio  3.19
+  Vb 24.0 V, C601 22.0 nF, HGATE 75 uA: Q2 E   266 mJ, SOA ratio  1.81
+BSC070N10NS5 (OptiMOS 5, Diagram 3) linear-mode capability from the kick_calc digitisation, Tc 77 F (25 C):
+  10 V: 1 ms 11.60 A, 10 ms  3.59 A
+  20 V: 1 ms  2.90 A, 10 ms  0.90 A
+  30 V: 1 ms  1.29 A, 10 ms  0.40 A
+  For comparison, the Nexperia PSMN4R8-100YSE hot-swap ASFET (LFPAK56E) is rated 8 A at 50 V for 10 ms and 18 A at 50 V for 1 ms
+  (Nexperia datasheet / ASFET note, Nov 24, 2026). JLC stock today: 0 (C5122725).
+
+== 3. Channel -> card selectivity with the slot eFuse limit (HSO-5 / BRK-4 channel limit TPS1HTC30 33.2k: 2.41-3.61 A)
+A shorted channel draws up to 3.61 A; the rest of that card keeps its preload. If preload + 3.61 A > I_OL(min), the eFuse goes into
+current limit, FLT# falls after 1.09-1.6 ms and FW C5.1 cuts the whole card (Pass 4: the slot switch tripped at 10.6-16.5 A, so it did not).
+  as built 4.02k                       I_OL 4.14-4.86 A -> same-card preload allowed with one channel shorted: 0.53 A
+      HOT  bank overload trip with one card at I_OL max on top of the budget: >= 41.9 ms (FW 20 ms card-cut margin 21.9 ms)
+      ROOM bank overload trip with one card at I_OL max on top of the budget: >= 40.0 ms (FW 20 ms card-cut margin 20.0 ms)
+      eFuse in limit at 32 V, Vout ~ 18 V: (32-18) x 4.86 A = 68 W -> TSD in tens of ms, before t_CL 129 ms
+  option 3.09k (UL 2367 needs >= 3k)   I_OL 5.36-6.30 A -> same-card preload allowed with one channel shorted: 1.75 A
+      HOT  bank overload trip with one card at I_OL max on top of the budget: >= 31.7 ms (FW 20 ms card-cut margin 11.7 ms)
+      ROOM bank overload trip with one card at I_OL max on top of the budget: >= 29.9 ms (FW 20 ms card-cut margin 9.9 ms)
+      eFuse in limit at 32 V, Vout ~ 18 V: (32-18) x 6.30 A = 88 W -> TSD in tens of ms, before t_CL 129 ms
+
+== 4. SS310B (MDD, C14281) reverse leakage hot (closes the Pass 5 open item)
+Datasheet (docs/split_evidence/modular_pass6/ss310b_mdd.pdf): IR max 0.3 mA at 77 F (25 C) and 3 mA at 212 F (100 C), at the rated 100 V;
+Fig. 2 typical at 32 % of VRRM and 100 C ~0.7 mA. RthJA 60 C/W. Bound used: the 100 V maximum, doubling every 10 C (Schottky rule).
+  Tj  65 C (149 F): IR <=  0.27 mA, P <=    8 mW at 32 V, dTj  0.5 K, runaway factor 0.04 (stable)
+  Tj  85 C (185 F): IR <=  1.06 mA, P <=   34 mW at 32 V, dTj  2.0 K, runaway factor 0.14 (stable)
+  Tj 100 C (212 F): IR <=  3.00 mA, P <=   96 mW at 32 V, dTj  5.8 K, runaway factor 0.40 (stable)
+  Tj 115 C (239 F): IR <=  8.49 mA, P <=  272 mW at 32 V, dTj 16.3 K, runaway factor 1.13 (UNSTABLE)
+  Tj 125 C (257 F): IR <= 16.97 mA, P <=  543 mW at 32 V, dTj 32.6 K, runaway factor 2.26 (UNSTABLE)
+-> stable with 2.5x margin at a 212 F (100 C) diode junction; runaway needs the junction above ~234 F (112 C). Place it away from the eFuse
+   pad heat (layout note); the slot leakage (<= 3 mA) is negligible for VBAT_SLOTS.
+
+== 5. SS310B clamp level on the faulted slot (model: Vf0 1.2 V + 20 mOhm, MDD Fig. 3 ~1.15 V @ 10 A, ~1.35 V @ 20 A)
+  loop current  20 A at turn-off: OUT ~ -1.6 V for ~0.5 us (Ls 50 nH)
+  loop current  60 A at turn-off: OUT ~ -2.4 V for ~1.0 us (Ls 50 nH)
+  loop current 100 A at turn-off: OUT ~ -3.2 V for ~1.1 us (Ls 50 nH)
+  loop current 300 A at turn-off: OUT ~ -7.2 V for ~1.4 us (Ls 50 nH)
+  (realistic kick_calc corners, FET saturating ~60 A: -2.2 V; pessimistic unsaturated 300+ A corners: -5.9 to -7.5 V, linear r_dyn extrapolated
+   beyond Fig. 3, so an upper bound. SS310B pulse stress: (300 A)^2 x 1 us = 0.09 A2s vs IFSM 80 A half-sine 8.3 ms ~ 27 A2s: OK.)
+  TPS16630 OUT abs max is -0.3 V (static). TI 9.4.1 accepts the inductive negative spike with a Schottky at OUT/GND. Bench test 17.9 #2
+  now records the OUT minimum and checks the eFuse after 50 shorts instead of a -1.5 V pass line.
