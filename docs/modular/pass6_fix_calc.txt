@@ -1,0 +1,151 @@
+Pass 6 fixes (Ethan's picks, Nov 24, 2026 HST): B1 Q2 hold-off, M2 R_ILIM 3.09k, M3 engine-slot feeds. Numbers behind MOD section 19.
+Same Q2 / HGATE / SOA model as pass6_calc.boot and kick_calc (BSC070N10NS5 SOA, Tc 149 F / 65 C derating), plus the hold-off:
+BAT_IN -> D401 1N4148W -> Q121 MMBT5401 E (R1121 22k E-B, R1122 68k B -> VBAT_P); C -> R1123 22k -> HO_F (C1121 100 nF || R1124 100k)
+-> Q122 MMBT3904 -> D402 BAT54C -> BB_UVLO (C602, U2 EN/UVLO) and U5_EN (R1125 100k / R1126 47k from VBAT_P).
+C602 is 1 uF X7R (0.5-1.1 uF effective; was 10 uF): see section 3 for why.
+== 1. Hold-off threshold vs temperature (Vth = Vf(D401) + Veb(Q121) x 90k/22k)
+  cold -40 F (-40 C)   Vf 0.72 V, Veb 0.75 V -> Vth 3.79 V
+  room 77 F (25 C)     Vf 0.55 V, Veb 0.62 V -> Vth 3.09 V
+  hot 185 F (85 C)     Vf 0.42 V, Veb 0.50 V -> Vth 2.47 V
+  Engage delay (HO_F 0 -> Q122 on, beta1 corner) for a step BAT_IN - VBAT_P = Vds at BAT_IN = Vb:
+  Vb  8.0 V: Vds 4 V   209 /   527 us, 6 V   209 /   268 us, full   209 /   268 us  (room / cold)
+  Vb 13.8 V: Vds 4 V   113 /   527 us, 6 V   113 /   142 us, full   113 /   142 us  (room / cold)
+  Vb 24.0 V: Vds 4 V    63 /   527 us, 6 V    63 /    78 us, full    63 /    78 us  (room / cold)
+  Vb 32.0 V: Vds 4 V    49 /   527 us, 6 V    46 /    58 us, full    46 /    58 us  (room / cold)
+  Nuisance: a slot or bank inrush step is <= 224 A x 14 mOhm = 3.1 V for 2.7 us; slot kicks <= 1.8 us: both far below the
+  >= 46 us engage delay. Normal load (F1 10 A) through Q1 + Q2 hot (2 x 11 mOhm): 0.22 V << 2.47 V min threshold.
+  Cranking (VBAT_P > BAT_IN, Q1 blocks): D401 blocks the E-B junction (reverse <= Vds, MMBT5401 VEBO 6 V not reached).
+  Stress: Q121 VCE <= 57 V kick (150 V part); D402 reverse <= max(BB_UVLO 14.1 V, U5_EN 18.2 V) at 57 V (30 V part);
+  Q122 VCE <= 18.2 V + 0.3 V; Q122 sink <= beta x 1.4 mA (<= 140 mA), BAT54C 200 mA IF: C602 1 uF x 7.9 V discharge lasts <= 0.25 ms.
+
+== 2. Q2 cold start with the hold-off (U5 2.1 W bound and U2 70 W both held off until BAT_IN - VBAT_P < Vth; C602 from 0 V)
+  Vb     HGATE  corner  | Q2 E mJ  ramp ms  SOA ratio
+  12.0 V 39 uA  cold   |     17     10.5    0.06 OK
+  12.0 V 39 uA  hot    |     17     10.5    0.06 OK
+  12.0 V 75 uA  cold   |     17      5.5    0.10 OK
+  12.0 V 75 uA  hot    |     17      5.5    0.10 OK
+  13.8 V 39 uA  cold   |     22     11.5    0.08 OK
+  13.8 V 39 uA  hot    |     22     11.5    0.08 OK
+  13.8 V 75 uA  cold   |     22      6.0    0.14 OK
+  13.8 V 75 uA  hot    |     22      6.0    0.14 OK
+  24.0 V 39 uA  cold   |     66     17.3    0.38 OK
+  24.0 V 39 uA  hot    |     66     17.3    0.38 OK
+  24.0 V 75 uA  cold   |     66      9.0    0.48 OK
+  24.0 V 75 uA  hot    |     66      9.0    0.48 OK
+  28.8 V 39 uA  cold   |     95     20.0    0.66 OK
+  28.8 V 39 uA  hot    |     95     20.0    0.66 OK
+  28.8 V 75 uA  cold   |     95     10.4    0.71 OK
+  28.8 V 75 uA  hot    |     94     10.4    0.71 OK
+  32.0 V 39 uA  cold   |    117     21.9    0.88 OK
+  32.0 V 39 uA  hot    |    117     21.9    0.88 OK
+  32.0 V 75 uA  cold   |    117     11.4    0.89 OK
+  32.0 V 75 uA  hot    |    117     11.4    0.89 OK
+  (Pass 6 review, no hold-off: 32 V cold start with U5 2.1 W = SOA ratio 1.17-1.43, EXCEEDED.)
+
+== 3. Q2 warm restart with the hold-off (C602 still charged; U2 70 W out, input <= 3.56 A; U5 2.1 W bound)
+  Start states: VBAT_P 4 V (U2 had stopped: restarts with soft start when VBAT_P > 3.8 V), Vb/2 (short dip: U2 still running at
+  FULL load at t = 0, harsher than the Pass 6 review model). HGATE 39 / 75 uA, hold-off cold (Vth 3.7 V, slow) and hot (2.5 V).
+  Vb   from    HGATE corner | engage ms  U2 off ms  U2 back ms | Q2 E mJ  SOA ratio
+  12.0   4.0 V 39 uA cold |   0.17       0.18        -    |      9    0.03 OK
+  12.0   4.0 V 39 uA hot  |   0.11       0.19        -    |      9    0.03 OK
+  12.0   4.0 V 75 uA cold |   0.17       0.18        -    |      9    0.04 OK
+  12.0   4.0 V 75 uA hot  |   0.11       0.19        -    |      8    0.04 OK
+  12.0   6.0 V 39 uA cold |   0.17       0.14        -    |      9    0.03 OK
+  12.0   6.0 V 39 uA hot  |   0.11       0.15        -    |      9    0.03 OK
+  12.0   6.0 V 75 uA cold |   0.17       0.14        -    |      9    0.04 OK
+  12.0   6.0 V 75 uA hot  |   0.11       0.15        -    |      8    0.04 OK
+  13.8   4.0 V 39 uA cold |   0.14       0.18        -    |     13    0.04 OK
+  13.8   4.0 V 39 uA hot  |   0.09       0.20        -    |     12    0.04 OK
+  13.8   4.0 V 75 uA cold |   0.14       0.18        -    |     12    0.07 OK
+  13.8   4.0 V 75 uA hot  |   0.09       0.20        -    |     12    0.07 OK
+  13.8   6.9 V 39 uA cold |   0.14       0.29        -    |     16    0.09 OK
+  13.8   6.9 V 39 uA hot  |   0.09       0.20        -    |     12    0.05 OK
+  13.8   6.9 V 75 uA cold |   0.14       0.29        -    |     16    0.12 OK
+  13.8   6.9 V 75 uA hot  |   0.09       0.20        -    |     12    0.08 OK
+  24.0   4.0 V 39 uA cold |   0.08       0.22        -    |     48    0.24 OK
+  24.0   4.0 V 39 uA hot  |   0.05       0.18        -    |     47    0.23 OK
+  24.0   4.0 V 75 uA cold |   0.08       0.22        -    |     48    0.34 OK
+  24.0   4.0 V 75 uA hot  |   0.05       0.18        -    |     47    0.33 OK
+  24.0  12.0 V 39 uA cold |   0.08       0.25        -    |     29    0.17 OK
+  24.0  12.0 V 39 uA hot  |   0.05       0.18        -    |     25    0.10 OK
+  24.0  12.0 V 75 uA cold |   0.08       0.25        -    |     29    0.24 OK
+  24.0  12.0 V 75 uA hot  |   0.05       0.18        -    |     25    0.17 OK
+  28.8   4.0 V 39 uA cold |   0.06       0.23      17.03  |     73    0.45 OK
+  28.8   4.0 V 39 uA hot  |   0.04       0.17      17.70  |     72    0.44 OK
+  28.8   4.0 V 75 uA cold |   0.06       0.23        -    |     73    0.54 OK
+  28.8   4.0 V 75 uA hot  |   0.04       0.17        -    |     72    0.53 OK
+  28.8  14.4 V 39 uA cold |   0.06       0.24      11.11  |     38    0.22 OK
+  28.8  14.4 V 39 uA hot  |   0.04       0.17      11.78  |     34    0.13 OK
+  28.8  14.4 V 75 uA cold |   0.06       0.24        -    |     38    0.33 OK
+  28.8  14.4 V 75 uA hot  |   0.04       0.17        -    |     34    0.23 OK
+  32.0   4.0 V 39 uA cold |   0.06       0.24      18.48  |     93    0.64 OK
+  32.0   4.0 V 39 uA hot  |   0.04       0.17      19.17  |     91    0.62 OK
+  32.0   4.0 V 75 uA cold |   0.06       0.24        -    |     93    0.69 OK
+  32.0   4.0 V 75 uA hot  |   0.04       0.17        -    |     91    0.68 OK
+  32.0  16.0 V 39 uA cold |   0.06       0.24      11.65  |     45    0.25 OK
+  32.0  16.0 V 39 uA hot  |   0.04       0.17      12.34  |     40    0.16 OK
+  32.0  16.0 V 75 uA cold |   0.06       0.24        -    |     45    0.39 OK
+  32.0  16.0 V 75 uA hot  |   0.04       0.17        -    |     40    0.28 OK
+  Same restarts WITHOUT the hold-off (reference, cold corner unused):
+  24.0   4.0 V 39 uA no hold-off | Q2 E   430 mJ, SOA ratio  1.99
+  24.0  12.0 V 39 uA no hold-off | Q2 E   271 mJ, SOA ratio  1.08
+  32.0   4.0 V 39 uA no hold-off | Q2 E   848 mJ, SOA ratio  5.63
+  32.0  16.0 V 39 uA no hold-off | Q2 E   415 mJ, SOA ratio  1.85
+  As first drawn with C602 = 10 uF (the Pass 5 delay cap) the hold-off needs 1.2-1.7 ms to pull U2 EN below 1.17 V; with U2 at full
+  load through a short dip Q2 is overstressed meanwhile, so C602 became 1 uF (same 0805 pad, C28323):
+  24.0  12.0 V 39 uA cold, C602 10 uF | U2 off   1.82 ms | SOA ratio  1.02 (EXCEEDED -> rejected)
+  32.0  16.0 V 39 uA cold, C602 10 uF | U2 off   1.87 ms | SOA ratio  1.67 (EXCEEDED -> rejected)
+  C602 at its derated 0.5 uF (faster re-arm after release) at 32 V:
+  32.0   4.0 V 39 uA cold | U2 back  16.96 ms | SOA ratio  0.62
+  32.0   4.0 V 39 uA hot  | U2 back  17.67 ms | SOA ratio  0.61
+  32.0  16.0 V 39 uA cold | U2 back  10.13 ms | SOA ratio  0.15
+  32.0  16.0 V 39 uA hot  | U2 back  10.84 ms | SOA ratio  0.14
+  WORST SOA ratio with the hold-off, all corners: 0.89 (OK)
+  U2 restart after release: C602 recharges from ~0.45 V to 1.17-1.29 V, tau 12-27 ms (24.8k x 0.5-1.1 uF):
+   9.0 V:   6.4- 17.4 ms after release (U2 then soft-starts over 7.5 ms)
+  13.8 V:   3.4-  9.1 ms after release (U2 then soft-starts over 7.5 ms)
+  24.0 V:   1.7-  4.5 ms after release (U2 then soft-starts over 7.5 ms)
+  32.0 V:   1.3-  3.2 ms after release (U2 then soft-starts over 7.5 ms)
+  Trade-off (documented): a BAT_IN dip below U1 UVLO (~5.2 V) now always restarts U2 (MCU runs on +3V3_SAFE via U5 / TPS2116 only
+  if VBAT_P stays above ~4.25 V); before, a short dip could ride through. At 70 W VBAT_P (230 uF) drains 10-25 V/ms, so U2 dropped
+  out anyway on any dip longer than ~1 ms: the change only affects sub-ms dips, and it is the price of a Q2 that survives them.
+
+== 4. M2: slot eFuse R_ILIM 3.09k (C22992, 1 %)
+  TPS16630 I_OL = 18/R_ILIM(k) (SLVSET9G row at 3.0k: 5.58/6.00/6.42 A). UL 2367 recognition needs R_ILIM >= 3 kOhm:
+  3.09k -1 % = 3.059 k >= 3.0 k (3.01k would be 2.98k at -1 %). I_OL 5.36-6.30 A incl. the resistor.
+  Channel short (TPS1HTC30 limit max 3.61 A): same-card preload still allowed 1.75 A (4.02k: 0.53 A).
+  HOT  bank overload trip, budget + one card at I_OL max: >= 31.7 ms, FW 20 ms card cut margin 11.7 ms
+  ROOM bank overload trip, budget + one card at I_OL max: >= 29.9 ms, FW 20 ms card cut margin 9.9 ms
+  F1 10 A (74 A2s melt): two cards in limit = 12.6 A until the bank trip (<= ~32 ms + 20 ms FW): 8.2 A2s = 11 % of melt;
+  steady-state the bank overload (ROOM 5.11-6.08 A, HOT 3.15-3.65 A) still caps the total far below F1.
+  Fast-trip 2 x I_OL = 10.7-12.6 A; hard short SCP 45 A / 1 us unchanged (kick_calc rerun with I_OL 6.30 A).
+  Hard short after the SCP retry: regulation at I_OL into a dead short = 32 V x 6.30 A = 201 W (4.02k: 156 W).
+  TPS16630 thermal: T_J reg 136-154 C, TSD 165 C; at ~200 W the die (RthJC ~1 C/W, ~0.15 J/K local) reaches TSD in ~0.5-1 ms,
+  the FET is TI-rated for this (power-limited start into short, SLVSET9G 9.3.2 / Fig. "start-up with short at 24 V, 3k").
+  steady 4.00 A: R_ON 31 mOhm x 1.45 hot = 0.72 W -> T_J ~ 194 F (90 C) at 149 F (65 C) ambient, RthJA 35 C/W
+  steady 5.00 A: R_ON 31 mOhm x 1.45 hot = 1.12 W -> T_J ~ 220 F (104 C) at 149 F (65 C) ambient, RthJA 35 C/W
+  steady 5.36 A: R_ON 31 mOhm x 1.45 hot = 1.29 W -> T_J ~ 230 F (110 C) at 149 F (65 C) ambient, RthJA 35 C/W
+  Steady current above 5.11 A (ROOM) trips the bank anyway, so the eFuse never sits at 6 A for long.
+  Connector: 9 VBAT contacts x 2 A (Pass 4 budget 6 A cont) >= 6.30 A; card SLn_VBAT sized for 6 A cont (slot_pinout_LV.csv).
+
+== 5. M3: engine slot feeds
+  U160 TPS2553DBVR, R_ILIM 210k: 110/130/150 mA (SLVS841 table), auto-retry. Engine card +3V3 load <= 15 mA (2x INA281,
+  TLV1812, EEPROM, 2.2k pull-ups): 7x margin. Fault on the card: +3V3_SAFE sees <= 150 mA extra, <= 0.55 A + 0.15 A = 0.70 A
+  on U5 backup (rated 0.6 A) only while +3V3 (U2 chain) is down at boot: possible brownout = safe state; on +3V3: 0.15 of 3 A.
+  U161 TPS16630 on the engine VBAT_P feed (chosen over the PTC that was drawn first):
+    R_ILIM 30k (C22984): I_OL 0.54/0.60/0.66 A (SLVSET9G row) -> 0.535-0.667 A with 1 % R vs <= 0.13 A load (LM317 + R47 10R = 125 mA).
+    SCP 45 A / 1 us: prospective short ~32 V / (0.06 Ohm source + harness) ~ 100+ A is cut in ~1 us: F1 I2t ~ 0.002 A2s;
+    Q1+Q2 drop 100 A x 22 mOhm = 2.2 V for ~1 us: far below the hold-off engage delay (>= 46 us).
+    PTC (LUTE 1812L030/60GR, rejected): I_max 40 A < ~100 A prospective (may fail), trip time 10s-100s of us at that current, during which
+    BAT_IN - VBAT_P ~ 2.2 V sits 0.3 V under the hot hold-off threshold: marginal, and a dead short could also restart U2.
+    Cost +$2.98 vs +$0.045 for the PTC; JLC stock 1824 (2026-11-24): 9 per board now. Auto-retry (MODE = GND, 648 ms).
+  Series R at U7 on the engine lines that had none: 10k 0805 (150 V) + BAT54S to +3V3_SAFE / GND on the MCU side.
+    36 V on a line: 3.2 mA into the clamp, 0.10 W in the 10k (0805 0.125 W... 0.11 W: OK at 149 F ambient with 0805 derating to 70 C = 100 %)
+    ADC (FUEL_ISNS, CRANK_ISNS from INA281 outputs): 10k + U7 ADC Cs 5 pF + 1 nF C1111/C1112 at the pin:
+      U7 ADC sample cap ~5 pF vs 1 nF at the pin: charge sharing moves the pin by <= 0.5 % of a step (<= 20 LSB worst, one-off),
+      with 1 nF at the pin the S/H kickback is 5 pF/1 nF = 0.5 % of a step, recovered by 10k x 1 nF = 10 us; at <= 1 kS/s per channel
+      the error is < 0.1 LSB. FW: sample time >= 64.5 cycles anyway (FW_REQ).
+    BAT54S leakage hot: <= 2 uA at 3.3 V, 185 F (85 C) x 10k = 20 mV (0.6 % of 3.3 V full scale) on FUEL/CRANK_ISNS: covered by the
+    existing +/-2 % current-sense tolerance; cold/room < 1 mV.
+    Digital lines (MPU_GATE, MPU_SPEED, DPLUS_EXC_EN, DIAG_EN): 10k x (5 pF + 10 pF trace) = 0.15 us edges: MPU_SPEED <= 10 kHz OK.
+    DPLUS_SNS: 1k after D65 (card side 100k already): adds <= 0.1 % divider error.

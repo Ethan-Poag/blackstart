@@ -1,4 +1,5 @@
-Pass 6 deep review (Nov 24, 2026 HST): numbers behind /workspace/review/modular_pass6.md and MOD section 18.
+Pass 6 deep review (Nov 24, 2026 HST): numbers behind /workspace/review/modular_pass6.md and MOD section 18. REVIEW RECORD of the
+pre-fix design (10 uF C602, no hold-off, 4.02k); the fixes and their numbers are in pass6_fix_calc.txt (MOD section 19).
 Q2 (U1 HGATE FET) linear-mode stress at cold start with the real boot load and after a supply interruption (warm restart),
 channel -> card selectivity with the TPS16630 limit, SS310B hot leakage and OUT clamp. Same Q2 / gate / SOA model as kick_calc.hotplug.
 == 1. Cold start at 32 V (C601 22 nF + 1k, C602 holds U2 off until after the ramp): U5 is NOT off

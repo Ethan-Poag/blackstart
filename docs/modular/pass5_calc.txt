@@ -2,6 +2,7 @@ Pass 5 (Ethan 2026-11-23 10:20 PM HST): slot switches TPS48100 + 2x BSC070N10NS5
 47R ahead of C225/U65. Every number below comes from the datasheets in docs/split_evidence/modular_pass5/ (tps1663.txt = TI SLVSET9G,
 tps2663.txt = TI SLVSE94G, bsc070_soa.png) and the live JLC/LCSC searches in docs/split_evidence/modular_pass5/fetch/ (2026-11-23).
 Transient numbers: docs/modular/tools/kick_calc.py (docs/modular/kick_calc.txt).
+Pass 5 RECORD: R_ILIM 4.02k as built in Pass 5. Pass 6 (M2) moved R_ILIM to 3.09k: current numbers in docs/modular/pass6_fix_calc.txt.
 
 == Part selection (JLC/LCSC live 2026-11-23; per board 8 + spares)
 TPS16630PWPR (HTSSOP-20 PWP)           C1849461  stock 1833   $2.9202  CHOSEN: adjustable UVLO + OVP cut-off (no clamp), I_OL 0.6-6 A, latch or retry, best stock and price
