@@ -1,0 +1,37 @@
+Sim 2: cold start (battery connected with everything discharged) into the full load and bulk caps.
+Deck: fe.frontend (vendor BSC070N10NS5 Q1/Q2 with thermal network, behavioral LM74800 HGATE 39/75 uA into R1001 1k + C601 22n,
+transistor-level hold-off), U2 LM5176 as a 79.5 W input load with 7.5 ms soft start gated by BB_UVLO (C602 1 uF or 0.5 uF derated),
+U5 LMR36506 as a 2.1 W load gated by U5_EN. Battery 0 -> Vb in 10 us through the harness (Rb 15 mOhm, Lb 0.5 uH, as the hand calc).
+Q2 SOA = the hand calc's soa_check (BSC070 Diagram 3 derated to Tc 149 F / 65 C) on 10 us bins of the simulated Vds/Id;
+Q2 Tj = the vendor model's own thermal network (Zthtype 1 = max) from Tcase 149 F (65 C).
+Hand calc: modular pass6_fix_calc.txt section 2 (worst 0.89 at 32 V), split p7_calc.txt section 3 (worst 0.91 at 32 V, inrush ~0.6 A).
+Usage: s2_start.py mod|split
+
+Branch mod. temp = hold-off BJT/diode temperature (.temp); Tcase 149 F (65 C) for Q2 in every row.
+Vb    HGATE  temp   C602 | ramp ms  U5 on ms  U2 on ms | inrush pk (after 50 us)  Q2 I in ramp | Q2 E mJ  Q2 Tj max       SOA ratio (tau, Veff, Iavg)
+12.0  39 uA   -40 F 1.0 uF |   9.08     7.43    19.16  |   1.88 A                0.41 A      |   17.6   154 F ( 68 C)   0.06 (1e-03 s, 10.9 V, 0.39 A)
+12.0  39 uA   -40 F 0.5 uF |   9.08     7.44    12.58  |   3.74 A                0.41 A      |   18.2   154 F ( 68 C)   0.06 (1e-03 s, 10.9 V, 0.39 A)
+12.0  39 uA   185 F 1.0 uF |   9.11     8.57    19.72  |   1.37 A                0.41 A      |   17.2   154 F ( 68 C)   0.06 (1e-03 s, 10.9 V, 0.39 A)
+12.0  39 uA   185 F 0.5 uF |   9.11     8.60    13.95  |   3.74 A                0.41 A      |   17.6   154 F ( 68 C)   0.06 (1e-03 s, 10.9 V, 0.39 A)
+12.0  75 uA   -40 F 1.0 uF |   4.73     3.94    16.37  |   1.33 A                0.79 A      |   16.8   157 F ( 69 C)   0.10 (1e-03 s, 10.1 V, 0.74 A)
+12.0  75 uA   -40 F 0.5 uF |   4.73     3.94     9.71  |   3.74 A                0.79 A      |   17.3   157 F ( 69 C)   0.10 (1e-03 s, 10.1 V, 0.74 A)
+12.0  75 uA   185 F 1.0 uF |   4.74     4.55    16.43  |   1.29 A                0.79 A      |   16.7   157 F ( 69 C)   0.10 (1e-03 s, 10.1 V, 0.74 A)
+12.0  75 uA   185 F 0.5 uF |   4.74     4.60    10.05  |   3.74 A                0.79 A      |   17.2   157 F ( 69 C)   0.10 (1e-03 s, 10.1 V, 0.74 A)
+24.0  39 uA   -40 F 1.0 uF |  15.61    14.14    18.04  |   3.44 A                0.42 A      |   69.1   161 F ( 72 C)   0.40 (1e-02 s, 15.9 V, 0.38 A)
+24.0  39 uA   -40 F 0.5 uF |  15.61    14.16    16.10  |   3.44 A                0.42 A      |   69.2   161 F ( 72 C)   0.40 (1e-02 s, 15.9 V, 0.38 A)
+24.0  39 uA   185 F 1.0 uF |  15.64    15.19    19.64  |   3.44 A                0.42 A      |   69.0   161 F ( 72 C)   0.40 (1e-02 s, 16.0 V, 0.38 A)
+24.0  39 uA   185 F 0.5 uF |  15.64    15.24    17.31  |   3.44 A                0.42 A      |   69.1   161 F ( 72 C)   0.40 (1e-02 s, 16.0 V, 0.38 A)
+24.0  75 uA   -40 F 1.0 uF |   8.13     7.39    11.29  |   3.44 A                0.80 A      |   67.8   169 F ( 76 C)   0.47 (1e-03 s, 21.9 V, 0.77 A)
+24.0  75 uA   -40 F 0.5 uF |   8.13     7.40     9.32  |   3.44 A                0.80 A      |   68.0   169 F ( 76 C)   0.47 (1e-03 s, 21.9 V, 0.77 A)
+24.0  75 uA   185 F 1.0 uF |   8.14     7.97    12.52  |   3.44 A                0.80 A      |   67.9   169 F ( 76 C)   0.47 (1e-03 s, 21.9 V, 0.77 A)
+24.0  75 uA   185 F 0.5 uF |   8.14     8.00    10.14  |   3.44 A                0.80 A      |   68.1   169 F ( 76 C)   0.47 (1e-03 s, 21.9 V, 0.77 A)
+32.0  39 uA   -40 F 1.0 uF |  19.98    18.64    21.38  |   2.58 A                0.42 A      |  122.2   166 F ( 74 C)   0.91 (1e-02 s, 23.3 V, 0.41 A)
+32.0  39 uA   -40 F 0.5 uF |  19.98    18.66    20.00  |   2.58 A                0.42 A      |  122.3   166 F ( 74 C)   0.91 (1e-02 s, 23.3 V, 0.41 A)
+32.0  39 uA   185 F 1.0 uF |  20.00    19.68    22.78  |   2.58 A                0.42 A      |  122.3   166 F ( 74 C)   0.92 (1e-02 s, 23.3 V, 0.41 A)
+32.0  39 uA   185 F 0.5 uF |  20.00    19.74    21.14  |   2.58 A                0.42 A      |  122.4   166 F ( 74 C)   0.92 (1e-02 s, 23.3 V, 0.41 A)
+32.0  75 uA   -40 F 1.0 uF |  10.39     9.72    12.47  |   2.58 A                0.80 A      |  120.5   178 F ( 81 C)   0.88 (1e-03 s, 29.7 V, 0.78 A)
+32.0  75 uA   -40 F 0.5 uF |  10.39     9.74    11.08  |   2.58 A                0.80 A      |  120.6   178 F ( 81 C)   0.88 (1e-03 s, 29.7 V, 0.78 A)
+32.0  75 uA   185 F 1.0 uF |  10.41    10.29    13.49  |   2.58 A                0.80 A      |  120.7   178 F ( 81 C)   0.88 (1e-03 s, 29.8 V, 0.78 A)
+32.0  75 uA   185 F 0.5 uF |  10.41    10.32    11.80  |   2.58 A                0.80 A      |  120.8   178 F ( 81 C)   0.88 (1e-03 s, 29.8 V, 0.78 A)
+
+WORST SOA ratio: 0.92 at (32.0, 3.9e-05, 85, 1e-06, 0)

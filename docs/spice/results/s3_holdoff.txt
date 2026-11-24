@@ -1,0 +1,56 @@
+Sim 3: the 11-part Q2 hold-off (D401, Q121 MMBT5401, R1121 22k, R1122 68k, R1123 22k, C1121 100n, R1124 100k, Q122 MMBT3904,
+D402 BAT54C) with the U2 EN/UVLO (R4 100k / R5 33k / C602 1u) and U5 EN (R1125 100k / R1126 47k) networks, transistor level.
+(a) DC threshold: BAT_IN - VBAT_P at which U2 EN/UVLO (BB_UVLO) is pulled below 1.17 V and U5_EN below 1.16 V, at VBAT_P 12 / 24 V,
+    -40 / 77 / 185 F (ngspice .temp; vendor-equivalent ON Semi 2N5401/2N3904/1N4148 models, BAT54 fitted).
+(b) Engage timing: VBAT_P held at Vb - dV, BAT_IN steps up by dV; time to Q122 on (collector current > 1 mA), BB_UVLO < 1.17 V, U5_EN < 1.16 V.
+(c) U5 EN turn-on point with the hold-off idle (BAT_IN = VBAT_P + 0.1 V): VBAT_P at U5_EN = 1.16 / 1.26 / 1.36 V.
+Usage: s3_holdoff.py [mod|split] -> results/s3_holdoff.txt (the circuit is identical on both branches).
+
+(a) DC threshold BAT_IN - VBAT_P (V). Hand calc (pass6_fix_calc / MOD 19.1): 3.79 cold / 3.09 room / 2.47 hot.
+   temp              VBAT_P   U2 off (BB_UVLO<1.17)   U5 off (U5_EN<1.16)
+    -40 F (-40 C) cold  12.0 V         3.33 V                 3.33 V
+     77 F ( 25 C) room  12.0 V         2.54 V                 2.54 V
+    185 F ( 85 C) hot   12.0 V         1.78 V                 1.78 V
+    -40 F (-40 C) cold  24.0 V         3.35 V                 3.35 V
+     77 F ( 25 C) room  24.0 V         2.56 V                 2.56 V
+    185 F ( 85 C) hot   24.0 V         1.80 V                 1.80 V
+
+(b) Engage timing after BAT_IN steps dV above VBAT_P (ms). Hand calc engage (HO_F -> Q122 on): 46-58 us at 32 V, 63-78 us at 24 V,
+    113-142 us at 13.8 V, 209-268 us at 8 V (room/cold, full step); up to ~0.53 ms just above threshold (4 V step, cold); U2 off <= 0.25 ms after engage.
+   Vb     dV    temp            Q122 on    U2 EN<1.17 V   U5 EN<1.16 V
+    8.0   4.0   -40 F (-40 C)    0.270         n/a          0.230
+    8.0   4.0    77 F ( 25 C)    0.217         n/a          0.169
+    8.0   4.0   185 F ( 85 C)    0.177         n/a          0.121
+   13.8   4.0   -40 F (-40 C)    0.242       0.306          0.300
+   13.8   4.0    77 F ( 25 C)    0.120       0.162          0.156
+   13.8   4.0   185 F ( 85 C)    0.099       0.141          0.137
+   13.8   6.0   -40 F (-40 C)    0.140       0.172          0.166
+   13.8   6.0    77 F ( 25 C)    0.117       0.151          0.145
+   13.8   6.0   185 F ( 85 C)    0.097       0.131          0.125
+   13.8   9.8   -40 F (-40 C)    0.139         n/a          0.119
+   13.8   9.8    77 F ( 25 C)    0.116         n/a          0.092
+   13.8   9.8   185 F ( 85 C)    0.096         n/a          0.066
+   24.0   4.0   -40 F (-40 C)    0.222       0.352          0.348
+   24.0   4.0    77 F ( 25 C)    0.071       0.123          0.119
+   24.0   4.0   185 F ( 85 C)    0.057       0.105          0.101
+   24.0   6.0   -40 F (-40 C)    0.079       0.131          0.127
+   24.0   6.0    77 F ( 25 C)    0.066       0.112          0.110
+   24.0   6.0   185 F ( 85 C)    0.055       0.098          0.095
+   24.0  20.0   -40 F (-40 C)    0.075         n/a          0.066
+   24.0  20.0    77 F ( 25 C)    0.065         n/a          0.051
+   24.0  20.0   185 F ( 85 C)    0.055         n/a          0.037
+   32.0   4.0   -40 F (-40 C)    0.210       0.386          0.382
+   32.0   4.0    77 F ( 25 C)    0.063       0.123          0.119
+   32.0   4.0   185 F ( 85 C)    0.044       0.095          0.092
+   32.0   6.0   -40 F (-40 C)    0.061       0.122          0.119
+   32.0   6.0    77 F ( 25 C)    0.051       0.102          0.099
+   32.0   6.0   185 F ( 85 C)    0.041       0.089          0.087
+   32.0  28.0   -40 F (-40 C)    0.056         n/a          0.048
+   32.0  28.0    77 F ( 25 C)    0.048         n/a          0.038
+   32.0  28.0   185 F ( 85 C)    0.041         n/a          0.028
+   (dV = Vb - 4 V: warm restart from VBAT_P 4 V. n/a = that EN pin was already below its threshold before the step, or Q122 had nothing to sink.)
+
+(c) U5 turn-on with the hold-off idle: VBAT_P where U5_EN reaches 1.16 / 1.26 / 1.36 V (EN min / typ / max). Hand calc 3.63-4.25 V.
+    -40 F (-40 C): 3.63 / 3.94 / 4.25 V
+     77 F ( 25 C): 3.63 / 3.94 / 4.25 V
+    185 F ( 85 C): 3.68 / 3.99 / 4.30 V

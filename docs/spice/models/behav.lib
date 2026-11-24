@@ -1,0 +1,75 @@
+* Behavioral models built from datasheet parameters (vendor models encrypted or not published). See ../README.md.
+
+* ---- Bidirectional TVS (SMDJ40CA / SMBJ40CA): V = VBR_max + Rd*I, Rd = (VC - VBR_max)/Ipp, as kick_calc TVS dict
+.subckt TVSCA a k PARAMS: vbr=49.1 rd=0.333 n=1
+B1 a k I = {n}*((V(a,k)-{vbr})+sqrt((V(a,k)-{vbr})*(V(a,k)-{vbr})+1e-4))/(2*{rd}) - {n}*((-V(a,k)-{vbr})+sqrt((V(a,k)+{vbr})*(V(a,k)+{vbr})+1e-4))/(2*{rd})
+C1 a k 2n
+.ends
+
+* ---- LM74800-Q1 (SNOSDE8): ideal-diode DGATE + HGATE high-side driver + OV/UVLO.
+* Pins: A (anode, BAT_IN), C (VS/cathode, VBAT_DD), DGATE, HGATE, OUT (VBAT_P), OVP (OV pin), UVP (EN/UVLO pin)
+* DGATE: regulates V(A,C) to 20 mV (source ~2 mA, clamp A+11 V); fast reverse turn-off at -11 mV (2.37 A sink).
+* HGATE: sources ihg (39 uA min / 75 uA max) up to OUT+11.5 V; off (OV or UVLO) -> 168 mA sink to OUT.
+* OV: rising 1.195 V, falling 1.091 V, deglitch tdeg (3.98 us typ / 5.4 us max). UVLO pin: on 1.23 V, off 1.13 V
+* (BAT_IN about 5.6 V on / 5.2 V off through R1/R2/R3). Comparators are tanh-smoothed (1 mV) for convergence.
+.subckt LM74800B A C DGATE HGATE OUT OVP UVP PARAMS: ihg=75u tdeg=3.98u
+Buv uvr 0 V = 0.25*(1+tanh((V(UVP)-1.23+0.10*V(uvs))/1m))*(1+tanh((V(C)-3.9+0.3*V(uvs))/20m))
+Ruv uvr uvs 1k
+Cuv uvs 0 10p
+Bov ovr 0 V = 0.5*(1+tanh((V(OVP)-1.195+0.104*V(ovs))/1m))
+Rov ovr ovs 1k
+Cov ovs 0 10p
+* deglitch: dg ramps 1 V per tdeg while OV is high, collapses in ~50 ns when low; OFF when dg > 1 V
+Bdg 0 dg I = V(ovs)*1n/{tdeg} - (1-V(ovs))*20m*tanh(V(dg)/0.05) - 1n*0.5*(1+tanh((V(dg)-1.2)/0.01))*{1/tdeg}*V(ovs)
+Cdg dg 0 1n
+Rdg dg 0 1G
+Boff offr 0 V = 1-(1-0.5*(1+tanh((V(dg)-1.0)/0.01)))*V(uvs)
+Roff offr offs 1k
+Coff offs 0 10p
+* HGATE: smooth current-limited source to OUT+11.5 V, 168 mA sink when off
+Bhg OUT HGATE I = (1-V(offs))*{ihg}*tanh((11.5-V(HGATE,OUT))/0.2) - V(offs)*0.168*tanh(V(HGATE,OUT)/0.3)
+* DGATE: on (11 V through 5k, ~2 mA source) unless reverse V(A,C) < -11 mV, then 2.37 A sink. The 20 mV light-load
+* regulation is not modelled (it only matters at mA loads; full enhancement is the worst case for every event here).
+Edg dgd A VOL = V(uvs)*11*0.5*(1+tanh((V(A,C)+0.011)/1m))
+Rdg5 dgd DGATE 5k
+Bdgs DGATE A I = (2.37*0.5*(1-tanh((V(A,C)+0.011)/1m)) + 0.1*(1-V(uvs)))*tanh(V(DGATE,A)/0.3)
+Cdgp DGATE A 10p
+.ends
+
+* ---- TPS16630 eFuse (SLVSET9G), slot switch. TI's TPS1663 model is encrypted ($ENCRYPTED_LIB), so behavioral:
+* Ron (19 mOhm min / 53 max). Fast trip I(SCP) 45 A: FET starts turning off t_resp after detection (1 us typ, 1.5 us corner),
+* ramps off in 0.2 us, stays off 5 us, then the current-limit loop regulates at I(OL) (R_ILIM 3.09k: 5.36-6.30 A).
+* isat: optional FET saturation current (realistic case, 60 A). Timer node tt counts microseconds since the trip.
+.subckt TPS16630B IN OUT PARAMS: ron=19m iscp=45 tresp=1.0 iol=6.30 isat=1e6
+Vs IN n1 0
+Bdet detr 0 V = time < 1n ? 0 : max(V(det), 0.5*(1+tanh((i(Vs)-{iscp})/0.5)))
+Rdet detr det 1k
+Cdet det 0 10p
+Btt 0 tt I = time < 1n ? -V(tt)*1m : 1m*0.5*(1+tanh((V(det)-0.5)/0.02))
+Ctt tt 0 1n
+Rtt tt 0 1G
+Bf ff 0 V = V(tt) < {tresp} ? 1 : (V(tt) < {tresp}+0.2 ? 1-(V(tt)-{tresp})/0.2 : 0)
+Bsw n1 OUT I = V(tt) < ({tresp}+5.2) ? min(V(ff)*V(n1,OUT)/{ron}, {isat}) : min(max(V(n1,OUT),0)/{ron}, {iol})
+Cp n1 OUT 100p
+.ends
+
+* ---- LM5176 (U2) as a load: runs when EN/UVLO > 1.23 V (off < 1.17 V) and VIN > 3.8 V (off 3.5 V); soft start 7.5 ms (load
+* ramps linearly 0 -> pin), input power pin = 70 W / 0.88 = 79.5 W, input current limit 3.56 A. ss0 = 1 starts at full load.
+.subckt U2LOAD VIN EN PARAMS: pin=79.5 ilim=3.56 tss=7.5m ss0=0
+Brun runr 0 V = 0.25*(1+tanh((V(EN)-1.23+0.06*V(runs))/1m))*(1+tanh((V(VIN)-3.8+0.3*V(runs))/20m))
+Rrun runr runs 1k
+Crun runs 0 10p
+Bss 0 ss I = time < 1n ? ({ss0}-V(ss))*1 : V(runs)*(1u/{tss})*0.5*(1-tanh((V(ss)-1)/2m)) - (1-V(runs))*1m*tanh(V(ss)/0.02)
+Css ss 0 1u
+Rss ss 0 1G
+Bld VIN 0 I = V(runs)*min(max(V(ss),0)*{pin}/max(V(VIN),2.5), {ilim})
+.ends
+
+* ---- LMR36506 (U5, +3V3_BK) as a load: runs when EN > von (off < voff) and VIN > 3.9 V (off 3.4 V); bound 2.1 W input.
+* alive = output up (+3V3_SAFE is fed by +3V3_BK through the TPS2116 once U2 is down).
+.subckt U5LOAD VIN EN alive PARAMS: p=2.1 von=1.26 voff=1.16
+Brun runr 0 V = 0.25*(1+tanh((V(EN)-{von}+({von}-{voff})*V(alive))/1m))*(1+tanh((V(VIN)-3.9+0.5*V(alive))/20m))
+Rrun runr alive 1k
+Crun alive 0 10p
+Bld VIN 0 I = V(alive)*{p}/max(V(VIN),2.5)
+.ends

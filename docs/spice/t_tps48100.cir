@@ -1,0 +1,31 @@
+* TPS48100-Q1 vendor model smoke test in ngspice: start-up, then a short on the output
+.include models/TPS48100-Q1_TRANS.lib
+.include models/OptiMOS5_100V_Spice.lib
+VIN CS_PLUS 0 24
+RSNS CS_PLUS CS_MINUS 1m
+XQ CS_MINUS G1_PD SRC BSC070N10NS5_L1
+VEN EN 0 PULSE(0 5 0.1m 10u 10u 1 2)
+VINP INP1 0 PULSE(0 5 0.5m 10u 10u 1 2)
+XU BST CS_MINUS CS_PLUS 0 EN FLT G1_PD G1_PU G2 0 INP1 0 ISCP 0 SRC TMR CS_PLUS TPS48100-Q1_TRANS
+RISCP ISCP 0 40.2k
+CTMR TMR 0 4.7n
+RG G1_PU G1_PD 10
+CBST BST SRC 470n
+RL SRC 0 12
+LSH SRC SH1 0.5u
+RSH SH1 SH2 20m
+SSH SH2 0 SHC 0 SWM
+VSH SHC 0 PULSE(0 1 25m 1u 1u 1 2)
+.model SWM SW(Ron=10m Roff=1G Vt=0.5)
+RFLT FLT VPU 10k
+VPU VPU 0 3.3
+.tran 0.5u 27m 0 0.5u
+.control
+run
+meas tran vsrc_on find v(SRC) at=24.9m
+meas tran ipk max i(LSH) from=24.99m to=27m
+meas tran t_off when i(LSH)=1 fall=1 td=25.001m
+meas tran iend find i(LSH) at=26.9m
+meas tran flt find v(FLT) at=26.9m
+.endc
+.end

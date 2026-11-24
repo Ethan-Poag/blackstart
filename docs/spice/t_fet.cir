@@ -1,0 +1,13 @@
+* BSC070N10NS5 vendor model smoke test (ngspice, psa compat)
+.include models/OptiMOS5_100V_Spice.lib
+Vd d 0 1
+Vg g 0 10
+X1 d g 0 tj tc BSC070N10NS5
+Rth tc 0 0.01
+.control
+dc Vg 2 10 0.5
+print -i(Vd)
+op
+print -i(Vd) v(tj)
+.endc
+.end
