@@ -100,7 +100,7 @@ print('  (Pass 6 review, no hold-off: 32 V cold start with U5 2.1 W = SOA ratio 
 
 print('\n== 3. Q2 warm restart with the hold-off (C602 still charged; U2 70 W out, input <= 3.56 A; U5 2.1 W bound)')
 print('  Start states: VBAT_P 4 V (U2 had stopped: restarts with soft start when VBAT_P > 3.8 V), Vb/2 (short dip: U2 still running at')
-print('  FULL load at t = 0, harsher than the Pass 6 review model). HGATE 39 / 75 uA, hold-off cold (Vth 3.7 V, slow) and hot (2.5 V).')
+print('  FULL load at t = 0, harsher than the Pass 6 review model). HGATE 39 / 75 uA, hold-off cold (Vth 3.8 V, slow) and hot (2.5 V).')
 print('  Vb   from    HGATE corner | engage ms  U2 off ms  U2 back ms | Q2 E mJ  SOA ratio')
 for Vb in (12.0,13.8,24.0,28.8,32.0):
     for vp0,full in ((4.0,False),(Vb/2,True)):
@@ -172,9 +172,14 @@ print('  Series R at U7 on the engine lines that had none: 10k 0805 (150 V) + BA
 I=(36-3.3-0.3)/10e3
 print('    36 V on a line: %.1f mA into the clamp, %.2f W in the 10k (0805 0.125 W... 0.11 W: OK at 149 F ambient with 0805 derating to 70 C = 100 %%)'%(I*1e3,I*I*10e3))
 print('    ADC (FUEL_ISNS, CRANK_ISNS from INA281 outputs): 10k + U7 ADC Cs 5 pF + 1 nF C1111/C1112 at the pin:')
-print('      U7 ADC sample cap ~5 pF vs 1 nF at the pin: charge sharing moves the pin by <= 0.5 %% of a step (<= %.0f LSB worst, one-off),'%(4096*5e-12/1.005e-9))
-print('      with 1 nF at the pin the S/H kickback is 5 pF/1 nF = 0.5 % of a step, recovered by 10k x 1 nF = 10 us; at <= 1 kS/s per channel')
-print('      the error is < 0.1 LSB. FW: sample time >= 64.5 cycles anyway (FW_REQ).')
+ke=5e-12/1.005e-9*math.exp(-1.6e-6/(10e3*1.005e-9))
+print('      U7 ADC sample cap ~5 pF vs 1 nF at the pin: each conversion shares charge with the previous channel\'s voltage, error')
+print('      <= %.2f %% of |V_prev - V_in| (%.0f LSB for a full-scale jump; the 10k recovers only 15 %% within a 64.5-cycle sample).'%(ke*100,4096*ke))
+print('      Pass 7 m1 FW rule: convert FUEL/CRANK_ISNS twice back-to-back and use the second (error -> ~0), or sample >= 810.5 cycles')
+print('      (20 us at 40 MHz = 2 tau: <= %.1f LSB).'%(4096*5e-12/1.005e-9*math.exp(-20e-6/(10e3*1.005e-9))))
+print('  Pass 7 checks on the hold-off: BAT54C cross-leakage U5_EN -> BB_UVLO (reverse = 0.072 x VBAT_P: 0.36 V near the 5 V UVLO, where')
+print('    hot leakage of a few uA moves BB_UVLO <= 0.05 V = 0.2 V of VBAT_P; at 32 V BB_UVLO sits at 7.9 V, far above 1.29 V): OK.')
+print('    Q122 at high beta (300) could sink up to 0.42 A at first: C602 1 uF x 8 V = 8 uC, so <= ~20 us, inside the BAT54C 600 mA IFSM: OK.')
 print('    BAT54S leakage hot: <= 2 uA at 3.3 V, 185 F (85 C) x 10k = 20 mV (0.6 % of 3.3 V full scale) on FUEL/CRANK_ISNS: covered by the')
 print('    existing +/-2 % current-sense tolerance; cold/room < 1 mV.')
 print('    Digital lines (MPU_GATE, MPU_SPEED, DPLUS_EXC_EN, DIAG_EN): 10k x (5 pF + 10 pF trace) = 0.15 us edges: MPU_SPEED <= 10 kHz OK.')

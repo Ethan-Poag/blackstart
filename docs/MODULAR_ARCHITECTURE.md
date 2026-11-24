@@ -1378,8 +1378,8 @@ J48 carries +3V3_SAFE (a13/c13) and VBAT_P (a12/c12) straight to the engine card
 
 ### 18.4 "A different kind of problem?" Single points of failure (honest list)
 A fault on an **LV slot card** cannot take down the safety core: power is contained by its eFuse (and +3V3_ID by its own 150 Ω, ≤ 22 mA per slot), logic signals go through IOFF buffers, and the I²C is per slot. What can still take it down or stop the generator:
-1. The engine card (M3): it is not a "card" in the containment sense.
-2. Q2 overstress on a warm restart (B1): a mainboard part failing from a field event, not a card fault.
+1. The engine card (M3): it is not a "card" in the containment sense. *(Pass 6 §19.3: its +3V3 and VBAT_P feeds are now limited and its U7 lines have series resistors; it is still a mandatory card, so its loss stops the generator, fail-safe.)*
+2. Q2 overstress on a warm restart (B1): a mainboard part failing from a field event, not a card fault. *(Fixed, §19.1: worst SOA ratio 0.89.)*
 3. A short on the mainboard VBAT_SLOTS bus, or an eFuse that has failed short followed by a card short: F1 clears it, everything stops fail-safe.
 4. LV I/O availability, not safety: a card with a failed MISO buffer, or a stuck RST_N/INT_N, takes the shared slot SPI down for all eight slots; ID_WP is shared (a stuck-low only unlocks EEPROM writes). Firmware must fail safe on SPI/CRC loss (C5.1).
 5. Back-feed through the eFuse body diode (install rule, unchanged).
@@ -1432,7 +1432,7 @@ Ethan's rulings (8:26 AM HST): **B1 hold-off circuit only (do not swap Q2), M2 r
 - **ENG_3V3_SAFE (J48 a13/c13):** U160 **TPS2553DBVR** (C55266, JLC 42,087, $0.545) from +3V3_SAFE, EN tied on, R1101 210k = **110/130/150 mA**, auto-retry. Engine card +3V3 load ≤ 15 mA. FAULT → **ENG_PWR_FAULT_N** on 0x22 P15 (R1102 10k pull-up).
 - **ENG_VBAT_P (J48 a12/c12):** U161 **TPS16630PWPR** (C1849461, JLC 1,824, $2.92; the slot eFuse) with R1103 30k = **I_OL 0.54/0.60/0.66 A** vs ≤ 0.13 A load (D+ excitation LM317 + 10R), SCP 45 A / 1 µs, **MODE = GND (auto-retry, 648 ms)**, SHDN# open (internal pull-up = on), UVLO 100k/27k + 4.7 nF (on 5.64 V), OVP 453k/10k, dVdT 10 nF, IN 2.2 µF / 100 V, OUT 100 nF and SS310B. FLT# and PGOOD join ENG_PWR_FAULT_N.
   - **Why an eFuse, not the PTC first drawn** (LUTE 1812L030/60GR, C20627122, $0.045): a hard short on the engine card is about 100 A prospective, above the PTC's 40 A I_max, and its tens-to-hundreds-of-µs trip holds BAT_IN − VBAT_P near 2.2 V, only 0.3 V under the hot hold-off threshold. The eFuse cuts in 1 µs, F1 sees about 0.002 A²s, and the hold-off never sees it. Cost +$2.98 instead of +$0.045 (judgement call, recorded for Ethan). The TPS1HTC30 (JLC stock 0, $9.73) was not considered for this feed; note it as a supply risk for the HSO-5/BRK-4 cards too.
-- **Engine lines straight to U7:** R1111 1k on DPLUS_SNS (after the existing D65; the card side already has 100k). R1112–R1117 **10k 0805** (C17414, 150 V) on FUEL_ISNS, CRANK_ISNS, MPU_GATE, MPU_SPEED, DPLUS_EXC_EN and DIAG_EN, each with a BAT54S (D411–D416) to +3V3_SAFE/GND on the MCU side, plus C1111/C1112 1 nF on the two ISNS pins. A 36 V card fault injects ≤ 3.3 mA (0.11 W) into the clamp, not the pin. The ADC error stays under 1 LSB with the 1 nF at the pin; BAT54S hot leakage adds ≤ 20 mV (0.6 % FS) on the ISNS lines, inside the existing ±2 %. U7 pins: PA2 (24), PA3 (25), PB1 (35), PC7 (64), PC8 (65), PA8 (67), PA15 (77).
+- **Engine lines straight to U7:** R1111 1k on DPLUS_SNS (after the existing D65; the card side already has 100k). R1112–R1117 **10k 0805** (C17414, 150 V) on FUEL_ISNS, CRANK_ISNS, MPU_GATE, MPU_SPEED, DPLUS_EXC_EN and DIAG_EN, each with a BAT54S (D411–D416) to +3V3_SAFE/GND on the MCU side, plus C1111/C1112 1 nF on the two ISNS pins. A 36 V card fault injects ≤ 3.3 mA (0.11 W) into the clamp, not the pin. The 1 nF at the pin needs a double conversion (or ≥ 810.5-cycle sampling) to keep charge sharing out of the reading (Pass 7 m1, FW C3.5); BAT54S hot leakage adds ≤ 20 mV (0.6 % FS) on the ISNS lines, inside the existing ±2 %. U7 pins: PA2 (24), PA3 (25), PB1 (35), PC7 (64), PC8 (65), PA8 (67), PA15 (77).
 - **Residual:** a shorted ENG_3V3_SAFE at boot (U5 backup only, before +3V3 is up) loads U5 with 0.55 + 0.15 A against its 0.6 A rating: possible brownout until U2 starts (fail-safe).
 - **Parts (+31):** U160, R1101, R1102, C1101, C1102; U161, R1103–R1107, C1103–C1106, D403; R1111–R1117, D411–D416, C1111, C1112.
 
@@ -1465,3 +1465,20 @@ Mainboard **1,033** fitted parts (was 991, +42). Delta vs baseline now **+$332.8
 ### 19.7 Gates
 ERC 0/0 on all 7 projects; engine, DI-8, AI-4, HSO-5, BRK-4 1 page each; genctl_meter 2 pages. Audit: 1,050 same, 138 changes, 0 unexplained, 0 orphans. Drawn vs intended: 3,024 pins, 0 errors. BOM: 0 mismatches. Note lint: 509 notes, 0 findings. Q2 worst SOA ratio 0.89; kick_calc margins all ≥ 5 %. Commits: e57024a (schematic/tooling), b9ebd88 (calcs).
 **B1, M2 and M3 are closed in the schematic.** Pass 7 (independent review of the whole design) follows in §20.
+
+## 20. Pass 7: independent review of the whole design after the Pass 6 fixes (Nov 24, 2026, HST)
+Scope: the new hold-off, U5 EN divider and C602 change; the R_ILIM change and every margin it moves (kick_calc rerun, bank overload, F1, eFuse thermal, connector); the engine feeds (U160, U161) and the series resistors against the real engine-card netlist; ERC, audit, drawn-vs-intended, BOM; FW and install docs. Full notes: `/workspace/review/modular_pass7.md`.
+
+**Findings: 0 blocker, 0 major, 2 minor (fixed).**
+- **m1 (fixed):** §19.3 and the calc said the ADC error with 1 nF at the ISNS pins was under 1 LSB. Not so: each conversion shares charge with the previous channel's voltage, ≤ 0.42 % of the jump (17 LSB full scale), and the 10k recovers only 15 % within a 64.5-cycle sample. FW C3.5 now converts FUEL/CRANK_ISNS twice and uses the second result (or samples ≥ 810.5 cycles: ≤ 2.8 LSB).
+- **m2 (fixed):** text: cold hold-off threshold 3.8 V (not 3.6/3.7) everywhere; §18.4 single-point list updated for B1/M3.
+
+**Checked and OK:**
+- Hold-off: reverse battery (D401 sees VBAT_P − BAT_IN ≤ 65 V; 1N4148W 75 V VRRM), crank (VBAT_P > BAT_IN: E-B never reverse-biased), µs kicks (≤ 363 A × 22 mΩ for ≤ 2 µs adds ≤ 30 mV on the filter), BAT54C cross-leakage near UVLO ≤ 0.2 V of VBAT_P, Q122 high-β peak ≤ 0.42 A for ≤ 20 µs (BAT54C IFSM 600 mA), Q121 VCE ≤ 57.6 V (150 V), U5 EN ≤ 18.4 V, U5 still runs through a 6 V crank (EN 1.9 V) and stops only below 2.4–3.3 V; U2 UVLO with C602 1 µF stops at about 4.6 V, below the 6 V crank floor.
+- Engine card loads behind the 10k: DPLUS_EXC_EN drives Q10 through R45 10k / R46 100k: base current still ≈ 120 µA for ≤ 0.3 mA collector load; MPU_GATE/MPU_SPEED are TLV1812 push-pull with 2.2k pull-ups into a high-impedance MCU input; DIAG_EN drives the TPS1HTC30 DIAG_EN input (high impedance). Card +3V3 load ≤ 15 mA vs the 110 mA minimum limit.
+- U161: MODE = GND, SHDN# open (internal pull-up), IMON open (allowed), FLT#/PGOOD on ENG_PWR_FAULT_N with U160 FAULT; VBAT_P kick 47.1 V vs 67 V; dead-short average heat low (TSD + 648 ms retry).
+- M2 numbers re-derived independently: I_OL 5.36–6.30 A, bank margin 9.9/11.7 ms, F1 8.2 A²s (11 %), steady T_J ≈ 230 °F (110 °C).
+- Gates rerun after the fixes (see §19.7): ERC 0/0 × 7, page counts, audit 0 unexplained, 3,024 pins 0 errors, BOM 0 mismatches, note lint 0.
+- Supply note (not new): TPS1HTC30 (HSO-5, BRK-4, engine card U8) is JLC stock 0 today; the BOM already plans it as consigned from the TI store.
+
+**Verdict: READY** (schematic level, local commits only; layout stays frozen, so the Pass 6 parts need a rework or respin plan when Ethan unfreezes it).

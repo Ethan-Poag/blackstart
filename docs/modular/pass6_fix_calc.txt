@@ -44,7 +44,7 @@ C602 is 1 uF X7R (0.5-1.1 uF effective; was 10 uF): see section 3 for why.
 
 == 3. Q2 warm restart with the hold-off (C602 still charged; U2 70 W out, input <= 3.56 A; U5 2.1 W bound)
   Start states: VBAT_P 4 V (U2 had stopped: restarts with soft start when VBAT_P > 3.8 V), Vb/2 (short dip: U2 still running at
-  FULL load at t = 0, harsher than the Pass 6 review model). HGATE 39 / 75 uA, hold-off cold (Vth 3.7 V, slow) and hot (2.5 V).
+  FULL load at t = 0, harsher than the Pass 6 review model). HGATE 39 / 75 uA, hold-off cold (Vth 3.8 V, slow) and hot (2.5 V).
   Vb   from    HGATE corner | engage ms  U2 off ms  U2 back ms | Q2 E mJ  SOA ratio
   12.0   4.0 V 39 uA cold |   0.17       0.18        -    |      9    0.03 OK
   12.0   4.0 V 39 uA hot  |   0.11       0.19        -    |      9    0.03 OK
@@ -142,9 +142,13 @@ C602 is 1 uF X7R (0.5-1.1 uF effective; was 10 uF): see section 3 for why.
   Series R at U7 on the engine lines that had none: 10k 0805 (150 V) + BAT54S to +3V3_SAFE / GND on the MCU side.
     36 V on a line: 3.2 mA into the clamp, 0.10 W in the 10k (0805 0.125 W... 0.11 W: OK at 149 F ambient with 0805 derating to 70 C = 100 %)
     ADC (FUEL_ISNS, CRANK_ISNS from INA281 outputs): 10k + U7 ADC Cs 5 pF + 1 nF C1111/C1112 at the pin:
-      U7 ADC sample cap ~5 pF vs 1 nF at the pin: charge sharing moves the pin by <= 0.5 % of a step (<= 20 LSB worst, one-off),
-      with 1 nF at the pin the S/H kickback is 5 pF/1 nF = 0.5 % of a step, recovered by 10k x 1 nF = 10 us; at <= 1 kS/s per channel
-      the error is < 0.1 LSB. FW: sample time >= 64.5 cycles anyway (FW_REQ).
+      U7 ADC sample cap ~5 pF vs 1 nF at the pin: each conversion shares charge with the previous channel's voltage, error
+      <= 0.42 % of |V_prev - V_in| (17 LSB for a full-scale jump; the 10k recovers only 15 % within a 64.5-cycle sample).
+      Pass 7 m1 FW rule: convert FUEL/CRANK_ISNS twice back-to-back and use the second (error -> ~0), or sample >= 810.5 cycles
+      (20 us at 40 MHz = 2 tau: <= 2.8 LSB).
+  Pass 7 checks on the hold-off: BAT54C cross-leakage U5_EN -> BB_UVLO (reverse = 0.072 x VBAT_P: 0.36 V near the 5 V UVLO, where
+    hot leakage of a few uA moves BB_UVLO <= 0.05 V = 0.2 V of VBAT_P; at 32 V BB_UVLO sits at 7.9 V, far above 1.29 V): OK.
+    Q122 at high beta (300) could sink up to 0.42 A at first: C602 1 uF x 8 V = 8 uC, so <= ~20 us, inside the BAT54C 600 mA IFSM: OK.
     BAT54S leakage hot: <= 2 uA at 3.3 V, 185 F (85 C) x 10k = 20 mV (0.6 % of 3.3 V full scale) on FUEL/CRANK_ISNS: covered by the
     existing +/-2 % current-sense tolerance; cold/room < 1 mV.
     Digital lines (MPU_GATE, MPU_SPEED, DPLUS_EXC_EN, DIAG_EN): 10k x (5 pF + 10 pF trace) = 0.15 us edges: MPU_SPEED <= 10 kHz OK.
