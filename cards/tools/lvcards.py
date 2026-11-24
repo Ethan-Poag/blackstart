@@ -11,7 +11,7 @@ from verify_card import verify
 
 TYPES={'di8':0x0010,'ai4':0x0011,'hso5':0x0012,'brk4':0x0013}
 COMMON_RENAME={'VBAT_P':'VBAT_FIELD','+3V3_SAFE':'+3V3_SLOT','OUT_FAULT_N':'CARD_FAULT_N'}
-RAILS={'GND','+3V3_SLOT','+3V3_ID','+5V_SLOT','VBAT_FIELD'}
+RAILS={'GND','+3V3_SLOT','+3V3_ID','VBAT_FIELD'}
 
 def setup(name,title,rename):
     c=Card(name,title)
@@ -19,7 +19,7 @@ def setup(name,title,rename):
     for n in c.nets:
         sn=short(n['name'])
         if sn in R: c.netmap[n['name']]=R[sn]
-    c.rename=R; c.changes=[]
+    c.rename=R; c.changes=[]; c.vchanges=[]
     return c
 def retarget(c,bref,pin,new,why):
     for p in c.parts:
@@ -40,6 +40,23 @@ def header(c,nets,desc):
     J=c.newref('J'); c.add('Connector_Generic:Conn_01x06',J,desc,{str(i+1):n for i,n in enumerate(nets)},h); return J
 def pullup(c,net,rail='+3V3_SLOT'):
     res=dict(c.inst['R349'][0]['props']); res.pop('Reference'); R=c.newref('R'); c.add('Device:R',R,res['Value'],{'1':rail,'2':net},res); return R
+R0603='Resistor_SMD:R_0603_1608Metric'
+VAL={'33.2k':dict(Value='33.2k',Footprint=R0603,MPN='0603WAF3322T5E',Manufacturer='UNI-ROYAL',LCSC='C23003'),
+     '910':dict(Value='910',Footprint=R0603,MPN='0603WAF9100T5E',Manufacturer='UNI-ROYAL',LCSC='C23264'),
+     '4.7k':dict(Value='4.7k',Footprint=R0603,MPN='0603WAF4701T5E',Manufacturer='UNI-ROYAL',LCSC='C23162'),
+     'C100N100V':dict(Value='100n',Footprint='Capacitor_SMD:C_0805_2012Metric',MPN='CL21B104KCFNNNE',Manufacturer='Samsung Electro-Mechanics',LCSC='C28233'),
+     'C2U2100V':dict(Value='2.2u',Footprint='Capacitor_SMD:C_1206_3216Metric',MPN='CL31B225KCHSNNE',Manufacturer='Samsung Electro-Mechanics',LCSC='C170101')}
+def revalue(c,ref,key,why):
+    """change Value/MPN/LCSC of a MOVED baseline part (connectivity unchanged); recorded in value_changes.csv"""
+    for p in c.parts:
+        if p['ref']==ref:
+            old=p['props'].get('Value'); p['props'].update(VAL[key]); c.vchanges.append((p['props'].get('BaselineRef'),ref,old,VAL[key]['Value'],why)); return
+    raise KeyError(ref)
+def newpart(c,key,a,b,desc):
+    d=dict(VAL[key]); d['Description']=desc; pre='C' if key.startswith('C') else 'R'; r=c.newref(pre)
+    c.add('Device:'+pre,r,d['Value'],{'1':a,'2':b},d); return r
+def pulls(c,nets,rail,desc):
+    return [L.res(c,'C25819',n,rail,desc) for n in nets]
 def bufcopy(c,inputs,outputs):
     """SN74LVC541A (copy of baseline U42): both OE pins on OUT_EN_N (slot, active low, card pull-up) -> outputs Hi-Z unless enabled."""
     pinmap={'1':'OUT_EN_N','19':'OUT_EN_N','10':'GND','20':'+3V3_SLOT'}
@@ -71,6 +88,7 @@ def finish(c,blocks,slot_ref,fields,paper,notes,replaced,labels_only=(),extra=No
     with open(os.path.join(ROOT,'cards',c.name,'net_changes.csv'),'w',newline='') as f:
         w=csv.writer(f); w.writerow(['baseline_ref','pin','baseline_net','card_net','why'])
         for r in c.changes: w.writerow(r)
+        for r in c.vchanges: w.writerow([r[0],'(value)',r[2],r[3],r[4]])
         for k,v in sorted(c.rename.items()): w.writerow(['(rename)','',k,v,'card-local name'])
     print(c.name,'parts',len({p['ref'] for p in c.parts}),'overflow',over,'left',D.left)
     return errs,unacc,over
@@ -95,21 +113,22 @@ def di8(paper=None):
     # own Schmitt triggers for IN1/IN2 (copy of U32, unused gates: input GND, output NC)
     sm={'DI5_D':'IN1_D','DI6_D':'IN2_D','DI5_N':'IN1_N','DI6_N':'IN2_N','DI1_D':'GND','DI2_D':'GND','DI3_D':'GND','DI4_D':'GND','DI1_N':None,'DI2_N':None,'DI3_N':None,'DI4_N':None}
     L.copy_parts(c,['U32'],nf(c,sm))
-    L.copy_parts(c,['R635'],nf(c,{'DI_BIAS_FLT_N':'CARD_FAULT_N'}))    # eFuse fault pull-up (baseline one stays with bank A)
     JS,c.P=L.slot(c); ee=L.eeprom(c)
-    mc=L.mcp(c,[f'IN{i}_N' for i in range(1,9)],['BIAS_ON','BIAS_DISCH','CARD_FAULT_N',None,'SLOT_ID0','SLOT_ID1','SLOT_ID2','SLOT_IDP'])
+    buf=L.slotbuf(c)
+    mc=L.mcp(c,[f'IN{i}_N' for i in range(1,9)],['BIAS_ON','BIAS_DISCH',None,None,'SLOT_ID0','SLOT_ID1','SLOT_ID2','SLOT_IDP'])
     blocks=[('Slot connector (universal LV slot) - DIN 41612 C96',B(c,JS)),
       ('Card bias supply: switch + eFuse + PTC + TVS + discharge',B(c,'Q39','Q40','U90','Q41')),
       ('Inputs IN1-IN8 (field headers J20: IN3-IN8, J22: IN1, IN2)',B(c,'J20','J22')),
       ('Schmitt triggers',B(c,'U33','U32')),
-      ('SPI I/O expander + card ID EEPROM',B(c,mc[0],ee[0]))]
+      ('IOFF slot buffers + SPI I/O expander + card ID EEPROM',B(c,*buf,mc[0],ee[0]))]
     notes=['DI-8 CARD, card type 0x0010. Fits any universal LV slot (LV coding notch).',
       'Self-contained: own bias supply (copy of baseline bank-B switch/eFuse, fed from VBAT_FIELD), own 74HC14 Schmitt triggers, own MCP23S17 on the slot SPI bus.',
-      'MCP23S17: GPA0-7 = IN1_N..IN8_N; GPB0 BIAS_ON, GPB1 BIAS_DISCH, GPB2 CARD_FAULT_N (eFuse fault, also to the slot), GPB4-7 slot ID straps (internal pull-ups).',
+      'MCP23S17: GPA0-7 = IN1_N..IN8_N; GPB0 BIAS_ON, GPB1 BIAS_DISCH, GPB2/GPB3 unused (NC, GPPU on), GPB4-7 slot ID straps (GPPU on). CARD_FAULT_N (TPS26621 FLT, open drain, 62 V abs max to RTN) goes to the slot only; pulled up on the backplane, read by U-exp 0x22.',
+      'Slot logic behind IOFF buffers (74LVC125A in, 1G125 MISO, 1G07 INT_N): an unpowered card never loads the slot bus.',
       'Baseline names: IN1..IN8 = DI5..DI12, BIAS = DI_BIAS_B. Net changes: net_changes.csv.']
     replaced={f'IN{i}_N':'was a 74HC14 output to an STM32 pin (series R on mainboard); now read by the card MCP23S17' for i in range(1,9)}
     replaced.update({'BIAS_ON':'was driven by mainboard TCA9555 U31 P16; now card MCP23S17 GPB0','BIAS_DISCH':'was mainboard TCA9555 U31 P17; now MCP23S17 GPB1',
-      'CARD_FAULT_N':'was DI_BIAS_FLT_N to mainboard TCA9555 U76 (shared with bank A); now card fault to the slot + MCP23S17',
+      'CARD_FAULT_N':'was DI_BIAS_FLT_N to mainboard TCA9555 U76 (shared with bank A); now card fault to the slot only (pull-up + 0x22 expander on the backplane)',
       'IN1':'field terminal moved from mainboard J19.5 to card J22.2','IN2':'field terminal moved from mainboard J19.6 to card J22.3',
       'IN1_D':'mainboard U32 gate replaced by the card 74HC14 copy','IN2_D':'mainboard U32 gate replaced by the card 74HC14 copy'})
     return finish(c,blocks,JS,[c.refmap['J20'],c.refmap['J22']],paper,notes,replaced,rails={'BIAS'})
@@ -117,7 +136,7 @@ def di8(paper=None):
 
 # ---------------------------------------------------------------- AI-4
 def ai4(paper=None):
-    paper=os.environ.get('PAPER','A3')
+    paper=os.environ.get('PAPER','A2')   # pass 1 additions (IOFF buffers, boot pulls) no longer pack on A3
     rn={}
     for i,b in enumerate((3,4,5,6)):
         k=i+1; rn.update({f'AI{b}':f'IN{k}',f'AI{b}_ADC':f'IN{k}_ADC',f'AI_CS_DIS{b}':f'CS_DIS{k}',f'AI_SH_EN{b}':f'SH_EN{k}',f'AI_SH_G{b}':f'SH_G{k}'})
@@ -132,25 +151,30 @@ def ai4(paper=None):
     # own ADS1115 (copy of U30): AIN0-3 = IN1-4, ADDR=GND -> 0x48 on the slot I2C bus
     um={'1':'GND','2':None,'3':'GND','4':'IN1_ADC','5':'IN2_ADC','6':'IN3_ADC','7':'IN4_ADC','8':'+3V3_SLOT','9':'I2C_SDA','10':'I2C_SCL'}
     adc=L.copy_parts(c,['U30'],lambda n,p:um[p])['U30']
+    for p in c.parts:
+        if p['ref']==adc: p['props']['Value']='ADS1115 @0x48'   # ADDR = GND -> 0x48 (pass 1 N1)
     L.copy_parts(c,['C130'],nf(c))                                   # ADC decoupling
     L.copy_parts(c,['U25','R127','R128','C128'],nf(c))               # own VMID buffer
     L.copy_parts(c,['Q72','R628','D146','C144','C145','C146','D23','C131','R129'],nf(c))  # own VBAT_AI + AI_VSET current-source reference
     rm={'AI_SH_G1':'SH_G1','AI_SH_G2':'SH_G2','AI_SH_G3':'SH_G3','AI_SH_G4':'SH_G4'}
     L.copy_parts(c,['RN1'],nf(c,rm))                                 # shunt-gate pull-downs (off when '541 is Hi-Z)
     buf=bufcopy(c,[f'SH_EN{i}' for i in range(1,5)],[f'SH_G{i}' for i in range(1,5)])
-    pu=pullup(c,'OUT_EN_N')
-    JS,c.P=L.slot(c); ee=L.eeprom(c)
+    pu=pullup(c,'OUT_EN_N','+3V3_ID')
+    pd=pulls(c,[f'SH_EN{i}' for i in range(1,5)],'GND','boot-safe: shunt request low while MCP23S17 is reset/Hi-Z')
+    pu2=pulls(c,[f'CS_DIS{i}' for i in range(1,5)],'+3V3_SLOT','boot-safe: CS_DIS high = current source OFF (baseline TCA9555 POR high) while MCP23S17 is reset/Hi-Z')
+    JS,c.P=L.slot(c); ee=L.eeprom(c); buf2=L.slotbuf(c)
     mc=L.mcp(c,[f'CS_DIS{i}' for i in range(1,5)]+[f'SH_EN{i}' for i in range(1,5)],['SLOT_ID0','SLOT_ID1','SLOT_ID2','SLOT_IDP',None,None,None,None])
     J=header(c,['IN1','IN2','IN3','IN4','GND','GND'],'AI_FIELD')
     blocks=[('Slot connector (universal LV slot) - DIN 41612 C96',B(c,JS)),
       ('Field inputs IN1-IN4: current source, shunt, filter, clamp',B(c,J,*[r for r in moved])),
       ('ADC + mid-rail reference',B(c,adc,'U25','R127','R128','C128','C130')),
       ('Current-source supply VBAT_AI + 2.5 V reference',B(c,'Q72','R628','D146','C144','C145','C146','D23','C131','R129')),
-      ("Shunt gate drive ('541 gated by OUT_EN_N)",B(c,buf,'RN1',pu)),
-      ('SPI I/O expander + card ID EEPROM',B(c,mc[0],ee[0]))]
+      ("Shunt gate drive ('541 gated by OUT_EN_N) + boot-safe defaults",B(c,buf,'RN1',pu,*pd)),
+      ('IOFF slot buffers + SPI I/O expander + card ID EEPROM',B(c,*buf2,mc[0],ee[0],*pu2))]
     notes=['AI-4 CARD, card type 0x0011. 4 configurable analog inputs (0-5/0-10 V, 4-20 mA shunt, resistive sender via current source).',
       'Self-contained: own ADS1115 (0x48 on the slot I2C bus), own VMID buffer, own VBAT_AI pre-regulator and LM4040 current-source reference, own MCP23S17.',
-      'MCP23S17: GPA0-3 CS_DIS1-4, GPA4-7 SH_EN1-4; GPB0-3 slot ID straps. 4-20 mA shunts only close while OUT_EN_N is low (replaces SH_ALLOW AND gate).',
+      'MCP23S17: GPA0-3 CS_DIS1-4 (47k pull-up: source OFF at reset), GPA4-7 SH_EN1-4 (47k pull-down: shunt open at reset); GPB0-3 slot ID straps, GPB4-7 unused (NC, GPPU on). Shunts only close while OUT_EN_N is low (backplane: PWR_EN AND WD_OK AND NRST AND SLOT_RST_N AND slot ARM).',
+      'Slot logic behind IOFF buffers (74LVC125A in, 1G125 MISO, 1G07 INT_N); OUT_EN_N pull-up on +3V3_ID (always on).',
       'Baseline names: IN1..IN4 = AI3..AI6. Net changes: net_changes.csv.']
     replaced={}
     for i,b in enumerate((3,4,5,6)):
@@ -177,7 +201,7 @@ def grow(c,seed,allowed,rails):
     return seen
 
 # ---------------------------------------------------------------- HSO-5 / BRK-4 (high-side output cards)
-def hso_card(name,title,typ,part,outs,extra_moves,clamp,straps,notes,nc_pins=(),paper='A3',pad=1):
+def hso_card(name,title,typ,part,outs,extra_moves,clamp,straps,notes,nc_pins=(),paper='A2',pad=1):
     """outs: baseline output prefixes in card order (OUT1..). Each card: its outputs' high-side switches (moved), own '541
     (OUT_EN_N gated), own TMUX1208 current-sense mux to ANA_OUT, own MCP23S17, own clamps, CARD_FAULT_N pull-up."""
     rn={'DIAG_EN':'DIAG_EN'}
@@ -200,8 +224,20 @@ def hso_card(name,title,typ,part,outs,extra_moves,clamp,straps,notes,nc_pins=(),
     for i,pn in enumerate(S): tm[pn]=f'OUT{i+1}_SNSM' if i<n else 'GND'
     mux=L.copy_parts(c,['U63'],lambda nn,p:tm[p])['U63']
     L.copy_parts(c,['C182'],nf(c))
-    pu=pullup(c,'OUT_EN_N'); pf=pullup(c,'CARD_FAULT_N')
-    JS,c.P=L.slot(c); ee=L.eeprom(c)
+    pu=pullup(c,'OUT_EN_N','+3V3_ID')
+    pd=pulls(c,[f'OUT{k}_REQ' for k in range(1,n+1)]+['DIAG_EN','MUX_A0','MUX_A1','MUX_A2'],'GND','boot-safe: low while MCP23S17 is reset/Hi-Z')
+    JS,c.P=L.slot(c); ee=L.eeprom(c); sbuf=L.slotbuf(c)
+    # M1 + M2 + N17 (pass 1): per-driver VS decoupling, card bulk, ILIM 33.2k, SNS 910 / 4.7k series into the clamp
+    vs={}; bulk=newpart(c,'C2U2100V','VBAT_FIELD','GND','card bulk on VBAT_FIELD, 100 V X7R (slot SCP blanking ~70 us >> 2.7 uF charge time)')
+    for u in sorted([r for r in moved if r.startswith('U')],key=lambda r:int(r[1:])):
+        cu=c.refmap[u]; vs[cu]=newpart(c,'C100N100V','VBAT_FIELD','GND',f'{cu} VS decoupling (TPS1HTC30-Q1 C_IC >= 100 nF)')
+        pp=[p for p in c.parts if p['ref']==cu][0]; ilim=pp['pn']['7']; sns=pp['pn']['6']
+        for q in c.parts:
+            if q['lib_id']!='Device:R': continue
+            nets=set(q['pn'].values())
+            if ilim in nets: revalue(c,q['ref'],'33.2k','ILIM 33.2k: I_CL = 80..120 A*kOhm / 33.2k = 2.41/3.01/3.61 A')
+            elif sns in nets and 'GND' in nets: revalue(c,q['ref'],'910','R_SNS 910: 3.61 A / 1300 x 910 = 2.53 V < V_SNSFH min 3.0 V')
+            elif sns in nets: revalue(c,q['ref'],'4.7k','SNS series 4.7k: clamp current <= 0.13 mA, S pin <= VDD + 0.25 V (BAT54C VF max 240 mV @ 0.1 mA)')
     gpa=[f'OUT{k}_REQ' for k in range(1,n+1)]+['DIAG_EN']; gpb=[f'OUT{k}_RB_N' for k in range(1,n+1)]+['MUX_A0','MUX_A1','MUX_A2']
     free=[None]*(16-len(gpa)-len(gpb)); st=list(straps)
     gpa+= [st.pop(0) if st else None for _ in range(8-len(gpa))]; gpb+=[st.pop(0) if st else None for _ in range(8-len(gpb))]
@@ -220,23 +256,30 @@ def hso_card(name,title,typ,part,outs,extra_moves,clamp,straps,notes,nc_pins=(),
         refs=[r for g in grp[a:b2] for r in g]+(rest+[J] if b2==n else [])
         lab=f'OUT{a+1}' if b2-a==1 else f'OUT{a+1}-OUT{b2}'
         blocks.append((f'High-side switch {lab}: driver, sense resistor, readback, clamps'+(' + field header' if b2==n else ''),B(c,*refs)))
-    blocks.append(("Enable buffer ('541, OUT_EN_N)",B(c,buf,pu,pf)))
+    blocks.append(("Enable buffer ('541, OUT_EN_N) + boot-safe pull-downs",B(c,buf,pu,*pd)))
     blocks.append(('Sense mux to ANA_OUT + clamps',B(c,mux,'C182',*clamps,*clamp_new)))
+    blocks.append(('IOFF slot buffers (no back-power into an unpowered card)',B(c,*sbuf)))
     blocks.append(('SPI I/O expander + card ID EEPROM',B(c,mc[0],ee[0])))
+    xb={}
+    for t,keys in blocks:
+        for cu,cr in vs.items():
+            if any(k[0]==cu for k in keys): xb[cr]=t
+    xb[bulk]=blocks[1][0]
     replaced={'DIAG_EN':'was one mainboard net shared by all 15 high-side switches; now driven by the card MCP23S17',
-              'CARD_FAULT_N':'was the board-wide OUT_FAULT_N wired-OR (R44 pull-up); now a per-card fault line to the slot with its own pull-up',
+              'CARD_FAULT_N':'was the board-wide OUT_FAULT_N wired-OR (R44 pull-up); now a per-card fault line to the slot, pulled up on the backplane only (TPS1HTC30 FAULT abs max 7 V to GND, no VS clamp)',
               'MUX_A0':'card-local mux select from the MCP23S17','MUX_A1':'card-local mux select','MUX_A2':'card-local mux select'}
     for k,b in enumerate(outs,1):
         replaced[f'OUT{k}']=f'field terminal moved from the mainboard output header to the card header'
         replaced[f'OUT{k}_EN']="was mainboard '541 U41/U42 output; now the card '541"
         replaced[f'OUT{k}_RB_N']='was mainboard TCA9555 U62 input; now card MCP23S17'
         replaced[f'OUT{k}_SNSM']='was a mainboard TMUX1208 U63/U64 channel; now the card TMUX1208'
-    return finish(c,blocks,JS,[J],os.environ.get('PAPER',paper),notes,replaced,pad=pad)
+    return finish(c,blocks,JS,[J],os.environ.get('PAPER',paper),notes,replaced,pad=pad,extra=xb)
 
 
 def hso5():
     notes=['HSO-5 CARD, card type 0x0012. 5 protected high-side outputs (TPS1HTC30-class, baseline AUX1-AUX5 circuit); a 2nd instance replaces AUX6-AUX10.',
-      "Self-contained: own SN74LVC541A enable buffer (outputs only enabled while OUT_EN_N is low), own TMUX1208 current-sense mux to ANA_OUT, own BAT54C clamps, own MCP23S17.",
+      "Self-contained: own SN74LVC541A enable buffer (outputs only enabled while OUT_EN_N is low), own TMUX1208 current-sense mux to ANA_OUT, own BAT54C clamps, own MCP23S17 behind IOFF slot buffers.",
+      'Pass 1: REQ/DIAG_EN/MUX_A 47k pull-downs (boot-safe), OUT_EN_N pull-up on +3V3_ID, 100 nF/100 V at every VS + 2.2 uF bulk, ILIM 33.2k (2.41/3.01/3.61 A), R_SNS 910 + 4.7k into the clamp. CARD_FAULT_N pulled up on the backplane only.',
       'MCP23S17: GPA0-4 OUT1-5_REQ, GPA5 DIAG_EN, GPA6-7 SLOT_ID0/1; GPB0-4 OUT1-5_RB_N, GPB5-7 MUX_A0-2. SLOT_ID2/IDP not read (no spare GPIO): slot identity also comes from the I2C mux channel.',
       'Baseline names: OUTk = AUXk. Net changes: net_changes.csv.']
     return hso_card('hso5','HSO-5 card (type 0x0012): 5 high-side outputs',0x12,'HSO_A',['AUX1','AUX2','AUX3','AUX4','AUX5'],[],
@@ -244,7 +287,8 @@ def hso5():
 
 def brk4():
     notes=['BRK-4 CARD, card type 0x0013. 4 breaker coil outputs: OUT1 GCB close, OUT2 GCB open, OUT3 MCB close, OUT4 MCB open.',
-      "Self-contained: own SN74LVC541A enable buffer (OUT_EN_N gated), own TMUX1208 current-sense mux to ANA_OUT, own MCP23S17. Shared clamps D128/D130 split: their GLOW/AUX1 halves are left NC here.",
+      "Self-contained: own SN74LVC541A enable buffer (OUT_EN_N gated), own TMUX1208 current-sense mux to ANA_OUT, own MCP23S17 behind IOFF slot buffers. Shared clamps D128/D130 split: their GLOW/AUX1 halves are left NC here.",
+      'Pass 1: REQ/DIAG_EN/MUX_A 47k pull-downs (boot-safe), OUT_EN_N pull-up on +3V3_ID, 100 nF/100 V at every VS + 2.2 uF bulk, ILIM 33.2k: coil current limit 2.41 A min (coils above 2.4 A need an interposing relay), R_SNS 910 + 4.7k into the clamp.',
       'MCP23S17: GPA0-3 OUT1-4_REQ, GPA4 DIAG_EN, GPA5-7 SLOT_ID0-2; GPB0-3 OUT1-4_RB_N, GPB4-6 MUX_A0-2, GPB7 SLOT_IDP.',
       'Baseline names: OUT1 GCB_CL, OUT2 GCB_OP, OUT3 MCB_CL, OUT4 MCB_OP. Net changes: net_changes.csv.']
     return hso_card('brk4','BRK-4 card (type 0x0013): 4 breaker coil outputs',0x13,'BRK4',['GCB_CL','GCB_OP','MCB_CL','MCB_OP'],[],None,

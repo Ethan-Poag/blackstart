@@ -29,3 +29,15 @@ print()
 print('| Current | 1 oz outer, 18 °F rise | 1 oz outer, 36 °F rise | 2 oz outer, 18 °F rise | 0.5 oz inner, 18 °F rise |'); print('|---|---|---|---|---|')
 for I in (7.6,10.0):
     print('| %.1f A | %.1f mm | %.1f mm | %.1f mm | %.1f mm |'%(I,width(I,10,1,0.048),width(I,20,1,0.048),width(I,10,2,0.048),width(I,10,0.5,0.024)))
+# ---- Pass 1 (M2/N13): slot-bank limiter (TPS48100 + 2x BSC070N10NS5 + 5 mOhm HoJLR2512-3W, VBAT_P -> VBAT_SLOTS) ----
+# Same FET model (RthJA 50 K/W, RDS(on) max 7 mOhm x (1 + 0.7 (Tj-25)/125)). Currents: 5.0 A = AUX/slot budget at room,
+# 8.61 A = budget + one shorted HSO channel at its 3.61 A max current limit, 9.2 A = lowest bank trip (19.6k, 45.8 mV / 5 mOhm).
+print()
+print('| Ambient °F | Bank A | Part | A in part | Loss W | Tj °F | Rise °F |'); print('|---|---|---|---|---|---|---|')
+for ta in (40.0,65.0):
+    for tot in (5.0,8.61,9.2):
+        for name,share in (('Bank BSC070N10NS5 (each, 50/50)',0.5),('Bank BSC070N10NS5 (hot FET, 60/40)',0.6)):
+            TA=ta; t,p=tj(tot*share,rds_bsc,50)
+            print('| %.0f | %.2f | %s | %.2f | %.2f | %.0f | %.0f |'%(F(ta),tot,name,tot*share,p,F(t),dF(t-ta)))
+        print('| %.0f | %.2f | Bank shunt 5 mOhm 2512 (3 W) | %.2f | %.2f | - | - |'%(F(ta),tot,tot,tot*tot*0.005))
+TA=40.0

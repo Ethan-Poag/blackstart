@@ -23,7 +23,7 @@ syms.append('(symbol "AT24CS32-STUM" (pin_names (offset 0.5)) (exclude_from_sim 
   +prop('Reference','U',3.81,6.35)+prop('Value','AT24CS32-STUM-T',3.81,-6.35)+prop('Footprint','Package_TO_SOT_SMD:SOT-23-5',0,0,True)+prop('Datasheet','',0,0,True)
   +prop('Description','32 Kbit I2C EEPROM + 128-bit factory serial (0x50 EEPROM / 0x58 serial, SOT-23 A2..A0 = 0)',0,0,True)
   +'(symbol "AT24CS32-STUM_1_1" (rectangle (start -5.08 5.08) (end 5.08 -5.08) (stroke (width 0.254) (type default)) (fill (type background))) '+' '.join(p)+'))')
-L=[(11,'~{CS}','input'),(12,'SCK','input'),(13,'SI','input'),(14,'SO','output'),(18,'~{RESET}','input'),(20,'INTA','open_collector'),(19,'INTB','open_collector'),(15,'A0','input'),(16,'A1','input'),(17,'A2','input')]
+L=[(11,'~{CS}','input'),(12,'SCK','input'),(13,'SI','input'),(14,'SO','output'),(18,'~{RESET}','input'),(20,'INTA','output'),(19,'INTB','output'),(15,'A0','input'),(16,'A1','input'),(17,'A2','input')]
 p=[pin(n,nm,-12.7,round(17.78-i*2.54,2),0,t) for i,(n,nm,t) in enumerate(L)]
 R=[(21+i,f'GPA{i}') for i in range(8)]+[(1+i,f'GPB{i}') for i in range(8)]
 p+=[pin(n,nm,12.7,round(19.05-i*2.54-(1.27 if i>=8 else 0),2),180,'bidirectional') for i,(n,nm) in enumerate(R)]
@@ -56,6 +56,13 @@ box('SN74LVC138APWR','SN74LVC138APWR','Package_SO:TSSOP-16_4.4x5mm_P0.65mm','3-t
     [(16,'VCC',P)],[(8,'GND',P)])
 box('74LVC1G02','74LVC1G02','Package_TO_SOT_SMD:SOT-23-5','Single 2-input NOR (DBV: 1 A 2 B 3 GND 4 Y 5 VCC, TI SCES213)',[(1,'A',I),(2,'B',I)],[(4,'Y',O)],[(5,'VCC',P)],[(3,'GND',P)],w=5.08)
 box('74LVC1G00','74LVC1G00','Package_TO_SOT_SMD:SOT-23-5','Single 2-input NAND (DBV: 1 A 2 B 3 GND 4 Y 5 VCC, TI SCES212)',[(1,'A',I),(2,'B',I)],[(4,'Y',O)],[(5,'VCC',P)],[(3,'GND',P)],w=5.08)
+box('74LVC125APW','74LVC125APW,118','Package_SO:TSSOP-14_4.4x5mm_P0.65mm','Quad buffer, 3-state, IOFF partial power-down (Nexperia 74LVC125A rev 11: IOFF +/-10 uA at VCC 0 V, VI/VO 5.5 V). PW: 1 1OE 2 1A 3 1Y 4 2OE 5 2A 6 2Y 7 GND 8 3Y 9 3A 10 3OE 11 4Y 12 4A 13 4OE 14 VCC',
+    [(2,'1A',I),(5,'2A',I),(9,'3A',I),(12,'4A',I),(1,'~{1OE}',I),(4,'~{2OE}',I),(10,'~{3OE}',I),(13,'~{4OE}',I)],[(3,'1Y','tri_state'),(6,'2Y','tri_state'),(8,'3Y','tri_state'),(11,'4Y','tri_state')],[(14,'VCC',P)],[(7,'GND',P)])
+box('74LVC1G125','SN74LVC1G125DBVR','Package_TO_SOT_SMD:SOT-23-5','Single buffer, 3-state, Ioff (TI SCES223U, DBV: 1 OE# 2 A 3 GND 4 Y 5 VCC)',[(2,'A',I),(1,'~{OE}',I)],[(4,'Y','tri_state')],[(5,'VCC',P)],[(3,'GND',P)],w=5.08)
+box('74LVC1G07','SN74LVC1G07DBVR','Package_TO_SOT_SMD:SOT-23-5','Single buffer, open-drain output, Ioff (TI SCES296AG, DBV: 1 NC 2 A 3 GND 4 Y 5 VCC)',[(2,'A',I),(1,'NC','no_connect')],[(4,'Y',OD)],[(5,'VCC',P)],[(3,'GND',P)],w=5.08)
+box('74LVC1G04','SN74LVC1G04DBVR','Package_TO_SOT_SMD:SOT-23-5','Single inverter, Ioff (TI SCES214AF, DBV: 1 NC 2 A 3 GND 4 Y 5 VCC)',[(2,'A',I),(1,'NC','no_connect')],[(4,'Y',O)],[(5,'VCC',P)],[(3,'GND',P)],w=5.08)
+box('74LVC1G10','SN74LVC1G10DBVR','Package_TO_SOT_SMD:SOT-23-6','Single 3-input NAND, Ioff (TI SCES486F, DBV-6: 1 A 2 GND 3 B 4 Y 5 VCC 6 C)',[(1,'A',I),(3,'B',I),(6,'C',I)],[(4,'Y',O)],[(5,'VCC',P)],[(2,'GND',P)],w=5.08)
+box('74LVC1G11','SN74LVC1G11DBVR','Package_TO_SOT_SMD:SOT-23-6','Single 3-input AND, Ioff (TI SCES487J, DBV-6: 1 A 2 GND 3 B 4 Y 5 VCC 6 C)',[(1,'A',I),(3,'B',I),(6,'C',I)],[(4,'Y',O)],[(5,'VCC',P)],[(2,'GND',P)],w=5.08)
 open(os.path.join(D,'cards.kicad_sym'),'w').write('(kicad_symbol_lib (version 20241209) (generator "mklib") (generator_version "9.0")\n'+'\n'.join(syms)+'\n)\n')
 def fp(name,desc,holes,hole_y,pin1_right,edge_y=None):
     """Pads per the WingTAT 'P.C. Board Layout' (component-side view): rows c (top, y=0), b (2.54), a (5.08); 2.54 pitch,

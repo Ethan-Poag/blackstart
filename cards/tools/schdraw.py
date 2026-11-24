@@ -286,6 +286,10 @@ def mask_of(P,pad=1):  # pad on all sides; clusters keep >= 2 units apart
     x0,y0,x1,y1=P.bb.b; w=int(math.ceil(x1-x0))+2*pad+1; h=int(math.ceil(y1-y0))+2*pad+1
     M=np.zeros((h,w),dtype=np.float32)
     rr=list(P.bb.r)+[(min(a[0],b[0]),min(a[1],b[1]),max(a[0],b[0]),max(a[1],b[1])) for k,a,b,*_ in [p for p in P.prims if p[0]=='wire']]
+    for p in P.prims:   # label text bodies (bb.pt only records their end points, so packing could slide another cluster over the text)
+        if p[0]=='label':
+            _,n,(x,y),(dx,dy)=p; L=tw(n); ex,ey=x+dx*L,y+dy*L
+            rr.append((min(x,ex)-(0.7 if dy else 0),min(y,ey)-(0.7 if dx else 0),max(x,ex)+(0.7 if dy else 0),max(y,ey)+(0.7 if dx else 0)))
     for a,b,c,d in rr:
         M[max(0,int(math.floor(b-y0))):int(math.ceil(d-y0))+2*pad+1, max(0,int(math.floor(a-x0))):int(math.ceil(c-x0))+2*pad+1]=1
     return M

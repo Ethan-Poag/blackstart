@@ -69,7 +69,7 @@ for i in range(1,17):
     if a in bnet and c in bnet: bu(a,c)
 # ---------- node map baseline -> new ----------
 rw=json.load(open(os.path.join(R,'docs/modular/mainboard_rework.json')))
-REMOVED=set(rw['removed_p1'])|set(rw['removed_p2'])
+REMOVED=set(rw['removed_p1'])|set(rw['removed_p2'])|set(rw.get('removed_p3',{}))
 refmap={c:json.load(open(os.path.join(R,'cards',c,'refmap.json'))) for c in set(CARDS.values())}
 comps0,nets0=srcdb.load('genctl')[:2]
 pins0=collections.defaultdict(dict)
