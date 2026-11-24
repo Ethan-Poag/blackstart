@@ -23,7 +23,7 @@ def slot(c,mpn_note=''):
     for u,r in enumerate('abc',1): c.add('cards:DIN41612_C96',JS,'DIN41612_C96',{k:v for k,v in P.items() if k[0]==r},din,unit=u)
     return JS,P
 def eeprom(c):
-    cap=dict(c.inst['C199'][0]['props']); cap.pop('Reference'); res=dict(c.inst['R349'][0]['props']); res.pop('Reference')
+    cap=dict(c.inst['C199'][0]['props']); cap.pop('Reference'); res=r10k('ID_WP pull-up: write-protected unless the backplane pulls ID_WP low')
     U=c.newref('U'); c.add('cards:AT24CS32-STUM',U,'AT24CS32-STUM-T',{'1':'I2C_SCL','2':'GND','3':'I2C_SDA','4':'+3V3_ID','5':'ID_WP'},
       {'Footprint':'Package_TO_SOT_SMD:SOT-23-5','MPN':'AT24CS32-STUM-T','Manufacturer':'Microchip','LCSC':'C147891','Description':'Card ID + calibration EEPROM (0x50 / serial 0x58)'})
     C=c.newref('C'); c.add('Device:C',C,cap['Value'],{'1':'+3V3_ID','2':'GND'},cap)
@@ -36,7 +36,13 @@ NEWP={'C6059':{'Footprint':'Package_SO:TSSOP-14_4.4x5mm_P0.65mm','MPN':'74LVC125
       'C7829':{'Footprint':'Package_TO_SOT_SMD:SOT-23-5','MPN':'SN74LVC1G07DBVR','Manufacturer':'Texas Instruments','LCSC':'C7829',
            'Description':'Slot INT_N open-drain driver, Ioff (MCP23S17 INTA push-pull active-low into A)'},
       'C25819':{'Value':'47k','Footprint':'Resistor_SMD:R_0603_1608Metric','MPN':'0603WAF4702T5E','Manufacturer':'UNI-ROYAL','LCSC':'C25819','Description':'boot-safe default'},
+      'C25804':{'Value':'10k','Footprint':'Resistor_SMD:R_0603_1608Metric','MPN':'0603WAF1002T5E','Manufacturer':'UNI-ROYAL','LCSC':'C25804','Description':''},
+      'C23140':{'Value':'33R','Footprint':'Resistor_SMD:R_0603_1608Metric','MPN':'0603WAF330JT5E','Manufacturer':'UNI-ROYAL','LCSC':'C23140','Description':''},
+      'C21190':{'Value':'1k','Footprint':'Resistor_SMD:R_0603_1608Metric','MPN':'0603WAF1001T5E','Manufacturer':'UNI-ROYAL','LCSC':'C21190','Description':''},
       'C25803':{'Value':'100k','Footprint':'Resistor_SMD:R_0603_1608Metric','MPN':'0603WAF1003T5E','Manufacturer':'UNI-ROYAL','LCSC':'C25803','Description':''}}
+def r10k(desc=''):
+    """Pass 2 m16: new 10k card pull-ups are 0603 (C25804), not the baseline R349 1206 part."""
+    d=dict(NEWP['C25804']); d['Description']=desc; return d
 def capp(c): cap=dict(c.inst['C199'][0]['props']); cap.pop('Reference'); return cap
 def res(c,lcsc,a,b,desc=''):
     d=dict(NEWP[lcsc]); d['Description']=desc or d['Description']; R=c.newref('R'); c.add('Device:R',R,d['Value'],{'1':a,'2':b},d); return R
@@ -44,21 +50,23 @@ def slotbuf(c):
     """B1 fix (pass 1): every slot logic line crosses an IOFF buffer powered from +3V3_SLOT, so an unpowered card
     (or a card whose 3V3 is shorted) never back-powers the MCP23S17 and never clamps the shared slot bus.
     In: SPI_CS_N/SCK/MOSI/RST_N -> 74LVC125A (OE# = GND) -> CS_N_B/SCK_B/MOSI_B/RST_N_B.
-    Out: MISO_B -> 1G125 (OE# = CS_N_B) -> SPI_MISO; INTA_B -> 1G07 (open drain) -> INT_N."""
+    Out: MISO_B -> 1G125 (OE# = CS_N_B) -> 33R -> SPI_MISO; INTA_B (100k pull-up) -> 1G07 (open drain) -> INT_N."""
     cap=capp(c); out=[]
     U=c.newref('U'); c.add('cards:74LVC125APW',U,'74LVC125APW,118',{'2':'SPI_CS_N','3':'CS_N_B','5':'SPI_SCK','6':'SCK_B','9':'SPI_MOSI','8':'MOSI_B',
         '12':'RST_N','11':'RST_N_B','1':'GND','4':'GND','10':'GND','13':'GND','14':'+3V3_SLOT','7':'GND'},NEWP['C6059']); out.append(U)
     C=c.newref('C'); c.add('Device:C',C,cap['Value'],{'1':'+3V3_SLOT','2':'GND'},cap)
-    U2=c.newref('U'); c.add('cards:74LVC1G125',U2,'SN74LVC1G125DBVR',{'1':'CS_N_B','2':'MISO_B','3':'GND','4':'SPI_MISO','5':'+3V3_SLOT'},NEWP['C23654']); out.append(U2)
+    U2=c.newref('U'); c.add('cards:74LVC1G125',U2,'SN74LVC1G125DBVR',{'1':'CS_N_B','2':'MISO_B','3':'GND','4':'MISO_S','5':'+3V3_SLOT'},NEWP['C23654']); out.append(U2)
+    res(c,'C23140','MISO_S','SPI_MISO','Pass 2 m4: 33R source series at the 1G125 output (shared MISO, 8 slots + engine)')
     C=c.newref('C'); c.add('Device:C',C,cap['Value'],{'1':'+3V3_SLOT','2':'GND'},cap)
     res(c,'C25803','MISO_B','GND','MISO_B pull-down: 1G125 input defined while MCP23S17 SO is 3-state')
+    res(c,'C25803','INTA_B','+3V3_SLOT','Pass 2 m3: INTA_B pull-up, 1G07 input defined while the MCP23S17 is in reset')
     U3=c.newref('U'); c.add('cards:74LVC1G07',U3,'SN74LVC1G07DBVR',{'1':None,'2':'INTA_B','3':'GND','4':'INT_N','5':'+3V3_SLOT'},NEWP['C7829']); out.append(U3)
     C=c.newref('C'); c.add('Device:C',C,cap['Value'],{'1':'+3V3_SLOT','2':'GND'},cap)
     return out
 def mcp(c,gpa,gpb):
     """MCP23S17 behind the slot buffers (slotbuf). RESET has a 10k pull-down: an unpowered/undriven reset holds every GPIO as input (Hi-Z).
     INTA push-pull (IOCON.ODR = 0, INTPOL = 0: active low) into the 1G07 open-drain slot driver."""
-    cap=capp(c); res_=dict(c.inst['R349'][0]['props']); res_.pop('Reference')
+    cap=capp(c); res_=r10k('MCP23S17 RESET pull-down: GPIO Hi-Z until the buffered RST_N releases')
     U=c.newref('U'); pn={'9':'+3V3_SLOT','10':'GND','11':'CS_N_B','12':'SCK_B','13':'MOSI_B','14':'MISO_B','15':'GND','16':'GND','17':'GND',
                        '18':'RST_N_B','19':None,'20':'INTA_B'}
     for i in range(8): pn[str(21+i)]=gpa[i]; pn[str(1+i)]=gpb[i]   # unused GPIO: NC, firmware sets GPPU=1 (defined, never driven)

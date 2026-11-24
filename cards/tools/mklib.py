@@ -63,6 +63,8 @@ box('74LVC1G07','SN74LVC1G07DBVR','Package_TO_SOT_SMD:SOT-23-5','Single buffer, 
 box('74LVC1G04','SN74LVC1G04DBVR','Package_TO_SOT_SMD:SOT-23-5','Single inverter, Ioff (TI SCES214AF, DBV: 1 NC 2 A 3 GND 4 Y 5 VCC)',[(2,'A',I),(1,'NC','no_connect')],[(4,'Y',O)],[(5,'VCC',P)],[(3,'GND',P)],w=5.08)
 box('74LVC1G10','SN74LVC1G10DBVR','Package_TO_SOT_SMD:SOT-23-6','Single 3-input NAND, Ioff (TI SCES486F, DBV-6: 1 A 2 GND 3 B 4 Y 5 VCC 6 C)',[(1,'A',I),(3,'B',I),(6,'C',I)],[(4,'Y',O)],[(5,'VCC',P)],[(2,'GND',P)],w=5.08)
 box('74LVC1G11','SN74LVC1G11DBVR','Package_TO_SOT_SMD:SOT-23-6','Single 3-input AND, Ioff (TI SCES487J, DBV-6: 1 A 2 GND 3 B 4 Y 5 VCC 6 C)',[(1,'A',I),(3,'B',I),(6,'C',I)],[(4,'Y',O)],[(5,'VCC',P)],[(2,'GND',P)],w=5.08)
+box('TLV3012B','TLV3012BIDBVR','Package_TO_SOT_SMD:SOT-23-6','Comparator, push-pull, 1.242 V reference, POR (output low while V+ ramps) (TI SBOS300C, DBV-6: 1 OUT 2 V- 3 IN+ 4 IN- 5 REF 6 V+)',
+    [(3,'IN+',I),(4,'IN-',I)],[(1,'OUT',O),(5,'REF',O)],[(6,'V+',P)],[(2,'V-',P)],w=5.08)
 open(os.path.join(D,'cards.kicad_sym'),'w').write('(kicad_symbol_lib (version 20241209) (generator "mklib") (generator_version "9.0")\n'+'\n'.join(syms)+'\n)\n')
 def fp(name,desc,holes,hole_y,pin1_right,edge_y=None):
     """Pads per the WingTAT 'P.C. Board Layout' (component-side view): rows c (top, y=0), b (2.54), a (5.08); 2.54 pitch,

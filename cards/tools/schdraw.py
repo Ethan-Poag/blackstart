@@ -219,9 +219,9 @@ class Drawer:
         elif (-1,0) not in used:
             F=[('Reference',(bb.b[0]-0.8,cy-0.3),'right'),('Value',(bb.b[0]-0.8,cy+TH),'right')]
             C.bb.box(bb.b[0]-0.8-w,cy-0.3-TH,bb.b[0],cy+TH+0.3)
-        else:
-            F=[('Reference',(cx,bb.b[1]-0.8),'center'),('Value',(cx,bb.b[3]+0.8+TH),'center')]
-            C.bb.box(cx-w/2,bb.b[1]-0.8-TH,cx+w/2,bb.b[3]+0.8+TH)
+        else:   # pins on all four sides: ref + value in the free top-right corner (a centred value under the body crossed the bottom pin stubs)
+            F=[('Reference',(bb.b[2]+0.8,bb.b[1]-0.8-TH),'left'),('Value',(bb.b[2]+0.8,bb.b[1]-0.8),'left')]
+            C.bb.box(bb.b[2],bb.b[1]-0.8-2*TH,bb.b[2]+0.8+w,bb.b[1])
         C.prims.append(('sym',p,(0,0),0,F)); C.bb.merge(bb)
         sides=collections.defaultdict(list)
         for pp in s.pins_of(k):
@@ -393,10 +393,11 @@ def run(D,outdir,title):
             if best is None or score<best[0]: best=(score,pos,uw,uh)
         _,pos,used_w,used_h=best
         alts=sorted(alts,key=lambda a:a[0])[:6]
-        laid.append(dict(title=bt,cl=cl,pos=pos,w=used_w+3,h=used_h+6,alts=[(a[1],a[2]+3,a[3]+6) for a in alts]))
+        tw_=2+len(bt)*1.6   # Pass 2 m16: 2 mm bold block title is ~2.0 mm/char = 1.6 grid units; the box is never narrower than its title
+        laid.append(dict(title=bt,cl=cl,pos=pos,w=max(used_w+3,tw_),h=used_h+6,alts=[(a[1],max(a[2]+3,tw_),a[3]+6) for a in alts]))
     notes=[l for t in D.notes for l in textwrap.wrap(t,78)]
     if notes:
-        P=Piece(); P.prims.append(('text',(0,0),notes)); P.bb.box(0,0,max(len(l) for l in notes)*CW*1.0,len(notes)*1.75*FS/G)
+        P=Piece(); P.prims.append(('text',(0,0),notes)); P.bb.box(0,0,max(len(l) for l in notes)*CW*1.12,len(notes)*1.75*FS/G)
         laid.append(dict(title='Notes',cl=[P],pos=[(0,0)],w=P.bb.b[2]+5,h=P.bb.b[3]+8))
     res=[(Wu-int(112/G),Hu-int(34/G),Wu,Hu)]
     best=None

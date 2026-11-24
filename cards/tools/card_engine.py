@@ -41,7 +41,8 @@ for p in c.parts:
     if p['props'].get('BaselineRef')=='J18': p['props']['Value']='COM/MPU'
 # ID EEPROM
 cap=dict(c.inst['C199'][0]['props']); cap.pop('Reference')
-res=dict(c.inst['R349'][0]['props']); res.pop('Reference')
+import lvcommon as L
+res=L.r10k('ID_WP pull-up: write-protected unless the backplane pulls ID_WP low')   # Pass 2 m16: 0603
 c.add('cards:AT24CS32-STUM',c.newref('U'),'AT24CS32-STUM-T',{'1':'ID_SCL','2':'GND','3':'ID_SDA','4':'+3V3_SAFE','5':'ID_WP'},
       {'Footprint':'Package_TO_SOT_SMD:SOT-23-5','MPN':'AT24CS32-STUM-T','Manufacturer':'Microchip','LCSC':'C147891','Description':'Card ID + calibration EEPROM (0x50 / serial 0x58)'})
 CID=c.newref('C'); c.add('Device:C',CID,cap['Value'],{'1':'+3V3_SAFE','2':'GND'},cap)
