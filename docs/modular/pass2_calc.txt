@@ -1,0 +1,80 @@
+
+== TPS48100 thresholds (A) and latch-off timers (us)
+slot 24.3k: 10.6/13.5/16.5 A  V_SCP typ 67.6 mV
+bank 61.9k: 22.4/28.6/35.0 A  V_SCP typ 142.8 mV
+slot 4.7 nF: 36/64/103 us
+bank 68 nF : 517/919/1490 us  (bank min / slot max = 5.0x)
+latch clamp R*I_TMR_SRC_FLT max = 100k*4.8uA = 0.48 V < V_TMR_SC min 0.924 V
+current grading: bank SCP min 22.4 A vs slot SCP max 16.5 A + 5.0 A other slots = 21.5 A
+
+== Bank SCP stress, both FETs fully on (RDS(on) 7 mOhm max at 25 C, x1.5 hot)
+I=35.0 A for 1.49 ms: hot FET (60/40) 4.6 W, shunt 6.1 W (9 mJ; 3 W 2512 short-time OK), FET in RDS(on), not SOA-limited
+hard short on VBAT_SLOTS copper: ~230 A for 1.49 ms max = 79 A2s -> F1 (115 A2s melt) may open: board-fault class, same as a VBAT_P short
+
+== Bank overload cutoff: INA281A2 (50 V/V) on the 5 mOhm bank shunt -> RC -> TLV3012B -> 74LVC1G74 latch -> BANK_UVLO low
+V_TH = 1.242 V x 100k/144.2k = 0.8613 V
+HOT (Rx off, default): k=1.0000  tau=220 ms  trip nominal 3.45 A, worst-case +/-8.3% -> 3.16..3.73 A
+   error terms %%: ref 1.90, div 0.61, cmp_vos 1.04, cmp_hys 0.93, ina_gain 0.58, ina_vos 1.97, shunt 1.30, filt 0.00
+ROOM (Rx on, firmware selects only while F1 state = ROOM, <= 77 F): k=0.6239  tau=137 ms  trip nominal 5.52 A, worst-case +/-8.4% -> 5.06..5.98 A
+   error terms %%: ref 1.90, div 0.61, cmp_vos 1.04, cmp_hys 0.93, ina_gain 0.58, ina_vos 1.23, shunt 1.30, filt 0.75
+INA281 output saturates at (+5V_TRIP min 4.9 V - 0.15 V)/0.25 V/A = 19.0 A
+HOT (Rx off, default)
+   budget 3.0 A: never trips (min threshold 3.16 A)
+   budget + one shorted channel 6.61 A: trips no sooner than 114 ms (tau-20%, Ith min); firmware channel latch <= 80 ms
+     8.0 A: 88..159 ms
+    10.7 A: 62..109 ms
+    16.6 A: 37..64 ms
+    19.0 A: 32..55 ms
+ROOM (Rx on, firmware selects only while F1 state = ROOM, <= 77 F)
+   budget 5.0 A: never trips (min threshold 5.06 A)
+   budget + one shorted channel 8.61 A: trips no sooner than 97 ms (tau-20%, Ith min); firmware channel latch <= 80 ms
+     8.0 A: 110..217 ms
+    10.7 A: 70..129 ms
+    16.6 A: 40..71 ms
+    19.0 A: 34..60 ms
+
+== F1 10 A ATO coordination (base load 4.95 A at 12 V, 6.46 A at 9 V; F1 hold 110% >= 100 h; hot rerate 0.8)
+77 F: F1 holds 11.0 A; base 4.95 + bank overload max 5.98 = 10.93 A (margin 0.07 A)
+   worst single fault (slot at SCP max 16.5 + 5 A others): bank trips <= 60 ms; F1 sees 26.5 A -> 42 A2s (melt I2t 115 room, ~74 hot [E])
+   double fault just under bank SCP min 22.4 A: <= 60 ms, 45 A2s
+149 F: F1 holds 8.8 A; base 4.95 + bank overload max 3.73 = 8.68 A (margin 0.12 A)
+   worst single fault (slot at SCP max 16.5 + 5 A others): bank trips <= 55 ms; F1 sees 26.5 A -> 39 A2s (melt I2t 115 room, ~74 hot [E])
+   double fault just under bank SCP min 22.4 A: <= 55 ms, 41 A2s
+
+== Bank FET / shunt steady state at the overload threshold (RthJA 50 K/W, RDS(on) 7 mOhm x 1.5 hot, 60/40 split)
+77 F, 5.98 A: hot FET 0.14 W, Tj 89 F; shunt 0.18 W of 3 W
+149 F, 3.73 A: hot FET 0.05 W, Tj 154 F; shunt 0.07 W of 3 W
+
+== Gate dV/dt: R1 150R G1PU->gate, C1 22 nF + R2 10R gate->GND (slot and bank)
+output slew 1.88 V/us; 32 V in 17 us; inrush into 2.7 uF card bulk 5.1 A (slot SCP min 10.6 A)
+turn-on into a short: linear window ~4.9 us; SOA 10 us line ~94 A at 32 V (Tc 77 F), x0.68 at 149 F = ~2 kW: inside
+CBST >= Qg/dV + 10*C1 = 2x38 nC/1 V + 220 nF = 296 nF; fitted 470 nF
+
+== VBAT_ESTOP switched bleeder: 2x 2.2k 2512 1 W (1.1k) + IRLML0100, on when RC_EN low
+C=1.85 uF tau=1.98 ms: 12.6 V->2 V 3.65 ms, 24.0 V->2 V 4.92 ms, 28.8 V->2 V 5.28 ms, 32.0 V->2 V 5.49 ms
+C=2.22 uF tau=2.38 ms: 12.6 V->2 V 4.38 ms, 24.0 V->2 V 5.91 ms, 28.8 V->2 V 6.34 ms, 32.0 V->2 V 6.59 ms
+stuck-on Q101/Q102 at 32 V: 0.93 W total, 0.47 W per 1 W 2512 (47%)
+stuck-on Q101/Q102 at 36 V: 1.18 W total, 0.59 W per 1 W 2512 (59%)
+IRLML0100 gate 5 V (+5V_TRIP via 100k) vs VGS(th) 2.5 V max; RDS(on) <= 235 mOhm at 4.5 V; ID <= 33 mA
+
+== SLOT_ANA settling with 1k series per slot
+C224 10 nF: tau 66.2 us, 12-bit (ln 8192 = 9.01 tau) 0.60 ms
+C224 11 nF: tau 72.9 us, 12-bit (ln 8192 = 9.01 tau) 0.66 ms
+firmware wait 0.8 ms; unpowered-slot dump through 1k <= 3.3 mA (TMUX1208 S abs max 30 mA)
+
+== +3V3_ID feed 68R 1206 0.25 W
+short: 160 mW (64% of 250 mW); load 3.66 mA (AT24CS32 ICC2 write 3 mA max @5 V + 2x 10k) -> droop 249 mV -> +3V3_ID >= 3.00 V (3.25 V SAFE min)
+SDA pulled to +3V3_SAFE 3.3 V; VIH max = VCC + 0.5 = 3.50 V -> margin 201 mV (150R: VCC 2.70 V, margin -99 mV)
+
+== AI-4 back-power: IN -> R9 100k -> BAV99 -> +3V3_SLOT (TPS2553 has no QOD; only TPS25530-1 does)
+bleeder none: 4 inputs at 24 V inject 0.94 mA -> rail set by IC leakage (>1.65 V possible)
+bleeder 1.0k: 4 inputs at 24 V inject 0.94 mA -> rail 0.94 V, 11 mW at 3.3 V
+bleeder 2.2k: 4 inputs at 24 V inject 0.94 mA -> rail not clamped (I*R = 2.06 V > 1.65 V, rail sits near the input clamp level)
+bleeder 4.7k: 4 inputs at 24 V inject 0.94 mA -> rail not clamped (I*R = 4.40 V > 1.65 V, rail sits near the input clamp level)
+
+== DIN C96 VBAT_FIELD sharing: 9 contacts, 2 A each, 20 mOhm max; worst split one 5 mOhm vs eight 20 mOhm = 1/3
+5.0 A budget: worst contact 1.67 A
+room overload max 5.98 A: worst contact 1.99 A
+even split 5 A: worst contact 0.56 A
+slot short above SCP (max 16.5 A) for <= 103 us: worst contact 5.5 A (I2t 0.0031 A2s)
+slot overload just below slot SCP min 10.6 A: worst contact 3.5 A until the bank overload trips (<= 110 ms HOT, <= 131 ms ROOM) unless firmware drops the slot in 50 ms

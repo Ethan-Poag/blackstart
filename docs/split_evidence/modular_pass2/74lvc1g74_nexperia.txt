@@ -1,0 +1,948 @@
+                  74LVC1G74-Q100
+                  Single D-type flip-flop with set and reset;
+                  positive edge trigger
+                  Rev. 6 — 18 August 2023                                                    Product data sheet
+
+
+
+
+1. General description
+              The 74LVC1G74-Q100 is a single positive edge triggered D-type flip-flop with individual data (D),
+              clock (CP), set (SD) and reset (RD) inputs, and complementary Q and Q outputs. Data at the
+              D-input that meets the set-up and hold time requirements on the LOW-to-HIGH clock transition
+              will be stored in the flip-flop and appear at the Q output. Inputs can be driven from either 3.3 V or
+              5 V devices. This feature allows the use of these devices as translators in mixed 3.3 V and 5 V
+              environments.
+              Schmitt-trigger action at all inputs makes the circuit tolerant of slower input rise and fall times.
+              This device is fully specified for partial power down applications using IOFF. The IOFF circuitry
+              disables the output, preventing the potentially damaging backflow current through the device when
+              it is powered down.
+              This product has been qualified to the Automotive Electronics Council (AEC) standard Q100
+              (Grade 1) and is suitable for use in automotive applications.
+
+
+2. Features and benefits
+              •   Automotive product qualification in accordance with AEC-Q100 (Grade 1)
+                  • Specified from -40 °C to +85 °C and from -40 °C to +125 °C
+              •   Wide supply voltage range from 1.65 V to 5.5 V
+              •   Overvoltage tolerant inputs to 5.5 V
+              •   High noise immunity
+              •   ±24 mA output drive (VCC = 3.0 V)
+              •   CMOS low power consumption
+              •   Direct interface with TTL levels
+              •   IOFF circuitry provides partial Power-down mode operation
+              •   Latch-up performance exceeds 250 mA
+              •   Complies with JEDEC standard:
+                  • JESD8-7 (1.65 V to 1.95 V)
+                  • JESD8-5 (2.3 V to 2.7 V)
+                  • JESD8-B/JESD36 (2.7 V to 3.6 V)
+              •   ESD protection:
+                  • HBM: ANSI/ESDA/JEDEC JS-001 class 2 exceeds 2000 V
+                  • CDM: ANSI/ESDA/JEDEC JS-002 class C3 exceeds 1000 V
+              •   Multiple package options
+Nexperia                                                                                                                                     74LVC1G74-Q100
+                                                                     Single D-type flip-flop with set and reset; positive edge trigger
+
+
+3. Ordering information
+Table 1. Ordering information
+Type number             Package
+                                 Temperature range                 Name                  Description                                                                        Version
+74LVC1G74DP-Q100                 -40 °C to +125 °C                 TSSOP8                plastic thin shrink small outline package; 8 leads;                                SOT505-2
+                                                                                         body width 3 mm; lead length 0.5 mm
+74LVC1G74DC-Q100                 -40 °C to +125 °C                 VSSOP8                plastic very thin shrink small outline package;                                    SOT765-1
+                                                                                         8 leads; body width 2.3 mm
+74LVC1G74GT-Q100                 -40 °C to +125 °C                 XSON8                 plastic extremely thin small outline package;                                      SOT833-1
+                                                                                         no leads; 8 terminals; body 1 × 1.95 × 0.5 mm
+
+
+4. Marking
+Table 2. Marking codes
+Type number                                                                                  Marking code [1]
+74LVC1G74DP-Q100                                                                             V74
+74LVC1G74DC-Q100                                                                             V74
+74LVC1G74GT-Q100                                                                             V74
+
+[1]   The pin 1 indicator is located on the lower left corner of the device, below the marking code.
+
+
+
+5. Functional diagram
+
+                                  SD
+
+                                     SD
+                             D                  Q
+                                 D          Q
+                           CP                                                                                                           S
+                                 CP
+                                      FF                                                                                                C1
+                                                Q
+                                            Q
+                                                                                                                                        1D
+                                     RD
+                                                                                                                                        R
+                                  RD
+                                           001aah757                                                                                         001aah758
+
+Fig. 1.     Logic symbol                                                                     Fig. 2.          IEC logic symbol
+
+                                                                                                                                                                        Q
+                                                                 C
+                                                                                                                                    C
+
+
+
+                                                C
+                                                                                                            C
+                                                                 C
+                                                                                                                                    C
+                 D
+                                                                                                                                                                        Q
+                                                C                                                           C
+                 RD
+
+
+                 SD
+                                                                                                                                              mna421
+
+
+                 CP                             C
+
+                                                C
+
+Fig. 3.     Logic diagram
+
+
+
+
+74LVC1G74_Q100                                         All information provided in this document is subject to legal disclaimers.                        © Nexperia B.V. 2023. All rights reserved
+
+
+Product data sheet                                                   Rev. 6 — 18 August 2023                                                                                            2 / 16
+Nexperia                                                                                                                                   74LVC1G74-Q100
+                                                                Single D-type flip-flop with set and reset; positive edge trigger
+
+
+6. Pinning information
+
+                              6.1. Pinning
+
+                                                                                                                                      74LVC1G74
+
+                                                                                                                               CP      1         8    VCC
+
+
+                              74LVC1G74                                                                                        D       2         7    SD
+
+
+                  CP     1                    8    VCC
+                                                                                                                               Q       3         6    RD
+                     D   2                    7    SD
+                   Q     3                    6    RD
+                 GND     4                    5    Q                                                                       GND         4         5    Q
+
+                                  001aab659                                                                                                     001aab658
+
+                                                                                                                                   Transparent top view
+Fig. 4.     Pin configuration SOT505-2 (TSSOP8) and
+            SOT765-1 (VSSOP8)                                                           Fig. 5.          Pin configuration SOT833-1 (XSON8)
+
+
+
+                              6.2. Pin description
+Table 3. Pin description
+Symbol                            Pin                                                   Description
+CP                                1                                                     clock input (LOW-to-HIGH, edge-triggered)
+D                                 2                                                     data input
+Q                                 3                                                     complement output
+GND                               4                                                     ground (0 V)
+Q                                 5                                                     true output
+RD                                6                                                     asynchronous reset-direct input (active LOW)
+SD                                7                                                     asynchronous set-direct input (active LOW)
+VCC                               8                                                     supply voltage
+
+
+7. Functional description
+Table 4. Function table for asynchronous operation
+H = HIGH voltage level; L = LOW voltage level; X = don’t care.
+Input                                                                                                                          Output
+SD                       RD                       CP                                    D                                      Q                              Q
+L                        H                        X                                     X                                      H                              L
+H                        L                        X                                     X                                      L                              H
+L                        L                        X                                     X                                      H                              H
+
+
+
+
+74LVC1G74_Q100                                    All information provided in this document is subject to legal disclaimers.                              © Nexperia B.V. 2023. All rights reserved
+
+
+Product data sheet                                              Rev. 6 — 18 August 2023                                                                                                  3 / 16
+Nexperia                                                                                                                                 74LVC1G74-Q100
+                                                                 Single D-type flip-flop with set and reset; positive edge trigger
+
+Table 5. Function table for synchronous operation
+H = HIGH voltage level; L = LOW voltage level; ↑ = LOW-to-HIGH CP transition;
+Qn+1 = state after the next LOW-to-HIGH CP transition.
+Input                                                                                                                           Output
+SD                       RD                        CP                                    D                                      Qn+1                     Q n+1
+H                        H                         ↑                                     L                                      L                        H
+H                        H                         ↑                                     H                                      H                        L
+
+
+8. Limiting values
+Table 6. Limiting values
+In accordance with the Absolute Maximum Rating System (IEC 60134). Voltages are referenced to GND (ground = 0 V).
+Symbol Parameter                                        Conditions                                                                             Min                  Max            Unit
+VCC          supply voltage                                                                                                                    -0.5                +6.5            V
+IIK          input clamping current                     VI < 0 V                                                                                -50                    -           mA
+VI           input voltage                                                                                                               [1]   -0.5                +6.5            V
+IOK          output clamping current                    VO > VCC or VO < 0 V                                                                     -                  ±50            mA
+VO           output voltage                             Active mode                                                                      [1]   -0.5            VCC + 0.5 V
+                                                        Power-down mode; VCC = 0 V                                                       [1]   -0.5                +6.5            V
+IO           output current                             VO = 0 V to VCC                                                                          -                  ±50            mA
+ICC          supply current                                                                                                                      -                  100            mA
+IGND         ground current                                                                                                                    -100                    -           mA
+Ptot         total power dissipation                    Tamb = -40 °C to +125 °C                                                         [2]     -                  250            mW
+Tstg         storage temperature                                                                                                                -65                +150            °C
+
+[1]    The input and output voltage ratings may be exceeded if the input and output current ratings are observed.
+[2]    For SOT505-2 (TSSOP8) package: Ptot derates linearly with 4.6 mW/K above 96 °C.
+       For SOT765-1 (VSSOP8) package: Ptot derates linearly with 4.9 mW/K above 99 °C.
+       For SOT833-1 (XSON8) package: Ptot derates linearly with 3.1 mW/K above 68 °C.
+
+
+
+9. Recommended operating conditions
+Table 7. Operating conditions
+Symbol Parameter                                                                Conditions                                                     Min                 Max             Unit
+VCC          supply voltage                                                                                                                    1.65                 5.5            V
+VI           input voltage                                                                                                                      0                   5.5            V
+VO           output voltage                                                     Active mode                                                     0                   VCC            V
+                                                                                Power-down mode; VCC = 0 V                                      0                   5.5            V
+Tamb         ambient temperature                                                                                                               -40                 +125            °C
+Δt/ΔV        input transition rise and fall rate                                VCC = 1.65 V to 2.7 V                                           -                    20            ns/V
+                                                                                VCC = 2.7 V to 5.5 V                                            -                    10            ns/V
+
+
+
+
+74LVC1G74_Q100                                     All information provided in this document is subject to legal disclaimers.                        © Nexperia B.V. 2023. All rights reserved
+
+
+Product data sheet                                               Rev. 6 — 18 August 2023                                                                                            4 / 16
+Nexperia                                                                                                                            74LVC1G74-Q100
+                                                              Single D-type flip-flop with set and reset; positive edge trigger
+
+
+10. Static characteristics
+Table 8. Static characteristics
+At recommended operating conditions; voltages are referenced to GND (ground = 0 V).
+Symbol Parameter                   Conditions                                                   Tamb = -40 °C to +85 °C                      Tamb =                      Unit
+                                                                                                                                       -40 °C to +125 °C
+                                                                                               Min              Typ [1]       Max        Min              Max
+VIH          HIGH-level input      VCC = 1.65 V to 1.95 V                                  0.65VCC                    -         -      0.65VCC               -           V
+             voltage               VCC = 2.3 V to 2.7 V                                         1.7                   -         -        1.7                 -           V
+                                   VCC = 2.7 V to 3.6 V                                         2.0                   -         -        2.0                 -           V
+                                   VCC = 4.5 V to 5.5 V                                     0.7VCC                    -         -      0.7VCC                -           V
+VIL          LOW-level input       VCC = 1.65 V to 1.95 V                                         -                   -      0.35VCC       -           0.35VCC V
+             voltage               VCC = 2.3 V to 2.7 V                                           -                   -        0.7         -               0.7           V
+                                   VCC = 2.7 V to 3.6 V                                           -                   -        0.8         -               0.8           V
+                                   VCC = 4.5 V to 5.5 V                                           -                   -      0.3VCC        -            0.3VCC           V
+VOH          HIGH-level output     VI = VIH or VIL
+             voltage                   IO = -100 μA;                                      VCC - 0.1                   -         -      VCC - 0.1             -           V
+                                       VCC = 1.65 V to 5.5 V
+                                       IO = -4 mA; VCC = 1.65 V                                 1.2               1.54          -        0.95                -           V
+                                       IO = -8 mA; VCC = 2.3 V                                  1.9               2.15          -        1.7                 -           V
+                                       IO = -12 mA; VCC = 2.7 V                                 2.2               2.50          -        1.9                 -           V
+                                       IO = -24 mA; VCC = 3.0 V                                 2.3               2.62          -        2.0                 -           V
+                                       IO = -32 mA; VCC = 4.5 V                                 3.8               4.11          -        3.4                 -           V
+VOL          LOW-level output      VI = VIH or VIL
+             voltage                   IO = 100 μA;                                               -                   -       0.10         -              0.10           V
+                                       VCC = 1.65 V to 5.5 V
+                                       IO = 4 mA; VCC = 1.65 V                                    -               0.07        0.45         -              0.70           V
+                                       IO = 8 mA; VCC = 2.3 V                                     -               0.12        0.30         -              0.45           V
+                                       IO = 12 mA; VCC = 2.7 V                                    -               0.17        0.40         -              0.60           V
+                                       IO = 24 mA; VCC = 3.0 V                                    -               0.33        0.55         -              0.80           V
+                                       IO = 32 mA; VCC = 4.5 V                                    -               0.39        0.55         -              0.80           V
+II           input leakage         VI = 5.5 V or GND;                                             -               ±0.1         ±1          -                ±1           μA
+             current               VCC = 0 V to 5.5 V
+IOFF         power-off leakage     VI or VO = 5.5 V; VCC = 0 V                                    -               ±0.1         ±2          -                ±2           μA
+             current
+ICC          supply current        VI = 5.5 V or GND;                                             -                0.1         4           -                 4           μA
+                                   VCC = 1.65 V to 5.5 V; IO = 0 A
+ΔICC         additional supply     per pin; VI = VCC - 0.6 V;                                     -                  5        500          -               500           μA
+             current               IO = 0 A; VCC = 2.3 V to 5.5 V
+CI           input capacitance                                                                    -                4.0          -          -                 -           pF
+
+[1]   All typical values are measured at Tamb = 25 °C.
+
+
+
+
+74LVC1G74_Q100                                  All information provided in this document is subject to legal disclaimers.                 © Nexperia B.V. 2023. All rights reserved
+
+
+Product data sheet                                            Rev. 6 — 18 August 2023                                                                                     5 / 16
+Nexperia                                                                                                                  74LVC1G74-Q100
+                                                          Single D-type flip-flop with set and reset; positive edge trigger
+
+
+11. Dynamic characteristics
+Table 9. Dynamic characteristics
+Voltages are referenced to GND (ground = 0 V); for test circuit see Fig. 8.
+Symbol Parameter                 Conditions                                                  Tamb = -40 °C to +85 °C                  Tamb =      Unit
+                                                                                                                                -40 °C to +125 °C
+                                                                                             Min             Typ [1]     Max     Min              Max
+tpd          propagation delay   CP to Q, Q; see Fig. 6                          [2]
+                                    VCC = 1.65 V to 1.95 V                                    1.5                6.0     13.4    1.5              13.4          ns
+                                    VCC = 2.3 V to 2.7 V                                      1.0                3.5     7.1     1.0               7.1          ns
+                                    VCC = 2.7 V                                               1.0                3.5     7.1     1.0               7.1          ns
+                                    VCC = 3.0 V to 3.6 V                                      1.0                3.5     5.9     1.0               5.9          ns
+                                    VCC = 4.5 V to 5.5 V                                      1.0                2.5     4.1     1.0               4.1          ns
+                                 SD to Q, Q; see Fig. 7                          [2]
+                                    VCC = 1.65 V to 1.95 V                                    1.5                6.0     12.9    1.5              12.9          ns
+                                    VCC = 2.3 V to 2.7 V                                      1.0                3.5     7.0     1.0               7.0          ns
+                                    VCC = 2.7 V                                               1.0                3.5     7.0     1.0               7.0          ns
+                                    VCC = 3.0 V to 3.6 V                                      1.0                3.0     5.9     1.0               5.9          ns
+                                    VCC = 4.5 V to 5.5 V                                      1.0                2.5     4.1     1.0               4.1          ns
+                                 RD to Q, Q; see Fig. 7                          [2]
+                                    VCC = 1.65 V to 1.95 V                                    1.5                5.0     12.9    1.5              12.9          ns
+                                    VCC = 2.3 V to 2.7 V                                      1.0                3.5     7.0     1.0               7.0          ns
+                                    VCC = 2.7 V                                               1.0                3.5     7.0     1.0               7.0          ns
+                                    VCC = 3.0 V to 3.6 V                                      1.0                3.0     5.9     1.0               5.9          ns
+                                    VCC = 4.5 V to 5.5 V                                      1.0                2.5     4.1     1.0               4.1          ns
+tW           pulse width         CP HIGH or LOW; see Fig. 6
+                                    VCC = 1.65 V to 1.95 V                                    6.2                  -      -      6.2                 -          ns
+                                    VCC = 2.3 V to 2.7 V                                      2.7                  -      -      2.7                 -          ns
+                                    VCC = 2.7 V                                               2.7                  -      -      2.7                 -          ns
+                                    VCC = 3.0 V to 3.6 V                                      2.7                1.3      -      2.7                 -          ns
+                                    VCC = 4.5 V to 5.5 V                                      2.0                  -      -      2.0                 -          ns
+                                 SD and RD LOW; see Fig. 7
+                                    VCC = 1.65 V to 1.95 V                                    6.2                  -      -      6.2                 -          ns
+                                    VCC = 2.3 V to 2.7 V                                      2.7                  -      -      2.7                 -          ns
+                                    VCC = 2.7 V                                               2.7                  -      -      2.7                 -          ns
+                                    VCC = 3.0 V to 3.6 V                                      2.7                1.6      -      2.7                 -          ns
+                                    VCC = 4.5 V to 5.5 V                                      2.0                  -      -      2.0                 -          ns
+trec         recovery time       SD or RD; see Fig. 7
+                                    VCC = 1.65 V to 1.95 V                                    1.9                  -      -      1.9                 -          ns
+                                    VCC = 2.3 V to 2.7 V                                      1.4                  -      -      1.4                 -          ns
+                                    VCC = 2.7 V                                               1.3                  -      -      1.3                 -          ns
+                                    VCC = 3.0 V to 3.6 V                                    +1.2                 -3.0     -      +1.2                -          ns
+                                    VCC = 4.5 V to 5.5 V                                      1.0                  -      -      1.0                 -          ns
+
+
+
+
+74LVC1G74_Q100                              All information provided in this document is subject to legal disclaimers.            © Nexperia B.V. 2023. All rights reserved
+
+
+Product data sheet                                        Rev. 6 — 18 August 2023                                                                                6 / 16
+Nexperia                                                                                                                     74LVC1G74-Q100
+                                                             Single D-type flip-flop with set and reset; positive edge trigger
+
+Symbol Parameter                   Conditions                                                   Tamb = -40 °C to +85 °C                 Tamb =      Unit
+                                                                                                                                  -40 °C to +125 °C
+                                                                                                Min             Typ [1]     Max    Min              Max
+tsu          set-up time           D to CP; see Fig. 6
+                                       VCC = 1.65 V to 1.95 V                                    2.9                  -      -     2.9                 -          ns
+                                       VCC = 2.3 V to 2.7 V                                      1.7                  -      -     1.7                 -          ns
+                                       VCC = 2.7 V                                               1.7                  -      -     1.7                 -          ns
+                                       VCC = 3.0 V to 3.6 V                                      1.3                0.5      -     1.3                 -          ns
+                                       VCC = 4.5 V to 5.5 V                                      1.1                  -      -     1.1                 -          ns
+th           hold time             D to CP; see Fig. 6
+                                       VCC = 1.65 V to 1.95 V                                    1.5                  -      -     1.5                 -          ns
+                                       VCC = 2.3 V to 2.7 V                                      1.0                  -      -     1.0                 -          ns
+                                       VCC = 2.7 V                                               1.0                  -      -     1.0                 -          ns
+                                       VCC = 3.0 V to 3.6 V                                      1.0                0.6      -     1.0                 -          ns
+                                       VCC = 4.5 V to 5.5 V                                      1.0                  -      -     1.0                 -          ns
+fmax         maximum               CP; see Fig. 6
+             frequency                 VCC = 1.65 V to 1.95 V                                    80                   -      -      80                 -          MHz
+                                       VCC = 2.3 V to 2.7 V                                     175                   -      -     175                 -          MHz
+                                       VCC = 2.7 V                                              175                   -      -     175                 -          MHz
+                                       VCC = 3.0 V to 3.6 V                                     175                 280      -     175                 -          MHz
+                                       VCC = 4.5 V to 5.5 V                                     200                   -      -     200                 -          MHz
+CPD          power dissipation     VI = GND to VCC; VCC = 3.3 V [3]                                -                 15      -       -                 -          pF
+             capacitance
+
+[1]    Typical values are measured at Tamb = 25 °C and VCC = 1.8 V, 2.5 V, 2.7 V, 3.3 V and 5.0 V respectively.
+[2]    tpd is the same as tPLH and tPHL.
+                                                                                           2                    2
+[3]    CPD is used to determine the dynamic power dissipation (PD in μW). PD = CPD × VCC × fi × N + Σ(CL × VCC × fo) where:
+       fi = input frequency in MHz; fo = output frequency in MHz;
+       CL = output load capacitance in pF; VCC = supply voltage in V;
+                                                     2
+       N = number of inputs switching; Σ(CL × VCC × fo) = sum of outputs.
+
+
+
+
+74LVC1G74_Q100                                 All information provided in this document is subject to legal disclaimers.           © Nexperia B.V. 2023. All rights reserved
+
+
+Product data sheet                                           Rev. 6 — 18 August 2023                                                                               7 / 16
+Nexperia                                                                                                                          74LVC1G74-Q100
+                                                             Single D-type flip-flop with set and reset; positive edge trigger
+
+
+                           11.1. Waveforms and test circuit
+                                                                                                         tW
+                                              VI
+
+                                  CP input                               VM
+
+                                             GND
+
+
+                                                                                          1/fmax
+                                              VI
+
+                                  D input              VM
+
+                                             GND
+                                                                         th                                             th
+                                                            t su                                            t su
+                                                                                     t PHL                                     t PLH
+                                             VOH
+
+                                  Q output                                       VM
+
+                                             VOL
+
+                                             VOH
+
+                                  Q output                                      VM
+
+                                             VOL
+                                                          t PLH                                           t PHL
+                                                                                                                             mnb141
+
+            Measurement points are given in Table 10.
+            The shaded areas indicate when the input is permitted to change for predictable output performance.
+            VOL and VOH are typical output voltage levels that occur with the output load.
+Fig. 6.     The clock input (CP) to output (Q, Q) propagation delays and pulse width, D to CP set-up,
+            CP to D hold times and the maximum frequency
+
+
+
+
+74LVC1G74_Q100                                 All information provided in this document is subject to legal disclaimers.              © Nexperia B.V. 2023. All rights reserved
+
+
+Product data sheet                                           Rev. 6 — 18 August 2023                                                                                  8 / 16
+Nexperia                                                                                                                                   74LVC1G74-Q100
+                                                                Single D-type flip-flop with set and reset; positive edge trigger
+
+                                             VI
+
+                                 CP input                                                                                        VM
+
+                                            GND
+                                                                                                                                       t rec
+                                             VI
+
+                                 SD input                    VM
+
+                                            GND                                                                                        t rec
+                                                                     tW                                         tW
+                                             VI
+
+                                 RD input                                                                VM
+
+                                            GND
+                                                                          t PLH                                     t PHL
+                                            VOH
+
+                                 Q output                            VM
+
+                                            VOL
+
+                                            VOH
+
+                                 Q output                            VM
+
+                                            VOL
+                                                                          t PHL                                      t PLH
+                                                                                                                                    mnb142
+
+            Measurement points are given in Table 10.
+            VOL and VOH are typical output voltage levels that occur with the output load.
+Fig. 7.     The set (SD) and reset (RD) input to output (Q, Q) propagation delays, pulse widths and the RD to CP
+            recovery time
+
+Table 10. Measurement points
+Supply voltage                                Input                                                                            Output
+VCC                                           VM                                                                               VM
+1.65 V to 1.95 V                              0.5 × VCC                                                                        0.5 × VCC
+2.3 V to 2.7 V                                0.5 × VCC                                                                        0.5 × VCC
+2.7 V                                         1.5 V                                                                            1.5 V
+3.0 V to 3.6 V                                1.5 V                                                                            1.5 V
+4.5 V to 5.5 V                                0.5 × VCC                                                                        0.5 × VCC
+
+
+
+
+74LVC1G74_Q100                                    All information provided in this document is subject to legal disclaimers.                   © Nexperia B.V. 2023. All rights reserved
+
+
+Product data sheet                                              Rev. 6 — 18 August 2023                                                                                       9 / 16
+Nexperia                                                                                                                            74LVC1G74-Q100
+                                                              Single D-type flip-flop with set and reset; positive edge trigger
+
+                                                                                                               VEXT
+                                                                            VCC
+                                                                                                                      RL
+                                                         VI                                VO
+                                               G                            DUT
+
+                                                                     RT                                  CL           RL
+
+
+
+                                                                                                                mna616
+
+            Test data is given in Table 11.
+            Definitions for test circuit:
+            RL = Load resistance.
+            CL = Load capacitance including jig and probe capacitance.
+            RT = Termination resistance should be equal to the output impedance Zo of the pulse generator.
+            VEXT = External voltage for measuring switching times.
+Fig. 8.     Test circuit for measuring switching times
+
+Table 11. Test data
+Supply voltage          Input                                   Load                                                   VEXT
+VCC                     VI            tr, tf                    CL                         RL                          tPLH, tPHL    tPZH, tPHZ           tPZL, tPLZ
+1.65 V to 1.95 V        VCC           ≤ 2.0 ns                  30 pF                      1 kΩ                        open          GND                  2 × VCC
+2.3 V to 2.7 V          VCC           ≤ 2.0 ns                  30 pF                      500 Ω                       open          GND                  2 × VCC
+2.7 V                   2.7 V         ≤ 2.5 ns                  50 pF                      500 Ω                       open          GND                  6V
+3.0 V to 3.6 V          2.7 V         ≤ 2.5 ns                  50 pF                      500 Ω                       open          GND                  6V
+4.5 V to 5.5 V          VCC           ≤ 2.5 ns                  50 pF                      500 Ω                       open          GND                  2 × VCC
+
+
+
+
+74LVC1G74_Q100                                 All information provided in this document is subject to legal disclaimers.                  © Nexperia B.V. 2023. All rights reserved
+
+
+Product data sheet                                            Rev. 6 — 18 August 2023                                                                                   10 / 16
+Nexperia                                                                                                                                                     74LVC1G74-Q100
+                                                                                Single D-type flip-flop with set and reset; positive edge trigger
+
+
+12. Package outline
+
+  TSSOP8: plastic thin shrink small outline package; 8 leads; body width 3 mm; lead length 0.5 mm                                                                                                   SOT505-2
+
+
+
+
+                                                D                                                                                  E                             A
+                                                                                                                                                                          X
+
+
+
+
+                                                                                                c
+
+                                    y                                                                                             HE                                          v M A
+
+
+                                          Z
+
+                               8                                  5
+
+
+
+
+                                                                                                                A2
+                                                                                                            A                                                      (A3)
+                                                                                                                      A1
+                                        pin 1 index
+
+                                                                                                                                                                              θ
+                                                                                                                                                        Lp
+
+                                                                                                                                                        L
+
+                               1                                  4                                                                    detail X
+
+                                          e                                 w M
+                                                             bp
+
+
+
+
+                                                                  0                                  2.5                             5 mm
+                                                                                                    scale
+
+
+
+
+     DIMENSIONS (mm are the original dimensions)
+                  A
+       UNIT             A1         A2          A3     bp              c      D(1)        E(1)         e         HE          L          Lp         v          w        y            Z(1)        θ
+                 max.
+                        0.15       0.95               0.38        0.18        3.1        3.1                    4.1                  0.47                                         0.70         8°
+        mm       1.1                          0.25                                                  0.65                   0.5                    0.2       0.13     0.1
+                        0.00       0.75               0.22        0.08        2.9        2.9                    3.9                  0.33                                         0.35         0°
+
+      Note
+      1. Plastic or metal protrusions of 0.15 mm maximum per side are not included.
+
+           OUTLINE                                                          REFERENCES                                                                   EUROPEAN
+                                                                                                                                                                                          ISSUE DATE
+           VERSION                       IEC                      JEDEC                           JEITA                                                 PROJECTION
+
+           SOT505-2                                                   ---                                                                                                                   02-01-16
+
+
+
+Fig. 9.      Package outline SOT505-2 (TSSOP8)
+
+
+
+
+74LVC1G74_Q100                                                    All information provided in this document is subject to legal disclaimers.                                      © Nexperia B.V. 2023. All rights reserved
+
+
+Product data sheet                                                              Rev. 6 — 18 August 2023                                                                                                        11 / 16
+Nexperia                                                                                                                                                            74LVC1G74-Q100
+                                                                                       Single D-type flip-flop with set and reset; positive edge trigger
+
+  VSSOP8: plastic very thin shrink small outline package; 8 leads; body width 2.3 mm                                                                                                                         SOT765-1
+
+
+
+
+                                                       D                                                                                   E                             A
+                                                                                                                                                                                     X
+
+
+
+
+                                                                                                       c
+
+                                              y                                                                                           HE                                         v        A
+
+
+
+
+                                     Z
+
+
+                                 8                                        5
+
+
+
+                                                                                                                                                                     Q
+
+                                                                                                                      A2
+                                                                                                                 A
+                                                                                                                              A1                                             (A3)
+                                                       pin 1 index
+
+                                                                                                                                                                                         θ
+                                                                                                                                                               Lp
+
+                                 1                                         4                                                   detail X                        L
+
+                                              e                                   w
+                                                                bp
+
+
+
+
+                                                            0                                                                                              5 mm
+                                                                                                           scale
+
+
+
+     Dimensions (mm are the original dimensions)
+                      A
+         Unit               A1           A2       A3       bp        c         D(1)     E(2)       e        HE        L        Lp        Q            v    w         y        Z(1)       θ
+                     max.
+             max            0.15 0.85                      0.27 0.23           2.1      2.4                3.2               0.40 0.21                                        0.4        8°
+      mm     nom      1                           0.12                                            0.5                0.4                         0.2      0.08      0.1
+             min            0.00 0.60                      0.17 0.08           1.9      2.2                3.0               0.15 0.19                                        0.1        0°
+     Note
+     1. Plastic or metal protrusions of 0.15 mm maximum per side are not included.
+     2. Plastic or metal protrusions of 0.25 mm maximum per side are not included.                                                                                                                         sot765-1_po
+
+           Outline                                                                References                                                                       European
+                                                                                                                                                                                                    Issue date
+           version                       IEC                     JEDEC                                 JEITA                                                       projection
+                                                                                                                                                                                                     07-06-02
+         SOT765-1                                                MO-187                                                                                                                              16-05-31
+
+Fig. 10. Package outline SOT765-1 (VSSOP8)
+
+
+
+
+74LVC1G74_Q100                                                           All information provided in this document is subject to legal disclaimers.                                      © Nexperia B.V. 2023. All rights reserved
+
+
+Product data sheet                                                                     Rev. 6 — 18 August 2023                                                                                                        12 / 16
+Nexperia                                                                                                                                             74LVC1G74-Q100
+                                                                                Single D-type flip-flop with set and reset; positive edge trigger
+
+  XSON8: plastic extremely thin small outline package; no leads; 8 terminals; body 1 x 1.95 x 0.5 mm                                                                                SOT833-1
+
+
+
+                                                                                                         b
+                                      1                     2                      3                      4
+
+                                                                                                                                             4×
+                                                                                                                         L                   (2)
+                        L1
+
+
+                  e
+
+
+
+
+                                      8                     7                      6                       5
+                                                e1                    e1                    e1
+
+
+
+
+                        8×                                                                                                      A
+                        (2)
+
+
+
+
+                                                                                                                       A1
+
+                                                                      D
+
+
+
+
+                                                                                                                            E
+
+
+
+
+                 terminal 1
+                 index area
+
+                                                      0                                             1                                         2 mm
+                                                                                                 scale
+     DIMENSIONS (mm are the original dimensions)
+
+      UNIT       A(1)   A1      b         D           E         e          e1          L         L1
+                 max    max
+                               0.25       2.0        1.05                           0.35       0.40
+       mm        0.5    0.04                                    0.6        0.5
+                               0.17       1.9        0.95                           0.27       0.32
+     Notes
+     1. Including plating thickness.
+     2. Can be visible in some manufacturing processes.
+
+          OUTLINE                                                     REFERENCES                                                                    EUROPEAN
+                                                                                                                                                                         ISSUE DATE
+          VERSION                   IEC                     JEDEC                           JEITA                                                  PROJECTION
+
+                                                                                                                                                                            07-11-14
+          SOT833-1                  ---                     MO-252                            ---
+                                                                                                                                                                            07-12-07
+
+
+Fig. 11. Package outline SOT833-1 (XSON8)
+
+
+
+
+74LVC1G74_Q100                                                  All information provided in this document is subject to legal disclaimers.                      © Nexperia B.V. 2023. All rights reserved
+
+
+Product data sheet                                                               Rev. 6 — 18 August 2023                                                                                     13 / 16
+Nexperia                                                                                                            74LVC1G74-Q100
+                                                     Single D-type flip-flop with set and reset; positive edge trigger
+
+
+13. Abbreviations
+Table 12. Abbreviations
+Acronym                      Description
+CMOS                         Complementary Metal-Oxide Semiconductor
+DUT                          Device Under Test
+ESD                          ElectroStatic Discharge
+HBM                          Human Body Model
+TTL                          Transistor-Transistor Logic
+
+
+14. Revision history
+Table 13. Revision history
+Document ID                  Release date          Data sheet status                                Change notice Supersedes
+74LVC1G74_Q100 v.6           20230818              Product data sheet                               -               74LVC1G74_Q100 v.5
+Modifications:               •   Section 2: ESD specification updated according to the latest JEDEC standard.
+74LVC1G74_Q100 v.5           20210920              Product data sheet                               -               74LVC1G74_Q100 v.4
+Modifications:               •   Section 1 and Section 2 updated.
+                             •   Section 8: Derating values for Ptot total power dissipation updated.
+74LVC1G74_Q100 v.4           20181105              Product data sheet                               -               74LVC1G74_Q100 v.3
+Modifications:               •   The format of this data sheet has been redesigned to comply with the identity
+                                 guidelines of Nexperia.
+                             •   Legal texts have been adapted to the new company name where appropriate.
+                             •   Type number 74LVC1G74GD-Q100 (SOT996-2) removed.
+                             •   Type number 74LVC1G74GT-Q100 (SOT833-1) added.
+74LVC1G74_Q100 v.3           20161209              Product data sheet                               -               74LVC1G74_Q100 v.2
+Modifications:               •   Table 8: The maximum limits for leakage current and supply current have changed.
+74LVC1G74_Q100 v.2           20130514              Product data sheet                               -               74LVC1G74_Q100 v.1
+Modifications:               •   74LVC1G74GD-Q100 (XSON8) added.
+74LVC1G74_Q100 v.1           20120807              Product data sheet                               -               -
+
+
+
+
+74LVC1G74_Q100                         All information provided in this document is subject to legal disclaimers.          © Nexperia B.V. 2023. All rights reserved
+
+
+Product data sheet                                   Rev. 6 — 18 August 2023                                                                            14 / 16
+Nexperia                                                                                                                                74LVC1G74-Q100
+                                                                         Single D-type flip-flop with set and reset; positive edge trigger
+                                                                                                   equipment, nor in applications where failure or malfunction of an Nexperia
+
+15. Legal information                                                                              product can reasonably be expected to result in personal injury, death or
+                                                                                                   severe property or environmental damage. Nexperia and its suppliers accept
+                                                                                                   no liability for inclusion and/or use of Nexperia products in such equipment or
+                                                                                                   applications and therefore such inclusion and/or use is at the customer's own
+Data sheet status                                                                                  risk.
+                                                                                                   Quick reference data — The Quick reference data is an extract of the
+ Document status         Product           Definition                                              product data given in the Limiting values and Characteristics sections of this
+ [1][2]                  status [3]                                                                document, and as such is not complete, exhaustive or legally binding.
+
+ Objective [short]       Development       This document contains data from                        Applications — Applications that are described herein for any of these
+ data sheet                                the objective specification for                         products are for illustrative purposes only. Nexperia makes no representation
+                                           product development.                                    or warranty that such applications will be suitable for the specified use
+                                                                                                   without further testing or modification.
+ Preliminary [short]     Qualification     This document contains data from
+                                                                                                   Customers are responsible for the design and operation of their applications
+ data sheet                                the preliminary specification.
+                                                                                                   and products using Nexperia products, and Nexperia accepts no liability for
+ Product [short]         Production        This document contains the product                      any assistance with applications or customer product design. It is customer’s
+ data sheet                                specification.                                          sole responsibility to determine whether the Nexperia product is suitable
+                                                                                                   and fit for the customer’s applications and products planned, as well as
+                                                                                                   for the planned application and use of customer’s third party customer(s).
+[1]   Please consult the most recently issued document before initiating or                        Customers should provide appropriate design and operating safeguards to
+      completing a design.                                                                         minimize the risks associated with their applications and products.
+[2]   The term 'short data sheet' is explained in section "Definitions".
+[3]   The product status of device(s) described in this document may have                          Nexperia does not accept any liability related to any default, damage, costs
+      changed since this document was published and may differ in case of                          or problem which is based on any weakness or default in the customer’s
+      multiple devices. The latest product status information is available on                      applications or products, or the application or use by customer’s third party
+      the internet at https://www.nexperia.com.                                                    customer(s). Customer is responsible for doing all necessary testing for the
+                                                                                                   customer’s applications and products using Nexperia products in order to
+                                                                                                   avoid a default of the applications and the products or of the application or
+Definitions                                                                                        use by customer’s third party customer(s). Nexperia does not accept any
+                                                                                                   liability in this respect.
+Draft — The document is a draft version only. The content is still under
+internal review and subject to formal approval, which may result in                                Limiting values — Stress above one or more limiting values (as defined in
+modifications or additions. Nexperia does not give any representations or                          the Absolute Maximum Ratings System of IEC 60134) will cause permanent
+warranties as to the accuracy or completeness of information included herein                       damage to the device. Limiting values are stress ratings only and (proper)
+and shall have no liability for the consequences of use of such information.                       operation of the device at these or any other conditions above those
+                                                                                                   given in the Recommended operating conditions section (if present) or the
+Short data sheet — A short data sheet is an extract from a full data sheet
+                                                                                                   Characteristics sections of this document is not warranted. Constant or
+with the same product type number(s) and title. A short data sheet is
+                                                                                                   repeated exposure to limiting values will permanently and irreversibly affect
+intended for quick reference only and should not be relied upon to contain
+                                                                                                   the quality and reliability of the device.
+detailed and full information. For detailed and full information see the relevant
+full data sheet, which is available on request via the local Nexperia sales                        Terms and conditions of commercial sale — Nexperia products are
+office. In case of any inconsistency or conflict with the short data sheet, the                    sold subject to the general terms and conditions of commercial sale, as
+full data sheet shall prevail.                                                                     published at http://www.nexperia.com/profile/terms, unless otherwise agreed
+                                                                                                   in a valid written individual agreement. In case an individual agreement is
+Product specification — The information and data provided in a Product
+                                                                                                   concluded only the terms and conditions of the respective agreement shall
+data sheet shall define the specification of the product as agreed between
+                                                                                                   apply. Nexperia hereby expressly objects to applying the customer’s general
+Nexperia and its customer, unless Nexperia and customer have explicitly
+                                                                                                   terms and conditions with regard to the purchase of Nexperia products by
+agreed otherwise in writing. In no event however, shall an agreement be
+                                                                                                   customer.
+valid in which the Nexperia product is deemed to offer functions and qualities
+beyond those described in the Product data sheet.                                                  No offer to sell or license — Nothing in this document may be interpreted
+                                                                                                   or construed as an offer to sell products that is open for acceptance or the
+                                                                                                   grant, conveyance or implication of any license under any copyrights, patents
+Disclaimers                                                                                        or other industrial or intellectual property rights.
+Limited warranty and liability — Information in this document is believed                          Export control — This document as well as the item(s) described herein
+to be accurate and reliable. However, Nexperia does not give any                                   may be subject to export control regulations. Export might require a prior
+representations or warranties, expressed or implied, as to the accuracy                            authorization from competent authorities.
+or completeness of such information and shall have no liability for the
+                                                                                                   Translations — A non-English (translated) version of a document is for
+consequences of use of such information. Nexperia takes no responsibility
+                                                                                                   reference only. The English version shall prevail in case of any discrepancy
+for the content in this document if provided by an information source outside
+                                                                                                   between the translated and English versions.
+of Nexperia.
+In no event shall Nexperia be liable for any indirect, incidental, punitive,
+special or consequential damages (including - without limitation - lost                            Trademarks
+profits, lost savings, business interruption, costs related to the removal
+                                                                                                   Notice: All referenced brands, product names, service names and
+or replacement of any products or rework charges) whether or not such
+                                                                                                   trademarks are the property of their respective owners.
+damages are based on tort (including negligence), warranty, breach of
+contract or any other legal theory.
+Notwithstanding any damages that customer might incur for any reason
+whatsoever, Nexperia’s aggregate and cumulative liability towards customer
+for the products described herein shall be limited in accordance with the
+Terms and conditions of commercial sale of Nexperia.
+Right to make changes — Nexperia reserves the right to make changes
+to information published in this document, including without limitation
+specifications and product descriptions, at any time and without notice. This
+document supersedes and replaces all information supplied prior to the
+publication hereof.
+Suitability for use in automotive applications — This Nexperia product
+has been qualified for use in automotive applications. Unless otherwise
+agreed in writing, the product is not designed, authorized or warranted to
+be suitable for use in life support, life-critical or safety-critical systems or
+
+
+
+
+74LVC1G74_Q100                                             All information provided in this document is subject to legal disclaimers.               © Nexperia B.V. 2023. All rights reserved
+
+
+Product data sheet                                                       Rev. 6 — 18 August 2023                                                                                 15 / 16
+Nexperia                                                                                                                                 74LVC1G74-Q100
+                                                                          Single D-type flip-flop with set and reset; positive edge trigger
+
+
+Contents
+1. General description...................................................... 1
+2. Features and benefits.................................................. 1
+3. Ordering information....................................................2
+4. Marking.......................................................................... 2
+5. Functional diagram.......................................................2
+6. Pinning information......................................................3
+6.1. Pinning.........................................................................3
+6.2. Pin description............................................................. 3
+7. Functional description................................................. 3
+8. Limiting values............................................................. 4
+9. Recommended operating conditions..........................4
+10. Static characteristics..................................................5
+11. Dynamic characteristics.............................................6
+11.1. Waveforms and test circuit........................................ 8
+12. Package outline........................................................ 11
+13. Abbreviations............................................................ 14
+14. Revision history........................................................14
+15. Legal information......................................................15
+
+© Nexperia B.V. 2023. All rights reserved
+
+For more information, please visit: http://www.nexperia.com
+For sales office addresses, please send an email to: salesaddresses@nexperia.com
+Date of release: 18 August 2023
+
+
+
+
+74LVC1G74_Q100                                              All information provided in this document is subject to legal disclaimers.       © Nexperia B.V. 2023. All rights reserved
+
+
+Product data sheet                                                        Rev. 6 — 18 August 2023                                                                         16 / 16
+

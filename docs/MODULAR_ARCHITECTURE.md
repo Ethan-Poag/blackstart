@@ -162,7 +162,7 @@ Boundary parts (shared bias, decoupling) are heuristic, the same caveat as `revi
 
 ### 2.4 Per-slot power budget
 
-> **Pass 1 update (§13):** the slot shunt is now 5 mΩ (trip 10.7/13.6/16.6 A), the LV slots share a bank limiter (9.2/11.6/14.4 A), and +5V_SLOT is gone. The figures below are the Phase 1 proposal.
+> **Pass 1 update (§13), superseded in part by Pass 2 (§14):** the slot shunt is now 5 mΩ (trip 10.6/13.5/16.5 A), the LV slots share a bank switch with a 22.4/28.6/35.0 A short-circuit trip plus a hardware overload cutoff (§14.1), and +5V_SLOT is gone. The figures below are the Phase 1 proposal.
 | Rail | Per-slot limit | Hardware | Notes |
 |---|---|---|---|
 | VBAT_FIELD | **6 A continuous [E]**; pulses up to the slot trip | TPS48100-Q1 + 2× BSC070N10NS5 + shunt, the same circuit as fuel/crank (`bom/design_spec.md`) | With a 10 mΩ shunt the trip scales to about 7.7/9.9/12.3 A (min/typ/max). I derived that from the 20 mΩ figure of 3.86/4.97/6.14 A; check it against the datasheet in Phase 2. 9 contacts × 2 A = 18 A rated, so 6 A leaves 3× margin |
@@ -716,17 +716,17 @@ Checks after the fixes:
 |---|---|---|---|
 | Card channel (HSO-5, BRK-4) | TPS1HTC30 ILIM 33.2k (KCL 80/100/120 A·kΩ) | 2.41 / 3.01 / 3.61 A | per channel |
 | Slot switch (×8) | TPS48100 + 2× BSC070N10NS5 + 5 mΩ (C2903482) + ISCP 24.3k (C23348) | 10.7 / 13.6 / 16.6 A (V_SCP 53.4 / 67.6 / 83.0 mV) | 4.7 nF + 100k across TMR: latch-off, tSC ≈ 70 µs |
-| Slot bank (new, VBAT_P → VBAT_SLOTS) | TPS48100 + 2× BSC070N10NS5 + 5 mΩ + ISCP 19.6k (C22898) | 9.2 / 11.6 / 14.4 A (V_SCP 45.8 / 58.2 / 71.9 mV) | 10 nF + 100k: latch-off, tSC ≈ 148 µs |
+| Slot bank (new, VBAT_P → VBAT_SLOTS) | Pass 1: TPS48100 + 2× BSC070N10NS5 + 5 mΩ + ISCP 19.6k. **Superseded by Pass 2 (§14.1): ISCP 61.9k, 68 nF, plus a hardware overload cutoff.** | Pass 1: 9.2 / 11.6 / 14.4 A. Pass 2: 22.4 / 28.6 / 35.0 A | Pass 1: 10 nF, ≈ 148 µs. Pass 2: 517-1490 µs |
 | Rail cut (VBAT_ESTOP) | unchanged, plus 100k across C_TMR | 15.8 / 20 / 24.8 A | latch-off; re-arm with RC_ALLOW |
 
 - The equation is TPS48100 SLUSEW1C Eq 5: R_ISCP = (I_SC × R_SNS − 19 mV) / 2 µA. The tolerance rows come from the datasheet (10.5k → 31.6/40/49.5 mV; 28k → 58.8/75/91.8 mV), interpolated.
-- **Why 9.2 A minimum for the bank, not 7 A:** the budget case is 5.0 A of slot load plus one shorted HSO channel at its 3.61 A maximum limit, which is 8.61 A. That stays under 9.2 A, so a single channel short never takes down every slot.
-- **Selectivity:** a hard short in one slot trips that slot (~70 µs) before the bank timer (~148 µs) runs out. A slot overload between 9.2 A and 10.7 A trips the bank and takes every LV slot down (caveat).
-- **F1:** worst case 14.4 A bank + 4.95 A base load = 19.4 A, which is under 200 % of F1 (10 A at room, 8 A at 149 °F). The INA237 (U86) firmware tiers cover the fuse time domain.
+- **(Pass 1 history) Why 9.2 A minimum for the bank, not 7 A:** the budget case is 5.0 A of slot load plus one shorted HSO channel at its 3.61 A maximum limit, which is 8.61 A. That stays under 9.2 A, so a single channel short never takes down every slot.
+- **Selectivity (Pass 1, superseded):** the Pass 2 review (MAJ-1) showed that the Pass 1 timers overlapped (slot 36-103 µs vs bank 69-142 µs) and the bank threshold sat under the slot maximum. §14.1 replaces this.
+- **F1 (Pass 1, superseded):** the Pass 2 review (MAJ-2) showed that a 5-14 A bank overload could sit on F1 for minutes. §14.2 replaces this with the hardware overload cutoff and the 77 °F / 149 °F ladder.
 - **Bank control:**
   - BANK_EN = 0x22 P11, with a 10k pull-down: off at reset.
   - BANK_FAULT_N = 0x22 P12, with a 10k pull-up.
-- **Bank FET thermal** (`modular/tools/railcut_thermal.py`; RthJA 50 K/W, RDS(on) 7 mΩ max):
+- **Bank FET thermal, Pass 1 currents** (Pass 2 threshold figures are in §14.2) (`modular/tools/railcut_thermal.py`; RthJA 50 K/W, RDS(on) 7 mΩ max):
 
 | Ambient | Bank current | Hot FET (60/40) loss | Hot FET Tj | Rise | Shunt loss (3 W part) |
 |---|---|---|---|---|---|
@@ -738,22 +738,22 @@ Checks after the fixes:
 
   TjMax is 302 °F. The slot switches carry at most one card's load, which is less than this.
 - **N14 DIN contacts:** the WingTAT C96 contact rating is 2 A (LCSC parameter and drawing 9001D11001 R7; contact resistance 20 mΩ max at DC 100 mA; −67…+257 °F; 1000 VAC withstand).
-  - A slot can never pass more than the bank's 14.4 A maximum. Across its 9 VBAT_FIELD contacts that is ≤ 1.6 A each.
+  - Pass 1 assumed an even split. Pass 2 (m12, §14.6) uses the worst split: one contact carries about 1/3 of the slot current.
   - **WingTAT publishes no temperature derating curve** (caveat).
 - **N17 sense clamp:** V_SNSFH tracks DIAG_EN (3.0/3.3/3.82 V at DIAG_EN 3.3 V). Changing R_SNS alone does not bound the clamp current.
   - R_SNS 1.1k → **910 Ω** (C23264) keeps the 3.61 A I_CL at 3.61 A × 1300⁻¹ × 910 = 2.53 V, below the 3.0 V V_SNSFH minimum.
   - The series resistor 1k → **4.7k** (C23162) keeps the BAT54C clamp current ≤ 0.13 mA. That keeps the TMUX1208 S pin ≤ VDD + 0.25 V (BAT54 VF 240 mV max at 0.1 mA) inside its VDD + 0.5 V abs max, with about 0.33 V margin at −40 °F.
-  - Cost: about 57 µs settling, so firmware waits 0.5 ms after a mux change (FW_REQ C7.3).
-- **BRK-4 caveat:** the coil limit is now 2.41 A minimum. A coil above 2.4 A needs an interposing relay.
+  - Cost (corrected in Pass 2): with the 1k series resistor per slot, 1τ ≈ 66 µs (73 µs at +10 % C) and full 12-bit settling takes 0.60-0.66 ms, so firmware waits 0.8 ms after a mux change (FW_REQ C7.3). The old "57 µs" was 1τ, not full settling.
+- **BRK-4:** the channel limit is 2.41 A minimum. Pass 2 (MAJ-6) makes interposing relays mandatory for every breaker coil (§14.5).
 
 ### 13.5 Faults, ID bus, write protect, rail cut (M4-M8, N8-N11)
 - **M5 / N10, the third TCA9555 at 0x22** on I2C2 (A1 = +3V3_SAFE):
   - P00-P07 = SL1-8_CARD_FAULT_N (10k pull-ups);
   - P10 = ENG_PRESENT_N (engine slot c31; the card grounds it; 10k pull-up);
-  - P11 = BANK_EN; P12 = BANK_FAULT_N; P13-P17 spare.
+  - P11 = BANK_EN; P12 = BANK_FAULT_N; P13 = BANK_OVL_ROOM and P14 = BANK_OVL_N (Pass 2); P15-P17 spare.
   - U106 (0x20) P1 = SLn_PWR_FAULT_N, shared by TPS48100 FLT and TPS2553 FAULT. U107 (0x21) P1 = SLn_ARM_N.
   - All three INTs go to SLOT_EXP_INT_N.
-- **M4:** PB5 drives ID_MUX_RST_N. Its 100k pull-down R544 is removed; the 10k pull-up R707 stays. Recovery procedure: FW_REQ C7.4.
+- **M4:** PB5 drives ID_MUX_RST_N. Its 100k pull-down R544 is removed; the 10k pull-up on the backplane stays (R717 in the Pass 2 build; the earlier text said R707, which is the RC_EN pull-down). Recovery procedure: FW_REQ C7.4.
 - **M6:** D126 is now an SMDJ36CA (Littelfuse, C224075, 4,813 in stock). Datasheet values:
   - VR 36 V; VBR 40.0-44.2 V at 1 mA.
   - VC 58.1 V at Ipp 51.6 A (10/1000 µs, 77 °F); αT 0.1 %/°C, so VC is about 60.4 V at 149 °F.
@@ -784,7 +784,7 @@ Checks after the fixes:
 | Part | Stock (Nov 23) | Alternate |
 |---|---|---|
 | AT24CS32-STUM-T (C147891, SOT-23-5, on every card) | 243 | AT24CS32-SSHM-T SOIC-8 (C615972, 92) or AT24CS32-MAHM-T UDFN (C2061575, 228). Neither is pin-compatible: a footprint change. Buy a reel for the build early. |
-| TPS48100QDGXRQ1 (C43131316) | 728 (11 per controller now) | No stocked pin-compatible alternate found. Order ahead. |
+| TPS48100QDGXRQ1 (C43131316) | 728 (12 per controller: rail cut, bank, 8 slots, 2 on the engine card) | No stocked pin-compatible alternate found. Order ahead. |
 | SN74LVC1G10DBVR (C403721) | 3,580 LCSC / 4,044 JLC (8 per controller) | No alternate verified this pass. Check the pinout of any other-brand 1G10 before substituting. |
 | WingTAT DIN C96 female (C5173363) | 983 (9 per controller) | No alternate verified this pass (footprint is WingTAT-specific). |
 
@@ -811,3 +811,140 @@ Prices are live JLC parts API prices taken Nov 23, 2026 ~3:40 PM HST (`bom/lcsc_
 ### 13.8 Sheet sizes
 - AI-4, HSO-5 and BRK-4 grew past A3 and are now one A2 page each, like the engine card. DI-8 stays A3.
 - schdraw now masks label text bodies when packing, so clusters can no longer slide over a label. J31 nets on mtr_if are drawn as centred global labels.
+
+## 14. Pass 2 review fixes (Nov 23, 2026, HST; review `/workspace/review/modular_pass2.md`)
+All numbers come from `modular/tools/pass2_calc.py` (output `modular/pass2_calc.txt`). Datasheets and JLC stock: `split_evidence/modular_pass2/`. Rebuild: `sh docs/modular/tools/pass2_rebuild.sh`.
+
+### 14.1 Slot/bank selectivity (MAJ-1)
+| Stage | Parts | Trip min / typ / max | Latch-off timer min / typ / max |
+|---|---|---|---|
+| Slot switch (×8) | TPS48100 + 5 mΩ + ISCP 24.3k, C_TMR 4.7 nF ∥ 100k | 10.6 / 13.5 / 16.5 A | 36 / 64 / 103 µs |
+| Bank (U110) | TPS48100 + 2× BSC070N10NS5 + 5 mΩ + **ISCP 61.9k (R764, C23091)**, **C_TMR 68 nF (C413, C31658)** ∥ 100k | **22.4 / 28.6 / 35.0 A** | **517 / 919 / 1490 µs** |
+
+- SLUSEW1C Eq 5, V_SCP = 19 mV + 2 µA·R_ISCP. Tolerance is scaled from the 28k row (min/typ 0.784, max/typ 1.224) and extrapolated to 61.9k (caveat).
+- Timer: t = R·C·ln(1/(1 − V_TMR/(R·I_TMR))) with I_TMR 67/87/114 µA, V_TMR 0.924/1.1/1.21 V, C ±10 %. The 100k latch leg clamps at 0.48 V, below the 0.924 V minimum, so the latch holds.
+- **Time grading:** the bank minimum is 5.0× the slot maximum. **Current grading:** the bank minimum of 22.4 A is above the slot maximum of 16.5 A plus 5.0 A from the other slots (21.5 A). So a slot short always clears in its own slot.
+- The review's suggested 33 nF gives only 251 µs minimum (below the 530 µs it was meant to reach); 68 nF gives 517 µs.
+- Bank SCP stress at 35 A for 1.49 ms: 4.6 W in the hot FET, 6.1 W in the shunt (9 mJ). The FETs stay in RDS(on), not SOA-limited.
+- **m11 gate dV/dt** (bank and all 8 slots, SLUSEW1C Fig 7-4): R1 150R G1PU → gate, then C1 22 nF + R2 10R from gate to GND.
+  - Output slew is 1.88 V/µs (32 V in 17 µs), so inrush into the 2.7 µF card bulk is 5.1 A, below the 10.6 A slot SCP minimum.
+  - Turning on into a short spends about 4.9 µs in the linear region, inside the BSC070N10NS5 SOA.
+  - CBST ≥ 296 nF is needed; 470 nF is fitted.
+
+### 14.2 Bank overload cutoff and the F1 ladder (MAJ-2)
+Hardware chain: INA281A2 (U111, 50 V/V) on the bank shunt → R770 220k / C416 1 µF → TLV3012B (U112, internal 1.242 V reference; R773 44.2k / R774 100k sets V_TH = 0.8613 V) → Nexperia 74LVC1G74-Q100 (U113: S̅D = trip, R̅D = BANK_EN, D = CP = GND) → Q109 pulls U110 EN/UVLO low.
+- **HOT** (default, Q108 off): 3.45 A nominal, ±8.3 % → **3.16-3.73 A**, τ 220 ms.
+- **ROOM** (BANK_OVL_ROOM on 0x22 P13 turns on Q108 and puts R771 365k across the filter): 5.52 A nominal, ±8.4 % → **5.06-5.98 A**, τ 137 ms.
+- Inverse time, t = τ·ln(I/(I − I_trip)). The INA281 saturates at 19.0 A, so the cutoff time does not keep falling above that.
+
+| Bank current | HOT trip | ROOM trip |
+|---|---|---|
+| 8 A | 88-159 ms | 110-217 ms |
+| 10.7 A | 62-109 ms | 70-129 ms |
+| 16.6 A | 37-64 ms | 40-71 ms |
+| ≥ 19 A | 32-55 ms | 34-60 ms |
+
+- Budget plus one shorted HSO channel at 3.61 A: HOT trips no sooner than 114 ms and ROOM no sooner than 97 ms. Both are longer than the ≤ 80 ms firmware channel latch, so a channel short never takes the bank down.
+- Fail-safe: the TLV3012B output is low for up to 1.9 ms on power-up (POR), which sets the latch. Losing +5V_TRIP therefore latches the bank off. Q (BANK_OVL) has a 100k pull-down, so Q109 stays off while +3V3_SAFE is down.
+- BANK_OVL_N (Q̅) is on 0x22 P14. Clear the latch by toggling BANK_EN (FW_REQ C5.4).
+
+**The 4-tier ladder:** TPS1HTC30 channel (2.41/3.01/3.61 A) → slot TPS48100 (10.6-16.5 A, ≤ 103 µs) → bank overload cutoff (inverse time) + slow bank SCP (22.4-35.0 A, 0.5-1.5 ms) → F1 10 A ATO.
+
+| F1 ambient | F1 holds (110 % ≥ 100 h, × 0.8 hot) | Base + bank overload max | Margin | Worst single fault (16.5 A slot + 5 A others = 26.5 A at F1) | Double fault just under 22.4 A | F1 melt I²t |
+|---|---|---|---|---|---|---|
+| 77 °F (25 °C), ROOM | 11.0 A | 4.95 + 5.98 = 10.93 A | 0.07 A | bank trips ≤ 60 ms, 42 A²s | ≤ 60 ms, 45 A²s | 115 A²s |
+| 149 °F (65 °C), HOT | 8.8 A | 4.95 + 3.73 = 8.68 A | 0.12 A | bank trips ≤ 55 ms, 39 A²s | ≤ 55 ms, 41 A²s | ~74 A²s [E] |
+
+- F1 stays 10 A. Ethan's ruling stands ("a 15 A fuse was not approved").
+- Firmware rules (FW_REQ C5.4 / C7.10):
+  - ROOM is allowed only while the F1 state is ROOM (T_F1 = U83 + 18 °F ≤ 77 °F), VBAT ≥ 11 V on the 12 V class, and U83 is present.
+  - When leaving ROOM, shed AUX to the HOT cap first, then switch to HOT.
+- Bank FET at the overload threshold: 0.14 W, Tj 89 °F at 77 °F / 5.98 A; 0.05 W, Tj 154 °F at 149 °F / 3.73 A.
+- Caveats:
+  - The 0.07 A ROOM margin is thin; it is why ROOM is only allowed with a ≤ 77 °F F1 estimate.
+  - At 9 V and hot (6.46 A base load), F1 is still not coordinated; the existing L3 shed covers that case.
+  - A single-slot overload of 6-10.6 A trips the whole bank unless firmware drops that slot first (FW_REQ C5.4: 50 ms).
+  - A hard short on the VBAT_SLOTS copper (about 79 A²s) may open F1. That is the board-fault class, like a VBAT_P short.
+
+### 14.3 VBAT_ESTOP switched bleeder (MAJ-3)
+- When RC_EN is low, Q103 (AO3400A, gate = RC_EN) turns off. R708 100k from +5V_TRIP then turns on Q104 (IRLML0100, 100 V; 5 V gate vs 2.5 V max VGS(th)), which puts R709 + R710 (2 × 2.2k 2512 1 W, C421608) across VBAT_ESTOP.
+- τ is 1.98 ms (2.38 ms at +20 % C). Decay to 2 V takes:
+  - 12.6 V: 3.65 ms;
+  - 24 V: 4.92 ms;
+  - 28.8 V: 5.28 ms;
+  - 32 V: 5.49 ms (6.59 ms worst case).
+- If the rail-cut FETs are stuck on, the bleeder burns 0.93 W at 32 V (0.47 W per 1 W resistor, 47 %) or 1.18 W at 36 V (0.59 W each).
+- Proof test limit: 2 V within 20 ms (FW_REQ C7.5).
+
+### 14.4 Card fault handling (MAJ-4, MAJ-5)
+- Firmware only: FW_REQ C6.2 is rewritten.
+  - On HSO-5/BRK-4, CARD_FAULT_N is an attention signal with 80 ms inrush blanking.
+  - Firmware finds the faulted channel by polling SNS and latches off only that channel.
+  - A BRK-4 trip pulse is never aborted early.
+  - The slot is cut only if the fault persists or SLn_PWR_FAULT_N trips.
+- DI-8 masks the TPS26621 FLT for ≥ 30 ms after BIAS_ON. C19 = 10 nF gives a start-up of 8.9 / 11.4 / 14.4 ms at 12 / 24 / 32 V.
+- BRK-4 has no free GPB pin, so SNS polling is the method on both cards.
+
+### 14.5 Breaker coils (MAJ-6)
+- ILIM stays 33.2k (2.41/3.01/3.61 A). Interposing relays are mandatory for every GCB/MCB trip, close and motor-operator coil. The single limit is ≤ 2.4 A including pull-in (`INSTALL_SAFETY.md`, output table and modular section).
+- The engine-card GLOW keeps 4.02 A.
+- The "5 A / ≤ 100 ms coil pulse" admission in firmware ARCHITECTURE §12 does not apply to BRK-4 (FW_REQ C6 BRK-4).
+
+### 14.6 Minors
+| # | Fix |
+|---|---|
+| m1 | U109 EN = PE13 SLOT_ANA_EN (R751 100k pull-down); 1k series R752-R759 on every SLn_ANA (≤ 3.3 mA into an unpowered card); MUX_A0-2 100k pull-downs R714-R716; 0.8 ms wait (FW C7.3). |
+| m2 | FW C2.3: U107 ARM_N = 0xFF and expander readback before SLOT_RST_N release. |
+| m3 | 100k INTA_B pull-up to +3V3_SLOT on every LV card. |
+| m4 | 33R footprint in series with each card's 1G125 MISO; FW C7.7 slot SPI ≤ 6.25 MHz (5 MHz). |
+| m5 | FW C7.5: time-window OUT_FAULT_N mask keyed to E-stop/RC events, with readback discrimination. |
+| m6 | FW C7.9: crank-dip classification with VBAT_P < 6.5 V. |
+| m7 | Doc errors fixed: ID_MUX_RST_N pull-up ref (§13.5), settling time (§13.4), TPS48100 = 12 per controller (§13.6), HSO-off-on-E-stop rule added as FW C7.5. |
+| m8 | FW C2.5: PSU_MAIN_OK low while running → immediate alarm and controlled shutdown. |
+| m9 | AI-4: 1k bleeder on +3V3_SLOT, so 4 live loops (0.94 mA) hold the rail at 0.94 V. The TPS2553 has no output discharge; only the TPS25530-1 does. HSO/BRK body-diode back-feed is documented as an install rule. |
+| m10 | FW C5.1: TPS2553 FAULT wired-OR on SLn_PWR_FAULT_N; any assertion disarms ARM_N and cuts PWR_EN. |
+| m11 | Gate dV/dt RC on the bank and 8 slots (§14.1). |
+| m12 | DIN contacts, worst 1/3 split: 1.67 A at the 5.0 A budget and 1.99 A at the 5.98 A ROOM maximum, both within 2 A. A slot short puts 5.5 A on one contact for ≤ 103 µs. An overload just under 10.6 A puts 3.5 A on one contact for ≤ 110-131 ms unless firmware drops the slot (caveat: WingTAT publishes no derating curve). |
+| m13 | FW C7.8: one ID_WP unlock at a time, ≤ 100 ms timeout. |
+| m14 | +3V3_ID feed 150R → 68R 1206 per slot (R790 family). A write draws 3.66 mA, so the rail is ≥ 3.00 V, with a VIH margin of +201 mV (150R gave −99 mV). A short dissipates 160 mW (64 % of 0.25 W). |
+| m15 | Thin stock refreshed (§14.7). |
+| m16 | estop/slot_power title and notes overflow fixed (shorter sheet titles; notes box width; a block is never narrower than its title; 4-side-pin parts put ref/value at the corner). Card 10k pull-ups are now 0603 (C25804). slot_power stays one A1 sheet (not split per slot pair). |
+
+### 14.7 Thin stock (Nov 23, 2026)
+| Part | Stock | Per controller | Note |
+|---|---|---|---|
+| AT24CS32-STUM-T (C147891) | 243 | 7 | ≈ 34 systems; alternates need a footprint change (§13.6) |
+| TPS48100QDGXRQ1 (C43131316) | 728 | 12 | ≈ 60 systems |
+| SN74LVC1G10DBVR (C403721) | 3,580 | 8 | |
+| WingTAT DIN C96 female (C5173363) | 983 | 9 | |
+| BSC070N10NS5 (C534364) | 1,823 | 31 | ≈ 58 systems |
+| **TLV3012BIDBVR (C20345924)** | **LCSC 15 / JLC 705** | 1 | alternate TLV3011BIDBVR (C20345920, 827) is open-drain and loses the POR-low fail-safe |
+| INA281A2IDBVR (C1517405) | LCSC 1,165 / JLC 2,381 | 1 | $5.62; INA281A2QDBVRQ1 (C2908677, $2.17) has only 35 |
+| 365k 0603 (C23031) | 4,717 | 1 | |
+
+### 14.8 Part counts and cost after Pass 2
+| Board | Parts (fitted) |
+|---|---|
+| Mainboard | 976 (was 926) |
+| ENGINE / DI-8 / AI-4 / HSO-5 / BRK-4 | 158 / 84 / 122 / 99 (×2) / 85 (was 158 / 82 / 119 / 97 / 83) |
+| HV meter | 221 |
+| **Example build, combined (245 lines)** | **1,844** (was 1,783) |
+
+| True net cost delta | qty 1 | qty 10 (per unit) |
+|---|---|---|
+| Baseline mainboard + meter (tag) | −$330.25 | −$279.37 |
+| Reworked mainboard BOM | +$242.87 | +$204.94 |
+| HV meter BOM | +$65.33 | +$54.60 |
+| Card BOMs | +$133.83 | +$112.84 |
+| Card PCBs + PCBA fees + extended-part loading [E/DS] | +$200.80 | +$22.08 |
+| Bays, guides, faceplates [E] | +$29.00 | +$17.50 |
+| **Total** | **+$341.58** (was +$331.72, +$9.86) | **+$132.59** (was +$123.46, +$9.13) |
+
+Prices are live JLC parts API prices, Nov 23, 2026, HST (`bom/lcsc_prices.csv`, 11 rows added).
+
+### 14.9 Verification
+- ERC: 0 errors / 0 warnings on genctl, genctl_meter, engine, di8, ai4, hso5 and brk4.
+- Netlist audit: 1057 nets unchanged, 127 changes, 0 unexplained, 0 orphans. Mating: 413 contacts wired both sides, 166 NC on both sides, 7 card-NC slot signals, 6 open ID straps. Drawn-vs-intended: 2914 pins, 0 errors.
+- BOM ↔ schematic: 0 mismatches.
+- Sheet sizes: the cards are one page each (engine/AI-4/HSO-5/BRK-4 A2, DI-8 A3). Mainboard: mcu A3, estop A3, backplane A2, slot_power A1, io_core A2. genctl_meter stays 2 pages.
+

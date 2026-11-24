@@ -1,6 +1,6 @@
 # Firmware requirements: swappable cards (M-mod Phase 2, branch m7-modular)
 
-Status: requirements only. Nothing is implemented. Source: `docs/MODULAR_ARCHITECTURE.md` §3 and §9. Written Nov 23, 2026, HST. Updated Nov 23, 2026, HST, for the Pass 1 review fixes (`/workspace/review/modular_pass1.md`): C2.3, C4.3, C5.1, C6 and the new C7.
+Status: requirements only. Nothing is implemented. Source: `docs/MODULAR_ARCHITECTURE.md` §3 and §9. Written Nov 23, 2026, HST. Updated Nov 23, 2026, HST, for the Pass 1 review fixes (`/workspace/review/modular_pass1.md`): C2.3, C4.3, C5.1, C6 and the new C7. Updated again Nov 23, 2026, HST, for the Pass 2 review fixes (`/workspace/review/modular_pass2.md`): C2.3, C2.5, C5.1, C5.4, C6.2, C7.3-C7.5 and the new C7.7-C7.12. The numbers come from `docs/modular/tools/pass2_calc.py` (output in `docs/modular/pass2_calc.txt`).
 
 ## C1 Card identification
 - C1.1 Every card has an AT24CS32 ID EEPROM at 0x50, reached through its own TCA9548A channel. There are 2 muxes, at 0x70 and 0x71: 8 LV slots + engine + HV. The bus is the slot I2C bus on I2C2 (PB10/PB11), never the FRAM/ADS1115 bus on I2C1.
@@ -30,6 +30,11 @@ Status: requirements only. Nothing is implemented. Source: `docs/MODULAR_ARCHITE
   | x | x | 1 | 1 | off |
   | 1 | 1 | 0 | 0 | enabled (the card MCP23S17 REQ bits still decide each output) |
 
+  Boot rule (Pass 2 m2), before SLOT_RST_N is released for the first time:
+  1. Write U107 (0x21) port 1 output register = 0xFF (every SLn_ARM_N high), then set port 1 to outputs.
+  2. Read back the U106 (0x20), U107 (0x21) and U108 (0x22) configuration and output registers. Port 1 of 0x21 must read 0xFF, every EN_N must be high, BANK_EN low, BANK_OVL_ROOM low.
+  3. Only then release SLOT_RST_N. On any mismatch: `SLOT_EXP_FAULT`, slots stay off, no start.
+
   Enable order:
   1. SLn_EN_N low.
   2. Wait for PWR_FAULT_N to stay high.
@@ -47,6 +52,7 @@ Status: requirements only. Nothing is implemented. Source: `docs/MODULAR_ARCHITE
 - C2.5 Missing card, wrong type, unknown type, bad CRC, failed self-test or over power budget: the slot stays unpowered and `CARD_FAULT(slot)` is raised. Then:
   - If the card carries a protection-class function: **no start**.
   - Otherwise: alarm only.
+  - **+3V3 lost while running (Pass 2 m8).** The slot +3V3 comes from main +3V3 through the TPS2553s, so PSU_MAIN_OK low takes every LV card's logic down at once (outputs fail off; DI/AI readings become invalid). Firmware raises `PSU_MAIN_FAULT` at once and runs a controlled shutdown on the safety core, which stays on +3V3_SAFE: FUEL_EN = 0 within 1 s (no cool-down), ARM_N high and EN_N high on every slot. BRK-4 cannot be commanded while its +3V3_SLOT is gone. The ESTOP_TRIP path stays on the mainboard and is unaffected. Restart needs PSU_MAIN_OK and an acknowledgment.
 - C2.6 Uncommissioned slot with a card in it: show a "new card" notice. Its channels stay unmapped until they are assigned in the config suite.
 - C2.7 The channel map is `logical function → (slot, channel)`. It can only be edited while stopped, and is validated against SAFE_MAX.
 
@@ -70,15 +76,30 @@ Status: requirements only. Nothing is implemented. Source: `docs/MODULAR_ARCHITE
 ## C5 Running faults
 - C5.1 Any card: PRESENT edge, SLn_PWR_FAULT_N, SLn_CARD_FAULT_N or SPI/CRC failure.
   - PRESENT high removes PWR_EN in hardware (74LVC1G02).
-  - Each slot switch latches off on its own short-circuit trip: TPS48100 with 100k across C_TMR, trip 10.7/13.6/16.6 A. Firmware reads that latch as SLn_PWR_FAULT_N low on 0x20 port 1. The TPS48100 FLT and the TPS2553 FAULT share that line.
+  - Each slot switch latches off on its own short-circuit trip: TPS48100 with 100k across C_TMR, trip 10.6/13.5/16.5 A after 36-103 µs. Firmware reads that latch as SLn_PWR_FAULT_N low on 0x20 port 1.
+  - **SLn_PWR_FAULT_N wiring (Pass 2 m10):** the TPS48100 FLT and the TPS2553 FAULT are both open drain, wired-OR onto SLn_PWR_FAULT_N with one 10k pull-up to +3V3_SAFE. Low means slot switch latched, slot UVLO, or +3V3_SLOT overcurrent; firmware cannot tell which from the line alone.
+  - **Rule:** any SLn_PWR_FAULT_N low immediately drives that slot's ARM_N high and EN_N high (PWR_EN off), then raises CARD_FAULT(slot), unless C7.9 classifies it as a supply dip.
   - SLn_CARD_FAULT_N is read on 0x22 port 0. Firmware drops the slot itself (EN_N high, ARM_N high).
   - Firmware then applies C2.5's protection-class rule.
   - Re-arm a latched slot only after the operator acknowledges it: EN_N high for at least 10 ms, then low again.
-- C5.4 Slot bank limiter. One TPS48100 feeds VBAT_SLOTS to all 8 LV slots and trips at 9.2/11.6/14.4 A. It latches off after about 148 µs, longer than the slot trips (about 70 µs), so a slot short trips its own slot first.
-  - BANK_EN is on 0x22 P11, with a 10k pull-down: the bank is off until firmware enables it after the boot checks.
-  - BANK_FAULT_N is on 0x22 P12, with a 10k pull-up.
-  - A bank trip removes every LV slot. That is `SLOT_BANK_FAULT`, which means no start, and a stop if running when any protection-class card is affected.
-  - Re-arm after an acknowledgment: BANK_EN low for at least 10 ms, then high.
+- C5.4 Slot bank limiter and bank overload cutoff (Pass 2 MAJ-1/MAJ-2). One TPS48100 (U110) feeds VBAT_SLOTS to all 8 LV slots.
+  - Short circuit: 22.4/28.6/35.0 A, latch-off after 517-1490 µs (68 nF + 100k). That is 5× the slowest slot timer (103 µs) and above the slot maximum (16.5 A) plus the 5.0 A of other slots, so a slot short always trips its own slot first.
+  - Overload (hardware): INA281A2 (U111) on the bank shunt → 220k/1 µF filter → TLV3012B (U112) → 74LVC1G74 latch (U113) → pulls U110 EN/UVLO low. Inverse time: t = τ·ln(I/(I − I_trip)).
+    - HOT (default, BANK_OVL_ROOM low): trip 3.16-3.73 A, τ 220 ms.
+    - ROOM (BANK_OVL_ROOM = 0x22 P13 high): trip 5.06-5.98 A, τ 137 ms.
+    - Above about 19 A the INA281 output saturates: trip 32-60 ms.
+  - BANK_EN is on 0x22 P11, with a 10k pull-down: the bank is off until firmware enables it after the boot checks. BANK_EN low also resets the overload latch.
+  - BANK_FAULT_N is on 0x22 P12 (10k pull-up): low = SCP latch or bank UVLO, which includes an overload cutoff.
+  - BANK_OVL_N is on 0x22 P14 (driven by the latch): low = hardware overload cutoff latched.
+  - The TLV3012B holds its output low for up to 1.9 ms while +5V_TRIP ramps (POR), so a brown-out of +5V_TRIP sets the latch: the bank fails off. After every power-up, firmware clears it with BANK_EN low before the first enable.
+  - **ROOM select rule:** BANK_OVL_ROOM follows the existing F1 state (`aux_total_cap_room_A` / `_hot_A`). Firmware drives it high only while the F1 state is ROOM, VBAT is above 11 V (12 V class) and U83 reads valid. Leave ROOM like this:
+    1. First shed AUX load to the 3.0 A HOT cap.
+    2. Confirm with the INA237 that the slot share is below 3.0 A.
+    3. Only then drive BANK_OVL_ROOM low.
+    4. If the load cannot be shed within 5 s, open the lowest-priority slots (EN_N high) first.
+  - **Firmware tier below the hardware:** an LV slot whose card-reported channel sum exceeds its declared maximum, or which draws 6-10.6 A, would trip the whole bank in hardware. So firmware drops that one slot (ARM_N high, then EN_N high) within 50 ms. That is faster than the 62-109 ms hardware trip at 10.7 A.
+  - A bank trip removes every LV slot. That is `SLOT_BANK_FAULT` (or `SLOT_BANK_OVERLOAD` when BANK_OVL_N is low), which means no start, and a stop if running when any protection-class card is affected.
+  - Re-arm after an acknowledgment: BANK_EN low for at least 10 ms, then high, not sooner than 2 s after the trip (the filter must decay).
   - The INA237 (U86, F1 chain) tiers still cover the fuse time domain above the bank trip.
 - C5.2 A missing BRK-4 blocks every breaker close. It never opens a closed breaker by itself. ESTOP_TRIP stays on the mainboard.
 - C5.3 Cards are re-enumerated only after a power cycle. There is no hot-plug.
@@ -98,13 +119,18 @@ Status: requirements only. Nothing is implemented. Source: `docs/MODULAR_ARCHITE
   - REQ, DIAG_EN and MUX_A have 47k pull-downs, so they stay low while the MCP is reset or Hi-Z.
 - **BRK-4 (0x0013):**
   - GPA0-3 OUT1-4_REQ, GPA4 DIAG_EN, GPA5-7 SLOT_ID0-2; GPB0-3 OUT1-4_RB_N, GPB4-6 MUX_A0-2, GPB7 SLOT_IDP. Same 47k pull-downs as HSO-5.
-  - Coil current limit: 2.41 A min / 3.01 A typ / 3.61 A max (ILIM 33.2k). A coil that needs more than 2.4 A needs an interposing relay.
+  - Channel current limit: 2.41 A min / 3.01 A typ / 3.61 A max (ILIM 33.2k), the same on HSO-5 and BRK-4. Firmware `aux_out_limit_A` stays 2.0 A.
+  - **Every GCB/MCB trip, close and motor-operator coil is switched through an external interposing relay (Pass 2 MAJ-6).** BRK-4 drives only the relay coil (≤ 2.4 A including pull-in). The firmware/ARCHITECTURE §12 "5 A / ≤ 100 ms coil pulse" admission does not apply to BRK-4: the channel limits at 2.41 A minimum.
 - **C6.1** Firmware writes the EEPROM only while PB6 holds ID_WP low (C1.4; commissioning and calibration only).
-- **C6.2** SLn_CARD_FAULT_N (0x22 port 0) low for longer than 10 ms:
-  - firmware drives ARM_N high, then EN_N high (that slot's TPS48100 off);
-  - firmware raises CARD_FAULT(slot).
-
-  SLn_PWR_FAULT_N (0x20 port 1) low means the slot switch has already latched off (C5.1). All three expanders share SLOT_EXP_INT_N (PB4).
+- **C6.2 SLn_CARD_FAULT_N handling (Pass 2 MAJ-4/MAJ-5).** SLn_CARD_FAULT_N is read on 0x22 port 0. All three expanders share SLOT_EXP_INT_N (PB4).
+  - **HSO-5 and BRK-4: an attention signal, not a trip.** The line is the wired-OR of the card's TPS1HTC30 FAULT pins, and each channel already limits its own current.
+    1. Blanking: ignore the line for 80 ms (50-100 ms window) after any REQ rising edge on that card, which covers lamp inrush and relay pull-in.
+    2. Outside the blanking, on low: find the faulted channel by polling each channel's SNS through the card TMUX1208 (MUX_A, then ANA_OUT, C7.3). BRK-4 has no free GPB pin (GPB0-3 RB_N, GPB4-6 MUX_A, GPB7 SLOT_IDP), so SNS polling is the method on both cards.
+    3. Latch off only the faulted channel: REQ = 0 and `CH_FAULT(slot, ch)` until acknowledged. The other channels keep running.
+    4. **Never abort a BRK-4 trip (OPEN) pulse early.** If the fault comes during an OPEN pulse, finish the pulse; the TPS1HTC30 limits itself. Then latch that channel.
+    5. Cut the whole slot (ARM_N high, then EN_N high) only if CARD_FAULT_N stays low for more than 200 ms after the faulted channel's REQ = 0, or if SLn_PWR_FAULT_N trips.
+  - **DI-8: TPS26621 FLT.** Mask CARD_FAULT_N for at least 30 ms after BIAS_ON rises. With C19 = 10 nF the TPS26621 start-up takes 8.9 / 11.4 / 14.4 ms at 12 / 24 / 32 V, so 30 ms is 2× the worst case. After the mask, low for more than 10 ms means: BIAS_ON = 0, `DI_BIAS_FAULT(slot)`, and that card's inputs are marked invalid. The slot stays powered.
+  - **AI-4** drives no CARD_FAULT_N; a low there is an `ID/CARD` fault and the slot is dropped (ARM_N high, EN_N high).
 - **C6.3** MCP23S17 setup on every LV card:
   - IOCON.ODR = 0: INTA push-pull, active low, into the card 74LVC1G07, which is the open-drain INT_N on the backplane.
   - Unused GPIO stay inputs with GPPU = 1. Never configure an unused pin as an output.
@@ -116,10 +142,11 @@ Status: requirements only. Nothing is implemented. Source: `docs/MODULAR_ARCHITE
 - **C7.3 MUX_A sharing and ANA_OUT settling.**
   - MUX_A0-2 are card-local MCP outputs; each card has its own mux.
   - The mainboard SLOT_ANA mux (U109) selects one slot ANA_OUT.
-  - Order: set the card MUX_A, select the slot on the mainboard mux, then wait at least 0.5 ms before converting. The 4.7k + 910R sense network into about 10 nF settles in about 57 µs; 0.5 ms gives margin.
-  - Never select the ANA channel of an unpowered slot.
+  - Pass 2 m1: each SLn_ANA reaches U109 through a 1k series resistor. U109 EN is PE13 (SLOT_ANA_EN) with a 100k pull-down, so every switch is open at MCU reset. The mainboard MUX_A0-2 lines have 100k pull-downs.
+  - Order: set the card MUX_A, drive MUX_A0-2 for the slot, drive SLOT_ANA_EN high, then wait at least **0.8 ms** before converting. The source is 4.7k + 910R + 1k + 2 × 7 Ω RON ≈ 6.6 kΩ into C224 (10 nF ±10%). That gives τ = 66-73 µs (1τ). Full 12-bit settling (9.0 τ) takes 0.60-0.66 ms, so 0.8 ms has margin. The old "57 µs" was 1τ without the 1k, not full settling.
+  - Drive SLOT_ANA_EN low after the conversion. Never select the ANA channel of an unpowered slot. The 1k limits an unpowered or faulty slot to ≤ 3.3 mA into U109 anyway.
 - **C7.4 ID mux bus recovery (M4).**
-  - PB5 drives ID_MUX_RST_N (R707 10k pull-up: the muxes run while the MCU is in reset).
+  - PB5 drives ID_MUX_RST_N (10k pull-up on the backplane, R717 in this build, R711 in the Pass 1 build; R707 is the RC_EN pull-down): the muxes run while the MCU is in reset.
   - If an ID read times out or SDA is held low: drive PB5 low for 10 µs (TCA9548A datasheet tW(L) = 6 ns min, so this has wide margin), release it, then clock SCL 9 times with SDA released and send a STOP.
   - Then re-select the channel and retry once.
   - Two failures: `ID_BUS_FAULT` (C2.5 rules).
@@ -129,8 +156,27 @@ Status: requirements only. Nothing is implemented. Source: `docs/MODULAR_ARCHITE
   - U101 latches off after a short (100k across C_TMR). Re-arm by toggling RC_ALLOW low for at least 10 ms, then high.
   - Pre-crank proof test, every start, in IDLE before PREHEAT:
     1. With ESTOP_OK = 1 and WD_OK = 1, drive RC_ALLOW low.
-    2. Check that the VBAT_ESTOP readback (R411 ADC) falls below 2 V within 50 ms.
+    2. Check that the VBAT_ESTOP readback (R411 ADC) falls below 2 V within 20 ms. The switched bleeder (Pass 2 MAJ-3) makes the decay 3.6-6.6 ms; see below.
     3. Drive RC_ALLOW high and check that VBAT_ESTOP returns within 5 % of VBAT_ESTOP_PRE within 50 ms.
     4. If either check fails: `RAIL_CUT_FAULT`, no start.
-  - **OUT_FAULT_N masking rule:** OUT_FAULT_N also carries the U101 FLT. During the proof test (RC_ALLOW low) and for 20 ms after RC_ALLOW returns high, firmware ignores OUT_FAULT_N for the rail-cut path only. Any OUT_FAULT_N outside that window is a real fault.
+  - **Switched bleeder (Pass 2 MAJ-3).** Whenever RC_EN is low (E-stop, WD_OK low, RC_ALLOW low), Q103 AO3400A turns off and Q104 IRLML0100 (100 V) gets 5 V from +5V_TRIP through 100k. That puts 2 × 2.2k 2512 1 W (1.1 kΩ) across VBAT_ESTOP.
+    - With the 40.3k passive path, R = 1.07 kΩ. With about 1.85 µF (+20%), τ = 1.98-2.38 ms.
+    - Time to 2 V: 12.6 V 3.6-4.4 ms; 24 V 4.9-5.9 ms; 28.8 V 5.3-6.3 ms; 32 V 5.5-6.6 ms. All under 10 ms.
+    - If Q101/Q102 are stuck on, the bleeder stays on across the battery: 32 V → 0.93 W (0.47 W per 1 W resistor, 47%); 36 V → 1.18 W (0.59 W each). Firmware sees that as VBAT_ESTOP not falling: `RAIL_CUT_FAULT`, no start, and an alarm to remove battery power.
+  - **OUT_FAULT_N masking rule (Pass 2 m5).** OUT_FAULT_N is a wired-OR: the U101 FLT and the engine card U4/U6 FLT all assert on UVLO at an E-stop and during the proof test. So a "rail-cut-only" mask is not possible.
+    - Mask OUT_FAULT_N as a whole from any RC_EN falling cause (ESTOP_OK falling, WD_OK falling, RC_ALLOW low) until 20 ms after RC_EN is back high.
+    - Discriminate with readback. With ESTOP_OK = 0 or VBAT_ESTOP_PRE < 6.5 V, OUT_FAULT_N low is expected. With ESTOP_OK = 1, RC_ALLOW = 1, VBAT_ESTOP_PRE ≥ 9 V and VBAT_ESTOP < 2 V, OUT_FAULT_N low is a real `RAIL_CUT_TRIP`.
+    - Any OUT_FAULT_N outside the window that fails this check is a real fault.
+  - **E-stop also turns off the LV HSO outputs (Pass 2 m7).** The E-stop does not cut VBAT_SLOTS in hardware. On ESTOP_OK falling, firmware sets every HSO-5 REQ = 0 and drives the HSO-5 ARM_N high within 10 ms. BRK-4 stays armed only for an OPEN pulse.
 - **C7.6 Slot power budget.** The VBAT_SLOTS budget is 5.0 A at room and 3.0 A at 149 °F, the existing AUX cap. Firmware refuses a commissioned map over budget (C2.5).
+- **C7.7 Slot SPI clock (Pass 2 m4).** The MISO return path is about 62.5 ns: MCP23S17 TV 45 ns, plus the 1G125 delay, plus backplane flight. Each card now also has a 33R footprint in series with its 1G125 MISO output. SPI3 must run at **≤ 6.25 MHz**; use 5 MHz.
+- **C7.8 ID_WP (Pass 2 m13).** Unlock one EEPROM write at a time: PB6 high, then one page write, then ACK polling for at most 100 ms, then PB6 low. If it times out: PB6 low, `ID_WRITE_FAULT`. Never leave ID_WP low across several cards or across a power state change.
+- **C7.9 Supply dips vs card faults (Pass 2 m6).** The bank and slot TPS48100 FLT also assert on input UVLO (100k/27k on EN/UVLO; a crank dip to about 5.1-5.6 V). So a deep crank dip pulls BANK_FAULT_N and every SLn_PWR_FAULT_N low together.
+  - If VBAT_P (VBAT_SNS) is below 6.5 V at the fault, or within ±20 ms of it, classify the event as `SLOT_UV_DIP`, not as a card fault. Still disarm (ARM_N high), because that is safe.
+  - Auto re-arm with the normal enable order after VBAT_P is above 8 V for 100 ms, without operator acknowledgment. Log the dip.
+  - A single slot's fault with VBAT_P ≥ 6.5 V is a real fault (C5.1).
+- **C7.10 Bank overload ROOM/HOT.** See C5.4. BANK_OVL_ROOM is low at reset (100k pull-down = HOT) and whenever the F1 state is not ROOM, VBAT < 11 V, or U83 is missing.
+- **C7.11 Slot power budget.** Unchanged (C7.6). The hardware bank cutoff sits above it: HOT 3.16 A min against the 3.0 A cap, ROOM 5.06 A min against the 5.0 A cap.
+- **C7.12 Back-power (Pass 2 m9, `docs/INSTALL_SAFETY.md`).**
+  - An AI-4 with live loops but slot power off back-feeds ≤ 0.94 mA through its input clamps into +3V3_SLOT. A 1k bleeder holds the rail at ≤ 0.94 V, so firmware may see AI-4 inputs at about 0 V while the slot is off, and must ignore them.
+  - An HSO-5/BRK-4 output wired to an externally energized load back-feeds through the TPS1HTC30 body diode into VBAT_FIELD, then through the slot and bank FET body diodes into VBAT_SLOTS/VBAT_P. That is an install rule (never wire an output to an externally energized load), not something firmware can prevent.

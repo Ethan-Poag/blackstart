@@ -1,0 +1,662 @@
+                                                                                                      PD - 97157
+
+
+                                                                 IRLML0100TRPbF
+                                                                        HEXFET® Power MOSFET
+
+            VDS               100                V
+           VGS Max            ± 16               V           G 1
+
+        RDS(on) max
+       (@VGS = 10V)
+                               220            m   :                          3 D
+
+
+        RDS(on) max
+       (@VGS = 4.5V)
+                               235            m   :          S   2                         Micro3TM (SOT-23)
+                                                                                           IRLML0100TRPbF
+
+
+Application(s)
+• Load/ System Switch
+Features and Benefits
+Features                                                                            Benefits
+Industry-standard pinout                                                                Multi-vendor compatibility
+Compatible with existing Surface Mount Techniques                    results in         Easier manufacturing
+RoHS compliant containing no lead, no bromide and no halogen              ⇒             Environmentally friendly
+MSL1                                                                                    Increased reliability
+
+
+Absolute Maximum Ratings
+        Symbol                          Parameter                               Max.                     Units
+VDS                    Drain-Source Voltage                                       100                      V
+ID @ TA = 25°C         Continuous Drain Current, VGS @ 10V                        1.6
+ID @ TA = 70°C         Continuous Drain Current, VGS @ 10V                        1.3                      A
+IDM                    Pulsed Drain Current                                       7.0
+PD @TA = 25°C          Maximum Power Dissipation                                  1.3
+                                                                                                           W
+PD @TA = 70°C          Maximum Power Dissipation                                  0.8
+                       Linear Derating Factor                                   0.01                      W/°C
+VGS                    Gate-to-Source Voltage                                     ± 16                     V
+TJ, TSTG               Junction and Storage Temperature Range                -55 to + 150                  °C
+
+Thermal Resistance
+        Symbol                          Parameter                     Typ.                 Max.          Units
+RθJA                   Junction-to-Ambient   e                         –––                  100
+RθJA                   Junction-to-Ambient (t<10s)    f                –––                   99
+                                                                                                          °C/W
+
+
+ORDERING INFORMATION:
+See detailed ordering and shipping information on the last page of this data sheet.
+
+Notes  through  are on page 10
+www.irf.com                                                                                                      1
+                                                                                                           11/24/09
+IRLML0100TRPbF
+
+Electric Characteristics @ TJ = 25°C (unless otherwise specified)
+      Symbol               Parameter                  Min. Typ. Max. Units                  Conditions
+V(BR)DSS       Drain-to-Source Breakdown Voltage      100   –––    –––     V    VGS = 0V, ID = 250µA
+ΔV(BR)DSS/ΔTJ Breakdown Voltage Temp. Coefficient     –––   0.10   –––    V/°C Reference to 25°C, ID = 1mA
+                                                      –––   190    235          VGS = 4.5V, ID = 1.3A    d
+RDS(on)        Static Drain-to-Source On-Resistance
+                                                      –––   178    220
+                                                                          mΩ
+                                                                                VGS = 10V, ID = 1.6A     d
+VGS(th)        Gate Threshold Voltage                 1.0   –––    2.5     V    VDS = VGS, ID = 25µA
+IDSS                                                  –––   –––    20           VDS =100V, VGS = 0V
+               Drain-to-Source Leakage Current                            µA
+                                                      –––   –––    250          VDS = 100V, VGS = 0V, TJ = 125°C
+IGSS           Gate-to-Source Forward Leakage         –––   –––    100          VGS = 16V
+                                                                          nA
+               Gate-to-Source Reverse Leakage         –––   –––    -100         VGS = -16V
+RG             Internal Gate Resistance               –––   1.3    –––     Ω
+gfs            Forward Transconductance               5.7   –––    –––     S    VDS = 50V, ID = 1.6A
+Qg             Total Gate Charge                      –––   2.5    –––          ID = 1.6A
+Qgs            Gate-to-Source Charge                  –––   0.5    –––    nC    VDS =50V
+Qgd            Gate-to-Drain ("Miller") Charge        –––   1.2    –––          VGS = 4.5V   d
+td(on)         Turn-On Delay Time                     –––   2.2    –––          VDD =50V    d
+tr             Rise Time                              –––   2.1    –––          ID = 1.0A
+                                                                           ns
+td(off)        Turn-Off Delay Time                    –––   9.0    –––          RG = 6.8Ω
+tf             Fall Time                              –––   3.6    –––          VGS = 4.5V
+Ciss           Input Capacitance                      –––   290    –––          VGS = 0V
+Coss           Output Capacitance                     –––   27     –––    pF    VDS = 25V
+Crss           Reverse Transfer Capacitance           –––   13     –––          ƒ = 1.0MHz
+
+Source - Drain Ratings and Characteristics
+      Symbol         Parameter                        Min. Typ. Max. Units                  Conditions
+IS             Continuous Source Current                                        MOSFET symbol
+                                                      –––   –––    1.1
+               (Body Diode)                                                     showing the
+                                                                           A
+ISM            Pulsed Source Current                                            integral reverse
+               (Body Diode) c                        –––   –––    7.0
+                                                                                p-n junction diode.
+VSD            Diode Forward Voltage                  –––   –––    1.3     V    TJ = 25°C, IS = 1.1A, VGS = 0V   d
+trr            Reverse Recovery Time                  –––   20     30      ns   TJ = 25°C, VR = 50V, IF=1.1A
+Qrr            Reverse Recovery Charge                –––   13     20     nC    di/dt = 100A/µs    d
+
+
+
+
+      2                                                                                                www.irf.com
+                                                                                                                                                        IRLML0100TRPbF
+                                       100                                                                                                       100
+                                                    ≤60µs PULSE WIDTH                    VGS                                                                 ≤60µs PULSE WIDTH                     VGS
+                                                    Tj = 25°C                 TOP        10.0V                                                                                           TOP       10.0V
+                                                                                         4.50V
+                                                                                                                                                             Tj = 150°C                            4.50V
+ID, Drain-to-Source Current (A)
+
+
+
+
+                                                                                                           ID, Drain-to-Source Current (A)
+                                                                                         3.50V                                                                                                     3.50V
+                                                                                         3.30V                                                                                                     3.30V
+                                        10                                               3.25V                                                                                                     3.25V
+                                                                                         2.50V                                                                                                     2.50V
+                                                                                         2.35V                                                   10                                                2.35V
+                                                                              BOTTOM     2.25V                                                                                           BOTTOM    2.25V
+
+
+                                         1
+
+
+                                                                                                                                                  1
+                                        0.1
+                                                                                                                                                                                 2.25V
+
+                                                                    2.25V
+                                       0.01                                                                                                      0.1
+                                              0.1               1             10                 100                                                   0.1               1           10                100
+                                                       VDS, Drain-to-Source Voltage (V)                                                                         VDS, Drain-to-Source Voltage (V)
+
+
+                                        Fig 1. Typical Output Characteristics                                                                     Fig 2. Typical Output Characteristics
+
+
+
+
+                                        10                                                                                                       2.5
+                                                                                                                                                             ID = 1.6A
+                                                                                                       RDS(on) , Drain-to-Source On Resistance
+
+
+
+
+                                                                                                                                                             VGS = 10V
+      ID, Drain-to-Source Current(A)
+
+
+
+
+                                                                                                                                                 2.0
+                                                        TJ = 150°C
+                                         1
+                                                                                                                   (Normalized)
+
+
+
+
+                                                                                                                                                 1.5
+
+
+                                        0.1                            TJ = 25°C
+                                                                                                                                                 1.0
+
+                                                                       VDS = 50V
+                                                                       ≤60µs PULSE WIDTH
+                                       0.01                                                                                                      0.5
+                                              1.5         2.0         2.5          3.0           3.5                                                   -60 -40 -20 0     20 40 60 80 100 120 140 160
+
+                                                       VGS, Gate-to-Source Voltage (V)                                                                           TJ , Junction Temperature (°C)
+
+
+                                        Fig 3. Typical Transfer Characteristics                                                                   Fig 4. Normalized On-Resistance
+                                                                                                                                                          Vs. Temperature
+            www.irf.com                                                                                                                                                                                    3
+IRLML0100TRPbF
+
+                                 10000                                                                                                                      16
+                                                    VGS = 0V,     f = 1 MHZ
+                                                    Ciss = Cgs + Cgd, Cds SHORTED                                                                                     ID= 1.6A
+
+
+
+
+                                                                                                                         VGS, Gate-to-Source Voltage (V)
+                                                    Crss = Cgd                                                                                                                        VDS= 80V
+                                                    Coss = Cds + Cgd                                                                                                                  VDS= 50V
+                                     1000                                                                                                                   12
+                                                                                                                                                                                      VDS= 20V
+  C, Capacitance (pF)
+
+
+
+
+                                                         Ciss
+
+                                     100                                                                                                                     8
+                                                         Coss
+
+                                                         Crss
+                                                                                                                                                             4
+                                       10
+
+
+
+                                                                                                                                                             0
+                                        1                                                                                                                         0        1     2        3      4        5   6      7
+                                             1                    10                      100
+                                                                                                                                                                               QG Total Gate Charge (nC)
+                                                    VDS , Drain-to-Source Voltage (V)
+
+
+                                             Fig 5. Typical Capacitance Vs.                                                                                           Fig 6. Typical Gate Charge Vs.
+                                                Drain-to-Source Voltage                                                                                                   Gate-to-Source Voltage
+
+
+
+                                     100                                                                                                           100
+                                                                                                                                                                                  OPERATION IN THIS AREA
+                                                                                                                                                                                  LIMITED BY R DS (on)
+                                                                                                ID, Drain-to-Source Current (A)
+ISD, Reverse Drain Current (A)
+
+
+
+
+                                      10                                                                                                                   10
+
+                                                                                                                                                                                                          100µsec
+                                                  TJ = 150°C
+
+                                       1                                                                                                                    1
+                                                                                                                                                                                                     1msec
+
+
+
+                                      0.1                                                                                                                  0.1
+                                                                TJ = 25°C                                                                                              TA = 25°C
+                                                                                                                                                                                                 10msec
+                                                                                                                                                                       Tj = 150°C
+                                                                               VGS = 0V                                                                                Single Pulse
+                                     0.01                                                                                                  0.01
+                                            0.4           0.6            0.8              1.0                                                                    0.1                  1              10             100
+
+                                                   VSD , Source-to-Drain Voltage (V)                                                                                       VDS, Drain-to-Source Voltage (V)
+
+
+                                        Fig 7. Typical Source-Drain Diode                                                                                  Fig 8. Maximum Safe Operating Area
+                                                 Forward Voltage
+
+                                 4                                                                                                                                                                   www.irf.com
+                                                                                                           IRLML0100TRPbF
+
+                                   2.0
+                                                                                                                                           RD
+                                                                                                                         V DS
+
+                                                                                                                   VGS
+                                   1.5
+                                                                                                                                       D.U.T.
+                                                                                                              RG
+        ID , Drain Current (A)
+
+
+
+
+                                                                                                                                                            +
+                                                                                                                                                            - VDD
+
+                                                                                                                   VGS
+                                   1.0
+                                                                                                              Pulse Width ≤ 1 µs
+                                                                                                              Duty Factor ≤ 0.1 %
+
+
+
+                                   0.5                                                          Fig 10a. Switching Time Test Circuit
+
+                                                                                                     VDS
+                                   0.0                                                               90%
+                                         25         50        75     100       125      150
+
+                                                    TA , Ambient Temperature (°C)
+
+                                                                                                     10%
+                                   Fig 9. Maximum Drain Current Vs.                                  VGS
+                                          Ambient Temperature                                                   td(on)    tr                t d(off)   tf
+
+
+                                                                                                   Fig 10b. Switching Time Waveforms
+                                 1000
+
+
+
+                                 100
+Thermal Response ( ZthJA )
+
+
+
+
+                                              D = 0.50
+                                                 0.20
+                                  10             0.10
+                                                 0.05
+                                                 0.02
+                                   1             0.01
+
+
+
+                                  0.1
+                                                                                                                                Notes:
+                                                             SINGLE PULSE
+                                                                                                                                1. Duty Factor D = t1/t2
+                                                             ( THERMAL RESPONSE )
+                                                                                                                                2. Peak Tj = P dm x Zthjc + Tc
+                                 0.01
+                                    1E-006               1E-005       0.0001           0.001           0.01                    0.1                1                 10
+
+                                                                               t1 , Rectangular Pulse Duration (sec)
+
+
+                                          Fig 11. Typical Effective Transient Thermal Impedance, Junction-to-Ambient
+
+             www.irf.com                                                                                                                                            5
+IRLML0100TRPbF
+
+                                               600                                                                                                 270
+
+
+
+
+                                                                                                                                            ( Ω)
+RDS(on), Drain-to -Source On Resistance (mΩ)
+
+
+
+
+                                                                                   ID = 1.6A
+
+
+
+
+                                                                                                    RDS(on), Drain-to -Source On Resistance m
+                                               550
+
+                                               500                                                                                                 250
+                                                                                                                                                                             Vgs = 4.5V
+                                               450
+                                                                                                                                                   230
+                                               400
+                                                                                  TJ = 125°C
+                                               350                                                                                                                                        Vgs = 10V
+                                                                                                                                                   210
+                                               300
+
+                                               250
+                                                                                                                                                   190
+                                                                                   TJ = 25°C
+                                               200
+
+                                               150                                                                                                 170
+                                                     2       4          6          8           10                                                        0         2            4              6         8
+
+                                                         VGS, Gate -to -Source Voltage (V)                                                                             ID, Drain Current (A)
+
+
+      Fig 12. Typical On-Resistance Vs. Gate                                                                                                Fig 13. Typical On-Resistance Vs. Drain
+                      Voltage                                                                                                                               Current
+
+
+
+
+      Id
+                                                                                   Vds
+
+                                           Vgs
+
+
+                                                                                                                                                                       D
+                                                                                                                                                                                    L
+                                                                                                                                                                                                   VCC
+                                                                                                                                                               G
+                                                                                                                                                                            DUT
+                                                                                               0
+                                                                                  Vgs(th)                                                                              S
+                                                                                                                                                          1K
+                                                                                                                                                         20K
+
+
+
+
+                                                          Qgodr       Qgd     Qgs2 Qgs1
+
+
+
+
+                                                Fig 14a. Basic Gate Charge Waveform                                                                  Fig 14b. Gate Charge Test Circuit
+                               6                                                                                                                                                        www.irf.com
+                                                                                                             IRLML0100TRPbF
+
+                                      2.5                                                              100
+VGS(th), Gate threshold Voltage (V)
+
+
+
+
+                                                                                                       80
+                                      2.0
+
+
+
+
+                                                                                           Power (W)
+                                                                                                       60
+
+                                      1.5
+                                                ID = 25uA                                              40
+                                                ID = 250uA
+
+                                      1.0
+                                                                                                       20
+
+
+
+                                                                                                        0
+                                      0.5
+                                                                                                         1E-005 0.0001   0.001      0.01      0.1   1   10
+                                            -75 -50 -25     0   25   50   75 100 125 150
+                                                      TJ , Temperature ( °C )                                                    Time (sec)
+
+
+                                             Fig 15. Typical Threshold Voltage Vs.                               Fig 16. Typical Power Vs. Time
+                                                     Junction Temperature
+
+
+
+
+         www.irf.com                                                                                                                                    7
+IRLML0100TRPbF
+
+Micro3 (SOT-23) Package Outline
+Dimensions are shown in millimeters (inches)
+                                                                                                                                                                    DIMENSIONS
+                           6           A     5
+                                                                                                                                                             MILLIMETERS              INCHES
+                           D                                                                                                                 SYMBOL
+                                                                                                                                                             MIN         MAX        MIN       MAX
+
+                                                                            A
+                                                                                                                                                   A         0.89        1.12      
+                                                                                A2                                     C
+                                                                                                                                                   A1        0.01        0.10    0.0004 
+                       3                     E                                                                                                     A2        0.88        1.02      
+      6   E1
+                                        0.15 [0.006] M C B A                                                                                        b        0.30        0.50      
+                   1           2
+                                                                                                               0.10 [0.004] C                       c        0.08        0.20      
+                                                                       A1
+                                                                                                     3X b                                          D         2.80        3.04      
+  5   B
+               e                                                                                         0.20 [0.008] M C B A                      E         2.10        2.64      
+                                                                                NOTES:
+                       e1                                                                                                                          E1        1.20        1.40      
+                                                                                                                                                    e        0.95        BSC        %6&
+                                                                                                                                                   e1        1.90        BSC        %6&
+                                                                                                                                                    L        0.40        0.60      
+               H 4                    L1                                                                                                           L1        0.54        REF       REF
+                                                                   Recommended Footprint
+                                                                                                                                                   L2        0.25        BSC       BSC
+                                                 c
+                                                                        0.972                                                                                  0           8         0          8
+
+                                                                                                 0.950
+                                        L2                                                                  2.742
+                                                               0.802
+
+                                                                                                                                1. DIMENSIONING & TOLERANCING PER ANSI Y14.5M-1994
+                       3X L                                                                                                     2. DIMENSIONS ARE SHOWN IN MILLIMETERS [INCHES].
+                                                                                                                                3. CONTROLLING DIMENSION: MILLIMETER.
+                           7
+                                                                                                                                4. DATUM PLANE H IS LOCATED AT THE MOLD PARTING LINE.
+                                                                                      1.900                                     5. DATUM A AND B TO BE DETERMINED AT DATUM PLANE H.
+                                                                                                                                6. DIMENSIONS D AND E1 ARE MEASURED AT DATUM PLANE H. DIMENSIONS DOES
+                                                                                                                                 NOT INCLUDE MOLD PROTRUSIONS OR INTERLEAD FLASH. MOLD PROTRUSIONS
+                                                                                                                                 OR INTERLEAD FLASH SHALL NOT EXCEED 0.25 MM [0.010 INCH] PER SIDE.
+                                                                                                                                7. DIMENSION L IS THE LEAD LENGTH FOR SOLDERING TO A SUBSTRATE.
+                                                                                                                                8. OUTLINE CONFORMS TO JEDEC OUTLINE TO-236 AB.
+
+
+
+
+Micro3 (SOT-23/TO-236AB) Part Marking Information
+                           Notes : T his part marking information applies to devices produced after 02/26/2001
+                                                                                                            W = (1-26) IF PRECEDE D BY LAS T DIGIT OF CALE NDAR YEAR
+                                                                                                                                                        WORK
+                                                                                     Y = YEAR                                       YEAR       Y        WE EK        W
+                                                                                     W = WEE K                                      2001       1        01           A
+                                   PART NUMBER
+                                                                                                                                    2002       2        02           B
+                                                                                                                                    2003       3        03           C
+                                                                                                                                    2004       4        04           D
+                                                                                                                                    2005       5
+                                                                                      LOT
+                                                                                                                                    2006       6
+                                                                                     CODE
+                                                                                                                                    2007       7
+                                                                                                                                    2008       8
+                                    PART NUMBER CODE REF ERE NCE :                                                                  2009       9
+                                                                                                                                    2010       0        24           X
+                                             A = IRLML2402                                                                                              25           Y
+                                             B = IRLML2803                                                                                              26           Z
+                                             C = IRLML6302
+                                             D = IRLML5103                                                                 W = (27-52) IF PRECEDE D BY A LET TE R
+                                             E = IRLML6402                                                                                              WORK
+                                             F = IRLML6401                                                                          YEAR       Y        WE EK        W
+                                             G = IRLML2502                                                                          2001       A        27           A
+                                             H = IRLML5203                                                                          2002       B        28           B
+                                             I = IRLML0030                                                                          2003       C        29           C
+                                                                                                                                    2004       D        30           D
+                                             J = IRLML2030
+                                                                                                                                    2005       E
+                                             K = IRLML0100                                                                          2006       F
+                                             L = IRLML0060                                                                          2007       G
+                                             M = IRLML0040                                                                          2008       H
+                                             N = IRLML2060                                                                          2009       J
+                                                                                                                                    2010       K        50           X
+                                    Note: A line above the work week                                                                                    51           Y
+                                    (as shown here) indicates Lead - Free.                                                                              52           Z
+
+
+Note: For the most current drawing please refer to IR website at: http://www.irf.com/package/
+  8                                                                                                                                                                                  www.irf.com
+                                                                                    IRLML0100TRPbF
+
+Micro3™ Tape & Reel Information
+Dimensions are shown in millimeters (inches)
+
+
+
+                 2.05 ( .080 )                              1.6 ( .062 )                               1.32 ( .051 )
+                 1.95 ( .077 )                              1.5 ( .060 )
+                                                                                   1.85 ( .072 )       1.12 ( .045 )
+                                          4.1 ( .161 )
+                                          3.9 ( .154 )                             1.65 ( .065 )
+
+
+
+                 TR                                                                  3.55 ( .139 )      8.3 ( .326 )
+                                                                                     3.45 ( .136 )      7.9 ( .312 )
+
+
+
+           FEED DIRECTION                    4.1 ( .161 )
+                                             3.9 ( .154 )          1.1 ( .043 )                      0.35 ( .013 )
+                                                                   0.9 ( .036 )                      0.25 ( .010 )
+
+
+
+
+                 178.00
+               ( 7.008 )
+                  MAX.
+
+
+
+
+                                                                                  9.90 ( .390 )
+                                                                                  8.40 ( .331 )
+
+              NOTES:
+              1. CONTROLLING DIMENSION : MILLIMETER.
+              2. OUTLINE CONFORMS TO EIA-481 & EIA-541.
+
+
+
+
+Note: For the most current drawing please refer to IR website at: http://www.irf.com/package/
+
+
+
+
+www.irf.com                                                                                                            9
+IRLML0100TRPbF
+
+Orderable part number              Package Type                          Standard Pack                   Note
+                                                                       Form         Quantity
+IRLML0100TRPbF                     Micro3                          Tape and Reel       3000
+
+Qualification information†
+                                                                                     ††
+                                                                         Cons umer
+Qualification level                                                                 †††
+                                                           (per JE DE C JE S D47F         guidelines )
+                                                                                             MS L1
+Moisture Sensitivity Level                              Micro3                                                  †††
+                                                                           (per IPC/JE DE C J-S T D-020D              )
+RoHS compliant                                                              Yes
+
+       Qualification standards can be found at International Rectifier’s web site
+        http://www.irf.com/product-info/reliability
+     Higher qualification ratings may be available should the user have such requirements.
+        Please contact your International Rectifier sales representative for further information:
+       http://www.irf.com/whoto-call/salesrep/
+    Applicable version of JEDEC standard at the time of product release.
+
+
+Note: For the most current drawing please refer to IR website at: http://www.irf.com/package/
+
+
+Notes:
+ Repetitive rating; pulse width limited by max. junction temperature.
+ Pulse width ≤ 400µs; duty cycle ≤ 2%.
+ Surface mounted on 1 in square Cu board
+ Refer to application note #AN-994.
+
+
+
+
+                                                        Data and specifications subject to change without notice.
+
+
+
+
+ IR WORLD HEADQUARTERS: 233 Kansas St., El Segundo, California 90245, USA Tel: (310) 252-7105
+                                                                      TAC Fax: (310) 252-7903
+                                  Visit us at www.irf.com for sales contact information.11/2009
+
+ 10                                                                                                  www.irf.com
+IMPORTANT NOTICE
+The information given in this document shall in no    For further information on the product, technology,
+event be regarded as a guarantee of conditions or     delivery terms and conditions and prices please
+characteristics (“Beschaffenheitsgarantie”) .         contact your nearest Infineon Technologies office
+                                                      (www.infineon.com).
+With respect to any examples, hints or any typical
+values stated herein and/or any information
+regarding the application of the product, Infineon    WARNINGS
+Technologies hereby disclaims any and all             Due to technical requirements products may
+warranties and liabilities of any kind, including     contain dangerous substances. For information on
+without limitation warranties of non-infringement     the types in question please contact your nearest
+of intellectual property rights of any third party.   Infineon Technologies office.
+In addition, any information given in this document   Except as otherwise explicitly approved by Infineon
+is subject to customer’s compliance with its          Technologies in a written document signed by
+obligations stated in this document and any           authorized      representatives     of     Infineon
+applicable legal requirements, norms and              Technologies, Infineon Technologies’ products may
+standards concerning customer’s products and any      not be used in any applications where a failure of
+use of the product of Infineon Technologies in        the product or any consequences of the use thereof
+customer’s applications.                              can reasonably be expected to result in personal
+                                                      injury.
+The data contained in this document is exclusively
+intended for technically trained staff. It is the
+responsibility of customer’s technical departments
+to evaluate the suitability of the product for the
+intended application and the completeness of the
+product information given in this document with
+respect to such application.
+
