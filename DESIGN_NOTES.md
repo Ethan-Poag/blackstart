@@ -360,7 +360,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 ## Rev 2026-10-24: always-on safety 3.3 V, datasheet pass
 
 ### +3V3_SAFE domain (restored battery backup)
-- +3V3 (TPS56637 from +12V) and +3V3_BK (LMR36506RRPER, EN tied to VBAT_P, runs 4.2-65 V so covers 6-32 V battery incl. cranking) feed a TPS2116 priority mux -> +3V3_SAFE.
+- +3V3 (TPS56637 from +12V) and +3V3_BK (LMR36506RRPER, EN tied to VBAT_P [modular Pass 6: EN = 100k/47k from VBAT_P, on above 4.25 V, held off by the Q2 hold-off], runs 4.2-65 V so covers 6-32 V battery incl. cranking) feed a TPS2116 priority mux -> +3V3_SAFE.
 - Powers: STM32H743, FRAM, TPS3431 watchdog, E-stop logic, input/output expanders, front-panel logic. CM5, display, comms, modem stay on +3V3/+5V/+12V.
 - LMR36506: RT 40.2k (18286/400^1.021 = 40.4k -> ~400 kHz); FB 100k/43.2k -> 1.0*(1+100/43.2)=3.315 V; L 33 uH; 2x47 uF; CIN 2.2 uF/100 V + 100n.
 - TPS2116: VIN1=+3V3 priority, PR1 divider 18.7k/10k -> switchover when +3V3 < 1.0*28.7/10 = 2.87 V (2.64-3.10 V over tol). ST -> PSU_MAIN_OK (STM32 PC3_C, 100k pull-up to SAFE) so firmware knows it is on backup.
@@ -637,3 +637,10 @@ Source: /workspace/review/sch_review/SCH_REVIEW_2026-11-22_pass6.md m1-m3, NOTEs
 - §12 now splits editable settings (default + hard limits, out-of-range refused) from fixed items (E-stop, overspeed, watchdog latch, close permissives, reverse-power, retry count, warnings, counters). New BS-13.
 - Open: no reverse-power function or paralleling spec exists yet, so D6 is a requirement on future paralleling work.
 - Docs only: ERC 0/0 on both boards, BOM-vs-netlist 0 mismatches, netlists identical to Batch 33 (docs/split_evidence/batch33a).
+
+## Modular Pass 6 fixes (2026-11-24 HST, rev M-mod P6, branch m7-modular)
+Ethan's picks for the Pass 6 review (MOD §18/§19, `docs/modular/pass6_fix_calc.txt`):
+- **B1 Q2 hold-off:** BAT_IN − VBAT_P > 2.5–3.8 V (MMBT5401 sense, 46–270 µs filter) holds U2 EN/UVLO and U5 EN low through a BAT54C, so Q2 (BSC070N10NS5, kept) never carries converter load deep in its linear ramp. U5 EN gets its own 100k/47k divider. C602 10 µF → 1 µF so the hold-off can stop U2 in ≤ 0.25 ms. Worst Q2 SOA ratio 0.89 over cold start, warm restart and short dips at 12–32 V (was up to 5.6). Trade-off: interruptions over ~0.15–0.35 ms now always restart the controller.
+- **M2:** slot eFuse R_ILIM 3.09k (I_OL 5.36–6.30 A, UL 2367 ≥ 3k kept): a channel short no longer cuts its card; bank-overload margin over the 20 ms card cut ≥ 9.9 ms.
+- **M3:** engine slot +3V3 via TPS2553 (110–150 mA), VBAT_P via a TPS16630 eFuse (0.54–0.66 A, chosen over a PTC whose 40 A I_max is below the ~100 A prospective short), faults on ENG_PWR_FAULT_N (0x22 P15); 10k/1k series resistors + BAT54S clamps on the engine lines that went straight to U7.
+- Cost +$3.95 qty 1 per board (mostly the engine eFuse); mainboard 1,033 parts.

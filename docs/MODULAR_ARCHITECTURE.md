@@ -1255,7 +1255,7 @@ The Pass 4 slot switch (TPS48100 + 2 × BSC070 + 1 nF timer) let a dead short bu
 | CL31B225KCHSNNE 2.2 µF 100 V 1206 | C170101 | 164,294 | $0.12 | eFuse IN cap × 8 |
 | SS310B 3 A 100 V Schottky SMB | C14281 | 95,690 | $0.058 | OUT → GND × 8 (TI SLVSET9G §9.4.1/§9.5) |
 | CC0603KRX7R0BB223 22 nF 100 V + 1k | C313105 + C21190 | 77,944 | $0.013 | C601/R1001 on U1 HGATE |
-| CL21A106KAYNNNE 10 µF 25 V | C15850 | 9.25 M | $0.031 | C602 on U2 EN/UVLO |
+| CL21A106KAYNNNE 10 µF 25 V | C15850 | 9.25 M | $0.031 | C602 on U2 EN/UVLO (Pass 6: now CL21B105KBFNNNE 1 µF 50 V, C28323, same 0805 pad, §19) |
 | 47 Ω 1206 | C17969 | 270,203 | $0.005 | R1002, D120 → C225/U65 |
 
 Rejected: TPS26632/TPS26636 (fixed OV clamp at 32–39 V, inside the 36 V / 60 s rating), MAX17613 (3 A), TPS26600 (2.23 A). Both are below the 4.0 A ROOM slot budget.
@@ -1296,7 +1296,7 @@ U1 does not OV-trip in the realistic corner. It trips in 6 of 64 pessimistic cor
 ### 17.5 U1 HGATE 22 nF + 1k, and why C602 had to be added
 22 nF on HGATE limits the bulk-cap inrush to 0.4–0.8 A (ramp 10–20 ms). On its own, though, it made things worse: U2 starts at its 4.96 V UVLO while Q2 is still ramping, so Q2 carries U2's 70 W in linear mode for most of the ramp. That is BSC070 SOA ratio **1.72–4.62 (exceeded)**; 10 nF is 1.40–1.66, also exceeded. As built (no CdVdT) it was 0.97–0.98, at the edge. Fix: **C602 10 µF on U2 EN/UVLO.** With R4/R5 (Thevenin 24.8k) U2 starts 31–68 ms after VBAT_P at 32 V (ramp ≤ 20 ms) and 99–219 ms at 9 V. Q2 then only charges capacitance: SOA 0.85–0.87, Q2 ΔTj 9–15 K. The DC hysteresis is unchanged.
 
-**Pass 6 correction (B1, open for Ethan):** "only charges capacitance" is not true. U5 (EN tied to VBAT_P) starts at about 4.2 V and carries all of +3V3_SAFE during the ramp: cold-start SOA 0.97–1.24 at HGATE 39 µA with 0.5–2.1 W (`pass6_calc.txt` §1). Worse, C602 does not re-arm on a short supply interruption, so a warm restart puts U2's 70 W on Q2 mid-ramp: SOA 1.8–7.9 at 24–32 V. See §18.
+**Pass 6 correction (B1, open for Ethan):** "only charges capacitance" is not true. U5 (EN tied to VBAT_P) starts at about 4.2 V and carries all of +3V3_SAFE during the ramp: cold-start SOA 0.97–1.24 at HGATE 39 µA with 0.5–2.1 W (`pass6_calc.txt` §1). Worse, C602 does not re-arm on a short supply interruption, so a warm restart puts U2's 70 W on Q2 mid-ramp: SOA 1.8–7.9 at 24–32 V. See §18. **Fixed in §19:** a Q2 hold-off keeps U2 and U5 off while BAT_IN − VBAT_P > 2.5–3.8 V, and C602 is now 1 µF.
 
 ### 17.6 U65 feed
 R1002 47 Ω 1206 sits between D120 and C225/U65 (RC 470 µs vs the µs kick). It drops 0.24 V at 5 mA. Cold crank at 9 V still gives 8.3 V at U65 IN. The 5 mA load is the RAIL_PLAN assumption (TLC555 + logic). Even at 50 mA the input is still 6.2 V, above the ~5.5 V the 5 V LDO needs. The 47 Ω sits ahead of C225, so the E-stop trip hold-up is not weakened.
@@ -1324,7 +1324,7 @@ What remains:
 1. **VBAT_P overshoot** (closes §16.2): dead short on a slot at 24 / 28.8 / 32 V, real battery and harness (short and 2 m long). Probe VBAT_P at U2 VIN, BAT_IN at U1 A, VBAT_SLOTS at a healthy slot's IN, and U65 IN, at ≥ 100 MHz bandwidth. Pass: VBAT_P ≤ 52 V, BAT_IN ≤ 62 V, VBAT_SLOTS ≤ 60 V, U65 ≤ 40 V, and no OVP trip on healthy slots.
 2. **eFuse dead short** on each slot at 12.6 / 24 / 32 V, at 77 °F and 149 °F (25 and 65 °C). Measure current with a Rogowski probe and OUT with a short ground. Pass: trip ≤ 5 µs; record the OUT minimum (model −2.2 V realistic; Pass 6 m2) and re-check the eFuse (I_OL, leakage, FLT#) after 50 shorts per slot; latched off with FLT# and PWR_FAULT_N low ≤ 2 ms; bank and F1 intact; other slots stay up.
 3. **Enable into a short** at 32 V and 149 °F (65 °C): thermal regulation ends in ≤ 1.5 s and latches; firmware shows `SLOT_SHORT_LOCKOUT` at 250 ms; EN_N toggle re-arms it.
-4. **Overload** at 4.0 A (no trip) and 5.0 A (limit, FLT# ≤ 1.6 ms) on each slot, HOT and ROOM. Two slots at I_OL: the bank does not trip before the FW cut.
+4. **Overload** at 5.0 A (no limit) and 6.5 A (limit, FLT# ≤ 1.6 ms; Pass 6 R_ILIM 3.09k, I_OL 5.36–6.30 A) on each slot, HOT and ROOM. Two slots at I_OL: the bank does not trip before the FW cut.
 5. **Hot-plug / power-up** at 32 V, 149 °F (65 °C), with U2 loaded to 70 W. Measure Q2 Vds and Id, and VBAT_P vs U2 EN/UVLO timing. Pass: U2 starts after the VBAT_P ramp; Q2 stays within SOA (≤ 0.9 of the 100 µs curve). **Pass 6:** also with U5 carrying the real +3V3_SAFE boot load, and a **warm restart**: interrupt BAT_IN for 2 ms, 20 ms and 200 ms with U2 at 70 W, at 24 and 32 V (B1; expected to fail with the as-built Q2).
 6. **Cold crank** at 9 V: U65 IN ≥ 7 V, U2 starts ≤ 250 ms.
 7. Firmware C2.3 / C5.1 / C6.2 / C7.9 as in §16.7 #3–5, with the eFuse timings (PGOOD ≤ 24 ms).
@@ -1348,14 +1348,14 @@ A fresh-eyes adversarial pass over the Pass 5 schematic, the models and the docs
   - m4: steady-state eFuse heat: 0.85 W at 4.0 A, Tj ≤ 198 °F (92 °C) at 149 °F (65 °C) ambient. All slots together are ≤ 2.0 W (capped by the bank overload cutoff).
   - m5: the healthy-slot 57.0 V is a bound before the card filter. Added a measurement at the card (bench test 17.9 #9).
   - m6: the double-fault and no-reverse-blocking residuals are written into 17.7.
-  - m7: C602 also slows U2's EN/UVLO on the way down (τ 124–273 ms). U2 rides through a fast dip below its UVLO setpoint instead of stopping, down to its internal VCC UVLO. This is accepted: DESIGN_NOTES already relies on the LM5176 riding through cranking down to about 4 V, so a later stop only extends that. The DC thresholds are unchanged. Bench test 17.9 #6 covers start-up at 9 V.
+  - m7 (superseded by §19: C602 is 1 µF, τ 12–27 ms, and the hold-off stops U2 on a warm restart): C602 also slows U2's EN/UVLO on the way down (τ 124–273 ms). U2 rides through a fast dip below its UVLO setpoint instead of stopping, down to its internal VCC UVLO. This is accepted: DESIGN_NOTES already relies on the LM5176 riding through cranking down to about 4 V, so a later stop only extends that. The DC thresholds are unchanged. Bench test 17.9 #6 covers start-up at 9 V.
 - **Different kind of problem:** what Pass 5 adds is a new load on the bank at turn-on (P5-MAJ-1) and the loss of reverse blocking (m1). Neither reaches the safety core.
 - **Verdict: READY** for the bench tests in 17.9 (layout still frozen; nothing ordered). **Superseded by Pass 6 (§18): NOT READY until Ethan decides B1.**
 
 ## 18. Pass 6 deep review (Nov 24, 2026, HST)
 An independent, adversarial pass over the whole modular design, not just the Pass 5 change: every eFuse pin and strap, reverse behaviour, protection coordination (U1, D1/D2/D123, U110, F1), start-up and Q2 SOA, the 57 V vs 60 V card margin, card faults, connector ratings, the netlist, ERC, footprints, BOM/LCSC, firmware and doc consistency, the models, and SS310B hot leakage. Numbers: `docs/modular/pass6_calc.txt`, `kick_calc.txt`, `pass5_calc.txt`. Full report: `/workspace/review/modular_pass6.md`. **The schematic is unchanged by Pass 6** (rev stays M-mod P5); the three open items below are Ethan's decisions.
 
-### 18.1 B1 (blocker, open): Q2 SOA on a warm restart, and at cold start with the real boot load
+### 18.1 B1 (blocker; fixed in §19 with Ethan's option B): Q2 SOA on a warm restart, and at cold start with the real boot load
 - **Warm restart.** U1's EN/UVLO has no filter, so any battery-side interruption (loose terminal, isolator blip, U1 UVLO or a sustained OV) turns HGATE off in 3–6 µs. U2 drains VBAT_P to its 3.5–4 V floor in 1–2 ms, but **C602 keeps U2's EN/UVLO above 1.23 V for 127–509 ms**. When the battery returns inside that window, U2 restarts as soon as VBAT_P passes its floor, while Q2 is still in its 22 nF linear ramp. Q2 then carries U2's 70 W (input ≤ 3.56 A) in linear mode: **SOA ratio 3.2–7.9 at HGATE 39 µA and 1.8–3.5 at 75 µA, for 24–32 V systems** (0.27–1.06 J). 12 V systems are inside SOA (0.44–0.66). A short dip (VBAT_P only falls to Vb/2) is fine (0.14–0.81).
 - **Cold start.** §17.5 said Q2 "only charges capacitance". It does not: U5 (EN tied to VIN) starts at about 4.2 V and, through the TPS2116, carries all of +3V3_SAFE during the ramp. With 0.5 / 1.0 / 2.1 W, the ratio is 0.97 / 1.05 / 1.24 at HGATE 39 µA (0.89–0.98 at 75 µA).
 - **Root cause:** the BSC070N10NS5 is a switching FET (OptiMOS 5) with almost no linear-mode capability: 0.40 A at 30 V for 10 ms. It is being used as a hot-swap FET. Removing C601 still leaves the warm restart at 1.6–1.9 at 32 V.
@@ -1366,13 +1366,13 @@ An independent, adversarial pass over the whole modular design, not just the Pas
   - Not recommended: a smaller C601 (it does not fix the warm restart) or install rules alone.
 - Bench test 17.9 #5 now includes the warm restart.
 
-### 18.2 M2 (major, open): one channel short can cut its whole card
+### 18.2 M2 (major; fixed in §19 with Ethan's option B, R_ILIM 3.09k): one channel short can cut its whole card
 The eFuse I_OL minimum is 4.14 A, and a shorted HSO-5/BRK-4 channel sits at its TPS1HTC30 limit of up to 3.61 A. With more than **0.53 A** of other load on the same card, the eFuse also goes into current limit, FLT# falls in 1.09–1.6 ms and FW C5.1 cuts the whole card, BRK-4 breaker relays included. (Pass 4's slot switch tripped at 10.6–16.5 A, so this was new in Pass 5.) It fails safe, but selectivity is lost.
 - **A. Firmware:** if a channel SNS fault coincides, open the channel first and cut the card only if FLT# stays low (FW C5.1 draft). Risk: eFuse TSD may come first; needs a bench test.
 - **B. R_ILIM 3.09k:** I_OL 5.36–6.30 A, allowed preload 1.75 A; the bank-overload margin over the 20 ms FW card cut drops from 20.0 to 9.9 ms (ROOM). Stays ≥ 3 kΩ for UL 2367.
 - **C. Accept it** (document as behaviour).
 
-### 18.3 M3 (major, open, architecture): the engine slot is not isolated
+### 18.3 M3 (major, architecture; fixed in §19 per Ethan): the engine slot is not isolated
 J48 carries +3V3_SAFE (a13/c13) and VBAT_P (a12/c12) straight to the engine card, each next to GND (b12/b13), with no switch, limit or fuse. The engine card also wires DPLUS_SNS, CRANK_ISNS, FUEL_ISNS, MPU_* and DIAG_EN directly to U7 pins. A cracked 100 nF cap or a bent pin on insertion collapses the safety MCU rail or (VBAT_P) blows F1. It fails safe (the rail-cut pull-down drops fuel), but the safety core goes down and the board is not serviceable by a card swap.
 - **Option:** a TPS2553-class limiter on the engine +3V3_SAFE feed and a PTC or eFuse on the engine VBAT_P feed; series resistors on the direct U7 lines. Architecture change: Ethan. Otherwise it stays a documented residual: the engine card is part of the safety core.
 
@@ -1398,3 +1398,70 @@ TPS16630 pin map, MODE open = latch, OVP and UVLO dividers, SHDN# pull-down, PGO
 ### 18.7 Gates and verdict
 ERC 0/0 on all 7 projects; engine, DI-8, AI-4, HSO-5, BRK-4 1 page each; genctl_meter 2 pages. Audit: 1,056 same, 128 changes, 0 unexplained, 0 orphans. Drawn vs intended: 2,908 pins, 0 errors. BOM: 0 mismatches. Note lint: 0. Parts and cost unchanged (991 mainboard parts; +$328.87 / +$119.65).
 **Verdict: NOT READY.** B1 must be decided before first power-up on 24 V systems; M2 and M3 are Ethan's trade-offs.
+
+## 19. Pass 6 fixes: Ethan's B1/M2/M3 picks (Nov 24, 2026, HST)
+Ethan's rulings (8:26 AM HST): **B1 hold-off circuit only (do not swap Q2), M2 raise the eFuse limit, M3 add the engine-slot protection.** Rev **M-mod P6**. Numbers: `docs/modular/pass6_fix_calc.txt` (new, `tools/pass6_fix_calc.py`), `kick_calc.txt` (rerun with I_OL 6.30 A), `pass5_calc.txt` (Pass 5 record, pinned to 4.02k), `pass6_calc.txt` (pre-fix review record). Prices and stock: JLC parts API, Nov 24, 2026 HST.
+
+### 19.1 B1: Q2 hold-off (estop sheet) and C602 1 µF
+- **Circuit:** BAT_IN → D401 1N4148W → Q121 **MMBT5401** emitter; R1121 22k E-B, R1122 68k base → VBAT_P. Q121 turns on when BAT_IN − VBAT_P > Vth = Vf + Veb × 90/22 = **2.47 V hot (185 °F / 85 °C), 3.09 V room, 3.79 V cold (−40 °F / −40 °C)**. Collector → R1123 22k → HO_F (C1121 100 nF ‖ R1124 100k) → Q122 MMBT3904 → D402 BAT54C, whose two anodes pull **BB_UVLO** (U2 LM5176 EN/UVLO) and the new **U5_EN** (U5 LMR36506 EN/UVLO) to ≤ 0.45 V.
+- **U5 EN is no longer strapped to VIN:** R1125 100k / R1126 47k from VBAT_P. U5 starts above VBAT_P 4.25 V (1.36 V max × 147/47) and keeps EN ≤ 18.2 V at a 57 V kick, so the BAT54C (30 V) never sees more than 18.2 V reverse. BB_UVLO and U5_EN are now global nets (`tools/pass6_power_patch.py`).
+- **C602 10 µF → 1 µF** (CL21B105KBFNNNE, C28323, Basic, same 0805 pad). The first drawing kept 10 µF; the model showed the hold-off then needs 1.2–1.7 ms to pull U2 EN below 1.17 V, and with U2 still at full load through a short dip Q2 reached **SOA ratio 1.02 (24 V) and 1.67 (32 V)**: rejected. With 1 µF U2 is off ≤ 0.25 ms after the hold-off engages. The cold-start U2 delay is now the hold-off itself (U2 and U5 held until Q2 has nearly finished its ramp); after release C602 re-arms from 0.45 V in **1.3–3.2 ms at 32 V, 6.4–17 ms at 9 V**, then U2 soft-starts over 7.5 ms.
+- **Why these parts:** the MMBT3906 (VCEO 40 V) would see the 57 V BAT_IN kick; the MMBT5401 is 150 V on the same SOT-23 B-E-C pinout. D401 blocks reverse battery and the crank case (VBAT_P > BAT_IN) from the 6 V E-B junction.
+- **Nuisance immunity:** engage delay **46 µs at 32 V to 268 µs at 8 V** (cold, full step; up to ~0.5 ms just above threshold). Slot/bank inrush is ≤ 224 A × 14 mΩ = 3.1 V for 2.7 µs and slot kicks ≤ 1.8 µs: both far below it. Normal load (F1 10 A) through Q1 + Q2 hot drops 0.22 V ≪ 2.47 V.
+- **Q2 SOA with the hold-off** (BSC070N10NS5 Diagram 3, Tc 149 °F (65 °C), HGATE 39/75 µA, hold-off hot and cold corners, U2 70 W / ≤ 3.56 A in, U5 2.1 W bound):
+
+| Case | 12 V | 13.8 V | 24 V | 28.8 V | 32 V |
+|---|---|---|---|---|---|
+| Cold start (was 1.17–1.43 at 32 V with U5) | 0.06–0.10 | 0.08–0.14 | 0.38–0.48 | 0.66–0.71 | **0.88–0.89** |
+| Warm restart from VBAT_P 4 V (was 1.99 / 5.63 at 24 / 32 V) | 0.03–0.04 | 0.04–0.07 | 0.23–0.34 | 0.44–0.54 | 0.62–0.69 |
+| Short dip, U2 at full load from Vb/2 (was 1.08 / 1.85) | 0.03–0.04 | 0.05–0.12 | 0.10–0.24 | 0.13–0.33 | 0.16–0.39 |
+
+  **Worst 0.89 across all corners (OK).** The 32 V cold-start 0.88 is Q2 charging the 230 µF bulk alone, the same as Pass 5's no-load ramp (0.85–0.87); C602 derated to 0.5 µF is also OK (≤ 0.62).
+- **Behaviour change (documented trade-off):** a battery-side interruption long enough for VBAT_P to sag more than Vth below the returning BAT_IN (VBAT_P falls 11–16 V/ms at U2's 3.56 A input limit, so about 0.15–0.25 ms at 12 V and 0.23–0.35 ms at 32 V) now restarts U2 and U5: +3V3_SAFE drops and the MCU resets (fail-safe; FW warm-reset rules apply). Before, dips up to about 1–2 ms could ride through, at the cost of the Q2 overstress. A sustained OV (U1 trip) and U1 UVLO now also give a clean restart.
+- **Parts (+11):** D401, Q121, R1121–R1126, C1121, Q122, D402; C602 value change.
+
+### 19.2 M2: slot eFuse R_ILIM 4.02k → 3.09k
+- **Choice:** 3.09k 1 % (0603WAF3091T5E, C22992). It is the smallest E96 value whose −1 % end (3.059k) stays ≥ 3.0 kΩ, the TPS16630 UL 2367 condition (3.01k would be 2.98k). I_OL = 18/R: **5.42–6.23 A, 5.36–6.30 A with the resistor tolerance** (SLVSET9G row at 3.0k: 5.58/6.00/6.42 A).
+- **Selectivity:** a shorted HSO-5/BRK-4 channel (≤ 3.61 A) now leaves **1.75 A** for the rest of its card before the eFuse limits (was 0.53 A).
+- **Bank overload vs the 20 ms FW card cut** (budget preload + one card at I_OL max): HOT ≥ **31.7 ms** (margin 11.7 ms), ROOM ≥ **29.9 ms** (margin 9.9 ms). The channel-fault case (58.4/56.6 ms, C7.11) is unchanged because the channel limit sits below I_OL.
+- **F1 10 A (unchanged, 74 A²s melt):** two cards in limit (12.6 A) until the bank trip plus 20 ms: 8.2 A²s, 11 % of melt; the bank overload still caps steady current at 5.11–6.08 A ROOM / 3.15–3.65 A HOT. SCP 45 A / 1 µs unchanged: kick_calc rerun with I_OL 6.30 A, worst 32 V corner VBAT_P 47.1 V, BAT_IN 57.6 V, VBAT_SLOTS 56.9 V (vs 47.3/57.2/57.0 V), every margin still ≥ 5 %.
+- **eFuse thermal:** a dead short after the SCP retry regulates at up to 32 V × 6.30 A = 201 W (was 156 W): TSD (165 °C, 329 °F) in about 0.5–1 ms, the case TI characterises (start into short at 3 kΩ). Steady 5.36 A: 1.29 W, T_J ≈ 230 °F (110 °C) at 149 °F (65 °C) ambient, below T_J(reg) 277 °F (136 °C); above 5.11 A the bank overload trips anyway.
+- **Connector:** 9 VBAT contacts × 2 A ≥ 6.30 A; cards were sized for the Pass 4 6 A slot budget.
+
+### 19.3 M3: engine-slot protection (backplane and mcu sheets)
+- **ENG_3V3_SAFE (J48 a13/c13):** U160 **TPS2553DBVR** (C55266, JLC 42,087, $0.545) from +3V3_SAFE, EN tied on, R1101 210k = **110/130/150 mA**, auto-retry. Engine card +3V3 load ≤ 15 mA. FAULT → **ENG_PWR_FAULT_N** on 0x22 P15 (R1102 10k pull-up).
+- **ENG_VBAT_P (J48 a12/c12):** U161 **TPS16630PWPR** (C1849461, JLC 1,824, $2.92; the slot eFuse) with R1103 30k = **I_OL 0.54/0.60/0.66 A** vs ≤ 0.13 A load (D+ excitation LM317 + 10R), SCP 45 A / 1 µs, **MODE = GND (auto-retry, 648 ms)**, SHDN# open (internal pull-up = on), UVLO 100k/27k + 4.7 nF (on 5.64 V), OVP 453k/10k, dVdT 10 nF, IN 2.2 µF / 100 V, OUT 100 nF and SS310B. FLT# and PGOOD join ENG_PWR_FAULT_N.
+  - **Why an eFuse, not the PTC first drawn** (LUTE 1812L030/60GR, C20627122, $0.045): a hard short on the engine card is about 100 A prospective, above the PTC's 40 A I_max, and its tens-to-hundreds-of-µs trip holds BAT_IN − VBAT_P near 2.2 V, only 0.3 V under the hot hold-off threshold. The eFuse cuts in 1 µs, F1 sees about 0.002 A²s, and the hold-off never sees it. Cost +$2.98 instead of +$0.045 (judgement call, recorded for Ethan). The TPS1HTC30 (JLC stock 0, $9.73) was not considered for this feed; note it as a supply risk for the HSO-5/BRK-4 cards too.
+- **Engine lines straight to U7:** R1111 1k on DPLUS_SNS (after the existing D65; the card side already has 100k). R1112–R1117 **10k 0805** (C17414, 150 V) on FUEL_ISNS, CRANK_ISNS, MPU_GATE, MPU_SPEED, DPLUS_EXC_EN and DIAG_EN, each with a BAT54S (D411–D416) to +3V3_SAFE/GND on the MCU side, plus C1111/C1112 1 nF on the two ISNS pins. A 36 V card fault injects ≤ 3.3 mA (0.11 W) into the clamp, not the pin. The ADC error stays under 1 LSB with the 1 nF at the pin; BAT54S hot leakage adds ≤ 20 mV (0.6 % FS) on the ISNS lines, inside the existing ±2 %. U7 pins: PA2 (24), PA3 (25), PB1 (35), PC7 (64), PC8 (65), PA8 (67), PA15 (77).
+- **Residual:** a shorted ENG_3V3_SAFE at boot (U5 backup only, before +3V3 is up) loads U5 with 0.55 + 0.15 A against its 0.6 A rating: possible brownout until U2 starts (fail-safe).
+- **Parts (+31):** U160, R1101, R1102, C1101, C1102; U161, R1103–R1107, C1103–C1106, D403; R1111–R1117, D411–D416, C1111, C1112.
+
+### 19.4 Parts and cost
+| Part | LCSC | JLC stock (Nov 24) | Unit qty 1 | Qty / board |
+|---|---|---|---|---|
+| MMBT5401 | C8326 | 689,253 | $0.014 | 1 |
+| 1N4148W / MMBT3904 / BAT54C | C81598 / C20526 / C37704 | in BOM | | 1 each |
+| 68k / 22k / 100k / 47k | C23231 / C4190 / C25803 / C23162 | in BOM | | |
+| 1 µF 50 V 0805 (C602) | C28323 | 3,754,415 | $0.028 | 1 (replaces 10 µF) |
+| 3.09k 1 % | C22992 | 3,508 | $0.0023 | 8 (replace 4.02k) |
+| TPS2553DBVR | C55266 | 42,087 | $0.545 | +1 |
+| TPS16630PWPR | C1849461 | 1,824 | $2.92 | +1 (9 total) |
+| 30k 1 % | C22984 | 1,737,576 | $0.002 | 1 |
+| 10k 0805 | C17414 | 44,247,215 | $0.003 | 6 |
+| BAT54S | C8592 | 111,213 | $0.024 | 6 |
+
+Mainboard **1,033** fitted parts (was 991, +42). Delta vs baseline now **+$332.82 qty 1 / +$122.71 qty 10** (Pass 5: +$328.87 / +$119.65, so Pass 6 adds **+$3.95 / +$3.06** per board, $2.92 of it the engine eFuse). TPS16630 stock 1,824 covers about 200 boards at 9 each.
+
+### 19.5 Firmware and install
+- FW_REQ_CARDS: C5.1 (new limit), C7.9/C7.11 numbers, new **C3.5** (engine feeds, ENG_PWR_FAULT_N on 0x22 P15, ADC sample time ≥ 64.5 cycles) and **C7.13** (hold-off restarts).
+- INSTALL_SAFETY: the interim B1 isolator sentence is removed (fixed in hardware); it now says an interruption over about 0.2–0.35 ms restarts the controller. Keeping terminals tight and stopping the engine before isolating still apply.
+
+### 19.6 Bench tests added to §17.9
+- **#10 Hold-off threshold and delay:** with VBAT_P held by a second supply, step BAT_IN up; record the BAT_IN − VBAT_P at which BB_UVLO and U5_EN go low (pass 2.4–3.9 V over a cold-soak and a 185 °F (85 °C) soak) and the delay (pass ≥ 40 µs at 32 V).
+- **#11 Warm restart:** at 24 V and 32 V with U2 at 70 W, interrupt BAT_IN for 0.1, 0.5, 2, 20 and 200 ms; record Q2 Vds/Id. Pass: U2 and U5 off within 0.3 ms of the hold-off engaging and Q2 inside the derated SOA (model worst 0.89).
+- **#12 Engine feeds:** short J48 a13 to GND (U160 limits at 110–150 mA, ENG_PWR_FAULT_N low, +3V3_SAFE stays up on +3V3) and J48 a12 to GND at 32 V (U161 cuts in about 1 µs, F1 intact, no hold-off restart, auto-retry every ~0.65 s).
+- **#13 M2 selectivity:** short one HSO-5 channel with 1.5 A on the rest of the card: the card stays up, only the channel faults.
+
+### 19.7 Gates
+ERC 0/0 on all 7 projects; engine, DI-8, AI-4, HSO-5, BRK-4 1 page each; genctl_meter 2 pages. Audit: 1,050 same, 138 changes, 0 unexplained, 0 orphans. Drawn vs intended: 3,024 pins, 0 errors. BOM: 0 mismatches. Note lint: 509 notes, 0 findings. Q2 worst SOA ratio 0.89; kick_calc margins all ≥ 5 %. Commits: e57024a (schematic/tooling), b9ebd88 (calcs).
+**B1, M2 and M3 are closed in the schematic.** Pass 7 (independent review of the whole design) follows in §20.

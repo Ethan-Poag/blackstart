@@ -145,6 +145,7 @@ Labels: **DERIVED** means datasheet, BOM or design note plus arithmetic, with th
   - **The +3V3 conflict is resolved.** The "≥3 A" in DN:18/DS:17 is the regulator's capability (TPS56637 6 A), not a load. ROUTING_PLAN's "≤1 A" is below the 1.47 A worst-case bound. Route for 2 A.
 - +3V3_SAFE capacity: same ≤0.55 A. The U6 output stub of 0.25 mm (0.88 A) is adequate.
 - +3V3_BK: on backup it carries the whole SAFE load, ≤0.55 A. That is 92 % of LMR36506's 0.6 A at the 221 °F MCU bound, and 0.45 A (75 %) at 185 °F. The margin is thin but not over.
+- Modular Pass 6 (M-mod P6): U5 EN is a 100k/47k divider from VBAT_P (on above 4.25 V) and the Q2 hold-off holds it off while BAT_IN − VBAT_P > 2.5–3.8 V. A shorted engine card +3V3 adds up to 0.15 A (U160 TPS2553 limit): 0.70 A against U5's 0.6 A only while +3V3 is still down at boot, a possible brownout until U2 is up (fail-safe).
 - +3V3_AC: ≤60 mA DERIVED of ≥75 mA. OK.
 - CM5_3V3: LVC1T45 ×2, R105/R106 330R and R59/R60 1k pull-ups (ASSUMED ≤20 mA), plus J5.1 (Header A) external load, which is UNKNOWN (FW-Q5). Of 600 mA available.
 
