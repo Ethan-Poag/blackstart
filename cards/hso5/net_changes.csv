@@ -1,4 +1,19 @@
 baseline_ref,pin,baseline_net,card_net,why
+R319,(value),24.9k,33.2k,ILIM 33.2k: I_CL = 80..120 A*kOhm / 33.2k = 2.41/3.01/3.61 A
+R320,(value),1.1k,910,R_SNS 910: 3.61 A / 1300 x 910 = 2.53 V < V_SNSFH min 3.0 V
+R321,(value),1k,4.7k,"SNS series 4.7k: clamp current <= 0.13 mA, S pin <= VDD + 0.25 V (BAT54C VF max 240 mV @ 0.1 mA)"
+R322,(value),24.9k,33.2k,ILIM 33.2k: I_CL = 80..120 A*kOhm / 33.2k = 2.41/3.01/3.61 A
+R323,(value),1.1k,910,R_SNS 910: 3.61 A / 1300 x 910 = 2.53 V < V_SNSFH min 3.0 V
+R324,(value),1k,4.7k,"SNS series 4.7k: clamp current <= 0.13 mA, S pin <= VDD + 0.25 V (BAT54C VF max 240 mV @ 0.1 mA)"
+R325,(value),24.9k,33.2k,ILIM 33.2k: I_CL = 80..120 A*kOhm / 33.2k = 2.41/3.01/3.61 A
+R326,(value),1.1k,910,R_SNS 910: 3.61 A / 1300 x 910 = 2.53 V < V_SNSFH min 3.0 V
+R327,(value),1k,4.7k,"SNS series 4.7k: clamp current <= 0.13 mA, S pin <= VDD + 0.25 V (BAT54C VF max 240 mV @ 0.1 mA)"
+R328,(value),24.9k,33.2k,ILIM 33.2k: I_CL = 80..120 A*kOhm / 33.2k = 2.41/3.01/3.61 A
+R329,(value),1.1k,910,R_SNS 910: 3.61 A / 1300 x 910 = 2.53 V < V_SNSFH min 3.0 V
+R330,(value),1k,4.7k,"SNS series 4.7k: clamp current <= 0.13 mA, S pin <= VDD + 0.25 V (BAT54C VF max 240 mV @ 0.1 mA)"
+R331,(value),24.9k,33.2k,ILIM 33.2k: I_CL = 80..120 A*kOhm / 33.2k = 2.41/3.01/3.61 A
+R332,(value),1.1k,910,R_SNS 910: 3.61 A / 1300 x 910 = 2.53 V < V_SNSFH min 3.0 V
+R333,(value),1k,4.7k,"SNS series 4.7k: clamp current <= 0.13 mA, S pin <= VDD + 0.25 V (BAT54C VF max 240 mV @ 0.1 mA)"
 (rename),,+3V3_SAFE,+3V3_SLOT,card-local name
 (rename),,AUX1_EN,OUT1_EN,card-local name
 (rename),,AUX1_LED,OUT1_LED,card-local name

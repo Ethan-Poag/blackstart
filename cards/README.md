@@ -7,9 +7,15 @@ and the original ref is kept in the `BaselineRef` field (`refmap.json`).
 
 | card | sheet | ERC | parts | files |
 |---|---|---|---|---|
-| engine (keyed ENGINE slot) | **A2**, 1 page (156 parts do not fit A3 legibly with wires; text 1.27 mm) | 0 err / 0 warn | 156 (150 moved + 6 new) | `engine/engine.kicad_sch`, `engine.png`, `engine.pdf`, `engine_slot_pinout.csv`, `net_accounting.csv`, `unaccounted_nets.txt` (empty) |
+| engine (keyed ENGINE slot) | **A2**, 1 page | 0 err / 0 warn | 158 (150 moved + 8 new) | `engine/engine.kicad_sch`, `engine.png`, `engine.pdf`, `engine_slot_pinout.csv`, `net_accounting.csv`, `unaccounted_nets.txt` (empty) |
+| di8 (DI-8, type 0x0010) | A3, 1 page | 0 err / 0 warn | 82 | `di8/di8.kicad_sch`, `.png`, `.pdf`, `di8_bom.csv`, `net_changes.csv`, `net_accounting.csv` |
+| ai4 (AI-4, type 0x0011) | **A2**, 1 page (Pass 1 grew past A3) | 0 err / 0 warn | 119 | `ai4/…` (same set) |
+| hso5 (HSO-5, type 0x0012; fitted twice) | **A2**, 1 page (Pass 1 grew past A3) | 0 err / 0 warn | 97 | `hso5/…` (same set) |
+| brk4 (BRK-4, type 0x0013) | **A2**, 1 page (Pass 1 grew past A3) | 0 err / 0 warn | 83 | `brk4/…` (same set) |
 
-Rebuild + check: `python3 tools/card_engine.py && tools/render.sh engine`
+Pass 1 (Nov 23, 2026 HST): every LV card has Ioff slot buffers (Nexperia 74LVC125A + 1G125 + 1G07), boot-safe 47k pulls, and an OUT_EN_N pull-up on +3V3_ID. HSO-5/BRK-4 also get 100 nF/100 V per driver VS, a 2.2 µF/100 V bulk cap, ILIM 33.2k, R_SNS 910 and a 4.7k clamp resistor. The engine card gets 100 nF/100 V at the glow VS and 2.2 µF/100 V on VBAT_ESTOP. See `docs/MODULAR_ARCHITECTURE.md` §13.
+
+Rebuild + check: `python3 tools/mklib.py && python3 tools/card_engine.py && for c in di8 ai4 hso5 brk4; do python3 tools/lvcards.py $c; done && python3 tools/mainboard.py`, then `tools/render.sh <card>` and `sh tools/bom.sh <card>`.
 
 `tools/verify_card.py` re-exports the card netlist and checks (1) every moved pin is on the same net
 as in the baseline (documented overrides only: glow driver VS VBAT_P -> VBAT_ESTOP), (2) every baseline net

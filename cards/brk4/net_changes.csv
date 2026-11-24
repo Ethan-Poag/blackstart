@@ -1,6 +1,18 @@
 baseline_ref,pin,baseline_net,card_net,why
 D128,1,GLOW_SNSM,,clamp half for GLOW_SNSM stays on the mainboard (new BAT54C there)
 D130,2,AUX1_SNSM,,clamp half for AUX1_SNSM moves to the HSO-5 card
+R307,(value),24.9k,33.2k,ILIM 33.2k: I_CL = 80..120 A*kOhm / 33.2k = 2.41/3.01/3.61 A
+R308,(value),1.1k,910,R_SNS 910: 3.61 A / 1300 x 910 = 2.53 V < V_SNSFH min 3.0 V
+R309,(value),1k,4.7k,"SNS series 4.7k: clamp current <= 0.13 mA, S pin <= VDD + 0.25 V (BAT54C VF max 240 mV @ 0.1 mA)"
+R310,(value),24.9k,33.2k,ILIM 33.2k: I_CL = 80..120 A*kOhm / 33.2k = 2.41/3.01/3.61 A
+R311,(value),1.1k,910,R_SNS 910: 3.61 A / 1300 x 910 = 2.53 V < V_SNSFH min 3.0 V
+R312,(value),1k,4.7k,"SNS series 4.7k: clamp current <= 0.13 mA, S pin <= VDD + 0.25 V (BAT54C VF max 240 mV @ 0.1 mA)"
+R313,(value),24.9k,33.2k,ILIM 33.2k: I_CL = 80..120 A*kOhm / 33.2k = 2.41/3.01/3.61 A
+R314,(value),1.1k,910,R_SNS 910: 3.61 A / 1300 x 910 = 2.53 V < V_SNSFH min 3.0 V
+R315,(value),1k,4.7k,"SNS series 4.7k: clamp current <= 0.13 mA, S pin <= VDD + 0.25 V (BAT54C VF max 240 mV @ 0.1 mA)"
+R316,(value),24.9k,33.2k,ILIM 33.2k: I_CL = 80..120 A*kOhm / 33.2k = 2.41/3.01/3.61 A
+R317,(value),1.1k,910,R_SNS 910: 3.61 A / 1300 x 910 = 2.53 V < V_SNSFH min 3.0 V
+R318,(value),1k,4.7k,"SNS series 4.7k: clamp current <= 0.13 mA, S pin <= VDD + 0.25 V (BAT54C VF max 240 mV @ 0.1 mA)"
 (rename),,+3V3_SAFE,+3V3_SLOT,card-local name
 (rename),,DIAG_EN,DIAG_EN,card-local name
 (rename),,GCB_CL_EN,OUT1_EN,card-local name
