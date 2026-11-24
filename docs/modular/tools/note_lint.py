@@ -13,7 +13,8 @@ import os,re,subprocess,sys,tempfile,glob
 ROOT=os.getcwd()
 TOK=re.compile(r'(?<![\w\-/.])((?:TP|JP|[RCDQUJLYF])\d{1,3})(?![\w\-])')
 STALE=['symbol kept']
-EDITS={'genctl_meter:C301':'Pass 4 m3 hand edit: baseline said "C297 exists", but C297 is not in the meter project'}
+EDITS={'genctl_meter:C301':'Pass 4 m3 hand edit: baseline said "C297 exists", but C297 is not in the meter project',
+       'genctl:U5':'Pass 8 hand edit (pass6_power_patch.py): baseline said "always-on"; U5 EN is now the R1125/R1126 divider held off by the Q2 hold-off'}
 HIST=('baseline ','was ','spec ref ','spec name ')   # deliberately historical designators
 def parse(path):
     tok=re.findall(r'\(|\)|"(?:[^"\\]|\\.)*"|[^\s()]+',open(path).read()); st=[[]]

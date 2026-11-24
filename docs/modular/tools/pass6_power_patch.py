@@ -14,6 +14,10 @@ c6_new=('(property "Value" "1u 50V" (at 438.15 81.28 0)','"Pass 6 B1: LM5176 EN/
 if c6_old[0] in s:
     for a,b in zip(c6_old,c6_new): assert s.count(a)==1,a[:50]; s=s.replace(a,b)
     print('power.kicad_sch: C602 10 uF -> 1 uF (Pass 6 B1)')
+# Pass 8: notes that still said U5 is "always on" (idempotent text fixes)
+for old,new in (('+3V3_BK (always on); TPS2116','+3V3_BK (EN = R1125/R1126 divider from VBAT_P: on above 3.6-4.25 V; held off with U2 by the Q2 hold-off, Pass 6); TPS2116'),
+                ('always-on 3.3V from battery, 65V abs max','3.3V backup from battery (EN divider R1125/R1126 + Q2 hold-off, Pass 6), 65V abs max')):
+    if old in s: s=s.replace(old,new); print('power.kicad_sch: Pass 8 note updated:',old[:30])
 if '(global_label "U5_EN"' in s: open(fn,'w').write(s); print('power.kicad_sch: Pass 6 enables already global'); raise SystemExit
 U=lambda: str(uuid.uuid4())
 # 1. U5 pin 3 (EN/UVLO) was strapped to pin 4 (VIN = VBAT_P) by a wire at x 477.52: remove the strap and its junction

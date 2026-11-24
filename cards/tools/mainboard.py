@@ -193,7 +193,7 @@ def vs_holdup(S,k,feed):
     return [add(S,'Diode:1N4148W','D','C81598',{'2':feed,'1':f'{k}_VSD'},ref=f"D{VSREF['D']}",Description=f'VS hold-up diode from {feed}: blocks when {feed} collapses (Pass 4 P4-MAJ-1)'),
             R(S,'C22775',f'{k}_VSD',f'{k}_VS',ref=f"R{VSREF['R']}",Description='RVS 100R (SLUSEW1C 8.3) (Pass 4 P4-MAJ-1)'),
             C(S,'C13832',f'{k}_VS','GND',ref=f"C{VSREF['C']}",Description='C_VS 1 uF / 100 V hold-up: VS >= 4 V for >= 8.3 ms (Pass 4 P4-MAJ-1)')]
-C10N='C57112'; FET='C534364'; R10K='C25804'; R100K='C25803'; R47K='C23162'; R22K='C4190';   # NB: R47K/R22K are 4.7k/2.2k parts (names historic, Pass 8)
+C10N='C57112'; FET='C534364'; R10K='C25804'; R100K='C25803'; R4K7='C23162'; R2K2='C4190';   # Pass 8: were named R47K/R22K although they are the 4.7k/2.2k parts (caused the hold-off value bug)
 C100N='C14663'; R100='C22775'
 # ---- E-stop feed: ideal diode + rail cut ----
 S='estop'
@@ -252,9 +252,9 @@ for a in (0,1):
         sc,sd={0:('5','4'),1:('7','6'),2:('9','8'),3:('11','10'),4:('14','13'),5:('16','15'),6:('18','17'),7:('20','19')}[i]
         pn[sc]=f'{n}_ID_SCL' if n else None; pn[sd]=f'{n}_ID_SDA' if n else None
     mx.append(add(S,'cards:TCA9548APWR','U','C130026',pn,Value=f'TCA9548APWR @0x7{a}')); C(S,C100N,'+3V3_SAFE')
-R(S,R10K,'ID_MUX_RST_N','+3V3_SAFE'); R(S,R22K,'I2C2_SCL','+3V3_SAFE'); R(S,R22K,'I2C2_SDA','+3V3_SAFE')
+R(S,R10K,'ID_MUX_RST_N','+3V3_SAFE'); R(S,R2K2,'I2C2_SCL','+3V3_SAFE'); R(S,R2K2,'I2C2_SDA','+3V3_SAFE')
 for n in [f'SL{i}' for i in range(1,9)]+['ENG','MTR']:
-    R(S,R47K,f'{n}_ID_SCL','+3V3_SAFE'); R(S,R47K,f'{n}_ID_SDA','+3V3_SAFE')
+    R(S,R4K7,f'{n}_ID_SCL','+3V3_SAFE'); R(S,R4K7,f'{n}_ID_SDA','+3V3_SAFE')
 R(S,R10K,'ID_WP','+3V3_SAFE',Description='ID_WP idle high = all ID EEPROMs write-protected')
 add(S,'cards:AO3400A','Q','C20917',{'1':'ID_WP_UNLOCK','2':'GND','3':'ID_WP'},Description='M7: PB6 high (ID_WP_UNLOCK, 100k pull-down R545) pulls ID_WP low = slot + engine ID EEPROMs writable')
 # slot SPI chip selects

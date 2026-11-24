@@ -39,6 +39,11 @@ JF1=c.newref('J'); c.add('Connector_Generic:Conn_01x06',JF1,'DI1-4/AI1-2',{'1':'
 JF2=c.newref('J'); c.add('Connector_Generic:Conn_01x06',JF2,'D+/GLOW/BIAS',{'1':'DPLUS','2':'GLOW_OUT','3':'DI_BIAS_A','4':'GND','5':None,'6':None},hdr)
 for p in c.parts:
     if p['props'].get('BaselineRef')=='J18': p['props']['Value']='COM/MPU'
+# Pass 8: D+ excitation LM317M was UMW LM317MDT-TR (C3015165), rated 0 to +125 C (32 to 257 F) junction only; the controller is specified
+# down to -40 F (-40 C). onsemi LM317MBDTRKG (C179570): -40 to +125 C Tj, same DPAK (TO-252-2) and pinout (1 ADJ, 2 OUT/tab, 3 IN).
+for p in c.parts:
+    if p['props'].get('BaselineRef')=='U36':
+        p['props'].update(MPN='LM317MBDTRKG',Manufacturer='onsemi',LCSC='C179570')
 # ID EEPROM
 cap=dict(c.inst['C199'][0]['props']); cap.pop('Reference'); cap.pop('Note',None)
 import lvcommon as L
