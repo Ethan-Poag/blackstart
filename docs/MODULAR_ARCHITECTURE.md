@@ -1173,7 +1173,7 @@ C_TMR 4.7 nF X7R → **1.0 nF C0G 50 V 5 %** (YAGEO CC0603JRNPO9BN102, C106246, 
   | + D1 SMDJ36CA at BAT_IN (as built) | 50.4 V | 58.7 V | 64.2 V |
   | SMBJ33CA → SMDJ33CA 3 kW, + D1 | 48.8 V | 55.9 V | 60.5 V |
 
-  Parts on VBAT_P: LM5176 55 V, LMR36506 65 V, TPS1HTC30 (U68) 64 V, LM74800 (U1) 70 V, INA237 85 V, and 50 V electrolytic/MLCCs. At a 24 V battery the peak reaches the 50 V capacitor ratings; at 28.8–32 V it exceeds the LM5176's 55 V. A bigger TVS alone does not fix it. This gives the existing VBAT_P surge open item (DESIGN_NOTES s3c6f, "needs surge test") a defined source. Pass 3 was worse (4.7 nF slot timer: up to 95.2 V in the same model). **Needs a decision:** a VBAT_P clamp sized for the harness energy, a slower slot turn-off (trading FET energy), or a lower maximum battery voltage; plus bench test 16.7 #6.
+  Parts on VBAT_P: LM5176 55 V, LMR36506 65 V, TPS1HTC30 (U68) 64 V, LM74800 (U1) 70 V, INA237 85 V, and 50 V electrolytic/MLCCs. At a 24 V battery the peak reaches the 50 V capacitor ratings; at 28.8–32 V it exceeds the LM5176's 55 V. A bigger TVS alone does not fix it. This gives the existing VBAT_P surge open item (DESIGN_NOTES s3c6f, "needs surge test") a defined source. Pass 3 was worse (4.7 nF slot timer: up to 95.2 V in the same model). **RESOLVED in Pass 5 (§17): slot eFuses, VBAT_P ≤ 47.3 V worst model.** Original text: **Needs a decision:** a VBAT_P clamp sized for the harness energy, a slower slot turn-off (trading FET energy), or a lower maximum battery voltage; plus bench test 16.7 #6.
 
   > **Pass 5 pre-check (2026-11-23, `docs/modular/tools/kick_calc.py` → `docs/modular/kick_calc.txt`). The table above understates the problem. Schematic not changed (STOP-GATE).** The netlist audit found different real parts from the ones the Pass 4 model assumed:
   > - D2 on VBAT_P is SMBJ40CA (600 W, VBR 44.4–49.1 V), not SMBJ33CA.
@@ -1239,3 +1239,87 @@ TDRV_EN = C_BST(max) × V(BST_UVLOR) max 9.93 V / I(BST) min 190 µA = **126 ms 
 4. Firmware C6.2: single-channel latency ≤ 25 ms (blank 0 / 15 / 20 ms, BRK-4 OPEN pulse), and two channels shorted together: card cut ≤ 20 ms.
 5. Firmware C7.9 and C2.3/TDRV_EN: measure FLT low time after BANK_EN with 2.2 µF C_BST at 12.6 and 32 V, cold and hot (expect ≤ 126 ms); crank-dip and dead-short recovery, no endless retry, `SLOT_SHORT_LOCKOUT`, one classified crank unlatch.
 6. VBAT_P overshoot when a slot latches (32 V, short harness): peak at the SMBJ33CA and at the 40 V parts on VBAT_P.
+
+## 17. Pass 5: slot eFuses, U1 dV/dt, U65 feed (Nov 23, 2026, HST; Ethan's decision at 10:20 PM)
+Ethan: "go with the eFuse slots plus the gate cap and 47 ohm", and at 10:21 PM: **no backup blade fuse per slot, eFuse only.** This closes the §16.2 VBAT_P overshoot open item. Numbers: `docs/modular/pass5_calc.txt` (settings, coordination) and `docs/modular/kick_calc.txt` PART 2 (transients, abs-max, hot-plug SOA). Datasheets and live JLC searches: `docs/split_evidence/modular_pass5/`.
+
+### 17.1 Why the slots changed
+The Pass 4 slot switch (TPS48100 + 2 × BSC070 + 1 nF timer) let a dead short build 400–590 A in the harness for up to 25 µs. Cutting that current dumped about 0.3 J into VBAT_P: up to 84 V as built, against the LM5176's 60 V. A clamp big enough to absorb it needed a new bulk-cap topology. An eFuse trips a dead short in about 1 µs, so the harness current never gets big. The energy goes down with the square of the current, so the kick mostly goes away.
+
+### 17.2 Parts (JLC live, Nov 23, 2026, HST)
+| Part | LCSC | Stock | Unit qty 1 | Use |
+|---|---|---|---|---|
+| **TPS16630PWPR** (HTSSOP-20, 67 V abs max) | C1849461 | **1,833** | **$2.92** | slots 1–8 (U115, U120 … U150; refs kept) |
+| TPS26631PWPR (same land pattern) | C2866319 | 1 | $5.52 | drop-in alternate: stock too low to rely on |
+| TPS26631RGER (VQFN-24) | C1850273 | 217 | $10.92 | volume second source; needs a footprint variant (layout frozen: noted for layout only) |
+| CL31B225KCHSNNE 2.2 µF 100 V 1206 | C170101 | 164,294 | $0.12 | eFuse IN cap × 8 |
+| SS310B 3 A 100 V Schottky SMB | C14281 | 95,690 | $0.058 | OUT → GND × 8 (TI SLVSET9G §9.4.1/§9.5) |
+| CC0603KRX7R0BB223 22 nF 100 V + 1k | C313105 + C21190 | 77,944 | $0.013 | C601/R1001 on U1 HGATE |
+| CL21A106KAYNNNE 10 µF 25 V | C15850 | 9.25 M | $0.031 | C602 on U2 EN/UVLO |
+| 47 Ω 1206 | C17969 | 270,203 | $0.005 | R1002, D120 → C225/U65 |
+
+Rejected: TPS26632/TPS26636 (fixed OV clamp at 32–39 V, inside the 36 V / 60 s rating), MAX17613 (3 A), TPS26600 (2.23 A). Both are below the 4.0 A ROOM slot budget.
+
+### 17.3 Slot settings (per slot)
+- **Current limit:** ILIM 4.02k gives I_OL 4.14–4.86 A (datasheet row ± 1 % R), which is at least the 4.0 A ROOM budget. The fast trip is at 2 × I_OL. A hard short trips at 45 A with a 1 µs typical response. After the trip the eFuse regulates to I_OL. MODE is left open, so it **latches** after t_CL 129–202 ms or at thermal shutdown, and resets when SHDN# toggles.
+- **OVP:** 453k/10k turns the slot off at 53.4–57.8 V, never inside the 9–32 V / 36 V-60 s rating. The slot turns back on below 49.5–53.9 V. UVLO is 100k/27k as before.
+- **Inrush (dVdT 10 nF):** 32 V in 5.0–8.4 ms. PGOOD is high ≤ 23.3 ms after enable, well inside the C2.3 150 ms mask.
+- **Fault reporting:** FLT# and PGOOD are wired-OR with the TPS2553 FAULT onto SLn_PWR_FAULT_N, so the existing expander path and firmware rule (C5.1) carry it. Fault table: pass5_calc.txt.
+- **IMON:** 15k gives 0.418 V/A. It is a test point only: there is no ADC channel, and the layout is frozen.
+- **Default off:** a 10k pull-down on SHDN# keeps the eFuse off if the 1G02 is unpowered (the SHDN# internal pull-up would otherwise turn it on).
+
+### 17.4 Kick, abs max and coordination (worst model, 64 corners)
+| Vbat | Corner | VBAT_P | BAT_IN | VBAT_SLOTS | U65 IN | eFuse peak | Harness peak | F1 I²t |
+|---|---|---|---|---|---|---|---|---|
+| 24 V | pessimistic / realistic | 35.5 / 27.0 V | 35.4 / 27.1 V | 42.9 / 29.3 V | 23.7 V | 272 / 60 A | 78 / 24 A | 0.030 / 0.004 A²s |
+| 28.8 V | pessimistic / realistic | 42.6 / 31.8 V | 42.5 / 31.9 V | 51.4 / 34.1 V | 28.6 V | 327 / 60 A | 93 / 24 A | 0.043 / 0.004 A²s |
+| 32 V | pessimistic / realistic | **47.3 / 35.0 V** | **57.2 / 35.0 V** | 57.0 / 37.3 V | 31.8 V | 363 / 60 A | 103 / 24 A | **0.053** / 0.004 A²s |
+
+"Pessimistic" lets the current rise freely until the trip (no FET saturation). "Realistic" saturates the eFuse FET at 60 A. Margins at 32 V pessimistic:
+- LM5176 (U2): 47.3 V vs 60 V.
+- LM74800 (U1) A pin: 57.2 V vs 70 V.
+- 63 V electrolytics: 47.3 V vs 63 V.
+- TPS16630 IN: 57.0 V vs 67 V.
+- U65: 31.8 V vs 45 V.
+- Card LM5176s behind healthy slots: 57.0 V vs 60 V for ≤ 1.8 µs (5 %; the card input caps and the slot harness filter it).
+
+U1 does not OV-trip in the realistic corner. It trips in 6 of 64 pessimistic corners at 32 V and is harmless there. Healthy-slot OVP never trips: the spike is above 53.4 V for ≤ 1.8 µs, against OVP_toff ≥ 8.5 µs.
+
+**Coordination:**
+- F1 sees at most 0.053 A²s, more than 2,000 times below 115 A²s.
+- The bank U110 (kept) never trips on a slot short: slot ≤ 4.5 µs vs bank SCP ≥ 466 µs.
+- **m9:** a card is now capped at 4.86 A. The bank overload trips at ≥ 41.9 ms HOT / 40.0 ms ROOM (was 27.4 / 25.8 ms), so the 20 ms FW card-cut rule has 21.9 / 20.0 ms margin. The eFuse FLT# (≤ 1.6 ms) normally gets there first.
+- **Residual:** a short on the VBAT_SLOTS bus itself is still cleared by F1 (Pass 4).
+
+**eFuse thermal, 32 V hard short:** after the trip it regulates 156 W and reaches TSD 329 °F (165 °C) in milliseconds, then latches off. The trip-kick energy is ≤ 13.3 mJ. Starting into a short, it holds T_J(REG) 277–309 °F (136–154 °C) for 1.1–1.5 s, then latches. The SS310B clamps OUT at −1.2 V for microseconds.
+
+### 17.5 U1 HGATE 22 nF + 1k, and why C602 had to be added
+22 nF on HGATE limits the bulk-cap inrush to 0.4–0.8 A (ramp 10–20 ms). On its own, though, it made things worse: U2 starts at its 4.96 V UVLO while Q2 is still ramping, so Q2 carries U2's 70 W in linear mode for most of the ramp. That is BSC070 SOA ratio **1.72–4.62 (exceeded)**; 10 nF is 1.40–1.66, also exceeded. As built (no CdVdT) it was 0.97–0.98, at the edge. Fix: **C602 10 µF on U2 EN/UVLO.** With R4/R5 (Thevenin 24.8k) U2 starts 31–68 ms after VBAT_P at 32 V (ramp ≤ 20 ms) and 99–219 ms at 9 V. Q2 then only charges capacitance: SOA 0.85–0.87, Q2 ΔTj 9–15 K. The DC hysteresis is unchanged.
+
+### 17.6 U65 feed
+R1002 47 Ω 1206 sits between D120 and C225/U65 (RC 470 µs vs the µs kick). It drops 0.24 V at 5 mA. Cold crank at 9 V still gives 8.3 V at U65 IN.
+
+### 17.7 Does this solve the real problem? Field service and the safety core
+The goal is a controller where a card fault cannot take down the safety core, and where a bad card is swapped, not the controller. Pass 4 failed that test: one dead short could put up to 84 V on VBAT_P, which feeds the safety core's 12 V converter, and that converter is rated 60 V. Now:
+- a card short is contained in the card's own slot within microseconds, and VBAT_P stays ≤ 47.3 V;
+- the bank and F1 stay closed, and the other seven slots and the engine slot keep running;
+- the faulted slot latches and reports, firmware locks it out, and the fix is to pull the card;
+- no blade fuse needs replacing, and no mainboard part takes energy beyond its rating.
+
+What remains:
+- a short on the mainboard's VBAT_SLOTS bus still blows F1 (a mainboard fault, not a card fault);
+- the eFuse is single-source in practice until the VQFN variant has a footprint.
+
+### 17.8 Parts, cost and verification
+- **Parts:** the mainboard has **991** fitted parts (was 1,067: −8 TPS48100, −16 BSC070, −8 shunts, slot gate, timer and hold-up networks; +8 eFuse sets, C601, R1001, C602, R1002). Cards are unchanged. The combined build is **1,861** parts on 254 lines.
+- **Cost:** the true delta is **+$328.87 at qty 1 / +$119.65 at qty 10**, down $9.86 / $9.52 from Pass 4.
+- **Gates:** ERC 0/0 on all 7 projects. Each card is 1 page; genctl_meter is 2. Audit: 1,056 same, 128 changes, 0 unexplained, 0 orphans. Drawn vs intended: 2,908 pins, 0 errors. BOM: 0 mismatches. Note lint: 0. Rev **M-mod P5**.
+
+### 17.9 Bench tests before first field use (replaces §16.7)
+1. **VBAT_P overshoot** (closes §16.2): dead short on a slot at 24 / 28.8 / 32 V, real battery and harness (short and 2 m long). Probe VBAT_P at U2 VIN, BAT_IN at U1 A, VBAT_SLOTS at a healthy slot's IN, and U65 IN, at ≥ 100 MHz bandwidth. Pass: VBAT_P ≤ 52 V, BAT_IN ≤ 62 V, VBAT_SLOTS ≤ 60 V, U65 ≤ 40 V, and no OVP trip on healthy slots.
+2. **eFuse dead short** on each slot at 12.6 / 24 / 32 V, at 77 °F and 149 °F (25 and 65 °C). Measure current with a Rogowski probe and OUT with a short ground. Pass: trip ≤ 5 µs; OUT ≥ −1.5 V; latched off with FLT# and PWR_FAULT_N low ≤ 2 ms; bank and F1 intact; other slots stay up.
+3. **Enable into a short** at 32 V and 149 °F (65 °C): thermal regulation ends in ≤ 1.5 s and latches; firmware shows `SLOT_SHORT_LOCKOUT` at 250 ms; EN_N toggle re-arms it.
+4. **Overload** at 4.0 A (no trip) and 5.0 A (limit, FLT# ≤ 1.6 ms) on each slot, HOT and ROOM. Two slots at I_OL: the bank does not trip before the FW cut.
+5. **Hot-plug / power-up** at 32 V, 149 °F (65 °C), with U2 loaded to 70 W. Measure Q2 Vds and Id, and VBAT_P vs U2 EN/UVLO timing. Pass: U2 starts after the VBAT_P ramp; Q2 stays within SOA (≤ 0.9 of the 100 µs curve).
+6. **Cold crank** at 9 V: U65 IN ≥ 7 V, U2 starts ≤ 250 ms.
+7. Firmware C2.3 / C5.1 / C6.2 / C7.9 as in §16.7 #3–5, with the eFuse timings (PGOOD ≤ 24 ms).
