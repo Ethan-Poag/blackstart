@@ -431,3 +431,14 @@ The problem, restated:
 - **(d) Change R12 (cycle-by-cycle limit):** this alters the inductor and short-circuit current, not the average input. 8 mΩ already gives ≥8.25 A out. Raising R12 to 10 mΩ (D p7 thresholds → valley 6.6 A, peak 10 A) gives about 6.9 A out at 9 V ((10 − 0.81) × 0.75). That is below 7.64 A but above the realistic 3.6 A. It lowers L1/BB stress, and power-stage copper could then target about 9.2 A.
 - **(e) Bigger or second converter:** not needed for capability (the as-built limit already covers 7.64 A). It does not help the F1/VBAT_P constraint.
 - **(f) Router/EXP to VBAT_P:** see (2).
+
+## Batch 34 (m7-split-p7, 2026-11-24 HST): layout items from the Q2 front-end port (PCB frozen, NOT done)
+- U5.3 (LMR36506 EN) must no longer touch VBAT_P. It goes to U5_EN: R1125 100k from VBAT_P, R1126 47k to GND, and D402 pin 2. The REVISION 3 audit already lists U5.3 as isolated from the Q3 group on pcb_v4: confirm whether it has any VBAT_P connection at all.
+- The new parts are all signal-level (≤ 1 mA steady), so no copper width targets:
+  - R1001/C601 next to U1 HGATE;
+  - C602 (0805) at U2 pin 1;
+  - the hold-off (D401, Q121, R1121–R1124, C1121, Q122) near Q1/Q2, sensing BAT_IN and VBAT_P;
+  - D402 between U2 pin 1 and U5 pin 3;
+  - R1125/R1126 at U5.
+- The VBAT_P bulk now charges at ≈ 0.6 A instead of a 36–53 A peak, so the BAT_IN/VBAT_P copper sees less inrush stress. The 10 A continuous targets are unchanged.
+

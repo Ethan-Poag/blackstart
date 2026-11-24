@@ -534,6 +534,7 @@ Sources read this session: SN65DSI83 SLLSEC1I; PCA9306 SCPS113O; SN74LVC1T45 SCE
 - R3 10k -> **9.76k (0603WAF9761T5E, LCSC C23128)**. Recomputed here (OV = Vth·ΣR/R3, UV = Vth·ΣR/(R2+R3), 1 % R worst case, DS p5-6 thresholds) [INFERRED, matches the reviewer]: OV rising 32.39 / 34.01 / 35.69 V (35.74 V with 200 nA leakage), OV falling 29.57 / 31.22 / 32.65 V (reviewer 32.70 with leakage), UV rising 5.32 / 5.56 / 5.82 V (5.86 with leakage).
 - Max operating battery 31 V. OV-trip minimum margin vs 31 V = 32.39 − 31 = **1.39 V** (4.5 %) [INFERRED]. Resistor TCR is not in the stack; 0.1 % resistors are an option.
 - After an OV trip the load may stay off until the battery falls below OV falling (as low as **29.57 V** min) [INFERRED, divider_check.md §7].
+- **Batch 34 correction (2026-11-24 HST):** the facts in the next bullet are out of date. D1 is now SMDJ40CA (VC 64.5 V at Ipp < U1 70 V abs max) and D2 on VBAT_P is SMBJ40CA. The LM2904B op-amps (U26–U28) run from VBAT_AI, not VBAT_P. The lowest rating left on VBAT_P is SI2309CDS 60 V (Q36/Q39/Q42) and LM5176 60 V. During the 4–5.4 µs OV turn-off, VBAT_P rises by only I·t/C ≈ 100 A × 5 µs / 230 µF ≈ 2.2 V above the OV point (≤ ≈ 42 V). The surge test is still open.
 - **OPEN RISK (needs surge test):** D1 clamp (old SMDJ58CA 93.6 V; new SMDJ36CA 58.1 V per product page, PDF not opened) can still reach VBAT_P during the 4-5.4 µs OV turn-off (DS p7). LM2904B on VBAT_P is 40 V abs max (Compliance citation, not opened) and D2 SMBJ33CA clamps at 53.3 V. NOT VERIFIED.
 - **Supply assumption:** a 3 kW SMC TVS will not survive an unsuppressed 24 V alternator load dump. The board assumes a battery-backed, suppressed 35 V-class supply; it is NOT designed for an unsuppressed load dump (Ethan's decision 2026-10-27). See docs/INSTALL_SAFETY.md.
 - SUPERSEDED (N4/m7-sch 3c): no on-board fuse; battery net BAT_IN; the battery lead is fused in the power box (F1) at <=10 A standard (non-time-delay), >=58 V DC. Historical: F1 is **10 A** (Ethan's requirement). Any 5 A F1 figure in reviewer files (review/cur/final_power_spec.md) is not adopted.
@@ -635,3 +636,29 @@ Source: /workspace/review/sch_review/SCH_REVIEW_2026-11-22_pass6.md m1-m3, NOTEs
 - §12 now splits editable settings (default + hard limits, out-of-range refused) from fixed items (E-stop, overspeed, watchdog latch, close permissives, reverse-power, retry count, warnings, counters). New BS-13.
 - Open: no reverse-power function or paralleling spec exists yet, so D6 is a requirement on future paralleling work.
 - Docs only: ERC 0/0 on both boards, BOM-vs-netlist 0 mismatches, netlists identical to Batch 33 (docs/split_evidence/batch33a).
+
+## m7-split-p7 Batch 34 (2026-11-24 HST): Q2 front-end fix ported from m7-modular (Ethan: "u can go ahead and make fixes to both")
+- **Why.** The m7-split read-only check (/workspace/review/split_hp.txt) found the problem. A 32 V hot cold start puts Q2 BSC070N10NS5 at SOA ratio 0.97–0.99, with ΔTj 85–91 K and 36–53 A inrush: right at the edge. m7-modular fixed the same front end in Passes 5–8.
+- **What (power.kicad_sch only, tools/p7_power_patch.py):**
+  - R1001 1k + C601 22 nF / 100 V on the U1 HGATE (Q2 dV/dt).
+  - C602 1 µF on U2 EN/UVLO, which is now the named net BB_UVLO.
+  - U5 EN, formerly strapped to VBAT_P, is now the R1125 100k / R1126 47k divider.
+  - An 11-part Vds hold-off: D401 1N4148W, Q121 MMBT5401, R1121 22k, R1122 68k, R1123 22k, R1124 100k, C1121 100 nF, Q122 MMBT3904, D402 BAT54C. It holds U2 and U5 off while BAT_IN − VBAT_P > 2.5–3.8 V.
+  - Same refs and values as m7-modular. Note that m7-modular Pass 8 found its own R1121/R1123 drawn as 2.2k and R1126 as 4.7k. The split port uses the right 22k C31850 / 47k C25819, and tools/p7_calc.py checks the drawn values.
+- **Numbers (tools/p7_calc.py, docs/split_evidence/p7/p7_calc.txt):**
+  - VBAT_P effective capacitance is 234 µF.
+  - Worst Q2 SOA ratio is **0.91** across all corners: cold start, warm restart from 4 V, and a short dip with U2 at full load, at 12–32 V, hold-off hot/cold, HGATE 39/75 µA.
+  - Inrush is ≈ 0.6 A.
+  - With C601 but no hold-off, a dip restart would reach 1.08 (24 V) and 1.85 (32 V). That is why both parts go in together.
+  - U5 starts at 3.63–4.25 V. Its EN reaches ≤ 18.4 V at a 57.6 V clamp.
+- **Trade-off:** any interruption longer than ≈ 0.15–0.35 ms now resets the controller (docs/FW_REQ_BATCH34.md).
+- **Modular lessons judged NOT applicable to the split (reasons):**
+  - **R1002 47 Ω at U65:** on m7-modular the U65 / VBAT_P kick (67–84 V) came from a slot eFuse SCP cutting ~45 A on VBAT_SLOTS. The split has no slot bus. Its VBAT_P switches are TPS1HTC30 channels (current-limited, a few A, µJ-level interruption energy into 234 µF). The FUEL/CRANK TPS48100 switches sit on VBAT_ESTOP, a separate feed (J23 → SQD40P10 Q70/Q71). So VBAT_P stays ≤ ≈ 42 V, under the U65 45 V abs max via D120/C225.
+  - **D126 SMDJ40CA → SMDJ36CA:** on m7-modular this protected an LM74700 (65 V) on the E-stop rail. The split's VBAT_ESTOP loads are all 100 V or higher (SQD40P10, TPS48100, INA281 110 V, BSC070) plus the BZT52C15 gate clamp. A crank/fuel SCP kick clamped at ≤ ≈ 70 V by D126 stays inside them.
+  - **Slot / kick / M2 / M3 findings:** these are modular-only hardware (eFuses, backplane, engine card feeds).
+- **Layout impact (PCB frozen, not done):**
+  - 16 new footprints: R1001, C601 and the hold-off parts in 0603, C602 in 0805, plus 3 SOT-23 and 1 SOD-123.
+  - New nets: LM748_DVDT, BB_UVLO (renamed), U5_EN, HO_E/B/C/F/K.
+  - U5.3 EN must be cut from VBAT_P. RAIL_PLAN REVISION 3 already reports U5.3 isolated from the Q3 copper group on pcb_v4; check that against this.
+  - Placement: C601/R1001 at U1 HGATE; the hold-off near Q1/Q2 with short BAT_IN/VBAT_P sense; D402 near U2 pin 1 and U5 pin 3.
+- Checks: ERC 0/0, netlist diff with only the intended deltas, BOM 0 mismatches (docs/split_evidence/p7). Parts +$0.12 per board. One new JLC extended part (C313105), so one extended-part fee per order.

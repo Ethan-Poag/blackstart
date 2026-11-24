@@ -1267,3 +1267,28 @@ Checks (kicad-cli 9.0.2):
 - docs/INSTALL_SAFETY.md: warning text synced; installer items for D1/D2 persistence, D4 crank timing and D3 bus sensing.
 - DESIGN_NOTES.md: Batch 33a summary; the Batch 33 "D1–D7 open" line now points to it.
 - Checks (kicad-cli 9.0.2): ERC --severity-all genctl **0**, genctl_meter **0**; netlists identical to 5bd77c4 (1147 / 220 parts); BOM vs netlist 0 mismatches; no schematic, library, BOM or tools change. Evidence: docs/split_evidence/batch33a.
+
+## Batch 34 (P7): Q2 front-end fix ported from m7-modular (Grok Bot for Ethan, "u can go ahead and make fixes to both", relayed by Enginerd 10:21 AM HST 2026-11-24; branch m7-split-p7 from m7-split 5bac9fe; PCB not touched)
+Patch: tools/p7_power_patch.py (power.kicad_sch only, idempotent). Math: tools/p7_calc.py → docs/split_evidence/p7/p7_calc.txt.
+
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| R1001, C601 (new) | — | 1k 0603 C21190 + 22 nF / 100 V X7R 0603 C313105 from LM748_HGATE (U1.8 / Q2 gate) to GND | Q2 dV/dt: inrush ≈ 0.6 A instead of 36–53 A. A 32 V hot cold start went from SOA ratio 0.97–0.99 to ≤ 0.91. | TI SNOSDB4 Fig 9-3 (R1 + CdVdT); m7-modular Pass 5 |
+| C602 (new) | — | 1 µF / 50 V X7R 0805 C28323 on BB_UVLO (U2.1 EN/UVLO, R4/R5) | Filters U2 EN; kept at 1 µF (not 10 µF) so D402 can discharge it in ≤ 0.25 ms | m7-modular Pass 6 |
+| U2.1, R4.2, R5.1 net | Net-(U2-EN/UVLO) | BB_UVLO (named) | Hold-off connection | — |
+| U5.3 EN/UVLO | wire + junction to VBAT_P (477.52, 219.71) | label U5_EN; R1125 100k C25803 from VBAT_P, R1126 47k C25819 to GND | Lets the hold-off turn U5 off. On above VBAT_P 3.63–4.25 V; EN ≤ 18.4 V at 57.6 V. | LMR36506 EN 1.16–1.36 V (SNVSBB3) |
+| D401, Q121, R1121–R1124, C1121, Q122, D402 (new) | — | 1N4148W C81598; MMBT5401 C8326 (MMBT3906 symbol, B-E-C 1-2-3); 22k C31850; 68k C23231; 22k C31850; 100k C25803; 100 nF C14663; MMBT3904 C20526; BAT54C C37704 (pin 1 BB_UVLO, pin 2 U5_EN, pin 3 HO_K) | Q2 hold-off. When BAT_IN − VBAT_P > 2.5–3.8 V for ≥ 46–270 µs, U2 and U5 are held off. Without it, C601 makes a dip restart overstress Q2 (SOA 1.08 at 24 V, 1.85 at 32 V). | m7-modular Pass 6 B1; Pass 8 resistor-code fix |
+| bom/lcsc_prices.csv | — | + C313105, C8326, C31850 rows (from m7-modular, JLC API 2026-11-23/24) | New LCSC codes | JLC parts API |
+| BOARD (out of scope) | — | Layout needs:<br>• 16 new footprints;<br>• the U5.3 strap cut;<br>• new nets LM748_DVDT, BB_UVLO, U5_EN, HO_E/B/C/F/K.<br>See RAIL_PLAN "Batch 34". | Layout frozen | — |
+
+- Not ported, with reasons in DESIGN_NOTES "Batch 34": R1002 47 Ω at U65, D126 → SMDJ36CA, slot/kick/M2/M3.
+- Docs:
+  - New: docs/FW_REQ_BATCH34.md.
+  - Updated: FW_REQ_BATTLESHORT H8, INSTALL_SAFETY (supply interruptions), DESIGN_NOTES (Batch 34; corrected the stale s3c6f OPEN RISK facts), RAIL_PLAN (Batch 34 layout items).
+- Checks (kicad-cli 9.0.2):
+  - ERC --severity-all: genctl **0**, genctl_meter **0**.
+  - Netlist diff vs 5bac9fe: 1147 → 1161 parts. 14 added, none removed or changed. Net changes are only the ones listed above.
+  - BOM vs netlist: 0 mismatches.
+  - Main board parts $266.36 → $266.48 per board at qty 1.
+  - Q2 worst SOA ratio 0.91.
+  - Evidence: docs/split_evidence/p7.
