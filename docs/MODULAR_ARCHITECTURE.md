@@ -123,6 +123,8 @@ Boundary parts (shared bias, decoupling) are heuristic, the same caveat as `revi
 - DigiKey/Mouser stock for any of the three.
 
 ### 2.2 LV slot pinout (`modular/slot_pinout_LV.csv`)
+
+> **Pass 1 update (§13):** +5V_SLOT is removed; a8/b8 are reserved (NC). `slot_pinout_LV.csv` is current.
 96 pins, rows a/b/c × 32 positions.
 
 | Positions | Signals |
@@ -159,6 +161,8 @@ Boundary parts (shared bias, decoupling) are heuristic, the same caveat as `revi
   - The HV card keeps `MTR_DET_N` as it is today.
 
 ### 2.4 Per-slot power budget
+
+> **Pass 1 update (§13):** the slot shunt is now 5 mΩ (trip 10.7/13.6/16.6 A), the LV slots share a bank limiter (9.2/11.6/14.4 A), and +5V_SLOT is gone. The figures below are the Phase 1 proposal.
 | Rail | Per-slot limit | Hardware | Notes |
 |---|---|---|---|
 | VBAT_FIELD | **6 A continuous [E]**; pulses up to the slot trip | TPS48100-Q1 + 2× BSC070N10NS5 + shunt, the same circuit as fuel/crank (`bom/design_spec.md`) | With a 10 mΩ shunt the trip scales to about 7.7/9.9/12.3 A (min/typ/max). I derived that from the 20 mΩ figure of 3.86/4.97/6.14 A; check it against the datasheet in Phase 2. 9 contacts × 2 A = 18 A rated, so 6 A leaves 3× margin |
@@ -246,6 +250,8 @@ At boot every slot is unpowered. Firmware then reads PRESENT_N, then each EEPROM
 ---
 
 ## 5. Cost and part-count delta (`modular/cost_delta.csv`)
+
+> **Superseded:** the current cost is in §13 (`true_cost_delta.csv`). This section is the Phase 1 estimate.
 Build 2 (baseline-equivalent I/O: DI-8, AI-4, 2× HSO-5, BRK-4, HV) against the one-board baseline:
 
 | Group | qty 1 | qty 10 (per unit) | Source |
@@ -446,6 +452,8 @@ HSO-5 uses all 16 MCP23S17 GPIOs except two, so it reads only SLOT_ID0/1 (GPA6/7
 
 ## 11. Phase 2: watchdog rail cut, Q70/Q71 thermal check, datasheet checks, true cost (Nov 23, HST)
 
+> **Pass 1 update (§13):** D126 is now SMDJ36CA, and the rail-cut enable has an RC proof-test timer. The text below is the Phase 2 state.
+
 ### 11.1 Watchdog rail cut (now drawn: `estop.kicad_sch`, see §12)
 - **Circuit:** a copy of the proven fuel-driver circuit, placed in series after Q70/Q71.
   - Parts: TPS48100QDGXRQ1 (C43131316), 2× BSC070N10NS5 in parallel (C534364, 100 V, 7.0 mΩ max), and an RLP25FEER002 2 mΩ 2 W 2512 shunt (C160590, LCSC stock 31,525).
@@ -536,6 +544,8 @@ The items that were only specified here (slot sheets, ID muxes, presence/fault s
 ## 12. Phase 2 final: mainboard rework, ideal diode, full-system audit (Nov 23, HST)
 
 ### 12.1 Mainboard sheets (`genctl.kicad_sch`, ERC 0 errors / 0 warnings, `docs/modular/erc/genctl_main.rpt`)
+> **Superseded in part by §13 (Pass 1 review fixes).** The slot power, slot fault lines, OUT_EN_N logic, ID_WP, rail-cut enable, D126 and limits below describe the Phase 2 state. §13 gives the current design.
+
 Generator: `cards/tools/mainboard.py` (from the locked tag netlist plus the edits it lists; drawn by `schdraw.py`). Drawn-vs-intended check: `cards/tools/verify_mainboard.py` (2,716 pins, 0 errors). Renders: `docs/modular/img/mainboard/*.png` and `genctl_mainboard.pdf`.
 
 | Sheet | Status | Content |
@@ -656,4 +666,148 @@ The parts-only delta is +$97.58 at qty 1 and +$80.61 at qty 10. The rest is boar
 ### 12.7 Still open
 - The PCB layout is not started. The DIN male row lettering needs checking on a sample (§11.4).
 - The firmware items in §12.1 need to go into FW_REQ_CARDS.
-- The SPI3 slot bus runs to 8 slots with no series termination. Add 33R at the MCU if the layout length needs it [E].
+- ~~The SPI3 slot bus runs to 8 slots with no series termination.~~ Done in Pass 1: 33R source resistors on SCK, MOSI and SLOT_RST_N (§13).
+
+## 13. Pass 1 review fixes (Nov 23, 2026, HST; review `/workspace/review/modular_pass1.md`)
+Checks after the fixes:
+- ERC is 0 errors / 0 warnings on all 7 projects: genctl, genctl_meter, engine, di8, ai4, hso5, brk4.
+- System audit: 1,057 nets the same as the baseline, 127 intentional changes, **0 unexplained, 0 orphans**.
+- Mating contacts: 413 wired on both sides, 166 NC on both sides (+10 for the reserved a8/b8), 7 slot signals the card does not use, 6 open ID straps.
+- Drawn-vs-intended: 2,797 mainboard pins, 0 errors.
+- Datasheet and stock evidence: `docs/split_evidence/modular_pass1/`.
+
+### 13.1 Slot isolation and slot power (B1, M3, N3, N6)
+- **+5V_SLOT removed.** The 8 +5V TPS2553s, their ILIM resistors and their caps are gone. Contacts a8/b8 are reserved (NC on both sides).
+- **+3V3_SLOT** comes from the TPS2553 on main **+3V3**, not +3V3_SAFE, with ILIM 210k: 110/130/150 mA.
+  - The TPS2553 FAULT and EN abs max is −0.3 to 7 V to GND (SLVS841G), so a pulled-up FAULT with IN at 0 V is fine.
+- **Every LV card buffers the slot bus through Ioff parts**, so an unpowered card is never back-powered and never loads the bus:
+  - **Nexperia 74LVC125APW,118** (C6059): CS, SCK, MOSI and RST, OE tied to GND. IOFF is ±10 µA (−40…+85 °C) and ±20 µA (−40…+125 °C) at VCC 0 V, with VI/VO up to 5.5 V. TI's SN74LVC125A (SCAS290T) has no Ioff spec, so it is not used.
+  - **SN74LVC1G125** (C23654): MISO, with OE# = the buffered CS and a 100k pull-down on the card side.
+  - **SN74LVC1G07** (C7829): INT_N, open drain. The MCP23S17 INTA is push-pull (IOCON.ODR = 0).
+- **OUT_EN_N pull-ups** (AI-4 R45, HSO-5 R36, BRK-4 R29) now go to +3V3_ID, which is always on.
+- **CARD_FAULT_N pull-ups removed from the cards.** The pull-up is on the backplane (10k to +3V3_SAFE), read on the new 0x22 expander. Abs max at VS = 0:
+  - TPS1HTC30-Q1 FAULT: −1 to 7 V to IC GND, with no VS reference.
+  - TPS26621 FLT: 62 V to RTN, leakage ±100 nA.
+  - The DI-8 MCP GPB2 no longer sits on CARD_FAULT_N. An unpowered MCP would have been back-powered through it.
+- **+3V3_ID feed:** 150 Ω 0805 (C17471, 125 mW). With a short at the card it takes 22 mA, which is 72.6 mW in the resistor.
+- **U105 '138 / U109 slot ANA mux on +3V3_SAFE:** fine. The card inputs they drive are Ioff buffers. The ANA mux only connects a selected channel, and firmware never selects an unpowered slot (FW_REQ C7.3).
+- **N12:** 33R source resistors at the MCU on SLOT_SPI_SCK, SLOT_SPI_MOSI and SLOT_RST_N (R708-R710). The MCU side nets are SLOT_*_M.
+
+### 13.2 Boot and reset safety (B2)
+- **Cards:** 47k pull-downs on HSO-5 OUT1-5_REQ, DIAG_EN and MUX_A0-2; on BRK-4 OUT1-4_REQ, DIAG_EN and MUX_A0-2; and on AI-4 SH_EN1-4.
+- **AI-4 CS_DIS polarity, from the netlist:** CS_DIS high → Q3 on → Q2 BSS84 on → IN_REF pulled to VBAT_AI → current source **off**. So the safe level is high, and CS_DIS1-4 get 47k pull-ups to +3V3_SLOT. That is the same state the baseline TCA9555 POR gave.
+- **DI-8:** GPB2/GPB3 are unused: NC, with GPPU on.
+  - Tying them to GND was rejected. A bidirectional pin on GND fails ERC (pin_to_pin), and it is a short if firmware ever drives it high.
+  - Every unused MCP23S17 pin on every card is NC with GPPU = 1 (N4).
+- **Mainboard:**
+  - `GLOBAL_OUT_ALLOW = WD_OK AND NRST_S AND SLOT_RST_N`. It uses the spare U92 gate 4 (pins 12, 13 → 11) on SH_ALLOW, instead of a new 1G11.
+  - `SLn_ARM_N` is on U107 (0x21) P10-P17, with 10k pull-ups to +3V3_SAFE.
+  - `SLn_OUT_EN_N = NAND(PWR_EN, GLOBAL_OUT_ALLOW, NOT ARM_N)`, from an SN74LVC1G04 (C7827) plus an SN74LVC1G10 (C403721) per slot. These replace the 74LVC1G00.
+  - Truth table and enable order: FW_REQ C2.3.
+
+### 13.3 Decoupling (M1)
+- 100 nF / 100 V X7R 0805 (CL21B104KCFNNNE, C28233) at every TPS1HTC30 VS: 5 on HSO-5, 4 on BRK-4, and 1 on the engine card glow driver U8. The TPS1HTC30-Q1 needs C_IC ≥ 100 nF.
+- 2.2 µF / 100 V X7R 1206 (CL31B225KCHSNNE, C170101) bulk on VBAT_FIELD (HSO-5, BRK-4) and on VBAT_ESTOP (engine card).
+- **Inrush:** at most about 2.7 µF per card × 32 V = 86 µC. Even at 10 A that charges in under 9 µs, far below the ~70 µs slot short-circuit blanking, so it cannot trip.
+- Mainboard C205-C219 removed: they were the VS caps of drivers that now sit on the cards.
+
+### 13.4 Current limits and the slot-bank limiter (M2, N13)
+| Stage | Parts | Trip / limit (min / typ / max) | Latch |
+|---|---|---|---|
+| Card channel (HSO-5, BRK-4) | TPS1HTC30 ILIM 33.2k (KCL 80/100/120 A·kΩ) | 2.41 / 3.01 / 3.61 A | per channel |
+| Slot switch (×8) | TPS48100 + 2× BSC070N10NS5 + 5 mΩ (C2903482) + ISCP 24.3k (C23348) | 10.7 / 13.6 / 16.6 A (V_SCP 53.4 / 67.6 / 83.0 mV) | 4.7 nF + 100k across TMR: latch-off, tSC ≈ 70 µs |
+| Slot bank (new, VBAT_P → VBAT_SLOTS) | TPS48100 + 2× BSC070N10NS5 + 5 mΩ + ISCP 19.6k (C22898) | 9.2 / 11.6 / 14.4 A (V_SCP 45.8 / 58.2 / 71.9 mV) | 10 nF + 100k: latch-off, tSC ≈ 148 µs |
+| Rail cut (VBAT_ESTOP) | unchanged, plus 100k across C_TMR | 15.8 / 20 / 24.8 A | latch-off; re-arm with RC_ALLOW |
+
+- The equation is TPS48100 SLUSEW1C Eq 5: R_ISCP = (I_SC × R_SNS − 19 mV) / 2 µA. The tolerance rows come from the datasheet (10.5k → 31.6/40/49.5 mV; 28k → 58.8/75/91.8 mV), interpolated.
+- **Why 9.2 A minimum for the bank, not 7 A:** the budget case is 5.0 A of slot load plus one shorted HSO channel at its 3.61 A maximum limit, which is 8.61 A. That stays under 9.2 A, so a single channel short never takes down every slot.
+- **Selectivity:** a hard short in one slot trips that slot (~70 µs) before the bank timer (~148 µs) runs out. A slot overload between 9.2 A and 10.7 A trips the bank and takes every LV slot down (caveat).
+- **F1:** worst case 14.4 A bank + 4.95 A base load = 19.4 A, which is under 200 % of F1 (10 A at room, 8 A at 149 °F). The INA237 (U86) firmware tiers cover the fuse time domain.
+- **Bank control:**
+  - BANK_EN = 0x22 P11, with a 10k pull-down: off at reset.
+  - BANK_FAULT_N = 0x22 P12, with a 10k pull-up.
+- **Bank FET thermal** (`modular/tools/railcut_thermal.py`; RthJA 50 K/W, RDS(on) 7 mΩ max):
+
+| Ambient | Bank current | Hot FET (60/40) loss | Hot FET Tj | Rise | Shunt loss (3 W part) |
+|---|---|---|---|---|---|
+| 104 °F | 5.0 A | 0.07 W | 110 °F | 6 °F | 0.12 W |
+| 104 °F | 8.61 A | 0.21 W | 123 °F | 19 °F | 0.37 W |
+| 104 °F | 9.2 A (min trip) | 0.25 W | 126 °F | 22 °F | 0.42 W |
+| 149 °F | 8.61 A | 0.24 W | 171 °F | 22 °F | 0.37 W |
+| 149 °F | 9.2 A | 0.28 W | 174 °F | 25 °F | 0.42 W |
+
+  TjMax is 302 °F. The slot switches carry at most one card's load, which is less than this.
+- **N14 DIN contacts:** the WingTAT C96 contact rating is 2 A (LCSC parameter and drawing 9001D11001 R7; contact resistance 20 mΩ max at DC 100 mA; −67…+257 °F; 1000 VAC withstand).
+  - A slot can never pass more than the bank's 14.4 A maximum. Across its 9 VBAT_FIELD contacts that is ≤ 1.6 A each.
+  - **WingTAT publishes no temperature derating curve** (caveat).
+- **N17 sense clamp:** V_SNSFH tracks DIAG_EN (3.0/3.3/3.82 V at DIAG_EN 3.3 V). Changing R_SNS alone does not bound the clamp current.
+  - R_SNS 1.1k → **910 Ω** (C23264) keeps the 3.61 A I_CL at 3.61 A × 1300⁻¹ × 910 = 2.53 V, below the 3.0 V V_SNSFH minimum.
+  - The series resistor 1k → **4.7k** (C23162) keeps the BAT54C clamp current ≤ 0.13 mA. That keeps the TMUX1208 S pin ≤ VDD + 0.25 V (BAT54 VF 240 mV max at 0.1 mA) inside its VDD + 0.5 V abs max, with about 0.33 V margin at −40 °F.
+  - Cost: about 57 µs settling, so firmware waits 0.5 ms after a mux change (FW_REQ C7.3).
+- **BRK-4 caveat:** the coil limit is now 2.41 A minimum. A coil above 2.4 A needs an interposing relay.
+
+### 13.5 Faults, ID bus, write protect, rail cut (M4-M8, N8-N11)
+- **M5 / N10, the third TCA9555 at 0x22** on I2C2 (A1 = +3V3_SAFE):
+  - P00-P07 = SL1-8_CARD_FAULT_N (10k pull-ups);
+  - P10 = ENG_PRESENT_N (engine slot c31; the card grounds it; 10k pull-up);
+  - P11 = BANK_EN; P12 = BANK_FAULT_N; P13-P17 spare.
+  - U106 (0x20) P1 = SLn_PWR_FAULT_N, shared by TPS48100 FLT and TPS2553 FAULT. U107 (0x21) P1 = SLn_ARM_N.
+  - All three INTs go to SLOT_EXP_INT_N.
+- **M4:** PB5 drives ID_MUX_RST_N. Its 100k pull-down R544 is removed; the 10k pull-up R707 stays. Recovery procedure: FW_REQ C7.4.
+- **M6:** D126 is now an SMDJ36CA (Littelfuse, C224075, 4,813 in stock). Datasheet values:
+  - VR 36 V; VBR 40.0-44.2 V at 1 mA.
+  - VC 58.1 V at Ipp 51.6 A (10/1000 µs, 77 °F); αT 0.1 %/°C, so VC is about 60.4 V at 149 °F.
+  - That stays under the LM74700 ANODE 65 V abs max: 6.9 V margin at 77 °F, 4.6 V hot. On the post-ideal-diode side it is also under the TPS1HTC30 VS 64 V continuous rating (81 V for < 100 µs).
+  - For comparison, the SMDJ40CA clamps at 64.5 V at 46.5 A, so it had no margin.
+  - **S7-N13, stated honestly:** this is a clamp at the 10/1000 µs rating only. It does not make the board load-dump proof (`docs/INSTALL_SAFETY.md`, load dump section). Standoff is now 36 V, at the top of the 36 V / 60 s jump-start window, so leakage rises there. That is acceptable for a TVS that is not continuously biased above 32 V.
+- **M7:** PB6 (ID_WP_UNLOCK, 100k pull-down R545) drives an AO3400A (C20917).
+  - AO3400A: VGS(th) 0.65 / 1.05 / 1.45 V; RDS(on) ≤ 48 mΩ at 2.5 V.
+  - IRLML0100 was rejected: its 2.5 V maximum VGS(th) is marginal with a 3.3 V gate.
+  - The FET pulls ID_WP low. The 10k ID_WP pull-up is kept; it is now R734 after renumbering. Solder jumper JP10 is removed.
+  - **N8:** J31/J32 have no spare pin. J32.12 is now SCL and J32.16 is SDA, and the 4 GNDs are kept. So the HV meter WP stays on its TP3 bench pad (FW_REQ C4.3, INSTALL_SAFETY).
+- **M8 / N9:** U102 is now an SN74LVC1G11 (C22046): RC_EN = WD_OK AND ESTOP_OK AND RC_ALLOW. RC_ALLOW is PB7, keeping the 100k pull-down R546. The rail cut latches off (100k across C_TMR). The pre-crank proof test and the OUT_FAULT_N masking rule are in FW_REQ C7.5.
+- **N7:** C400 (LM74700 VCAP) is now 0.47 µF / 50 V X7R 0805 (C13967).
+- **N11:** MUX_A0-2 are card-local MCP outputs. The mainboard SLOT_ANA mux selects the slot (FW_REQ C7.3).
+- **N5:** SLOT_CS_EN ordering is in FW_REQ C7.1.
+- **N1:** the AI-4 ADS1115 value now reads "@0x48".
+- **N2 (dead logic removed):** U91 gates 3-4 and U92 gates 1-2 have their inputs on GND and their outputs NC. RN1 R3/R4 and U31 P10-P13 are NC. The AI_SH_EN3-6 pull-downs R160/R171/R182/R193 are removed.
+- **Ref renumbering:** the mainboard uses one shared counter for new parts, so new refs from R700 / C400 / U100 / Q100 onward moved. Examples:
+  - rail cut U101, U102 1G11;
+  - ID muxes U103/U104, '138 U105, expanders U106 (0x20), U107 (0x21), U108 (0x22), slot ANA mux U109;
+  - bank limiter U110, slot 1 U111-U115 (TPS48100, TPS2553, 1G02, 1G04, 1G10);
+  - ID_WP FET Q103, bank FETs Q104/Q105;
+  - 33R R708-R710, ID_WP pull-up R734.
+
+  The full list is in the regenerated BOM.
+
+### 13.6 Thin stock (N16)
+| Part | Stock (Nov 23) | Alternate |
+|---|---|---|
+| AT24CS32-STUM-T (C147891, SOT-23-5, on every card) | 243 | AT24CS32-SSHM-T SOIC-8 (C615972, 92) or AT24CS32-MAHM-T UDFN (C2061575, 228). Neither is pin-compatible: a footprint change. Buy a reel for the build early. |
+| TPS48100QDGXRQ1 (C43131316) | 728 (11 per controller now) | No stocked pin-compatible alternate found. Order ahead. |
+| SN74LVC1G10DBVR (C403721) | 3,580 LCSC / 4,044 JLC (8 per controller) | No alternate verified this pass. Check the pinout of any other-brand 1G10 before substituting. |
+| WingTAT DIN C96 female (C5173363) | 983 (9 per controller) | No alternate verified this pass (footprint is WingTAT-specific). |
+
+### 13.7 Part counts and cost after Pass 1
+| Board | Parts (fitted) |
+|---|---|
+| Mainboard (236 BOM lines) | 926 (was 908) + 11 DNP |
+| ENGINE / DI-8 / AI-4 / HSO-5 / BRK-4 | 158 / 82 / 119 / 97 (×2) / 83 (was 156 / 76 / 104 / 76 / 64) |
+| HV meter | 221 |
+| **Example build, combined (236 lines)** | **1,783** (was 1,681) |
+
+| True net cost delta | qty 1 | qty 10 (per unit) |
+|---|---|---|
+| Baseline mainboard + meter (tag) | −$330.25 | −$279.37 |
+| Reworked mainboard BOM | +$232.97 | +$195.77 |
+| HV meter BOM | +$65.33 | +$54.60 |
+| Card BOMs | +$133.87 | +$112.88 |
+| Card PCBs + PCBA fees + extended-part loading [E/DS] | +$200.80 | +$22.08 |
+| Bays, guides, faceplates [E] | +$29.00 | +$17.50 |
+| **Total** | **+$331.72** (was +$327.38) | **+$123.46** (was +$120.19) |
+
+Prices are live JLC parts API prices taken Nov 23, 2026 ~3:40 PM HST (`bom/lcsc_prices.csv`).
+
+### 13.8 Sheet sizes
+- AI-4, HSO-5 and BRK-4 grew past A3 and are now one A2 page each, like the engine card. DI-8 stays A3.
+- schdraw now masks label text bodies when packing, so clusters can no longer slide over a label. J31 nets on mtr_if are drawn as centred global labels.
