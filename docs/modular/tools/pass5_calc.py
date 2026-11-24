@@ -111,3 +111,37 @@ print('I_INRUSH = I_HGATE x C_OUT / CdVdT: C_OUT ~230 uF (2x100 uF + ceramics) -
 print('Turn-off: HGATE sinks 168 mA; through 1k the 22 nF can return <= 45 mA -> Q2 still off in ~0.2 us after the OV deglitch (kick_calc adds 1 us).')
 print('CdVdT discharge to the source level through 1k: tau 22 us; after an OV cut Q2 re-conducts as a follower once VBAT_P sags ~3-5 V.')
 print('C601 voltage: <= VBAT_P + 11 V (HGATE clamp) ~ 47-58 V on transients vs 100 V rating.')
+
+hdr('P5-MAJ-1 (Pass 5 review): bank U110 turn-on now charges the 8 eFuse IN caps (2.2 uF/100 V each) directly on VBAT_SLOTS')
+import io,contextlib
+with contextlib.redirect_stdout(io.StringIO()):
+    import pass3_calc as p3     # Pass 3 gate-network turn-on model (BST sag, Miller plateau), reused unchanged
+def bank_on(N,V0,Cload,vb0,K,Vt,ciss,dt=4e-9,T=2e-3):
+    n=N.n; vs=0.0; vgs=0.0; vb=vb0; vc1=0.0; vbmin=vb; ipk=0; E=0; t10=t90=None; cgs=n*(ciss-p3.CRSS_MAX)
+    for i in range(int(T/dt)):
+        vg=vs+vgs; i1=(vb-vgs)/N.R1; ic=N.ic1(vg,vc1); ib=(vc1-vs)/N.Rb; icl=N.icl(vgs,vb)
+        idd=n*p3.id_fet(vgs,V0-vs,K,Vt); dvs=idd/Cload*dt
+        cgd=p3.cgd_of(V0-vg,n); vgs+=((i1-ic-icl)*dt+cgd*(0-dvs))/(cgs+cgd); vs+=dvs
+        vc1+=(ic-ib)*dt/N.C1; pump=190e-6 if vb<10.37 else 0.0; vb+=(pump-i1+icl)*dt/N.Cbst
+        vbmin=min(vbmin,vb); ipk=max(ipk,idd); E+=idd*(V0-vs)*dt
+        if t10 is None and vs>0.1*V0: t10=i*dt
+        if t90 is None and vs>0.9*V0: t90=i*dt
+    return vbmin,ipk,E,(t90-t10)
+CB=1.185e-6   # C_BST 2.2 uF worst effective (Pass 4 m4)
+print('Load on VBAT_SLOTS at bank turn-on: Pass 4 9 x 100 nF = 0.9 uF; Pass 5 8 x 2.2 uF (+10 %, 0 V bias) + 0.9 uF = 20.3 uF worst.')
+print('The eFuse outputs stay off during the us-scale bank ramp (UVLO 5.64 V + 742 us + dVdT), so the cards are not part of this load.')
+for V0 in (12.6,32.0):
+    for lab,C in (('Pass 4',0.9e-6),('Pass 5',8*2.42e-6+0.9e-6)):
+        slow=p3.Net('slow',470,2.2e-9*1.1,10,True,Rb=1e6,zener=p3.ZH,clamp=True,Cbst=CB)
+        fast=p3.Net('fast',470,2.2e-9*0.9*0.7,10,True,Rb=1e6,zener=p3.ZH,clamp=True,Cbst=2.2e-6*1.1)
+        a=bank_on(slow,V0,C,9.27,36.0,3.82,p3.CISS_MAX); b=bank_on(fast,V0,C,12.83,30,2.86,p3.CISS_TYP)
+        hot=0.55*b[2]/b[3]; soa=p3.soa_power(32 if V0>20 else 12.6,b[3],p3.DER_149F)
+        print('  %4.1f V %s: BST-SRC min %.3f V (BST_UVLOF max 8.93 V); inrush slow %.0f A / %.1f us, fast %.0f A / %.1f us; Q106+Q107 energy %.1f mJ'%(
+              V0,lab,a[0],a[1],a[3]*1e6,b[1],b[3]*1e6,b[2]*1e3)+('; hot FET %.2f kW avg over the fast ramp vs SOA %.2f kW at Tc 149 F (65 C) = ratio %.2f'%(hot/1e3,soa/1e3,hot/soa) if lab=='Pass 5' else ''))
+print('-> BST sag unchanged (Miller plateau set by the gate network, not the load); bank SCP is blind below G1_GOOD and needs 466 us anyway: no trip.')
+print('   F1 I2t <= 224^2 x 2.7 us = %.2f A2s. VBAT_P dips ~%.1f V for us (C602 filters U2 EN/UVLO). Added to bench test MOD 17.9 #8.'%(224**2*2.7e-6,20.3e-6*32/(230e-6)))
+
+hdr('Steady-state slot dissipation (RON 34.5 mOhm max at 77 F / 25 C, 45 mOhm at 185 F / 85 C, 53 mOhm max over temperature; RthJA 32.2 C/W)')
+for I in (4.0,4.864):
+    P=I*I*0.053; print('  %.2f A: P <= %.2f W -> Tj rise <= %.0f K (JEDEC board) -> Tj <= %.0f F (%.0f C) at 149 F (65 C) ambient; TSD 329 F (165 C)'%(I,P,P*32.2,F(65+P*32.2),65+P*32.2))
+print('  Total over all slots is capped by the bank overload cutoff (6.08 A max ROOM): <= %.1f W even if one slot carries it all.'%(6.08**2*0.053))

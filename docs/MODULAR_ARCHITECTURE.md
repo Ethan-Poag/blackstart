@@ -1297,7 +1297,7 @@ U1 does not OV-trip in the realistic corner. It trips in 6 of 64 pessimistic cor
 22 nF on HGATE limits the bulk-cap inrush to 0.4–0.8 A (ramp 10–20 ms). On its own, though, it made things worse: U2 starts at its 4.96 V UVLO while Q2 is still ramping, so Q2 carries U2's 70 W in linear mode for most of the ramp. That is BSC070 SOA ratio **1.72–4.62 (exceeded)**; 10 nF is 1.40–1.66, also exceeded. As built (no CdVdT) it was 0.97–0.98, at the edge. Fix: **C602 10 µF on U2 EN/UVLO.** With R4/R5 (Thevenin 24.8k) U2 starts 31–68 ms after VBAT_P at 32 V (ramp ≤ 20 ms) and 99–219 ms at 9 V. Q2 then only charges capacitance: SOA 0.85–0.87, Q2 ΔTj 9–15 K. The DC hysteresis is unchanged.
 
 ### 17.6 U65 feed
-R1002 47 Ω 1206 sits between D120 and C225/U65 (RC 470 µs vs the µs kick). It drops 0.24 V at 5 mA. Cold crank at 9 V still gives 8.3 V at U65 IN.
+R1002 47 Ω 1206 sits between D120 and C225/U65 (RC 470 µs vs the µs kick). It drops 0.24 V at 5 mA. Cold crank at 9 V still gives 8.3 V at U65 IN. The 5 mA load is the RAIL_PLAN assumption (TLC555 + logic). Even at 50 mA the input is still 6.2 V, above the ~5.5 V the 5 V LDO needs. The 47 Ω sits ahead of C225, so the E-stop trip hold-up is not weakened.
 
 ### 17.7 Does this solve the real problem? Field service and the safety core
 The goal is a controller where a card fault cannot take down the safety core, and where a bad card is swapped, not the controller. Pass 4 failed that test: one dead short could put up to 84 V on VBAT_P, which feeds the safety core's 12 V converter, and that converter is rated 60 V. Now:
@@ -1309,6 +1309,8 @@ The goal is a controller where a card fault cannot take down the safety core, an
 What remains:
 - a short on the mainboard's VBAT_SLOTS bus still blows F1 (a mainboard fault, not a card fault);
 - the eFuse is single-source in practice until the VQFN variant has a footprint.
+- a double fault (an eFuse FET that has failed short, then a short on that card) behaves like a VBAT_SLOTS bus short: F1 clears it. The engine stops fail-safe (its outputs de-energise), and the controller needs a fuse and the faulty card replaced.
+- the TPS16630 has no reverse blocking: back-feed from an externally energised output still reaches VBAT_SLOTS (install rule, INSTALL_SAFETY, FW C7.12).
 
 ### 17.8 Parts, cost and verification
 - **Parts:** the mainboard has **991** fitted parts (was 1,067: −8 TPS48100, −16 BSC070, −8 shunts, slot gate, timer and hold-up networks; +8 eFuse sets, C601, R1001, C602, R1002). Cards are unchanged. The combined build is **1,861** parts on 254 lines.
@@ -1323,3 +1325,26 @@ What remains:
 5. **Hot-plug / power-up** at 32 V, 149 °F (65 °C), with U2 loaded to 70 W. Measure Q2 Vds and Id, and VBAT_P vs U2 EN/UVLO timing. Pass: U2 starts after the VBAT_P ramp; Q2 stays within SOA (≤ 0.9 of the 100 µs curve).
 6. **Cold crank** at 9 V: U65 IN ≥ 7 V, U2 starts ≤ 250 ms.
 7. Firmware C2.3 / C5.1 / C6.2 / C7.9 as in §16.7 #3–5, with the eFuse timings (PGOOD ≤ 24 ms).
+8. **Bank turn-on into the eFuse IN caps** (Pass 5 review P5-MAJ-1) at 12.6 and 32 V, 149 °F (65 °C): Rogowski on Q106/Q107, VBAT_SLOTS and BANK BST − SRC. Pass: inrush ≤ 250 A for ≤ 10 µs, BST − SRC ≥ 9.0 V, no bank SCP/overload trip, VBAT_P dip ≤ 4 V.
+9. During test 1, also probe a healthy slot's SLn_VBAT at the card connector: ≤ 55 V (card LM5176s are 60 V abs max; the model's 57.0 V bound is for VBAT_SLOTS before the card's input filter).
+
+### 17.10 Pass 5 review (Nov 23, 2026, HST)
+A fresh-eyes adversarial pass over the Pass 5 schematic, the models and the docs: the TPS16630 pin map against SLVSET9G Table 5-1, every changed net, the abs-max list, coordination, thermal behaviour, hot-plug and the "different kind of problem" question.
+- **Blockers: 0.**
+- **P5-MAJ-1 (fixed by analysis, no part change):** the eight 2.2 µF eFuse IN caps sit directly on VBAT_SLOTS, so the bank U110 now charges about 20 µF when it turns on (Pass 4: 0.9 µF). The Pass 3 gate-network model, reused unchanged (`pass5_calc.txt`), gives:
+  - inrush 66–74 A (slow corner) to 177–224 A (fast corner) for 1.6–8 µs;
+  - Q106 + Q107 energy ≤ 10.4 mJ, hot-FET power ratio 0.50 of the derated BSC070 SOA;
+  - BST − SRC ≥ 9.12 V (unchanged; the plateau is set by the gate network);
+  - no bank SCP trip (blind below G1_GOOD, 466 µs timer);
+  - F1 ≤ 0.14 A²s.
+  Bench test 17.9 #8.
+- **Minors (all fixed):**
+  - m1: the FW C7.12 back-feed text now names the eFuse body diode (the TPS16630 has no reverse blocking).
+  - m2: the slot block titles said 4.19–4.82 A (datasheet row). They now say 4.14–4.86 A, with the 1 % resistor.
+  - m3: the eFuse latch also clears on a UVLO low-high (deep crank, bank off/on). FW C5.1 now says to hold EN_N high on a faulted slot. With firmware dead, the retry is limited to 4.86 A and re-latches.
+  - m4: steady-state eFuse heat: 0.85 W at 4.0 A, Tj ≤ 198 °F (92 °C) at 149 °F (65 °C) ambient. All slots together are ≤ 2.0 W (capped by the bank overload cutoff).
+  - m5: the healthy-slot 57.0 V is a bound before the card filter. Added a measurement at the card (bench test 17.9 #9).
+  - m6: the double-fault and no-reverse-blocking residuals are written into 17.7.
+  - m7: C602 also slows U2's EN/UVLO on the way down (τ 124–273 ms). U2 rides through a fast dip below its UVLO setpoint instead of stopping, down to its internal VCC UVLO. This is accepted: DESIGN_NOTES already relies on the LM5176 riding through cranking down to about 4 V, so a later stop only extends that. The DC thresholds are unchanged. Bench test 17.9 #6 covers start-up at 9 V.
+- **Different kind of problem:** what Pass 5 adds is a new load on the bank at turn-on (P5-MAJ-1) and the loss of reverse blocking (m1). Neither reaches the safety core.
+- **Verdict: READY** for the bench tests in 17.9 (layout still frozen; nothing ordered).

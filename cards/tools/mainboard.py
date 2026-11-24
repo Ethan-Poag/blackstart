@@ -331,7 +331,7 @@ for s in range(1,9):
            R(S,R10K,f'{k}_EN_N','+3V3_SAFE'),R(S,R10K,f'{k}_PRESENT_N','+3V3_SAFE'),R(S,R10K,f'{k}_PWR_FAULT_N','+3V3_SAFE'),R(S,R10K,f'{k}_INT_N','+3V3_SAFE'),
            R(S,R10K,f'{k}_ARM_N','+3V3_SAFE',Description='ARM_N high (expander input at reset) = outputs disarmed'),
            R(S,'C17976','+3V3_SAFE',f'{k}_3V3_ID',Description='+3V3_ID always on via 68R 1206 (EEPROM + OUT_EN_N / ID_WP pull-ups only)')]
-    blocks_sp.append((f'Slot {s}: TPS16630 eFuse 4.19-4.82 A limit, 1 us SCP, latch, OVP 55.6 V, +3V3, PWR_EN / ARM / OUT_EN_N',refs))
+    blocks_sp.append((f'Slot {s}: TPS16630 eFuse 4.14-4.86 A limit, 1 us SCP, latch, OVP 55.6 V, +3V3, PWR_EN / ARM / OUT_EN_N',refs))
 R('estop','C17969','D120_K','U65_IN',ref='R1002',Description='Pass 5: 47R 1206 ahead of C225/U65 (TPS7B6950 45 V abs max): with C225 limits the VBAT kick at U65 IN to <= 31.8 V')
 add('io_core','Diode:BAT54C','D','C37704',{'1':'GLOW_SNSM','2':'ESTOP_TRIP_SNSM','3':'+3V3_SAFE'},Description='Relocated clamp: GLOW_SNSM + ESTOP_TRIP_SNSM (replaces D128 glow half / D135)')
 R('io_core',R10K,'EXP25_P12_SPARE','+3V3_SAFE',Description='U76 P12 (was AUX10_RB_N) spare input pull-up')
