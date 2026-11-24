@@ -162,7 +162,7 @@ Boundary parts (shared bias, decoupling) are heuristic, the same caveat as `revi
 
 ### 2.4 Per-slot power budget
 
-> **Current state (Pass 3, §15):** the slot shunt is 5 mΩ (SCP 10.6/13.5/16.6 A), the LV slots share a bank switch (SCP 21.2/28.6/36.3 A) plus a hardware overload cutoff (HOT 3.15–3.76 A, ROOM 5.11–6.08 A), and +5V_SLOT is gone. The table below is retained only as the Phase 1 proposal; use §15 for live values.
+> **Current state (Pass 4, §15 + §16):** the slot shunt is 5 mΩ (SCP 10.6/13.5/16.6 A), the LV slots share a bank switch (SCP 21.2/28.6/36.3 A) plus a hardware overload cutoff (HOT 3.15–3.76 A, ROOM 5.11–6.08 A), and +5V_SLOT is gone. The table below is retained only as the Phase 1 proposal; use §15 and §16 for live values.
 | Rail | Per-slot limit | Hardware | Notes |
 |---|---|---|---|
 | VBAT_FIELD | **6 A continuous [E]**; pulses up to the slot trip | TPS48100-Q1 + 2× BSC070N10NS5 + shunt, the same circuit as fuel/crank (`bom/design_spec.md`) | With a 10 mΩ shunt the trip scales to about 7.7/9.9/12.3 A (min/typ/max). I derived that from the 20 mΩ figure of 3.86/4.97/6.14 A; check it against the datasheet in Phase 2. 9 contacts × 2 A = 18 A rated, so 6 A leaves 3× margin |
@@ -812,6 +812,8 @@ Prices are live JLC parts API prices taken Nov 23, 2026 ~3:40 PM HST (`bom/lcsc_
 - schdraw now masks label text bodies when packing, so clusters can no longer slide over a label. J31 nets on mtr_if are drawn as centred global labels.
 
 ## 14. Pass 2 review fixes (Nov 23, 2026, HST; review `/workspace/review/modular_pass2.md`)
+> **Superseded by §15 and §16.** This section is the Pass 2 log, kept for history. Its values are not current: the bank SCP is 21.2/28.6/36.3 A (not 22.4 A), the slot latch is 8–21 µs (+4.3 µs) with 1 nF C0G (not 36–103 µs with 4.7 nF), a slot short is guaranteed to clear in its own slot only at the admitted budgets (§15.3), and ROOM/HOT selection uses the TS5A3166 (U112) with a 10k default pull-down (R773), not Q108. Use §15 and §16 for live values.
+
 All numbers come from `modular/tools/pass2_calc.py` (output `modular/pass2_calc.txt`). Datasheets and JLC stock: `split_evidence/modular_pass2/`. Rebuild: `sh docs/modular/tools/pass2_rebuild.sh`.
 
 ### 14.1 Slot/bank selectivity (MAJ-1)
@@ -949,6 +951,8 @@ Prices are live JLC parts API prices, Nov 23, 2026, HST (`bom/lcsc_prices.csv`, 
 
 
 ## 15. Pass 3 review fixes (Nov 23, 2026, HST; review `/workspace/review/modular_pass3.md`)
+> **Pass 4 changed some of these values (§16):** slot C_TMR 4.7 nF → 1 nF C0G (latch 8.0–20.9 µs + 4.3 µs, not 36–103 µs), C_BST 1 µF 0805 → 2.2 µF 1206, bank latch minimum 466 µs (−10 % temperature added; 517 µs was tolerance only), time grading 18.5×, R773 100k → 10k, and every TPS48100 VS now has a diode-isolated hold-up. Where §15 and §16 differ, §16 wins.
+
 All numbers come from `docs/modular/tools/pass3_calc.py` (output `docs/modular/pass3_calc.txt`). Evidence, stock and live prices: `docs/split_evidence/modular_pass3/`. Rebuild: `sh docs/modular/tools/pass3_rebuild.sh`. Temperatures are °F, with °C in parentheses.
 
 ### 15.1 Slot-power gate network (B1, MAJ-C, N11; bank U110 and slots 1–8)
@@ -1100,3 +1104,120 @@ The preload formula is t = τ·ln((I − I0)/(I − Ith)). τ_min uses −1 % R,
 - Netlist audit: 1057 same, 127 changes, 0 unexplained, 0 orphans. Mating: 413 contacts wired on both sides, 166 NC on both sides, 7 card-NC, 6 open straps.
 - Drawn vs intended: 3044 pins, 0 errors. BOM ↔ schematic: 0 mismatches.
 - Each card is 1 page; genctl_meter is 2 pages.
+
+## 16. Pass 4 review fixes (Nov 23, 2026, HST; review `/workspace/review/modular_pass4.md`)
+All numbers come from `docs/modular/tools/pass4_calc.py` (output `docs/modular/pass4_calc.txt`). Evidence, stock and live prices: `docs/split_evidence/modular_pass4/` (README there). Rebuild and verify: `sh docs/modular/tools/pass4_rebuild.sh`. Temperatures are °F, with °C in parentheses. F1 stays 10 A (Ethan's ruling).
+
+### 16.1 P4-MAJ-1: VS hold-up on all 9 TPS48100s (what SLUSEW1C actually says)
+The problem: in a dead slot short VBAT_SLOTS (and VBAT_P behind it) collapses within microseconds. In Pass 3 each slot VS sat directly on VBAT_SLOTS, so VS fell below the 4 V SCP minimum (reviewer: 0.70–3.14 V at 12.6 V) and the UVLO tripped first: hiccup, and 33–93 A²s into F1.
+
+TI SLUSEW1C (Jan 2024, rev. Jun 2026; copy in `split_evidence/modular_pass1/tps48100-q1_SLUSEW1C.txt`), read directly before wiring:
+- §5.1 abs max: "VS, CS+, CS– to GND –65 … 100 V", "SRC to GND –65 … 100 V", "CS+ to CS– –1 … 100 V", "G1PU, G1PD, G2, BST to SRC –0.3 … 19 V". **There is no VS-to-CS± or VS-to-SRC limit**, so VS held at 32 V while CS+, CS– and SRC are at 0 V is inside the table.
+- §5.3: "Minimum voltage on VS pin for Short Circuit Protection 4 V"; "VS, SRC to GND 22 nF" minimum; "BST to SRC 0.1 µF" minimum, no maximum.
+- §8.3 (power supply recommendations): "TI recommends to place a RVS – CVS filter between the input supply line and VS pin … TI recommends a RVS value around 100Ω." Fig 8-11's D1 is the input TVS, not a series diode.
+- §7.3.3.2: "Toggle INP1 or EN/UVLO (below V(ENF)) or power cycle VS below V(VS_PORF) to reset the latch." V(VS_PORF) is 1.7/2.33/3.06 V.
+- Supporting: TI FMEA SFFS636 Table 4-2 lists CS– or SRC shorted to GND as "Short to GND protection starts", that is, normal function with VS powered (`sffs636_tps4810_fmea.txt`). Fig 7-6 itself runs VS = 48 V with CS± near GND. TI E2E 1298005: 300 Ω in series with VS "should be ok … use with 1uF cap at Vs"; E2E 1621422: SCP is gated by VG_GOOD.
+- **Not specified anywhere:** the SCP comparator's CS+/CS– common-mode range in high-side mode (CS_SEL = GND) while CS± falls toward 0 V. This is a bench item (16.7 #1).
+
+The fix, per controller: feed → **1N4148W → 100R (RVS) → VS**, **1 µF / 100 V X7R 1206** (CL31B105KCHNNNE, C13832) VS to GND. New refs D241–D249, R921–R929, C521–C529 (own ref range, so every Pass 3 designator keeps its number; netlist diff vs Pass 3 = exactly these 27 parts + the value changes below + VS pin 20 of U110/U115–U150).
+
+**Feed origin.**
+- **Slots 1–8 from VBAT_SLOTS** (the bank output). With the bank off, slot VS is 0 V: the slot controllers sit in POR, draw nothing from VBAT_P, and a bank restart resets every slot latch (same behaviour as before, which C7.9 relies on). Feeding the slots from VBAT_P would park 8 × 4.6 µA plus diode leakage on the battery and keep 8 controllers powered with CS+ = 0 V for no benefit.
+- **Bank U110 from VBAT_P.** Both feeds are inside §5.1/§5.3.
+
+**Numbers (pass4_calc.txt):**
+
+| VBAT | VS start | C_VS effective (bias, tol, temp, aging) | Time to 4 V (559 µA + 50 µA leakage) |
+|---|---|---|---|
+| 12.6 V | 11.79 V | 0.648 µF | 8.3 ms |
+| 24 V | 23.19 V | 0.539 µF | 17.0 ms |
+| 32 V | 31.19 V | 0.462 µF | 20.6 ms |
+
+- ≥ 8.3 ms of VS ≥ 4 V against a 25.2 µs maximum slot latch: more than 100× margin. Steady VS drop is 0.81 V; RVS dissipates 31 µW. Recharge τ is 100 µs, diode peak ≤ 0.32 A.
+- Voltage stress: VBAT_P TVS SMBJ33CA clamps 53.3 V @ 11.3 A (D1 SMDJ36CA about 58 V upstream), so C_VS is a 100 V part. 1N4148W VRRM 75 V vs ≤ 39.4 V reverse in the model.
+- The Samsung DC-bias server returned "Server Error" this pass, so C_VS uses assumed bounds (−40 % at 32 V, −15 % at 12 V) plus −10 % tolerance, −10 % temperature and −5 % aging. These are conservative for a 100 V 1206; bench-measure.
+
+**CS+/CS– common mode.** With VS held, the controller sees CS+ = CS– ≈ 0 V (or slightly negative while VBAT_SLOTS rings to −3…−8 V in the lumped model; the abs max is −65 V). The datasheet allows it and the FMEA calls it normal, but does not give a guaranteed SCP comparator response there. The reviewer's concern is answered as far as the documents go; the rest is bench test 16.7 #1.
+
+**Engine card U4/U6** (fuel/crank, VS on VBAT_ESTOP): **left as is.** They are outside F1's slot bank, behind the U101 rail cut, and a collapse there fails safe (fuel and crank drop). Adding the same hold-up would make their latch deterministic; it is noted as an option, not done, to keep the engine card unchanged.
+
+### 16.2 Shorter slot C_TMR (P4-MAJ-1 #2, m1)
+C_TMR 4.7 nF X7R → **1.0 nF C0G 50 V 5 %** (YAGEO CC0603JRNPO9BN102, C106246, 1.35 M in stock) on all 8 slots, still with 100k across it (latch-off).
+
+| C_TMR | t_SC min / typ / max | Latch ≤ (+4.3 µs prop) | Time grading vs bank 466 µs min |
+|---|---|---|---|
+| 4.7 nF X7R (Pass 3) | 32.2 / 63.5 / 111.4 µs | 115.7 µs | 4.0× |
+| 1.5 nF C0G | 12.0 / 20.3 / 31.4 µs | 35.7 µs | 13.1× |
+| **1.0 nF C0G (fitted)** | **8.0 / 13.5 / 20.9 µs** | **25.2 µs** | **18.5×** |
+
+- Bank 68 nF minimum is now **466 µs** (−10 % tolerance and −10 % temperature; Pass 3's 517 µs used tolerance only).
+- Latch holds: I(TMR_SRC_FLT) max 4.8 µA × 100k = 0.48 V < V(TMR_SC) min 0.924 V, independent of C.
+- No inrush nuisance trip: SCP is gated by G1_GOOD (5.47 V min); the load-charging Miller plateau ends at Vgs 4.22 V (slow corner) / 3.63 V (fast corner), before the comparator is looked at.
+
+**Dead slot short, hold-up fitted, 1.0 nF, Tc 149 °F (65 °C), hot FET 55 % share, reviewer grid** (Rb 15/35 mΩ × Lb 0.5/2 µH × ESR 80/250 mΩ × Rd2 12/25 mΩ, slot loop 50 nH):
+
+| VBAT | Slot VS min | Bank UVLO min | Bank I > 21.2 A | F1 I²t | Hot FET ΔTj | VBAT_P peak | Harness I at latch |
+|---|---|---|---|---|---|---|---|
+| 12.6 V | 11.78 V | 2.07 V | ≤ 26 µs | ≤ 0.8 A²s | 11 K | 27.6 V | ≤ 218 A |
+| 24 V | 23.18 V | 3.95 V | ≤ 26 µs | ≤ 3.0 A²s | 38 K | 52.0 V | ≤ 415 A |
+| 28.8 V | 27.98 V | 4.74 V | ≤ 26 µs | ≤ 4.3 A²s | 55 K | 62.0 V | ≤ 498 A |
+| 32 V | 31.18 V | 5.26 V | ≤ 26 µs | ≤ 5.3 A²s | 68 K | 68.7 V | ≤ 554 A |
+
+- Slot VS ≥ 4 V and no UVLO crossing (UVLOF max 1.19 V) in every corner: the slot latches, the bank does not, no hiccup. F1 sees ≤ 5.3 A²s against 115 A²s (77 °F) / ~74 A²s (149 °F) melt.
+- For comparison, the old 4.7 nF with hold-up still hiccups at 12.6 V (UVLO trips first) and puts up to 41 A²s into F1 at 32 V; 1.5 nF reaches Tj 327 °F (164 °C) and was rejected.
+- **VBAT_P overshoot (OPEN ITEM, not fixed in Pass 4):** when the slot latches, the harness energy ½·Lb·I² (about 0.3 J at 554 A and 2 µH) dumps into VBAT_P. Worst of the grid, lumped model:
+
+  | Clamp model | 24 V | 28.8 V | 32 V |
+  |---|---|---|---|
+  | SMBJ33CA only (table above) | 52.0 V | 62.0 V | 68.7 V |
+  | + D1 SMDJ36CA at BAT_IN (as built) | 50.4 V | 58.7 V | 64.2 V |
+  | SMBJ33CA → SMDJ33CA 3 kW, + D1 | 48.8 V | 55.9 V | 60.5 V |
+
+  Parts on VBAT_P: LM5176 55 V, LMR36506 65 V, TPS1HTC30 (U68) 64 V, LM74800 (U1) 70 V, INA237 85 V, and 50 V electrolytic/MLCCs. At a 24 V battery the peak reaches the 50 V capacitor ratings; at 28.8–32 V it exceeds the LM5176's 55 V. A bigger TVS alone does not fix it. This gives the existing VBAT_P surge open item (DESIGN_NOTES s3c6f, "needs surge test") a defined source. Pass 3 was worse (4.7 nF slot timer: up to 95.2 V in the same model). **Needs a decision:** a VBAT_P clamp sized for the harness energy, a slower slot turn-off (trading FET energy), or a lower maximum battery voltage; plus bench test 16.7 #6.
+
+**m1, on-state dead short at 32 V, Tc 149 °F (65 °C)** (ZthJC Diagram 4 superposition, RDS(on) 11.5 mΩ at 257 °F (125 °C)):
+
+| C_TMR | Rd2 | Hot FET peak | > 320 A for | E | Tj |
+|---|---|---|---|---|---|
+| 4.7 nF | 12 mΩ | 352 A | 90.9 µs | 147 mJ | 652 °F (344 °C) |
+| **1.0 nF** | **12 mΩ** | **334 A** | **0.98 µs** | **22 mJ** | **272 °F (133 °C)** |
+| **1.0 nF** | **25 mΩ** | 275 A | 0 | 15 mJ | 234 °F (112 °C) |
+
+Tj stays below 302 °F (150 °C) in every corner. **Linear-FET fallback:** Nexperia PSMN4R8-100YSE (LFPAK56E, enhanced-SOA ASFET, Tj max 347 °F (175 °C)); LFPAK56E pins 1–3 S, 4 G, mounting base D (from the PSMN3R9-100YSF sheet of the same package; the PSMN4R8 PDF was blocked, see `nexperia_asfet_note.txt`), the same pin map as the BSC070 TDSON-8, so the symbol does not change. JLC stock 0 (consign). **Layout action:** draw the Q106/Q107/Q109–Q124 land pattern as a combined TDSON-8 / LFPAK56E pattern (the LFPAK56E gull-wing leads are longer than the TDSON-8 pads), checked against both vendors' recommended footprints, so the swap needs no PCB change.
+
+### 16.3 m4: C_BST 2.2 µF and TDRV_EN
+C_BST 1 µF / 50 V 0805 → **2.2 µF / 50 V X7R 1206** (CL31B225KBHNNNE, C50254, JLC basic, 281k stock) on all 9 channels. SLUSEW1C §5.3 sets a 0.1 µF minimum and no maximum.
+
+| C_BST | Effective worst case | BST − SRC min at 12.6/24/28.8/32 V | Margin to BST_UVLOF max 8.93 V |
+|---|---|---|---|
+| 1 µF 0805 (Pass 3; −16.3 % bias, −10 % tol, −10 % temp, −5 % aging) | 0.644 µF | 9.070/9.026/9.008/8.996 V | 66 mV |
+| **2.2 µF 1206 (−30 % bias bound, same derates)** | **1.185 µF** | **9.160/9.137/9.127/9.120 V** | **190 mV** |
+
+TDRV_EN = C_BST(max) × V(BST_UVLOR) max 9.93 V / I(BST) min 190 µA = **126 ms worst** (57 ms typical) for the first slot after BANK_EN; FLT is low until then. Firmware C2.3 now masks 150 ms, then requires 10 ms high, timeout 250 ms (was 20/10/100 ms).
+
+### 16.4 Minors
+- **m2:** R773 (BANK_OVL_ROOM pull-down) 100k → **10k**. TCA9555 internal pull-up (IIL ≤ 100 µA, resistive ≥ 55k): reset level ≤ 0.508 V at 3.3 V and ≤ 0.554 V at 3.6 V (≤ 0.783 V even at 36k), below the TS5A3166 V_IL 0.8 V, so HOT is guaranteed at reset. Driven high: 0.33 mA, VOH ≥ 3.1 V > V_IH 2.4 V.
+- **m3:** generator copies no longer inherit `Note` fields (`props_lcsc`, card copy helpers); carried baseline Notes keep their text with reference designators translated to this project (or marked "baseline Rxx"); the Pass 3 N13 symbol swaps replace "symbol kept" with the symbol used (`cards/tools/notefix.py`). One hand edit: genctl_meter C301 (baseline said "C297 exists", but C297 is a main-board part). New lint `docs/modular/tools/note_lint.py` checks all 7 projects (509 Notes): provenance vs the baseline tag, every named designator exists, DNP wording vs the DNP flag, diode "A = …, K = …" claims vs the actual pin nets, and stale phrases. **0 findings.**
+- **m5:** INSTALL_SAFETY now says the bank overload may clear itself once after a classified crank dip (C7.9), gives the slot short pulse as ≤ 25 µs at about 240–610 A (model, 12.6–32 V; was 180–400 A for ≤ 103 µs), and the bank SCP time as 0.47–1.5 ms.
+- **m6:** §14 banner, §15 pointer, this §16; pass3_calc "Q109 (overload latch)" corrected to Q108; root and regenerated sheets Rev **M-mod P4** (ac_metering too, for the C301 Note).
+- **m7:** TS5A3166DBVR is −40…185 °F (−40…85 °C). Alternatives checked: TS5A3166QDCKRQ1 (AEC-Q100) is SC-70-5 only with 82 in stock; 74LVC1G66-Q100 needs V_IH 3.5 V at 5 V and fails from 3.3 V logic; TMUX1101 is not AEC-Q100 and has 0 SOT-23 stock. **Kept**, with a layout rule (in its Description and the sheet Notes): U112 ≥ 15 mm from R760, Q106, Q107 and U110.
+- **m8:** stock today (JLC, Nov 23, 2026, HST): TPS48100QDGXRQ1 **728** (10 per controller → 72 controllers), TLV3012BIDBVR **695** (single source), INA281A2IDBVR 2,381, TS5A3166DBVR 5,706, BSC070N10NS5 6,690, 74LVC1G74DP-Q100H 20,363, C13832 79,796. **Pre-buy** TPS48100, TLV3012B and INA281A2 for the prototype run plus spares before ordering PCBA.
+- **m9:** FW C6.2 new rule: if more than one channel on a card is faulted at the first scan, set ARM_N and EN_N high for that card within ≤ 20 ms of the fault (no per-channel scan). Two channels in limit trip the bank in ≥ 27.4 ms HOT / 25.8 ms ROOM (Pass 3 filter τ min), so the rule keeps 7.4 / 5.8 ms margin.
+
+### 16.5 Parts and cost
+- Mainboard: **1,067** fitted parts (was 1,040, +27: 9 × 1N4148W, 9 × 100R, 9 × 1 µF / 100 V). Value swaps: C_BST × 9, C_TMR × 8, R773. Cards unchanged: engine 160, DI-8 84, AI-4 122, HSO-5 99, BRK-4 85. Combined example build: **1,937** parts on 249 lines.
+- True cost delta: **+$338.73** at qty 1 and **+$129.17** at qty 10 (Pass 3: +$342.62 / +$133.93). Split: Pass 4 parts **+$0.95** per controller at today's prices; live price drift **−$4.84** (TPS48100 $3.52 → $3.12 × 10 on the mainboard, and the engine card). Two new extended parts on the mainboard order (C13832, C106246) add about $6.14 of JLC loading per order, not per board.
+
+### 16.6 Verification
+- ERC: 0 errors, 0 warnings on all 7 projects (BANK_VS and SL1–8_VS carry PWR_FLAGs: they are fed passively through the diode and RVS).
+- Netlist audit: 1057 same, 127 changes, 0 unexplained, 0 orphans. Mating: 413 wired both sides, 166 NC both sides, 7 card-NC, 6 open straps.
+- Drawn vs intended: 3098 pins, 0 errors. BOM ↔ schematic: 0 mismatches. Note lint: 0 findings.
+- Each card is 1 page; genctl_meter is 2 pages. PNGs read in full and in crops (slot 1, bank, overload block, Notes, title blocks).
+
+### 16.7 Bench tests before first field use (replaces §15.6)
+1. Dead short on each slot and on VBAT_SLOTS at 12.6 / 24 / 32 V, real battery and harness, at 77 °F and 149 °F (25 and 65 °C). Probe slot VS and bank VS (must stay ≥ 4 V), CS+/CS– to GND (common mode while the comparator must still act), FLT latch retention, Vgs < 17 V and BST − SRC > 9.0 V. Pass: the slot latches in ≤ 25 µs, the bank does not trip, no UVLO hiccup, F1 intact.
+2. Enable into a dead short at 32 V and 149 °F (65 °C): per-FET current with a Rogowski probe, Vds and VBAT_P. Fail if the single-FET energy/Tj estimate exceeds the BSC070 limits; then fit the PSMN4R8-100YSE.
+3. Overload trip curve in HOT and ROOM, cold and preloaded at budget + 3.61 A (≥ 55 ms); leakage of the 185 °F (85 °C) filter node; confirm R773 holds HOT through an expander reset.
+4. Firmware C6.2: single-channel latency ≤ 25 ms (blank 0 / 15 / 20 ms, BRK-4 OPEN pulse), and two channels shorted together: card cut ≤ 20 ms.
+5. Firmware C7.9 and C2.3/TDRV_EN: measure FLT low time after BANK_EN with 2.2 µF C_BST at 12.6 and 32 V, cold and hot (expect ≤ 126 ms); crank-dip and dead-short recovery, no endless retry, `SLOT_SHORT_LOCKOUT`, one classified crank unlatch.
+6. VBAT_P overshoot when a slot latches (32 V, short harness): peak at the SMBJ33CA and at the 40 V parts on VBAT_P.

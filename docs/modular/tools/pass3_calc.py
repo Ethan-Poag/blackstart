@@ -217,7 +217,7 @@ for V0 in (12.6,24,32):
         if vinf>=1.083: print('VS %.1f V dips to %.1f V: node settles at %.2f V >= UVLOF min 1.083 V -> no UVLO turn-off'%(V0,Vd,vinf)); continue
         t=tau_min*math.log((v0-vinf)/(1.19-vinf))+2.8e-6
         print('VS %.1f V dips to %.1f V: UVLO node %.2f V -> UVLOF max 1.19 V after >= %.0f us (> slot SCP latch-off max 103 us)'%(V0,Vd,v0,t*1e6))
-print('turn-on delay added: <= 5 tau max = %.2f ms; Q109 (overload latch) discharges the cap through AO3400A in < 1 us'%(5*Rth*4.7e-9*1.1*1e3))
+print('turn-on delay added: <= 5 tau max = %.2f ms; Q108 (overload latch; Pass 4 m6: was misprinted Q109) discharges the cap through AO3400A in < 1 us'%(5*Rth*4.7e-9*1.1*1e3))
 print('Bulk would not help: holding VBAT_SLOTS above 4 V through a 300 A, 100 us short needs C >= 300 A*100 us/8.6 V = %.1f mF'%(300*100e-6/8.6*1e3))
 
 # ================= MAJ-D: VS/SRC caps =================

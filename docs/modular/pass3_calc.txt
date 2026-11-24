@@ -99,7 +99,7 @@ VS 24.0 V dips to 4.0 V: UVLO node 5.10 V -> UVLOF max 1.19 V after >= 207 us (>
 VS 24.0 V dips to 6.0 V: node settles at 1.28 V >= UVLOF min 1.083 V -> no UVLO turn-off
 VS 32.0 V dips to 4.0 V: UVLO node 6.80 V -> UVLOF max 1.19 V after >= 235 us (> slot SCP latch-off max 103 us)
 VS 32.0 V dips to 6.0 V: node settles at 1.28 V >= UVLOF min 1.083 V -> no UVLO turn-off
-turn-on delay added: <= 5 tau max = 0.55 ms; Q109 (overload latch) discharges the cap through AO3400A in < 1 us
+turn-on delay added: <= 5 tau max = 0.55 ms; Q108 (overload latch; Pass 4 m6: was misprinted Q109) discharges the cap through AO3400A in < 1 us
 Bulk would not help: holding VBAT_SLOTS above 4 V through a 300 A, 100 us short needs C >= 300 A*100 us/8.6 V = 3.5 mF
 
 == MAJ-D: 100 nF / 100 V 0805 X7R (CL21B104KCFNNNE) on VBAT_SLOTS (U110 SRC + 8 slot VS) and on each SLn_VBAT

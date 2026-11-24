@@ -535,6 +535,7 @@ Sources read this session: SN65DSI83 SLLSEC1I; PCA9306 SCPS113O; SN74LVC1T45 SCE
 - Max operating battery 31 V. OV-trip minimum margin vs 31 V = 32.39 − 31 = **1.39 V** (4.5 %) [INFERRED]. Resistor TCR is not in the stack; 0.1 % resistors are an option.
 - After an OV trip the load may stay off until the battery falls below OV falling (as low as **29.57 V** min) [INFERRED, divider_check.md §7].
 - **OPEN RISK (needs surge test):** D1 clamp (old SMDJ58CA 93.6 V; new SMDJ36CA 58.1 V per product page, PDF not opened) can still reach VBAT_P during the 4-5.4 µs OV turn-off (DS p7). LM2904B on VBAT_P is 40 V abs max (Compliance citation, not opened) and D2 SMBJ33CA clamps at 53.3 V. NOT VERIFIED.
+  - Modular Pass 4 (Nov 23, 2026, HST): a dead LV-slot short that the slot switch cuts in ≤ 25 µs dumps the harness energy into VBAT_P: 50.4 / 58.7 / 64.2 V peak at 24 / 28.8 / 32 V in the lumped model with D1 and D2. See docs/MODULAR_ARCHITECTURE.md §16.2 (open item) and bench test §16.7 #6.
 - **Supply assumption:** a 3 kW SMC TVS will not survive an unsuppressed 24 V alternator load dump. The board assumes a battery-backed, suppressed 35 V-class supply; it is NOT designed for an unsuppressed load dump (Ethan's decision 2026-10-27). See docs/INSTALL_SAFETY.md.
 - SUPERSEDED (N4/m7-sch 3c): no on-board fuse; battery net BAT_IN; the battery lead is fused in the power box (F1) at <=10 A standard (non-time-delay), >=58 V DC. Historical: F1 is **10 A** (Ethan's requirement). Any 5 A F1 figure in reviewer files (review/cur/final_power_spec.md) is not adopted.
 
