@@ -10,6 +10,10 @@ Same refs and values as m7-modular (MOD sections 19/20, Pass 8 resistor fix). Ma
 import os,re,uuid
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 fn=os.path.join(ROOT,'power.kicad_sch'); s=open(fn).read()
+# P7 review: notes that still said U5 is "always on" (idempotent text fixes)
+for old,new in (('+3V3_BK (always on); TPS2116','+3V3_BK (EN = R1125/R1126 divider from VBAT_P: on above 3.6-4.25 V; held off with U2 by the Q2 hold-off, Batch 34); TPS2116'),
+                ('always-on 3.3V from battery, 65V abs max','3.3V backup from battery (EN divider R1125/R1126 + Q2 hold-off, Batch 34), 65V abs max')):
+    if old in s: s=s.replace(old,new); open(fn,'w').write(s); print('power.kicad_sch: note updated:',old[:30])
 if '(property "Reference" "D402"' in s: print('power.kicad_sch: P7 front end already present'); raise SystemExit
 PATH='/2f7a4bb8-89ed-4e3c-b40c-67c49fede2c6/d8c05520-8978-4d93-9881-80f603685ecb'
 U=lambda: str(uuid.uuid4())
