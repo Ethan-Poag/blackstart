@@ -2,7 +2,7 @@ LCSC,Value,Qty,From
 C7498149,CR2032,1,mainboard
 C94599,MLT-8530,1,mainboard
 C28233,100n,57,ai4+brk4+di8+engine+hso5+mainboard
-C14663,100n,167,ai4+brk4+di8+engine+hso5+hv meter+mainboard
+C14663,100n,170,ai4+brk4+di8+engine+hso5+hv meter+mainboard
 C178628,100u 63V,2,mainboard
 C576517,10u,5,mainboard
 C1603,220p,1,mainboard
@@ -24,7 +24,7 @@ C1679,6.8p,2,mainboard
 none (consigned; Mouser 594-MAL223051003E3),20F 3.0V,2,mainboard
 C2932477,47u,3,mainboard
 C1621,4.7n,1,mainboard
-C57112,10n,8,mainboard
+C57112,10n,7,mainboard
 C1623,470n,13,engine+mainboard
 C15725,100n,2,ai4+mainboard
 C1945,100n,22,ai4+di8+engine+mainboard
@@ -35,6 +35,9 @@ C1872,4.7u,1,mainboard
 C1589,10n,2,di8+mainboard
 C13967,470n,1,mainboard
 C106218,4.7n,11,engine+mainboard
+C21122,22n,9,mainboard
+C31658,68n,1,mainboard
+C29936,1u,1,mainboard
 C224077,SMDJ40CA,3,engine+mainboard
 C114004,SMBJ40CA,18,brk4+engine+hso5+mainboard
 C77297,BAS70,2,mainboard
@@ -88,14 +91,14 @@ C79272,10u,1,mainboard
 C534364,BSC070N10NS5,31,engine+mainboard
 C20526,MMBT3904,36,ai4+brk4+di8+engine+hso5+mainboard
 C10493,SI2309CDS,3,di8+engine+mainboard
-C53658,IRLML0100,8,ai4+di8+engine+mainboard
+C53658,IRLML0100,9,ai4+di8+engine+mainboard
 C347476,AO3401A,1,mainboard
 C426787,BCP56-16,2,ai4+mainboard
-C20917,AO3400A,1,mainboard
+C20917,AO3400A,4,mainboard
 C22952,210k,9,mainboard
 C23184,49.9k,3,mainboard
 C23114,8.66k,1,mainboard
-C25803,100k,118,ai4+brk4+di8+engine+hso5+mainboard
+C25803,100k,131,ai4+brk4+di8+engine+hso5+mainboard
 C4216,33k,16,di8+engine+mainboard
 C23266,93.1k,1,mainboard
 C22964,27.4k,1,mainboard
@@ -112,7 +115,7 @@ C12447,40.2k,3,engine+mainboard
 C23053,43.2k,1,mainboard
 C22893,18.7k,1,mainboard
 C17927,1M,3,mainboard
-C21190,1k,67,ai4+engine+hv meter+mainboard
+C21190,1k,76,ai4+engine+hv meter+mainboard
 C4190,2.2k,8,engine+mainboard
 C17917,150R,3,mainboard
 C23162,4.7k,37,brk4+hso5+mainboard
@@ -127,8 +130,8 @@ C23186,5.1k,2,mainboard
 C22827,180k,1,mainboard
 C22913,232k,1,mainboard
 C2933354,1.1R,2,mainboard
-C17902,10k,37,ai4+brk4+di8+engine+hso5+mainboard
-C25804,10k,59,di8+mainboard
+C17902,10k,22,ai4+brk4+engine+hso5+mainboard
+C25804,10k,74,ai4+brk4+di8+engine+hso5+mainboard
 C309650,18k,8,ai4+mainboard
 C49308172,4.7k,13,di8+engine+mainboard
 C23231,68k,15,di8+engine+mainboard
@@ -138,20 +141,24 @@ C22976,2M,1,mainboard
 C22764,1.1k,2,engine+mainboard
 C23179,470R,24,mainboard
 C25811,200k,1,mainboard
-C22961,220k,1,mainboard
+C22961,220k,2,mainboard
 C2093761,2m,1,mainboard
 C22859,10R,14,engine+mainboard
 C22935,1M,6,di8+engine+hv meter+mainboard
 C22775,100R,1,mainboard
-C23140,33R,9,hv meter+mainboard
+C23140,33R,14,ai4+brk4+di8+hso5+hv meter+mainboard
 C160590,2m,1,mainboard
 C21189,0R,12,engine+mainboard
 C137808,10.5k,1,mainboard
 C22967,27k,12,engine+mainboard
+C421608,2.2k 1W,2,mainboard
 C2903482,5m,9,mainboard
-C22898,19.6k,1,mainboard
+C22808,150R,9,mainboard
+C23091,61.9k,1,mainboard
+C23031,365k,1,mainboard
+C23056,44.2k,1,mainboard
 C23348,24.3k,8,mainboard
-C17471,150R,8,mainboard
+C17976,68R,8,mainboard
 C29718,10k x4,2,ai4+mainboard
 C318884,RESET,4,mainboard
 C6077135,BTN1,12,mainboard
@@ -186,7 +193,7 @@ C22414694,TPS1HTC30AQPWPRQ1,16,brk4+engine+hso5+mainboard
 C33196,PCA9306DCUR,1,mainboard
 C7843,SN74LVC1T45DBVR,2,mainboard
 C2870250,TMP1075DSGR @0x4A,1,mainboard
-C548409,74LVC1G74DP-Q100H,1,mainboard
+C548409,74LVC1G74DP-Q100H,2,mainboard
 C7836,SN74LVC1G17DBVR,2,mainboard
 C2864837,INA237AIDGSR,1,mainboard
 C1848341,TPS26621DRCR,2,di8+mainboard
@@ -196,6 +203,8 @@ C43131316,TPS48100QDGXRQ1,12,engine+mainboard
 C22046,SN74LVC1G11DBVR,1,mainboard
 C130026,TCA9548APWR @0x70,2,mainboard
 C485077,SN74LVC138APWR,1,mainboard
+C1517405,INA281A2IDBVR,1,mainboard
+C20345924,TLV3012BIDBVR,1,mainboard
 C7394016,74LVC1G02,8,mainboard
 C7827,SN74LVC1G04DBVR,8,mainboard
 C403721,SN74LVC1G10DBVR,8,mainboard

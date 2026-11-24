@@ -1,10 +1,10 @@
-ERC report (2026-11-23T15:30:11-1000, Encoding UTF8)
+ERC report (2026-11-23T17:01:58-1000, Encoding UTF8)
 
 ***** Sheet /
 
 ***** Sheet /Power: input protection, ideal diode, 12V buck-boost, 5V, 3V3/
 
-***** Sheet /STM32H743 safety MCU (slot SPI3, slot CS decoder lines, I2C2 ID bus)/
+***** Sheet /STM32H743 safety MCU: slot SPI3, CS decoder, I2C2 ID bus/
 
 ***** Sheet /Raspberry Pi CM5/
 
@@ -12,13 +12,13 @@ ERC report (2026-11-23T15:30:11-1000, Encoding UTF8)
 
 ***** Sheet /Display: DSI->LVDS bridge, panel power, backlight, touch/
 
-***** Sheet /Core I/O kept on the mainboard: AI1/AI2 + COM ADC, DI1-4, D+, MPU, expanders, fuel/crank/glow gating, sense mux/
+***** Sheet /Core IO: AI1-2, DI1-4, D+, MPU, expanders, engine gating/
 
-***** Sheet /Backplane: ENGINE slot + 8 universal LV slots, ID muxes, slot bus/
+***** Sheet /Backplane: ENGINE + 8 LV slots, ID muxes, slot bus/
 
-***** Sheet /Slot power: bank limiter, 8x TPS48100 + TPS2553, OUT_EN_N logic/
+***** Sheet /Slot power: bank limiter, overload cutoff, 8 slots/
 
-***** Sheet /E-stop feed: J23, LM74700-Q1 ideal diode, watchdog rail cut, trip and sense/
+***** Sheet /E-stop feed: ideal diode, rail cut, bleeder, trip + sense/
 
 ***** Sheet /Metering interface J31 (HV meter ID I2C on J31.12/16)/
 
