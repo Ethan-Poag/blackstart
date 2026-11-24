@@ -121,9 +121,9 @@ C23053,43.2k,1,mainboard
 C22893,18.7k,1,mainboard
 C17927,1M,3,mainboard
 C21190,1k,78,ai4+engine+hv meter+mainboard
-C4190,2.2k,10,engine+mainboard
+C4190,2.2k,8,engine+mainboard
 C17917,150R,3,mainboard
-C23162,4.7k,38,brk4+hso5+mainboard
+C23162,4.7k,37,brk4+hso5+mainboard
 C23237,715k,1,mainboard
 C23003,33.2k,17,brk4+di8+hso5+mainboard
 C22974,29.4k,1,mainboard
@@ -141,7 +141,7 @@ C309650,18k,8,ai4+mainboard
 C49308172,4.7k,13,di8+engine+mainboard
 C23231,68k,16,di8+engine+mainboard
 C122538,100k,10,ai4+engine+mainboard
-C25819,47k,52,ai4+brk4+engine+hso5+mainboard
+C25819,47k,53,ai4+brk4+engine+hso5+mainboard
 C22976,2M,1,mainboard
 C22764,1.1k,2,engine+mainboard
 C23179,470R,25,mainboard
@@ -169,6 +169,7 @@ C25818,453k,9,mainboard
 C22809,15k,8,mainboard
 C22984,30k,1,mainboard
 C17414,10k,6,mainboard
+C31850,22k,2,mainboard
 C29718,10k x4,2,ai4+mainboard
 C318884,RESET,4,mainboard
 C6077135,BTN1,12,mainboard

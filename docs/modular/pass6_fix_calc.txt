@@ -3,6 +3,21 @@ Same Q2 / HGATE / SOA model as pass6_calc.boot and kick_calc (BSC070N10NS5 SOA, 
 BAT_IN -> D401 1N4148W -> Q121 MMBT5401 E (R1121 22k E-B, R1122 68k B -> VBAT_P); C -> R1123 22k -> HO_F (C1121 100 nF || R1124 100k)
 -> Q122 MMBT3904 -> D402 BAT54C -> BB_UVLO (C602, U2 EN/UVLO) and U5_EN (R1125 100k / R1126 47k from VBAT_P).
 C602 is 1 uF X7R (0.5-1.1 uF effective; was 10 uF): see section 3 for why.
+== 0. Pass 8 value check (drawn hold-off / front-end parts vs this model)
+  R1001  1k         C21190   OK
+  C601   22n 100V   C313105  OK
+  C602   1u 50V     C28323   OK
+  D401   1N4148W    C81598   OK
+  Q121   MMBT5401   C8326    OK
+  R1121  22k        C31850   OK
+  R1122  68k        C23231   OK
+  R1123  22k        C31850   OK
+  R1124  100k       C25803   OK
+  C1121  100n       C14663   OK
+  Q122   MMBT3904   C20526   OK
+  D402   BAT54C     C37704   OK
+  R1125  100k       C25803   OK
+  R1126  47k        C25819   OK
 == 1. Hold-off threshold vs temperature (Vth = Vf(D401) + Veb(Q121) x 90k/22k)
   cold -40 F (-40 C)   Vf 0.72 V, Veb 0.75 V -> Vth 3.79 V
   room 77 F (25 C)     Vf 0.55 V, Veb 0.62 V -> Vth 3.09 V

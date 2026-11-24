@@ -11,6 +11,24 @@ import kick_calc as k
 F=lambda c:c*9/5+32
 print(__doc__)
 
+# ---- Pass 8 value check: the drawn parts must be the ones this model assumes (Pass 8 found R1121/R1123 = 2.2k and R1126 = 4.7k:
+# mainboard.py's R22K/R47K constants are really the 2.2k/4.7k I2C pull-up parts). Fails the gate if any part drifts.
+import re,glob
+_ROOT=os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','..','..'))
+_S=''.join(open(f).read() for f in glob.glob(os.path.join(_ROOT,'*.kicad_sch')))
+WANT={'R1001':('1k','C21190'),'C601':(None,'C313105'),'C602':(None,'C28323'),'D401':('1N4148W','C81598'),'Q121':('MMBT5401','C8326'),
+      'R1121':('22k','C31850'),'R1122':('68k','C23231'),'R1123':('22k','C31850'),'R1124':('100k','C25803'),'C1121':('100n','C14663'),
+      'Q122':('MMBT3904','C20526'),'D402':('BAT54C','C37704'),'R1125':('100k','C25803'),'R1126':('47k','C25819')}
+print('== 0. Pass 8 value check (drawn hold-off / front-end parts vs this model)')
+_bad=0
+for ref,(val,lc) in WANT.items():
+    m=re.search(r'\(property "Reference" "%s"'%ref,_S); blk=_S[m.start():m.start()+3000] if m else ''
+    v=re.search(r'\(property "Value" "([^"]*)"',blk); l=re.search(r'\(property "LCSC" "([^"]*)"',blk)
+    v=v.group(1) if v else None; l=l.group(1) if l else None
+    ok=m is not None and (val is None or v==val) and l==lc; _bad+=not ok
+    print('  %-6s %-10s %-8s %s'%(ref,v,l,'OK' if ok else 'WRONG (want %s %s)'%(val,lc)))
+if _bad: sys.exit('Pass 8 value check: %d part(s) differ from the model'%_bad)
+
 # hold-off corners: (label, D401 Vf, Q121 Veb, Q121 beta, Q122 beta, Vbe Q122)
 HOT=('hot 185 F (85 C)',0.42,0.50,60.0,40.0,0.55); NOM=('room 77 F (25 C)',0.55,0.62,100.0,60.0,0.65); COLD=('cold -40 F (-40 C)',0.72,0.75,50.0,30.0,0.80)
 def vth(c): return c[1]+c[2]*(68+22)/22.0

@@ -152,6 +152,8 @@ NEWP={'C2941042':P('LM74700QDBVRQ1','Package_TO_SOT_SMD:SOT-23-6','LM74700QDBVRQ
  'C8326':P('MMBT5401','Package_TO_SOT_SMD:SOT-23','MMBT5401(RANGE:200-300)','CJ','C8326','PNP 150 V VCEO, hFE 200-300, SOT-23 (pin 1 B, 2 E, 3 C = MMBT3906 symbol) (Pass 6 B1 hold-off)'),
  'C23231':P('68k',R0603,'0603WAF6802T5E','UNI-ROYAL','C23231','68k 1 % 0603'),
  'C17414':P('10k','Resistor_SMD:R_0805_2012Metric','0805W8F1002T5E','UNI-ROYAL','C17414','10k 1 % 0805 125 mW 150 V'),
+ 'C31850':P('22k','Resistor_SMD:R_0603_1608Metric','0603WAF2202T5E','UNI-ROYAL','C31850','22k 1 % 0603 100 mW (Pass 8: hold-off divider; R22K/C4190 is 2.2k)'),
+ 'C25819':P('47k','Resistor_SMD:R_0603_1608Metric','0603WAF4702T5E','UNI-ROYAL','C25819','47k 1 % 0603 100 mW (Pass 8: U5 EN divider; R47K/C23162 is 4.7k)'),
  'C22984':P('30k','Resistor_SMD:R_0603_1608Metric','0603WAF3002T5E','UNI-ROYAL','C22984','30k 1 % 0603 100 mW'),
  'C25818':P('453k','Resistor_SMD:R_0603_1608Metric','0603WAF4533T5E','UNI-ROYAL','C25818','eFuse OVP divider top 453k 1 % (Pass 5)'),
  'C22809':P('15k','Resistor_SMD:R_0603_1608Metric','0603WAF1502T5E','UNI-ROYAL','C22809','eFuse IMON 15k: 0.42 V/A (27.9 uA/A), 2.0 V at 4.8 A (Pass 5)'),
@@ -191,7 +193,8 @@ def vs_holdup(S,k,feed):
     return [add(S,'Diode:1N4148W','D','C81598',{'2':feed,'1':f'{k}_VSD'},ref=f"D{VSREF['D']}",Description=f'VS hold-up diode from {feed}: blocks when {feed} collapses (Pass 4 P4-MAJ-1)'),
             R(S,'C22775',f'{k}_VSD',f'{k}_VS',ref=f"R{VSREF['R']}",Description='RVS 100R (SLUSEW1C 8.3) (Pass 4 P4-MAJ-1)'),
             C(S,'C13832',f'{k}_VS','GND',ref=f"C{VSREF['C']}",Description='C_VS 1 uF / 100 V hold-up: VS >= 4 V for >= 8.3 ms (Pass 4 P4-MAJ-1)')]
-C10N='C57112'; FET='C534364'; R10K='C25804'; R100K='C25803'; R47K='C23162'; R22K='C4190'; C100N='C14663'; R100='C22775'
+C10N='C57112'; FET='C534364'; R10K='C25804'; R100K='C25803'; R47K='C23162'; R22K='C4190';   # NB: R47K/R22K are 4.7k/2.2k parts (names historic, Pass 8)
+C100N='C14663'; R100='C22775'
 # ---- E-stop feed: ideal diode + rail cut ----
 S='estop'
 Uid=add(S,'cards:LM74700QDBVRQ1','U','C2941042',{'6':'VBAT_ESTOP_IN','3':'VBAT_ESTOP_IN','1':'ESTOP_ID_VCAP','4':'VBAT_ESTOP_PRE','5':'ESTOP_ID_G','2':'GND'})
@@ -348,15 +351,15 @@ R('estop','C17969','D120_K','U65_IN',ref='R1002',Description='Pass 5: 47R 1206 a
 S='estop'
 add(S,'Diode:1N4148W','D','C81598',{'2':'BAT_IN','1':'HO_E'},ref='D401',Description='Pass 6 hold-off: blocks reverse battery and the VBAT_P > BAT_IN case (crank) from the PNP E-B junction')
 add(S,'Transistor_BJT:MMBT3906','Q','C8326',{'1':'HO_B','2':'HO_E','3':'HO_C'},ref='Q121',Description='Pass 6 hold-off sense PNP MMBT5401 (150 V): on when BAT_IN - VBAT_P > ~3 V')
-R(S,'C4190','HO_E','HO_B',ref='R1121',Description='Pass 6 hold-off E-B 22k (threshold divider)')
+R(S,'C31850','HO_E','HO_B',ref='R1121',Description='Pass 6 hold-off E-B 22k (threshold divider)')
 R(S,'C23231','HO_B','VBAT_P',ref='R1122',Description='Pass 6 hold-off base 68k to VBAT_P: Vth = Vf + Veb x (68k+22k)/22k = 2.5-3.8 V')
-R(S,'C4190','HO_C','HO_F',ref='R1123',Description='Pass 6 hold-off collector 22k into the filter node')
+R(S,'C31850','HO_C','HO_F',ref='R1123',Description='Pass 6 hold-off collector 22k into the filter node')
 R(S,R100K,'HO_F','GND',ref='R1124',Description='Pass 6 hold-off filter bleed 100k')
 C(S,C100N,'HO_F','GND',ref='C1121',Description='Pass 6 hold-off filter 100 nF: 46 us (32 V) to 270 us (8 V, cold) before U2/U5 are pulled off')
 add(S,'Transistor_BJT:MMBT3904','Q','C20526',{'1':'HO_F','2':'GND','3':'HO_K'},ref='Q122',Description='Pass 6 hold-off pull-down NPN')
 add(S,'Diode:BAT54C','D','C37704',{'1':'BB_UVLO','2':'U5_EN','3':'HO_K'},ref='D402',Description='Pass 6 hold-off: pulls U2 EN/UVLO (BB_UVLO, discharges C602) and U5 EN to <= 0.45 V')
 R(S,R100K,'VBAT_P','U5_EN',ref='R1125',Description='Pass 6: U5 EN/UVLO pull-up 100k (was strapped to VIN)')
-R(S,R47K,'U5_EN','GND',ref='R1126',Description='Pass 6: U5 EN/UVLO 47k: U5 on above VBAT_P 4.25 V (1.36 V max x 147/47), off below 2.5 V; EN <= 18 V at a 57 V kick')
+R(S,'C25819','U5_EN','GND',ref='R1126',Description='Pass 6: U5 EN/UVLO 47k: U5 on above VBAT_P 4.25 V (1.36 V max x 147/47), off below 2.5 V; EN <= 18 V at a 57 V kick')
 # ---- Pass 6 M3 (Ethan): engine slot feeds. J48 a13/c13 = ENG_3V3_SAFE via TPS2553 (110-150 mA, auto-retry, FAULT -> 0x22 P15),
 # J48 a12/c12 = ENG_VBAT_P via a TPS16630 eFuse (engine card VBAT_P load <= 0.13 A: D+ excitation LM317 current source).
 S='backplane'
