@@ -125,7 +125,7 @@ Rows still unpriced inside the BOMs: power (display 12 V load switch, 3V3 LDO ba
 ## Rev 2026-10-24: always-on safety 3.3 V, datasheet pass
 
 ### +3V3_SAFE domain (restored battery backup)
-- +3V3 (TPS56637 from +12V) and +3V3_BK (LMR36506RRPER, EN tied to VBAT_P, runs 4.2-65 V so covers 6-32 V battery incl. cranking) feed a TPS2116 priority mux -> +3V3_SAFE.
+- +3V3 (TPS56637 from +12V) and +3V3_BK (LMR36506RRPER, EN tied to VBAT_P, runs 4.2-65 V so covers 6-32 V battery incl. cranking) [Batch 34: EN is now the R1125 100k / R1126 47k divider from VBAT_P (on above 3.6–4.25 V) and the Q2 hold-off can hold it off; see DESIGN_NOTES Batch 34] feed a TPS2116 priority mux -> +3V3_SAFE.
 - Powers: STM32H743, FRAM, TPS3431 watchdog, E-stop logic, input/output expanders, front-panel logic. CM5, display, comms stay on +3V3/+5V/+12V.
 - LMR36506: RT 40.2k (18286/400^1.021 = 40.4k -> ~400 kHz); FB 100k/43.2k -> 1.0*(1+100/43.2)=3.315 V; L 33 uH; 2x47 uF; CIN 2.2 uF/100 V + 100n.
 - TPS2116: VIN1=+3V3 priority, PR1 divider 18.7k/10k -> switchover when +3V3 < 1.0*28.7/10 = 2.87 V (2.64-3.10 V over tol). ST -> PSU_MAIN_OK (STM32 PC3_C, 100k pull-up to SAFE) so firmware knows it is on backup.
