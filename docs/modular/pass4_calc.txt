@@ -1,0 +1,103 @@
+
+== TI SLUSEW1C findings used for P4-MAJ-1 (exact datasheet lines are quoted in MODULAR_ARCHITECTURE section 16.1)
+6.1/5.1 Abs max: VS, CS+, CS- each -65..100 V to GND; SRC -65..100 V to GND; CS+ to CS- -1..100 V; BST/G1PU/G1PD to SRC -0.3..19 V.
+        No VS-to-CS+, VS-to-CS- or VS-to-SRC rating exists: VS = 32 V with CS+ = CS- = SRC = 0 V is inside the abs max table.
+        Fig 7-6 (low-side sensing) itself runs VS = 48 V with CS+/CS- near GND; SFFS636 Table 4-2: CS- or SRC shorted to GND =
+        "Short to GND protection starts" (normal function with VS powered).
+5.3 ROC: VS 3.5..95 V; minimum VS for short-circuit protection 4 V; VS and SRC caps >= 22 nF; BST-SRC cap >= 0.1 uF (no maximum).
+5.5: VS POR falling 1.7/2.33/3.06 V; IQ 35/49 uA; I(BST) 190/345/510 uA; BST UVLO rising 8/9/9.93 V, falling 7.28/8.2/8.93 V.
+7.3.3.2: 100k across C_TMR = latch-off; reset by INP1, EN/UVLO < V(ENF) or VS below V(VS_PORF).
+8.3: "TI recommends to place a RVS - CVS filter ... RVS value around 100 ohm"; Fig 8-11 D1 is the input TVS (no series diode drawn).
+E2E 1298005 (TI, TPS4811-Q1 sibling): 300 ohm in series with VS "should be ok ... Please use with 1uF cap at Vs".
+NOT specified anywhere: the CS+/CS- common-mode range of the SCP comparator in high-side mode (CS_SEL = GND) -> bench test 16.6 #1.
+
+== P4-MAJ-1: per-controller VS hold-up  D (1N4148W) -> 100R -> VS, C_VS 1 uF / 100 V X7R 1206 (CL31B105KCHNNNE) to GND
+12.6 V: VS starts at 11.79 V, C_VS eff 0.648 uF, hold-up to 4.0 V = 8.3 ms (draw 559 uA + 50 uA diode leakage)
+24.0 V: VS starts at 23.19 V, C_VS eff 0.539 uF, hold-up to 4.0 V = 17.0 ms (draw 559 uA + 50 uA diode leakage)
+28.8 V: VS starts at 27.99 V, C_VS eff 0.492 uF, hold-up to 4.0 V = 19.4 ms (draw 559 uA + 50 uA diode leakage)
+32.0 V: VS starts at 31.19 V, C_VS eff 0.462 uF, hold-up to 4.0 V = 20.6 ms (draw 559 uA + 50 uA diode leakage)
+-> >= 8.3 ms of guaranteed VS >= 4 V vs a slot latch <= 25.2 us: > 100x margin
+VS steady drop: Vf + 100R x 559 uA = 0.81 V below the feed; RVS power 31 uW
+C_VS recharge after the latch (feed back up within us): tau = 100R x 1 uF = 100 us; diode peak at bank turn-on <= 32 V/100R = 0.32 A (IFSM 1 A @ 1 s)
+Voltage stress: VBAT_P clamp SMBJ33CA 53.3 V @ 11.3 A (D1 SMDJ36CA ~58 V upstream) -> C_VS rated 100 V; 1N4148W VRRM 75 V vs reverse <= VS - VBAT_SLOTS <= 58 V
+Feed choice (16.1): slots from VBAT_SLOTS, bank U110 from VBAT_P. Bank off -> slot VS = 0 (POR, 0 uA from VBAT_P); 8 x VBAT_P feeds would cost
+   8 x I(SHDN) 4.6 uA = 37 uA parked plus 8 x diode leakage and keep the slot controllers powered with CS+ = 0 V. Both satisfy 5.1.
+
+== C_TMR with 100k latch-off (SLUSEW1C Eq 9 form t = R C ln(1/(1 - V_TMR_SC/(R I_TMR)))), C0G +/-5 %, no bias/temperature drift
+4.7 nF X7R (Pass 3)  t_SC 32.2 / 63.5 / 111.4 us (+4.3 us prop = latch <= 115.7 us); bank 68 nF min 466 us -> time grading 4.0x
+1.5 nF C0G           t_SC 12.0 / 20.3 / 31.4 us (+4.3 us prop = latch <= 35.7 us); bank 68 nF min 466 us -> time grading 13.1x
+1.0 nF C0G           t_SC 8.0 / 13.5 / 20.9 us (+4.3 us prop = latch <= 25.2 us); bank 68 nF min 466 us -> time grading 18.5x
+latch-off check: after the trip TMR charges at I(TMR_SRC_FLT) max 4.8 uA x 100k = 0.48 V < V(TMR_SC) min 0.924 V -> counter never advances (independent of C)
+inrush immunity: SCP is gated by G1_GOOD (5.47 V min). The load-charging Miller plateau ends below it:
+   slow corner 11.6 A, Vt 3.82 V, K 36: plateau Vgs 4.22 V < G1_GOOD min 5.47 V -> SRC ramp done before the comparator is looked at
+   fast corner 36 A, Vt 2.86 V, K 30: plateau Vgs 3.63 V < G1_GOOD min 5.47 V -> SRC ramp done before the comparator is looked at
+
+== Dead slot short, slot latch at t_SC max + prop = 115.7 us (4.7 nF X7R (Pass 3)), VS hold-up fitted, Tc 149 F (65 C) start, hot FET 55 % share
+grid per VBAT: Rb 15/35 mOhm x Lb 0.5/2 uH x electrolytic ESR 80/250 mOhm x Rd2 12/25 mOhm (reviewer grid), slot loop 50 nH; F1 melt 115 A2s (77 F) / ~74 A2s (149 F)
+12.6 V: slot VS min 11.73 V (>= 4 V: YES) | VBAT_SLOTS min -3.21 V | slot UVLO node min before latch -> UVLO trips first (HICCUP) | bank VS min 11.73 V | bank UVLO node min 1.20 V (UVLOF max 1.19 V) | bank I>21.2 A for <= 116 us (bank latch needs >= 466 us) | VBAT_P peak 39.3 V | F1 I2t <= 6.4 A2s | slot current pk 254 A | hot FET dTj <= 44 K (bank FET 44 K), E 23 mJ | harness current at latch <= 252 A | VS diode reverse <= 15.0 V
+24.0 V: slot VS min 23.13 V (>= 4 V: YES) | VBAT_SLOTS min -6.12 V | slot UVLO node min before latch -> never below 1.19 V | bank VS min 23.13 V | bank UVLO node min 2.28 V (UVLOF max 1.19 V) | bank I>21.2 A for <= 116 us (bank latch needs >= 466 us) | VBAT_P peak 72.2 V | F1 I2t <= 23.2 A2s | slot current pk 485 A | hot FET dTj <= 159 K (bank FET 159 K), E 83 mJ | harness current at latch <= 480 A | VS diode reverse <= 29.3 V
+28.8 V: slot VS min 27.93 V (>= 4 V: YES) | VBAT_SLOTS min -7.34 V | slot UVLO node min before latch -> never below 1.19 V | bank VS min 27.93 V | bank UVLO node min 2.74 V (UVLOF max 1.19 V) | bank I>21.2 A for <= 116 us (bank latch needs >= 466 us) | VBAT_P peak 86.0 V | F1 I2t <= 33.3 A2s | slot current pk 581 A | hot FET dTj <= 230 K (bank FET 229 K), E 120 mJ | harness current at latch <= 576 A | VS diode reverse <= 35.3 V
+32.0 V: slot VS min 31.13 V (>= 4 V: YES) | VBAT_SLOTS min -8.16 V | slot UVLO node min before latch -> never below 1.19 V | bank VS min 31.13 V | bank UVLO node min 3.04 V (UVLOF max 1.19 V) | bank I>21.2 A for <= 116 us (bank latch needs >= 466 us) | VBAT_P peak 95.2 V | F1 I2t <= 41.2 A2s | slot current pk 646 A | hot FET dTj <= 283 K (bank FET 283 K), E 148 mJ | harness current at latch <= 640 A | VS diode reverse <= 39.4 V
+
+== Dead slot short, slot latch at t_SC max + prop = 35.7 us (1.5 nF C0G), VS hold-up fitted, Tc 149 F (65 C) start, hot FET 55 % share
+grid per VBAT: Rb 15/35 mOhm x Lb 0.5/2 uH x electrolytic ESR 80/250 mOhm x Rd2 12/25 mOhm (reviewer grid), slot loop 50 nH; F1 melt 115 A2s (77 F) / ~74 A2s (149 F)
+12.6 V: slot VS min 11.77 V (>= 4 V: YES) | VBAT_SLOTS min -3.21 V | slot UVLO node min before latch -> never below 1.19 V | bank VS min 11.77 V | bank UVLO node min 1.90 V (UVLOF max 1.19 V) | bank I>21.2 A for <= 36 us (bank latch needs >= 466 us) | VBAT_P peak 28.6 V | F1 I2t <= 1.4 A2s | slot current pk 247 A | hot FET dTj <= 15 K (bank FET 15 K), E 5 mJ | harness current at latch <= 235 A | VS diode reverse <= 15.0 V
+24.0 V: slot VS min 23.17 V (>= 4 V: YES) | VBAT_SLOTS min -6.12 V | slot UVLO node min before latch -> never below 1.19 V | bank VS min 23.17 V | bank UVLO node min 3.62 V (UVLOF max 1.19 V) | bank I>21.2 A for <= 36 us (bank latch needs >= 466 us) | VBAT_P peak 53.8 V | F1 I2t <= 5.1 A2s | slot current pk 471 A | hot FET dTj <= 56 K (bank FET 56 K), E 19 mJ | harness current at latch <= 448 A | VS diode reverse <= 29.3 V
+28.8 V: slot VS min 27.97 V (>= 4 V: YES) | VBAT_SLOTS min -7.34 V | slot UVLO node min before latch -> never below 1.19 V | bank VS min 27.97 V | bank UVLO node min 4.35 V (UVLOF max 1.19 V) | bank I>21.2 A for <= 36 us (bank latch needs >= 466 us) | VBAT_P peak 64.2 V | F1 I2t <= 7.3 A2s | slot current pk 566 A | hot FET dTj <= 80 K (bank FET 80 K), E 28 mJ | harness current at latch <= 538 A | VS diode reverse <= 35.3 V
+32.0 V: slot VS min 31.17 V (>= 4 V: YES) | VBAT_SLOTS min -8.16 V | slot UVLO node min before latch -> never below 1.19 V | bank VS min 31.17 V | bank UVLO node min 4.83 V (UVLOF max 1.19 V) | bank I>21.2 A for <= 36 us (bank latch needs >= 466 us) | VBAT_P peak 71.1 V | F1 I2t <= 9.0 A2s | slot current pk 629 A | hot FET dTj <= 99 K (bank FET 99 K), E 35 mJ | harness current at latch <= 598 A | VS diode reverse <= 39.4 V
+
+== Dead slot short, slot latch at t_SC max + prop = 25.2 us (1.0 nF C0G), VS hold-up fitted, Tc 149 F (65 C) start, hot FET 55 % share
+grid per VBAT: Rb 15/35 mOhm x Lb 0.5/2 uH x electrolytic ESR 80/250 mOhm x Rd2 12/25 mOhm (reviewer grid), slot loop 50 nH; F1 melt 115 A2s (77 F) / ~74 A2s (149 F)
+12.6 V: slot VS min 11.78 V (>= 4 V: YES) | VBAT_SLOTS min -3.21 V | slot UVLO node min before latch -> never below 1.19 V | bank VS min 11.78 V | bank UVLO node min 2.07 V (UVLOF max 1.19 V) | bank I>21.2 A for <= 26 us (bank latch needs >= 466 us) | VBAT_P peak 27.6 V | F1 I2t <= 0.8 A2s | slot current pk 239 A | hot FET dTj <= 11 K (bank FET 11 K), E 3 mJ | harness current at latch <= 218 A | VS diode reverse <= 15.0 V
+24.0 V: slot VS min 23.18 V (>= 4 V: YES) | VBAT_SLOTS min -6.12 V | slot UVLO node min before latch -> never below 1.19 V | bank VS min 23.18 V | bank UVLO node min 3.95 V (UVLOF max 1.19 V) | bank I>21.2 A for <= 26 us (bank latch needs >= 466 us) | VBAT_P peak 52.0 V | F1 I2t <= 3.0 A2s | slot current pk 455 A | hot FET dTj <= 38 K (bank FET 38 K), E 12 mJ | harness current at latch <= 415 A | VS diode reverse <= 29.3 V
+28.8 V: slot VS min 27.98 V (>= 4 V: YES) | VBAT_SLOTS min -7.34 V | slot UVLO node min before latch -> never below 1.19 V | bank VS min 27.98 V | bank UVLO node min 4.74 V (UVLOF max 1.19 V) | bank I>21.2 A for <= 26 us (bank latch needs >= 466 us) | VBAT_P peak 62.0 V | F1 I2t <= 4.3 A2s | slot current pk 546 A | hot FET dTj <= 55 K (bank FET 55 K), E 18 mJ | harness current at latch <= 498 A | VS diode reverse <= 35.3 V
+32.0 V: slot VS min 31.18 V (>= 4 V: YES) | VBAT_SLOTS min -8.16 V | slot UVLO node min before latch -> never below 1.19 V | bank VS min 31.18 V | bank UVLO node min 5.26 V (UVLOF max 1.19 V) | bank I>21.2 A for <= 26 us (bank latch needs >= 466 us) | VBAT_P peak 68.7 V | F1 I2t <= 5.3 A2s | slot current pk 607 A | hot FET dTj <= 68 K (bank FET 68 K), E 22 mJ | harness current at latch <= 554 A | VS diode reverse <= 39.4 V
+
+Notes: VBAT_SLOTS goes below 0 V in the lumped model (undamped 50 nH / 0.9 uF ring); the UVLO RC and the VS diode ride through it. VBAT_P peak is the
+   harness energy (1/2 Lb I^2) dumped into VBAT_P ceramics/electrolytic ESR/SMBJ33CA (linear 1.47 ohm above 36.7 V) when the slot latches: < 100 V
+   (TPS48100, BSC070, C_VS ratings) but above 40 V parts on VBAT_P -> the pre-existing VBAT_P surge open item (DESIGN_NOTES) now has a defined source;
+   a shorter latch lowers it (it was larger with the bank-only latch).
+Without the hold-up (Pass 3) the reviewer measured slot VS 0.70-3.14 V at 12.6 V for most of the 103 us window and 33-93 A2s on F1.
+
+== VBAT_P overshoot at the slot latch (1.0 nF), worst of the grid, by clamp model (OPEN ITEM, bench test 16.7 #6)
+SMBJ33CA only (as above)                   24.0 V -> 52.0 V | 28.8 V -> 62.0 V | 32.0 V -> 68.7 V
++ D1 SMDJ36CA at BAT_IN (40 V, 0.35 ohm)   24.0 V -> 50.4 V | 28.8 V -> 58.7 V | 32.0 V -> 64.2 V
+SMBJ33CA -> SMDJ33CA 3 kW, + D1            24.0 V -> 48.8 V | 28.8 V -> 55.9 V | 32.0 V -> 60.5 V
+VBAT_P ratings: LM5176 55 V, LMR36506 65 V, TPS1HTC30 (U68) 64 V, LM74800 (U1) 70 V, INA237 85 V, 50 V electrolytic/MLCCs on VBAT_P.
+-> at a 24 V battery the peak sits at the 50 V capacitor ratings; at 28.8-32 V it exceeds LM5176 55 V. Not fixed in Pass 4: needs a decision
+   (stronger VBAT_P clamp sized for 1/2 Lb I^2 ~0.3 J, slower slot turn-off, or a battery-voltage limit) and the bench measurement.
+
+== m1: on-state dead short at 32 V, Tc 149 F (65 C): hot FET 55 % share, RDS(on) 11.5 mOhm at Tj 125 C, ZthJC Diagram 4 (max) superposition
+4.7 nF X7R (Pass 3)  Rd2 12 mOhm: latch 115.7 us, pk slot current 640 A (hot FET 352 A vs ID,pulse 320 A), above 320 A for 90.87 us, E 147 mJ, dTj 279 K -> Tj 652 F (344 C) vs Tj max 302 F (150 C)
+4.7 nF X7R (Pass 3)  Rd2 25 mOhm: latch 115.7 us, pk slot current 508 A (hot FET 279 A vs ID,pulse 320 A), above 320 A for 0.00 us, E 95 mJ, dTj 179 K -> Tj 471 F (244 C) vs Tj max 302 F (150 C)
+1.5 nF C0G           Rd2 12 mOhm: latch 35.7 us, pk slot current 612 A (hot FET 336 A vs ID,pulse 320 A), above 320 A for 10.82 us, E 35 mJ, dTj 99 K -> Tj 327 F (164 C) vs Tj max 302 F (150 C)
+1.5 nF C0G           Rd2 25 mOhm: latch 35.7 us, pk slot current 500 A (hot FET 275 A vs ID,pulse 320 A), above 320 A for 0.00 us, E 24 mJ, dTj 67 K -> Tj 269 F (132 C) vs Tj max 302 F (150 C)
+1.0 nF C0G           Rd2 12 mOhm: latch 25.2 us, pk slot current 607 A (hot FET 334 A vs ID,pulse 320 A), above 320 A for 0.98 us, E 22 mJ, dTj 68 K -> Tj 272 F (133 C) vs Tj max 302 F (150 C)
+1.0 nF C0G           Rd2 25 mOhm: latch 25.2 us, pk slot current 500 A (hot FET 275 A vs ID,pulse 320 A), above 320 A for 0.00 us, E 15 mJ, dTj 47 K -> Tj 234 F (112 C) vs Tj max 302 F (150 C)
+ID,pulse 320 A is the Diagram 3 package line (Tc 77 F). CHOSEN: 1.0 nF C0G (CC0603JRNPO9BN102, C106246): Tj stays below 302 F (150 C) in every corner.
+Fallback (no schematic change): Nexperia PSMN4R8-100YSE (LFPAK56E, enhanced-SOA ASFET, Tj 175 C, pins 1-3 S / 4 G / mb D = BSC070 TDSON-8 pin map).
+
+== m4: C_BST 1 uF/50 V 0805 (Pass 3) vs 2.2 uF/50 V 1206 X7R (CL31B225KBHNNNE, C50254). SLUSEW1C 5.3: BST-SRC >= 0.1 uF, no maximum
+1 uF 0805 (-16.3 % bias, -10 % tol, -10 % temp, -5 % aging): eff 0.644 uF; BST-SRC min 9.070/9.026/9.008/8.996 V at 12.6/24/28.8/32 V -> margin to BST_UVLOF max 8.93 V = 66 mV
+2.2 uF 1206 (-30 % bias bound, -10 % tol, -10 % temp, -5 % aging): eff 1.185 uF; BST-SRC min 9.160/9.137/9.127/9.120 V at 12.6/24/28.8/32 V -> margin to BST_UVLOF max 8.93 V = 190 mV
+TDRV_EN 1 uF: C max (+10 %, no bias loss) x V(BST_UVLOR) max 9.93 V / I(BST) min 190 uA = 57 ms (typ 26 ms at 345 uA, 9 V)
+TDRV_EN 2.2 uF: C max (+10 %, no bias loss) x V(BST_UVLOR) max 9.93 V / I(BST) min 190 uA = 126 ms (typ 57 ms at 345 uA, 9 V)
+-> FW C2.3: after BANK_EN, and after each first slot enable following a bank (re)start, treat BANK_FAULT_N / SLn_PWR_FAULT_N low as "charging" for 150 ms;
+   then require high for 10 ms; timeout 250 ms (was 20/10/100 ms).
+
+== m2: R773 BANK_OVL_ROOM pull-down 100k -> 10k against the TCA9555 internal pull-up (IIL <= 100 uA at VI = GND, VCC 1.65-5.5 V)
+VCC 3.3 V, R773 100k: reset level <= 2.129 V (resistive pull-up >= 55k); TS5A3166 V_IL max 0.8 V -> INDETERMINATE
+VCC 3.3 V, R773  10k: reset level <= 0.508 V (resistive pull-up >= 55k); TS5A3166 V_IL max 0.8 V -> LOW (HOT) guaranteed
+VCC 3.6 V, R773 100k: reset level <= 2.323 V (resistive pull-up >= 55k); TS5A3166 V_IL max 0.8 V -> INDETERMINATE
+VCC 3.6 V, R773  10k: reset level <= 0.554 V (resistive pull-up >= 55k); TS5A3166 V_IL max 0.8 V -> LOW (HOT) guaranteed
+even if 100 uA flowed at VCC 3.6 V (pull-up 36k): 0.783 V < 0.8 V
+driven high: 3.3 V / 10k = 0.33 mA (TCA9555 IOH 10 mA per pin); VOH >= 3.1 V > TS5A3166 V_IH 2.4 V; extra 1.1 mW while ROOM
+
+== m9: two channels in current limit at once (3.61 A max each), preloaded at budget (Pass 3 MAJ-A filter, tau min)
+HOT: one channel 58.2 ms, two channels 27.4 ms -> FW rule ">1 channel faulted at first scan = cut card by 20 ms" keeps 7.4 ms margin
+ROOM: one channel 56.7 ms, two channels 25.8 ms -> FW rule ">1 channel faulted at first scan = cut card by 20 ms" keeps 5.8 ms margin
+
+== m6 / m7 notes
+m6: pass3_calc.txt "Q109 (overload latch)" should read Q108 (AO3400A on BANK_UVLO); Q109 is a slot-1 BSC070N10NS5. Corrected in pass3_calc.py text.
+m7: TS5A3166DBVR is -40..185 F (-40..85 C). TS5A3166QDCKRQ1 (AEC-Q100, -40..257 F) exists only in SC-70-5 with 82 in JLC stock; 74LVC1G66-Q100 needs
+    V_IH 0.7 x 5 V = 3.5 V (fails from a 3.3 V expander); TMUX1101 is not AEC-Q100 and SOT-23 stock is 0. Keep TS5A3166DBVR + layout keep-away rule.

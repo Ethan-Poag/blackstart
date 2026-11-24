@@ -1,0 +1,471 @@
+www.ti.com                                                                                                                                                            Table of Contents
+
+Functional Safety Information
+TPS4810-Q1
+Functional Safety FIT Rate, FMD and Pin FMA
+
+
+
+
+                                                                           Table of Contents
+1 Overview..................................................................................................................................................................................2
+2 Functional Safety Failure In Time (FIT) Rates...................................................................................................................... 3
+3 Failure Mode Distribution (FMD)........................................................................................................................................... 4
+4 Pin Failure Mode Analysis (Pin FMA)....................................................................................................................................5
+5 Revision History......................................................................................................................................................................9
+Trademarks
+All trademarks are the property of their respective owners.
+
+
+
+
+SFFS636 – DECEMBER 2024                                                                                                                                      TPS4810-Q1                     1
+Submit Document Feedback                                                                                                     Functional Safety FIT Rate, FMD and Pin FMA
+                                                                 Copyright © 2024 Texas Instruments Incorporated
+Overview                                                                                                                                                                                                             www.ti.com
+
+
+1 Overview
+This document contains information for TPS4810-Q1 (VSSOP package) to aid in a functional safety system
+design. Information provided are:
+•   Functional safety failure in time (FIT) rates of the semiconductor component estimated by the application of
+    industry reliability standards
+•   Component failure modes and their distribution (FMD) based on the primary function of the device
+•   Pin failure mode analysis (pin FMA)
+Figure 1-1 shows the device functional block diagrams for reference.
+
+
+                                                                                        RSNS                                                                                               Q2
+             VBATT                                                                                                                                                          Q1                                  VOUT
+
+                                                                                                                                                           CBST
+
+
+                              VS                                                   CS+             CS-                                         BST         G1PU      G1PD        SRC          G2
+
+                                                                                                                                  G1PD      SRC           1.69 A               2A        2A          1.69 A
+                                                                                                                                                                                                              BST
+                                            +             Internal
+                                                                           EN
+                                                                                    +
+
+
+
+
+                                                                                                          +
+                                                         Regulators
+
+
+
+
+                                                                                                                                   +
+                              2.7 V                                                     HS                      LS
+                              2.4 V                                          VDS                                            VGS
+                                                POR             VINT
+                                                                           Comparator                                     Comparator
+                                                                                                                                                                   G1_ON/OFF                    G2_ON/OFF
+                              +
+                                       EN                              G1_ON/OFF               HS, LS
+                       1V                                                                      select
+                                                                        G2_ON/OFF
+                      0.3 V
+                                                                                                                                        CP (11 V)
+                                                                         FLT                                                      VS
+     EN/UVLO                          UVLO
+                              +
+
+                     1.24 V                                                                                                               345 µA
+                     1.14 V                                                              VDS, VGS Fault logic
+                                                       Gate
+           INP1
+                              +                       Driver
+                      2V                              control                                                                                                EN
+                     0.8 V                             logic                                                                                                                                                           FLT
+                                                                                                                                       Charge pump          BST
+                                                                       VINT
+           INP2                                                                                                                         enable logic
+                              +
+                                                                          80µA/2.2µA                                                                                                               FLT        70 Ω
+                      2V                                                                                                                                    SRC
+                                                                                               +
+
+
+
+
+                                                                                                                 +
+
+
+
+
+                                                                                VINT
+                     0.8 V
+                                                                                                        0.8 V
+
+
+
+
+                                                                                                                          0.8 V
+                                                                                                   2V
+
+
+
+
+                                                                                                                     2V
+
+
+
+
+                                                                                                                                    VS                     Reverse
+                                                                                                                                   SRC                 Protection Logic                TPS48100-Q1
+
+                                                                TMR         ISCP                                                                                     GND
+                                                                                        SCP_TEST                CS_SEL
+
+                                                                CTMR                   RISCP
+
+
+
+
+                                                                      Figure 1-1. Functional Block Diagram
+
+TPS4810-Q1 was developed using a quality-managed development process, but was not developed in
+accordance with the IEC 61508 or ISO 26262 standards.
+
+
+
+
+2     TPS4810-Q1                                                                                                                                                                                SFFS636 – DECEMBER 2024
+      Functional Safety FIT Rate, FMD and Pin FMA                                                                                                                                                Submit Document Feedback
+                                                                         Copyright © 2024 Texas Instruments Incorporated
+www.ti.com                                                                                            Functional Safety Failure In Time (FIT) Rates
+
+
+2 Functional Safety Failure In Time (FIT) Rates
+This section provides functional safety failure in time (FIT) rates for TPS4810-Q1 based on two different industry-
+wide used reliability standards:
+•   Table 2-1 provides FIT rates based on IEC TR 62380 / ISO 26262 part 11
+•   Table 2-2 provides FIT rates based on the Siemens Norm SN 29500-2
+                      Table 2-1. Component Failure Rates per IEC TR 62380 / ISO 26262 Part 11
+                     FIT IEC TR 62380 / ISO 26262                                              FIT (Failures Per 109 Hours)
+                       Total component FIT rate                                                                9
+                             Die FIT rate                                                                      3
+                           Package FIT rate                                                                    6
+
+
+The failure rate and mission profile information in Table 2-1 comes from the reliability data handbook IEC TR
+62380 / ISO 26262 part 11:
+•   Mission profile: Motor control from table 11
+•   Power dissipation: 0.6mW
+•   Climate type: World-wide table 8 IEC TR 62380
+•   Package factor (lambda 3): Table 17b IEC TR 62380
+•   Substrate material: FR4
+•   EOS FIT rate assumed: 0 FIT
+                          Table 2-2. Component Failure Rates per Siemens Norm SN 29500-2
+             Table                                   Category                               Reference FIT Rate             Reference Virtual TJ
+                                                  CMOS, BICMOS
+              5                                                                                      25 FIT                         55°C
+                                              Digital, analog, or mixed
+
+
+The reference FIT rate and reference virtual TJ (junction temperature) in Table 2-2 come from the Siemens Norm
+SN 29500-2 tables 1 through 5. Failure rates under operating conditions are calculated from the reference failure
+rate and virtual junction temperature using conversion information in SN 29500-2 section 4.
+
+
+
+
+SFFS636 – DECEMBER 2024                                                                                                             TPS4810-Q1    3
+Submit Document Feedback                                                                            Functional Safety FIT Rate, FMD and Pin FMA
+                                                  Copyright © 2024 Texas Instruments Incorporated
+Failure Mode Distribution (FMD)                                                                                                        www.ti.com
+
+
+3 Failure Mode Distribution (FMD)
+The failure mode distribution estimation for TPS4810-Q1 in Table 3-1 comes from the combination of common
+failure modes listed in standards such as IEC 61508 and ISO 26262, the ratio of sub-circuit function size and
+complexity, and from best engineering judgment.
+The failure modes listed in this section reflect random failure events and do not include failures resulting from
+misuse or overstress.
+                                            Table 3-1. Die Failure Modes and Distribution
+                           Die Failure Modes                                                      Failure Mode Distribution (%)
+                         Gate output stuck high                                                                10
+                          Gate output stuck low                                                                45
+      Gate output functional, not in specification voltage or timing                                           34
+             Short circuit protection fails to trip or false trip                                              5
+                      UVLO fails to trip or false trip                                                         1
+                      Pin-to-pin short any two pins                                                            5
+
+
+
+
+4     TPS4810-Q1                                                                                                         SFFS636 – DECEMBER 2024
+      Functional Safety FIT Rate, FMD and Pin FMA                                                                         Submit Document Feedback
+                                                      Copyright © 2024 Texas Instruments Incorporated
+www.ti.com                                                                                                 Pin Failure Mode Analysis (Pin FMA)
+
+
+4 Pin Failure Mode Analysis (Pin FMA)
+This section provides a failure mode analysis (FMA) for the pins of the TPS4810-Q1. The failure modes covered
+in this document include the typical pin-by-pin failure scenarios:
+•   Pin short-circuited to ground (see Table 4-2)
+•   Pin open-circuited (see Table 4-3)
+•   Pin short-circuited to an adjacent pin (see Table 4-4)
+•   Pin short-circuited to supply (see Table 4-5)
+Table 4-2 through Table 4-5 also indicate how these pin conditions can affect the device as per the failure effects
+classification in Table 4-1.
+                                  Table 4-1. TI Classification of Failure Effects
+                   Class                                                                 Failure Effects
+                     A                                          Potential device damage that affects functionality.
+                     B                                                     No device damage, but loss of functionality.
+                     C                                         No device damage, but performance degradation.
+                     D                                 No device damage, no impact to functionality or performance.
+
+
+Figure 4-1 shows the TPS4810-Q1 pin diagram. For a detailed description of the device pins please refer to the
+Pin Configuration and Functions section in the TPS4810-Q1 data sheet.
+
+
+
+                            EN/UVLO        1                                             20         VS
+
+                                INP2      2                                              19         N.C
+
+                                INP1      3                                              18         CS+
+
+                                N.C       4                                              17         CS-
+                                                             TPS48100-Q1
+
+
+
+
+                                FLT       5
+
+                                GND       6                                              15         G1PU
+
+                             CS_SEL       7                                              14         G1PD
+
+                                ISCP      8                                              13         SRC
+
+                                TMR       9                                              12         BST
+
+                           SCP_TEST       10                                             11         G2
+
+
+
+
+                                               Figure 4-1. Pin Diagram
+
+Following are the assumptions of use and the device configuration assumed for the pin FMA in this section:
+•   Follow the data sheet recommendations for operating conditions, external component selection, and PCB
+    layout
+
+
+
+
+SFFS636 – DECEMBER 2024                                                                                                         TPS4810-Q1    5
+Submit Document Feedback                                                                        Functional Safety FIT Rate, FMD and Pin FMA
+                                        Copyright © 2024 Texas Instruments Incorporated
+Pin Failure Mode Analysis (Pin FMA)                                                                                              www.ti.com
+
+                              Table 4-2. Pin FMA for Device Pins Short-Circuited to Ground
+                                                                                                                                  Failure
+     Pin Name         Pin No.                                   Description of Potential Failure Effects                          Effect
+                                                                                                                                   Class
+     EN/UVLO             1       Normal operation. The device is disabled.                                                           B
+       INP2              2       Normal operation. The G2 output is low and the external FET is off.                                 B
+       INP1              3       Normal operation. The G1PD output is low and the external FET is off.                               B
+        NC               4       Normal operation.                                                                                   D
+        FLT              5       Overcurrent, UVLO, charge pump UVLO fault diagnostic cannot be reported.                            B
+       GND               6       Normal operation.                                                                                   D
+      CS_SEL             7       Normal operation with current sensing configured for high-side sensing.                             B
+       ISCP              8       SCP threshold sets to minimum threshold.                                                            B
+       TMR               9       Overcurrent does not get detected, hence, overcurrent protection is disabled.                       B
+    SCP_TEST             10      Normal operation.                                                                                   B
+                                 With G2 grounded, if the pin voltage between SRC and G2 exceeds the pin data sheet range, the
+        G2               11                                                                                                          A
+                                 exceedance causes device damage resulting from voltage breakdown on the ESD circuit.
+        BST              12      Gate driver supply does not come up. FETs remain OFF.                                               B
+       SRC               13      Short to GND protection starts.                                                                     B
+                                 With G1PD grounded, if the pin voltage between SRC and G1PD exceeds the pin data sheet
+       G1PD              14      range, the exceedance can cause device damage resulting from voltage breakdown on the ESD           A
+                                 circuit.
+       G1PU              15      Gate driver supply gets short circuited. FETs remain OFF.                                           B
+        CS-              17      Short to GND protection starts.                                                                     B
+                                 With CS+ grounded, if the pin voltage between CS+ and CS– exceeds the pin data sheet range,
+        CS+              18                                                                                                          A
+                                 the exceedance can cause device damage resulting from voltage breakdown on ESD circuit.
+        NC               19      Normal operation.                                                                                   D
+        VS               20      Device supply is grounded. Device does not power up.                                                B
+
+
+
+
+6     TPS4810-Q1                                                                                                 SFFS636 – DECEMBER 2024
+      Functional Safety FIT Rate, FMD and Pin FMA                                                                 Submit Document Feedback
+                                                    Copyright © 2024 Texas Instruments Incorporated
+www.ti.com                                                                                                 Pin Failure Mode Analysis (Pin FMA)
+
+                                  Table 4-3. Pin FMA for Device Pins Open-Circuited
+                                                                                                                                        Failure
+    Pin Name        Pin No.                               Description of Potential Failure Effects                                      Effect
+                                                                                                                                         Class
+     EN/UVLO           1      Internal pulldown brings EN/UVLO low, disabling the device.                                                     B
+       INP2            2      Internal pulldown brings INP2 low, pulling G2 output low.                                                       B
+       INP1            3      Internal pulldown brings INP1 low, pulling G1PD output low.                                                     B
+        NC             4      Normal operation.                                                                                               D
+       FLT             5      Overcurrent, UVLO, charge pump UVLO fault diagnostic cannot be reported.                                        B
+       GND             6      Device does not power up and is disabled.                                                                       B
+                              Internal pulldown brings CS_SEL low, resulting in normal operation with current sensing
+     CS_SEL            7                                                                                                                      B
+                              configured for high-side sensing.
+       ISCP            8      SCP threshold sets to maximum threshold.                                                                        B
+                              Overcurrent response time and auto-retry duration is reduced to the minimum setting of the
+       TMR             9                                                                                                                      C
+                              device.
+    SCP_TEST          10      Internal pulldown brings CS_SEL low, resulting in normal operation.                                             B
+        G2            11      G2 output does is not controlled.                                                                               B
+       BST            12      External FET can be turned ON and OFF repetitively due to no capacitor connection at BST pin.                   B
+                              The external FET does not turn OFF as the FET source disconnects from the internal pulldown
+       SRC            13                                                                                                                      B
+                              driver.
+                              The external FET does not turn OFF as the FET GATE disconnects from the internal pulldown
+      G1PD            14                                                                                                                      B
+                              driver.
+                              The external FET does not turn OFF as the FET GATE disconnects from the internal pulldown
+      G1PU            15                                                                                                                      B
+                              driver.
+                              CS- gets internally clamped to CS+ minus 2 diode drops. If the ISCP feature is used, then the
+       CS-            17                                                                                                                      B
+                              external FET potentially does not turn ON due to a false overcurrent detection.
+       CS+            18      ISCP feature does not work.                                                                                     B
+        NC            19      Normal operation.                                                                                               D
+        VS            20      Device does not power up and is disabled.                                                                       B
+
+
+
+
+SFFS636 – DECEMBER 2024                                                                                                         TPS4810-Q1        7
+Submit Document Feedback                                                                        Functional Safety FIT Rate, FMD and Pin FMA
+                                              Copyright © 2024 Texas Instruments Incorporated
+Pin Failure Mode Analysis (Pin FMA)                                                                                                  www.ti.com
+
+                           Table 4-4. Pin FMA for Device Pins Short-Circuited to Adjacent Pin
+                                                                                                                                       Failure
+    Pin Name       Pin No.     Shorted to                              Description of Potential Failure Effects                        Effect
+                                                                                                                                       Class
+    EN/UVLO           1         2 (INP2)     If EN/UVLO is driven high, then INP2 is detected high, making the G2 output high.           B
+                                             If INP2 is driven high, then INP1 is detected high, making the G1PU and G2 output
+      INP2            2         3 (INP1)                                                                                                 B
+                                             high.
+      INP1            3          4 (NC)      Normal operation.                                                                           D
+       NC             4          5 (FLT)     Normal operation.                                                                           D
+       FLT            5         6 (GND)      Fault deviations are not indicated.                                                         B
+      GND             6       7 (CS_SEL)     Normal operation. Device is configured for high-side sensing.                               B
+                                             With CS_SEL grounded, the SCP threshold sets to minimum threshold. With CS_SEL
+    CS_SEL            7         8 (ISCP)                                                                                                 C
+                                             pulled high, the SCP threshold sets to maximum threshold.
+                                             TMR and ISCP thresholds are affected. External FET shuts off at a different threshold
+      ISCP            8         9 (TMR)      than set by ISCP. During an overcurrent fault the device is in latch-off mode if ISCP       C
+                                             has a < 100kΩ resistor.
+                                  10
+      TMR             9                  SCP_TEST feature gets disabled.                                                                 B
+                              (SCP_TEST)
+                                             When INP2 is driven high, BST (gate driver supply) gets loaded through the internal
+       G2             11        12 (BST)                                                                                                 B
+                                             G2 pulldown switch. Gate driver UVLO hits result in turning off the external FETs.
+       BST            12        13 (SRC)     Gate drive supply is shorted and external FETs do not turn ON.                              B
+                                             Shorting of the pulldown switch (between G1PD and SRC) of the internal gate driver.
+      SRC             13       14 (G1PD)                                                                                                 B
+                                             External FET remains OFF.
+      G1PD            14       15 (G1PU)     Turn ON and OFF speeds of the external FETs can be impacted.                                C
+                                             Bypasses the external current sense resistor or FET VDS sensing based on
+       CS-            17        18 (CS+)                                                                                                 B
+                                             application circuit. SCP features get disabled.
+      CS+             18         19 (NC)     Normal operation.                                                                           D
+       NC             19         20 (VS)     Normal operation.                                                                           D
+
+
+
+
+8     TPS4810-Q1                                                                                                   SFFS636 – DECEMBER 2024
+      Functional Safety FIT Rate, FMD and Pin FMA                                                                   Submit Document Feedback
+                                                    Copyright © 2024 Texas Instruments Incorporated
+www.ti.com                                                                                                                         Revision History
+
+                               Table 4-5. Pin FMA for Device Pins Short-Circuited to Supply
+                                                                                                                                          Failure
+    Pin Name         Pin No.                                Description of Potential Failure Effects                                      Effect
+                                                                                                                                           Class
+     EN/UVLO           1        EN/UVLO pin is supply rated. Device remains enabled.                                                            B
+       INP2            2        INP2 pin is supply rated and is treated as driven high.                                                         B
+       INP1            3        INP1 pin is supply rated and is treated as driven high.                                                         B
+        NC             4        Normal operation.                                                                                               D
+                                If pin voltage exceeds the pin data sheet range, the exceedance can cause device damage
+       FLT             5                                                                                                                        A
+                                resulting from voltage breakdown on the ESD circuit.
+       GND             6        Supply power is bypassed and device does not turn on.                                                           B
+     CS_SEL            7        CS_SEL pin is supply rated. Device is configured for low-side current sensing.                                  B
+                                If pin voltage exceeds the pin data sheet range, the exceedance can cause device damage
+       ISCP            8                                                                                                                        A
+                                resulting from voltage breakdown on the ESD circuit.
+                                If pin voltage exceeds the pin data sheet range, the exceedance can cause device damage
+       TMR             9                                                                                                                        A
+                                resulting from voltage breakdown on ESD circuit.
+                                If pin voltage exceeds the pin data sheet range, the exceedance can cause device damage
+    SCP_TEST           10                                                                                                                       A
+                                resulting from voltage breakdown on the ESD circuit.
+                                If pin voltage exceeds the pin data sheet range, the exceedance can cause device damage
+        G2             11                                                                                                                       A
+                                resulting from voltage breakdown on the ESD circuit.
+                                If pin voltage exceeds the pin data sheet range, the exceedance can cause device damage
+       BST             12                                                                                                                       A
+                                resulting from voltage breakdown on the ESD circuit.
+       SRC             13       Output stuck onto supply.                                                                                       B
+                                If pin voltage exceeds the pin data sheet range, the exceedance can cause device damage
+      G1PD             14                                                                                                                       A
+                                resulting from voltage breakdown on the ESD circuit.
+                                If pin voltage exceeds the pin data sheet range, the exceedance can cause device damage
+      G1PU             15                                                                                                                       A
+                                resulting from voltage breakdown on the ESD circuit.
+                                In the application, the external sense resistor, or FET VDS sensing, is bypassed. Short circuit
+       CS-             17                                                                                                                       A
+                                protection does not work.
+       CS+             18       No effect. Normal operation.                                                                                    D
+        NC             19       No effect. Normal operation.                                                                                    D
+        VS             20       No effect. Normal operation.                                                                                    D
+
+
+
+5 Revision History
+NOTE: Page numbers for previous revisions may differ from page numbers in the current version.
+              DATE                             REVISION                                                   NOTES
+         December 2024                              *                                                  Initial Release
+
+
+
+
+SFFS636 – DECEMBER 2024                                                                                                           TPS4810-Q1        9
+Submit Document Feedback                                                                          Functional Safety FIT Rate, FMD and Pin FMA
+                                                Copyright © 2024 Texas Instruments Incorporated
+                                       IMPORTANT NOTICE AND DISCLAIMER
+TI PROVIDES TECHNICAL AND RELIABILITY DATA (INCLUDING DATA SHEETS), DESIGN RESOURCES (INCLUDING REFERENCE
+DESIGNS), APPLICATION OR OTHER DESIGN ADVICE, WEB TOOLS, SAFETY INFORMATION, AND OTHER RESOURCES “AS IS”
+AND WITH ALL FAULTS, AND DISCLAIMS ALL WARRANTIES, EXPRESS AND IMPLIED, INCLUDING WITHOUT LIMITATION ANY
+IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT OF THIRD
+PARTY INTELLECTUAL PROPERTY RIGHTS.
+These resources are intended for skilled developers designing with TI products. You are solely responsible for (1) selecting the appropriate
+TI products for your application, (2) designing, validating and testing your application, and (3) ensuring your application meets applicable
+standards, and any other safety, security, regulatory or other requirements.
+These resources are subject to change without notice. TI grants you permission to use these resources only for development of an
+application that uses the TI products described in the resource. Other reproduction and display of these resources is prohibited. No license
+is granted to any other TI intellectual property right or to any third party intellectual property right. TI disclaims responsibility for, and you
+will fully indemnify TI and its representatives against, any claims, damages, costs, losses, and liabilities arising out of your use of these
+resources.
+TI’s products are provided subject to TI’s Terms of Sale or other applicable terms available either on ti.com or provided in conjunction with
+such TI products. TI’s provision of these resources does not expand or otherwise alter TI’s applicable warranties or warranty disclaimers for
+TI products.
+TI objects to and rejects any additional or different terms you may have proposed. IMPORTANT NOTICE
+
+                             Mailing Address: Texas Instruments, Post Office Box 655303, Dallas, Texas 75265
+                                            Copyright © 2024, Texas Instruments Incorporated
+

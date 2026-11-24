@@ -1,0 +1,16 @@
+Nexperia ASFET linear-mode fallback, web evidence captured Nov 23, 2026 (HST). The PDFs at assets.nexperia.com return
+"Access Denied" to curl from this box, so these are the search-index excerpts of the official pages, not the PDFs.
+
+PSMN4R8-100YSE  https://assets.nexperia.com/documents/data-sheet/PSMN4R8-100YSE.pdf (25 June 2021 product data sheet)
+  "N-channel enhancement mode MOSFET in a LFPAK56E package qualified to 175 C. Part of Nexperia's 'ASFETs for hotswap'
+   portfolio ... very low RDSon and a very strong linear-mode (SOA) performance ... complements the latest hot-swap controllers"
+  "Fully optimized Safe Operating Area (SOA) for superior linear mode operation"
+PSMN3R9-100YSF  https://assets.nexperia.com/documents/data-sheet/PSMN3R9-100YSF.pdf (regular technology, NOT the fallback)
+  Package "LFPAK56E; Power-SO8 (SOT1023)"; pins 1-3 S, 4 G, mb D; VGS +/-20 V; IDM 690 A (tp <= 10 us); Tj 175 C.
+Nexperia "Managing in-rush current & hot SOA curves" (Sept 2021):
+  PSMN3R9-100YSF vs PSMN4R8-100YSE SOA at 50 V: 1 ms 6 A vs 18 A; 10 ms 2 A vs 8 A; 100 ms 1.2 A vs 4.5 A ("Spirito knee is removed",
+  hot SOA at 125 C characterised).
+JLC stock today (fetch/search_PSMN4R8-100YSE.json): C5122725 PSMN4R8-100YSE = 0, C3278354 PSMN4R8-100YSEX = 0 -> consign if needed.
+Pin map vs BSC070N10NS5 (TDSON-8 / SuperSO8 5x6): 1-3 S, 4 G, tab/5-8 D on both -> same schematic symbol pins; the land pattern
+must be a combined TDSON-8 / LFPAK56E pattern (LFPAK56E gull-wing source/gate leads are longer than the TDSON-8 pads), checked
+at layout against both vendors' recommended footprints.
