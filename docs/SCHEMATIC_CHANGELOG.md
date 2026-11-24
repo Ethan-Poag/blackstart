@@ -1292,3 +1292,18 @@ Patch: tools/p7_power_patch.py (power.kicad_sch only, idempotent). Math: tools/p
   - Main board parts $266.36 → $266.48 per board at qty 1.
   - Q2 worst SOA ratio 0.91.
   - Evidence: docs/split_evidence/p7.
+
+## Batch 34a: P7 full-review fixes (Grok Bot for Ethan, 2026-11-24 HST; review /workspace/review/split_pass_p7.md; PCB not touched)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| U36 (inputs.kicad_sch), D+ excitation LM317M | UMW LM317MDT-TR, C3015165 (JLC: 0 to +125 °C junction) | onsemi LM317MBDTRKG, C179570 (−40 to +125 °C Tj), same TO-252-2 footprint, same pinout (1 ADJ, 2 OUT/tab, 3 IN), Extended part, JLC stock 8,926, $0.21 | The only engine-path part found rated just 0 °C (32 °F) and up. Board +$0.04. | JLC parts API, 2026-11-24 |
+| power.kicad_sch notes (SAFE DOMAIN text, U5 Note) | "+3V3_BK (always on)", "always-on 3.3V from battery" | EN divider + Q2 hold-off wording | Out of date after Batch 34 | — |
+| DESIGN_NOTES l.363, bom/design_spec.md l.128 | "EN tied to VBAT_P" | Batch 34 annotation | Out of date | — |
+
+- Review audits with no findings:
+  - every R/C Value vs its MPN code;
+  - Description values vs drawn values;
+  - capacitor voltage ratings on battery-side nets (the only 25 V parts there are the TPS48100 BST-SRC caps, ≤ 19 V);
+  - all 259 LCSC codes vs the JLC MPN (packaging suffixes only);
+  - the m7-modular R22K/R47K mix-up does not affect this branch: every C4190 part is 2.2k and every C23162 part is 4.7k, R1121/R1123 are 22k C31850 and R1126 is 47k C25819, and tools/p7_calc.py fails the gate if they drift.
+- Checks: ERC 0/0, BOM 0 mismatches, meter netlist identical to 5bac9fe.
