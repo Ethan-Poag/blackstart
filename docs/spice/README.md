@@ -36,7 +36,7 @@ Simulated in `ngspice 44.2` (`s1_split.py`, `s2_start.py` / `s2_c601.py`, `s3_ho
    - **Gates re-run (`edbae88`):** ERC `0/0` (`genctl`, `genctl_meter`), BOM `0` mismatches (`1,154` main / `218` meter refs; main board `$266.51` qty 1 / `$226.09` qty 10), `p7_calc.py` OK.
 3. **`R295`/`R301` (G1PU) 10 Ω → 22 k `C31850`, and new `R650`/`R651` 100 k `C25803` TMR latch-off (`outputs.kicad_sch`) — Batch 34c.** Needed once `C197`/`C201` are DNP: 10 Ω false-trips a 470 nF EMI cap, and open-TMR auto-retry plus the 22 k slew kicked `VBAT_ESTOP` to 111 V on a 24 V / 2 µH short. Latch-off holds 24/32 V to ≤ 50.1 V with no retry. 12 V / 2 µH can still retrigger through a VS POR dip (80.6 V, under 85 V). Cost about +$0.01 / board. Reset the latch by toggling INP1 or EN, or by VS below POR.
 
-## 4. Ride-Through Options (Recommended Only — Not Applied to Schematic)
+## 4. Ride-Through Options & Option B Applied (`f88ce9b`..follow-up)
 
 Identical to `m7-modular` (`results/s5_ride_split_asis_A_B.txt`, 286/288 converged):
 - **As-is (`asis`):** `0.2 ms` (O) / `0.1 ms` (G) @ `12 V`; `1 ms` (O) / `0.1 ms` (G) @ `24/32 V`; worst `Q2` SOA `0.41`.
@@ -50,4 +50,10 @@ Identical to `m7-modular` (`results/s5_ride_split_asis_A_B.txt`, 286/288 converg
 - `edbae88`: **Schematic fix (`C197`/`C201` 4.7 nF → DNP) + ERC/BOM/`p7_calc` gates**.
 - Batch 34c: **`R295`/`R301` 22 k + `R650`/`R651` 100 k TMR latch-off** + ERC/BOM/`p7_calc` gates.
 
-**Verdict (`m7-split-p7`):** Power front end and `VBAT_ESTOP` crank/fuel channels are **CLEARED FOR PLACEMENT** (Option A/B ride-through deferred for Ethan's decision). 22 k G1PU plus 100 k TMR latch-off is required with the DNP TMR capacitors.
+### 4.1 As-Drawn Option B Verification (`optB_verify.py`, `f88ce9b` and follow-up)
+Option B (+10 parts on the mainboard: `Q123, Q124, R1127–R1129` lockout + `D403, D404, R1130, C1122, C1123` hold-up; `+$1.24` qty 1 / `+$1.00` qty 10 → `$267.76 / $227.10`) was applied and re-verified from the as-drawn values:
+- **Sim 2b (`s2_c601_split_optB.txt`, `C601 = 100 nF`, 60–110%):** worst `Q2 SOA = 0.81` (`0.8083` at 60 nF, 75 µA, 32 V, `Tj 162 °F / 72 °C`) vs `0.80` pre-Option B.
+- **Sim 5 (`s5_ride_split_optB.txt`, boundary corners):** `12 V` `0.5 ms (O) / 0.2 ms (G)` (`SOA ≤ 0.06`); `24 V` `5 ms (O/G)` at −20% `160 µF + 1.4 µF` (`75 µA` survives 10 ms; `39 µA` resets at 19.49 ms; 1 unconverged: `24 V G 10 ms 39 µA`, bounded by the O corner); `32 V` `20 ms (O/G)` (`SOA 0.87`).
+- **Sim 1/1b (`s1_short_split_optB.txt`, `32 V` worst-L loaded):** kick/recovery essentially unchanged (`VBAT_P 41.4 V`, `BAT_IN 50.1 V`, `Q2 45 A`, `Tj 150 °F / 66 °C`, `SOA ≤ 0.07`, `U5_EN min` improved `4.05 V → 9.95 V`).
+
+**Verdict (`m7-split-p7`):** Power front end, Option B ride-through, and `VBAT_ESTOP` crank/fuel channels are **CLEARED FOR PLACEMENT**. 22 k G1PU plus 100 k TMR latch-off is required with the DNP TMR capacitors.

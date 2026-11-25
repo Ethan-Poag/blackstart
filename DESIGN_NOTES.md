@@ -360,7 +360,7 @@ Values marked *assumed* were chosen from datasheet equations or typical applicat
 ## Rev 2026-10-24: always-on safety 3.3 V, datasheet pass
 
 ### +3V3_SAFE domain (restored battery backup)
-- +3V3 (TPS56637 from +12V) and +3V3_BK (LMR36506RRPER, EN tied to VBAT_P, runs 4.2-65 V so covers 6-32 V battery incl. cranking) [Batch 34: EN is now the R1125/R1126 divider (on above 3.6–4.25 V) and the Q2 hold-off can hold it off] feed a TPS2116 priority mux -> +3V3_SAFE.
+- +3V3 (TPS56637 from +12V) and +3V3_BK (LMR36506RRPER, EN tied to VBAT_P, runs 4.2-65 V so covers 6-32 V battery incl. cranking) [Batch 34 + 34d Option B: EN divider from U5_VIN (D403/D404 SS110 + 2x 100uF hold-up); Q123/Q124 lockout while +3V3_BK is up] feed a TPS2116 priority mux -> +3V3_SAFE.
 - Powers: STM32H743, FRAM, TPS3431 watchdog, E-stop logic, input/output expanders, front-panel logic. CM5, display, comms, modem stay on +3V3/+5V/+12V.
 - LMR36506: RT 40.2k (18286/400^1.021 = 40.4k -> ~400 kHz); FB 100k/43.2k -> 1.0*(1+100/43.2)=3.315 V; L 33 uH; 2x47 uF; CIN 2.2 uF/100 V + 100n.
 - TPS2116: VIN1=+3V3 priority, PR1 divider 18.7k/10k -> switchover when +3V3 < 1.0*28.7/10 = 2.87 V (2.64-3.10 V over tol). ST -> PSU_MAIN_OK (STM32 PC3_C, 100k pull-up to SAFE) so firmware knows it is on backup.
@@ -662,3 +662,9 @@ Source: /workspace/review/sch_review/SCH_REVIEW_2026-11-22_pass6.md m1-m3, NOTEs
   - U5.3 EN must be cut from VBAT_P. RAIL_PLAN REVISION 3 already reports U5.3 isolated from the Q3 copper group on pcb_v4; check that against this.
   - Placement: C601/R1001 at U1 HGATE; the hold-off near Q1/Q2 with short BAT_IN/VBAT_P sense; D402 near U2 pin 1 and U5 pin 3.
 - Checks: ERC 0/0, netlist diff with only the intended deltas, BOM 0 mismatches (docs/split_evidence/p7). Parts +$0.12 per board. One new JLC extended part (C313105), so one extended-part fee per order.
+
+## m7-split-p7 Batch 34d (2026-11-24 HST): Ride-through Option B applied
+Ethan selected Option B for the 24 V fleet. +10 parts on `power.kicad_sch` (all already on the BOM): Q123/Q124 MMBT3904 C20526, R1127/R1129 47k C25819, R1128 100k C25803, D403/D404 SS110 C2482, R1130 2.2k C4190, C1122/C1123 100 µF 63 V C178628. D402 pin 2 is now NC. U5 VIN and the R1125/R1126 divider sit on U5_VIN.
+- Cost: main **$267.76 / $227.10** (was $266.52 / $226.10, +$1.24 / +$1.00).
+- As-drawn ride-through (160 µF −20% aged): 12 V 0.5 ms (open) / 0.2 ms (ground short); 24 V 5 ms (10 ms at 75 µA HGATE, and at 170/200 µF nominal); 32 V 20 ms. Worst Q2 SOA 0.87 at 32 V 20 ms; cold-start SOA 0.81 across the C601 60–110% band (was 0.80). 32 V worst-L dead-short kick unchanged; U5_EN min improved 4.05 V → 9.95 V.
+- The Batch 34 trade-off (interruptions over ≈ 0.15–0.35 ms reset the controller) no longer applies with Option B at 24/32 V.

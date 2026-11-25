@@ -1328,3 +1328,24 @@ Patch: tools/p7_power_patch.py (power.kicad_sch only, idempotent). Math: tools/p
 - Cost: R295/R301 10 R → 22 k is +$0.0048; R650/R651 two 100 k `C25803` is +$0.0058; about +$0.01 per board at qty 1. `C31850` and `C25803` were already on the BOM.
 - Gates: ERC `0/0` (`genctl`, `genctl_meter`), BOM 0 mismatches (`1,156` main / `218` meter refs; main board `$266.52` qty 1 / `$226.10` qty 10, was `$266.51`), `tools/p7_calc.py` OK (now also checks R295/R301/R650/R651 and C197/C201 DNP).
 
+## Batch 34d: Ride-through Option B applied (Grok Bot for Ethan, 2026-11-24 HST; PCB not touched)
+
+Ethan selected **Option B** for the 24 V fleet (10–20 ms ride-through). Applied on `power.kicad_sch` (`f88ce9b`); gates `73e91a0`; as-drawn SPICE `a9e4568` and follow-up.
+
+| Ref | Was | Now | Why | Evidence |
+|---|---|---|---|---|
+| D402 pin 2 | U5_EN | NC (pin 1 still pulls BB_UVLO) | Hold-off must not drop U5_EN while +3V3_BK is up | s5 Option A/B |
+| Q123, Q124 (new) | — | MMBT3904 C20526 SOT-23. Q123 C=U5_EN, B=HO_U5B, E=GND. Q124 C=HO_U5B, B=HO_U5LOCK, E=GND | Lockout: Q124 holds Q123 off whenever +3V3_BK is up | existing BOM C20526 |
+| R1127, R1129 (new) | — | 47k 0603 C25819 (HO_C→HO_U5B, +3V3_BK→HO_U5LOCK) | Base drive | C25819 already on BOM |
+| R1128 (new) | — | 100k 0603 C25803 (HO_U5B→GND) | Q123 B-E | C25803 already on BOM |
+| U5.4, C38, C39, R1125 | VBAT_P | U5_VIN (new local net); #FLG9001 added on VBAT_P | U5 VIN and EN divider ride on the hold-up island | s5 Option B deck |
+| D403, D404 (new) | — | SS110 C2482 SMA. D403 A=VBAT_P K=U5_VIN; D404 A=U5_HU K=U5_VIN | Steering diode + fast discharge path | C2482 already on BOM |
+| R1130 (new) | — | 2.2k 0603 C4190 (U5_VIN↔U5_HU) | Limits C1122/C1123 charge current during the Q2 ramp | C4190 already on BOM |
+| C1122, C1123 (new) | — | 2× 100 µF 63 V EEETG1J101UP C178628 (CP_Elec_10x10.5), + = U5_HU, − = GND | 200 µF nominal / 160 µF −20% aged U5 hold-up | C178628 already on BOM (same as C3/C4) |
+
+- Gates (`73e91a0`): ERC `0/0` (`genctl`, `genctl_meter`), BOM 0 mismatches (`1,166` main / `218` meter refs, +10 fitted), `tools/p7_calc.py` 32/32 value checks OK.
+- Cost: main board **`$267.76` qty 1 / `$227.10` qty 10** (was `$266.52 / $226.10`, **`+$1.24 / +$1.00`**). Meter `$63.89 / $53.42` and harness `$2.91 / $1.87` unchanged. All 10 parts were already on the BOM; no new LCSC SKUs.
+- As-drawn SPICE (`docs/spice/results/s2_c601_split_optB.txt`, `s5_ride_split_optB.txt`, `s1_short_split_optB.txt`):
+  - Sim 2b (`C601 = 100 nF`, 60–110% band): worst `Q2 SOA = 0.81` (`0.8083` at 60 nF / 75 µA / 32 V, `Tj 162 °F / 72 °C`) vs `0.80` pre-Option B.
+  - Sim 5 boundary corners (160 µF aged, C38+C39 ~1.4 µF on U5_VIN): `12 V` survives **0.5 ms (O) / 0.2 ms (G)**; `24 V` survives **5 ms (O & G)** (`75 µA` also survives 10 ms; `39 µA` at 160 µF resets at 19.49 ms); `32 V` survives **20 ms (O & G)**; worst SOA **0.87**. Unconverged: `24 V G 10 ms 39 µA` (bounded by the matching O corner).
+  - Sim 1/1b (`32 V` worst-L loaded): kick unchanged vs pre-Option B (`VBAT_P 41.4 vs 41.3 V`, `Q2 45 vs 44 A`, `Tj 150 °F / 66 °C`, `F1 I²t 0.0339 vs 0.0330 A²s`); `U5_EN min` improved `4.05 V → 9.95 V`. Recovery: MCU alive, SOA ≤ 0.07. At `32 V / 60 nH`, Q2 Vgs did not re-cross 8 V in the recorded window (`vp_end 37.40 V`); the 150 nH corner recovered in 0.036 ms and MCU stayed up in both.
