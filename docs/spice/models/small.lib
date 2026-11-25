@@ -1,0 +1,14 @@
+* Small-signal parts. Public manufacturer SPICE models (Fairchild/ON Semi PSpice library) for the die types:
+* MMBT3904 = 2N3904 die, MMBT5401 = 2N5401 die (same ON Semi datasheets), 1N4148W = 1N4148 die.
+* BAT54 and SS110/SS310B: fitted to the datasheet Vf curves (Diodes Inc. model URLs 404; see README).
+.model Q2N3904 NPN(Is=6.734f Xti=3 Eg=1.11 Vaf=74.03 Bf=416.4 Ne=1.259 Ise=6.734f Ikf=66.78m Xtb=1.5 Br=.7371 Nc=2
++ Isc=0 Ikr=0 Rc=1 Cjc=3.638p Mjc=.3085 Vjc=.75 Fc=.5 Cje=4.493p Mje=.2593 Vje=.75 Tr=239.5n Tf=301.2p Itf=.4 Vtf=4 Xtf=2 Rb=10)
+.model Q2N5401 PNP(Is=21.48f Xti=3 Eg=1.11 Vaf=100 Bf=132.1 Ne=1.375 Ise=21.48f Ikf=.1848 Xtb=1.5 Br=3.661 Nc=2
++ Isc=0 Ikr=0 Rc=1.6 Cjc=17.63p Mjc=.5312 Vjc=.75 Fc=.5 Cje=73.39p Mje=.3777 Vje=.75 Tr=1.476n Tf=641.9p Itf=0 Vtf=0 Xtf=0 Rb=10)
+.model D1N4148 D(Is=2.682n N=1.836 Rs=.5664 Ikf=44.17m Xti=3 Eg=1.11 Cjo=4p M=.3333 Vj=.5 Fc=.5 Isr=1.565n Nr=2 Bv=100 Ibv=100u Tt=11.54n)
+* BAT54: Vf 0.24 V @ 0.1 mA, 0.32 V @ 1 mA, 0.40 V @ 10 mA, 0.8 V @ 100 mA (Diodes Inc. DS11005 Fig. 1, 77 F)
+.model DBAT54 D(Is=4.5n N=1.0 Rs=2.2 Cjo=10p M=.33 Vj=.35 Eg=.69 Xti=2 Bv=30 Ibv=2u)
+* SS110 (1 A 100 V): Vf 0.55 V @ 0.1 A, 0.85 V @ 1 A
+.model DSS110 D(Is=2u N=1.6 Rs=0.15 Cjo=80p M=.5 Eg=.69 Xti=2 Bv=100)
+* SS310B (3 A 100 V, MDD): 0.79 V @ 3 A, 1.15 V @ 10 A, 1.35 V @ 20 A (Fig. 3) -> nVt 0.133 V, Rs 20 mOhm
+.model DSS310 D(Is=7.9m N=5.1 Rs=0.02 Cjo=300p M=.5 Eg=.69 Xti=2 Bv=100)
