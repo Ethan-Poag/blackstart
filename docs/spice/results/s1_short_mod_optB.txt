@@ -1,0 +1,12 @@
+Sim 1 (mod as-drawn Option B): 32 V worst-L dead short (Rb=15m, Lb=2uH, Rd2=25m, cold=1, Lbank=150nH, tresp=1.5us)
+mode                 case        VBAT_P  BAT_IN  VBAT_SLOTS  U65    eFuse   harness  Q2 Ipk  Q2 Tj        F1 I2t   U5_EN min  HO_F max
+loaded               pessimistic  41.5V   55.6V     48.1V    31.6V   305A     47A      45A    151F ( 66C)  0.0315    9.95V     0.09V
+loaded               realistic    33.9V   34.1V     35.2V    31.4V    61A     16A      16A    149F ( 65C)  0.0082    9.95V     0.01V
+
+pre-optB loaded      pessimistic  41.4V   55.5V     48.4V    31.6V   305A     46A      44A    151F ( 66C)  0.0309    4.08V     0.07V
+pre-optB loaded      realistic    33.9V   34.1V     35.2V    31.4V    61A     16A      16A    149F ( 65C)  0.0081    8.62V     0.00V
+
+Sim 1b recovery (mod as-drawn Option B, C601=100nF):
+12.0 V Lbank=150nH | VBAT_P min/end  3.52/11.68V | MCU alive (  0.006 ms /      none) | Q2 Vgs>8V   0.007 ms | Q2 Tj  151F ( 66C) | SOA 0.06
+32.0 V Lbank= 60nH | VBAT_P min/end 12.06/31.72V | MCU alive (     none /      none) | Q2 Vgs>8V   0.034 ms | Q2 Tj  151F ( 66C) | SOA 0.05
+32.0 V Lbank=150nH | VBAT_P min/end 12.16/33.88V | MCU alive (     none /      none) | Q2 Vgs>8V   0.016 ms | Q2 Tj  150F ( 66C) | SOA 0.04
