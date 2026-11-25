@@ -20,18 +20,21 @@ def one(a):
        'Vbat vb 0 PWL(0 0 10u %g)'%V,'Rb vb nb %g'%Rb,'Lb nb ESTIN %g'%Lb,'RQ70 ESTIN VBAT_ESTOP 20m',
        'XD126 VBAT_ESTOP 0 TVSCA PARAMS: vbr=%g rd=%g'%TVS['SMDJ40CA'],'C199 VBAT_ESTOP 0 160n',
        'R303 VBAT_ESTOP CRANK_DRN 20m','Vtc tc 0 65',
-       'VQ CRANK_DRN qd 0','XQ47 qd CRANK_G CRANK_OUT tj47 tc BSC070N10NS5 PARAMS: Zthtype=1','XQ48 qd CRANK_G CRANK_OUT tj48 tc BSC070N10NS5 PARAMS: Zthtype=1',
+       'VQ CRANK_DRN qd 0','XQ47 qd g47 CRANK_OUT tj47 tc BSC070N10NS5 PARAMS: Zthtype=1','XQ48 qd g48 CRANK_OUT tj48 tc BSC070N10NS5 PARAMS: Zthtype=1',
+       'Rg47 CRANK_G g47 1','Rg48 CRANK_G g48 1',   # 1 Ohm per gate (trace/package): identical parallel FETs on one node stall ngspice
        'R301 G1PU CRANK_G 10','R302 G1PD CRANK_G 1m','C202 BST CRANK_OUT 470n',
        'XD69 CRANK_OUT 0 TVSCA PARAMS: vbr=%g rd=%g'%TVS['SMDJ40CA'],'D72 0 CRANK_OUT DSS310','R352 CRANK_OUT 0 100k',
        'R298 VBAT_ESTOP EN 100k','R299 EN 0 27k','VINP INP1 0 5','RFLT FLT VPU 10k','VPU VPU 0 3.3',
        'R300 ISCP 0 40.2k','C201 TMR 0 4.7n',
        'XU45 BST CRANK_DRN VBAT_ESTOP 0 EN FLT G1PD G1PU G2 0 INP1 0 ISCP 0 CRANK_OUT TMR VBAT_ESTOP TPS48100-Q1_TRANS',
        'RLOAD CRANK_OUT 0 %g'%V,
-       'Ls CRANK_OUT ls1 %g'%Ls,'Rd2 ls1 ls2 %g'%Rd2,'Bsh ls2 0 I = V(ls2)*(1e3*max(min(V(shc),1),0)+1e-9)','Vsh shc 0 PWL(0 0 %g 0 %g 1)'%(T_SH,T_SH+1e-9)]
+       'Ls CRANK_OUT ls1 %g'%Ls,'Rd2 ls1 ls2 %g'%Rd2,'Bsh ls2 0 I = V(ls2)*(1e3*max(min(V(shc),1),0)+1e-9)','Vsh shc 0 PWL(0 0 %.9g 0 %.9g 1)'%(T_SH,T_SH+1e-9)]
     name='s1sp_%g_%g_%g_%g_%g'%(V,Rb*1e3,Lb*1e6,Ls*1e6,Rd2*1e3)
     r=run(L,['i(VQ)','v(VBAT_ESTOP)','v(CRANK_OUT)','v(qd,CRANK_OUT)','v(tj47)','v(FLT)','v(CRANK_G,CRANK_OUT)','i(Lb)'],T_SH+0.6e-3,0.5e-6,name,tmax=0.5e-6,
           opts='',timeout=3000)
-    t=r['t']; m=t>=T_SH-1e-6; iq=r['i(VQ)']
+    t=r['t']
+    if t[-1]<T_SH+20e-6: raise RuntimeError('%s ended at %g s, before the short was cleared'%(name,t[-1]))
+    m=t>=T_SH-1e-6; iq=r['i(VQ)']
     on=float(np.interp(T_SH-10e-6,t,r['v(CRANK_OUT)']))
     kpk=np.argmax(np.where(m,iq,-1)); toff=first(t[kpk:],iq[kpk:]<1.0)
     vds=r['v(qd,CRANK_OUT)']

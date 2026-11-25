@@ -46,7 +46,8 @@ def frontend(p):
     L.append('VQ2 VBAT_DD q2d 0')
     L.append('XQ2 q2d HGATE VBAT_PS tj2 tc BSC070N10NS5 PARAMS: Zthtype=%d'%zt)
     L.append('R555 VBAT_PS vp1 2m'); L.append('Lf vp1 VBAT_P 10n')
-    L.append('XU1 BAT_IN VBAT_DD DGATE HGATE VBAT_P OV UVLO LM74800B PARAMS: ihg=%g tdeg=%g'%(p.get('ihg',75e-6),p.get('tdeg',3.98e-6)))
+    fon=p.get('force_on', p.get('vb_src') is None)   # running-state decks (DC battery) start with U1 enabled
+    L.append('XU1 BAT_IN VBAT_DD DGATE HGATE VBAT_P OV UVLO LM74800B PARAMS: ihg=%g tdeg=%g fon=%d'%(p.get('ihg',75e-6),p.get('tdeg',3.98e-6),1 if fon else 0))
     L.append('R1001 HGATE DVDT 1k'); L.append('C601 DVDT 0 %g'%p.get('c601',C601_DEFAULT))
     # VBAT_P ceramics (bias derating as kick_calc) + bulk electrolytics
     cc=(4*10e-6*0.55+2.2e-6*0.5) if cold else (4*10e-6*0.65+2.2e-6*0.6)
