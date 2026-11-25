@@ -3,7 +3,7 @@
 Netlist facts (kicad-cli netlist of genctl.kicad_sch, 2026-11-24):
   BAT_IN: C297 220n, D1 SMDJ40CA, D401 1N4148W, U1 A, OV divider R1 210k / R2 49.9k / R3 8.66k.
   Q1 BSC070N10NS5 (S = BAT_IN, G = DGATE, D = VBAT_DD); VBAT_DD: C1, C2 100n; Q2 BSC070N10NS5 (D = VBAT_DD, G = HGATE,
-  S = VBAT_PS) -> R555 2 mOhm -> VBAT_P. U1 HGATE -> R1001 1k -> C601 22n/100 V.
+  S = VBAT_PS) -> R555 2 mOhm -> VBAT_P. U1 HGATE -> R1001 1k -> C601 (drawn 22n/100 V before this SPICE pass, now 100n/100 V).
   VBAT_P: C5-C8 4x10u X7S, C38 2.2u, C39/C233 100n, C3/C4 2x EEETG1J101UP 100u 63 V (0.8 Ohm), D2 SMBJ40CA,
   modular + C1105 2.2u/100 V; split + 15x100n (C205-C219). U65 feed D120 SS110 + C225 10u (modular adds R1002 47R ahead).
   Hold-off (both): D401 1N4148W, Q121 MMBT5401, R1121 22k, R1122 68k, R1123 22k, C1121 100n, R1124 100k, Q122 MMBT3904,

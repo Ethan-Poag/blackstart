@@ -10,7 +10,7 @@ from fe import *
 def one(a):
     br,c601,ihg,V=a
     p=dict(V=V,Rb=0.015,Lb=0.5e-6,branch=br,ihg=ihg,c601=c601,u2=dict(ss0=0),u5=dict(),vb_src='Vbat vb 0 PWL(0 0 10u %g)'%V)
-    tst=V/(ihg/(c601+1e-9))+16e-3
+    tst=1.4*V/(ihg/(c601+1e-9))+20e-3   # ramp is ~1.3x the ideal Q/I; U2 needs ~9 ms more at 12 V
     r=run(frontend(p),['v(VBAT_P)','v(VBAT_DD,VBAT_PS)','i(VQ2)','v(tj2)','v(xu2.runs)'],tst,2e-6,'s2c_%s_%g_%g_%g'%(br,c601*1e9,ihg*1e6,V),tmax=4e-6,temp=85)
     t=r['t']
     return a,soa(r),first(t,r['v(VBAT_P)']>0.97*V),float(r['v(tj2)'].max()),first(t,r['v(xu2.runs)']>0.5)
@@ -22,7 +22,7 @@ if __name__=='__main__':
     for (b,c,i,V),s,tr,tj,tu2 in R:
         nom=22 if c<40e-9 else 100
         out.append('  %3d nF      %5.1f nF   %2.0f uA %4.1f | %6.1f ms    %6s   | %.2f (%.0e s, %4.1f V, %.3f A) %s  %4.0f F (%3.0f C)'%(nom,c*1e9,i*1e6,V,tr*1e3,
-            ('%5.1f ms'%(tu2*1e3)) if tu2 else '  >end',s[0],s[1],s[2],s[3],'EXCEEDED' if s[0]>1 else ('<10%% margin' if s[0]>0.9 else 'OK        '),F(tj),tj))
+            ('%5.1f ms'%(tu2*1e3)) if tu2 else '  >end',s[0],s[1],s[2],s[3],'EXCEEDED' if s[0]>1 else ('<10% margin ' if s[0]>0.9 else 'OK        '),F(tj),tj))
     for nom in (22,100):
         S=[x for x in R if (x[0][1]<40e-9)==(nom==22)]
         out.append('WORST with %d nF nominal (60-110 %% band): %.2f'%(nom,max(x[1][0] for x in S)))

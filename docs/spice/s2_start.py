@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Sim 2: cold start (battery connected with everything discharged) into the full load and bulk caps.
-Deck: fe.frontend (vendor BSC070N10NS5 Q1/Q2 with thermal network, behavioral LM74800 HGATE 39/75 uA into R1001 1k + C601 22n,
+Deck: fe.frontend (vendor BSC070N10NS5 Q1/Q2 with thermal network, behavioral LM74800 HGATE 39/75 uA into R1001 1k + C601 (fe.C601_DEFAULT = 100 nF after the sim-2b fix; results/s2_start_mod_c601_22n.txt = as drawn before),
 transistor-level hold-off), U2 LM5176 as a 79.5 W input load with 7.5 ms soft start gated by BB_UVLO (C602 1 uF or 0.5 uF derated),
 U5 LMR36506 as a 2.1 W load gated by U5_EN. Battery 0 -> Vb in 10 us through the harness (Rb 15 mOhm, Lb 0.5 uH, as the hand calc).
 Q2 SOA = the hand calc's soa_check (BSC070 Diagram 3 derated to Tc 149 F / 65 C) on 10 us bins of the simulated Vds/Id;
@@ -13,7 +13,7 @@ def one(a):
     br,V,ihg,temp,c602,cold=a
     p=dict(V=V,Rb=0.015,Lb=0.5e-6,cold=cold,branch=br,ihg=ihg,c602=c602,u2=dict(ss0=0),u5=dict(),
            vb_src='Vbat vb 0 PWL(0 0 10u %g)'%V)
-    tst=V/(ihg/23e-9)+14e-3
+    tst=1.4*V/(ihg/(p.get('c601',C601_DEFAULT)+1e-9))+20e-3   # covers the slowest ramp + U2 soft start
     name='s2_%s_%g_%g_%g_%g_%d'%(br,V,ihg*1e6,temp,c602*1e6,cold)
     r=run(frontend(p),['v(BAT_IN)','v(VBAT_P)','v(VBAT_DD,VBAT_PS)','i(VQ2)','v(tj2)','i(Lb)','v(xu2.runs)','v(U5_ALIVE)','v(HO_F)'],tst,1e-6,name,tmax=2e-6,temp=temp)
     t=r['t']; vp=r['v(VBAT_P)']
