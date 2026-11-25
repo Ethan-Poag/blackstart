@@ -12,7 +12,8 @@ CC=4*10e-6*0.65+2.2e-6*0.6+0.2e-6+2*100e-6 + 15*100e-9*0.8 + 10e-6*0.5     # ~23
 print(__doc__)
 # ---- 0. drawn values (fails loudly if a part is wrong)
 s=open(os.path.join(ROOT,'power.kicad_sch')).read()
-WANT={'R1001':('1k','C21190'),'C601':('22n 100V','C313105'),'C602':('1u 50V','C28323'),'D401':('1N4148W','C81598'),'Q121':('MMBT5401','C8326'),
+# C601: 100 nF C15725 since the SPICE pass (docs/spice/README.md); the hand-calc model below keeps the P7 22 nF record.
+WANT={'R1001':('1k','C21190'),'C601':('100n 100V','C15725'),'C602':('1u 50V','C28323'),'D401':('1N4148W','C81598'),'Q121':('MMBT5401','C8326'),
       'R1121':('22k','C31850'),'R1122':('68k','C23231'),'R1123':('22k','C31850'),'R1124':('100k','C25803'),'C1121':('100n','C14663'),
       'Q122':('MMBT3904','C20526'),'D402':('BAT54C','C37704'),'R1125':('100k','C25803'),'R1126':('47k','C25819'),'R4':('100k',None),'R5':('33k',None)}
 bad=0

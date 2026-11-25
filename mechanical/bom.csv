@@ -34,7 +34,7 @@
 "C297","220n","Capacitor_SMD:C_0805_2012Metric","1"
 "C298","4.7u","Capacitor_SMD:C_1206_3216Metric","1"
 "C310,C313","10n","Capacitor_SMD:C_0603_1608Metric","2"
-"C601","22n 100V","Capacitor_SMD:C_0603_1608Metric","1"
+"C601","100n 100V","Capacitor_SMD:C_0603_1608Metric","1"
 "C602","1u 50V","Capacitor_SMD:C_0805_2012Metric","1"
 "D1,D68,D69,D126","SMDJ40CA","Diode_SMD:D_SMC","4"
 "D2,D63,D74,D76,D78,D80,D82,D84,D86,D88,D90,D92,D94,D96,D98,D100,D102,D123","SMBJ40CA","Diode_SMD:D_SMB","18"

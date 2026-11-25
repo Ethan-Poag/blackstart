@@ -34,7 +34,7 @@
 "C297","1","220n","Capacitor_SMD:C_0805_2012Metric","CC0805KKX7R0BB224","YAGEO","C513710","Extended","0.0295","0.0295","0.03","0.03","JLC parts API live","",""
 "C298","1","4.7u","Capacitor_SMD:C_1206_3216Metric","CL31B475KAHNNNE","Samsung Electro-Mechanics","C1872","Extended","0.0606","0.0606","0.06","0.06","JLC parts API live","",""
 "C310,C313","2","10n","Capacitor_SMD:C_0603_1608Metric","CL10B103KB8NNNC","Samsung Electro-Mechanics","C1589","Extended","0.0071","0.0071","0.01","0.01","JLC parts API live","",""
-"C601","1","22n 100V","Capacitor_SMD:C_0603_1608Metric","CC0603KRX7R0BB223","YAGEO","C313105","Extended","0.0128","0.0128","0.01","0.01","JLC parts API live (split P7, from m7-modular)","",""
+"C601","1","100n 100V","Capacitor_SMD:C_0603_1608Metric","CL10B104KC8NNNC","Samsung Electro-Mechanics","C15725","Extended","0.0101","0.0101","0.01","0.01","JLC parts API live","",""
 "C602","1","1u 50V","Capacitor_SMD:C_0805_2012Metric","CL21B105KBFNNNE","Samsung","C28323","Basic","0.0279","0.0279","0.03","0.03","JLC parts API live","",""
 "D1,D68,D69,D126","4","SMDJ40CA","Diode_SMD:D_SMC","SMDJ40CA","Littelfuse","C224077","Extended","0.2798","0.2798","1.12","1.12","JLC parts API live","",""
 "D2,D63,D74,D76,D78,D80,D82,D84,D86,D88,D90,D92,D94,D96,D98,D100,D102,D123","18","SMBJ40CA","Diode_SMD:D_SMB","SMBJ40CA","MDD(Microdiode Semiconductor)","C114004","Extended","0.0558","0.046","1.00","0.83","JLC parts API live","",""
