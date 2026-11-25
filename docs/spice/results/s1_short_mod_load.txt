@@ -1,0 +1,27 @@
+Sim 1 (modular): dead short at one slot output, downstream of the bank switch (U110) and Q2.
+Same grid as kick_calc PART 2: Rb 15/35 mOhm x Lb 0.5/2 uH x Rd2 12/25 mOhm x caps nominal/cold-aged x Lbank 60/150 nH x
+eFuse response 1.0/1.5 us; 'pessimistic' = eFuse current rises freely until the SCP turn-off, 'realistic' = FET saturates at 60 A.
+Slot network as kick_calc: bank = Lbank + Rd1 10 mOhm (bank FETs, 5 mOhm shunt, backplane); VBAT_SLOTS = 8 x (2.2 uF/100 V X7R
++ 100 nF) + C413 2.2u + 100 nF lumped; faulted slot TPS16630 (behavioral) -> OUT (SS310B to GND) -> Ls 50 nH -> Rd2 -> short.
+Default: no load current (worst case for the kick, as the hand calc); 'load' = U2 at full load + U5 2.1 W (worst case for dips); the Q2 hold-off, LM74800 OV (behavioral) and vendor BSC070 Q1/Q2 are in the deck.
+Usage: s1_short.py mod [load] -> results/s1_short_mod[_load].txt
+
+Worst of 64 corners per row (ngspice 44.2; vendor BSC070N10NS5 Q1/Q2 with thermal network Zthtype=1 (max), Tcase 149 F / 65 C).
+Vbat  case          VBAT_P  BAT_IN VBAT_SLOTS VS_min   U65  eFuse pk harness  trip us   OVtrip  Q2 Ipk  Q2 E    Q2 Tj max        E_D1  E_D2  F1 I2t  OUT min  t>OVP  HO_F max
+12.0  pessimistic    16.5V   17.8V     19.7V   -0.2V  11.4V    138A     41A 1.41-1.92   0/64     47A   0.2mJ  151F ( 66C)   0.0mJ  0.0mJ 0.0156  -3.82V  0.0us  0.01V
+12.0  realistic      14.7V   14.8V     16.8V    4.6V  11.4V     60A     28A 1.41-1.92   0/64     27A   0.1mJ  149F ( 65C)   0.0mJ  0.0mJ 0.0110  -2.35V  0.0us  0.00V
+24.0  pessimistic    34.0V   34.1V     40.3V    0.3V  23.6V    278A     77A 1.30-1.81   0/64     74A   0.3mJ  151F ( 66C)   0.0mJ  0.0mJ 0.0401  -6.56V  0.0us  0.00V
+24.0  realistic      26.7V   26.8V     28.8V   16.6V  23.4V     61A     27A 1.30-1.81   0/64     26A   0.1mJ  149F ( 65C)   0.0mJ  0.0mJ 0.0105  -2.37V  0.0us  0.00V
+32.0  pessimistic    45.4V   59.2V     53.7V    0.7V  31.7V    371A    100A 1.28-1.78  46/64     96A   0.4mJ  152F ( 66C)   2.9mJ  0.0mJ 0.0601  -8.34V  0.4us  0.09V
+32.0  realistic      34.7V   34.8V     36.8V   24.6V  31.4V     61A     27A 1.28-1.78   0/64     26A   0.1mJ  149F ( 65C)   0.0mJ  0.0mJ 0.0094  -2.37V  0.0us  0.00V
+
+Dips (same corners): VBAT_P / BAT_IN minimum, LM74800 UVLO glitch (BAT_IN < 5.2 V), U5_EN below 1.16 V, BB_UVLO minimum, Q2 gate
+Vbat  case          VBAT_P min  BAT_IN min  t(VBAT_P<4V)  U1 UVLO   U5_EN<1.16V (max time)  BB_UVLO min  Q2 Vgs min  Q2 Vgs end
+12.0  pessimistic    3.20 V      4.02 V     1.01 us     18/64      2/64 ( 0.47 us)         2.93 V      -0.14 V      2.13 V
+12.0  realistic      6.78 V      6.93 V     0.00 us      0/64      0/64 ( 0.00 us)         2.93 V      10.12 V     11.44 V
+24.0  pessimistic    7.68 V      7.90 V     0.00 us      0/64      0/64 ( 0.00 us)         5.91 V       5.72 V     10.93 V
+24.0  realistic     18.85 V     18.99 V     0.00 us      0/64      0/64 ( 0.00 us)         5.91 V      10.13 V     11.42 V
+32.0  pessimistic   10.56 V     10.83 V     0.00 us      0/64      0/64 ( 0.00 us)         7.91 V      -0.16 V      0.01 V
+32.0  realistic     26.90 V     27.03 V     0.00 us      0/64      0/64 ( 0.00 us)         7.91 V      10.14 V     11.43 V
+
+Simulator warnings: 0 of 384 runs

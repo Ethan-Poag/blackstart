@@ -1,0 +1,12 @@
+Sim 1b (modular): what happens AFTER the slot dead short in the two loaded corners (of 384, results/s1_short_mod_load.txt) where
+Q2's gate had not recovered 80 us after the short (LM74800 OV trip at 32 V / UVLO glitch at 12 V, both only in the 'pessimistic'
+no-saturation eFuse model). Same deck as s1_short.py 'load' (U2 79.5 W, U5 2.1 W, hold-off, vendor BSC070 Q1/Q2), run to 80 ms with a
+coarser max step after the event; C601 100 nF (applied) and 22 nF (as drawn before) for comparison. Reports whether the MCU stays up
+(U2 running or U5 running), U2/U5 drop-out times, Q2 SOA (hand-calc soa_check, 10 us bins) and Tj during the gate recovery.
+Usage: s1b_recover.py -> results/s1b_recover_mod.txt
+
+Vb   corner (Rb, Lb, Rd2, cold, Lbank, tresp)   C601 | VBAT_P min  MCU            U2 off / U5 off   U2 back  | Q2 Vgs>8 V again  Q2 Tj max       SOA ratio
+12.0 (0.015, 2e-06, 0.012, 1, 1.5e-07, 1.5)     100 nF |   3.74 V   alive               none /      none    2.00 ms |    0.00 ms      151 F ( 66 C)  0.06
+12.0 (0.015, 2e-06, 0.012, 1, 1.5e-07, 1.5)      22 nF |   3.74 V   alive               none /      none    2.00 ms |    0.00 ms      151 F ( 66 C)  0.06
+32.0 (0.015, 2e-06, 0.025, 1, 6e-08, 1.5)       100 nF |  12.58 V   alive               none /      none    2.00 ms |    0.00 ms      150 F ( 66 C)  0.05
+32.0 (0.015, 2e-06, 0.025, 1, 6e-08, 1.5)        22 nF |  12.58 V   alive               none /      none    2.00 ms |    0.00 ms      150 F ( 66 C)  0.05

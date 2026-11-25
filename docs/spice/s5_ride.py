@@ -34,7 +34,7 @@ def one(a):
     p.update({k:v for k,v in po.items() if k in ('u5_holdoff','u5en_src')})
     ns=ns_on(V); 
     if opt=='B': ns.update(U5VIN=V-0.3,chu=V-0.3,chu1=V-0.3)
-    tst=T0+tint+V/(ihg/23e-9)+14e-3
+    tst=T0+tint+1.1*V/(ihg/(C601_DEFAULT+1e-9))+14e-3   # covers the slowest HGATE re-ramp
     name='s5_%s_%g_%s_%g_%s_%g'%(br,V,typ,tint*1e3,opt,ihg*1e6)
     r=run(frontend(p),['v(BAT_IN)','v(VBAT_P)','v(VBAT_DD,VBAT_PS)','i(VQ2)','v(tj2)','v(xu2.runs)','v(U5_ALIVE)','v(HO_F)'],tst,2e-6,name,tmax=5e-6,nodeset=ns)
     t=r['t']; alive=(r['v(U5_ALIVE)']>0.5)|(r['v(xu2.runs)']>0.5)

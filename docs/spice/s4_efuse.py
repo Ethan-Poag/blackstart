@@ -5,7 +5,7 @@ lumped as their input caps + 3 A each. Bank = Lbank 60 nH + 10 mOhm; front end a
 U5 2.1 W, hold-off in. Harness Rb 15 mOhm / Lb 0.5 uH (fast corner) and Rb 35 mOhm / Lb 2 uH (slow corner).
  (a) hard short on slot 1 (Ls 50 nH, Rd2 12 mOhm), pessimistic (no FET saturation), t_resp 1.5 us;
  (b) overload on slot 1: load steps from 3 A to 8 A (resistive) -> eFuse regulates at I_OL;
- (c) what the 22 nF HGATE cap (C601 via R1001 1k) and R1002 47R do in these events: Q2 gate and U65 input.
+ (c) what the HGATE cap (C601 via R1001 1k, 100 nF after the sim-2 fix) and R1002 47R do in these events: Q2 gate and U65 input.
 Usage: s4_efuse.py -> results/s4_efuse_mod.txt"""
 import sys, numpy as np, os, multiprocessing as mp
 from fe import *
