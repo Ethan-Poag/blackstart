@@ -50,9 +50,10 @@ def frontend(p):
     fon=p.get('force_on', p.get('vb_src') is None)   # running-state decks (DC battery) start with U1 enabled
     L.append('XU1 BAT_IN VBAT_DD DGATE HGATE VBAT_P OV UVLO LM74800B PARAMS: ihg=%g tdeg=%g fon=%d'%(p.get('ihg',75e-6),p.get('tdeg',3.98e-6),1 if fon else 0))
     L.append('R1001 HGATE DVDT 1k'); L.append('C601 DVDT 0 %g'%p.get('c601',C601_DEFAULT))
-    # VBAT_P ceramics (bias derating as kick_calc) + bulk electrolytics
-    cc=(4*10e-6*0.55+2.2e-6*0.5) if cold else (4*10e-6*0.65+2.2e-6*0.6)
-    cc+=0.2e-6
+    opt_b=p.get('opt_b',True)
+    # VBAT_P ceramics (bias derating as kick_calc) + bulk electrolytics (C38 2.2u + C39 100n live on U5_VIN under Option B)
+    cc=(4*10e-6*0.55) if cold else (4*10e-6*0.65)
+    cc+=0.1e-6 if opt_b else (2.2e-6*(0.5 if cold else 0.6)+0.2e-6)
     if br=='mod': cc+=2.2e-6*(0.5 if cold else 0.6)          # C1105
     else: cc+=15*0.1e-6*0.63                                  # C205-C219
     L.append('CC VBAT_P 0 %g'%cc)
@@ -65,19 +66,27 @@ def frontend(p):
     L.append('C225 U65_IN 0 7.5u'); L.append('B65 U65_IN 0 I = 5m*0.5*(1+tanh((V(U65_IN)-1)/0.3))')
     # U2 EN/UVLO, U5 EN, hold-off
     L.append('R4 VBAT_P BB_UVLO 100k'); L.append('R5 BB_UVLO 0 33k'); L.append('C602 BB_UVLO 0 %g'%p.get('c602',1e-6))
-    u5en_src=p.get('u5en_src','VBAT_P')
+    if opt_b:
+        cu5=2.2e-6*(0.5 if cold else 0.6)+0.1e-6*(0.7 if cold else 0.8)   # C38 2.2u + C39 100n on U5_VIN
+        chu=p.get('c_hu',160e-6 if cold else 200e-6)
+        L+=['D417 VBAT_P U5VIN DSS110','R1130 U5VIN chu 2.2k','D418 chu U5VIN DSS110',
+            'CHU chu1 0 %g'%chu,'RCHU chu chu1 0.4','CU5 U5VIN 0 %g'%cu5]
+    u5en_src=p.get('u5en_src','U5VIN' if opt_b else 'VBAT_P')
     L.append('R1125 %s U5_EN 100k'%u5en_src); L.append('R1126 U5_EN 0 47k')
     if p.get('holdoff',True):
         L+=['D401 BAT_IN ho_a D1N4148','Q121 ho_c ho_b ho_a Q2N5401','R1121 ho_a ho_b 22k','R1122 ho_b VBAT_P 68k',
             'R1123 ho_c HO_F 22k','C1121 HO_F 0 100n','R1124 HO_F 0 100k','Q122 HO_K HO_F 0 Q2N3904','D402A BB_UVLO HO_K DBAT54']
-        if p.get('u5_holdoff',True):
+        if opt_b and p.get('u5_lockout',True):
+            L+=['B3V3 v3bk 0 V = 3.3*V(U5_ALIVE)' if p.get('u5') is not None else 'Vv3bk v3bk 0 DC 0','R1127 ho_c q123b 47k','R1128 q123b 0 100k','Q123 U5_EN q123b 0 Q2N3904',
+                'R1129 v3bk q124b 47k','Q124 q123b q124b 0 Q2N3904']
+        elif p.get('u5_holdoff',not opt_b):
             L.append('D402B %s HO_K DBAT54'%p.get('u5_ho_node','U5_EN'))
     u2=p.get('u2')
     if u2 is not None:
         L.append('XU2 VBAT_P BB_UVLO U2LOAD PARAMS: pin=%g ilim=3.56 tss=7.5m ss0=%g'%(u2.get('pin',79.5),u2.get('ss0',0)))
     u5=p.get('u5')
     if u5 is not None:
-        L.append('XU5 %s U5_EN U5_ALIVE U5LOAD PARAMS: p=%g von=%g voff=%g'%(u5.get('vin','VBAT_P'),u5.get('p',2.1),u5.get('von',1.26),u5.get('voff',1.16)))
+        L.append('XU5 %s U5_EN U5_ALIVE U5LOAD PARAMS: p=%g von=%g voff=%g'%(u5.get('vin','U5VIN' if opt_b else 'VBAT_P'),u5.get('p',2.1),u5.get('von',1.26),u5.get('voff',1.16)))
     for x in p.get('extra',[]): L.append(x)
     return L
 
@@ -137,6 +146,6 @@ def first(t,cond):
 
 def ns_on(V,br='mod'):
     """nodeset for a running front end at battery V"""
-    d=dict(BAT_IN=V,VBAT_DD=V,VBAT_PS=V,VBAT_P=V,HGATE=V+11.3,DVDT=V+11.3,DGATE=V+11,BB_UVLO=V*33/133,U5_EN=V*47/147,HO_F=0,
+    d=dict(BAT_IN=V,VBAT_DD=V,VBAT_PS=V,VBAT_P=V,U5VIN=V-0.3,chu=V-0.3,chu1=V-0.3,HGATE=V+11.3,DVDT=V+11.3,DGATE=V+11,BB_UVLO=V*33/133,U5_EN=(V-0.3)*47/147,HO_F=0,
            HO_K=min(V*33/133,V*47/147),UVLO=V*58.56/268.56,OV=V/31.01,U65_IN=V-0.6,VBAT_SLOTS=V,OUT=V,efin=V)
     return d
