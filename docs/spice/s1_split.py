@@ -4,7 +4,7 @@ VENDOR models: TI TPS48100-Q1 (SLUM908, unencrypted, runs in ngspice) and Infine
 Netlist (kicad-cli, m7-split-p7): J23 VBAT_ESTOP_IN -> Q70/Q71 SQD40P10-40L (parallel, modelled 20 mOhm) -> VBAT_ESTOP
 [D126 SMDJ40CA, C199/C203 100n, U45 VS/CS+, EN/UVLO R298 100k / R299 27k] -> R303 20 mOhm -> CRANK_DRN -> Q47 || Q48 ->
 CRANK_OUT [C202 470n BST-SRC, D69 SMDJ40CA, D72 SK1010C to GND] -> J23 -> output harness Ls / Rd2 -> short.
-U45: ISCP R300 40.2k, TMR C201 DNP (~10p stray; was 4.7n -> 110.8 V > 100 V), G1PU via R301 22k (was 10R; rides through <= 1 uF EMI cap), G1PD via R302 0R, CS_SEL GND, INP1 high.
+U45: ISCP R300 40.2k, TMR C201 DNP (~10p stray; was 4.7n -> 110.8 V > 100 V), G1PU via R301 22k (was 10R; rides through <= 1 uF EMI cap), G1PD via R302 0R, TMR latch-off R651 100k (R650 on FUEL), CS_SEL GND, INP1 high.
 VBAT_ESTOP is the separate J23 feed (power-box F2 10 A); it does NOT pass through Q2 / BAT_IN, so this event cannot load Q2.
 Feed harness Rb 15/35 mOhm x Lb 0.5/2 uH; output harness Ls 0.5/2 uH x Rd2 12/25 mOhm; Vb 12/24/32 V. U45 starts up
 (BST charge pump, ~16 ms), the channel is on with a 1 A load, the short closes at 25 ms (200 ns log-linear switch).
@@ -38,7 +38,7 @@ def one_raw(a,tm=0.5e-6,op=''):
        'R301 G1PU CRANK_G 22000','R302 G1PD CRANK_G 1m','C202 BST CRANK_OUT 470n',
        'XD69 CRANK_OUT 0 TVSCA PARAMS: vbr=%g rd=%g'%TVS['SMDJ40CA'],'D72 0 CRANK_OUT DSS310','R352 CRANK_OUT 0 100k',
        'R298 VBAT_ESTOP EN 100k','R299 EN 0 27k','VINP INP1 0 PWL(0 0 18m 0 18.2m 5)','RFLT FLT VPU 10k','VPU VPU 0 3.3',
-       'R300 ISCP 0 40.2k','C201 TMR 0 10p',
+       'R300 ISCP 0 40.2k','C201 TMR 0 10p','RTMR TMR 0 100k',  # R650/R651 latch-off
        'XU45 BST CRANK_DRN VBAT_ESTOP 0 EN FLT G1PD G1PU G2 0 INP1 0 ISCP 0 CRANK_OUT TMR VBAT_ESTOP TPS48100-Q1_TRANS',
        'RLOAD CRANK_OUT 0 %g'%V,
        'Ls CRANK_OUT ls1 %g'%Ls,'Rd2 ls1 ls2 %g'%Rd2,

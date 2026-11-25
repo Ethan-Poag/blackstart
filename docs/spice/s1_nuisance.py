@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Sim 1 nuisance-trip check (m7-split-p7 U45 CRANK / U43 FUEL TPS48100-Q1):
 Checks whether C197/C201 = DNP (~10 pF stray) trips on legitimate capacitive/inductive loads, and compares:
-  - R301 = 10 R (before Follow-up 1) vs R301 = 22 k (G1PU slew control; R302 G1PD stays 0 R)
+  - R301 = 10 R vs R301 = 22 k (G1PU slew control; R302 G1PD stays 0 R)
+  - R650/R651 = 100 k TMR-to-GND latch-off (SLUSEW1C 7.3.3.2); C197/C201 remain DNP for fastest tSC
   - 2.8 A inductive relay/solenoid (10 mH) + 470 nF / 1 uF EMI cap at 12/24/32 V, worst-case low ISCP (29 k ~ 3.9 A min)
   - Direct 45 A / 0.5 ms pull-in coil (30-60 A class): bounded hand calc (ngspice does not reliably converge
     this heavy startup). R_ISCP 40.2 k / 20 mOhm = 4.97 A typ (3.9 A min) trips a direct 30-60 A pull-in at any
@@ -42,7 +43,7 @@ def sim(args):
                 'R298 VBAT_ESTOP EN 100k', 'R299 EN 0 27k',
                 f'VINP INP1 0 PWL(0 0 {t0} 0 {t1} 5)',
                 'RFLT FLT VPU 10k', 'VPU VPU 0 3.3',
-                f'R300 ISCP 0 {riscp}', f'C201 TMR 0 {ctmr}',
+                f'R300 ISCP 0 {riscp}', f'C201 TMR 0 {ctmr}', 'RTMR TMR 0 100k',  # R650/R651 latch-off (SLUSEW1C 7.3.3.2)
                 'XU45 BST CRANK_DRN VBAT_ESTOP 0 EN FLT G1PD G1PU G2 0 INP1 0 ISCP 0 CRANK_OUT TMR VBAT_ESTOP TPS48100-Q1_TRANS',
                 'Ls CRANK_OUT ls1 0.5u', 'Rd2 ls1 ls2 12m',
             ]

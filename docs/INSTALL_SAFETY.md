@@ -78,6 +78,7 @@ Connectors:
 **FUEL/CRANK fuse type (installer's check):** FUEL and CRANK are limited to 2.8 A each
 (including pull-in). Use a 5 A standard (non-time-delay) ATO/ATC blade, 58 V DC (OptiFuse ANR58-UL-5A or equal), at power box F3/F4. The starter motor/solenoid must never be driven directly: use the interposing crank
 relay in the power box (K1) whose coil is <= 2.8 A (Safety Round 4, R4-N3).
+The electronic short-circuit trip on these two channels is about 5 A typical (3.9 A minimum). A fuel or crank solenoid whose pull-in is above about 4 A will trip the output at any timer setting, so it must be switched through an interposing relay whose coil is <= 2.8 A (already required by the 2.8 A rating above).
 
 > **WARNING: the 30 A battery fuse does NOT protect the FUEL/CRANK channels, the small
 > outputs, or their wiring.** A short on a channel can draw far more than its rating without

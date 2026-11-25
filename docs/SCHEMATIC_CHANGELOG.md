@@ -1315,3 +1315,16 @@ Patch: tools/p7_power_patch.py (power.kicad_sch only, idempotent). Math: tools/p
 | `C197`, `C201` (`outputs.kicad_sch`), U43 FUEL & U45 CRANK TMR | `4.7n`, YAGEO `C106218` | **DNP** (`0603` pads retained; open `TMR` per TI `SLUSEW1C` Pin 9) | As-drawn `4.7 nF` (`~71.8 µs`) let a `CRANK_OUT` dead short ramp to `260.5–330.9 A`, kicking `VBAT_ESTOP` to **`110.8 V`** (> `100 V` abs max of U43/U45, Q70/Q71, Q45–Q48, C199/C203). DNP trips in `0.4–1.8 µs`, holding `VBAT_ESTOP ≤ 51.0 V` and `F2 I²t ≤ 0.0008 A²s` (`edbae88`). | `ngspice 44.2` Sim 1 (`s1_short_split_crank.txt`) |
 
 - Gates (`edbae88`): ERC `0/0` (`genctl`, `genctl_meter`), BOM `0` mismatches (`1,154` main / `218` meter refs; main board `$266.51` qty 1 / `$226.09` qty 10), `tools/p7_calc.py` OK.
+
+## Batch 34c: FUEL/CRANK G1PU slew + TMR latch-off (Grok Bot, 2026-11-24 HST; SPICE follow-up on `m7-split-p7`; PCB not touched)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| `R295`, `R301` (`outputs.kicad_sch`), U43 FUEL & U45 CRANK G1PU | `10R` `C22859` | **`22k` `C31850`** (same 0603; already on BOM with R1121/R1123) | With `C197`/`C201` DNP (fastest short trip), a 10 Ω gate pull-up false-trips on a 470 nF EMI cap (hand calc ~250 A inrush). 22 k stretches turn-on to ~0.13 ms and keeps inrush ≤ 2.47 A at 32 V / 1 µF, under the 3.9 A min ISCP, including the 100 k TMR latch-off. Per-FET SOA 0.006. | `ngspice 44.2` `s1_nuisance_split.txt` |
+| `R650`, `R651` (new, `outputs.kicad_sch`), 100 k `C25803` TMR–GND on U43 & U45 | — | **100 k 0603** in parallel with DNP `C197`/`C201` | Open TMR auto-retries after `tRETRY ≈ 22.7e6 × CTMR` (~0.4 ms with stray 10 pF). The 22 k G1PU then turns the FETs back on into a still-present short: at 24 V / 2 µH that retry ramped to ~249 A and kicked `VBAT_ESTOP` to **111 V** (> 100 V abs max). 100 k latch-off (TI `SLUSEW1C` 7.3.3.2) stops the retry. 24 V worst first-trip kick **45.6 V**, 32 V **50.1 V**, SOA ≤ 0.001, no second pulse. Reset the latch by toggling INP1 or EN, or by VS below POR. | `ngspice 44.2`; TI `SLUSEW1C` §7.3.3.2 |
+| `C197`, `C201` | DNP (unchanged) | DNP (unchanged) | Still open for fastest `tSC` (0.4–2 µs). The 100 k is the latch, not a timing cap. | — |
+
+- On 12 V with a long (2 µH) feed, a dead short can ring `VBAT_ESTOP` below POR and re-enable the channel even with latch-off (INP1 still high). That second turn-on kicked **80.6 V** (under the 85 V target, 19 V below 100 V), Ipk 104 A, per-FET SOA 0.064, F2 I²t 0.53 A²s. 24 V and 32 V did not retrigger.
+- A direct 30–60 A pull-in coil still trips at any TMR setting (`ISCP` typ 4.97 A / min 3.9 A). `INSTALL_SAFETY.md` already limits FUEL/CRANK to 2.8 A including pull-in, via an interposing relay, and now also states the ~4 A electronic trip.
+- Cost: R295/R301 10 R → 22 k is +$0.0048; R650/R651 two 100 k `C25803` is +$0.0058; about +$0.01 per board at qty 1. `C31850` and `C25803` were already on the BOM.
+- Gates: ERC `0/0` (`genctl`, `genctl_meter`), BOM 0 mismatches (`1,156` main / `218` meter refs; main board `$266.52` qty 1 / `$226.10` qty 10, was `$266.51`), `tools/p7_calc.py` OK (now also checks R295/R301/R650/R651 and C197/C201 DNP).
+

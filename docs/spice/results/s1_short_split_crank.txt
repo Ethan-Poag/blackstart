@@ -3,24 +3,36 @@ VENDOR models: TI TPS48100-Q1 (SLUM908, unencrypted, runs in ngspice) and Infine
 Netlist (kicad-cli, m7-split-p7): J23 VBAT_ESTOP_IN -> Q70/Q71 SQD40P10-40L (parallel, modelled 20 mOhm) -> VBAT_ESTOP
 [D126 SMDJ40CA, C199/C203 100n, U45 VS/CS+, EN/UVLO R298 100k / R299 27k] -> R303 20 mOhm -> CRANK_DRN -> Q47 || Q48 ->
 CRANK_OUT [C202 470n BST-SRC, D69 SMDJ40CA, D72 SK1010C to GND] -> J23 -> output harness Ls / Rd2 -> short.
-U45: ISCP R300 40.2k, TMR C201 DNP (~10p stray; was 4.7n -> 110.8 V > 100 V), G1PU via R301 22k (was 10R; rides through <= 1 uF EMI cap), G1PD via R302 0R, CS_SEL GND, INP1 high.
+U45: ISCP R300 40.2k, TMR C201 DNP (~10p stray; was 4.7n -> 110.8 V > 100 V), G1PU via R301 22k (was 10R; rides through <= 1 uF EMI cap), G1PD via R302 0R, TMR latch-off R651 100k (was auto-retry with TMR open), CS_SEL GND, INP1 high.
 VBAT_ESTOP is the separate J23 feed (power-box F2 10 A); it does NOT pass through Q2 / BAT_IN, so this event cannot load Q2.
 Feed harness Rb 15/35 mOhm x Lb 0.5/2 uH; output harness Ls 0.5/2 uH x Rd2 12/25 mOhm; Vb 12/24/32 V. U45 starts up
-(BST charge pump, ~16 ms), the channel is on with a 1 A load, the short closes at 25 ms.
+(BST charge pump, ~16 ms), the channel is on with a 1 A load, the short closes at 25 ms (200 ns log-linear switch).
 Usage: python3 s1_split.py -> results/s1_short_split_crank.txt
 
-Vb   feed Rb/Lb      out Ls/Rd2     | CRANK_OUT before  I peak (t)          off after  | VBAT_ESTOP max  CRANK_OUT min | per-FET E  FET Tj max       FLT end  F2 I2t
-12.0 15m/0.5uH     0.5uH/12m     |  11.9 V            16.8 A (  1.3 us)     1.3 us |   38.8 V          -1.00 V      |    0.0 mJ   149 F ( 65 C)    0.0 V  0.0007 A2s
-12.0 15m/0.5uH     2.0uH/25m     |  11.9 V             5.9 A (  1.1 us)     1.1 us |   24.1 V          -0.30 V      |    0.0 mJ   149 F ( 65 C)    0.0 V  0.0003 A2s
-12.0 35m/2.0uH     0.5uH/12m     |  11.9 V            49.5 A (449.9 us)   450.0 us |   63.3 V          -1.47 V      |    1.4 mJ   157 F ( 70 C)    0.0 V  0.0223 A2s
-12.0 35m/2.0uH     2.0uH/25m     |  11.9 V           104.1 A (528.8 us)   528.8 us |   80.6 V          -2.31 V      |    2.3 mJ   155 F ( 69 C)    0.0 V  0.5299 A2s
-32.0 15m/0.5uH     0.5uH/12m     |  31.9 V            16.5 A (  0.3 us)     0.3 us |   48.7 V          -0.83 V      |    0.0 mJ   149 F ( 65 C)    0.0 V  0.0006 A2s
-32.0 15m/0.5uH     2.0uH/25m     |  31.9 V             8.2 A (  0.5 us)     0.5 us |   44.4 V          -0.43 V      |    0.0 mJ   149 F ( 65 C)    0.0 V  0.0004 A2s
-32.0 35m/2.0uH     2.0uH/25m     |  31.9 V             7.6 A (  0.5 us)     0.5 us |   44.4 V          -0.41 V      |    0.0 mJ   149 F ( 65 C)    0.0 V  0.0002 A2s
+Vb   feed Rb/Lb      out Ls/Rd2     | CRANK_OUT before  I peak (t)          off after  | VBAT_ESTOP max  CRANK_OUT min | per-FET E  FET Tj max       FLT end  F2 I2t   SOA
+12.0 15m/0.5uH     0.5uH/12m     |  11.9 V            15.0 A (  1.4 us)     1.4 us |   38.7 V          -0.98 V      |    0.0 mJ   149 F ( 65 C)    0.0 V  0.0006 A2s  0.000@0.10ms
+12.0 15m/0.5uH     2.0uH/25m     |  11.9 V             5.3 A (  1.1 us)     1.1 us |   22.8 V          -0.27 V      |    0.0 mJ   149 F ( 65 C)    0.0 V  0.0003 A2s  0.000@0.08ms
+12.0 35m/2.0uH     0.5uH/12m     |  11.9 V            49.4 A (449.9 us)   449.9 us |   63.3 V          -1.47 V      |    1.4 mJ   157 F ( 70 C)    0.0 V  0.0222 A2s  0.027@0.10ms
+24.0 15m/0.5uH     0.5uH/12m     |  23.9 V            13.0 A (  0.4 us)     0.5 us |   38.1 V          -0.69 V      |    0.0 mJ   149 F ( 65 C)    0.0 V  0.0005 A2s  0.000@0.10ms
+24.0 15m/0.5uH     2.0uH/25m     |  23.9 V             6.2 A (  0.6 us)     0.6 us |   33.2 V          -0.32 V      |    0.0 mJ   149 F ( 65 C)    0.0 V  0.0002 A2s  0.000@0.10ms
+24.0 35m/2.0uH     2.0uH/25m     |  23.9 V             8.2 A (  0.7 us)     0.8 us |   38.4 V          -0.37 V      |    0.0 mJ   149 F ( 65 C)    0.0 V  0.0002 A2s  0.000@0.04ms
+32.0 15m/0.5uH     0.5uH/12m     |  31.9 V            19.6 A (  0.5 us)     0.5 us |   51.0 V          -0.89 V      |    0.0 mJ   149 F ( 65 C)    0.0 V  0.0008 A2s  0.000@0.10ms
+32.0 15m/0.5uH     2.0uH/25m     |  31.9 V             7.1 A (  0.5 us)     0.6 us |   41.1 V          -0.37 V      |    0.0 mJ   149 F ( 65 C)    0.0 V  0.0002 A2s  0.000@0.10ms
+32.0 35m/2.0uH     0.5uH/12m     |  31.9 V            19.1 A (  0.5 us)     0.5 us |   50.3 V          -0.87 V      |    0.0 mJ   149 F ( 65 C)    0.0 V  0.0005 A2s  0.000@0.10ms
+32.0 35m/2.0uH     2.0uH/25m     |  31.9 V             9.5 A (  0.7 us)     0.7 us |   46.7 V          -0.44 V      |    0.0 mJ   149 F ( 65 C)    0.0 V  0.0002 A2s  0.000@0.05ms
 
-Failed runs: 5
-  (24.0, 0.015, 5e-07, 5e-07, 0.012): s1sp_24_15_0.5_0.5_12 ended at 0.0250001 s, before the short was cleared
-  (24.0, 0.015, 5e-07, 2e-06, 0.025): s1sp_24_15_0.5_2_25 ended at 0.0250006 s, before the short was cleared
-  (24.0, 0.035, 2e-06, 5e-07, 0.012): s1sp_24_35_2_0.5_12 ended at 0.000348022 s, before the short was cleared
-  (24.0, 0.035, 2e-06, 2e-06, 0.025): s1sp_24_35_2_2_25 ended at 0.000348022 s, before the short was cleared
-  (32.0, 0.035, 2e-06, 5e-07, 0.012): s1sp_32_35_2_0.5_12 ended at 0.0250004 s, before the short was cleared
+Failed runs: 2
+  (12.0, 0.035, 2e-06, 2e-06, 0.025): Command '['ngspice', '-b', '/workspace/m7/splitp7/docs/spice/work/s1sp_12_35_2_2_25.cir']' timed out after 200 seconds
+  (24.0, 0.035, 2e-06, 5e-07, 0.012): Command '['ngspice', '-b', '/workspace/m7/splitp7/docs/spice/work/s1sp_24_35_2_0.5_12.cir']' timed out after 200 seconds
+
+Latch-off confirmation (R651 100 k TMR-GND, C201 DNP ~10 pF, R301 22 k; 1.5 ms after the short so a ~0.4 ms retry would be visible):
+  24.0 35m/2.0uH     0.5uH/12m     |  23.9 V            15.1 A (  0.7 us)     0.7 us |   45.6 V          no retry     |    0.0 mJ   149 F ( 65 C)   SOA 0.000  PASS (was ~111 V / 249 A on auto-retry)
+  32.0 35m/2.0uH     0.5uH/12m     |  31.9 V            17.2 A (  0.7 us)     0.7 us |   50.1 V          no retry     |    0.0 mJ   149 F ( 65 C)   SOA 0.000  PASS
+  12.0 35m/2.0uH     2.0uH/25m     |  11.9 V           104.1 A (526.4 us)   526 us |   80.6 V          POR retrigger at 401 us |  2.3 mJ   155 F ( 69 C)   SOA 0.064  PASS (under 85 V; VS rang below POR and re-enabled INP1)
+
+Open-TMR auto-retry (no 100 k), for the record: tRETRY ≈ 22.7e6 * CTMR ~ 0.4 ms. The 22 k G1PU then turns on into the still-present short.
+  12.0 35m/2.0uH     0.5uH/12m     first trip 2 us, retry at 381 us, Ipk 49.4 A, VBAT_ESTOP 63.3 V, SOA 0.027 (full 0.8 ms window)
+  12.0 35m/2.0uH     2.0uH/25m     first trip 2 us, retry at 382 us, Ipk 104.0 A, VBAT_ESTOP 80.6 V, SOA 0.064 (full 0.92 ms window)
+  24.0 35m/2.0uH     0.5uH/12m     first trip 1 us / 14.4 A / 43.3 V; staged post-short window showed retry at 550 us, Ipk 249 A, VBAT_ESTOP 111.3 V (FAILED 100 V abs max). Fixed by latch-off.
+
+Failed to capture a full 0.8 ms post-short window without latch (simulator aborted after the first trip): 24.0 35m/2.0uH 0.5uH/12m and some 12 V low-L corners. The latch-off 24/32 V runs above used a 1.5 ms window and converged. A direct 45 A pull-in is a hand calc (ISCP typ 4.97 A trips at any TMR).

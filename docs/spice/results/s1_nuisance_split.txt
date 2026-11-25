@@ -31,4 +31,4 @@ Direct 45 A pull-in (hand calc; ngspice does not reliably converge this startup)
   Inrush ~ C*V/t = 470 nF * 32 V / 60 ns ~ 250 A, far above I_SCP 4.97 A, so DNP TMR trips in ~1 us.
   This is the false-trip the 22 k G1PU is meant to fix (22 k stretches turn-on to ~0.13 ms and
   drops the same inrush to about 0.1 A average; SPICE with 22 k shows Ipk <= 2.5 A).
-
+With R650/R651 100 k TMR latch-off added, the worst legit load was re-run (32 V, 1 uF, 2.8 A / 10 mH, min ISCP 29 k): Ipk 2.47 A, Vout 31.86 V, FLT 3.30 V, SOA 0.006, PASS_ON (same as without the 100 k). The latch resistor does not change inrush.

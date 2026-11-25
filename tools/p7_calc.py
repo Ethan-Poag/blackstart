@@ -24,6 +24,27 @@ for ref,(val,lc) in WANT.items():
     ok=(v==val) and (lc is None or l==lc); bad+=not ok
     print('  %-6s %-9s %-8s %s'%(ref,v,l,'OK' if ok else 'WRONG (want %s %s)'%(val,lc)))
 if bad: sys.exit('drawn values wrong: %d'%bad)
+# outputs.kicad_sch: G1PU slew and TMR latch-off (SPICE follow-up, 2026-11-24)
+so=open(os.path.join(ROOT,'outputs.kicad_sch')).read()
+WANT_OUT={'R295':('22k','C31850'),'R301':('22k','C31850'),'R650':('100k','C25803'),'R651':('100k','C25803')}
+for ref,(val,lc) in WANT_OUT.items():
+    m=re.search(r'\(property "Reference" "%s".*?\(property "Value" "([^"]*)"'%ref,so,re.S)
+    blk=so[m.start():m.start()+3000] if m else ''
+    v=m.group(1) if m else None; l=re.search(r'\(property "LCSC" "([^"]*)"',blk); l=l.group(1) if l else None
+    ok=(v==val) and (l==lc); bad+=not ok
+    print('  %-6s %-9s %-8s %s'%(ref,v,l,'OK' if ok else 'WRONG (want %s %s)'%(val,lc)))
+for ref in ('C197','C201'):
+    m=re.search(r'\(symbol \(lib_id "Device:C"\)[^)]*\(dnp (yes|no)\)[^)]*\n\(property "Reference" "%s"'%ref,so)
+    # fallback: search the symbol that contains this Reference
+    if not m:
+        i=so.find('(property "Reference" "%s"'%ref)
+        head=so[max(0,i-400):i]
+        dnp='yes' if '(dnp yes)' in head else ('no' if '(dnp no)' in head else None)
+    else:
+        dnp=m.group(1)
+    ok=dnp=='yes'; bad+=not ok
+    print('  %-6s dnp=%-5s           %s'%(ref,dnp,'OK' if ok else 'WRONG (want DNP)'))
+if bad: sys.exit('drawn values wrong: %d'%bad)
 
 SOA_100US=[(10,74.8),(20,31.5),(40,7.77),(90,1.54)]
 SOA_A={1e-3:1160.0,1e-2:359.0,1.0:167.0}
