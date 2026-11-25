@@ -18,6 +18,16 @@ C602 is 1 uF X7R (0.5-1.1 uF effective; was 10 uF): see section 3 for why.
   D402   BAT54C     C37704   OK
   R1125  100k       C25803   OK
   R1126  47k        C25819   OK
+  Q123   MMBT3904   C20526   OK
+  Q124   MMBT3904   C20526   OK
+  R1127  47k        C25819   OK
+  R1128  100k       C25803   OK
+  R1129  47k        C25819   OK
+  D417   SS110      C2482    OK
+  D418   SS110      C2482    OK
+  R1130  2.2k       C4190    OK
+  C1122  100u 63V   C178628  OK
+  C1123  100u 63V   C178628  OK
 == 1. Hold-off threshold vs temperature (Vth = Vf(D401) + Veb(Q121) x 90k/22k)
   cold -40 F (-40 C)   Vf 0.72 V, Veb 0.75 V -> Vth 3.79 V
   room 77 F (25 C)     Vf 0.55 V, Veb 0.62 V -> Vth 3.09 V

@@ -19,7 +19,9 @@ _S=''.join(open(f).read() for f in glob.glob(os.path.join(_ROOT,'*.kicad_sch')))
 # C601: 100 nF C15725 since the SPICE pass (docs/spice/README.md); the hand-calc model below keeps the Pass 6 22 nF record.
 WANT={'R1001':('1k','C21190'),'C601':(None,'C15725'),'C602':(None,'C28323'),'D401':('1N4148W','C81598'),'Q121':('MMBT5401','C8326'),
       'R1121':('22k','C31850'),'R1122':('68k','C23231'),'R1123':('22k','C31850'),'R1124':('100k','C25803'),'C1121':('100n','C14663'),
-      'Q122':('MMBT3904','C20526'),'D402':('BAT54C','C37704'),'R1125':('100k','C25803'),'R1126':('47k','C25819')}
+      'Q122':('MMBT3904','C20526'),'D402':('BAT54C','C37704'),'R1125':('100k','C25803'),'R1126':('47k','C25819'),
+      'Q123':('MMBT3904','C20526'),'Q124':('MMBT3904','C20526'),'R1127':('47k','C25819'),'R1128':('100k','C25803'),'R1129':('47k','C25819'),
+      'D417':('SS110','C2482'),'D418':('SS110','C2482'),'R1130':('2.2k','C4190'),'C1122':('100u 63V','C178628'),'C1123':('100u 63V','C178628')}
 print('== 0. Pass 8 value check (drawn hold-off / front-end parts vs this model)')
 _bad=0
 for ref,(val,lc) in WANT.items():
