@@ -30,12 +30,13 @@ def frontend(p):
     L.append('.include %s/models/small.lib'%HERE)
     L.append(p.get('vb_src') or 'Vbat vb 0 DC %g'%p['V'])
     if p.get('bat_switch'):           # battery interruption: series switch, control node bsw (1 = closed)
-        L.append('Rb vb nb1 %g'%p['Rb']); L.append('Bsbat nb1 nb I = V(nb1,nb)*(1e3*max(min(V(bsw),1),0)+1e-8)')
+        L.append('Rb vb nb1 %g'%p['Rb']); L.append('Bsbat nb1 nb I = V(nb1,nb)*exp(6.9078*max(min(V(bsw),1),0)-18.4207*(1-max(min(V(bsw),1),0)))')   # log-linear 1e-8..1e3 S
+        L.append('Cnb nb nbc 47n'); L.append('Rnb nbc 0 2')   # harness-side snubber (cable capacitance + damping): gives Lb's current a path when the switch opens
     else:
         L.append('Rb vb nb %g'%p['Rb'])
     L.append('Lb nb BAT_IN %g'%p['Lb'])
     if p.get('bat_short'):            # BAT_IN pulled to ground (crank-type dip): control node bsh (1 = shorted)
-        L.append('Bsbsh BAT_IN bshn I = V(BAT_IN,bshn)*(1e3*max(min(V(bsh),1),0)+1e-8)'); L.append('Rbsh bshn 0 %g'%p.get('r_short',0.05))
+        L.append('Bsbsh BAT_IN bshn I = V(BAT_IN,bshn)*exp(6.9078*max(min(V(bsh),1),0)-18.4207*(1-max(min(V(bsh),1),0)))'); L.append('Rbsh bshn 0 %g'%p.get('r_short',0.05))
     L.append('C297 BAT_IN 0 %g'%(0.22e-6*0.8+0.05e-6))
     L.append('XD1 BAT_IN 0 TVSCA PARAMS: vbr=%g rd=%g'%TVS['SMDJ40CA'])
     L.append('R1 BAT_IN UVLO 210k'); L.append('R2 UVLO OV 49.9k'); L.append('R3 OV 0 8.66k')

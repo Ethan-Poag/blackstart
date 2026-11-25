@@ -25,25 +25,38 @@ def ride_lines(opt):
     if opt=='A': return dict(u5_holdoff=False),A
     B=A+['DA VBAT_P U5VIN DSS110','RHU U5VIN chu 2.2k','DB chu U5VIN DSS110','CHU chu1 0 160u','RCHU chu chu1 0.4','CU5 U5VIN 0 10u']
     if opt=='B': return dict(u5_holdoff=False,u5en_src='U5VIN',u5vin='U5VIN'),B
-def one(a):
+def one_raw(a):
     br,V,typ,tint,opt,ihg=a
     po,extra=ride_lines(opt)
     p=dict(V=V,Rb=0.015,Lb=0.5e-6,branch=br,ihg=ihg,u2=dict(ss0=1),u5=dict(vin=po.get('u5vin','VBAT_P')),bat_switch=True,
-           bat_short=(typ=='G'),r_short=1.0,extra=extra+['Vbsw bsw 0 PWL(0 1 %g 1 %g 0 %g 0 %g 1)'%(T0,T0+1e-7,T0+tint,T0+tint+1e-7)]
-           +(['Vbsh bsh 0 PWL(0 0 %g 0 %g 1 %g 1 %g 0)'%(T0,T0+1e-7,T0+tint,T0+tint+1e-7)] if typ=='G' else []))
+           bat_short=(typ=='G'),r_short=1.0,extra=extra+['Vbsw bsw 0 PWL(0 1 %.9g 1 %.9g 0 %.9g 0 %.9g 1)'%(T0,T0+1e-6,T0+tint,T0+tint+1e-6)]
+           +(['Vbsh bsh 0 PWL(0 0 %.9g 0 %.9g 1 %.9g 1 %.9g 0)'%(T0,T0+1e-6,T0+tint,T0+tint+1e-6)] if typ=='G' else []))   # 1 us contact edges
     p.update({k:v for k,v in po.items() if k in ('u5_holdoff','u5en_src')})
     ns=ns_on(V); 
     if opt=='B': ns.update(U5VIN=V-0.3,chu=V-0.3,chu1=V-0.3)
     tst=T0+tint+1.1*V/(ihg/(C601_DEFAULT+1e-9))+14e-3   # covers the slowest HGATE re-ramp
     name='s5_%s_%g_%s_%g_%s_%g'%(br,V,typ,tint*1e3,opt,ihg*1e6)
     r=run(frontend(p),['v(BAT_IN)','v(VBAT_P)','v(VBAT_DD,VBAT_PS)','i(VQ2)','v(tj2)','v(xu2.runs)','v(U5_ALIVE)','v(HO_F)'],tst,2e-6,name,tmax=5e-6,nodeset=ns)
-    t=r['t']; alive=(r['v(U5_ALIVE)']>0.5)|(r['v(xu2.runs)']>0.5)
+    t=r['t']
+    if t[-1]<T0+tint+0.5e-3: raise RuntimeError('%s ended at %.3g s'%(name,t[-1]))
+    vpre=float(np.interp(T0-10e-6,t,r['v(VBAT_P)']))
+    if vpre<0.8*V: raise RuntimeError('%s: op not in the running state (VBAT_P %.2f V before the break)'%(name,vpre))
+    alive=(r['v(U5_ALIVE)']>0.5)|(r['v(xu2.runs)']>0.5)
     m=t>T0; dead=first(t[m],~alive[m])
     u5d=first(t[m],r['v(U5_ALIVE)'][m]<0.5); u2d=first(t[m],r['v(xu2.runs)'][m]<0.5)
     s=soa(r,t0=T0+tint)
     return dict(a=a,survive=dead is None,tdead=(dead-T0) if dead else None,u5d=(u5d-T0) if u5d else None,u2d=(u2d-T0) if u2d else None,
                 soa=s,tj=float(r['v(tj2)'].max()),E=integ(t,np.maximum(r['v(VBAT_DD,VBAT_PS)'],0)*np.maximum(r['i(VQ2)'],0),T0+tint),
                 vp_ret=float(np.interp(T0+tint,t,r['v(VBAT_P)'])),iq2=float(r['i(VQ2)'][t>T0+tint].max()),warn=r.get('_warn'))
+def one(a):
+    """cached, exception-safe wrapper: a failed run is reported, not fatal"""
+    import pickle
+    cd=os.path.join(HERE,'work','cache'); os.makedirs(cd,exist_ok=True)
+    fn=os.path.join(cd,'s5_'+'_'.join(str(x) for x in a)+'.pkl')
+    if os.path.exists(fn): return pickle.load(open(fn,'rb'))
+    try: x=one_raw(a)
+    except Exception as e: return dict(a=a,error=str(e)[:300])
+    pickle.dump(x,open(fn,'wb')); return x
 if __name__=='__main__':
     br=sys.argv[1]; opts=sys.argv[2].split(',') if len(sys.argv)>2 else ['asis','A','B']
     TI=[0.1e-3,0.2e-3,0.5e-3,1e-3,2e-3,5e-3,10e-3,20e-3]
@@ -52,6 +65,7 @@ if __name__=='__main__':
     import pickle; pickle.dump(R,open(os.path.join(HERE,'work','s5_%s_%s.pkl'%(br,'_'.join(opts))),'wb'))
     out=[__doc__,'','Branch %s.'%br,'opt  Vb   type  t_int ms  HGATE | VBAT_P at return  MCU   (U2 off / U5 off after the break starts, ms) | Q2 Ipk  Q2 E mJ  Tj max         SOA ratio']
     f=lambda v: '%6.2f'%(v*1e3) if v is not None else '     -'
+    bad=[x for x in R if 'error' in x]; R=[x for x in R if 'error' not in x]
     for x in R:
         _,V,typ,ti,opt,ihg=x['a']; s=x['soa']
         out.append('%-4s %4.1f  %s   %6.1f    %2.0f uA | %6.1f V          %-5s (%s / %s)  | %5.0fA %6.1f  %4.0f F (%3.0f C)  %.2f%s'%(opt,V,typ,ti*1e3,ihg*1e6,x['vp_ret'],
@@ -61,12 +75,13 @@ if __name__=='__main__':
         for V in (12.0,24.0,32.0):
             for typ in ('O','G'):
                 S=[x for x in R if x['a'][4]==opt and x['a'][1]==V and x['a'][2]==typ]
-                ok=[ti for ti in TI if all(x['survive'] for x in S if x['a'][3]==ti)]
+                ok=[ti for ti in TI if any(x['a'][3]==ti for x in S) and all(x['survive'] for x in S if x['a'][3]==ti)]
                 # longest contiguous survived length from the shortest
                 lc=0
                 for ti in TI:
                     if ti in ok: lc=ti
                     else: break
                 out.append('  %-4s %4.1f V type %s: MCU survives up to %s ms (first reset at %s ms); worst SOA %.2f'%(opt,V,typ,
-                    ('%g'%(lc*1e3)) if lc else '<0.1',('%g'%(min([ti for ti in TI if ti not in ok])*1e3)) if len(ok)<len(TI) else '>20',max(x['soa'][0] for x in S)))
+                    ('%g'%(lc*1e3)) if lc else '<0.1',('%g'%(min([ti for ti in TI if ti not in ok])*1e3)) if len(ok)<len(TI) else '>20',max([x['soa'][0] for x in S] or [float('nan')])))
+    out.append('\nFailed runs (simulator): %d'%len(bad)); out+=['  %s: %s'%(x['a'],x['error']) for x in bad]
     txt='\n'.join(out); print(txt); open(os.path.join(HERE,'results','s5_ride_%s_%s.txt'%(br,'_'.join(opts))),'w').write(txt+'\n')
