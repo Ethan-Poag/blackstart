@@ -1307,3 +1307,11 @@ Patch: tools/p7_power_patch.py (power.kicad_sch only, idempotent). Math: tools/p
   - all 259 LCSC codes vs the JLC MPN (packaging suffixes only);
   - the m7-modular R22K/R47K mix-up does not affect this branch: every C4190 part is 2.2k and every C23162 part is 4.7k, R1121/R1123 are 22k C31850 and R1126 is 47k C25819, and tools/p7_calc.py fails the gate if they drift.
 - Checks: ERC 0/0, BOM 0 mismatches, meter netlist identical to 5bac9fe.
+
+## Batch 34b: SPICE verification fixes (Grok Bot, 2026-11-24 HST; `docs/spice/README.md`)
+| ref | old | new | reason | source |
+|---|---|---|---|---|
+| `C601` (`power.kicad_sch`), U1 HGATE dV/dt | `22n 100V`, YAGEO `C313105` | **`100n 100V`**, Samsung `CL10B104KC8NNNC` `C15725` (same 0603, already on BOM) | X7R bias/cold/tolerance reduces 22 nF to 60–85%, pushing Q2 cold-start SOA to `1.35` (exceeded). 100 nF gives `0.58` nominal / `0.80` worst across 60–110% band (`fcfd095`). | `ngspice 44.2` Sim 2/2b (`s2_c601_split.txt`) |
+| `C197`, `C201` (`outputs.kicad_sch`), U43 FUEL & U45 CRANK TMR | `4.7n`, YAGEO `C106218` | **DNP** (`0603` pads retained; open `TMR` per TI `SLUSEW1C` Pin 9) | As-drawn `4.7 nF` (`~71.8 µs`) let a `CRANK_OUT` dead short ramp to `260.5–330.9 A`, kicking `VBAT_ESTOP` to **`110.8 V`** (> `100 V` abs max of U43/U45, Q70/Q71, Q45–Q48, C199/C203). DNP trips in `0.4–1.8 µs`, holding `VBAT_ESTOP ≤ 51.0 V` and `F2 I²t ≤ 0.0008 A²s` (`edbae88`). | `ngspice 44.2` Sim 1 (`s1_short_split_crank.txt`) |
+
+- Gates (`edbae88`): ERC `0/0` (`genctl`, `genctl_meter`), BOM `0` mismatches (`1,154` main / `218` meter refs; main board `$266.51` qty 1 / `$226.09` qty 10), `tools/p7_calc.py` OK.
