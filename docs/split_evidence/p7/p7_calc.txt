@@ -19,6 +19,22 @@ Also checks the drawn part values in power.kicad_sch (m7-modular Pass 8 found R1
   R1126  47k       C25819   OK
   R4     100k      C25803   OK
   R5     33k       C4216    OK
+  Q123   MMBT3904  C20526   OK
+  Q124   MMBT3904  C20526   OK
+  R1127  47k       C25819   OK
+  R1128  100k      C25803   OK
+  R1129  47k       C25819   OK
+  D403   SS110     C2482    OK
+  D404   SS110     C2482    OK
+  R1130  2.2k      C4190    OK
+  C1122  100u 63V  C178628  OK
+  C1123  100u 63V  C178628  OK
+  R295   22k       C31850   OK
+  R301   22k       C31850   OK
+  R650   100k      C25803   OK
+  R651   100k      C25803   OK
+  C197   dnp=yes             OK
+  C201   dnp=yes             OK
 
 VBAT_P effective capacitance 234 uF (m7-modular 228 uF)
 
