@@ -3,6 +3,7 @@
 set -e
 python3 docs/modular/tools/pass5_power_patch.py
 python3 docs/modular/tools/pass6_power_patch.py
+python3 docs/modular/tools/pass9_power_patch.py
 cd cards && python3 tools/mklib.py && python3 tools/card_engine.py && for c in di8 ai4 hso5 brk4; do python3 tools/lvcards.py $c; done && python3 tools/mainboard.py && cd ..
 for c in engine di8 ai4 hso5 brk4; do sh cards/tools/render.sh $c | head -1; sh cards/tools/bom.sh $c; pdfinfo cards/$c/$c.pdf | grep -E "^Pages"; done
 kicad-cli sch erc --severity-all -o docs/modular/erc/genctl_main.rpt genctl.kicad_sch >/dev/null; grep "ERC messages" docs/modular/erc/genctl_main.rpt
