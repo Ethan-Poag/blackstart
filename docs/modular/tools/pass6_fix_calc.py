@@ -16,7 +16,8 @@ print(__doc__)
 import re,glob
 _ROOT=os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','..','..'))
 _S=''.join(open(f).read() for f in glob.glob(os.path.join(_ROOT,'*.kicad_sch')))
-WANT={'R1001':('1k','C21190'),'C601':(None,'C313105'),'C602':(None,'C28323'),'D401':('1N4148W','C81598'),'Q121':('MMBT5401','C8326'),
+# C601: 100 nF C15725 since the SPICE pass (docs/spice/README.md); the hand-calc model below keeps the Pass 6 22 nF record.
+WANT={'R1001':('1k','C21190'),'C601':(None,'C15725'),'C602':(None,'C28323'),'D401':('1N4148W','C81598'),'Q121':('MMBT5401','C8326'),
       'R1121':('22k','C31850'),'R1122':('68k','C23231'),'R1123':('22k','C31850'),'R1124':('100k','C25803'),'C1121':('100n','C14663'),
       'Q122':('MMBT3904','C20526'),'D402':('BAT54C','C37704'),'R1125':('100k','C25803'),'R1126':('47k','C25819')}
 print('== 0. Pass 8 value check (drawn hold-off / front-end parts vs this model)')

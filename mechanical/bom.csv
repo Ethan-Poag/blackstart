@@ -40,7 +40,7 @@
 "C414","68n","Capacitor_SMD:C_0603_1608Metric","1"
 "C418,C419","10u","Capacitor_SMD:C_1206_3216Metric","2"
 "C521","1u 100V","Capacitor_SMD:C_1206_3216Metric","1"
-"C601","22n 100V","Capacitor_SMD:C_0603_1608Metric","1"
+"C601","100n 100V","Capacitor_SMD:C_0603_1608Metric","1"
 "C602","1u 50V","Capacitor_SMD:C_0805_2012Metric","1"
 "C611,C621,C631,C641,C651,C661,C671,C681,C1105","2.2u 100V","Capacitor_SMD:C_1206_3216Metric","9"
 "D1","SMDJ40CA","Diode_SMD:D_SMC","1"

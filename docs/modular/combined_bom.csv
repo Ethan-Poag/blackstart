@@ -26,7 +26,7 @@ C2932477,47u,3,mainboard
 C1621,4.7n,11,mainboard
 C57112,10n,16,mainboard
 C1623,470n,4,engine+mainboard
-C15725,100n,2,ai4+mainboard
+C15725,100n,3,ai4+mainboard
 C1945,100n,22,ai4+di8+engine+mainboard
 C5137595,2.2u,1,mainboard
 C464977,220n,1,mainboard
@@ -40,7 +40,6 @@ C50254,2.2u,1,mainboard
 C31658,68n,1,mainboard
 C14860,10u,2,mainboard
 C13832,1u 100V,1,mainboard
-C313105,22n 100V,1,mainboard
 C224077,SMDJ40CA,3,engine+mainboard
 C114004,SMBJ40CA,18,brk4+engine+hso5+mainboard
 C77297,BAS70,2,mainboard

@@ -5,7 +5,7 @@ BAT_IN -> D401 1N4148W -> Q121 MMBT5401 E (R1121 22k E-B, R1122 68k B -> VBAT_P)
 C602 is 1 uF X7R (0.5-1.1 uF effective; was 10 uF): see section 3 for why.
 == 0. Pass 8 value check (drawn hold-off / front-end parts vs this model)
   R1001  1k         C21190   OK
-  C601   22n 100V   C313105  OK
+  C601   100n 100V  C15725   OK
   C602   1u 50V     C28323   OK
   D401   1N4148W    C81598   OK
   Q121   MMBT5401   C8326    OK
