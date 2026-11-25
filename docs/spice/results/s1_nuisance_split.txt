@@ -1,0 +1,12 @@
+10p_r22k_c470n_12V     Ipk= -1.00A Vout= -1.00V VBAT_E= -1.00V FLT=-1.00V Tj= -1.0C E=-1.00mJ ERR:end 0.018008904
+10p_r22k_c470n_24V     Ipk=  2.27A Vout= 23.87V VBAT_E= 24.06V FLT= 3.30V Tj= 65.2C E= 0.08mJ OK
+10p_r22k_c470n_32V     Ipk= -1.00A Vout= -1.00V VBAT_E= -1.00V FLT=-1.00V Tj= -1.0C E=-1.00mJ ERR:end 0.018008904
+10p_r22k_c1u_12V       Ipk=  1.58A Vout= 11.91V VBAT_E= 12.09V FLT= 3.30V Tj= 65.1C E= 0.04mJ OK
+10p_r22k_c1u_24V       Ipk=  2.27A Vout= 23.87V VBAT_E= 24.09V FLT= 3.30V Tj= 65.4C E= 0.15mJ OK
+10p_r22k_c1u_32V       Ipk=  2.49A Vout= 31.85V VBAT_E= 32.09V FLT= 3.30V Tj= 65.8C E= 0.27mJ OK
+10p_r22k_pull45_24V    Ipk= -1.00A Vout= -1.00V VBAT_E= -1.00V FLT=-1.00V Tj= -1.0C E=-1.00mJ ERR:end 0.00034907637
+10p_r22k_closesh       Ipk= -1.00A Vout= -1.00V VBAT_E= -1.00V FLT=-1.00V Tj= -1.0C E=-1.00mJ ERR:end 0.00034752009
+sh_10p_r22k_12V_f05    Ipk= 15.26A Vout=  0.00V VBAT_E= 38.78V FLT= 0.02V Tj= 65.0C E= 0.01mJ OK
+sh_10p_r22k_24V_f05    Ipk= 13.35A Vout=  0.00V VBAT_E= 39.18V FLT= 0.02V Tj= 65.0C E= 0.01mJ OK
+sh_10p_r22k_32V_f05    Ipk= -1.00A Vout= -1.00V VBAT_E= -1.00V FLT=-1.00V Tj= -1.0C E=-1.00mJ ERR:end 0.00034754985
+sh_10p_r22k_32V_s2     Ipk= -1.00A Vout= -1.00V VBAT_E= -1.00V FLT=-1.00V Tj= -1.0C E=-1.00mJ ERR:end 0.00034754985
