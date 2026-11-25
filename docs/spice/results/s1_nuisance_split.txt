@@ -2,16 +2,33 @@ Sim 1 nuisance-trip check (m7-split-p7 U45 CRANK / U43 FUEL TPS48100-Q1):
 Checks whether C197/C201 = DNP (~10 pF stray) trips on legitimate capacitive/inductive loads, and compares:
   - R301 = 10 R (before Follow-up 1) vs R301 = 22 k (G1PU slew control; R302 G1PD stays 0 R)
   - 2.8 A inductive relay/solenoid (10 mH) + 470 nF / 1 uF EMI cap at 12/24/32 V, worst-case low ISCP (29 k ~ 3.9 A min)
-  - Direct 45 A / 0.5 ms pull-in coil (30-60 A class) even with C201 = 4.7 nF / 100 nF (demonstrates R_ISCP 40.2 k / 20 mOhm ~ 4.97 A typ trips direct 30-60 A pull-in; requires interposing relay per INSTALL_SAFETY.md)
+  - Direct 45 A / 0.5 ms pull-in coil (30-60 A class): bounded hand calc (ngspice does not reliably converge
+    this heavy startup). R_ISCP 40.2 k / 20 mOhm = 4.97 A typ (3.9 A min) trips a direct 30-60 A pull-in at any
+    TMR setting; requires an interposing relay per INSTALL_SAFETY.md.
 Usage: python3 docs/spice/s1_nuisance.py -> docs/spice/results/s1_nuisance_split.txt
 
-case                  Vb   ISCP   TMR   G1PU   Cemi | Ipk     Vout    VBAT_E  FLT_min  Tj_max  E/FET   status
-c470n_10p_r10_32V     32V 40.2k  10p      10R 470n |  -1.00A  -1.00V  -1.00V -1.00V   -1.0C -1.00mJ ERR:end 0.018008902
-c470n_10p_r22k_12V    12V 29.0k  10p   22000R 470n |  -1.00A  -1.00V  -1.00V -1.00V   -1.0C -1.00mJ ERR:end 0.018008904
-c470n_10p_r22k_24V    24V 29.0k  10p   22000R 470n |   2.27A  23.87V  24.06V  3.30V   65.2C  0.08mJ PASS_ON
-c470n_10p_r22k_32V    32V 29.0k  10p   22000R 470n |   2.49A  31.85V  32.06V  3.30V   65.4C  0.14mJ PASS_ON
-c1u_10p_r22k_12V      12V 29.0k  10p   22000R 1u   |   1.58A  11.91V  12.09V  3.30V   65.1C  0.04mJ PASS_ON
-c1u_10p_r22k_24V      24V 29.0k  10p   22000R 1u   |   2.27A  23.87V  24.09V  3.30V   65.4C  0.15mJ PASS_ON
-c1u_10p_r22k_32V      32V 29.0k  10p   22000R 1u   |   2.49A  31.85V  32.09V  3.30V   65.8C  0.27mJ PASS_ON
-pull45_4n7_r10_24V    24V 40.2k  4.7n     10R 0    |  -1.00A  -1.00V  -1.00V -1.00V   -1.0C -1.00mJ ERR:end 0.00034907637
-pull45_100n_r10_24V   24V 40.2k  100n     10R 0    |  -1.00A  -1.00V  -1.00V -1.00V   -1.0C -1.00mJ ERR:end 0.00034907637
+case                  Vb   ISCP   TMR   G1PU   Cemi | Ipk     Vout    VBAT_E  FLT_min  Tj_max  E/FET   SOA    status
+c470n_10p_r10_32V     32V 40.2k  10p      10R 470n |  -1.00A  -1.00V  -1.00V -1.00V   -1.0C -1.00mJ   n/a  ERR:end 0.018204983
+c470n_10p_r22k_12V    12V 29.0k  10p   22000R 470n |   1.54A  11.91V  12.06V  3.30V   65.1C  0.02mJ 0.001 PASS_ON
+c470n_10p_r22k_24V    24V 29.0k  10p   22000R 470n |   2.23A  23.87V  24.06V  3.30V   65.2C  0.08mJ 0.002 PASS_ON
+c470n_10p_r22k_32V    32V 29.0k  10p   22000R 470n |   2.47A  31.86V  32.06V  3.30V   65.4C  0.13mJ 0.003 PASS_ON
+c1u_10p_r22k_12V      12V 29.0k  10p   22000R 1u   |   1.54A  11.91V  12.09V  3.30V   65.1C  0.04mJ 0.001 PASS_ON
+c1u_10p_r22k_24V      24V 29.0k  10p   22000R 1u   |   2.23A  23.87V  24.09V  3.30V   65.4C  0.15mJ 0.003 PASS_ON
+c1u_10p_r22k_32V      32V 29.0k  10p   22000R 1u   |   2.47A  31.86V  32.08V  3.30V   65.8C  0.27mJ 0.006 PASS_ON
+
+Direct 45 A pull-in (hand calc; ngspice does not reliably converge this startup):
+  I_SCP typ = (2 uA x 40.2 k + 19 mV) / 20 mOhm = 4.97 A; min with 29 k ~ 3.9 A.
+  Model: 24 V into R = 24/45 = 0.533 Ohm, L = 0.5 mH, tau = 0.938 ms, I(t) = 45*(1-exp(-t/tau)).
+  Time to typ I_SCP: 0.110 ms. After I_SCP, TMR delay from the dead-short SPICE set:
+    DNP (~10 pF): +0.4-1.8 us -> trip at ~0.111 ms, I ~ 5.0 A
+    4.7 nF:       +71.8 us    -> trip at ~0.182 ms, I = 7.9 A
+    100 nF:       +1.53 ms    -> trip at ~1.64 ms,  I = 37 A
+  A 30-60 A pull-in lasting typical tens to hundreds of ms therefore trips at any TMR setting.
+  INSTALL_SAFETY.md already limits FUEL/CRANK to 2.8 A including pull-in, via an interposing relay.
+
+10 R G1PU + 470 nF EMI cap at 32 V (hand calc if the sim does not converge):
+  Two BSC070N10NS5, Qg ~ 2 x 30 nC, 10 Ohm, ~10 V drive -> turn-on ~ 60 ns.
+  Inrush ~ C*V/t = 470 nF * 32 V / 60 ns ~ 250 A, far above I_SCP 4.97 A, so DNP TMR trips in ~1 us.
+  This is the false-trip the 22 k G1PU is meant to fix (22 k stretches turn-on to ~0.13 ms and
+  drops the same inrush to about 0.1 A average; SPICE with 22 k shows Ipk <= 2.5 A).
+
