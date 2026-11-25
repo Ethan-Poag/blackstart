@@ -2,7 +2,7 @@
 * Same SCP state machine as TPS16630B in behav.lib, plus: when I > I(OL) the gate slews down (full range in tcl = 20 us),
 * regulating the current at I(OL); below I(OL) it slews back to fully on. The slew limit keeps a hard short reaching the 45 A
 * fast trip first (<= 7.5 % conduction loss in the 1.5 us response), as the real part does.
-.subckt TPS16630OL IN OUT PARAMS: ron=19m iscp=45 tresp=1.0 iol=6.30 tcl=20u
+.subckt TPS16630OL IN OUT PARAMS: ron=19m iscp=45 tresp=1.0 iol=6.30 tcl=20u isat=1e6
 Vs IN n1 0
 Bdet detr 0 V = time < 1n ? 0 : max(V(det), 0.5*(1+tanh((i(Vs)-{iscp})/0.5)))
 Rdet detr det 1k
@@ -11,9 +11,10 @@ Btt 0 tt I = time < 1n ? -V(tt)*1m : 1m*0.5*(1+tanh((V(det)-0.5)/0.02))
 Ctt tt 0 1n
 Rtt tt 0 1G
 Bf ff 0 V = V(tt) < {tresp} ? 1 : (V(tt) < {tresp}+0.2 ? 1-(V(tt)-{tresp})/0.2 : 0)
-Bg 0 gc I = time < 1n ? (1-V(gc))*1m : (1n/{tcl})*(-tanh((i(Vs)-{iol})/0.3)) - 1m*min(V(gc),0) - 1m*max(V(gc)-1,0)
+Bg 0 gc I = time < 1n ? (0.999-V(gc))*1m : (1n/{tcl})*(-tanh((i(Vs)-{iol})/0.3)) - 1m*min(V(gc),0) - 1m*max(V(gc)-1,0)
 Cg gc 0 1n
 Rg gc 0 1G
-Bsw n1 OUT I = V(tt) < ({tresp}+5.2) ? V(ff)*max(min(V(gc),1),0)*V(n1,OUT)/{ron} : min(max(V(n1,OUT),0)/{ron}, {iol})
+* time < 1n: plain on-resistance at the DC operating point (the gated expression below made the op fail with two eFuses)
+Bsw n1 OUT I = time < 1n ? V(n1,OUT)/{ron} : V(tt) < ({tresp}+5.2) ? min(V(ff)*max(min(V(gc),1),0)*V(n1,OUT)/{ron}, {isat}) : min(max(V(n1,OUT),0)/{ron}, {iol})
 Cp n1 OUT 100p
 .ends

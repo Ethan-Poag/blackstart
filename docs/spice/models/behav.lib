@@ -12,8 +12,10 @@ C1 a k 2n
 * HGATE: sources ihg (39 uA min / 75 uA max) up to OUT+11.5 V; off (OV or UVLO) -> 168 mA sink to OUT.
 * OV: rising 1.195 V, falling 1.091 V, deglitch tdeg (3.98 us typ / 5.4 us max). UVLO pin: on 1.23 V, off 1.13 V
 * (BAT_IN about 5.6 V on / 5.2 V off through R1/R2/R3). Comparators are tanh-smoothed (1 mV) for convergence.
-.subckt LM74800B A C DGATE HGATE OUT OVP UVP PARAMS: ihg=75u tdeg=3.98u
-Buv uvr 0 V = 0.25*(1+tanh((V(UVP)-1.23+0.10*V(uvs))/1m))*(1+tanh((V(C)-3.9+0.3*V(uvs))/20m))
+.subckt LM74800B A C DGATE HGATE OUT OVP UVP PARAMS: ihg=75u tdeg=3.98u fon=0
+* fon=1: the DC operating point starts with U1 enabled (running-state decks). Without it the op can settle in the
+* self-consistent 'all off' state (DGATE off -> Q1 off -> C low -> UVLO), which is not the state being simulated.
+Buv uvr 0 V = (time < 1n && {fon} > 0.5) ? 1 : 0.25*(1+tanh((V(UVP)-1.23+0.10*V(uvs))/1m))*(1+tanh((V(C)-3.9+0.3*V(uvs))/20m))
 Ruv uvr uvs 1k
 Cuv uvs 0 10p
 Bov ovr 0 V = 0.5*(1+tanh((V(OVP)-1.195+0.104*V(ovs))/1m))
@@ -49,7 +51,7 @@ Btt 0 tt I = time < 1n ? -V(tt)*1m : 1m*0.5*(1+tanh((V(det)-0.5)/0.02))
 Ctt tt 0 1n
 Rtt tt 0 1G
 Bf ff 0 V = V(tt) < {tresp} ? 1 : (V(tt) < {tresp}+0.2 ? 1-(V(tt)-{tresp})/0.2 : 0)
-Bsw n1 OUT I = V(tt) < ({tresp}+5.2) ? min(V(ff)*V(n1,OUT)/{ron}, {isat}) : min(max(V(n1,OUT),0)/{ron}, {iol})
+Bsw n1 OUT I = time < 1n ? V(n1,OUT)/{ron} : V(tt) < ({tresp}+5.2) ? min(V(ff)*V(n1,OUT)/{ron}, {isat}) : min(max(V(n1,OUT),0)/{ron}, {iol})
 Cp n1 OUT 100p
 .ends
 

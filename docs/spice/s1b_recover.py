@@ -21,17 +21,21 @@ def one(a):
     f=lambda c: first(t[m],c[m])
     s=soa(r,t0=S.T_SH)
     return dict(a=a,dead=f(~alive),u2d=f(r['v(xu2.runs)']<0.5),u5d=f(r['v(U5_ALIVE)']<0.5),soa=s,tj=float(r['v(tj2)'].max()),
-                vgs_on=f(r['v(HGATE,VBAT_P)']>8.0) if r['v(HGATE,VBAT_P)'][-1]>8 else None,vpmin=float(r['v(VBAT_P)'][m].min()),
-                u2back=first(t[t>2e-3],r['v(xu2.runs)'][t>2e-3]>0.5),warn=r.get('_warn'))
+                vgs_on=rec(t,r['v(HGATE,VBAT_P)']),vgs_min=float(r['v(HGATE,VBAT_P)'][m].min()),vpmin=float(r['v(VBAT_P)'][m].min()),
+                vp_end=float(r['v(VBAT_P)'][-1]),warn=r.get('_warn'))
+def rec(t,vgs):
+    """time (from the short) for Q2 Vgs to come back above 8 V after its minimum"""
+    m=t>S.T_SH; k=np.argmin(np.where(m,vgs,1e9)); x=first(t[k:],vgs[k:]>8.0)
+    return (x-S.T_SH) if x is not None else None
 if __name__=='__main__':
     C=[(12.0,0.015,2e-6,0.012,1,150e-9,1.5,'pessimistic'),(32.0,0.015,2e-6,0.025,1,60e-9,1.5,'pessimistic')]
     J=[(c,x) for c in C for x in (100e-9,22e-9)]
     with mp.Pool(4) as P: R=P.map(one,J,chunksize=1)
-    out=[__doc__,'','Vb   corner (Rb, Lb, Rd2, cold, Lbank, tresp)   C601 | VBAT_P min  MCU            U2 off / U5 off   U2 back  | Q2 Vgs>8 V again  Q2 Tj max       SOA ratio']
-    g=lambda v: ('%7.2f ms'%(v*1e3)) if v is not None else '     none'
+    out=[__doc__,'','Vb   corner (Rb, Lb, Rd2, cold, Lbank, tresp)   C601 | VBAT_P min / end   MCU            U2 off / U5 off       | Q2 Vgs min  back >8 V after  Q2 Tj max       SOA ratio']
+    g=lambda v: ('%7.3f ms'%(v*1e3)) if v is not None else '     none'
     for x in R:
         c,c601=x['a']; s=x['soa']
-        out.append('%4.1f %-42s %3.0f nF | %6.2f V   %-14s %s / %s %s | %s     %4.0f F (%3.0f C)  %.2f%s'%(c[0],str(c[1:7]),c601*1e9,x['vpmin'],
-            'alive' if x['dead'] is None else 'RESET at %.2f ms'%((x['dead']-S.T_SH)*1e3),g(x['u2d']),g(x['u5d']),g(x['u2back']),g(x['vgs_on']),F(x['tj']),x['tj'],s[0],
+        out.append('%4.1f %-42s %3.0f nF | %6.2f / %5.2f V  %-14s %s / %s | %6.2f V   %s     %4.0f F (%3.0f C)  %.2f%s'%(c[0],str(c[1:7]),c601*1e9,x['vpmin'],x['vp_end'],
+            'alive' if x['dead'] is None else 'RESET at %.2f ms'%((x['dead']-S.T_SH)*1e3),g(x['u2d']),g(x['u5d']),x['vgs_min'],g(x['vgs_on']),F(x['tj']),x['tj'],s[0],
             '  WARN '+x['warn'] if x['warn'] else ''))
     txt='\n'.join(out); print(txt); open(os.path.join(HERE,'results','s1b_recover_mod.txt'),'w').write(txt+'\n')
