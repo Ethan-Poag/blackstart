@@ -32,9 +32,9 @@ Coff offs 0 10p
 Bhg OUT HGATE I = (1-V(offs))*{ihg}*tanh((11.5-V(HGATE,OUT))/0.2) - V(offs)*0.168*tanh(V(HGATE,OUT)/0.3)
 * DGATE: on (11 V through 5k, ~2 mA source) unless reverse V(A,C) < -11 mV, then 2.37 A sink. The 20 mV light-load
 * regulation is not modelled (it only matters at mA loads; full enhancement is the worst case for every event here).
-Edg dgd A VOL = V(uvs)*11*0.5*(1+tanh((V(A,C)+0.011)/1m))
+Edg dgd A VOL = V(uvs)*11*0.5*(1+tanh((V(A,C)+0.011)/5m))
 Rdg5 dgd DGATE 5k
-Bdgs DGATE A I = (2.37*0.5*(1-tanh((V(A,C)+0.011)/1m)) + 0.1*(1-V(uvs)))*tanh(V(DGATE,A)/0.3)
+Bdgs DGATE A I = (2.37*0.5*(1-tanh((V(A,C)+0.011)/5m)) + 0.1*(1-V(uvs)))*tanh(V(DGATE,A)/0.3)
 Cdgp DGATE A 10p
 .ends
 

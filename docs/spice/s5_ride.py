@@ -32,15 +32,16 @@ def one_raw(a):
            bat_short=(typ=='G'),r_short=1.0,extra=extra+['Vbsw bsw 0 PWL(0 1 %.9g 1 %.9g 0 %.9g 0 %.9g 1)'%(T0,T0+1e-6,T0+tint,T0+tint+1e-6)]
            +(['Vbsh bsh 0 PWL(0 0 %.9g 0 %.9g 1 %.9g 1 %.9g 0)'%(T0,T0+1e-6,T0+tint,T0+tint+1e-6)] if typ=='G' else []))   # 1 us contact edges
     p.update({k:v for k,v in po.items() if k in ('u5_holdoff','u5en_src')})
-    ns=ns_on(V); 
+    ns=ns_on(V); ns.update({'xu1.uvs':1,'xu1.offs':0,'xu2.runs':1,'xu2.ss':1})
     if opt=='B': ns.update(U5VIN=V-0.3,chu=V-0.3,chu1=V-0.3)
     tst=T0+tint+1.1*V/(ihg/(C601_DEFAULT+1e-9))+14e-3   # covers the slowest HGATE re-ramp
     name='s5_%s_%g_%s_%g_%s_%g'%(br,V,typ,tint*1e3,opt,ihg*1e6)
-    r=run(frontend(p),['v(BAT_IN)','v(VBAT_P)','v(VBAT_DD,VBAT_PS)','i(VQ2)','v(tj2)','v(xu2.runs)','v(U5_ALIVE)','v(HO_F)'],tst,2e-6,name,tmax=5e-6,nodeset=ns)
-    t=r['t']
-    if t[-1]<T0+tint+0.5e-3: raise RuntimeError('%s ended at %.3g s'%(name,t[-1]))
-    vpre=float(np.interp(T0-10e-6,t,r['v(VBAT_P)']))
-    if vpre<0.8*V: raise RuntimeError('%s: op not in the running state (VBAT_P %.2f V before the break)'%(name,vpre))
+    for tm,op in ((5e-6,''),(1e-6,''),(0.5e-6,''),(1e-6,'reltol=3e-3 trtol=7')):
+        r=run(frontend(p),['v(BAT_IN)','v(VBAT_P)','v(VBAT_DD,VBAT_PS)','i(VQ2)','v(tj2)','v(xu2.runs)','v(U5_ALIVE)','v(HO_F)'],tst,2e-6,name,tmax=tm,opts=op,nodeset=ns)
+        t=r['t']; vpre=float(np.interp(T0-10e-6,t,r['v(VBAT_P)'])) if len(t) and t[-1]>T0 else 0.0
+        if t[-1]>=T0+tint+0.5e-3 and vpre>=0.8*V: break
+    else:
+        raise RuntimeError('%s ended at %.3g s (vpre=%.2f V)'%(name,t[-1],vpre))
     alive=(r['v(U5_ALIVE)']>0.5)|(r['v(xu2.runs)']>0.5)
     m=t>T0; dead=first(t[m],~alive[m])
     u5d=first(t[m],r['v(U5_ALIVE)'][m]<0.5); u2d=first(t[m],r['v(xu2.runs)'][m]<0.5)
