@@ -119,10 +119,16 @@ A    12.0  O      0.2    39 uA |    7.4 V          alive (     - /      -)  |   
 A    12.0  O      0.2    75 uA |    7.4 V          alive (     - /      -)  |    31A    3.3   150 F ( 65 C)  0.02
 A    12.0  O      0.5    39 uA |    3.7 V          RESET (  0.43 /   0.41)  |     4A   12.6   150 F ( 66 C)  0.02
 A    12.0  O      0.5    75 uA |    3.7 V          RESET (  0.43 /   0.41)  |     4A   10.7   151 F ( 66 C)  0.02
+A    12.0  O      1.0    39 uA |    3.7 V          RESET (  0.43 /   0.41)  |     4A   11.6   150 F ( 66 C)  0.01
 A    12.0  O      1.0    75 uA |    3.7 V          RESET (  0.43 /   0.41)  |     4A    9.6   151 F ( 66 C)  0.02
+A    12.0  O      2.0    39 uA |    3.7 V          RESET (  0.43 /   0.41)  |     4A   11.6   150 F ( 66 C)  0.02
 A    12.0  O      2.0    75 uA |    3.7 V          RESET (  0.43 /   0.41)  |     4A    9.6   151 F ( 66 C)  0.02
+A    12.0  O      5.0    39 uA |    3.7 V          RESET (  0.43 /   0.41)  |     4A   11.7   150 F ( 66 C)  0.02
 A    12.0  O      5.0    75 uA |    3.7 V          RESET (  0.43 /   0.41)  |     4A    9.7   151 F ( 66 C)  0.02
+A    12.0  O     10.0    39 uA |    3.7 V          RESET (  0.43 /   0.41)  |     4A   11.9   150 F ( 66 C)  0.02
 A    12.0  O     10.0    75 uA |    3.7 V          RESET (  0.43 /   0.41)  |     4A    9.9   151 F ( 66 C)  0.02
+A    12.0  O     20.0    39 uA |    3.6 V          RESET (  0.43 /   0.41)  |     4A   12.3   150 F ( 66 C)  0.02
+A    12.0  O     20.0    75 uA |    3.6 V          RESET (  0.43 /   0.41)  |     4A   10.3   151 F ( 66 C)  0.02
 A    12.0  G      0.1    39 uA |    9.1 V          alive (     - /      -)  |    16A   19.1   155 F ( 68 C)  0.02
 A    12.0  G      0.1    75 uA |    9.1 V          alive (     - /      -)  |    16A   10.5   154 F ( 68 C)  0.02
 A    12.0  G      0.2    39 uA |    7.4 V          alive (  0.39 /      -)  |     4A   17.0   154 F ( 68 C)  0.03
@@ -147,9 +153,13 @@ A    24.0  O      0.5    39 uA |   14.8 V          alive (     - /      -)  |   
 A    24.0  O      0.5    75 uA |   14.8 V          alive (     - /      -)  |    62A    4.6   150 F ( 66 C)  0.03
 A    24.0  O      1.0    39 uA |    6.5 V          alive (     - /      -)  |   117A    8.2   154 F ( 68 C)  0.06
 A    24.0  O      1.0    75 uA |    6.5 V          alive (     - /      -)  |   117A    5.4   154 F ( 68 C)  0.06
+A    24.0  O      2.0    39 uA |    3.7 V          RESET (  1.18 /   1.16)  |     3A   52.7   152 F ( 67 C)  0.12
 A    24.0  O      2.0    75 uA |    3.7 V          RESET (  1.18 /   1.16)  |     3A   49.3   154 F ( 68 C)  0.19
+A    24.0  O      5.0    39 uA |    3.7 V          RESET (  1.18 /   1.16)  |     3A   52.9   152 F ( 67 C)  0.12
 A    24.0  O      5.0    75 uA |    3.7 V          RESET (  1.19 /   1.16)  |     0A    0.1   149 F ( 65 C)  0.00
+A    24.0  O     10.0    39 uA |    3.7 V          RESET (  1.18 /   1.16)  |     3A   53.4   152 F ( 67 C)  0.12
 A    24.0  O     10.0    75 uA |    3.7 V          RESET (  1.18 /   1.16)  |     3A   49.8   154 F ( 68 C)  0.19
+A    24.0  O     20.0    39 uA |    3.7 V          RESET (  1.18 /   1.16)  |     3A   54.3   152 F ( 67 C)  0.13
 A    24.0  O     20.0    75 uA |    3.7 V          RESET (  1.18 /   1.16)  |     3A   50.6   154 F ( 68 C)  0.19
 A    24.0  G      0.1    39 uA |   21.2 V          alive (     - /      -)  |    16A   13.8   153 F ( 67 C)  0.02
 A    24.0  G      0.1    75 uA |   21.2 V          alive (     - /      -)  |    16A    7.7   152 F ( 67 C)  0.02
@@ -173,10 +183,16 @@ A    32.0  O      0.2    39 uA |   28.7 V          alive (     - /      -)  |   
 A    32.0  O      0.2    75 uA |   28.7 V          alive (     - /      -)  |    23A    3.0   149 F ( 65 C)  0.01
 A    32.0  O      0.5    39 uA |   24.5 V          alive (     - /      -)  |    50A    5.3   150 F ( 66 C)  0.03
 A    32.0  O      0.5    75 uA |   24.5 V          alive (     - /      -)  |    51A    3.2   150 F ( 66 C)  0.03
+A    32.0  O      1.0    39 uA |   16.5 V          alive (     - /      -)  |   103A    6.0   153 F ( 67 C)  0.05
 A    32.0  O      1.0    75 uA |   16.5 V          alive (     - /      -)  |   104A    3.9   153 F ( 67 C)  0.05
+A    32.0  O      2.0    39 uA |    3.8 V          RESET (  1.78 /   1.77)  |     3A   98.7   153 F ( 67 C)  0.24
+A    32.0  O      2.0    75 uA |    3.8 V          RESET (  1.79 /   1.77)  |     3A   93.6   156 F ( 69 C)  0.41
 A    32.0  O      5.0    39 uA |    3.7 V          RESET (  1.78 /   1.77)  |     3A   99.4   153 F ( 67 C)  0.25
 A    32.0  O      5.0    75 uA |    3.7 V          RESET (  1.78 /   1.76)  |     3A   94.1   156 F ( 69 C)  0.41
+A    32.0  O     10.0    39 uA |    3.7 V          RESET (  1.79 /   1.77)  |     3A   99.9   153 F ( 67 C)  0.25
 A    32.0  O     10.0    75 uA |    3.7 V          RESET (  1.78 /   1.76)  |     3A   94.6   156 F ( 69 C)  0.41
+A    32.0  O     20.0    39 uA |    3.7 V          RESET (  1.79 /   1.77)  |     3A  101.1   154 F ( 68 C)  0.25
+A    32.0  O     20.0    75 uA |    3.7 V          RESET (  1.79 /   1.77)  |     3A   95.5   156 F ( 69 C)  0.41
 A    32.0  G      0.1    39 uA |   29.9 V          alive (     - /      -)  |    10A    7.6   151 F ( 66 C)  0.02
 A    32.0  G      0.1    75 uA |   29.9 V          alive (     - /      -)  |    10A    4.3   150 F ( 66 C)  0.01
 A    32.0  G      0.2    39 uA |   28.7 V          alive (  0.35 /      -)  |     3A   10.2   151 F ( 66 C)  0.01
@@ -197,9 +213,18 @@ B    12.0  O      0.1    39 uA |    9.2 V          alive (     - /      -)  |   
 B    12.0  O      0.1    75 uA |    9.2 V          alive (     - /      -)  |    19A    3.3   149 F ( 65 C)  0.02
 B    12.0  O      0.2    39 uA |    7.7 V          alive (     - /      -)  |    29A    5.0   150 F ( 65 C)  0.02
 B    12.0  O      0.2    75 uA |    7.7 V          alive (     - /      -)  |    29A    3.3   150 F ( 65 C)  0.02
+B    12.0  O      0.5    39 uA |    3.7 V          alive (  0.47 /      -)  |    17A   27.4   161 F ( 72 C)  0.06
+B    12.0  O      0.5    75 uA |    3.6 V          alive (  0.47 /      -)  |    16A   17.5   161 F ( 72 C)  0.06
 B    12.0  O      1.0    39 uA |    3.7 V          RESET (  0.47 /   4.10)  |     4A   12.0   150 F ( 66 C)  0.02
+B    12.0  O      1.0    75 uA |    3.7 V          RESET (  0.47 /   4.10)  |     4A    9.9   151 F ( 66 C)  0.02
 B    12.0  O      2.0    39 uA |    3.7 V          RESET (  0.47 /   4.10)  |     4A   12.1   150 F ( 66 C)  0.02
+B    12.0  O      2.0    75 uA |    3.7 V          RESET (  0.47 /   4.10)  |     4A   10.0   151 F ( 66 C)  0.02
+B    12.0  O      5.0    39 uA |    3.7 V          RESET (  0.47 /   4.10)  |     4A   12.2   150 F ( 66 C)  0.02
+B    12.0  O      5.0    75 uA |    3.7 V          RESET (  0.47 /   4.10)  |     4A   10.1   151 F ( 66 C)  0.02
 B    12.0  O     10.0    39 uA |    3.7 V          RESET (  0.47 /   4.10)  |     4A   12.4   150 F ( 66 C)  0.02
+B    12.0  O     10.0    75 uA |    3.7 V          RESET (  0.47 /   4.10)  |     4A   10.3   151 F ( 66 C)  0.02
+B    12.0  O     20.0    39 uA |    3.6 V          RESET (  0.47 /   4.10)  |     4A   12.8   150 F ( 66 C)  0.02
+B    12.0  O     20.0    75 uA |    3.6 V          RESET (  0.47 /   4.10)  |     4A   10.7   151 F ( 66 C)  0.02
 B    12.0  G      0.1    39 uA |    9.2 V          alive (     - /      -)  |    14A   17.7   155 F ( 68 C)  0.02
 B    12.0  G      0.1    75 uA |    9.2 V          alive (     - /      -)  |    15A    9.7   153 F ( 67 C)  0.02
 B    12.0  G      0.2    39 uA |    7.7 V          alive (  0.39 /      -)  |     4A   13.1   153 F ( 67 C)  0.02
@@ -258,7 +283,9 @@ B    32.0  O      1.0    39 uA |   16.9 V          alive (     - /      -)  |   
 B    32.0  O      1.0    75 uA |   16.9 V          alive (     - /      -)  |   101A    3.8   153 F ( 67 C)  0.05
 B    32.0  O      2.0    39 uA |    3.7 V          alive (  1.87 /      -)  |     3A  142.9   157 F ( 69 C)  0.22
 B    32.0  O      2.0    75 uA |    3.8 V          alive (  1.87 /      -)  |     3A  103.5   156 F ( 69 C)  0.41
+B    32.0  O      5.0    39 uA |    3.7 V          alive (  1.87 /      -)  |     3A  170.7   159 F ( 70 C)  0.37
 B    32.0  O      5.0    75 uA |    3.7 V          alive (  1.87 /      -)  |     3A  109.9   157 F ( 70 C)  0.41
+B    32.0  O     10.0    39 uA |    3.7 V          alive (  1.87 /      -)  |     3A  188.4   160 F ( 71 C)  0.47
 B    32.0  O     10.0    75 uA |    3.7 V          alive (  1.87 /      -)  |     3A  116.2   158 F ( 70 C)  0.41
 B    32.0  O     20.0    39 uA |    3.7 V          alive (  1.87 /      -)  |     0A    0.1   149 F ( 65 C)  0.01
 B    32.0  O     20.0    75 uA |    3.7 V          alive (  1.87 /      -)  |     3A  136.5   161 F ( 72 C)  0.43
@@ -292,38 +319,11 @@ Summary: longest interruption with the MCU alive (all HGATE corners), and worst 
   A    24.0 V type G: MCU survives up to 1 ms (first reset at 2 ms); worst SOA 0.51
   A    32.0 V type O: MCU survives up to 1 ms (first reset at 2 ms); worst SOA 0.41
   A    32.0 V type G: MCU survives up to 1 ms (first reset at 2 ms); worst SOA 0.41
-  B    12.0 V type O: MCU survives up to 0.2 ms (first reset at 0.5 ms); worst SOA 0.02
+  B    12.0 V type O: MCU survives up to 0.5 ms (first reset at 1 ms); worst SOA 0.06
   B    12.0 V type G: MCU survives up to 0.2 ms (first reset at 0.5 ms); worst SOA 0.02
   B    24.0 V type O: MCU survives up to 10 ms (first reset at 20 ms); worst SOA 0.63
   B    24.0 V type G: MCU survives up to 10 ms (first reset at 20 ms); worst SOA 0.63
-  B    32.0 V type O: MCU survives up to 20 ms (first reset at >20 ms); worst SOA 0.43
+  B    32.0 V type O: MCU survives up to 20 ms (first reset at >20 ms); worst SOA 0.47
   B    32.0 V type G: MCU survives up to 20 ms (first reset at >20 ms); worst SOA 0.79
 
-Failed runs (simulator): 27
-  ('mod', 12.0, 'O', 0.001, 'A', 3.9e-05): s5_mod_12_O_1_A_39 ended at 0.00139 s
-  ('mod', 12.0, 'O', 0.002, 'A', 3.9e-05): s5_mod_12_O_2_A_39 ended at 0.00139 s
-  ('mod', 12.0, 'O', 0.005, 'A', 3.9e-05): s5_mod_12_O_5_A_39 ended at 0.00139 s
-  ('mod', 12.0, 'O', 0.01, 'A', 3.9e-05): s5_mod_12_O_10_A_39 ended at 0.00139 s
-  ('mod', 12.0, 'O', 0.02, 'A', 3.9e-05): s5_mod_12_O_20_A_39 ended at 0.00139 s
-  ('mod', 12.0, 'O', 0.02, 'A', 7.5e-05): s5_mod_12_O_20_A_75: op not in the running state (VBAT_P 0.65 V before the break)
-  ('mod', 24.0, 'O', 0.002, 'A', 3.9e-05): s5_mod_24_O_2_A_39 ended at 0.00212 s
-  ('mod', 24.0, 'O', 0.005, 'A', 3.9e-05): s5_mod_24_O_5_A_39 ended at 0.00212 s
-  ('mod', 24.0, 'O', 0.01, 'A', 3.9e-05): s5_mod_24_O_10_A_39 ended at 0.00212 s
-  ('mod', 24.0, 'O', 0.02, 'A', 3.9e-05): s5_mod_24_O_20_A_39 ended at 0.00212 s
-  ('mod', 32.0, 'O', 0.001, 'A', 3.9e-05): s5_mod_32_O_1_A_39: op not in the running state (VBAT_P 0.88 V before the break)
-  ('mod', 32.0, 'O', 0.002, 'A', 3.9e-05): s5_mod_32_O_2_A_39: op not in the running state (VBAT_P 0.88 V before the break)
-  ('mod', 32.0, 'O', 0.002, 'A', 7.5e-05): s5_mod_32_O_2_A_75: op not in the running state (VBAT_P 0.88 V before the break)
-  ('mod', 32.0, 'O', 0.01, 'A', 3.9e-05): s5_mod_32_O_10_A_39 ended at 0.0105 s
-  ('mod', 32.0, 'O', 0.02, 'A', 3.9e-05): s5_mod_32_O_20_A_39: op not in the running state (VBAT_P 0.88 V before the break)
-  ('mod', 32.0, 'O', 0.02, 'A', 7.5e-05): s5_mod_32_O_20_A_75: op not in the running state (VBAT_P 0.88 V before the break)
-  ('mod', 12.0, 'O', 0.0005, 'B', 3.9e-05): s5_mod_12_O_0.5_B_39: op not in the running state (VBAT_P 0.65 V before the break)
-  ('mod', 12.0, 'O', 0.0005, 'B', 7.5e-05): s5_mod_12_O_0.5_B_75: op not in the running state (VBAT_P 0.65 V before the break)
-  ('mod', 12.0, 'O', 0.001, 'B', 7.5e-05): s5_mod_12_O_1_B_75: op not in the running state (VBAT_P 0.65 V before the break)
-  ('mod', 12.0, 'O', 0.002, 'B', 7.5e-05): s5_mod_12_O_2_B_75: op not in the running state (VBAT_P 0.65 V before the break)
-  ('mod', 12.0, 'O', 0.005, 'B', 3.9e-05): s5_mod_12_O_5_B_39: op not in the running state (VBAT_P 0.65 V before the break)
-  ('mod', 12.0, 'O', 0.005, 'B', 7.5e-05): s5_mod_12_O_5_B_75: op not in the running state (VBAT_P 0.65 V before the break)
-  ('mod', 12.0, 'O', 0.01, 'B', 7.5e-05): s5_mod_12_O_10_B_75: op not in the running state (VBAT_P 0.65 V before the break)
-  ('mod', 12.0, 'O', 0.02, 'B', 3.9e-05): s5_mod_12_O_20_B_39: op not in the running state (VBAT_P 0.65 V before the break)
-  ('mod', 12.0, 'O', 0.02, 'B', 7.5e-05): s5_mod_12_O_20_B_75: op not in the running state (VBAT_P 0.65 V before the break)
-  ('mod', 32.0, 'O', 0.005, 'B', 3.9e-05): s5_mod_32_O_5_B_39: op not in the running state (VBAT_P 0.88 V before the break)
-  ('mod', 32.0, 'O', 0.01, 'B', 3.9e-05): s5_mod_32_O_10_B_39: op not in the running state (VBAT_P 0.88 V before the break)
+Failed runs (simulator): 0
