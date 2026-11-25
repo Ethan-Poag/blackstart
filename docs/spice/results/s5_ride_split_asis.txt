@@ -1,0 +1,125 @@
+Sim 5 (and the warm-restart half of sim 2): battery interruption while running, then the battery returns.
+Running state at t = 0: U2 at full load (79.5 W in), U5 2.1 W bound (worst case: the TPS2116 moves +3V3_SAFE onto +3V3_BK as soon
+as U2's chain drops; the real MCU-domain load is lower). Two interruption types:
+  O = battery side opens (loose terminal / connector): BAT_IN floats on C297 + its own loads.
+  G = battery side opens and BAT_IN is pulled to 0 V through 1 Ohm (shared feed collapsing, e.g. a hard short upstream).
+Interruption lengths 0.1-20 ms, then the battery returns through Rb 15 mOhm / Lb 0.5 uH.
+MCU alive = U2 running (its +3V3 chain) or U5 running (+3V3_BK). Conservative: the +12 V / +3V3 output caps' own hold-up after U2
+stops is not counted. Q2 SOA on the return = hand-calc soa_check on 10 us bins; Tj from the vendor thermal network.
+Options (recommend only; NOT in the schematics):
+  asis = drawn circuit (D402 pin 2 lets the hold-off pull U5_EN).
+  A    = hold-off may stop U5 only while +3V3_BK is down: D402 pin 2 not fitted; Q123 MMBT3904 (C = U5_EN) driven from the Q121
+         collector through 47k (100k B-E); Q124 MMBT3904 (C = Q123 base) driven from +3V3_BK through 47k. +2 BJT, +3 R.
+  B    = A + U5 hold-up: U5 VIN fed from VBAT_P through D_A SS110; C_HU 2x 100 uF 63 V (EEETG1J101UP, already on the BOM)
+         charged through R_HU 2.2k with D_B SS110 across it for discharge into U5 VIN; U5 EN divider from U5 VIN.
+         R_HU keeps the C_HU charge off Q2 during the ramp. +2 SS110, +2 caps, +1 R on top of A.
+Usage: s5_ride.py mod|split
+
+Branch split.
+opt  Vb   type  t_int ms  HGATE | VBAT_P at return  MCU   (U2 off / U5 off after the break starts, ms) | Q2 Ipk  Q2 E mJ  Tj max         SOA ratio
+asis 12.0  O      0.1    39 uA |    9.1 V          alive (     - /      -)  |    20A    4.9   149 F ( 65 C)  0.02
+asis 12.0  O      0.1    75 uA |    9.1 V          alive (     - /      -)  |    20A    3.2   149 F ( 65 C)  0.02
+asis 12.0  O      0.2    39 uA |    7.4 V          alive (     - /      -)  |    31A    5.0   150 F ( 65 C)  0.02
+asis 12.0  O      0.2    75 uA |    7.4 V          alive (     - /      -)  |    31A    3.3   150 F ( 65 C)  0.02
+asis 12.0  O      0.5    75 uA |    3.6 V          RESET (  0.43 /   0.41)  |     4A    9.7   151 F ( 66 C)  0.01
+asis 12.0  O      1.0    75 uA |    3.7 V          RESET (  0.43 /   0.41)  |     4A    9.3   151 F ( 66 C)  0.02
+asis 12.0  O      2.0    75 uA |    3.7 V          RESET (  0.43 /   0.41)  |     4A    9.3   151 F ( 66 C)  0.02
+asis 12.0  O      5.0    75 uA |    3.7 V          RESET (  0.43 /   0.41)  |     4A    9.4   151 F ( 66 C)  0.02
+asis 12.0  O     10.0    75 uA |    3.7 V          RESET (  0.43 /   0.41)  |     0A    0.0   149 F ( 65 C)  0.00
+asis 12.0  G      0.1    39 uA |    9.1 V          alive (     - /      -)  |    16A   19.2   155 F ( 68 C)  0.02
+asis 12.0  G      0.2    39 uA |    7.4 V          RESET (  0.39 /   0.39)  |     4A    9.5   154 F ( 68 C)  0.03
+asis 12.0  G      0.5    39 uA |    3.7 V          RESET (  0.43 /   0.41)  |     4A   11.2   150 F ( 66 C)  0.01
+asis 12.0  G      0.5    75 uA |    3.7 V          RESET (  0.43 /   0.41)  |     4A    9.3   151 F ( 66 C)  0.02
+asis 12.0  G      2.0    75 uA |    3.7 V          RESET (  0.43 /   0.41)  |     4A    9.3   151 F ( 66 C)  0.02
+asis 12.0  G      5.0    39 uA |    3.7 V          RESET (  0.43 /   0.41)  |     4A   11.3   150 F ( 66 C)  0.02
+asis 12.0  G      5.0    75 uA |    3.7 V          RESET (  0.43 /   0.41)  |     4A    9.4   151 F ( 66 C)  0.02
+asis 12.0  G     10.0    75 uA |    3.7 V          RESET (  0.43 /   0.41)  |     4A    9.6   151 F ( 66 C)  0.02
+asis 12.0  G     20.0    75 uA |    3.6 V          RESET (  0.43 /   0.41)  |     4A   10.1   151 F ( 66 C)  0.02
+asis 24.0  O      0.1    39 uA |   21.2 V          alive (     - /      -)  |    19A    7.1   149 F ( 65 C)  0.02
+asis 24.0  O      0.1    75 uA |   21.2 V          alive (     - /      -)  |    19A    4.3   149 F ( 65 C)  0.02
+asis 24.0  O      0.2    39 uA |   19.6 V          alive (     - /      -)  |    30A    7.1   149 F ( 65 C)  0.02
+asis 24.0  O      0.2    75 uA |   19.6 V          alive (     - /      -)  |    30A    4.3   149 F ( 65 C)  0.02
+asis 24.0  O      0.5    39 uA |   14.7 V          alive (     - /      -)  |    62A    7.4   150 F ( 66 C)  0.03
+asis 24.0  O      0.5    75 uA |   14.7 V          alive (     - /      -)  |    62A    4.6   150 F ( 66 C)  0.03
+asis 24.0  O      1.0    39 uA |    6.5 V          alive (     - /      -)  |   117A    8.2   154 F ( 68 C)  0.06
+asis 24.0  O      1.0    75 uA |    6.5 V          alive (     - /      -)  |   117A    5.4   154 F ( 68 C)  0.06
+asis 24.0  O      2.0    39 uA |    3.7 V          RESET (  1.18 /   1.16)  |     0A    0.1   149 F ( 65 C)  0.00
+asis 24.0  O      2.0    75 uA |    3.7 V          RESET (  1.18 /   1.16)  |     3A   49.1   154 F ( 68 C)  0.19
+asis 24.0  O      5.0    39 uA |    3.7 V          RESET (  1.18 /   1.16)  |     3A   52.8   152 F ( 67 C)  0.12
+asis 24.0  O      5.0    75 uA |    3.7 V          RESET (  1.18 /   1.16)  |     3A   49.3   154 F ( 68 C)  0.19
+asis 24.0  O     20.0    75 uA |    3.7 V          RESET (  1.18 /   1.16)  |     3A   50.5   154 F ( 68 C)  0.19
+asis 24.0  G      0.1    39 uA |   21.2 V          alive (     - /      -)  |    16A   13.9   153 F ( 67 C)  0.02
+asis 24.0  G      0.1    75 uA |   21.2 V          alive (     - /      -)  |    16A    7.7   152 F ( 67 C)  0.02
+asis 24.0  G      0.2    75 uA |   19.6 V          RESET (  0.33 /   0.33)  |     3A    6.9   152 F ( 67 C)  0.02
+asis 24.0  G      0.5    39 uA |   14.7 V          RESET (  0.63 /   0.62)  |     3A   18.4   150 F ( 66 C)  0.02
+asis 24.0  G      0.5    75 uA |   14.7 V          RESET (  0.63 /   0.62)  |     3A   14.8   151 F ( 66 C)  0.03
+asis 24.0  G      1.0    75 uA |    6.4 V          RESET (  1.12 /   1.12)  |     3A   41.4   153 F ( 67 C)  0.15
+asis 24.0  G      5.0    39 uA |    3.7 V          RESET (  1.17 /   1.16)  |     3A   52.8   152 F ( 67 C)  0.12
+asis 24.0  G      5.0    75 uA |    3.7 V          RESET (  1.18 /   1.16)  |     3A   49.7   154 F ( 68 C)  0.19
+asis 24.0  G     10.0    39 uA |    3.7 V          RESET (  1.17 /   1.16)  |     3A   53.2   152 F ( 67 C)  0.12
+asis 24.0  G     10.0    75 uA |    3.7 V          RESET (  1.18 /   1.16)  |     3A   49.6   154 F ( 68 C)  0.19
+asis 24.0  G     20.0    39 uA |    3.7 V          RESET (  1.17 /   1.16)  |     3A   54.2   152 F ( 67 C)  0.13
+asis 32.0  O      0.1    39 uA |   29.9 V          alive (     - /      -)  |    14A    5.1   149 F ( 65 C)  0.02
+asis 32.0  O      0.1    75 uA |   29.9 V          alive (     - /      -)  |    14A    3.0   149 F ( 65 C)  0.01
+asis 32.0  O      0.2    39 uA |   28.7 V          alive (     - /      -)  |    22A    5.1   149 F ( 65 C)  0.02
+asis 32.0  O      0.2    75 uA |   28.7 V          alive (     - /      -)  |    23A    3.0   149 F ( 65 C)  0.01
+asis 32.0  O      0.5    39 uA |   24.5 V          alive (     - /      -)  |    51A    5.3   150 F ( 66 C)  0.03
+asis 32.0  O      0.5    75 uA |   24.5 V          alive (     - /      -)  |    51A    3.2   150 F ( 66 C)  0.03
+asis 32.0  O      5.0    75 uA |    3.7 V          RESET (  1.78 /   1.76)  |     3A   93.9   156 F ( 69 C)  0.41
+asis 32.0  G      0.1    39 uA |   29.9 V          alive (     - /      -)  |    10A    7.6   151 F ( 66 C)  0.02
+asis 32.0  G      0.2    75 uA |   28.7 V          RESET (  0.33 /   0.33)  |     3A    4.8   150 F ( 66 C)  0.01
+asis 32.0  G      0.5    39 uA |   24.5 V          RESET (  0.61 /   0.61)  |     3A   14.5   150 F ( 66 C)  0.01
+asis 32.0  G      0.5    75 uA |   24.5 V          RESET (  0.61 /   0.61)  |     3A   10.3   151 F ( 66 C)  0.02
+asis 32.0  G      1.0    39 uA |   16.4 V          RESET (  1.11 /   1.11)  |     3A   36.8   151 F ( 66 C)  0.07
+asis 32.0  G      1.0    75 uA |   16.4 V          RESET (  1.11 /   1.11)  |     3A   32.5   153 F ( 67 C)  0.11
+asis 32.0  G      2.0    39 uA |    3.8 V          RESET (  1.79 /   1.76)  |     3A   98.7   153 F ( 67 C)  0.24
+asis 32.0  G      2.0    75 uA |    3.8 V          RESET (  1.78 /   1.76)  |     3A   93.5   156 F ( 69 C)  0.41
+asis 32.0  G      5.0    39 uA |    3.7 V          RESET (  1.79 /   1.76)  |     3A   99.2   153 F ( 67 C)  0.25
+asis 32.0  G      5.0    75 uA |    3.7 V          RESET (  1.78 /   1.76)  |     3A   93.9   156 F ( 69 C)  0.41
+asis 32.0  G     20.0    39 uA |    3.7 V          RESET (  1.79 /   1.76)  |     3A  101.0   154 F ( 68 C)  0.25
+
+Summary: longest interruption with the MCU alive (all HGATE corners), and worst Q2 SOA over all lengths
+  asis 12.0 V type O: MCU survives up to 0.2 ms (first reset at 0.5 ms); worst SOA 0.02
+  asis 12.0 V type G: MCU survives up to 0.1 ms (first reset at 0.2 ms); worst SOA 0.03
+  asis 24.0 V type O: MCU survives up to 1 ms (first reset at 2 ms); worst SOA 0.19
+  asis 24.0 V type G: MCU survives up to 0.1 ms (first reset at 0.2 ms); worst SOA 0.19
+  asis 32.0 V type O: MCU survives up to 0.5 ms (first reset at 1 ms); worst SOA 0.41
+  asis 32.0 V type G: MCU survives up to 0.1 ms (first reset at 0.2 ms); worst SOA 0.41
+
+Failed runs (simulator): 36
+  ('split', 12.0, 'O', 0.0005, 'asis', 3.9e-05): s5_split_12_O_0.5_asis_39 ended at 0.000826 s
+  ('split', 12.0, 'O', 0.001, 'asis', 3.9e-05): s5_split_12_O_1_asis_39 ended at 0.000826 s
+  ('split', 12.0, 'O', 0.002, 'asis', 3.9e-05): s5_split_12_O_2_asis_39 ended at 0.000826 s
+  ('split', 12.0, 'O', 0.005, 'asis', 3.9e-05): s5_split_12_O_5_asis_39 ended at 0.000826 s
+  ('split', 12.0, 'O', 0.01, 'asis', 3.9e-05): s5_split_12_O_10_asis_39 ended at 0.000826 s
+  ('split', 12.0, 'O', 0.02, 'asis', 3.9e-05): s5_split_12_O_20_asis_39 ended at 0.000826 s
+  ('split', 12.0, 'O', 0.02, 'asis', 7.5e-05): s5_split_12_O_20_asis_75 ended at 0.0205 s
+  ('split', 12.0, 'G', 0.0001, 'asis', 7.5e-05): s5_split_12_G_0.1_asis_75 ended at 0.000605 s
+  ('split', 12.0, 'G', 0.0002, 'asis', 7.5e-05): s5_split_12_G_0.2_asis_75 ended at 0.000705 s
+  ('split', 12.0, 'G', 0.001, 'asis', 3.9e-05): s5_split_12_G_1_asis_39 ended at 0.0015 s
+  ('split', 12.0, 'G', 0.001, 'asis', 7.5e-05): s5_split_12_G_1_asis_75 ended at 0.00151 s
+  ('split', 12.0, 'G', 0.002, 'asis', 3.9e-05): s5_split_12_G_2_asis_39 ended at 0.00251 s
+  ('split', 12.0, 'G', 0.01, 'asis', 3.9e-05): s5_split_12_G_10_asis_39 ended at 0.0105 s
+  ('split', 12.0, 'G', 0.02, 'asis', 3.9e-05): s5_split_12_G_20_asis_39 ended at 0.0205 s
+  ('split', 24.0, 'O', 0.01, 'asis', 3.9e-05): s5_split_24_O_10_asis_39 ended at 0.0105 s
+  ('split', 24.0, 'O', 0.01, 'asis', 7.5e-05): s5_split_24_O_10_asis_75 ended at 0.0105 s
+  ('split', 24.0, 'O', 0.02, 'asis', 3.9e-05): s5_split_24_O_20_asis_39 ended at 0.0205 s
+  ('split', 24.0, 'G', 0.0002, 'asis', 3.9e-05): s5_split_24_G_0.2_asis_39 ended at 0.000706 s
+  ('split', 24.0, 'G', 0.001, 'asis', 3.9e-05): s5_split_24_G_1_asis_39 ended at 0.0015 s
+  ('split', 24.0, 'G', 0.002, 'asis', 3.9e-05): s5_split_24_G_2_asis_39 ended at 0.00251 s
+  ('split', 24.0, 'G', 0.002, 'asis', 7.5e-05): s5_split_24_G_2_asis_75 ended at 0.0025 s
+  ('split', 24.0, 'G', 0.02, 'asis', 7.5e-05): s5_split_24_G_20_asis_75 ended at 0.0205 s
+  ('split', 32.0, 'O', 0.001, 'asis', 3.9e-05): s5_split_32_O_1_asis_39 ended at 0.00152 s
+  ('split', 32.0, 'O', 0.001, 'asis', 7.5e-05): s5_split_32_O_1_asis_75 ended at 0.00152 s
+  ('split', 32.0, 'O', 0.002, 'asis', 3.9e-05): s5_split_32_O_2_asis_39 ended at 0.0025 s
+  ('split', 32.0, 'O', 0.002, 'asis', 7.5e-05): s5_split_32_O_2_asis_75 ended at 0.00251 s
+  ('split', 32.0, 'O', 0.005, 'asis', 3.9e-05): s5_split_32_O_5_asis_39 ended at 0.0055 s
+  ('split', 32.0, 'O', 0.01, 'asis', 3.9e-05): s5_split_32_O_10_asis_39 ended at 0.0105 s
+  ('split', 32.0, 'O', 0.01, 'asis', 7.5e-05): s5_split_32_O_10_asis_75 ended at 0.0105 s
+  ('split', 32.0, 'O', 0.02, 'asis', 3.9e-05): s5_split_32_O_20_asis_39 ended at 0.0205 s
+  ('split', 32.0, 'O', 0.02, 'asis', 7.5e-05): s5_split_32_O_20_asis_75 ended at 0.0205 s
+  ('split', 32.0, 'G', 0.0001, 'asis', 7.5e-05): s5_split_32_G_0.1_asis_75 ended at 0.000601 s
+  ('split', 32.0, 'G', 0.0002, 'asis', 3.9e-05): s5_split_32_G_0.2_asis_39 ended at 0.000701 s
+  ('split', 32.0, 'G', 0.01, 'asis', 3.9e-05): s5_split_32_G_10_asis_39 ended at 0.0105 s
+  ('split', 32.0, 'G', 0.01, 'asis', 7.5e-05): s5_split_32_G_10_asis_75 ended at 0.0105 s
+  ('split', 32.0, 'G', 0.02, 'asis', 7.5e-05): s5_split_32_G_20_asis_75 ended at 0.0205 s

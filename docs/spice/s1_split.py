@@ -14,6 +14,11 @@ HERE=os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0,HERE)
 from fe import run, F, integ, first, TVS
 T_SH=25e-3
 def one(a):
+    for tm in (0.5e-6,0.2e-6,0.1e-6):   # retry with a finer max step if ngspice stalls
+        try: return one_raw(a,tm)
+        except Exception as e: err=str(e)[:300]
+    return dict(a=a,error=err)
+def one_raw(a,tm=0.5e-6):
     V,Rb,Lb,Ls,Rd2=a
     L=['.include %s/models/TPS48100-Q1_TRANS.lib'%HERE,'.include %s/models/OptiMOS5_100V_Spice.lib'%HERE,'.include %s/models/behav.lib'%HERE,
        '.include %s/models/small.lib'%HERE,
@@ -30,7 +35,7 @@ def one(a):
        'RLOAD CRANK_OUT 0 %g'%V,
        'Ls CRANK_OUT ls1 %g'%Ls,'Rd2 ls1 ls2 %g'%Rd2,'Bsh ls2 0 I = V(ls2)*(1e3*max(min(V(shc),1),0)+1e-9)','Vsh shc 0 PWL(0 0 %.9g 0 %.9g 1)'%(T_SH,T_SH+1e-9)]
     name='s1sp_%g_%g_%g_%g_%g'%(V,Rb*1e3,Lb*1e6,Ls*1e6,Rd2*1e3)
-    r=run(L,['i(VQ)','v(VBAT_ESTOP)','v(CRANK_OUT)','v(qd,CRANK_OUT)','v(tj47)','v(FLT)','v(CRANK_G,CRANK_OUT)','i(Lb)'],T_SH+0.6e-3,0.5e-6,name,tmax=0.5e-6,
+    r=run(L,['i(VQ)','v(VBAT_ESTOP)','v(CRANK_OUT)','v(qd,CRANK_OUT)','v(tj47)','v(FLT)','v(CRANK_G,CRANK_OUT)','i(Lb)'],T_SH+0.6e-3,tm,name,tmax=tm,
           opts='',timeout=3000)
     t=r['t']
     if t[-1]<T_SH+20e-6: raise RuntimeError('%s ended at %g s, before the short was cleared'%(name,t[-1]))
@@ -44,10 +49,12 @@ def one(a):
 if __name__=='__main__':
     G=[(V,Rb,Lb,Ls,Rd2) for V in (12.0,24.0,32.0) for (Rb,Lb) in ((0.015,0.5e-6),(0.035,2e-6)) for (Ls,Rd2) in ((0.5e-6,0.012),(2e-6,0.025))]
     with mp.Pool(8) as P: R=P.map(one,G,chunksize=1)
+    bad=[x for x in R if 'error' in x]; R=[x for x in R if 'error' not in x]
     out=[__doc__,'','Vb   feed Rb/Lb      out Ls/Rd2     | CRANK_OUT before  I peak (t)          off after  | VBAT_ESTOP max  CRANK_OUT min | per-FET E  FET Tj max       FLT end  F2 I2t']
     for x in R:
         V,Rb,Lb,Ls,Rd2=x['a']
         out.append('%4.1f %2.0fm/%3.1fuH     %3.1fuH/%2.0fm     | %5.1f V          %6.1f A (%5.1f us)  %s | %6.1f V         %6.2f V      | %6.1f mJ  %4.0f F (%3.0f C)   %4.1f V  %.4f A2s%s'%(
             V,Rb*1e3,Lb*1e6,Ls*1e6,Rd2*1e3,x['v_on'],x['ipk'],x['tpk']*1e6,('%6.1f us'%(x['toff']*1e6)) if x['toff'] else '  none  ',x['vE'],x['vneg'],x['E']*1e3,F(x['tj']),x['tj'],x['flt'],x['i2t'],
             '  WARN '+x['warn'] if x['warn'] else ''))
+    out.append('\nFailed runs: %d'%len(bad)); out+=['  %s: %s'%(x['a'],x['error']) for x in bad]
     txt='\n'.join(out); print(txt); open(os.path.join(HERE,'results','s1_short_split_crank.txt'),'w').write(txt+'\n')

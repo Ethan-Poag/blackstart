@@ -32,6 +32,9 @@ def deck(V,case,slow,iol,ccard=2.6e-6,isat=1e6):
     return L
 PR=['v(VBAT_P)','v(BAT_IN)','v(VBAT_SLOTS)','i(VEF)','i(VEF2)','v(OUT)','v(OUT2)','v(card2)','v(U65_IN)','v(HGATE,VBAT_P)','v(xu1.offs)','v(tj2)','v(ls1)','v(xef2.tt)','v(xef.tt)']
 def one(a):
+    try: return one_raw(a)
+    except Exception as e: return dict(a=a,error=str(e)[:300])
+def one_raw(a):
     V,case,slow,iol,ccard,isat=a
     ns=ns_on(V); ns.update(OUT=V,OUT2=V,card2=V,ef2=V,ls1=V)
     for e in ('xef','xef2'): ns.update({e+'.tt':0,e+'.det':0,e+'.detr':0,e+'.ff':1,e+'.gc':0.999,e+'.n1':V})
@@ -51,8 +54,9 @@ def one(a):
         k=np.nonzero(m&(np.abs(ief-iol)>0.05*iol))[0]; d['tset']=float(t[k[-1]]-T_EV) if len(k) else 0.0
     return d
 if __name__=='__main__':
-    jobs=[(V,c,s,iol,cc) for V in (12.0,24.0,32.0) for c in ('short','overload') for s in (0,1) for iol in ((6.30,) if c=='short' else (5.36,6.30)) for cc in ((2.6e-6,22e-6) if c=='short' else (2.6e-6,)) for isat in ((1e6,60.0) if c=='short' else (1e6,))]
+    jobs=[(V,c,s,iol,cc,isat) for V in (12.0,24.0,32.0) for c in ('short','overload') for s in (0,1) for iol in ((6.30,) if c=='short' else (5.36,6.30)) for cc in ((2.6e-6,22e-6) if c=='short' else (2.6e-6,)) for isat in ((1e6,60.0) if c=='short' else (1e6,))]
     with mp.Pool(8) as P: R=P.map(one,jobs,chunksize=1)
+    bad=[x for x in R if 'error' in x]; R=[x for x in R if 'error' not in x]
     out=[__doc__,'']
     out.append('(a) hard short on slot 1')
     out.append('Vb   harness card C  model | VBAT_P before  eFuse pk  VBAT_P  BAT_IN  VBAT_SLOTS max/min  t>53.4V OVP | slot 2: eFuse I min/max  card V min  OUT2 min | U65 IN  OV trip  Q2 Vgs min  slot 2 SCP trip  card 2 < 50 %')
@@ -68,5 +72,5 @@ if __name__=='__main__':
         if c!='overload': continue
         out.append('%4.1f %-7s %4.2f | %6.2f A  %5.2f A  %8.0f us   %6.1f W   %5.1f V | %6.1f V        %6.1f V        | %5.1f V'%(
             V,'slow' if s else 'fast',iol,x['ief'],x['ief_end'],x['tset']*1e6,x['pef_end'],x['vout_end'],x['vSlo'],x['card2min'],x['vP']))
-    w=[x for x in R if x['warn']]; out.append('\nSimulator warnings: %d'%len(w))
+    w=[x for x in R if x['warn']]; out.append('\nSimulator warnings: %d; failed runs: %d'%(len(w),len(bad))); out+=['  %s: %s'%(x['a'],x['error']) for x in bad]
     txt='\n'.join(out); print(txt); open(os.path.join(HERE,'results','s4_efuse_mod.txt'),'w').write(txt+'\n')
