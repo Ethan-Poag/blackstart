@@ -1517,4 +1517,36 @@ The power front end was verified in `ngspice 44.2` (`docs/spice/README.md`) usin
 - **Slot dead short (`s1_short_mod.txt`, `s1_short_mod_load.txt`, `s1b_recover_mod.txt`, 384/384):** matches `kick_calc` (`VBAT_P 45.4 V` vs `47.1 V`, `BAT_IN 58.3 V` vs `57.6 V`, `VBAT_SLOTS 53.8 V` vs `56.9 V`, `F1 I²t 0.0536 A²s`). `Q2` gate recovers `> 8 V` in `7–37 µs`, MCU stays alive (`U2/U5` off = none), `Q2` SOA `≤ 0.06`.
 - **Hold-off (`s3_holdoff.txt`):** DC thresholds `3.33 / 2.54 / 1.78 V` (`−40 / 77 / 185 °F`, conservative vs `3.79 / 3.09 / 2.47 V` hand calc); `6 V` step `Q122` engage `41–61 µs` at `32 V`; `U5` EN turn-on `3.63–4.30 V`.
 - **Slot eFuse coordination (`s4_efuse_mod.txt`, 0 failed):** under realistic `60 A` saturation with `2.6 µF` card caps, healthy slot 2 back-feeds `−13.4 / +21.2 A` and never false-trips (`22 µF` card caps trip healthy slots at `24–32 V` — keep cards `≤ 2.6 µF`); overload `2 A → 8 A` regulates at `I_OL` in `19–23 µs`.
-- **Ride-through (`s5_ride_mod_asis_A_B.txt`, 288/288, 0 failed):** as-is survives `0.2 ms` (open) / `0.1 ms` (ground short) at `12 V` and `1 ms` (open) / `0.1 ms` (ground short) at `24/32 V` (`Q2` SOA `0.41`). Proposed options (not applied to schematic): **Option A** (+5 parts, `+$0.03`: `U5_EN` lockout) extends ground-short ride-through to `0.2 ms` (`12 V`) / `1 ms` (`24/32 V`, SOA `0.51`); **Option B** (+10 parts, `+$1.23` qty 1 / `+$0.99` qty 10: Option A + `U5` `200 µF` hold-up) extends both open and ground short to `10 ms` at `24 V` and `20 ms` at `32 V` (`0.5 / 0.2 ms` at `12 V`, SOA `0.79`).
+- **Ride-through (`s5_ride_mod_asis_A_B.txt`, 288/288, 0 failed):** as-is survived `0.2 ms` (open) / `0.1 ms` (ground short) at `12 V` and `1 ms` (open) / `0.1 ms` (ground short) at `24/32 V` (`Q2` SOA `0.41`). **Option B** was selected by Ethan (24 V fleet -> 10-20 ms ride-through) and applied in §23 below.
+
+## 23. Ride-through Option B applied (`137bf01`, `95af9bc`, `e03d2e7`, Nov 24, 2026 HST)
+
+Ethan selected **Option B** for the 24 V fleet (2026-11-24). Implemented in `cards/tools/mainboard.py` (`estop.kicad_sch`), `docs/modular/tools/pass9_power_patch.py` (`power.kicad_sch`, chained in `pass5_rebuild.sh`), and `docs/modular/tools/pass6_fix_calc.py`.
+
+### 23.1 Parts added (+10 fitted refs on mainboard; all existing BOM parts, no new LCSC SKUs)
+- **U5_EN hold-off lockout while `+3V3_BK` is up (`estop.kicad_sch`, +5 parts):**
+  - `D402` (`BAT54C`) pin 2 disconnected from `U5_EN` (`NC`, pin 1 still pulls `BB_UVLO`).
+  - `Q123` (`MMBT3904`, `C20526`, `SOT-23`): B=`HO_U5B`, E=`GND`, C=`U5_EN`.
+  - `Q124` (`MMBT3904`, `C20526`, `SOT-23`): B=`HO_U5LOCK`, E=`GND`, C=`HO_U5B` (inhibits `Q123` whenever `+3V3_BK` is up).
+  - `R1127` (`47k`, `0603WAF4702T5E`, `C25819`): `HO_C` (`Q121.C`) → `HO_U5B`.
+  - `R1128` (`100k`, `0603WAF1003T5E`, `C25803`): `HO_U5B` → `GND`.
+  - `R1129` (`47k`, `0603WAF4702T5E`, `C25819`): `+3V3_BK` → `HO_U5LOCK`.
+- **U5 input hold-up (`power.kicad_sch`, +5 parts):**
+  - `U5.4`, `C38.1` (`2.2 µF 100 V`), `C39.1` (`100 nF 100 V`), `R1125` (`100k` EN top), and `#FLG0003` moved off `VBAT_P` onto global net `U5_VIN`; `#FLG9001` added on `VBAT_P`.
+  - `D417` (`SS110`, `C2482`, `D_SMA`): A=`VBAT_P`, K=`U5_VIN` (blocks back-feed on open/short).
+  - `D418` (`SS110`, `C2482`, `D_SMA`): A=`U5_HU`, K=`U5_VIN` (fast hold-up discharge path).
+  - `R1130` (`2.2k`, `0603WAF2201T5E`, `C4190`): `U5_VIN` ↔ `U5_HU` (limits `C1122/C1123` charge current during Q2 ramp).
+  - `C1122`, `C1123` (2× `100 µF 63 V`, `EEETG1J101UP`, `C178628`, `CP_Elec_10x10.5`): `+`=`U5_HU`, `-`=`GND`.
+
+### 23.2 Gates & Cost (`95af9bc`)
+- **ERC:** `0 Errors / 0 Warnings` across all 7 projects (`genctl`, `genctl_meter`, `engine`, `di8`, `ai4`, `hso5`, `brk4`).
+- **Audit & checks:** `system_audit.py` `0` unexplained / `0` orphans (`1050` same, `139` changes); `verify_mainboard.py` `3,036` pins `0` errors; `bom_from_sch.py` `1,054` mainboard refs (`1,043` fitted, `+10`), `221` meter refs, `0` mismatches; `note_lint.py` `509` notes `0` findings; `pass6_fix_calc.py` `24/24` value checks OK.
+- **Cost (`true_cost.py`):** Mainboard **`$236.47` qty 1 / `$197.07` qty 10** (was `$235.23 / $196.08`, **`+$1.24 / +$0.99`**); meter `$65.33 / $54.60`; 7 cards `$132.75 / $111.87`; net delta vs baseline **`+$334.10` qty 1 / `+$123.75` qty 10** (was `$332.86 / $122.75`).
+
+### 23.3 As-Drawn SPICE Verification (`e03d2e7`, `optB_verify.py`)
+- **Sim 2b cold-start SOA (`s2_c601_mod_optB.txt`, `C601 = 100 nF`, `60–110%` band, `185 °F / 85 °C`):** worst `Q2 SOA = 0.81` (`0.8069` at `60.0 nF, 75 µA, 32 V`, `Tj = 162 °F / 72 °C`) vs `0.80` pre-Option B (`+0.007` from `~3 mA` `R1130` charge current); all `70–110%` corners `≤ 0.74` (`0.59` nominal).
+- **Sim 5 ride-through (`s5_ride_mod_optB.txt`, `160 µF` `-20%` cold/aged, `C38+C39 ~1.4 µF` on `U5_VIN`, `2.1 W` bound):**
+  - `12 V`: survives **`0.5 ms` (O)** / **`0.2 ms` (G)** (`SOA ≤ 0.06`, matches earlier B; `12 V G 0.2 ms 39 µA` passed on retry with `method=trap reltol=5e-3 trtol=7`).
+  - `24 V`: survives **`5 ms` (O & G)** across both `39/75 µA` (`75 µA` survives `10 ms`; `39 µA` at `160 µF` resets at `19.45 ms`, ~`0.5 ms` shy of earlier `CU5=10 µF` B run at `20.56 ms`; `170 µF` and nominal `200 µF` both survive **`10 ms`** with `U5 off = none`). Worst `SOA = 0.44` (vs `0.63` earlier B).
+  - `32 V`: survives **`20 ms` (O & G)** (`SOA 0.87` at `39 µA` vs `0.79` earlier B). Unconverged (`1/96` after retry): `32 V G 0.2 ms 39 µA` (`75 µA` and `0.5–20 ms` all converged and survived).
+- **Sim 1/1b dead short (`s1_short_mod_optB.txt`, `32 V` worst-L `Lb = 2 µH, Lbank = 150 nH, Rd2 = 25 mΩ, cold = 1, tresp = 1.5 µs`):** kick/currents/thermal unchanged (`VBAT_P 41.5 vs 41.4 V`, `BAT_IN 55.6 vs 55.5 V`, `Q2 45 vs 44 A`, `Tj 151 °F / 66 °C`, `F1 I²t 0.0315 vs 0.0309 A²s`); `U5_EN min` improved from `4.08 V` to **`9.95 V`**. Sim 1b recovery (`12 V / 150 nH`, `32 V / 60 nH, 150 nH`): MCU **alive** (`U5 off = none`), `Q2 Vgs > 8 V` in `7–34 µs`, `SOA ≤ 0.06` (matches pre-Option B).

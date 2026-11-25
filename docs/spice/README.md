@@ -34,7 +34,7 @@ Simulated in `ngspice 44.2` across five decks (`s1_short.py`, `s1b_recover.py`, 
   - **Why:** X7R bias, cold (`−40 °F / −40 °C`), and tolerance reduce an as-drawn `22 nF` part to `60–85 %` effective capacitance (`13.2–18.7 nF`), pushing `Q2` cold-start SOA to **`1.34` (exceeded)** at `32 V / 75 µA`. `100 nF` lowers `Q2` worst-case SOA across the full `60–110 %` effective band to **`0.80`** (`0.58` nominal) while keeping `U2` startup at `19–99 ms` (well inside the `250 ms` cold-crank budget).
   - **Gates re-run (`a8b475f`):** ERC `0/0` across all 7 projects, BOM `0` mismatches (`true_cost` `$332.86` / `$122.75`), `note_lint` `0` findings (509 notes), `pass6_fix_calc` value check OK.
 
-## 4. Ride-Through Options (Recommended Only — Not Applied to Schematic)
+## 4. Ride-Through Options & Option B Applied (`137bf01`..`e03d2e7`)
 
 Sim 5 (`results/s5_ride_mod_asis_A_B.txt`, 288/288 converged, `0` failed) tested open-circuit breaks (`O`) and battery-side dead shorts (`G`, e.g., starter/harness fault) at `12 / 24 / 32 V`:
 
@@ -50,4 +50,10 @@ Sim 5 (`results/s5_ride_mod_asis_A_B.txt`, 288/288 converged, `0` failed) tested
 - `4f2809e`, `39f38ba`, `ec3bc93`, `9f8e121`: Sim 1 loaded, Sim 1b recovery, Sim 4 eFuse (`0` failed), Sim 5 robustness.
 - `7538506`, `b261e1e`: `LM74800B` `DGATE` smoothing + Sim 5 ride-through complete (`288/288` converged, `0` failed).
 
-**Verdict (`m7-modular`):** Power front end is **CLEARED FOR PLACEMENT** (keep card input capacitance `≤ 2.6 µF` per card as drawn; Option A/B ride-through deferred for Ethan's decision).
+### 4.1 As-Drawn Option B Verification (`optB_verify.py`, `137bf01`..`e03d2e7`)
+Option B (+10 parts on mainboard: `Q123, Q124, R1127-R1129` on `estop` + `D417, D418, R1130, C1122, C1123` on `power`; `+$1.24` qty 1 / `+$0.99` qty 10 -> `$236.47 / $197.07`) was applied and re-verified from the as-drawn values:
+- **Sim 2b (`s2_c601_mod_optB.txt`, `C601 = 100 nF`, `60–110%`):** worst `Q2 SOA = 0.81` (`0.8069` at `60 nF, 75 µA, 32 V`, `Tj 162 °F / 72 °C`) vs `0.80` pre-Option B; `70–110%` all `≤ 0.74` (`0.59` nom).
+- **Sim 5 (`s5_ride_mod_optB.txt`):** `12 V` `0.5 ms (O) / 0.2 ms (G)` (`SOA ≤ 0.06`); `24 V` `5 ms (O/G)` at `-20%` `160 µF + 1.4 µF` (`75 µA` survives `10 ms`; `170 µF` and nominal `200 µF` survive `10 ms` across all corners, `SOA 0.44`); `32 V` `20 ms (O/G)` (`SOA 0.87`). `1/96` unconverged after retry (`32 V G 0.2 ms 39 µA`).
+- **Sim 1/1b (`s1_short_mod_optB.txt`, `32 V` worst-L loaded):** kick/recovery unchanged (`VBAT_P 41.5 V`, `BAT_IN 55.6 V`, `Q2 45 A`, `Tj 151 °F / 66 °C`, `SOA ≤ 0.06`, `U5_EN min` improved `4.08 V -> 9.95 V`).
+
+**Verdict (`m7-modular`):** Power front end + Option B ride-through is **CLEARED FOR PLACEMENT** (keep card input capacitance `≤ 2.6 µF` per card as drawn).
